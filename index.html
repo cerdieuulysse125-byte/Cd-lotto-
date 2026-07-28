@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D V27 SUPABASE AYITI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#0a1a0f;color:#fff;padding:8px;padding-bottom:80px}
+.card{background:#132a1c;border:2px solid #1e4d2b;border-radius:12px;padding:10px;margin:6px 0}
+input,select,button{width:100%;padding:11px;border-radius:10px;border:none;margin:4px 0;font-size:14px}
+button{background:#16a34a;color:#fff;font-weight:bold}button.blue{background:#2563eb}button.yellow{background:#facc15;color:#000}
+.hidden{display:none!important}.nav{position:fixed;bottom:0;left:0;right:0;background:#0f2315;border-top:2px solid #1e4d2b;display:flex;justify-content:space-around;padding:6px 0;z-index:99}
+.nav button{width:22%;padding:6px 1px;font-size:10px;background:transparent;color:#9ca3af}.nav button.active{background:#16a34a;color:#fff;border-radius:8px}
+.tirag-row{padding:12px;border-bottom:1px solid #1e4d2b;display:flex;justify-content:space-between}
+.boul{color:#facc15;font-weight:bold}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #1e4d2b;padding:6px;text-align:center}th{background:#1a3a25;color:#facc15}
+</style></head><body>
+<div id="loginBox" class="card" style="text-align:center;border:2px solid #22c55e">
+<h3>🔓 C&D vérité lotto - V27 SUPABASE</h3><p style="font-size:11px;color:#facc15">Lave chodyè w - Baz Ayiti</p>
+<input id="codeInput" type="tel" value="230788" style="background:#fff;color:#000;font-weight:bold;font-size:22px;text-align:center">
+<button onclick="ouvrirApp()" style="background:#22c55e">✅ ENTRER</button>
+<p style="font-size:10px;color:#9ca3af;margin-top:8px">Supabase Sync - Tout vandè an dirèk</p>
+</div>
+<div id="appBox" class="hidden">
+<div style="background:#1a3a25;border:1px solid #22c55e;border-radius:8px;padding:6px;display:flex;justify-content:space-between;font-size:11px;position:sticky;top:0;z-index:50"><span>👤 <b id="userInfo"></b> | <span id="heureEST"></span></span><span id="autoStatus" style="color:#22c55e">☁️ SUPABASE AUTO</span></div>
+
+<div id="tabVendre" class="tab"><div class="card">
+<h3 style="color:#facc15">📝 VENDRE</h3><select id="loterie"></select>
+<div id="jeuxBtns" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin:8px 0"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<input id="numero" type="tel" placeholder="Nimewo →" style="background:#fff;color:#000;font-weight:bold;text-align:center;font-size:18px">
+<input id="montant" type="tel" placeholder="Miz ⏎" style="background:#fff;color:#000;font-weight:bold;text-align:center;font-size:18px">
+</div>
+<button onclick="ajouterAuPanier()" style="background:#2563eb">➕ AJOUTE</button>
+</div>
+<div class="card"><div style="display:flex;justify-content:space-between">🛒 PANYE <span id="panierCount">0</span> <b id="panierTotalMise" style="color:#facc15">0G</b></div><div id="panierList"></div>
+<button onclick="validerTicket()" style="background:#facc15;color:#000;padding:14px">✅ VALIDE + SYNC SUPABASE</button>
+<div id="dernierTicket" style="margin-top:8px"></div></div></div>
+
+<div id="tabTirages" class="tab hidden"><div class="card" style="padding:0"><div style="padding:10px;background:#0f2315;border-bottom:2px solid #22c55e;display:flex;justify-content:space-between"><b>🎯 TIRAGE - tirajrapid.com</b><button onclick="telechargerTirajRapid()" style="width:auto;padding:6px 12px;background:#2563eb">🔄 SYNC</button></div><div id="tiragesList"></div></div></div>
+
+<div id="tabRapport" class="tab hidden"><div class="card">
+<h3>📊 RAPPORT - <span id="rapportRoleInfo" style="color:#facc15"></span></h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input type="date" id="rapportDu"><input type="date" id="rapportAu"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px"><select id="rapportVendeur" onchange="renderRapport()"></select><select id="rapportTirage" onchange="renderRapport()"><option value="tous">Tout tiraj</option></select></div>
+<div id="rapportJour" style="margin-top:10px"></div><div id="rapportParVendeur" style="margin-top:8px"></div><div id="rapportDetail" style="margin-top:8px"></div>
+</div></div>
+
+<div id="tabProprio" class="tab hidden">
+<div class="card"><h3>👥 VENDEURS</h3><div id="vendeursList"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px"><input id="newVCode" placeholder="Kòd 1003" style="background:#fff;color:#000"><input id="newVNom" placeholder="Non" style="background:#fff;color:#000"></div><button class="blue" onclick="addVendeur()">➕ Ajoute Vandè</button></div>
+<div class="card"><h3>⏰ TIRAGES MANUEL</h3><div id="tirageManuel"></div></div>
+</div>
+
+<div class="nav"><button id="btnVendre" class="active" onclick="showTab('Vendre')">📝<br>Vendre</button><button id="btnTirages" onclick="showTab('Tirages')">🎯<br>Tiraj</button><button id="btnRapport" onclick="showTab('Rapport')">📊<br>Rapò</button><button id="btnProprio" onclick="showTab('Proprio')">👑<br>Proprio</button></div>
+</div>
+
+<script>
+// *** METE KLE SUPABASE OU YO LA ***
+const SUPABASE_URL = 'https://TON-PROJECT.supabase.co'; // Ranplase ak URL ou
+const SUPABASE_KEY = 'TON-ANON-KEY-LA'; // Ranplase ak anon key ou
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+var ownerCode='230788';
+var ordreTirage=["Georgia midi","Florida midi","New York midi","Georgia soir","Florida soir","New York soir"];
+var jeux=[{id:'borlette',nom:'borlette',chiffres:2,gain:50,gain2:20,gain3:10,limite:1000},{id:'lotto3',nom:'lotto3',chiffres:3,gain:500,limite:100},{id:'lotto4',nom:'lotto4',chiffres:4,gain:5000,limite:50},{id:'mariage',nom:'mariage',chiffres:4,gain:1000,limite:50}];
+var vendeurs=[],ventes=[],tirages=[],panier=[],currentCode='230788',role='VENDEUR',currentGame='borlette';
+
+async function ouvrirApp(){
+  if(SUPABASE_URL.includes('TON-PROJECT')){alert('Ou poko mete kle Supabase yo! Gade liy 58-59 nan kòd la');return;}
+  currentCode=document.getElementById('codeInput').value.trim()||'230788'; role=(currentCode===ownerCode)?'PROPRIO':'VENDEUR';
+  document.getElementById('loginBox').style.display='none'; document.getElementById('appBox').classList.remove('hidden');
+  document.getElementById('userInfo').innerText=(role==='PROPRIO'?'👑 ':'👤 ')+currentCode;
+  await chargerVendeurs(); await chargerTirages(); await chargerVentes();
+  init(); showTab('Vendre');
+  if(role!=='PROPRIO'){document.getElementById('btnProprio').style.display='none'; document.getElementById('rapportRoleInfo').innerText='Vandè '+currentCode;}else{document.getElementById('rapportRoleInfo').innerText='Proprio - tout vandè';}
+  // Realtime
+  supabase.channel('ventes').on('postgres_changes',{event:'*',schema:'public',table:'ventes'},()=>{chargerVentes();}).subscribe();
+  supabase.channel('tirages').on('postgres_changes',{event:'*',schema:'public',table:'tirages'},()=>{chargerTirages();}).subscribe();
+}
+async function chargerVendeurs(){var {data}=await supabase.from('vendeurs').select('*');if(data&&data.length>0) vendeurs=data;}
+async function chargerVentes(){var {data}=await supabase.from('ventes').select('*').order('created_at',{ascending:false}).limit(500);if(data){ventes=data; renderRapport(); renderDash(); document.getElementById('autoStatus').innerText='☁️ '+ventes.length+' fich';}}
+async function chargerTirages(){var {data}=await supabase.from('tirages').select('*').eq('date',new Date().toISOString().split('T')[0]);if(data) tirages=data.map(t=>[{loterie:t.loterie,numero:t.n1,position:1},{loterie:t.loterie,numero:t.n2,position:2},{loterie:t.loterie,numero:t.n3,position:3}]).flat(); renderTirageList();}
+function getEastern(){var s=new Date().toLocaleString('en-US',{timeZone:'America/New_York',hour12:false});var d=new Date(s);return {str:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};}
+function showTab(n){document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));document.getElementById('tab'+n).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.getElementById('btn'+n).classList.add('active');if(n==='Tirages')renderTirageList();if(n==='Rapport'){initRapport();renderRapport();}if(n==='Proprio'){if(role!=='PROPRIO'){alert('Proprio sèlman');showTab('Vendre');return;}renderVendeurs();renderTirageManuel();}}
+function init(){var sel=document.getElementById('loterie');sel.innerHTML='';ordreTirage.forEach(k=>{var o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});var today=new Date().toISOString().split('T')[0];document.getElementById('rapportDu').value=today;document.getElementById('rapportAu').value=today;var rt=document.getElementById('rapportTirage');rt.innerHTML='<option value="tous">Tout tiraj</option>'+ordreTirage.map(t=>'<option value="'+t+'">'+t+'</option>').join('');document.getElementById('heureEST').innerText=getEastern().str+' EST';renderJeuxBtns();setupFleche();}
+function renderJeuxBtns(){var div=document.getElementById('jeuxBtns');div.innerHTML='';jeux.forEach(j=>{var b=document.createElement('button');b.style.padding='8px';b.style.fontSize='11px';b.style.border='2px solid '+(j.id==currentGame?'#facc15':'#1e4d2b');b.style.background=j.id==currentGame?'#22c55e':'#132a1c';b.style.color='#fff';b.innerHTML=j.nom+'<br>x'+j.gain+' L'+j.limite+'<br>'+j.chiffres+' chif';b.onclick=()=>{currentGame=j.id;renderJeuxBtns();document.getElementById('numero').placeholder=j.chiffres+' chif →';focusNumero();};div.appendChild(b);});}
+function focusNumero(){document.getElementById('numero').focus();}
+function focusMontant(){document.getElementById('montant').focus();}
+function setupFleche(){
+  var num=document.getElementById('numero');
+  num.addEventListener('input',function(){var j=jeux.find(x=>x.id===currentGame);if(this.value.length>=j.chiffres)setTimeout(focusMontant,200);});
+  num.addEventListener('keydown',e=>{if(e.key==='Enter'){var j=jeux.find(x=>x.id===currentGame);if(num.value.length>=j.chiffres){e.preventDefault();focusMontant();}}});
+  document.getElementById('montant').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();ajouterAuPanier();}});
+}
+function ajouterAuPanier(){
+  var lot=document.getElementById('loterie').value; var n=document.getElementById('numero').value.trim(); var m=parseInt(document.getElementById('montant').value);
+  var j=jeux.find(x=>x.id===currentGame); if(n.length!==j.chiffres){alert(j.nom+' dwe '+j.chiffres+' chif');return;} if(!m)return;
+  panier.push({id:Date.now()+Math.random(),loterie:lot,numero:n,montant:m,jeu:currentGame});
+  document.getElementById('numero').value=''; document.getElementById('montant').value=''; renderPanier(); focusNumero();
+}
+function renderPanier(){var d=document.getElementById('panierList');if(panier.length===0){d.innerHTML='<small style="color:#9ca3af">Panye vid</small>';document.getElementById('panierCount').innerText='0';document.getElementById('panierTotalMise').innerText='0G';return;}document.getElementById('panierCount').innerText=panier.length;document.getElementById('panierTotalMise').innerText=panier.reduce((a,b)=>a+b.montant,0)+'G';d.innerHTML=panier.map((it,i)=>'<div style="display:flex;justify-content:space-between;background:#0f2315;padding:8px;margin:3px 0;border-radius:6px"><span>'+it.loterie+' <b>'+it.numero+'</b> '+it.montant+'G ('+it.jeu+')</span><button style="width:auto;padding:4px 10px;background:#7f1d1d" onclick="panier.splice('+i+',1);renderPanier()">✕</button></div>').join('');}
+async function validerTicket(){
+  if(panier.length===0)return; var now=new Date(); var tid=currentCode+'-'+Date.now().toString().slice(-6);
+  var toInsert=panier.map(it=>({id:String(it.id),ticketId:tid,code:currentCode,loterie:it.loterie,jeu:it.jeu,numero:it.numero,montant:it.montant}));
+  var {error}=await supabase.from('ventes').insert(toInsert);
+  if(error){alert('Erè: '+error.message);return;}
+  var total=panier.reduce((a,b)=>a+b.montant,0);
+  document.getElementById('dernierTicket').innerHTML='<div style="background:#fff;color:#000;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;text-align:center"><b>C&D vérité lotto</b><br>Lave chodyè w<br>----------------<br>Tirage: '+panier[0].loterie+' | Date: '+now.toLocaleDateString()+'<br>Id ticket: '+tid+'<br>----------------<br>'+panier.map(p=>p.jeu+' '+p.numero+' - '+p.montant+'G').join('<br>')+'<br>----------------<br>Total: '+total+'G<br>Code: '+currentCode+'</div>';
+  panier=[]; renderPanier(); await chargerVentes();
+}
+function renderTirageList(){var div=document.getElementById('tiragesList');var today=new Date().toISOString().split('T')[0];var html='';ordreTirage.forEach(lot=>{var arr=tirages.filter(t=>t.loterie===lot);var t1=arr.find(a=>a.position==1),t2=arr.find(a=>a.position==2),t3=arr.find(a=>a.position==3);var n1=t1?t1.numero:'--',n2=t2?t2.numero:'--',n3=t3?t3.numero:'--';html+='<div class="tirag-row"><div><b>'+lot+'</b> : <span class="boul">'+n1+'</span> <span class="boul">'+n2+'</span> <span class="boul">'+n3+'</span><br><small>1er: '+n1+' - 2e: '+n2+' - 3e: '+n3+'</small></div><div>'+(arr.length?'✅':'⏳')+'</div></div>';});div.innerHTML=html;}
+async function telechargerTirajRapid(){try{var res=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent('https://tirajrapid.com/'));var html=await res.text();var results={};var lines=html.split(/<tr|<div/i);lines.forEach(line=>{var l=line.toLowerCase();var nums=line.match(/\b\d{1,2}\b/g);if(nums&&nums.length>=3){var last3=nums.slice(-3);if(l.includes('georgia')&&l.includes('mid')) results['Georgia midi']=last3;else if(l.includes('florida')&&l.includes('mid')) results['Florida midi']=last3;else if(l.includes('new york')&&l.includes('mid')) results['New York midi']=last3;else if(l.includes('georgia')&&(l.includes('even')||l.includes('soir'))) results['Georgia soir']=last3;else if(l.includes('florida')&&(l.includes('even')||l.includes('soir'))) results['Florida soir']=last3;else if(l.includes('new york')&&(l.includes('even')||l.includes('soir'))) results['New York soir']=last3;}});var today=new Date().toISOString().split('T')[0];for(var lot in results){var nums=results[lot];await supabase.from('tirages').upsert({loterie:lot,date:today,n1:nums[0],n2:nums[1],n3:nums[2]},{onConflict:'loterie,date'});}alert('Tiraj sync!');await chargerTirages();}catch(e){alert('Erè tiraj: '+e.message);}}
+function initRapport(){var rv=document.getElementById('rapportVendeur');if(role==='PROPRIO'){rv.innerHTML='<option value="tous">Tout vandè</option>'+vendeurs.map(v=>'<option value="'+v.code+'">'+v.code+'</option>').join('');}else{rv.innerHTML='<option value="'+currentCode+'">'+currentCode+'</option>';}}
+function renderRapport(){
+  var du=document.getElementById('rapportDu').value,au=document.getElementById('rapportAu').value;
+  var vendVal=document.getElementById('rapportVendeur').value||currentCode; if(role!=='PROPRIO') vendVal=currentCode;
+  var tirajVal=document.getElementById('rapportTirage').value;
+  var filtered=ventes.filter(v=>v.date>=du&&v.date<=au);
+  if(vendVal!=='tous') filtered=filtered.filter(v=>v.code===vendVal);
+  if(tirajVal!=='tous') filtered=filtered.filter(v=>v.loterie===tirajVal);
+  var vendu=filtered.reduce((a,b)=>a+b.montant,0);
+  document.getElementById('rapportJour').innerHTML='<div style="text-align:center;background:#1a3a25;border:1px solid #facc15;border-radius:8px;padding:8px">Du '+du+' Au '+au+'<br>Vandu: <b style="color:#3b82f6">'+vendu+'G</b> | Fich: '+filtered.length+'</div>';
+  var parV={};filtered.forEach(v=>{if(!parV[v.code]) parV[v.code]={vendu:0};parV[v.code].vendu+=v.montant;});
+  var html='<table><tr><th>Vendeur</th><th>Vendu</th></tr>';Object.entries(parV).forEach(([c,d])=>{html+='<tr><td>'+c+'</td><td>'+d.vendu+'G</td></tr>';});html+='</table>';document.getElementById('rapportParVendeur').innerHTML=html;
+  document.getElementById('rapportDetail').innerHTML=filtered.slice(0,50).map(v=>'<div style="padding:6px;border-bottom:1px solid #1e4d2b;font-size:11px">'+v.loterie+' <b>'+v.numero+'</b> '+v.montant+'G - '+v.code+' ('+v.jeu+') - '+v.date+'</div>').join('');
+}
+function renderVendeurs(){document.getElementById('vendeursList').innerHTML=vendeurs.map(v=>'<div style="background:#0f2315;padding:8px;border-radius:8px;margin:4px 0"><b>'+v.code+'</b> - '+v.nom+'</div>').join('');}
+async function addVendeur(){var c=document.getElementById('newVCode').value.trim();var n=document.getElementById('newVNom').value.trim();if(!c)return;var {error}=await supabase.from('vendeurs').insert({code:c,nom:n||c});if(error)alert(error.message);else{alert('Vandè '+c+' ajoute');await chargerVendeurs();renderVendeurs();}}
+function renderTirageManuel(){var div=document.getElementById('tirageManuel');var html='';ordreTirage.forEach(lot=>{html+='<div style="background:#0f2315;padding:6px;border-radius:6px;margin:4px 0"><small>'+lot+'</small><div style="display:grid;grid-template-columns:1fr 1fr 1fr 60px;gap:4px"><input id="m1_'+lot+'" placeholder="1er" style="background:#fff;color:#000;text-align:center"><input id="m2_'+lot+'" placeholder="2e" style="background:#fff;color:#000;text-align:center"><input id="m3_'+lot+'" placeholder="3e" style="background:#fff;color:#000;text-align:center"><button style="padding:6px" onclick="saveManuel(\''+lot+'\')">OK</button></div></div>';});div.innerHTML=html;}
+async function saveManuel(lot){var n1=document.getElementById('m1_'+lot).value,n2=document.getElementById('m2_'+lot).value,n3=document.getElementById('m3_'+lot).value;if(!n1||!n2||!n3)return alert('Mete 3 nimewo');var today=new Date().toISOString().split('T')[0];await supabase.from('tirages').upsert({loterie:lot,date:today,n1:n1,n2:n2,n3:n3},{onConflict:'loterie,date'});alert(lot+' sove');await chargerTirages();}
+function renderDash(){}
+document.getElementById('codeInput').addEventListener('keydown',e=>{if(e.key==='Enter')ouvrirApp();});
+</script></body></html>
