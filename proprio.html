@@ -1,1 +1,192 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D PROPRIO V71</title><style>body{font-family:Arial;background:#0f172a;color:#fff;padding:12px;margin:0}h1{color:#facc15;text-align:center}.card{background:#1e293b;padding:14px;border-radius:12px;margin:10px 0;border:1px solid #334155}.btn{padding:10px 16px;border:0;border-radius:8px;font-weight:bold;cursor:pointer}.btn-y{background:#facc15;color:#000}.btn-g{background:#22c55e;color:#000}input{padding:8px;border-radius:6px;border:1px solid #475569;background:#0f172a;color:#fff;margin:3px}.tab{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.tab button{padding:9px 12px;border:0;border-radius:8px;background:#334155;color:#fff}.tab button.active{background:#facc15;color:#000}table{width:100%;border-collapse:collapse}th,td{border:1px solid #334155;padding:6px;font-size:12px}th{background:#0f172a}</style></head><body><h1>👑 C&D PROPRIO V71</h1><p style="text-align:center;color:#94a3b8">6 Tiraj | FL 13:15/21:15 GA 12:20/18:20 NY 14:15/21:30 EST</p><div class="tab"><button onclick="show('dash')" id="b-dash" class="active">📊 DASH</button><button onclick="show('rezilta')" id="b-rezilta">🎯 REZILTA</button><button onclick="show('pri')" id="b-pri">💰 PRI</button></div><div id="dash" class="card"><h3>📊 DASH JODIA</h3><div id="dashContent">Ap chaje...</div><hr><h4>Détail - GAYAN/PÈDI</h4><div id="korijeList"></div></div><div id="rezilta" class="card" style="display:none"><h2>🎯 Antre Rezilta</h2><div id="reziltaGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px"></div></div><div id="pri" class="card" style="display:none"><h2>💰 PRI</h2>Bolet 1er: <input id="p_b1" type="number" value="50"><br>Bolet 2e: <input id="p_b2" type="number" value="20"><br>Bolet 3e: <input id="p_b3" type="number" value="10"><br><br>Maryaj: <input id="p_mar" type="number" value="1000"><br>Loto3: <input id="p_l3" type="number" value="500"><br>Loto4: <input id="p_l4" type="number" value="5000"><br>Loto5: <input id="p_l5" type="number" value="25000"><br><br><button class="btn btn-g" onclick="savePri()">💾 SOVE PRI</button> <span id="priStat"></span></div><script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";import{getDatabase,ref,onValue,set}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";const firebaseConfig={apiKey:"AIzaSyA1_MK9_5ou2opJA_LRfMTgSEY56W7HQEs",authDomain:"cerdieulotto.firebaseapp.com",projectId:"cerdieulotto",storageBucket:"cerdieulotto.firebasestorage.app",messagingSenderId:"614410442443",appId:"1:614410442443:web:ed0f44671b4b0ff60bed4e",measurementId:"G-M6CJ9DZGET",databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"};const app=initializeApp(firebaseConfig);const db=getDatabase(app);const TIRAJ=[{id:"gaam",nom:"GA AM",ferme:"12:20",h:12,m:20},{id:"flam",nom:"FL AM",ferme:"13:15",h:13,m:15},{id:"nyam",nom:"NY AM",ferme:"14:15",h:14,m:15},{id:"gapm",nom:"GA PM",ferme:"18:20",h:18,m:20},{id:"flpm",nom:"FL PM",ferme:"21:15",h:21,m:15},{id:"nypm",nom:"NY PM",ferme:"21:30",h:21,m:30}];let PRI={b1:50,b2:20,b3:10,l3:500,mar:1000,l4:5000,l5:25000};let VENTES={};let REZILTA={};window.show=(t)=>{document.querySelectorAll('#dash,#rezilta,#pri').forEach(e=>e.style.display='none');document.getElementById(t).style.display='block';document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));document.getElementById('b-'+t).classList.add('active');if(t=='rezilta')renderReziltaForm();if(t=='dash')renderDash();};function renderReziltaForm(){let html="";TIRAJ.forEach(t=>{const r=REZILTA[t.id]||{};html+=`<div class="card"><b>${t.nom} - ${t.ferme} EST</b><br><br>1er: <input id="${t.id}1" value="${r.r1||''}" style="width:60px"> 2e: <input id="${t.id}2" value="${r.r2||''}" style="width:60px"> 3e: <input id="${t.id}3" value="${r.r3||''}" style="width:60px"><br><br><button class="btn btn-y" onclick="saveRez('${t.id}')">SOVE ${t.nom}</button> <span id="st-${t.id}">${r.r1!==undefined?'✅':''}</span></div>`;});document.getElementById('reziltaGrid').innerHTML=html;}window.saveRez=async(id)=>{const r1=document.getElementById(id+'1').value.padStart(2,'0');const r2=document.getElementById(id+'2').value.padStart(2,'0');const r3=document.getElementById(id+'3').value.padStart(2,'0');if(!r1)return alert("Antre 1er");const today=new Date().toISOString().split('T')[0];await set(ref(db,'rezilta/'+today+'/'+id),{r1,r2,r3,ts:Date.now()});document.getElementById('st-'+id).innerText='✅ Sove!';};window.savePri=async()=>{PRI={b1:+p_b1.value,b2:+p_b2.value,b3:+p_b3.value,l3:+p_l3.value,mar:+p_mar.value,l4:+p_l4.value,l5:+p_l5.value};await set(ref(db,'config/pri'),PRI);priStat.innerText='✅ Pri sove!';};function kalkilGayan(f){const rez=REZILTA[f.tiraj];if(!rez)return{gayan:false,peyman:0,txt:"Ann attente"};let pey=0;if(f.type=='bolet'){if(f.boul==rez.r1)pey=f.montan*PRI.b1;else if(f.boul==rez.r2)pey=f.montan*PRI.b2;else if(f.boul==rez.r3)pey=f.montan*PRI.b3;}else if(f.type=='maryaj'){const parts=f.boul.split('-');const nums=[rez.r1,rez.r2,rez.r3];if(nums.includes(parts[0])&&nums.includes(parts[1]))pey=f.montan*PRI.mar;}return{gayan:pey>0,peyman:pey,txt:pey>0?'🟢 GAYAN '+pey+'G':'🔴 PÈDI'};}function renderDash(){let totalV=0,totalP=0,html="<table><tr><th>Tiraj</th><th>Vant</th><th>Peyman</th><th>Benefis</th><th>Rezilta</th></tr>";TIRAJ.forEach(t=>{let v=0,p=0;Object.values(VENTES).forEach(vend=>{Object.values(vend).forEach(f=>{if(f.tiraj==t.id){v+=+f.montan||0;p+=kalkilGayan(f).peyman;}})});const rez=REZILTA[t.id];html+=`<tr><td>${t.nom}</td><td>${v}G</td><td>${p}G</td><td style="color:${v-p>=0?'#22c55e':'#ef4444'};font-weight:bold">${v-p}G</td><td>${rez?rez.r1+'-'+rez.r2+'-'+rez.r3+' ✅':'⏳'}</td></tr>`;totalV+=v;totalP+=p;});html+=`</table><h2 style="color:${totalV-totalP>=0?'#22c55e':'#ef4444'}">TOTAL: ${totalV}G - ${totalP}G = ${totalV-totalP}G</h2>`;document.getElementById('dashContent').innerHTML=html;let list="<table><tr><th>Fich</th><th>Tiraj</th><th>Boul</th><th>Rezilta</th><th>Peyman</th></tr>";Object.entries(VENTES).forEach(([vend,fiches])=>{Object.entries(fiches).forEach(([fid,f])=>{const g=kalkilGayan(f);list+=`<tr><td>${vend}-${fid.slice(-4)}</td><td>${f.tiraj}</td><td>${f.type} ${f.boul} ${f.montan}G</td><td>${g.txt}</td><td>${g.peyman}G</td></tr>`;})});document.getElementById('korijeList').innerHTML=list+"</table>";}const today=new Date().toISOString().split('T')[0];onValue(ref(db,'config/pri'),s=>{if(s.val()){PRI=s.val();try{p_b1.value=PRI.b1;p_b2.value=PRI.b2;p_b3.value=PRI.b3;p_l3.value=PRI.l3;p_mar.value=PRI.mar;p_l4.value=PRI.l4;p_l5.value=PRI.l5;}catch(e){}}});onValue(ref(db,'rezilta/'+today),s=>{REZILTA=s.val()||{};renderReziltaForm();renderDash();});onValue(ref(db,'ventes/'+today),s=>{VENTES=s.val()||{};renderDash();});</script></body></html>
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PROPRIO C&D V73 + RAPÒ</title>
+<style>
+*{box-sizing:border-box}body{background:#0f172a;color:#fff;font-family:sans-serif;margin:0;padding:10px}
+h1{color:#facc15;text-align:center;margin:6px 0}
+.card{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:10px;margin-bottom:10px}
+input,select{padding:8px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+button{background:#facc15;color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:bold;cursor:pointer}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+th{background:#0f172a;color:#facc15;padding:6px;text-align:left}
+td{padding:6px;border-bottom:1px solid #334155}
+.bal-pos{color:#22c55e;font-weight:bold}
+.bal-neg{color:#ef4444;font-weight:bold}
+</style>
+</head>
+<body>
+
+<script>
+// 🔐 MODPAS C&D123 MODIFIABLE
+let DEF_PASS="C&D123";
+let curPass=localStorage.getItem("proprio_custom_pass")||DEF_PASS;
+function checkPass(){
+let auth=sessionStorage.getItem("proprio_auth");
+if(auth===curPass) return true;
+let p=prompt("🔐 Antre Modpas PROPRIO:");
+if(p!==curPass){
+document.body.innerHTML="<div style='height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center'><h1>⛔ Aksè Refize</h1><button onclick='sessionStorage.clear();location.reload()' style='margin-top:20px;padding:10px 20px;background:#facc15;border:none;border-radius:10px'>Resevwa</button></div>";
+throw "blocked";
+}
+sessionStorage.setItem("proprio_auth",curPass);
+}
+checkPass();
+function chanjeModpas(){
+let a=prompt("Ansyen modpas:"); if(a!==curPass){alert("⛔ Pa bon");return;}
+let n=prompt("Nouvo modpas:"); if(!n||n.length<3){alert("Twò kout");return;}
+localStorage.setItem("proprio_custom_pass",n); curPass=n; sessionStorage.setItem("proprio_auth",n); alert("✅ Nouvo modpas: "+n);
+}
+</script>
+
+<h1>👑 C&D PROPRIO V73</h1>
+<div style="text-align:center;margin-bottom:8px">
+<button onclick="chanjeModpas()" style="background:#334155;color:white;font-size:11px">🔑 Chanje Modpas</button>
+<button onclick="sessionStorage.clear();location.reload()" style="background:#ef4444;color:white;font-size:11px">🚪 Dekonekte</button>
+</div>
+
+<div class="card">
+<b>📊 RAPPORT VENTE - Du... Au...</b>
+<div class="row">
+<div style="flex:1"><label style="font-size:11px">Du:</label><input type="date" id="dateDu" style="width:100%"></div>
+<div style="flex:1"><label style="font-size:11px">Au:</label><input type="date" id="dateAu" style="width:100%"></div>
+<div style="flex:1"><label style="font-size:11px">Vendeur:</label><select id="filtreVendeur" style="width:100%"><option value="all">Tout Vendeur</option></select></div>
+<button onclick="chajeRapò()" style="margin-top:16px">🔍 OK</button>
+</div>
+
+<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">VENTE</div><b id="totalVente" style="color:#fff;font-size:16px">0G</b></div>
+<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">COMISIÓN 10%</div><b id="totalCom" style="color:#facc15;font-size:16px">0G</b></div>
+<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">PAYÉ</div><b id="totalPaye" style="color:#22c55e;font-size:16px">0G</b></div>
+<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">BALANCE</div><b id="totalBal" style="color:#ef4444;font-size:16px">0G</b></div>
+</div>
+</div>
+
+<div class="card">
+<table>
+<thead><tr><th>Vendeur</th><th>Vente</th><th>Com 10%</th><th>Payé</th><th>Balance</th><th>Aksyon</th></tr></thead>
+<tbody id="tbodyRapò"></tbody>
+</table>
+<div id="detailFich" style="margin-top:10px;font-size:11px;color:#94a3b8"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, get, child, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+const firebaseConfig = { databaseURL: "https://cerdieulotto-default-rtdb.firebaseio.com" };
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window.db=db; window.ref=ref; window.get=get; window.child=child; window.set=set;
+
+window.onload=()=>{
+let t=new Date().toISOString().split('T')[0];
+document.getElementById('dateDu').value=t;
+document.getElementById('dateAu').value=t;
+chajeRapò();
+};
+</script>
+
+<script>
+let paiementsCache={};
+
+async function chajeRapò(){
+let dateDu=document.getElementById('dateDu').value;
+let dateAu=document.getElementById('dateAu').value;
+let filtre=document.getElementById('filtreVendeur').value;
+if(!dateDu) dateDu=new Date().toISOString().split('T')[0];
+if(!dateAu) dateAu=new Date().toISOString().split('T')[0];
+
+let snap=await get(child(ref(db),'fiches'));
+if(!snap.exists()){document.getElementById('tbodyRapò').innerHTML='<tr><td colspan=6>Pa gen fich</td></tr>';return;}
+let all=Object.values(snap.val());
+
+// Chaje paiements
+try{
+let snapPay=await get(child(ref(db),'paiements'));
+if(snapPay.exists()) paiementsCache=snapPay.val();
+}catch(e){}
+
+let filtreData=all.filter(f=>{
+let fDate=f.date?f.date.split('T')[0]:'';
+if(dateDu && fDate < dateDu) return false;
+if(dateAu && fDate > dateAu) return false;
+if(filtre!=='all' && f.vendeur!==filtre && f.idVendeur!==filtre) return false;
+return true;
+});
+
+let parVendeur={};
+filtreData.forEach(f=>{
+let v=f.vendeur||f.idVendeur||'Inconnu';
+if(!parVendeur[v]) parVendeur[v]={vente:0, fich:0};
+parVendeur[v].vente+=parseInt(f.total||f.montan||0)||0;
+parVendeur[v].fich++;
+});
+
+// Update select vendeur
+let sel=document.getElementById('filtreVendeur');
+let vendeursList=[...new Set(all.map(f=>f.vendeur||f.idVendeur))];
+if(sel.options.length<=1){
+vendeursList.forEach(v=>{
+let opt=document.createElement('option'); opt.value=v; opt.textContent=v; sel.appendChild(opt);
+});
+}
+
+let tbody=document.getElementById('tbodyRapò');
+tbody.innerHTML='';
+let totVente=0, totCom=0, totPaye=0, totBal=0;
+
+Object.keys(parVendeur).forEach(v=>{
+let vente=parVendeur[v].vente;
+let com=Math.round(vente*0.1);
+let paye=parseInt(paiementsCache[v+`_${dateDu}_${dateAu}`]?.montant || paiementsCache[v]?.montant || 0);
+let balance=vente - com - paye;
+totVente+=vente; totCom+=com; totPaye+=paye; totBal+=balance;
+tbody.innerHTML+=`<tr>
+<td><b>${v}</b><br><span style="font-size:10px">${parVendeur[v].fich} fich</span></td>
+<td>${vente}G</td>
+<td style="color:#facc15">${com}G</td>
+<td style="color:#22c55e"><input id="paye_${v}" type="number" value="${paye}" style="width:70px;padding:4px" onchange="sovePaye('${v}')"></td>
+<td class="${balance>=0?'bal-pos':'bal-neg'}">${balance}G</td>
+<td><button onclick="sovePaye('${v}')" style="padding:4px 6px;font-size:10px">💾</button> <button onclick="detailVendeur('${v}')" style="padding:4px 6px;font-size:10px;background:#334155;color:white">👁️</button></td>
+</tr>`;
+});
+
+document.getElementById('totalVente').innerText=totVente+'G';
+document.getElementById('totalCom').innerText=totCom+'G';
+document.getElementById('totalPaye').innerText=totPaye+'G';
+document.getElementById('totalBal').innerText=totBal+'G';
+}
+
+async function sovePaye(vendeur){
+let dateDu=document.getElementById('dateDu').value;
+let dateAu=document.getElementById('dateAu').value;
+let input=document.getElementById('paye_'+vendeur);
+let montant=parseInt(input.value)||0;
+let key=`${vendeur}_${dateDu}_${dateAu}`;
+try{
+await set(ref(db,`paiements/${key}`),{vendeur,montant,dateDu,dateAu,date:new Date().toISOString()});
+alert(`✅ Payé ${montant}G pou ${vendeur} sove!`);
+chajeRapò();
+}catch(e){alert('Erè: '+e.message);}
+}
+window.sovePaye=sovePaye;
+
+async function detailVendeur(v){
+let dateDu=document.getElementById('dateDu').value;
+let dateAu=document.getElementById('dateAu').value;
+let snap=await get(child(ref(db),'fiches'));
+let all=Object.values(snap.val());
+let f= all.filter(x=> (x.vendeur===v||x.idVendeur===v) && x.date.split('T')[0]>=dateDu && x.date.split('T')[0]<=dateAu);
+let html=`<b>Detail ${v} Du ${dateDu} Au ${dateAu}:</b><br>`;
+f.slice(-10).forEach(d=>{
+html+=`${d.date.split('T')[0]} - ${d.tiraj} - ${d.total}G - ${d.fiches?.length||1} fich<br>`;
+});
+document.getElementById('detailFich').innerHTML=html;
+}
+window.detailVendeur=detailVendeur;
+window.chajeRapò=chajeRapò;
+</script>
+</body>
+</html>
