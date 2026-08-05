@@ -1,192 +1,73 @@
-<!DOCTYPE html>
-<html lang="ht">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PROPRIO C&D V73 + RAPÒ</title>
-<style>
-*{box-sizing:border-box}body{background:#0f172a;color:#fff;font-family:sans-serif;margin:0;padding:10px}
-h1{color:#facc15;text-align:center;margin:6px 0}
-.card{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:10px;margin-bottom:10px}
-input,select{padding:8px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff}
-.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-button{background:#facc15;color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:bold;cursor:pointer}
-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
-th{background:#0f172a;color:#facc15;padding:6px;text-align:left}
-td{padding:6px;border-bottom:1px solid #334155}
-.bal-pos{color:#22c55e;font-weight:bold}
-.bal-neg{color:#ef4444;font-weight:bold}
-</style>
-</head>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V74 ULTIMATE</title>
+<style>*{box-sizing:border-box}body{background:#0f172a;color:#fff;font-family:sans-serif;margin:0;padding:8px}h1{color:#facc15;text-align:center;margin:4px 0;font-size:20px}.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:8px;margin-bottom:8px}input,select{padding:6px;border-radius:6px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:12px}button{background:#facc15;color:#000;border:none;padding:6px 10px;border-radius:6px;font-weight:bold;font-size:12px}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#0f172a;color:#facc15;padding:5px}td{padding:5px;border-bottom:1px solid #334155}</style></head>
 <body>
-
-<script>
-// 🔐 MODPAS C&D123 MODIFIABLE
-let DEF_PASS="C&D123";
-let curPass=localStorage.getItem("proprio_custom_pass")||DEF_PASS;
-function checkPass(){
-let auth=sessionStorage.getItem("proprio_auth");
-if(auth===curPass) return true;
-let p=prompt("🔐 Antre Modpas PROPRIO:");
-if(p!==curPass){
-document.body.innerHTML="<div style='height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center'><h1>⛔ Aksè Refize</h1><button onclick='sessionStorage.clear();location.reload()' style='margin-top:20px;padding:10px 20px;background:#facc15;border:none;border-radius:10px'>Resevwa</button></div>";
-throw "blocked";
-}
-sessionStorage.setItem("proprio_auth",curPass);
-}
-checkPass();
-function chanjeModpas(){
-let a=prompt("Ansyen modpas:"); if(a!==curPass){alert("⛔ Pa bon");return;}
-let n=prompt("Nouvo modpas:"); if(!n||n.length<3){alert("Twò kout");return;}
-localStorage.setItem("proprio_custom_pass",n); curPass=n; sessionStorage.setItem("proprio_auth",n); alert("✅ Nouvo modpas: "+n);
-}
-</script>
-
-<h1>👑 C&D PROPRIO V73</h1>
-<div style="text-align:center;margin-bottom:8px">
-<button onclick="chanjeModpas()" style="background:#334155;color:white;font-size:11px">🔑 Chanje Modpas</button>
-<button onclick="sessionStorage.clear();location.reload()" style="background:#ef4444;color:white;font-size:11px">🚪 Dekonekte</button>
+<script>let DEF="C&D123";let cur=localStorage.getItem("ppass")||DEF;function chk(){if(sessionStorage.getItem("pauth")===cur) return;let p=prompt("Modpas Proprio:");if(p!==cur){document.body.innerHTML="<h1>⛔ Refize</h1>";throw "no";}sessionStorage.setItem("pauth",cur);}chk();</script>
+<h1>👑 C&D PROPRIO V74</h1>
+<div class="card">
+<b>📊 RAPPORT - Du Au + Vendeur + Tirage</b>
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
+<div><label style="font-size:10px">Du:</label><input type="date" id="dateDu"></div>
+<div><label style="font-size:10px">Au:</label><input type="date" id="dateAu"></div>
+<div><label style="font-size:10px">Vendeur:</label><select id="fVendeur"><option value="all">Tout</option></select></div>
+<div><label style="font-size:10px">Tirage:</label><select id="fTirage"><option value="all">Tout Tirage</option><option>GA AM</option><option>GA PM</option><option>FL AM</option><option>FL PM</option><option>NY AM</option><option>NY PM</option></select></div>
+<button onclick="loadRapò()">🔍 OK</button>
+</div>
+<div style="display:flex;gap:4px;margin-top:8px"><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">VENTE</div><b id="tVente">0G</b></div><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">COMMISSION</div><b id="tCom" style="color:#facc15">0G</b></div><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">PAYÉ</div><b id="tPaye" style="color:#22c55e">0G</b></div><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">BALANCE</div><b id="tBal" style="color:#ef4444">0G</b></div></div>
 </div>
 
 <div class="card">
-<b>📊 RAPPORT VENTE - Du... Au...</b>
-<div class="row">
-<div style="flex:1"><label style="font-size:11px">Du:</label><input type="date" id="dateDu" style="width:100%"></div>
-<div style="flex:1"><label style="font-size:11px">Au:</label><input type="date" id="dateAu" style="width:100%"></div>
-<div style="flex:1"><label style="font-size:11px">Vendeur:</label><select id="filtreVendeur" style="width:100%"><option value="all">Tout Vendeur</option></select></div>
-<button onclick="chajeRapò()" style="margin-top:16px">🔍 OK</button>
-</div>
-
-<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
-<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">VENTE</div><b id="totalVente" style="color:#fff;font-size:16px">0G</b></div>
-<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">COMISIÓN 10%</div><b id="totalCom" style="color:#facc15;font-size:16px">0G</b></div>
-<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">PAYÉ</div><b id="totalPaye" style="color:#22c55e;font-size:16px">0G</b></div>
-<div style="flex:1;background:#0f172a;padding:8px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#94a3b8">BALANCE</div><b id="totalBal" style="color:#ef4444;font-size:16px">0G</b></div>
-</div>
+<table><thead><tr><th>Vendeur</th><th>Vente</th><th>Com</th><th>Payé</th><th>Balance</th><th></th></tr></thead><tbody id="tbody"></tbody></table>
 </div>
 
 <div class="card">
-<table>
-<thead><tr><th>Vendeur</th><th>Vente</th><th>Com 10%</th><th>Payé</th><th>Balance</th><th>Aksyon</th></tr></thead>
-<tbody id="tbodyRapò"></tbody>
-</table>
-<div id="detailFich" style="margin-top:10px;font-size:11px;color:#94a3b8"></div>
+<b>⚙️ KONTWÒL PROPRIO</b>
+<div style="margin-top:6px"><label>Ouvert/Fermé Vendeurs:</label><div id="listVendeurs" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"></div></div>
+<div style="margin-top:8px"><label>⏰ Lè Fermeture modifiable (EST):</label>
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+<div>GA AM<input id="fGAAM" type="time" value="12:15"></div><div>GA PM<input id="fGAPM" type="time" value="18:15"></div><div>FL AM<input id="fFLAM" type="time" value="13:15"></div><div>FL PM<input id="fFLPM" type="time" value="21:15"></div><div>NY AM<input id="fNYAM" type="time" value="14:15"></div><div>NY PM<input id="fNYPM" type="time" value="21:30"></div>
+</div><button onclick="saveFerm()" style="margin-top:4px">💾 Save Lè</button></div>
+<div style="margin-top:8px"><label>💰 Paiement Jeux modifiable:</label>
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+<div>Bolet<input id="pBolet" value="50/20/10" style="width:90px"></div><div>Loto3<input id="pLoto3" value="500" style="width:60px"></div><div>Loto4<input id="pLoto4" value="5000" style="width:60px"></div><div>Loto5<input id="pLoto5" value="25000" style="width:70px"></div>
+</div><button onclick="savePay()" style="margin-top:4px">💾 Save Paiement</button></div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, get, child, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-const firebaseConfig = { databaseURL: "https://cerdieulotto-default-rtdb.firebaseio.com" };
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-window.db=db; window.ref=ref; window.get=get; window.child=child; window.set=set;
-
-window.onload=()=>{
-let t=new Date().toISOString().split('T')[0];
-document.getElementById('dateDu').value=t;
-document.getElementById('dateAu').value=t;
-chajeRapò();
-};
+import { getDatabase, ref, get, child, set, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+const cfg={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"};const app=initializeApp(cfg);const db=getDatabase(app);window.db=db;window.ref=ref;window.get=get;window.child=child;window.set=set;window.update=update;
+window.onload=()=>{let t=new Date().toISOString().split('T')[0];document.getElementById('dateDu').value=t;document.getElementById('dateAu').value=t;loadConfig();loadRapò();};
+async function loadConfig(){
+let s=await get(child(ref(db),'config'));if(!s.exists()) return;let c=s.val();
+if(c.fermeture){document.getElementById('fGAAM').value=c.fermeture['GA AM']||'12:15';document.getElementById('fGAPM').value=c.fermeture['GA PM']||'18:15';document.getElementById('fFLAM').value=c.fermeture['FL AM']||'13:15';document.getElementById('fFLPM').value=c.fermeture['FL PM']||'21:15';document.getElementById('fNYAM').value=c.fermeture['NY AM']||'14:15';document.getElementById('fNYPM').value=c.fermeture['NY PM']||'21:30';}
+if(c.paiements){document.getElementById('pBolet').value=c.paiements.bolet||'50/20/10';document.getElementById('pLoto3').value=c.paiements.loto3||'500';}
+if(c.vendeurs){renderVendeursCtrl(c.vendeurs);}
+}
+function renderVendeursCtrl(vs){let d=document.getElementById('listVendeurs');d.innerHTML='';Object.keys(vs).forEach(v=>{d.innerHTML+=`<label style="background:#0f172a;padding:4px 8px;border-radius:15px;font-size:11px"><input type="checkbox" ${vs[v]==='ouvert'?'checked':''} onchange="toggleV('${v}',this.checked)"> ${v} ${vs[v]==='ouvert'?'🟢':'🔴'}</label>`;});}
+window.toggleV=async(v,ouvert)=>{await update(ref(db,`config/vendeurs`),{[v]:ouvert?'ouvert':'ferme'});};
+window.saveFerm=async()=>{await set(ref(db,'config/fermeture'),{'GA AM':document.getElementById('fGAAM').value,'GA PM':document.getElementById('fGAPM').value,'FL AM':document.getElementById('fFLAM').value,'FL PM':document.getElementById('fFLPM').value,'NY AM':document.getElementById('fNYAM').value,'NY PM':document.getElementById('fNYPM').value});alert('✅ Lè sove');};
+window.savePay=async()=>{await set(ref(db,'config/paiements'),{bolet:document.getElementById('pBolet').value,loto3:document.getElementById('pLoto3').value,loto4:document.getElementById('pLoto4').value,loto5:document.getElementById('pLoto5').value});alert('✅ Paiement sove');};
 </script>
-
 <script>
-let paiementsCache={};
-
-async function chajeRapò(){
-let dateDu=document.getElementById('dateDu').value;
-let dateAu=document.getElementById('dateAu').value;
-let filtre=document.getElementById('filtreVendeur').value;
-if(!dateDu) dateDu=new Date().toISOString().split('T')[0];
-if(!dateAu) dateAu=new Date().toISOString().split('T')[0];
-
-let snap=await get(child(ref(db),'fiches'));
-if(!snap.exists()){document.getElementById('tbodyRapò').innerHTML='<tr><td colspan=6>Pa gen fich</td></tr>';return;}
+async function loadRapò(){
+let du=document.getElementById('dateDu').value;let au=document.getElementById('dateAu').value;let fv=document.getElementById('fVendeur').value;let ft=document.getElementById('fTirage').value;
+let snap=await get(child(ref(db),'fiches'));let tb=document.getElementById('tbody');if(!snap.exists()){tb.innerHTML='<tr><td>Pa gen fich</td></tr>';return;}
 let all=Object.values(snap.val());
-
-// Chaje paiements
-try{
-let snapPay=await get(child(ref(db),'paiements'));
-if(snapPay.exists()) paiementsCache=snapPay.val();
-}catch(e){}
-
-let filtreData=all.filter(f=>{
-let fDate=f.date?f.date.split('T')[0]:'';
-if(dateDu && fDate < dateDu) return false;
-if(dateAu && fDate > dateAu) return false;
-if(filtre!=='all' && f.vendeur!==filtre && f.idVendeur!==filtre) return false;
-return true;
+let paySnap=await get(child(ref(db),'paiements'));let pays=paySnap.exists()?paySnap.val():{};
+let vendSet=new Set(all.map(f=>f.vendeur||f.idVendeur));let sel=document.getElementById('fVendeur');if(sel.options.length<=1){vendSet.forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});}
+let filt=all.filter(f=>{let fd=f.date.split('T')[0];if(du&&fd<du) return false;if(au&&fd>au) return false;if(fv!=='all'&&(f.vendeur||f.idVendeur)!==fv) return false;if(ft!=='all'&&!(f.tirajs||[f.tiraj]).join(',').includes(ft)) return false;return true;});
+let par={};filt.forEach(f=>{let v=f.vendeur||f.idVendeur;if(!par[v]) par[v]={vente:0};par[v].vente+=parseInt(f.total||0);});
+tb.innerHTML='';let tv=0,tc=0,tp=0,tb2=0;
+Object.keys(par).forEach(v=>{
+let vente=par[v].vente;let com=Math.round(vente*0.1);
+let paye=0;Object.keys(pays).forEach(k=>{if(k.startsWith(v)) paye+=parseInt(pays[k].montant||0);});
+let bal=vente-com-paye;tv+=vente;tc+=com;tp+=paye;tb2+=bal;
+tb.innerHTML+=`<tr><td>${v}</td><td>${vente}G</td><td style="color:#facc15">${com}G</td><td><input id="pay_${v}" type="number" value="${paye}" style="width:60px" onchange="saveP('${v}')">G</td><td style="color:${bal>=0?'#22c55e':'#ef4444'}">${bal}G</td><td><button onclick="saveP('${v}')" style="padding:3px 6px;font-size:10px">💾</button></td></tr>`;
 });
-
-let parVendeur={};
-filtreData.forEach(f=>{
-let v=f.vendeur||f.idVendeur||'Inconnu';
-if(!parVendeur[v]) parVendeur[v]={vente:0, fich:0};
-parVendeur[v].vente+=parseInt(f.total||f.montan||0)||0;
-parVendeur[v].fich++;
-});
-
-// Update select vendeur
-let sel=document.getElementById('filtreVendeur');
-let vendeursList=[...new Set(all.map(f=>f.vendeur||f.idVendeur))];
-if(sel.options.length<=1){
-vendeursList.forEach(v=>{
-let opt=document.createElement('option'); opt.value=v; opt.textContent=v; sel.appendChild(opt);
-});
+document.getElementById('tVente').innerText=tv+'G';document.getElementById('tCom').innerText=tc+'G';document.getElementById('tPaye').innerText=tp+'G';document.getElementById('tBal').innerText=tb2+'G';
+// list vendeur ctrl
+let listCtrl=document.getElementById('listVendeurs');if(listCtrl.innerHTML===''){let html='';vendSet.forEach(v=>{html+=`<label style="background:#0f172a;padding:4px 8px;border-radius:15px;font-size:11px"><input type="checkbox" checked onchange="toggleV('${v}',this.checked)"> ${v} 🟢</label>`;});listCtrl.innerHTML=html;}
 }
-
-let tbody=document.getElementById('tbodyRapò');
-tbody.innerHTML='';
-let totVente=0, totCom=0, totPaye=0, totBal=0;
-
-Object.keys(parVendeur).forEach(v=>{
-let vente=parVendeur[v].vente;
-let com=Math.round(vente*0.1);
-let paye=parseInt(paiementsCache[v+`_${dateDu}_${dateAu}`]?.montant || paiementsCache[v]?.montant || 0);
-let balance=vente - com - paye;
-totVente+=vente; totCom+=com; totPaye+=paye; totBal+=balance;
-tbody.innerHTML+=`<tr>
-<td><b>${v}</b><br><span style="font-size:10px">${parVendeur[v].fich} fich</span></td>
-<td>${vente}G</td>
-<td style="color:#facc15">${com}G</td>
-<td style="color:#22c55e"><input id="paye_${v}" type="number" value="${paye}" style="width:70px;padding:4px" onchange="sovePaye('${v}')"></td>
-<td class="${balance>=0?'bal-pos':'bal-neg'}">${balance}G</td>
-<td><button onclick="sovePaye('${v}')" style="padding:4px 6px;font-size:10px">💾</button> <button onclick="detailVendeur('${v}')" style="padding:4px 6px;font-size:10px;background:#334155;color:white">👁️</button></td>
-</tr>`;
-});
-
-document.getElementById('totalVente').innerText=totVente+'G';
-document.getElementById('totalCom').innerText=totCom+'G';
-document.getElementById('totalPaye').innerText=totPaye+'G';
-document.getElementById('totalBal').innerText=totBal+'G';
-}
-
-async function sovePaye(vendeur){
-let dateDu=document.getElementById('dateDu').value;
-let dateAu=document.getElementById('dateAu').value;
-let input=document.getElementById('paye_'+vendeur);
-let montant=parseInt(input.value)||0;
-let key=`${vendeur}_${dateDu}_${dateAu}`;
-try{
-await set(ref(db,`paiements/${key}`),{vendeur,montant,dateDu,dateAu,date:new Date().toISOString()});
-alert(`✅ Payé ${montant}G pou ${vendeur} sove!`);
-chajeRapò();
-}catch(e){alert('Erè: '+e.message);}
-}
-window.sovePaye=sovePaye;
-
-async function detailVendeur(v){
-let dateDu=document.getElementById('dateDu').value;
-let dateAu=document.getElementById('dateAu').value;
-let snap=await get(child(ref(db),'fiches'));
-let all=Object.values(snap.val());
-let f= all.filter(x=> (x.vendeur===v||x.idVendeur===v) && x.date.split('T')[0]>=dateDu && x.date.split('T')[0]<=dateAu);
-let html=`<b>Detail ${v} Du ${dateDu} Au ${dateAu}:</b><br>`;
-f.slice(-10).forEach(d=>{
-html+=`${d.date.split('T')[0]} - ${d.tiraj} - ${d.total}G - ${d.fiches?.length||1} fich<br>`;
-});
-document.getElementById('detailFich').innerHTML=html;
-}
-window.detailVendeur=detailVendeur;
-window.chajeRapò=chajeRapò;
-</script>
-</body>
-</html>
+async function saveP(v){let du=document.getElementById('dateDu').value;let au=document.getElementById('dateAu').value;let m=parseInt(document.getElementById('pay_'+v).value)||0;await set(ref(db,`paiements/${v}_${du}_${au}`),{vendeur:v,montant:m,dateDu:du,dateAu:au});alert('Payé sove');loadRapò();}
+window.loadRapò=loadRapò;window.saveP=saveP;
+</script></body></html>
