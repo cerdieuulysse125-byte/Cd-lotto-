@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V74 ULTIMATE</title>
-<style>*{box-sizing:border-box}body{background:#0f172a;color:#fff;font-family:sans-serif;margin:0;padding:8px}h1{color:#facc15;text-align:center;margin:4px 0;font-size:20px}.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:8px;margin-bottom:8px}input,select{padding:6px;border-radius:6px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:12px}button{background:#facc15;color:#000;border:none;padding:6px 10px;border-radius:6px;font-weight:bold;font-size:12px}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#0f172a;color:#facc15;padding:5px}td{padding:5px;border-bottom:1px solid #334155}</style></head>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V75 VENDEURS</title>
+<style>*{box-sizing:border-box}body{background:#0f172a;color:#fff;font-family:sans-serif;margin:0;padding:8px}h1{color:#facc15;text-align:center;margin:4px 0;font-size:20px}.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:10px;margin-bottom:8px}input,select{padding:6px;border-radius:6px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:12px}button{background:#facc15;color:#000;border:none;padding:6px 10px;border-radius:6px;font-weight:bold;font-size:12px;cursor:pointer}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#0f172a;color:#facc15;padding:5px}td{padding:5px;border-bottom:1px solid #334155}.switch{position:relative;display:inline-block;width:50px;height:24px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ef4444;border-radius:24px;transition:.3s}.slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s}input:checked+.slider{background:#22c55e}input:checked+.slider:before{transform:translateX(26px)}</style></head>
 <body>
 <script>let DEF="C&D123";let cur=localStorage.getItem("ppass")||DEF;function chk(){if(sessionStorage.getItem("pauth")===cur) return;let p=prompt("Modpas Proprio:");if(p!==cur){document.body.innerHTML="<h1>⛔ Refize</h1>";throw "no";}sessionStorage.setItem("pauth",cur);}chk();</script>
-<h1>👑 C&D PROPRIO V74</h1>
+<h1>👑 C&D PROPRIO V75</h1>
+
 <div class="card">
 <b>📊 RAPPORT - Du Au + Vendeur + Tirage</b>
 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
@@ -15,59 +16,102 @@
 <div style="display:flex;gap:4px;margin-top:8px"><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">VENTE</div><b id="tVente">0G</b></div><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">COMMISSION</div><b id="tCom" style="color:#facc15">0G</b></div><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">PAYÉ</div><b id="tPaye" style="color:#22c55e">0G</b></div><div style="flex:1;background:#0f172a;padding:6px;border-radius:6px;text-align:center"><div style="font-size:9px">BALANCE</div><b id="tBal" style="color:#ef4444">0G</b></div></div>
 </div>
 
-<div class="card">
-<table><thead><tr><th>Vendeur</th><th>Vente</th><th>Com</th><th>Payé</th><th>Balance</th><th></th></tr></thead><tbody id="tbody"></tbody></table>
+<div class="card"><table><thead><tr><th>Vendeur</th><th>Vente</th><th>Com</th><th>Payé</th><th>Balance</th><th></th></tr></thead><tbody id="tbody"></tbody></table></div>
+
+<div class="card" style="border:2px solid #facc15">
+<b>👥 GESTION VENDEURS - Ajouter / Ouvert / Fermé</b>
+<div style="display:flex;gap:4px;margin-top:8px">
+<input id="newVendeur" placeholder="Non nouvo vendeur ex: vendeur2" style="flex:1">
+<button onclick="ajouterVendeur()" style="background:#22c55e;color:#fff">➕ Ajouter Vendeur</button>
+</div>
+<div id="listVendeurs" style="margin-top:10px"></div>
+<div style="font-size:10px;color:#94a3b8;margin-top:6px">🟢 = Ouvè ka vann | 🔴 = Fèmen pa ka vann</div>
 </div>
 
 <div class="card">
 <b>⚙️ KONTWÒL PROPRIO</b>
-<div style="margin-top:6px"><label>Ouvert/Fermé Vendeurs:</label><div id="listVendeurs" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"></div></div>
-<div style="margin-top:8px"><label>⏰ Lè Fermeture modifiable (EST):</label>
-<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-<div>GA AM<input id="fGAAM" type="time" value="12:15"></div><div>GA PM<input id="fGAPM" type="time" value="18:15"></div><div>FL AM<input id="fFLAM" type="time" value="13:15"></div><div>FL PM<input id="fFLPM" type="time" value="21:15"></div><div>NY AM<input id="fNYAM" type="time" value="14:15"></div><div>NY PM<input id="fNYPM" type="time" value="21:30"></div>
-</div><button onclick="saveFerm()" style="margin-top:4px">💾 Save Lè</button></div>
-<div style="margin-top:8px"><label>💰 Paiement Jeux modifiable:</label>
-<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-<div>Bolet<input id="pBolet" value="50/20/10" style="width:90px"></div><div>Loto3<input id="pLoto3" value="500" style="width:60px"></div><div>Loto4<input id="pLoto4" value="5000" style="width:60px"></div><div>Loto5<input id="pLoto5" value="25000" style="width:70px"></div>
-</div><button onclick="savePay()" style="margin-top:4px">💾 Save Paiement</button></div>
+<div style="margin-top:6px"><b>⏰ Lè Fermeture modifiable (EST):</b>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px">
+<div>GA AM<input id="fGAAM" type="time" value="12:15" style="width:100%"></div><div>GA PM<input id="fGAPM" type="time" value="18:15" style="width:100%"></div>
+<div>FL AM<input id="fFLAM" type="time" value="13:15" style="width:100%"></div><div>FL PM<input id="fFLPM" type="time" value="21:15" style="width:100%"></div>
+<div>NY AM<input id="fNYAM" type="time" value="14:15" style="width:100%"></div><div>NY PM<input id="fNYPM" type="time" value="21:30" style="width:100%"></div>
+</div><button onclick="saveFerm()" style="margin-top:6px">💾 Save Lè</button></div>
+<div style="margin-top:10px"><b>💰 Paiement Jeux modifiable:</b>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px">
+<div>Bolet<input id="pBolet" value="50/20/10" style="width:100%"></div><div>Loto3<input id="pLoto3" value="500" style="width:100%"></div>
+<div>Loto4<input id="pLoto4" value="5000" style="width:100%"></div><div>Loto5<input id="pLoto5" value="25000" style="width:100%"></div>
+</div><button onclick="savePay()" style="margin-top:6px">💾 Save Paiement</button></div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, get, child, set, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 const cfg={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"};const app=initializeApp(cfg);const db=getDatabase(app);window.db=db;window.ref=ref;window.get=get;window.child=child;window.set=set;window.update=update;
-window.onload=()=>{let t=new Date().toISOString().split('T')[0];document.getElementById('dateDu').value=t;document.getElementById('dateAu').value=t;loadConfig();loadRapò();};
+window.onload=async()=>{
+let t=new Date().toISOString().split('T')[0];document.getElementById('dateDu').value=t;document.getElementById('dateAu').value=t;
+await loadConfig(); await loadRapò();
+};
 async function loadConfig(){
-let s=await get(child(ref(db),'config'));if(!s.exists()) return;let c=s.val();
+let s=await get(child(ref(db),'config')); if(!s.exists()){initDefault();return;}
+let c=s.val();
 if(c.fermeture){document.getElementById('fGAAM').value=c.fermeture['GA AM']||'12:15';document.getElementById('fGAPM').value=c.fermeture['GA PM']||'18:15';document.getElementById('fFLAM').value=c.fermeture['FL AM']||'13:15';document.getElementById('fFLPM').value=c.fermeture['FL PM']||'21:15';document.getElementById('fNYAM').value=c.fermeture['NY AM']||'14:15';document.getElementById('fNYPM').value=c.fermeture['NY PM']||'21:30';}
-if(c.paiements){document.getElementById('pBolet').value=c.paiements.bolet||'50/20/10';document.getElementById('pLoto3').value=c.paiements.loto3||'500';}
-if(c.vendeurs){renderVendeursCtrl(c.vendeurs);}
+if(c.paiements){document.getElementById('pBolet').value=c.paiements.bolet||'50/20/10';document.getElementById('pLoto3').value=c.paiements.loto3||'500';document.getElementById('pLoto4').value=c.paiements.loto4||'5000';document.getElementById('pLoto5').value=c.paiements.loto5||'25000';}
+if(c.vendeurs){renderVendeurs(c.vendeurs);} else {initDefault();}
 }
-function renderVendeursCtrl(vs){let d=document.getElementById('listVendeurs');d.innerHTML='';Object.keys(vs).forEach(v=>{d.innerHTML+=`<label style="background:#0f172a;padding:4px 8px;border-radius:15px;font-size:11px"><input type="checkbox" ${vs[v]==='ouvert'?'checked':''} onchange="toggleV('${v}',this.checked)"> ${v} ${vs[v]==='ouvert'?'🟢':'🔴'}</label>`;});}
-window.toggleV=async(v,ouvert)=>{await update(ref(db,`config/vendeurs`),{[v]:ouvert?'ouvert':'ferme'});};
+async function initDefault(){let def={vendeur1:'ouvert',vendeur2:'ouvert',vendeur3:'ouvert'};await set(ref(db,'config/vendeurs'),def);renderVendeurs(def);}
+function renderVendeurs(vs){
+let div=document.getElementById('listVendeurs'); div.innerHTML='';
+Object.keys(vs).forEach((v,i)=>{
+let ouvert=vs[v]==='ouvert';
+div.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;background:#0f172a;padding:8px;border-radius:8px;margin:4px 0">
+<div><b>${v}</b> <span style="font-size:11px;color:${ouvert?'#22c55e':'#ef4444'}">${ouvert?'🟢 OUVERT':'🔴 FERMÉ'}</span></div>
+<div style="display:flex;gap:6px;align-items:center">
+<label class="switch"><input type="checkbox" ${ouvert?'checked':''} onchange="toggleV('${v}',this.checked)"><span class="slider"></span></label>
+<button onclick="suppV('${v}')" style="background:#ef4444;color:#fff;padding:4px 8px;font-size:10px">🗑️</button>
+</div></div>`;
+});
+}
+window.toggleV=async(v,ouvert)=>{
+await update(ref(db,'config/vendeurs'),{[v]:ouvert?'ouvert':'ferme'});
+let d=document.getElementById('listVendeurs'); // re-render quick
+let s=await get(child(ref(db),'config/vendeurs'));renderVendeurs(s.val());
+};
+window.ajouterVendeur=async()=>{
+let n=document.getElementById('newVendeur').value.trim(); if(!n){alert('Mete non vendeur');return;}
+n=n.toLowerCase().replace(/\s+/g,'');
+await update(ref(db,'config/vendeurs'),{[n]:'ouvert'});
+document.getElementById('newVendeur').value='';alert('✅ '+n+' ajoute OUVERT');loadConfig();loadRapò();
+};
+window.suppV=async(v)=>{
+if(!confirm('Efase '+v+'?')) return;
+let s=await get(child(ref(db),'config/vendeurs'));let vs=s.val();delete vs[v];await set(ref(db,'config/vendeurs'),vs);loadConfig();
+};
 window.saveFerm=async()=>{await set(ref(db,'config/fermeture'),{'GA AM':document.getElementById('fGAAM').value,'GA PM':document.getElementById('fGAPM').value,'FL AM':document.getElementById('fFLAM').value,'FL PM':document.getElementById('fFLPM').value,'NY AM':document.getElementById('fNYAM').value,'NY PM':document.getElementById('fNYPM').value});alert('✅ Lè sove');};
 window.savePay=async()=>{await set(ref(db,'config/paiements'),{bolet:document.getElementById('pBolet').value,loto3:document.getElementById('pLoto3').value,loto4:document.getElementById('pLoto4').value,loto5:document.getElementById('pLoto5').value});alert('✅ Paiement sove');};
+window.loadConfig=loadConfig; window.renderVendeurs=renderVendeurs;
 </script>
 <script>
 async function loadRapò(){
 let du=document.getElementById('dateDu').value;let au=document.getElementById('dateAu').value;let fv=document.getElementById('fVendeur').value;let ft=document.getElementById('fTirage').value;
-let snap=await get(child(ref(db),'fiches'));let tb=document.getElementById('tbody');if(!snap.exists()){tb.innerHTML='<tr><td>Pa gen fich</td></tr>';return;}
-let all=Object.values(snap.val());
+let snap=await get(child(ref(db),'fiches'));let tb=document.getElementById('tbody');
 let paySnap=await get(child(ref(db),'paiements'));let pays=paySnap.exists()?paySnap.val():{};
-let vendSet=new Set(all.map(f=>f.vendeur||f.idVendeur));let sel=document.getElementById('fVendeur');if(sel.options.length<=1){vendSet.forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});}
+let vendConf=await get(child(ref(db),'config/vendeurs'));let allVendeurs=vendConf.exists()?Object.keys(vendConf.val()):[];
+// update select
+let sel=document.getElementById('fVendeur');let current=sel.value;sel.innerHTML='<option value="all">Tout</option>';allVendeurs.forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;if(v===current) o.selected=true;sel.appendChild(o);});
+if(!snap.exists()){tb.innerHTML='<tr><td colspan=6>Pa gen fich - men vendeurs yo disponib</td></tr>';document.getElementById('tVente').innerText='0G';document.getElementById('tCom').innerText='0G';document.getElementById('tPaye').innerText='0G';document.getElementById('tBal').innerText='0G';return;}
+let all=Object.values(snap.val());
 let filt=all.filter(f=>{let fd=f.date.split('T')[0];if(du&&fd<du) return false;if(au&&fd>au) return false;if(fv!=='all'&&(f.vendeur||f.idVendeur)!==fv) return false;if(ft!=='all'&&!(f.tirajs||[f.tiraj]).join(',').includes(ft)) return false;return true;});
 let par={};filt.forEach(f=>{let v=f.vendeur||f.idVendeur;if(!par[v]) par[v]={vente:0};par[v].vente+=parseInt(f.total||0);});
 tb.innerHTML='';let tv=0,tc=0,tp=0,tb2=0;
+if(Object.keys(par).length===0){tb.innerHTML='<tr><td colspan=6>Pa gen fich pou filt sa</td></tr>';}
 Object.keys(par).forEach(v=>{
 let vente=par[v].vente;let com=Math.round(vente*0.1);
 let paye=0;Object.keys(pays).forEach(k=>{if(k.startsWith(v)) paye+=parseInt(pays[k].montant||0);});
 let bal=vente-com-paye;tv+=vente;tc+=com;tp+=paye;tb2+=bal;
-tb.innerHTML+=`<tr><td>${v}</td><td>${vente}G</td><td style="color:#facc15">${com}G</td><td><input id="pay_${v}" type="number" value="${paye}" style="width:60px" onchange="saveP('${v}')">G</td><td style="color:${bal>=0?'#22c55e':'#ef4444'}">${bal}G</td><td><button onclick="saveP('${v}')" style="padding:3px 6px;font-size:10px">💾</button></td></tr>`;
+tb.innerHTML+=`<tr><td><b>${v}</b></td><td>${vente}G</td><td style="color:#facc15">${com}G</td><td><input id="pay_${v}" type="number" value="${paye}" style="width:60px" onchange="saveP('${v}')">G</td><td style="color:${bal>=0?'#22c55e':'#ef4444'};font-weight:bold">${bal}G</td><td><button onclick="saveP('${v}')" style="padding:3px 6px">💾</button></td></tr>`;
 });
 document.getElementById('tVente').innerText=tv+'G';document.getElementById('tCom').innerText=tc+'G';document.getElementById('tPaye').innerText=tp+'G';document.getElementById('tBal').innerText=tb2+'G';
-// list vendeur ctrl
-let listCtrl=document.getElementById('listVendeurs');if(listCtrl.innerHTML===''){let html='';vendSet.forEach(v=>{html+=`<label style="background:#0f172a;padding:4px 8px;border-radius:15px;font-size:11px"><input type="checkbox" checked onchange="toggleV('${v}',this.checked)"> ${v} 🟢</label>`;});listCtrl.innerHTML=html;}
 }
-async function saveP(v){let du=document.getElementById('dateDu').value;let au=document.getElementById('dateAu').value;let m=parseInt(document.getElementById('pay_'+v).value)||0;await set(ref(db,`paiements/${v}_${du}_${au}`),{vendeur:v,montant:m,dateDu:du,dateAu:au});alert('Payé sove');loadRapò();}
+async function saveP(v){let du=document.getElementById('dateDu').value;let au=document.getElementById('dateAu').value;let m=parseInt(document.getElementById('pay_'+v).value)||0;await set(ref(db,`paiements/${v}_${du}_${au}`),{vendeur:v,montant:m,dateDu:du,dateAu:au});alert('✅ Payé sove');loadRapò();}
 window.loadRapò=loadRapò;window.saveP=saveP;
 </script></body></html>
