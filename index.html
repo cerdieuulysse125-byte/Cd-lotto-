@@ -1,25 +1,12 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VENDEUR V81 FINAL</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VENDEUR V82 FINAL DEBUG</title>
 <style>*{box-sizing:border-box}body{background:#f1f5f9;color:#000;font-family:sans-serif;margin:0;padding:8px}h1{font-size:13px;text-align:center;color:#ca8a04;margin:4px}.card{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:10px;margin-bottom:8px}input,select{padding:8px;border-radius:6px;border:1px solid #94a3b8;background:#fff;color:#000;font-size:14px;width:100%}button{background:#eab308;color:#000;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer}.tirage{display:flex;gap:5px;flex-wrap:wrap}.tirage label{background:#f1f5f9;padding:5px 10px;border-radius:20px;border:1px solid #cbd5e1;font-size:12px;cursor:pointer}.tirage input{width:auto}#liste{max-height:180px;overflow:auto;background:#f8fafc;border-radius:8px;padding:6px;margin-top:6px;border:1px solid #e2e8f0}@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:80mm;padding:5px;font-family:monospace;font-size:12px;color:#000;background:#fff}}</style></head>
 <body>
 <script>
-// FIX DAT AYITI FÒSE - menm jan ak Proprio
-function getHaitiDateStr(){
-let d=new Date();
-let haiti=new Date(d.toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));
-let y=haiti.getFullYear();
-let m=String(haiti.getMonth()+1).padStart(2,'0');
-let day=String(haiti.getDate()).padStart(2,'0');
-return `${y}-${m}-${day}`;
-}
-function getHaitiTimeStr(){
-let d=new Date();
-let haiti=new Date(d.toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));
-return haiti.toLocaleTimeString('fr-HT');
-}
+function getHaitiDateStr(){let d=new Date();let haiti=new Date(d.toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));let y=haiti.getFullYear();let m=String(haiti.getMonth()+1).padStart(2,'0');let day=String(haiti.getDate()).padStart(2,'0');return `${y}-${m}-${day}`;}
+function getHaitiTimeStr(){let d=new Date();let haiti=new Date(d.toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));return haiti.toLocaleTimeString('fr-HT');}
 </script>
 <h1>🎫 C&D LOTTO <span id="idV">...</span> - <span id="stat">...</span> - <span id="haitiNow" style="color:#000;font-weight:bold"></span></h1>
 <div id="openMsg"></div>
-
 <div class="card">
 <b>Tirage ( plizyè ):</b>
 <div class="tirage">
@@ -30,10 +17,9 @@ return haiti.toLocaleTimeString('fr-HT');
 <label><input type="checkbox" value="NY MIDI" class="chkT"> NY MIDI</label>
 <label><input type="checkbox" value="NY SOIR" class="chkT"> NY SOIR</label>
 </div>
-<div style="margin-top:8px"><b>Jeux ( chwazi ):</b>
+<div style="margin-top:8px"><b>Jeux:</b>
 <div class="tirage"><label><input type="checkbox" value="bolet" class="chkJ" checked> Bolet</label><label><input type="checkbox" value="mariage" class="chkJ"> Mariage</label><label><input type="checkbox" value="loto3" class="chkJ"> Loto3</label><label><input type="checkbox" value="loto4" class="chkJ"> Loto4</label><label><input type="checkbox" value="loto5" class="chkJ"> Loto5</label></div></div>
 </div>
-
 <div class="card">
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
 <div><label style="font-size:11px">Tip:</label><select id="tip"><option value="bolet">Bolèt</option><option value="mariage">Maryaj</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select></div>
@@ -46,7 +32,6 @@ return haiti.toLocaleTimeString('fr-HT');
 <div style="display:flex;justify-content:space-between;margin-top:8px;font-weight:bold"><span>Ticket Total</span><span id="tTotal">0G</span></div>
 <button id="btnVal" onclick="valide()" style="width:100%;margin-top:8px;background:#000;color:#facc15;font-size:16px">✅ Validé + Imprimer</button>
 </div>
-
 <div class="card">
 <b>📋 Mon rapport - Vente Commission Payé Balance</b>
 <div style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap">
@@ -56,250 +41,58 @@ return haiti.toLocaleTimeString('fr-HT');
 <button onclick="loadMonRap()" style="padding:6px 12px">OK</button><button onclick="printRapport()" style="background:#000;color:#fff;padding:6px 12px">🖨️ Imprimer</button>
 </div>
 <div style="display:flex;gap:4px;margin-top:8px"><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center;border:1px solid #e2e8f0"><div style="font-size:8px">VENTE</div><b id="mVente">0G</b></div><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center;border:1px solid #e2e8f0"><div style="font-size:8px">COMMISSION</div><b id="mCom" style="color:#ca8a04">0G</b></div><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center;border:1px solid #e2e8f0"><div style="font-size:8px">PAYÉ</div><b id="mPaye" style="color:#16a34a">0G</b></div><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center;border:1px solid #e2e8f0"><div style="font-size:8px">BALANCE</div><b id="mBal" style="color:#ef4444">0G</b></div></div>
-<div id="monRap" style="margin-top:8px;font-size:11px;background:#f8fafc;padding:6px;border-radius:6px"></div>
+<div id="monRap" style="margin-top:8px;font-size:11px;background:#f8fafc;padding:6px;border-radius:6px;min-height:40px"></div>
 </div>
-
 <div class="card" style="border:2px solid #22c55e">
 <b>📄 Mes Fiches - KORIGE OTOMATIK</b> <button onclick="loadMesFiches()" style="padding:4px 8px;background:#facc15">Refresh</button>
-<div id="mesFiches" style="margin-top:6px;font-size:12px;max-height:400px;overflow:auto"></div>
+<div id="mesFiches" style="margin-top:6px;font-size:12px;max-height:500px;overflow:auto"></div>
 </div>
-
 <div id="printArea" style="display:none"></div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, get, child, set, push } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 const cfg={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"};const app=initializeApp(cfg);const db=getDatabase(app);
-
 let vendeur=prompt("Non Vendeur? ex: vendeur1")||"vendeur1"; vendeur=vendeur.toLowerCase().replace(/\s+/g,'');
 document.getElementById('idV').innerText=vendeur;
 document.getElementById('haitiNow').innerText='AYITI: '+getHaitiDateStr();
-
 let panier=[]; let limites={bolet:1000,mariage:50,loto3:100,loto4:20,loto5:10}; let totalsDuJour={};
-
 async function init(){
 let s=await get(child(ref(db),'config')); if(!s.exists()) return;
-let c=s.val();
-let etat=c.vendeurs?.[vendeur]||'ouvert';
+let c=s.val(); let etat=c.vendeurs?.[vendeur]||'ouvert';
 document.getElementById('stat').innerText=etat.toUpperCase();
-document.getElementById('stat').style.color=etat==='ouvert'?'green':'red';
-if(etat!=='ouvert'){
-document.getElementById('openMsg').innerHTML=`<div style="background:#ef4444;color:#fff;padding:16px;border-radius:8px;text-align:center;font-weight:bold;font-size:16px">🔴 ${vendeur.toUpperCase()} FERMÉ pa Proprio<br>Ou pa gen aksè pou vann</div>`;
-document.getElementById('btnAdd').style.display='none'; document.getElementById('btnVal').style.display='none';
-return;
-}
+if(etat!=='ouvert'){document.getElementById('openMsg').innerHTML=`<div style="background:#ef4444;color:#fff;padding:12px;border-radius:8px;text-align:center;font-weight:bold">🔴 ${vendeur.toUpperCase()} FERMÉ</div>`;document.getElementById('btnAdd').style.display='none';document.getElementById('btnVal').style.display='none';return;}
 if(c.limites) limites=c.limites;
-if(c.fermeture){
-let now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));
-let hm=now.getHours()*60+now.getMinutes();
-document.querySelectorAll('.chkT').forEach(ch=>{
-let lim=c.fermeture[ch.value];
-if(lim){let [h,m]=lim.split(':').map(Number); if(hm>=h*60+m){ch.disabled=true; ch.parentElement.style.opacity='0.4'; ch.parentElement.innerHTML+=' 🔒';}}
-});
+if(c.fermeture){let now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));let hm=now.getHours()*60+now.getMinutes();document.querySelectorAll('.chkT').forEach(ch=>{let lim=c.fermeture[ch.value];if(lim){let [h,m]=lim.split(':').map(Number);if(hm>=h*60+m){ch.disabled=true;ch.parentElement.style.opacity='0.4';}}});}
+await calcTotals(); let t=getHaitiDateStr();document.getElementById('rapDu').value=t;document.getElementById('rapAu').value=t;
 }
-await calcTotals();
-let t=getHaitiDateStr();
-document.getElementById('rapDu').value=t;
-document.getElementById('rapAu').value=t;
-}
-
-async function calcTotals(){
-let snap=await get(child(ref(db),'fiches')); totalsDuJour={}; if(!snap.exists()) return;
-let today=getHaitiDateStr();
-Object.values(snap.val()).forEach(f=>{
-let fd=f.haitiDate||f.date.split('T')[0];
-if(fd!==today) return;
-(f.details||[]).forEach(d=>{
-(f.tirajs||[]).forEach(t=>{
-let k=t+'_'+(d.type||'bolet')+'_'+d.boul;
-if(!totalsDuJour[k]) totalsDuJour[k]=0;
-totalsDuJour[k]+=parseInt(d.montan||0);
-});
-});
-});
-}
-
-function getTirajSelected(){ return [...document.querySelectorAll('.chkT:checked')].map(c=>c.value); }
-
-document.getElementById('boul').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('montan').focus(); }});
-document.getElementById('montan').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addBoul(); }});
-
-window.addBoul=async()=>{
-let tirajs=getTirajSelected(); if(tirajs.length===0){alert('Chwazi tiraj');return;}
-let tip=document.getElementById('tip').value; let boul=document.getElementById('boul').value.trim(); let montan=parseInt(document.getElementById('montan').value);
-if(!boul||!montan){alert('Mete boul ak montan');return;}
-for(let t of tirajs){
-let k=t+'_'+tip+'_'+boul; let deja=totalsDuJour[k]||0; let lim=limites[tip]||1000;
-if(deja+montan>lim){alert(`🚫 BLOKE! ${boul} (${tip}) ${t} deja ${deja}G / limit ${lim}G`); return;}
-}
-panier.push({type:tip,boul:boul,montan:montan});
-for(let t of tirajs){let k=t+'_'+tip+'_'+boul; if(!totalsDuJour[k]) totalsDuJour[k]=0; totalsDuJour[k]+=montan;}
-render(); document.getElementById('boul').value=''; document.getElementById('montan').value=''; document.getElementById('boul').focus();
-};
-
-function render(){
-let div=document.getElementById('liste'); div.innerHTML=''; let tot=0;
-panier.forEach((p,i)=>{ tot+=p.montan; div.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0"><span>${p.type} ${p.boul}</span><span>${p.montan}G <button onclick="retire(${i})" style="padding:2px 6px;background:#ef4444;color:#fff">x</button></span></div>`;});
-document.getElementById('tTotal').innerText=tot+'G';
-}
-window.retire=(i)=>{
-let p=panier[i]; let tirajs=getTirajSelected();
-tirajs.forEach(t=>{let k=t+'_'+p.type+'_'+p.boul; if(totalsDuJour[k]) totalsDuJour[k]-=p.montan;});
-panier.splice(i,1); render();
-};
-
-window.valide=async()=>{
-if(panier.length===0){alert('Panier vid');return;}
-let tirajs=getTirajSelected(); if(tirajs.length===0){alert('Chwazi tiraj');return;}
-let total=panier.reduce((a,b)=>a+b.montan,0);
-let id=push(child(ref(db),'fiches')).key;
-let shortId=id.slice(-6).toUpperCase();
-let haitiDate=getHaitiDateStr();
-let haitiTime=getHaitiTimeStr();
-await set(ref(db,'fiches/'+id),{
-id:id,shortId:shortId,
-vendeur:vendeur,idVendeur:vendeur,
-tirajs:tirajs,tiraj:tirajs[0],
-details:panier,total:total,
-haitiDate:haitiDate,
-haitiTime:haitiTime,
-date:new Date().toISOString()
-});
-let printDiv=document.getElementById('printArea');
-printDiv.innerHTML=`
-<div style="text-align:center">
-<b>C&D VÉRITÉ LOTTO</b><br>
-Date: ${haitiDate} ${haitiTime}<br>
-Tirage: ${tirajs.join(', ')}<br>
-Id ticket: ${shortId}<br>
-....................................<br>
-</div>
-<div style="margin:10px 0">
-${panier.map(p=>`${p.type.toUpperCase()} - ${p.boul} - ${p.montan}G`).join('<br>')}
-<br>
-....................................<br>
-<div style="text-align:center;font-weight:bold">Total: ${total}G</div>
-....................................<br>
-</div>
-<div style="text-align:center">Lave chodyè w anvan w peye<br>Mèsi!</div>`;
-printDiv.style.display='block';window.print();setTimeout(()=>printDiv.style.display='none',500);
-panier=[];render();await calcTotals();loadMonRap();loadMesFiches();
-};
-
+async function calcTotals(){let snap=await get(child(ref(db),'fiches'));totalsDuJour={};if(!snap.exists())return;let today=getHaitiDateStr();Object.values(snap.val()).forEach(f=>{let fd=f.haitiDate||f.date.split('T')[0];if(fd!==today)return;(f.details||[]).forEach(d=>{(f.tirajs||[]).forEach(t=>{let k=t+'_'+(d.type||'bolet')+'_'+d.boul;if(!totalsDuJour[k])totalsDuJour[k]=0;totalsDuJour[k]+=parseInt(d.montan||0);});});});}
+function getTirajSelected(){return [...document.querySelectorAll('.chkT:checked')].map(c=>c.value);}
+document.getElementById('boul').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('montan').focus();}});
+document.getElementById('montan').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addBoul();}});
+window.addBoul=async()=>{let tirajs=getTirajSelected();if(tirajs.length===0){alert('Chwazi tiraj');return;}let tip=document.getElementById('tip').value;let boul=document.getElementById('boul').value.trim();let montan=parseInt(document.getElementById('montan').value);if(!boul||!montan)return;for(let t of tirajs){let k=t+'_'+tip+'_'+boul;let deja=totalsDuJour[k]||0;let lim=limites[tip]||1000;if(deja+montan>lim){alert(`🚫 BLOKE! ${boul} ${t} deja ${deja}/${lim}`);return;}}panier.push({type:tip,boul:boul,montan:montan});for(let t of tirajs){let k=t+'_'+tip+'_'+boul;if(!totalsDuJour[k])totalsDuJour[k]=0;totalsDuJour[k]+=montan;}render();document.getElementById('boul').value='';document.getElementById('montan').value='';document.getElementById('boul').focus();};
+function render(){let div=document.getElementById('liste');div.innerHTML='';let tot=0;panier.forEach((p,i)=>{tot+=p.montan;div.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0"><span>${p.type} ${p.boul}</span><span>${p.montan}G <button onclick="retire(${i})" style="padding:2px 6px;background:#ef4444;color:#fff">x</button></span></div>`;});document.getElementById('tTotal').innerText=tot+'G';}
+window.retire=(i)=>{let p=panier[i];let tirajs=getTirajSelected();tirajs.forEach(t=>{let k=t+'_'+p.type+'_'+p.boul;if(totalsDuJour[k])totalsDuJour[k]-=p.montan;});panier.splice(i,1);render();};
+window.valide=async()=>{if(panier.length===0){alert('Panier vid');return;}let tirajs=getTirajSelected();if(tirajs.length===0){alert('Chwazi tiraj');return;}let total=panier.reduce((a,b)=>a+b.montan,0);let id=push(child(ref(db),'fiches')).key;let shortId=id.slice(-6).toUpperCase();let haitiDate=getHaitiDateStr();let haitiTime=getHaitiTimeStr();await set(ref(db,'fiches/'+id),{id:id,shortId:shortId,vendeur:vendeur,idVendeur:vendeur,tirajs:tirajs,tiraj:tirajs[0],details:panier,total:total,haitiDate:haitiDate,haitiTime:haitiTime,date:new Date().toISOString()});let printDiv=document.getElementById('printArea');printDiv.innerHTML=`<div style="text-align:center"><b>C&D VÉRITÉ LOTTO</b><br>Date: ${haitiDate} ${haitiTime}<br>Tirage: ${tirajs.join(', ')}<br>Id: ${shortId}<br>....<br></div><div>${panier.map(p=>`${p.type.toUpperCase()} - ${p.boul} - ${p.montan}G`).join('<br>')}<br>....<br><div style="text-align:center;font-weight:bold">Total: ${total}G</div>....</div>`;printDiv.style.display='block';window.print();setTimeout(()=>printDiv.style.display='none',500);panier=[];render();await calcTotals();loadMonRap();loadMesFiches();};
 window.loadMonRap=async()=>{
-let du=document.getElementById('rapDu').value; let au=document.getElementById('rapAu').value; let ft=document.getElementById('rapTiraj').value;
-let snap=await get(child(ref(db),'fiches')); let resSnap=await get(child(ref(db),'resultats')); let res=resSnap.exists()?resSnap.val():{};
-let div=document.getElementById('monRap'); if(!snap.exists()){div.innerHTML='Pa gen fich';return;}
+let du=document.getElementById('rapDu').value;let au=document.getElementById('rapAu').value;let ft=document.getElementById('rapTiraj').value;
+let snap=await get(child(ref(db),'fiches'));let resSnap=await get(child(ref(db),'resultats'));let res=resSnap.exists()?resSnap.val():{};
+let div=document.getElementById('monRap');if(!snap.exists()){div.innerHTML='Pa gen fich';return;}
 let all=Object.values(snap.val()).filter(f=>(f.vendeur||f.idVendeur)===vendeur);
-let filt=all.filter(f=>{
-let fd=f.haitiDate||f.date.split('T')[0];
-if(du&&fd<du) return false;
-if(au&&fd>au) return false;
-if(ft!=='all'&&!(f.tirajs||[f.tiraj]||[]).includes(ft)) return false;
-return true;
-});
-let vente=filt.reduce((a,b)=>a+parseInt(b.total||0),0);
-let com=Math.round(vente*0.1);
-let gain=0;
-filt.forEach(f=>{
-let fd=f.haitiDate||f.date.split('T')[0];
-(f.tirajs||[]).forEach(t=>{
-let r=res[fd+'_'+t.replace(' ','_')]||res[fd+'_'+t]||res[fd+'_'+t.replace(' ','_').replace(' MIDI','_MIDI').replace(' SOIR','_SOIR')];
-if(!r) return;
-(f.details||[]).forEach(dd=>{
-let boul=dd.boul.toString().trim();
-if((dd.type||'bolet')==='bolet'){
-if(boul===r.premier?.toString().trim()) gain+=dd.montan*50;
-else if(boul===r.deuxieme?.toString().trim()) gain+=dd.montan*20;
-else if(boul===r.troisieme?.toString().trim()) gain+=dd.montan*10;
-}
-});
-});
-});
-let bal=vente-com-gain;
-document.getElementById('mVente').innerText=vente+'G';
-document.getElementById('mCom').innerText=com+'G';
-document.getElementById('mPaye').innerText=gain+'G';
-document.getElementById('mBal').innerText=bal+'G';
-div.innerHTML=`Du ${du} Au ${au} | ${ft} - ${filt.length} fich<br>Vente: ${vente}G - Com: ${com}G - Payé: ${gain}G - Balance: ${bal}G`;
+let filt=all.filter(f=>{let fd=f.haitiDate||f.date.split('T')[0];if(du&&fd<du)return false;if(au&&fd>au)return false;if(ft!=='all'&&!(f.tirajs||[f.tiraj]||[]).includes(ft))return false;return true;});
+let vente=filt.reduce((a,b)=>a+parseInt(b.total||0),0);let com=Math.round(vente*0.1);let gain=0;let debug="";
+filt.forEach(f=>{let fd=f.haitiDate||f.date.split('T')[0];(f.tirajs||[]).forEach(t=>{let r=res[fd+'_'+t.replace(' ','_')]||res[fd+'_'+t];if(r)debug+=`✅ ${fd} ${t}: ${r.premier}-${r.deuxieme}-${r.troisieme}<br>`;else debug+=`❌ Pa jwenn rezilta pou ${fd} ${t}<br>`;if(!r)return;(f.details||[]).forEach(dd=>{let b=String(dd.boul).trim();let p1=String(r.premier||'').trim();let p2=String(r.deuxieme||'').trim();let p3=String(r.troisieme||'').trim();if(b===p1){gain+=dd.montan*50;debug+=` GAGNÉ ${b}=1er +${dd.montan*50}G<br>`;}else if(b===p2){gain+=dd.montan*20;debug+=` GAGNÉ ${b}=2e +${dd.montan*20}G<br>`;}else if(b===p3){gain+=dd.montan*10;debug+=` GAGNÉ ${b}=3e +${dd.montan*10}G<br>`;}});});});
+let bal=vente-com-gain;document.getElementById('mVente').innerText=vente+'G';document.getElementById('mCom').innerText=com+'G';document.getElementById('mPaye').innerText=gain+'G';document.getElementById('mBal').innerText=bal+'G';div.innerHTML=`${filt.length} fich - Vente:${vente}G Com:${com}G Payé:${gain}G Bal:${bal}G<hr><div style="font-size:10px">${debug}</div>`;
 };
-
 window.loadMesFiches=async()=>{
-let snap=await get(child(ref(db),'fiches')); let resSnap=await get(child(ref(db),'resultats')); let res=resSnap.exists()?resSnap.val():{};
-let div=document.getElementById('mesFiches'); if(!snap.exists()){div.innerHTML='Pa gen fich';return;}
+let snap=await get(child(ref(db),'fiches'));let resSnap=await get(child(ref(db),'resultats'));let res=resSnap.exists()?resSnap.val():{};
+let div=document.getElementById('mesFiches');if(!snap.exists()){div.innerHTML='Pa gen';return;}
 let mine=Object.values(snap.val()).filter(f=>(f.vendeur||f.idVendeur)===vendeur).slice(-30).reverse();
-if(mine.length===0){div.innerHTML='Pa gen fich pou dat sa';return;}
-div.innerHTML=mine.map(f=>{
-let fd=f.haitiDate||f.date.split('T')[0]; let gain=0;
-(f.tirajs||[]).forEach(t=>{
-let r=res[fd+'_'+t.replace(' ','_')]||res[fd+'_'+t];
-if(r){
-(f.details||[]).forEach(dd=>{
-if((dd.type||'bolet')==='bolet'){
-if(dd.boul===r.premier) gain+=dd.montan*50;
-else if(dd.boul===r.deuxieme) gain+=dd.montan*20;
-else if(dd.boul===r.troisieme) gain+=dd.montan*10;
-}
-});
-}
-});
-let status=Object.keys(res).length===0?'<span style="color:#64748b">⏳ Pa gen tiraj</span>':gain>0?`<span style="color:#16a34a;font-weight:bold">✅ GAGNÉ ${gain}G</span>`:'<span style="color:#ef4444">❌ PERDU</span>';
-return `<div style="border-bottom:1px solid #e2e8f0;padding:6px 0;display:flex;justify-content:space-between"><div><b>${f.shortId||f.id.slice(-4)}</b> - ${fd} - ${(f.tirajs||[]).join(',')} - ${f.total}G<br><span style="font-size:11px">${(f.details||[]).map(dd=>dd.boul+'('+dd.montan+'G)').join(', ')}</span></div><div style="text-align:right">${status}<br><button onclick="reprint('${f.id}')" style="padding:2px 6px;font-size:10px">🖨️</button></div></div>`;
-}).join('');
+div.innerHTML=mine.map(f=>{let fd=f.haitiDate||f.date.split('T')[0];let gain=0;(f.tirajs||[]).forEach(t=>{let r=res[fd+'_'+t.replace(' ','_')]||res[fd+'_'+t];if(r){(f.details||[]).forEach(dd=>{if(String(dd.boul).trim()===String(r.premier).trim())gain+=dd.montan*50;else if(String(dd.boul).trim()===String(r.deuxieme).trim())gain+=dd.montan*20;else if(String(dd.boul).trim()===String(r.troisieme).trim())gain+=dd.montan*10;});}});let status=gain>0?`<span style="color:#16a34a;font-weight:bold">✅ GAGNÉ ${gain}G</span>`:'<span style="color:#ef4444">❌ PERDU</span>';return `<div style="border-bottom:1px solid #e2e8f0;padding:6px 0;display:flex;justify-content:space-between"><div><b>${f.shortId||f.id.slice(-4)}</b> - ${fd} - ${(f.tirajs||[]).join(',')} - ${f.total}G<br><span style="font-size:11px">${(f.details||[]).map(dd=>dd.boul+'('+dd.montan+'G)').join(', ')}</span></div><div style="text-align:right">${status}<br><button onclick="reprint('${f.id}')" style="padding:2px 6px;font-size:10px">🖨️</button></div></div>`;}).join('');
 };
-
-window.reprint=async(id)=>{
-let s=await get(child(ref(db),'fiches/'+id)); if(!s.exists()) return; let f=s.val();
-let printDiv=document.getElementById('printArea');
-printDiv.innerHTML=`
-<div style="text-align:center">
-<b>C&D VÉRITÉ LOTTO</b><br>
-Date: ${f.haitiDate||f.date.split('T')[0]} ${f.haitiTime||''}<br>
-Tirage: ${(f.tirajs||[f.tiraj]).join(', ')}<br>
-Id ticket: ${f.shortId||f.id.slice(-4)}<br>
-....................................<br>
-</div>
-<div style="margin:10px 0">
-${(f.details||[]).map(p=>`${(p.type||'').toUpperCase()} - ${p.boul} - ${p.montan}G`).join('<br>')}
-<br>
-....................................<br>
-<div style="text-align:center;font-weight:bold">Total: ${f.total}G</div>
-....................................<br>
-</div>
-<div style="text-align:center">Lave chodyè w anvan w peye<br>Mèsi!</div>`;
-printDiv.style.display='block'; window.print(); setTimeout(()=>printDiv.style.display='none',500);
-};
-
-window.printRapport=()=>{
-let content=document.getElementById('monRap').innerHTML;
-let vente=document.getElementById('mVente').innerText;
-let com=document.getElementById('mCom').innerText;
-let paye=document.getElementById('mPaye').innerText;
-let bal=document.getElementById('mBal').innerText;
-let printDiv=document.getElementById('printArea');
-printDiv.innerHTML=`
-<div style="text-align:center">
-<b>C&D VÉRITÉ LOTTO</b><br>
-RAPPORT ${vendeur.toUpperCase()}<br>
-Date: ${document.getElementById('rapDu').value} au ${document.getElementById('rapAu').value}<br>
-....................................<br>
-</div>
-<div>
-Vente: ${vente}<br>
-Commission: ${com}<br>
-Payé: ${paye}<br>
-Balance: ${bal}<br>
-....................................<br>
-${content}
-</div>`;
-printDiv.style.display='block'; window.print(); setTimeout(()=>printDiv.style.display='none',500);
-};
-
+window.reprint=async(id)=>{let s=await get(child(ref(db),'fiches/'+id));if(!s.exists())return;let f=s.val();let printDiv=document.getElementById('printArea');printDiv.innerHTML=`<div style="text-align:center"><b>C&D LOTTO</b><br>${f.haitiDate||''} ${f.haitiTime||''}<br>${(f.tirajs||[]).join(',')}<br>${f.shortId||''}<br>....</div><div>${(f.details||[]).map(p=>`${p.type} - ${p.boul} - ${p.montan}G`).join('<br>')}<br>....<br><b>Total: ${f.total}G</b></div>`;printDiv.style.display='block';window.print();setTimeout(()=>printDiv.style.display='none',500);};
+window.printRapport=()=>{let printDiv=document.getElementById('printArea');printDiv.innerHTML=document.getElementById('monRap').innerHTML;printDiv.style.display='block';window.print();setTimeout(()=>printDiv.style.display='none',500);};
 document.getElementById('btnAdd').addEventListener('click',addBoul);
-document.getElementById('tip').addEventListener('change',e=>{
-let lim=limites[e.target.value]||0;
-document.getElementById('limiteInfo').innerText=`Limit ${e.target.value}: ${lim}G / boul / tiraj`;
-});
+document.getElementById('tip').addEventListener('change',e=>{let lim=limites[e.target.value]||0;document.getElementById('limiteInfo').innerText=`Limit ${e.target.value}: ${lim}G / boul / tiraj`;});
 document.getElementById('tip').dispatchEvent(new Event('change'));
-init(); loadMonRap(); loadMesFiches();
+init();loadMonRap();loadMesFiches();
 </script></body></html>
