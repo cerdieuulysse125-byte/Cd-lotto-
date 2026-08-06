@@ -1,14 +1,12 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>C&D LOTTO V88.7</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>C&D LOTTO V88.8</title>
 <style>*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:#f1f5f9;padding:8px;padding-bottom:100px}.loginPage{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f172a;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}.loginBox{background:#1e293b;border-radius:16px;padding:25px;width:100%;max-width:350px;border:2px solid #facc15;text-align:center}input,select{padding:12px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;width:100%;margin-top:8px}input.light,select.light{background:#fff;color:#000;border:1px solid #cbd5e1}button{padding:10px;border-radius:8px;border:none;font-weight:bold;cursor:pointer}.btnY{background:#facc15;color:#000;width:100%}.btnG{background:#22c55e;color:#fff}.btnR{background:#ef4444;color:#fff}.btnB{background:#3b82f6;color:#fff}.card{background:#fff;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.1)}.tirajGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tirajItem{border:1px solid #e2e8f0;border-radius:8px;padding:8px;display:flex;gap:6px;font-size:12px;align-items:center}.tirajItem.ferme{opacity:.4;background:#fee2e2}.bloqueOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f172a;z-index:99998;display:none;align-items:center;justify-content:center;padding:20px;text-align:center}.ficheRow{padding:12px 0;border-bottom:1px solid #e2e8f0}</style></head>
 <body>
 
 <div id="loginPage" class="loginPage">
 <div class="loginBox">
-<div style="font-size:50px">🔐</div><h2 style="color:#facc15">C&D LOTTO</h2><p style="color:#fff;font-size:13px">Antre non ak modpas</p>
-<input id="loginVendeur" placeholder="Non vandè">
-<input id="loginPass" type="password" placeholder="Modpas">
-<button onclick="doLogin()" class="btnY">🔓 Konekte</button>
-<div id="loginErr" style="color:#ef4444;font-size:12px;margin-top:10px"></div>
+<div style="font-size:50px">🔐</div><h2 style="color:#facc15">C&D LOTTO</h2>
+<input id="loginVendeur" placeholder="Non vandè"><input id="loginPass" type="password" placeholder="Modpas">
+<button onclick="doLogin()" class="btnY">🔓 Konekte</button><div id="loginErr" style="color:#ef4444;font-size:12px;margin-top:10px"></div>
 </div>
 </div>
 
@@ -27,24 +25,37 @@
 <button onclick="validerFiche()" style="background:#0f172a;color:#facc15;border:none;padding:12px;border-radius:10px;font-weight:bold;width:100%;margin-top:10px">✅ Validé + Imprimer</button>
 </div>
 
-<!-- NOUVO KONT KOPYE APA -->
-<div class="card" style="border:2px solid #22c55e;background:#f0fdf4">
-<h3 style="margin:0 0 8px;font-size:14px;color:#15803d">📋 KOPYE NENPÒT TICKET</h3>
-<div style="font-size:11px;color:#475569;margin-bottom:8px">Mete ID Ticket la pou kopye l (ex: KPMZHW oswa C&D-12345)</div>
-<div style="display:flex;gap:6px">
-<input id="idTicketCopy" class="light" placeholder="ID Ticket ex: KPMZHW" style="flex:1;text-transform:uppercase">
-<button onclick="kopyeNenpotTicket()" class="btnG" style="padding:12px 20px">📋 Kopye</button>
+<!-- PATI RAPÒ - KOPLE PA KOUPÉ -->
+<div class="card" style="border:2px solid #3b82f6">
+<h3 style="margin:0 0 10px;font-size:15px;color:#0f172a">📊 RAPPORT - Mes Fiches</h3>
+
+<div style="background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:10px">
+<div style="display:flex;gap:6px;align-items:end">
+<div style="flex:1"><label style="font-size:10px;font-weight:bold">Du:</label><input type="date" id="rapDu" class="light"></div>
+<div style="flex:1"><label style="font-size:10px;font-weight:bold">Au:</label><input type="date" id="rapAu" class="light"></div>
+<div><button onclick="loadMonRap()" class="btnB" style="padding:12px 20px;background:#3b82f6">OK</button></div>
 </div>
-<div id="copyResult" style="margin-top:8px;font-size:12px"></div>
+<div style="display:flex;gap:6px;margin-top:8px">
+<select id="rapTiraj" class="light" style="flex:1"><option value="all">Tout Tiraj</option><option>GA MIDI</option><option>GA SOIR</option><option>FL MIDI</option><option>FL SOIR</option><option>NY MIDI</option><option>NY SOIR</option></select>
+<button onclick="loadMonRap()" style="background:#facc15;color:#000;padding:10px 15px;border-radius:8px;font-weight:bold">🔄 Actualiser</button>
+</div>
 </div>
 
-<div class="card" style="border:2px solid #3b82f6">
-<h3 style="margin:0 0 8px;font-size:14px">📊 Mes Fiches</h3>
-<div style="display:flex;gap:6px"><div style="flex:1">Du:<input type="date" id="rapDu" class="light"></div><div style="flex:1">Au:<input type="date" id="rapAu" class="light"></div></div>
-<div style="display:flex;gap:6px;margin-top:6px"><select id="rapTiraj" class="light" style="flex:1"><option value="all">Tout</option><option>GA MIDI</option><option>GA SOIR</option><option>FL MIDI</option><option>FL SOIR</option><option>NY MIDI</option><option>NY SOIR</option></select><button onclick="loadMonRap()" class="btnB" style="padding:10px 20px">OK</button><button onclick="loadMonRap()" class="btnY" style="padding:10px">🔄</button></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px"><div style="background:#0f172a;color:#fff;padding:10px;border-radius:8px;text-align:center"><div style="font-size:9px">VENTE</div><b id="rapVente">0G</b></div><div style="background:#f1f5f9;padding:10px;border-radius:8px;text-align:center;border:1px solid #cbd5e1"><div style="font-size:9px">FICH</div><b id="rapNb">0</b></div></div>
-<div id="monRapRes" style="margin-top:10px;max-height:600px;overflow:auto"></div>
-<div style="margin-top:10px;padding:8px;background:#fef3c7;border-radius:8px;font-size:10px;color:#92400e">⏱️ Règ: 5 minit sèlman pou efase yon fich. Apre 5 minit pa ka efase ankò.</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div style="background:#0f172a;color:#fff;padding:14px;border-radius:10px;text-align:center"><div style="font-size:10px;opacity:.7">VENTE</div><b id="rapVente" style="font-size:20px">0G</b></div>
+<div style="background:#fff;padding:14px;border-radius:10px;text-align:center;border:2px solid #e2e8f0"><div style="font-size:10px;color:#64748b">FICH</div><b id="rapNb" style="font-size:20px;color:#0f172a">0</b></div>
+</div>
+
+<!-- KOPYE NENPÒT TICKET - NOUVO KONT APA -->
+<div style="margin-top:12px;background:#f0fdf4;border:2px solid #22c55e;padding:10px;border-radius:10px">
+<div style="font-size:12px;font-weight:bold;color:#15803d;margin-bottom:6px">📋 KOPYE NENPÒT TICKET</div>
+<div style="display:flex;gap:6px"><input id="idTicketCopy" class="light" placeholder="ID Ticket ex: KPMZHW" style="flex:1;text-transform:uppercase"><button onclick="kopyeNenpotTicket()" class="btnG" style="padding:10px 16px">Kopye</button></div>
+<div id="copyResult" style="margin-top:6px;font-size:11px"></div>
+</div>
+
+<div id="monRapRes" style="margin-top:12px;max-height:700px;overflow:auto"></div>
+
+<div style="margin-top:10px;padding:10px;background:#fef3c7;border-radius:8px;font-size:11px;color:#92400e;text-align:center">⏱️ <b>Règ:</b> 5 minit sèlman pou efase yon fich. Apre 5 minit pa ka efase ankò.</div>
 </div>
 </div>
 
@@ -56,6 +67,7 @@ let VENDEUR="",panier=[],limites={bolet:1000,mariage:50,loto3:100,loto4:20,loto5
 function getHaitiNow(){return new Date(new Date().toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));}
 function getHaitiDateStr(){let h=getHaitiNow();return `${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`;}
 function getHaitiTimeStr(){let h=getHaitiNow();return `${String(h.getHours()).padStart(2,'0')}:${String(h.getMinutes()).padStart(2,'0')}`;}
+function getDiffMin(f){ try{ let t1=0; if(f.id &&!isNaN(parseInt(f.id)) && String(f.id).length>=13){ t1=parseInt(f.id); } else if(f.date){ t1=new Date(f.date).getTime(); } else { return 999; } let diff=(Date.now()-t1)/1000/60; return isNaN(diff)?999:diff; }catch(e){ return 999; } }
 
 window.doLogin=async()=>{
   let v=document.getElementById('loginVendeur').value.trim().toLowerCase(),p=document.getElementById('loginPass').value.trim();
@@ -76,7 +88,6 @@ window.ajouteBoul=async()=>{if(await checkBloke())return alert('🚫 BLOKE'); le
 function renderPanier(){let div=document.getElementById('listFiche');div.innerHTML='';let tot=0;panier.forEach((p,i)=>{tot+=p.montan;div.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:13px"><span>${p.type} ${p.boul}</span><span>${p.montan}G <button onclick="panier.splice(${i},1);renderPanier()" style="background:#ef4444;color:#fff;border:none;border-radius:50%;width:18px;height:18px">x</button></span></div>`;});document.getElementById('totalG').innerText=tot+'G';}
 window.validerFiche=async()=>{if(await checkBloke())return alert('🚫 BLOKE'); if(panier.length===0)return alert('Panier vid'); let sel=[...document.querySelectorAll('.chkTiraj:checked')].map(c=>c.value); if(sel.length===0)return alert('Chwazi tiraj'); let total=panier.reduce((a,b)=>a+b.montan,0); let fich={id:Date.now(),shortId:'C&D-'+Date.now().toString().slice(-5),vendeur:VENDEUR,idVendeur:VENDEUR,date:new Date().toISOString(),haitiDate:getHaitiDateStr(),tiraj:sel[0],tirajs:sel,details:panier,total:total}; await set(ref(db,`fiches/${fich.id}`),fich); alert(`Fich ${fich.shortId} ✅ ${total}G`); let win=window.open('','_blank','width=320,height=600'); win.document.write(`<html><body style="font-family:monospace;font-size:12px;padding:10px"><center><b>C&D LOTTO</b><br>Vendeur: ${VENDEUR}<br>Date: ${fich.haitiDate} ${getHaitiTimeStr()}<br>Tiraj: ${sel.join(',')}<br>----------------</center>${panier.map(p=>`${p.type.toUpperCase()} ${p.boul} - ${p.montan}G`).join('<br>')}<br>----------------<br><b>TOTAL: ${total}G</b><br>ID: ${fich.shortId}<br><center>Bonne Chance!</center></body></html>`); win.document.close(); setTimeout(()=>win.print(),500); panier=[];renderPanier(); loadMonRap();};
 
-// NOUVO FONKSYON KOPYE NENPOT TICKET
 window.kopyeNenpotTicket=async()=>{
   let idInput=document.getElementById('idTicketCopy').value.trim().toUpperCase();
   if(!idInput){document.getElementById('copyResult').innerHTML='<span style="color:#ef4444">Mete ID ticket la</span>';return;}
@@ -85,10 +96,9 @@ window.kopyeNenpotTicket=async()=>{
   let all=Object.values(fs.val());
   let f=all.find(x=> (x.shortId||'').toUpperCase()===idInput || (x.shortId||'').toUpperCase().includes(idInput) || String(x.id)===idInput );
   if(!f){document.getElementById('copyResult').innerHTML=`<span style="color:#ef4444">Ticket ${idInput} pa jwenn</span>`;return;}
-  // Kopye nan panye
   document.querySelectorAll('.chkTiraj').forEach(ch=>{ ch.checked = (f.tirajs||[f.tiraj]||[]).includes(ch.value); });
   panier = [...(f.details||[])]; renderPanier();
-  document.getElementById('copyResult').innerHTML=`<span style="color:#22c55e">✅ Ticket ${f.shortId} kopye! ${panier.length} boul - ${f.total}G<br>Tiraj: ${(f.tirajs||[f.tiraj]).join(',')}</span>`;
+  document.getElementById('copyResult').innerHTML=`<span style="color:#22c55e">✅ Ticket ${f.shortId} kopye! ${panier.length} boul - ${f.total}G</span>`;
   window.scrollTo({top:0,behavior:'smooth'});
 };
 
@@ -105,17 +115,27 @@ window.loadMonRap=async()=>{
   let html='';
   filt.forEach(f=>{
     let fd=f.haitiDate||f.date.split('T')[0];
-    let dejaTire=false;
-    (f.tirajs||[]).forEach(t=>{ if(res[fd+'_'+t]||res[fd+'_'+t.replace(' ','_')]) dejaTire=true; });
-    let diffMin = (Date.now() - parseInt(f.id)) / 1000 / 60;
+    let dejaTire=false; (f.tirajs||[]).forEach(t=>{ if(res[fd+'_'+t]||res[fd+'_'+t.replace(' ','_')]) dejaTire=true; });
+    let diffMin = getDiffMin(f);
     let plisKe5Min = diffMin > 5;
-    let tanRete = Math.max(0, 5 - Math.floor(diffMin));
+    let tanRete = plisKe5Min?0:Math.max(0, 5 - Math.floor(diffMin));
+    let tanReteSec = plisKe5Min?0:Math.max(0, 300 - Math.floor(diffMin*60));
+
     html+=`<div class="ficheRow">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-        <div style="flex:1"><b>${f.shortId}</b> - ${fd}<br><span style="font-size:10px;color:#64748b">${(f.tirajs||[f.tiraj]).join(',')}</span><br><span style="color:#64748b;font-size:11px">${(f.details||[]).map(d=>`${d.type} ${d.boul} ${d.montan}G`).join(', ')}</span><br><b>${f.total}G</b> ${plisKe5Min?'':'<span style="font-size:9px;color:#22c55e">⏱️ '+tanRete+'m</span>'}</div>
-        <div style="display:flex;gap:6px;flex-direction:column">
-          <button onclick="reimprimer('${f.id}')" style="background:#0f172a;color:#facc15;padding:8px 12px;border-radius:6px;font-size:11px">🖨️ Re-Print</button>
-          ${!dejaTire &&!plisKe5Min? `<button onclick="efaseMaFiche('${f.id}','${f.shortId}')" style="background:#fee2e2;color:#ef4444;padding:6px;border-radius:6px;font-size:10px;border:1px solid #fecaca">🗑️ Efase (${tanRete}m)</button>` : `<div style="font-size:9px;color:#ef4444;text-align:center;padding:4px;background:#fee2e2;border-radius:4px">${plisKe5Min?'🔒 >5m':'🔒 Tiraj soti'}</div>`}
+      <div style="display:flex;justify-content:space-between;gap:8px">
+        <div style="flex:1">
+          <b style="font-size:14px">${f.shortId}</b> <span style="font-size:12px">- ${fd}</span><br>
+          <span style="font-size:11px;color:#64748b">${(f.tirajs||[f.tiraj]).join(',')}</span><br>
+          <span style="font-size:11px">${(f.details||[]).map(d=>`${d.type} ${d.boul} ${d.montan}G`).join(', ')}</span><br>
+          <b style="font-size:15px">${f.total}G</b> <span style="font-size:10px;color:${plisKe5Min?'#ef4444':'#22c55e'}">⏱️ ${plisKe5Min? 'Pa ka efase': tanRete+'m '+ (tanReteSec%60)+'s rete'}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:130px">
+          <button onclick="kopyeTicket('${f.id}')" style="background:#22c55e;color:#fff;padding:8px;border-radius:6px;font-size:11px;font-weight:bold;width:100%">📋 Kopye Ticket</button>
+          <div style="display:flex;gap:4px">
+            <button onclick="reimprimer('${f.id}')" style="background:#0f172a;color:#facc15;padding:7px;flex:1;border-radius:6px;font-size:11px">🖨️ Re-Print</button>
+            <button onclick="kopyeTexte('${f.id}')" style="background:#3b82f6;color:#fff;padding:7px;flex:1;border-radius:6px;font-size:11px">📲 WhatsApp</button>
+          </div>
+          ${!dejaTire &&!plisKe5Min? `<button onclick="efaseMaFiche('${f.id}','${f.shortId}')" style="background:#fee2e2;color:#ef4444;padding:7px;border-radius:6px;font-size:11px;border:1px solid #fecaca;font-weight:bold">🗑️ Efase (${tanRete}m)</button>` : `<div style="font-size:10px;color:#fff;text-align:center;padding:6px;background:${dejaTire?'#94a3b8':'#ef4444'};border-radius:6px">${dejaTire?'🔒 Tiraj soti':'🔒 >5min'}</div>`}
         </div>
       </div>
     </div>`;
@@ -124,16 +144,23 @@ window.loadMonRap=async()=>{
 };
 
 window.efaseMaFiche=async(id,shortId)=>{
-  let diffMin = (Date.now() - parseInt(id)) / 1000 / 60;
-  if(diffMin > 5){ alert(`🚫 PA KA EFASÉ! ${Math.floor(diffMin)} minit pase. Règ: 5 minit sèlman!`); loadMonRap(); return; }
-  if(!confirm(`Efase ${shortId}?`))return;
-  if(!confirm(`Konfime efase ${shortId}?`))return;
-  if((Date.now() - parseInt(id)) / 1000 / 60 > 5){ alert(`⏱️ Tan fini!`); loadMonRap(); return; }
+  let snap=await get(child(ref(db),`fiches/${id}`)); if(!snap.exists())return; let f=snap.val();
+  let diffMin=getDiffMin(f); if(diffMin>5){ alert(`🚫 PA KA EFASÉ!\n${Math.floor(diffMin)} minit pase. Règ: 5 minit sèlman!`); loadMonRap(); return; }
+  if(!confirm(`Efase ${shortId}? Rete ${Math.max(0,5-Math.floor(diffMin))} minit`))return;
+  if(!confirm(`Konfime?`))return;
+  if(getDiffMin(f)>5){ alert(`⏱️ Tan fini!`); loadMonRap(); return; }
   await remove(ref(db,`fiches/${id}`)); alert(`Efase ✅`); loadMonRap();
 };
-window.reimprimer=async(id)=>{
+window.kopyeTicket=async(id)=>{
   let snap=await get(child(ref(db),`fiches/${id}`)); if(!snap.exists())return; let f=snap.val();
-  let win=window.open('','_blank','width=320,height=600'); win.document.write(`<html><body style="font-family:monospace;font-size:12px;padding:10px"><center><b>C&D LOTTO - RE-IMPRESSION</b><br>Vendeur: ${f.vendeur}<br>Date: ${f.haitiDate}<br>Tiraj: ${(f.tirajs||[f.tiraj]).join(',')}<br>----------------</center>${(f.details||[]).map(p=>`${p.type.toUpperCase()} ${p.boul} - ${p.montan}G`).join('<br>')}<br>----------------<br><b>TOTAL: ${f.total}G</b><br>ID: ${f.shortId}<br><center>Bonne Chance!</center></body></html>`); win.document.close(); setTimeout(()=>win.print(),500);
+  document.querySelectorAll('.chkTiraj').forEach(ch=>{ ch.checked = (f.tirajs||[f.tiraj]).includes(ch.value); });
+  panier=[...(f.details||[])]; renderPanier(); window.scrollTo({top:0,behavior:'smooth'}); alert(`📋 ${f.shortId} kopye!`);
 };
+window.kopyeTexte=async(id)=>{
+  let snap=await get(child(ref(db),`fiches/${id}`)); if(!snap.exists())return; let f=snap.val();
+  let txt=`C&D LOTTO\nVendeur: ${f.vendeur}\nDate: ${f.haitiDate}\nTiraj: ${(f.tirajs||[f.tiraj]).join(',')}\n----------------\n${(f.details||[]).map(p=>`${p.type.toUpperCase()} ${p.boul} - ${p.montan}G`).join('\n')}\n----------------\nTOTAL: ${f.total}G\nID: ${f.shortId}`;
+  try{ await navigator.clipboard.writeText(txt); alert('📋 Kopye pou WhatsApp!'); }catch(e){ let ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); alert('📋 Kopye!'); }
+};
+window.reimprimer=async(id)=>{ let snap=await get(child(ref(db),`fiches/${id}`)); if(!snap.exists())return; let f=snap.val(); let win=window.open('','_blank','width=320,height=600'); win.document.write(`<html><body style="font-family:monospace;font-size:12px;padding:10px"><center><b>C&D LOTTO - RE-IMPRESSION</b><br>Vendeur: ${f.vendeur}<br>Date: ${f.haitiDate}<br>Tiraj: ${(f.tirajs||[f.tiraj]).join(',')}<br>----------------</center>${(f.details||[]).map(p=>`${p.type.toUpperCase()} ${p.boul} - ${p.montan}G`).join('<br>')}<br>----------------<br><b>TOTAL: ${f.total}G</b><br>ID: ${f.shortId}</body></html>`); win.document.close(); setTimeout(()=>win.print(),500); };
 (async()=>{let v=localStorage.getItem('vendeur_nom'),p=localStorage.getItem('vendeur_pass'); if(v&&p){let snap=await get(child(ref(db),`config/vendeurs/${v}`)); if(snap.exists()&&snap.val().password===p&&snap.val().active!==false){document.getElementById('loginVendeur').value=v;document.getElementById('loginPass').value=p;doLogin();}}})();
 </script></body></html>
