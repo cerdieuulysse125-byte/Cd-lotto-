@@ -1,82 +1,108 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VENDEUR V85 PAYMAN</title>
-<style>*{box-sizing:border-box}body{background:#f1f5f9;color:#000;font-family:sans-serif;margin:0;padding:8px}h1{font-size:12px;text-align:center;color:#ca8a04}.card{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:10px;margin-bottom:8px}input,select{padding:8px;border-radius:6px;border:1px solid #94a3b8;background:#fff;color:#000;font-size:14px;width:100%}button{background:#eab308;color:#000;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer}button:disabled{background:#94a3b8;opacity:0.5}.tirage{display:flex;gap:5px;flex-wrap:wrap}.tirage label{padding:5px 10px;border-radius:20px;border:1px solid #cbd5e1;font-size:12px;cursor:pointer}.tirage label.ouvert{background:#dcfce7;border-color:#22c55e}.tirage label.ferme{background:#fee2e2;border-color:#ef4444;opacity:0.6}.tirage input{width:auto}#liste{max-height:160px;overflow:auto;background:#f8fafc;border-radius:8px;padding:6px;margin-top:6px;border:1px solid #e2e8f0}@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:80mm;padding:5px;font-family:monospace;font-size:12px;color:#000;background:#fff}}</style></head>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D LOTTO Vendeur LOGIN</title>
+<style>*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:#f1f5f9;padding:8px}.loginPage{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f172a;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}.loginBox{background:#1e293b;border-radius:16px;padding:25px;width:100%;max-width:350px;border:2px solid #facc15;text-align:center}input{padding:12px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;width:100%;margin-top:8px}button{padding:12px;border-radius:8px;border:none;font-weight:bold;width:100%;margin-top:10px;cursor:pointer}.btnY{background:#facc15;color:#000}.btnG{background:#22c55e;color:#fff}.card{background:#fff;border-radius:12px;padding:12px;margin-bottom:10px}.tirajGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tirajItem{border:1px solid #e2e8f0;border-radius:8px;padding:6px 8px;display:flex;gap:6px;font-size:12px}.tirajItem.ferme{opacity:.4;background:#fee2e2}.bloqueOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f172a;z-index:99998;display:none;align-items:center;justify-content:center;padding:20px;text-align:center}</style></head>
 <body>
-<script>function getHaitiDateStr(){let d=new Date();let h=new Date(d.toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));return `${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`;}function getHaitiTimeStr(){return new Date(new Date().toLocaleString("en-US",{timeZone:"America/Port-au-Prince"})).toLocaleTimeString('fr-HT');}function getHaitiHM(){let d=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));return d.getHours()*60+d.getMinutes();}</script>
-<h1>🎫 C&D LOTTO <span id="idV"></span> - <span id="stat"></span> - <span id="haitiNow"></span></h1>
-<div id="fermetureInfo" style="background:#fff3cd;border:1px solid #facc15;padding:6px;border-radius:8px;margin-bottom:8px;font-size:11px;text-align:center"></div>
-<div class="card"><b>Tiraj:</b> <small id="heureHaiti"></small><div class="tirage" id="tirageContainer">
-<label id="lab_GA MIDI"><input type="checkbox" value="GA MIDI" class="chkT"> GA MIDI <span class="hFerm"></span></label>
-<label id="lab_GA SOIR"><input type="checkbox" value="GA SOIR" class="chkT"> GA SOIR <span class="hFerm"></span></label>
-<label id="lab_FL MIDI"><input type="checkbox" value="FL MIDI" class="chkT"> FL MIDI <span class="hFerm"></span></label>
-<label id="lab_FL SOIR"><input type="checkbox" value="FL SOIR" class="chkT"> FL SOIR <span class="hFerm"></span></label>
-<label id="lab_NY MIDI"><input type="checkbox" value="NY MIDI" class="chkT"> NY MIDI <span class="hFerm"></span></label>
-<label id="lab_NY SOIR"><input type="checkbox" value="NY SOIR" class="chkT"> NY SOIR <span class="hFerm"></span></label>
-</div></div>
-<div class="card">
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-<div><label style="font-size:10px">Tip:</label><select id="tip"><option value="bolet">Bolèt</option><option value="mariage">Maryaj (23-45)</option><option value="loto3">Loto3 (123)</option><option value="loto4">Loto4 (1234)</option><option value="loto5">Loto5 (12345)</option></select></div>
-<div><label style="font-size:10px">Boul:</label><input id="boul" placeholder="23"></div>
-<div><label style="font-size:10px">Montan:</label><input id="montan" type="number" placeholder="50"></div>
+
+<div id="loginPage" class="loginPage">
+<div class="loginBox">
+<div style="font-size:50px">🔐</div><h2 style="color:#facc15">C&D LOTTO</h2><p style="color:#fff;font-size:13px">Antre non ak modpas ou</p>
+<input id="loginVendeur" placeholder="Non vandè ex: vendeur1">
+<input id="loginPass" type="password" placeholder="Modpas ex: 1111">
+<button onclick="doLogin()" class="btnY">🔓 Konekte</button>
+<div id="loginErr" style="color:#ef4444;font-size:12px;margin-top:10px"></div>
+<div style="color:#64748b;font-size:10px;margin-top:15px">Si ou bliye modpas - Rele Chèf la</div>
 </div>
-<button id="btnAdd" style="width:100%;margin-top:8px;background:#22c55e;color:#fff">➕ Ajoute</button>
-<div id="limiteInfo" style="font-size:10px;margin-top:4px;color:#ca8a04">💰 Bolet 50x/20x/10x | Maryaj 1000x | Loto3 500x | Loto4 5000x | Loto5 25000x</div>
-<div id="liste"></div>
-<div style="display:flex;justify-content:space-between;margin-top:8px;font-weight:bold"><span>Total</span><span id="tTotal">0G</span></div>
-<button id="btnVal" onclick="valide()" style="width:100%;margin-top:8px;background:#000;color:#facc15">✅ Validé + Imprimer</button>
-<div id="bloqueMsg" style="display:none;background:#ef4444;color:#fff;padding:12px;border-radius:8px;margin-top:8px;text-align:center;font-weight:bold"></div>
 </div>
-<div class="card"><b>📋 Mon rapport</b><div style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap"><div>Du:<input type="date" id="rapDu"></div><div>Au:<input type="date" id="rapAu"></div><div>Tiraj:<select id="rapTiraj"><option value="all">Tous</option><option>GA MIDI</option><option>GA SOIR</option><option>FL MIDI</option><option>FL SOIR</option><option>NY MIDI</option><option>NY SOIR</option></select></div><button onclick="loadMonRap()">OK</button></div><div style="display:flex;gap:4px;margin-top:8px"><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center"><div style="font-size:8px">VENTE</div><b id="mVente">0G</b></div><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center"><div style="font-size:8px">COM</div><b id="mCom">0G</b></div><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center"><div style="font-size:8px">PAYÉ</div><b id="mPaye">0G</b></div><div style="flex:1;background:#f1f5f9;padding:6px;border-radius:6px;text-align:center"><div style="font-size:8px">BAL</div><b id="mBal">0G</b></div></div><div id="monRap" style="margin-top:8px;font-size:11px;background:#f8fafc;padding:6px;border-radius:6px"></div></div>
-<div class="card" style="border:2px solid #22c55e"><b>📄 Mes Fiches</b> <button onclick="loadMesFiches()" style="padding:4px 8px;background:#facc15">Refresh</button><div id="mesFiches" style="margin-top:6px;font-size:11px;max-height:400px;overflow:auto"></div></div>
-<div id="printArea" style="display:none"></div>
+
+<div id="bloqueOverlay" class="bloqueOverlay"><div style="background:#1e293b;border:3px solid #ef4444;border-radius:16px;padding:25px;max-width:380px;width:100%"><div style="font-size:60px">🚫</div><h1 style="color:#ef4444">OU BLOKE!</h1><div id="bloqueMsg" style="color:#fff;font-size:13px"></div><button onclick="logout()" style="margin-top:15px;background:#ef4444;color:#fff;padding:12px;width:100%;border-radius:8px;border:none;font-weight:bold">Dekonekte</button></div></div>
+
+<div id="mainApp" style="display:none">
+<div style="background:#facc15;padding:8px;border-radius:12px;text-align:center;font-weight:bold;font-size:13px;margin-bottom:8px">🎫 C&D LOTTO <span id="vName"></span> - <span id="dateNow"></span> <button onclick="logout()" style="float:right;background:#0f172a;color:#fff;border:none;padding:4px 8px;border-radius:6px;font-size:10px">Dekonekte</button></div>
+<div id="msgTiraj" style="background:#fef9c3;padding:8px;border-radius:8px;text-align:center;font-size:12px;font-weight:bold;margin-bottom:8px"></div>
+<div class="card"><b>Tiraj: <span id="heureAyiti" style="font-size:11px;color:#64748b"></span></b><div class="tirajGrid" id="tirajGrid" style="margin-top:8px"></div></div>
+<div class="card"><div style="display:flex;gap:6px"><select id="tip" style="flex:1"><option value="bolet">Bolet</option><option value="mariage">Maryaj</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select><input id="boul" placeholder="Boul" style="flex:1"><input id="montan" type="number" placeholder="Montan" style="flex:1"></div><button onclick="ajouteBoul()" class="btnG" style="margin-top:8px">➕ Ajoute</button><div id="listFiche" style="margin-top:10px"></div><div style="display:flex;justify-content:space-between;font-weight:bold;font-size:16px;margin-top:10px;border-top:2px solid #000;padding-top:8px"><span>Total</span><span id="totalG">0G</span></div><button onclick="validerFiche()" style="background:#0f172a;color:#facc15;border:none;padding:12px;border-radius:10px;font-weight:bold;width:100%;margin-top:10px">✅ Validé + Imprimer</button></div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, get, child, set, push } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getDatabase, ref, get, child, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 const cfg={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"};const app=initializeApp(cfg);const db=getDatabase(app);
-let vendeur=prompt("Non Vendeur?")||"vendeur1";vendeur=vendeur.toLowerCase().replace(/\s+/g,'');
-document.getElementById('idV').innerText=vendeur;document.getElementById('haitiNow').innerText=getHaitiDateStr()+' '+getHaitiTimeStr();
-let panier=[];let limites={bolet:1000,mariage:50,loto3:100,loto4:20,loto5:10};let totalsDuJour={};let fermeture={};
-function calcGain(detail, res){
-let gain=0; let expl=""; let b=String(detail.boul).trim(); let montan=parseInt(detail.montan);
-if(!res) return {gain:0,expl:""};
-let p1=String(res.premier||'').trim(); let p2=String(res.deuxieme||'').trim(); let p3=String(res.troisieme||'').trim(); let l3=String(res.loto3||'').trim();
-if(detail.type==='bolet'){
-if(b===p1){gain+=montan*50; expl=`Bolet ${b}=1er 50x`;}
-else if(b===p2){gain+=montan*20; expl=`Bolet ${b}=2e 20x`;}
-else if(b===p3){gain+=montan*10; expl=`Bolet ${b}=3e 10x`;}
+
+let VENDEUR="", MOTDEPASSE="", EST_BLOKE=false, panier=[], limites={bolet:1000,mariage:50,loto3:100,loto4:20,loto5:10}, fermetures={};
+
+function getHaitiNow(){return new Date(new Date().toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));}
+function getHaitiDateStr(){let h=getHaitiNow();return `${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`;}
+function getHaitiTimeStr(){let h=getHaitiNow();return `${String(h.getHours()).padStart(2,'0')}:${String(h.getMinutes()).padStart(2,'0')}`;}
+
+window.doLogin=async()=>{
+  let v=document.getElementById('loginVendeur').value.trim().toLowerCase(), p=document.getElementById('loginPass').value.trim();
+  if(!v||!p){document.getElementById('loginErr').innerText='Mete non ak modpas';return;}
+  let snap=await get(child(ref(db),`config/vendeurs/${v}`));
+  if(!snap.exists()){document.getElementById('loginErr').innerText='Vandè sa pa egziste';return;}
+  let d=snap.val();
+  if((d.password||'')!==p){document.getElementById('loginErr').innerText='Modpas pa kòrèk';return;}
+  if(d.active===false){document.getElementById('loginErr').innerText='🚫 Ou bloke - Rele Chèf la';return;}
+  VENDEUR=v; MOTDEPASSE=p;
+  localStorage.setItem('vendeur_nom',v); localStorage.setItem('vendeur_pass',p);
+  document.getElementById('loginPage').style.display='none'; document.getElementById('mainApp').style.display='block';
+  document.getElementById('vName').innerText=v;
+  loadConfig(); checkBloke();
+};
+window.logout=()=>{localStorage.removeItem('vendeur_nom');localStorage.removeItem('vendeur_pass');location.reload();};
+
+async function checkBloke(){
+  let snap=await get(child(ref(db),`config/vendeurs/${VENDEUR}`));
+  if(!snap.exists()||snap.val().active===false){
+    document.getElementById('bloqueOverlay').style.display='flex';
+    document.getElementById('bloqueMsg').innerHTML=`Vandè <b>${VENDEUR}</b> bloke!<br>Rele Chèf la`;
+    EST_BLOKE=true; return true;
+  }
+  document.getElementById('bloqueOverlay').style.display='none'; EST_BLOKE=false; return false;
 }
-else if(detail.type==='mariage'){
-let parts=b.split(/[-xX ]+/).filter(x=>x); if(parts.length>=2){let a=parts[0].trim(), c=parts[1].trim(); let tops=[p1,p2,p3]; let hasA=tops.includes(a), hasC=tops.includes(c);
-if(hasA&&hasC){gain+=montan*1000;
-if((a===p1&&c===p2)||(a===p2&&c===p1)) expl=`Maryaj ${a}-${c}=1erx2e 1000x`;
-else if((a===p1&&c===p3)||(a===p3&&c===p1)) expl=`Maryaj ${a}-${c}=1erx3e 1000x`;
-else if((a===p2&&c===p3)||(a===p3&&c===p2)) expl=`Maryaj ${a}-${c}=2ex3e 1000x`;
-else expl=`Maryaj ${a}-${c}=1000x`;
-}}
+async function loadConfig(){
+  let s1=await get(child(ref(db),'config/limites')); if(s1.exists())limites={...limites,...s1.val()};
+  let s3=await get(child(ref(db),'config/fermeture')); if(s3.exists())fermetures=s3.val(); else fermetures={'GA MIDI':'12:15','GA SOIR':'18:15','FL MIDI':'13:15','FL SOIR':'21:15','NY MIDI':'14:15','NY SOIR':'21:30'};
+  renderTiraj();
 }
-else if(detail.type==='loto3'){
-if(l3 && b===l3){gain+=montan*500; expl=`Loto3 ${b}=500x`;}
+function renderTiraj(){
+  let now=getHaitiTimeStr(); let grid=document.getElementById('tirajGrid'); grid.innerHTML=''; let toutFerme=true;
+  Object.entries(fermetures).forEach(([nom,heure])=>{
+    let ferme=now>=heure; if(!ferme)toutFerme=false;
+    grid.innerHTML+=`<label class="tirajItem ${ferme?'ferme':''}"><input type="checkbox" value="${nom}" ${ferme?'disabled':''} class="chkTiraj"> ${nom} (${heure})</label>`;
+  });
+  document.getElementById('msgTiraj').innerHTML=toutFerme?'🔒 Tout tiraj fèmen':'✅ Tout tiraj ouvè';
+  document.getElementById('heureAyiti').innerText='Lè Ayiti: '+now; document.getElementById('dateNow').innerText=getHaitiDateStr()+' '+now;
 }
-else if(detail.type==='loto4'){
-let comb=String(p2).padStart(2,'0')+String(p3).padStart(2,'0'); if(comb.length>=4 && b===comb){gain+=montan*5000; expl=`Loto4 ${b}=2e+3e ${p2}+${p3}=5000x`;}
-let comb2=String(p2).padStart(2,'0')+String(p1).padStart(2,'0'); // backup
-}
-else if(detail.type==='loto5'){
-if(l3 && p2){let comb5=String(l3)+String(p2).padStart(2,'0'); if(b===comb5){gain+=montan*25000; expl=`Loto5 ${b}=Loto3+2e ${l3}+${p2}=25000x`;}}
-}
-return {gain,expl};
-}
-function checkFermeture(){let hm=getHaitiHM();let now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Port-au-Prince"}));document.getElementById('heureHaiti').innerText=`Lè Ayiti: ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;let info="";let allFerme=true;Object.keys(fermeture).forEach(t=>{let [h,m]=fermeture[t].split(':').map(Number);let limH=h*60+m;let lab=document.getElementById('lab_'+t);if(!lab)return;let chk=lab.querySelector('input');let span=lab.querySelector('.hFerm');span.innerText=`(${fermeture[t]})`;if(hm>=limH){chk.checked=false;chk.disabled=true;lab.className='ferme';span.innerText+=` 🔒`;info+=`${t} FÈMÈ | `;}else{chk.disabled=false;lab.className='ouvert';allFerme=false;}});document.getElementById('fermetureInfo').innerHTML=info||"✅ Tout tiraj ouvè";if(allFerme){document.getElementById('bloqueMsg').style.display='block';document.getElementById('bloqueMsg').innerHTML=`🔴 TOUT TIRAJ FÈMÈ`;document.getElementById('btnAdd').disabled=true;document.getElementById('btnVal').disabled=true;}else{document.getElementById('bloqueMsg').style.display='none';document.getElementById('btnAdd').disabled=false;document.getElementById('btnVal').disabled=false;}}
-async function init(){let s=await get(child(ref(db),'config'));if(!s.exists())return;let c=s.val();if(c.limites)limites=c.limites;if(c.fermeture)fermeture=c.fermeture;else fermeture={'GA MIDI':'12:15','GA SOIR':'18:15','FL MIDI':'13:15','FL SOIR':'21:15','NY MIDI':'14:15','NY SOIR':'21:30'};checkFermeture();setInterval(checkFermeture,30000);await calcTotals();let t=getHaitiDateStr();document.getElementById('rapDu').value=t;document.getElementById('rapAu').value=t;}
-async function calcTotals(){let snap=await get(child(ref(db),'fiches'));totalsDuJour={};if(!snap.exists())return;let today=getHaitiDateStr();Object.values(snap.val()).forEach(f=>{let fd=f.haitiDate||f.date.split('T')[0];if(fd!==today)return;(f.details||[]).forEach(d=>{(f.tirajs||[]).forEach(t=>{let k=t+'_'+(d.type||'bolet')+'_'+d.boul;if(!totalsDuJour[k])totalsDuJour[k]=0;totalsDuJour[k]+=parseInt(d.montan||0);});});});}
-function getTirajSelected(){return [...document.querySelectorAll('.chkT:checked')].map(c=>c.value);}
-document.getElementById('boul').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('montan').focus();}});
-document.getElementById('montan').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addBoul();}});
-window.addBoul=async()=>{checkFermeture();let tirajs=getTirajSelected();if(tirajs.length===0){alert('Chwazi tiraj');return;}for(let t of tirajs){let [h,m]= (fermeture[t]||'23:59').split(':').map(Number);if(getHaitiHM()>=h*60+m){alert(`${t} FÈMÈ`);return;}}let tip=document.getElementById('tip').value;let boul=document.getElementById('boul').value.trim();let montan=parseInt(document.getElementById('montan').value);if(!boul||!montan)return;for(let t of tirajs){let k=t+'_'+tip+'_'+boul;let deja=totalsDuJour[k]||0;let lim=limites[tip]||1000;if(deja+montan>lim){alert(`BLOKE! ${boul} ${t} deja ${deja}/${lim}`);return;}}panier.push({type:tip,boul:boul,montan:montan});for(let t of tirajs){let k=t+'_'+tip+'_'+boul;if(!totalsDuJour[k])totalsDuJour[k]=0;totalsDuJour[k]+=montan;}render();document.getElementById('boul').value='';document.getElementById('montan').value='';document.getElementById('boul').focus();};
-function render(){let div=document.getElementById('liste');div.innerHTML='';let tot=0;panier.forEach((p,i)=>{tot+=p.montan;div.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0"><span>${p.type} ${p.boul}</span><span>${p.montan}G <button onclick="retire(${i})" style="padding:2px 6px;background:#ef4444;color:#fff">x</button></span></div>`;});document.getElementById('tTotal').innerText=tot+'G';}
-window.retire=(i)=>{let p=panier[i];let tirajs=getTirajSelected();tirajs.forEach(t=>{let k=t+'_'+p.type+'_'+p.boul;if(totalsDuJour[k])totalsDuJour[k]-=p.montan;});panier.splice(i,1);render();};
-window.valide=async()=>{checkFermeture();if(panier.length===0){alert('Panier vid');return;}let tirajs=getTirajSelected();if(tirajs.length===0){alert('Chwazi tiraj');return;}for(let t of tirajs){let [h,m]= (fermeture[t]||'23:59').split(':').map(Number);if(getHaitiHM()>=h*60+m){alert(`${t} FÈMÈ`);return;}}let total=panier.reduce((a,b)=>a+b.montan,0);let id=push(child(ref(db),'fiches')).key;let shortId=id.slice(-6).toUpperCase();let haitiDate=getHaitiDateStr();let haitiTime=getHaitiTimeStr();await set(ref(db,'fiches/'+id),{id:id,shortId:shortId,vendeur:vendeur,idVendeur:vendeur,tirajs:tirajs,tiraj:tirajs[0],details:panier,total:total,haitiDate:haitiDate,haitiTime:haitiTime,date:new Date().toISOString()});let printDiv=document.getElementById('printArea');printDiv.innerHTML=`<div style="text-align:center"><b>C&D VERITE LOTTO</b><br>${haitiDate} ${haitiTime}<br>${tirajs.join(', ')}<br>${shortId}<br>....</div><div>${panier.map(p=>`${p.type.toUpperCase()} - ${p.boul} - ${p.montan}G`).join('<br>')}<br><b>Total: ${total}G</b></div>`;printDiv.style.display='block';window.print();setTimeout(()=>printDiv.style.display='none',500);panier=[];render();await calcTotals();loadMonRap();loadMesFiches();};
-window.loadMonRap=async()=>{let du=document.getElementById('rapDu').value;let au=document.getElementById('rapAu').value;let ft=document.getElementById('rapTiraj').value;let snap=await get(child(ref(db),'fiches'));let resSnap=await get(child(ref(db),'resultats'));let res=resSnap.exists()?resSnap.val():{};let div=document.getElementById('monRap');if(!snap.exists()){div.innerHTML='Pa gen';return;}let all=Object.values(snap.val()).filter(f=>(f.vendeur||f.idVendeur)===vendeur);let filt=all.filter(f=>{let fd=f.haitiDate||f.date.split('T')[0];if(du&&fd<du)return false;if(au&&fd>au)return false;if(ft!=='all'&&!(f.tirajs||[f.tiraj]||[]).includes(ft))return false;return true;});let vente=filt.reduce((a,b)=>a+parseInt(b.total||0),0);let com=Math.round(vente*0.1);let gain=0;filt.forEach(f=>{let fd=f.haitiDate||f.date.split('T')[0];(f.tirajs||[]).forEach(t=>{let r=res[fd+'_'+t]||res[fd+'_'+t.replace(' ','_')];if(!r)return;(f.details||[]).forEach(dd=>{let g=calcGain(dd,r);gain+=g.gain;});});});let bal=vente-com-gain;document.getElementById('mVente').innerText=vente+'G';document.getElementById('mCom').innerText=com+'G';document.getElementById('mPaye').innerText=gain+'G';document.getElementById('mBal').innerText=bal+'G';div.innerHTML=`${filt.length} fich - Vente:${vente}G Paye:${gain}G Bal:${bal}G`;};
-window.loadMesFiches=async()=>{let snap=await get(child(ref(db),'fiches'));let resSnap=await get(child(ref(db),'resultats'));let res=resSnap.exists()?resSnap.val():{};let div=document.getElementById('mesFiches');if(!snap.exists()){div.innerHTML='Pa gen';return;}let mine=Object.values(snap.val()).filter(f=>(f.vendeur||f.idVendeur)===vendeur).slice(-30).reverse();div.innerHTML=mine.map(f=>{let fd=f.haitiDate||f.date.split('T')[0];let gain=0;let detailsG=[];(f.tirajs||[]).forEach(t=>{let r=res[fd+'_'+t]||res[fd+'_'+t.replace(' ','_')];if(r){(f.details||[]).forEach(dd=>{let g=calcGain(dd,r);if(g.gain>0){gain+=g.gain;detailsG.push(g.expl);}});}});let status=gain>0?`<span style="color:#16a34a;font-weight:bold">✅ GAGNÉ ${gain}G<br><small>${detailsG.join('<br>')}</small></span>`:'<span style="color:#ef4444">❌ PERDU</span>';return `<div style="border-bottom:1px solid #e2e8f0;padding:6px 0;display:flex;justify-content:space-between"><div><b>${f.shortId||''}</b> - ${fd} - ${(f.tirajs||[]).join(',')} - ${f.total}G<br><span style="font-size:10px">${(f.details||[]).map(dd=>dd.type+':'+dd.boul).join(', ')}</span></div><div style="text-align:right">${status}</div></div>`;}).join('');};
-document.getElementById('btnAdd').addEventListener('click',addBoul);
-init();loadMonRap();loadMesFiches();
+window.ajouteBoul=async()=>{
+  if(await checkBloke())return alert('🚫 OU BLOKE');
+  let tip=document.getElementById('tip').value,boul=document.getElementById('boul').value.trim(),montan=parseInt(document.getElementById('montan').value)||0;
+  if(!boul||montan<=0)return alert('Mete boul ak montan');
+  let max=tip==='bolet'?limites.bolet:tip==='mariage'?limites.mariage:limites.loto3; if(montan>max)return alert(`Limit ${max}G`);
+  let sel=[...document.querySelectorAll('.chkTiraj:checked')].map(c=>c.value); if(sel.length===0)return alert('Chwazi tiraj');
+  panier.push({type:tip,boul:montan?boul:boul,montan:montan}); renderPanier();
+  document.getElementById('boul').value='';document.getElementById('montan').value='';
+};
+function renderPanier(){let div=document.getElementById('listFiche');div.innerHTML='';let tot=0;panier.forEach((p,i)=>{tot+=p.montan;div.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:13px"><span>${p.type} ${p.boul}</span><span>${p.montan}G <button onclick="panier.splice(${i},1);renderPanier()" style="background:#ef4444;color:#fff;border:none;border-radius:50%;width:18px;height:18px">x</button></span></div>`;});document.getElementById('totalG').innerText=tot+'G';}
+window.validerFiche=async()=>{
+  if(await checkBloke())return alert('🚫 BLOKE');
+  if(panier.length===0)return alert('Panier vid');
+  let sel=[...document.querySelectorAll('.chkTiraj:checked')].map(c=>c.value); if(sel.length===0)return alert('Chwazi tiraj');
+  let total=panier.reduce((a,b)=>a+b.montan,0);
+  let fich={id:Date.now(),shortId:'C&D-'+Date.now().toString().slice(-5),vendeur:VENDEUR,idVendeur:VENDEUR,date:new Date().toISOString(),haitiDate:getHaitiDateStr(),tiraj:sel[0],tirajs:sel,details:panier,total:total};
+  await set(ref(db,`fiches/${fich.id}`),fich);
+  alert(`Fich ${fich.shortId} ✅ ${total}G`);
+  let win=window.open('','_blank','width=300,height=500'); win.document.write(`<pre>C&D LOTTO\nVendeur: ${VENDEUR}\nDate: ${fich.haitiDate}\nTiraj: ${sel.join(',')}\n---\n${panier.map(p=>`${p.type} ${p.boul} ${p.montan}G`).join('\n')}\n---\nTOTAL: ${total}G\nID: ${fich.shortId}</pre>`); win.print();
+  panier=[];renderPanier();
+};
+
+// Auto-login si deja konekte
+(async()=>{
+  let v=localStorage.getItem('vendeur_nom'), p=localStorage.getItem('vendeur_pass');
+  if(v&&p){
+    let snap=await get(child(ref(db),`config/vendeurs/${v}`));
+    if(snap.exists() && snap.val().password===p && snap.val().active!==false){
+      document.getElementById('loginVendeur').value=v; document.getElementById('loginPass').value=p; doLogin();
+    }
+  }
+})();
+setInterval(()=>{ if(VENDEUR) checkBloke(); },10000);
 </script></body></html>
