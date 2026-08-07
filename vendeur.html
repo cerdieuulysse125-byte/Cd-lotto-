@@ -1,216 +1,162 @@
 <!DOCTYPE html>
 <html lang="ht">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>C&D VÉRITÉ LOTTO - VENDEUR</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C&D VENDEUR - FIX LOGIN</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
-*{box-sizing:border-box} body{font-family:Arial;margin:0;background:#f8fafc}
-.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold;font-size:18px;position:sticky;top:0;z-index:10}
-.tabs{display:flex;gap:4px;padding:8px;background:#000}
-.tabs button{flex:1;padding:10px;border:none;border-radius:8px;font-weight:bold}
-.tabs button.active{background:#FFD700;color:#000}
-.card{padding:10px;max-width:480px;margin:0 auto;background:#fff;min-height:80vh}
-input,select{padding:10px;border:2px solid #000;border-radius:8px;width:100%;margin:4px 0;font-size:16px}
-.btn{padding:12px;width:100%;border:none;border-radius:10px;font-weight:bold;font-size:16px;margin:6px 0;cursor:pointer}
-.bK{background:#000;color:#FFD700}.bG{background:#16a34a;color:#fff}
-.tiraj{display:inline-block;padding:7px 10px;margin:3px;border:2px solid #000;border-radius:20px;font-weight:bold;cursor:pointer;font-size:13px}
+*{box-sizing:border-box} body{font-family:Arial;margin:0;background:#fff}
+.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold}
+.card{padding:12px;max-width:480px;margin:0 auto}
+input,select{padding:12px;border:2px solid #000;border-radius:8px;width:100%;margin:5px 0;font-size:16px}
+.btn{padding:14px;width:100%;border:none;border-radius:10px;font-weight:bold;font-size:17px;margin:6px 0}
+.bK{background:#000;color:#FFD700}
+.tiraj{display:inline-block;padding:8px 12px;margin:3px;border:2px solid #000;border-radius:20px;font-weight:bold;cursor:pointer}
 .tiraj.active{background:#000;color:#FFD700}
-.line{display:grid;grid-template-columns:90px 1fr 70px 60px;gap:4px;margin:4px 0;align-items:center}
-.line b{text-align:center}
-#ticketPrint{display:none}
-.ticketBox{border:2px dashed #000;padding:15px;margin:10px auto;max-width:350px;text-align:center;font-family:monospace;font-size:18px;font-weight:bold;line-height:1.4;background:#fff}
-@media print{
-  body *{visibility:hidden}
-  #ticketPrint,#ticketPrint *{visibility:visible}
-  #ticketPrint{display:block!important;position:absolute;left:0;top:0;width:100%;text-align:center}
-}
-.rowF{border-bottom:1px solid #ddd;padding:8px;font-size:14px;display:flex;justify-content:space-between}
+.line{display:grid;grid-template-columns:80px 1fr 65px;gap:4px;margin:5px 0}
+.ticket{border:2px dashed #000;padding:15px;text-align:center;font-size:19px;font-weight:bold;line-height:1.5;max-width:360px;margin:10px auto}
+@media print{body *{visibility:hidden} #ticketPrint,#ticketPrint *{visibility:visible} #ticketPrint{position:absolute;left:0;top:0;width:100%}}
 </style>
 </head>
 <body>
 <div class="h">C&D VÉRITÉ LOTTO</div>
 
-<div id="login" class="card" style="text-align:center;padding-top:60px">
+<div id="login" class="card" style="text-align:center;padding-top:40px">
 <h2>Connexion Vendeur</h2>
-<input id="uName" placeholder="Non vendeur (ex: Tamouche)" value="Tamouche">
-<input id="uPass" type="password" placeholder="Modpas" value="">
-<button class="btn bK" onclick="login()">Antre</button>
-<p id="lMsg" style="color:red"></p>
-<small>Si se premye fwa, lap kreye kont la otomatik</small>
+<input id="uName" value="Tamouche">
+<input id="uPass" type="password" placeholder="Modpas - mete nenpòt" value="1234">
+<button class="btn bK" onclick="forceLogin()">Antre Kounya</button>
+<p id="lMsg"></p>
+<p style="color:green;font-weight:bold" id="status"></p>
 </div>
 
 <div id="app" style="display:none">
-<div class="tabs">
-<button id="t1" class="active" onclick="show('vendre',this)">Vendre</button>
-<button onclick="show('fiches',this)">Mes Fiches</button>
-<button onclick="show('rapport',this)">Rapport</button>
+<div style="display:flex;gap:4px;background:#000;padding:6px">
+<button class="btn bK" style="margin:0" onclick="showTab('vendre')">Vendre</button>
+<button class="btn bK" style="margin:0" onclick="showTab('fiches')">Mes Fiches</button>
+<button class="btn bK" style="margin:0" onclick="showTab('rapport')">Rapport</button>
 </div>
 
 <div id="vendre" class="card">
-<div id="blocked" style="display:none;background:#dc2626;color:#fff;padding:10px;border-radius:8px;text-align:center;font-weight:bold">🔴 OU FERMEN - Kontakte Proprio</div>
-<div id="sellBox">
-<div style="font-weight:bold;text-align:center">TIRAGE MULTIPLE - Chwazi yo</div>
-<div id="tirajBox" style="text-align:center"></div>
-<div class="line" style="background:#000;color:#FFD700;border-radius:6px"><b>JEUX</b><b>BOUL</b><b>MIZ</b><b>KAZ M.</b></div>
+<div style="text-align:center;font-weight:bold">TIRAJ MULTIP - Chwazi</div>
+<div id="tirajBox" style="text-align:center;margin:8px 0"></div>
+<div style="display:flex;background:#000;color:#FFD700;padding:6px;border-radius:6px;font-weight:bold"><div style="width:80px">JEUX</div><div style="flex:1">BOUL</div><div style="width:65px">MIZ</div></div>
 <div id="lines"></div>
-<button class="btn" style="background:#ddd" onclick="addLine()">+ Ajoute liy (Flèche ↓)</button>
-<div style="background:#000;color:#fff;padding:10px;border-radius:10px;text-align:center;margin-top:10px">
-Total: <span id="tot">0$</span> × <span id="nb">1</span> Tiraj<br>
-<h2 style="margin:4px;color:#FFD700">A PEYE: <span id="paye">0$</span></h2>
+<button class="btn" onclick="addLine()">+ Liy - Flech ↓ pou avanse</button>
+<div style="background:#111;color:#fff;padding:10px;border-radius:10px;text-align:center;margin-top:10px">
+Total <span id="tot">0$</span> × <span id="nb">1</span><br>
+<h2 style="color:#FFD700;margin:5px">A PEYE: <span id="paye">0$</span></h2>
 </div>
-<button class="btn bK" onclick="vann()">✅ VENDRE & IMPRIMER</button>
-</div>
+<button class="btn bK" onclick="vann()">VENDRE & IMPRIMER</button>
 </div>
 
-<div id="fiches" class="card" style="display:none">
-<h3 style="text-align:center">Mes Fiches - <span id="myName"></span></h3>
-<div id="listF"></div>
-</div>
+<div id="fiches" class="card" style="display:none"><h3>Mes Fiches - <span id="myName"></span></h3><div id="listF"></div></div>
 
 <div id="rapport" class="card" style="display:none">
-<h3 style="text-align:center">Rapport Vendeur</h3>
-<div style="display:flex;gap:6px"><div>Du <input id="du" type="date"></div><div>Au <input id="au" type="date"></div></div>
-<select id="fT"><option value="tous">Tirage - Tous</option><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
+<h3>Rapport</h3>
+<div style="display:flex;gap:5px">Du <input id="du" type="date"> Au <input id="au" type="date"></div>
+<select id="fT"><option value="tous">Tirage Tous</option><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
 <button class="btn bK" onclick="genRap()">Générer</button>
-<div id="printArea">
 <div id="rap"></div>
-</div>
-<button class="btn bG" onclick="window.print()">🖨️ Imprimer - Santre Lizib</button>
+<button class="btn bK" onclick="window.print()">🖨️ Imprimer Santre Lizib</button>
 </div>
 </div>
 
-<div id="ticketPrint"></div>
+<div id="ticketPrint" style="display:none"></div>
 
 <script>
-const firebaseConfig={databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"};
-firebase.initializeApp(firebaseConfig); const db=firebase.database();
-let curV='', selT=[], cfg={}, totGlobal=0;
+let curV='', selT=[], lineId=0, totG=0, fichesLocal=JSON.parse(localStorage.getItem('fiches')||'[]');
+let db=null; try{ firebase.initializeApp({databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"}); db=firebase.database(); }catch(e){}
 
-function show(id,btn){document.querySelectorAll('.card').forEach(c=>c.style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(id==='fiches') loadFiches();}
+// FORSE ANTRE - Pa bezwen Firebase
+function forceLogin(){
+  const n=document.getElementById('uName').value.trim()||'Tamouche';
+  if(!n) return alert('Mete non');
+  curV=n; localStorage.setItem('curV',n);
+  document.getElementById('status').innerText='Antre...';
+  setTimeout(()=>{
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('myName').innerText=n;
+    loadTirages(); 
+    for(let i=0;i<6;i++) addLine();
+    if(db){ try{ db.ref('vendors/'+n).update({name:n,status:'OUVE',lastLogin:Date.now()}); }catch(e){} }
+  },300);
+}
 
-db.ref('config').on('value',s=>{cfg=s.val()||{}; loadTirages();});
+function showTab(id){document.getElementById('vendre').style.display=id==='vendre'?'block':'none'; document.getElementById('fiches').style.display=id==='fiches'?'block':'none'; document.getElementById('rapport').style.display=id==='rapport'?'block':'none'; if(id==='fiches') loadFiches();}
+
 function loadTirages(){
- const box=document.getElementById('tirajBox'); if(!box) return; box.innerHTML='';
+ const box=document.getElementById('tirajBox'); box.innerHTML='';
  ['GA midi','GA soir','FL midi','FL soir','NY midi','NY soir'].forEach(t=>{
-   const h=(cfg.heures||{})[{'GA midi':'gaMidi','GA soir':'gaSoir','FL midi':'flMidi','FL soir':'flSoir','NY midi':'nyMidi','NY soir':'nySoir'}[t]]||'';
-   box.innerHTML+=`<span class="tiraj" onclick="toggleT(this,'${t}')">${t} <small>${h}</small></span>`;
+   box.innerHTML+=`<span class="tiraj" onclick="toggleT(this,'${t}')">${t}</span>`;
  });
 }
+function toggleT(el,t){ el.classList.toggle('active'); if(selT.includes(t)) selT=selT.filter(x=>x!==t); else selT.push(t); updateTot();}
 
-function toggleT(el,t){
-  el.classList.toggle('active');
-  if(selT.includes(t)) selT=selT.filter(x=>x!==t); else selT.push(t);
-  updateTot();
-}
-
-function login(){
-  const n=uName.value.trim(), p=uPass.value.trim();
-  if(!n||!p) return lMsg.innerText='Mete non ak modpas';
-  db.ref('vendors/'+n).once('value',snap=>{
-    if(!snap.exists()){
-      // kreye otomatik
-      db.ref('vendors/'+n).set({name:n,pass:p,status:'OUVE'}).then(()=> doEnter(n));
-    } else {
-      const v=snap.val();
-      if(v.pass!==p && v.pass!==undefined) return lMsg.innerText='❌ Modpas pa bon. Nan Proprio modpas la se: '+v.pass;
-      // si modpas vid nan ansyen sistem, mete nouvo a
-      if(!v.pass) db.ref('vendors/'+n+'/pass').set(p);
-      if(v.status==='FERME') return lMsg.innerText='🔴 OU FERMEN - Kontakte Proprio';
-      doEnter(n);
-    }
-  });
-}
-function doEnter(n){
-  curV=n; login.style.display='none'; app.style.display='block';
-  document.getElementById('myName').innerText=n;
-  document.getElementById('vendre').style.display='block';
-  db.ref('vendors/'+n+'/status').on('value',s=>{
-    const b=document.getElementById('blocked'), sb=document.getElementById('sellBox');
-    if(s.val()==='FERME'){b.style.display='block'; sb.style.display='none';}
-    else{b.style.display='none'; sb.style.display='block';}
-  });
-  if(document.getElementById('lines').children.length===0){for(let i=0;i<5;i++) addLine();}
-}
-
-let lineId=0;
 function addLine(){
-  lineId++; const d=document.createElement('div'); d.className='line'; d.innerHTML=`
-  <select id="j${lineId}"><option>Borlette</option><option>Mariage</option><option>Loto3</option><option>Loto4</option><option>Loto5</option></select>
-  <input id="b${lineId}" placeholder="Boul" onkeydown="if(event.key==='ArrowDown'||event.key==='Enter'){event.preventDefault(); addLine(); setTimeout(()=>document.getElementById('b${lineId+1}')?.focus(),100)}">
-  <input id="m${lineId}" type="number" placeholder="Miz" oninput="updateTot()">
-  <input id="k${lineId}" placeholder="KM" style="font-size:12px">`;
+  lineId++; const d=document.createElement('div'); d.className='line';
+  d.innerHTML=`<select id="j${lineId}"><option>Borlette</option><option>Mariage</option><option>Loto3</option><option>Loto4</option><option>Loto5</option></select>
+  <input id="b${lineId}" placeholder="Boul" onkeydown="if(event.key==='Enter'||event.key==='ArrowDown'){event.preventDefault(); addLine();}">
+  <input id="m${lineId}" type="number" placeholder="Miz" oninput="updateTot()">`;
   document.getElementById('lines').appendChild(d);
-  document.getElementById('b'+lineId).focus();
 }
-
 function updateTot(){
-  let t=0; for(let i=1;i<=lineId;i++){const m=document.getElementById('m'+i); if(m) t+=parseInt(m.value)||0;}
-  totGlobal=t; document.getElementById('tot').innerText=t+'$'; document.getElementById('nb').innerText=selT.length||1;
-  document.getElementById('paye').innerText=(t*(selT.length||1))+'$';
+  let t=0; for(let i=1;i<=lineId;i++){ const m=document.getElementById('m'+i); if(m) t+=parseInt(m.value)||0;}
+  totG=t; document.getElementById('tot').innerText=t+'$'; document.getElementById('nb').innerText=selT.length||1; document.getElementById('paye').innerText=(t*(selT.length||1))+'$';
 }
 
 function vann(){
-  if(selT.length===0) return alert('Chwazi Tiraj'); if(totGlobal===0) return alert('Mete miz');
+  if(selT.length===0) return alert('Chwazi tiraj'); if(totG===0) return alert('Mete miz');
   let corps=''; for(let i=1;i<=lineId;i++){
-    const j=document.getElementById('j'+i), b=document.getElementById('b'+i), m=document.getElementById('m'+i), k=document.getElementById('k'+i);
-    if(b && b.value && m && m.value) corps+=`${j.value.substring(0,3)} ${b.value} x ${m.value}$ ${k.value? '['+k.value+']':''}<br>`;
+    const j=document.getElementById('j'+i), b=document.getElementById('b'+i), m=document.getElementById('m'+i);
+    if(b&&b.value&&m&&m.value) corps+=`${j.value.slice(0,3)} ${b.value} - ${m.value}$<br>`;
   }
   const id=Date.now(); const now=new Date();
-  const dateStr=now.toLocaleDateString()+' '+now.toLocaleTimeString();
-  const ticketHTML=`
-  <div class="ticketBox">
-  <div style="font-size:22px">C&D VÉRITÉ LOTTO</div>
-  Date: ${dateStr}<br>
+  const ticket=`<div class="ticket">
+  C&D VÉRITÉ LOTTO<br>
+  Date: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}<br>
   Tirage: ${selT.join(', ')}<br>
-  ID: ${id} - Vandè: ${curV}<br>
- ........................................<br>
+  ID: ${id}<br>
+  Vandè: ${curV}<br>
+  ........................................<br>
   ${corps}
- ........................................<br>
+  ........................................<br>
   Total × Tiraj<br>
-  ${totGlobal}$ × ${selT.length} = <b>${totGlobal*selT.length}$</b><br><br>
+  ${totG}$ × ${selT.length} = <b>${totG*selT.length}$</b><br><br>
   Mèsi pou konfyans ou fè n'<br>
   </div>`;
-  document.getElementById('ticketPrint').innerHTML=ticketHTML;
-  db.ref('fiches/'+id).set({id:id,vendor:curV,boules:corps,total:totGlobal,nbTiraj:selT.length,tiraj:selT.join(', '),date:Date.now(),html:ticketHTML});
+  document.getElementById('ticketPrint').innerHTML=ticket; document.getElementById('ticketPrint').style.display='block';
+  const fich={id, vendor:curV, tiraj:selT.join(','), total:totG, nbTiraj:selT.length, corps, ticket, date:now.toISOString(), time:Date.now()};
+  fichesLocal.push(fich); localStorage.setItem('fiches',JSON.stringify(fichesLocal));
+  if(db){ try{ db.ref('fiches/'+id).set({id,vendor:curV,boules:corps,total:totG,nbTiraj:selT.length,tiraj:selT.join(','),date:Date.now()}); }catch(e){} }
   window.print();
-  // reset
-  document.getElementById('lines').innerHTML=''; lineId=0; for(let i=0;i<5;i++) addLine(); updateTot();
+  document.getElementById('lines').innerHTML=''; lineId=0; for(let i=0;i<6;i++) addLine(); updateTot();
 }
 
 function loadFiches(){
-  db.ref('fiches').orderByChild('vendor').equalTo(curV).once('value',s=>{
-    const c=document.getElementById('listF'); c.innerHTML='';
-    if(!s.exists()){c.innerHTML='Pa gen fich'; return;}
-    s.forEach(ch=>{
-      const f=ch.val();
-      c.innerHTML+=`<div class="rowF"><span>ID ${f.id}<br>${f.tiraj} - ${f.total*f.nbTiraj}$</span><button class="btn bK" style="width:auto;padding:6px 10px" onclick="copyTicket('${ch.key}')">Kopye</button></div>`;
-    });
+  const c=document.getElementById('listF'); c.innerHTML='';
+  const my=fichesLocal.filter(f=>f.vendor===curV).reverse();
+  if(my.length===0) c.innerHTML='Pa gen fich'; 
+  my.forEach(f=>{
+    c.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #ccc"><span>${new Date(f.time).toLocaleString()}<br>${f.tiraj} - ${f.total*f.nbTiraj}$</span><button class="btn bK" style="width:auto;padding:6px" onclick="reprint(${f.id})">Kopye</button></div>`;
   });
 }
-function copyTicket(key){
-  db.ref('fiches/'+key).once('value',snap=>{
-    const f=snap.val(); document.getElementById('ticketPrint').innerHTML=f.html||f.boules; window.print();
-  });
-}
+function reprint(id){ const f=fichesLocal.find(x=>x.id===id); if(f){ document.getElementById('ticketPrint').innerHTML=f.ticket; document.getElementById('ticketPrint').style.display='block'; window.print(); } }
+
 function genRap(){
-  const duV=du.value?new Date(du.value):null, auV=au.value?new Date(au.value):null, ft=fT.value;
-  db.ref('fiches').orderByChild('vendor').equalTo(curV).once('value',s=>{
-    let vente=0; let html=`<div style="text-align:center;font-size:20px"><b>C&D VÉRITÉ LOTTO</b><br>Rapport ${curV}<br>Du ${du.value} Au ${au.value}<br>Tiraj: ${ft}<br>ID: ${Date.now()}<br>------------------------------<br></div>`;
-    html+=`<table border=1 style="width:100%;border-collapse:collapse;text-align:center"><tr><th>Date</th><th>Tiraj</th><th>Vente</th></tr>`;
-    s.forEach(ch=>{
-      const f=ch.val(); const d=new Date(f.date);
-      if(duV&&d<duV) return; if(auV&&d>new Date(auV.getTime()+86400000)) return;
-      if(ft!=='tous'&&!f.tiraj.includes(ft)) return;
-      const v=f.total*f.nbTiraj; vente+=v;
-      html+=`<tr><td>${d.toLocaleDateString()}</td><td>${f.tiraj}</td><td>${v}$</td></tr>`;
-    });
-    const comm=vente*0.15, net=vente-comm;
-    html+=`</table><div style="text-align:center;font-weight:bold;font-size:18px;margin-top:10px">
-    Vente: ${vente}$<br>Commission: ${comm}$<br>Payé: 0$<br>Balance Net: ${net}$<br><br>Mèsi pou konfyans ou fè n'</div>`;
-    document.getElementById('rap').innerHTML=html;
+  const duV=document.getElementById('du').value, auV=document.getElementById('au').value, ft=document.getElementById('fT').value;
+  let vente=0; let html=`<div style="text-align:center"><b>C&D VÉRITÉ LOTTO</b><br>Date: ${new Date().toLocaleString()}<br>Vandè: ${curV}<br>Du ${duV} Au ${auV}<br>Tiraj: ${ft}<br>------------------------------<br></div>`;
+  fichesLocal.filter(f=>f.vendor===curV).forEach(f=>{
+    if(ft!=='tous' && !f.tiraj.includes(ft)) return;
+    if(duV && f.date.slice(0,10)<duV) return;
+    if(auV && f.date.slice(0,10)>auV) return;
+    vente+=f.total*f.nbTiraj;
   });
+  const comm=Math.round(vente*0.15), net=vente-comm;
+  html+=`<div style="text-align:center;font-weight:bold;font-size:20px">Vente: ${vente}$<br>Commission: ${comm}$<br>Payé: 0$<br>Balance Net: ${net}$<br></div>`;
+  document.getElementById('rap').innerHTML=html;
 }
 </script>
 </body>
