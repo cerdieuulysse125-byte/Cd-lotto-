@@ -1,20 +1,20 @@
 <!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>C&D V98</title>
+<title>C&D V99 PAYE</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#fff}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold}.card{padding:10px;max-width:480px;margin:auto}input,select{padding:14px;border:2px solid #000;border-radius:10px;width:100%;font-size:18px;margin:6px 0}.line{display:grid;grid-template-columns:85px 1fr 75px;gap:6px;margin:6px 0}.tiraj{padding:9px 14px;margin:4px;border:2px solid #000;border-radius:25px;font-weight:bold;display:inline-block}.tiraj.active{background:#000;color:#FFD700}.tiraj.ferme{background:#eee;color:#aaa;border-color:#ccc;pointer-events:none;opacity:.6}.tiraj.ferme::after{content:" FÈMEN";color:red;font-size:9px}.btn{padding:15px;width:100%;border:none;border-radius:10px;font-weight:bold;font-size:18px;margin:6px 0}.bK{background:#000;color:#FFD700}.ticket{border:2px dashed #000;padding:14px;text-align:center;font-size:18px;max-width:360px;margin:auto}@media print{body *{visibility:hidden}#prt,#prt *{visibility:visible}#prt{position:absolute;left:0;top:0;width:100%}}</style>
+<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#fff}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold}.card{padding:10px;max-width:480px;margin:auto}input,select{padding:14px;border:2px solid #000;border-radius:10px;width:100%;font-size:18px;margin:6px 0}.line{display:grid;grid-template-columns:85px 1fr 75px;gap:6px;margin:6px 0}.tiraj{padding:9px 14px;margin:4px;border:2px solid #000;border-radius:25px;font-weight:bold;display:inline-block}.tiraj.active{background:#000;color:#FFD700}.tiraj.ferme{background:#eee;color:#aaa;border-color:#ccc;pointer-events:none;opacity:.6}.btn{padding:15px;width:100%;border:none;border-radius:10px;font-weight:bold;font-size:18px;margin:6px 0}.bK{background:#000;color:#FFD700}.ticket{border:2px dashed #000;padding:14px;text-align:center;font-size:18px;max-width:360px;margin:auto}@media print{body *{visibility:hidden}#prt,#prt *{visibility:visible}#prt{position:absolute;left:0;top:0;width:100%}}</style>
 </head><body>
-<div class="h">C&D VÉRITÉ LOTTO - V98</div>
+<div class="h">C&D VÉRITÉ LOTTO - V99</div>
 <div id="loginBox" class="card" style="text-align:center;padding-top:30px"><h2>Connexion Vendeur</h2><input id="uName" value="Tamouche"><input id="uPass" type="password" value="1234"><button class="btn bK" onclick="go()">Antre</button></div>
 <div id="appBox" style="display:none">
 <div style="display:flex;background:#000"><button class="btn bK" style="flex:1;margin:2px;background:#FFD700;color:#000" onclick="showTab('vendre')">Vendre</button><button class="btn bK" style="flex:1;margin:2px" onclick="showTab('fichesTab')">Fiches</button><button class="btn bK" style="flex:1;margin:2px" onclick="showTab('rapportTab')">Rapport</button></div>
 
 <div id="vendre" class="card"><div style="text-align:center;font-weight:bold">TIRAJ MULTIP - Chwazi</div><div id="tirajBox" style="text-align:center"></div>
 <div style="display:flex;background:#000;color:#FFD700;padding:7px;font-weight:bold;border-radius:6px"><div style="width:85px">JEUX</div><div style="flex:1">BOUL</div><div style="width:75px">MIZ</div></div><div id="lines"></div>
-<div style="background:#000;color:#fff;padding:10px;border-radius:10px;text-align:center;margin-top:8px">Total <span id="tot">0$</span> × <span id="nbT">1</span><h2 style="color:#FFD700;margin:3px">A PEYE <span id="paye">0$</span></h2></div><button class="btn bK" onclick="vann()">VENDRE & IMPRIMER</button><div id="prt" style="display:none"></div></div>
+<div style="background:#000;color:#fff;padding:12px;border-radius:10px;text-align:center;margin-top:8px"><div style="font-size:18px">Total <span id="tot">0$</span> × <span id="nbT">1</span></div><div style="font-size:28px;font-weight:bold;color:#FFD700">A PEYE <span id="paye">0$</span></div></div>
+<button class="btn bK" onclick="vann()">VENDRE & IMPRIMER</button><div id="prt" style="display:none"></div></div>
 
-<div id="fichesTab" class="card" style="display:none"><h3>Fiches - <span id="mn"></span></h3><div id="listF"></div>
-<button class="btn bK" onclick="imprimeFiches()">Enprime Fiches</button></div>
+<div id="fichesTab" class="card" style="display:none"><h3>Fiches - <span id="mn"></span></h3><div id="listF"></div><button class="btn bK" onclick="imprimeFiches()">Enprime Fiches</button></div>
 
 <div id="rapportTab" class="card" style="display:none"><h3>Rapport</h3>Du <input id="du" type="date"> Au <input id="au" type="date"><select id="fT"><option value="tous">Tous</option><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
 <button class="btn bK" onclick="genRap()">Générer</button><div id="rap" style="margin-top:10px"></div>
@@ -23,9 +23,9 @@
 <script>
 const firebaseConfig={databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"}; firebase.initializeApp(firebaseConfig); const db=firebase.database();
 let curV='',selT=[],lineId=0,cfg={},fichesData=JSON.parse(localStorage.getItem('fiches')||'[]');
-function go(){curV=document.getElementById('uName').value.trim(); if(!curV)return; localStorage.setItem('curV',curV); document.getElementById('loginBox').style.display='none'; document.getElementById('appBox').style.display='block'; document.getElementById('mn').innerText=curV; db.ref('config').on('value',s=>{cfg=s.val()||{}; renderTiraj();}); addLine(true);}
+function go(){curV=document.getElementById('uName').value.trim(); if(!curV)return; localStorage.setItem('curV',curV); document.getElementById('loginBox').style.display='none'; document.getElementById('appBox').style.display='block'; document.getElementById('mn').innerText=curV; db.ref('config').on('value',s=>{cfg=s.val()||{}; renderTiraj();}); const today=new Date().toISOString().split('T')[0]; document.getElementById('du').value=today; document.getElementById('au').value=today; addLine(true);}
 function isFerme(h){if(!h)return false; const now=new Date(); const [hh,mm]=h.split(':').map(Number); if(isNaN(hh))return false; const f=new Date(); f.setHours(hh,mm||0,0,0); return now>=f;}
-function renderTiraj(){const b=document.getElementById('tirajBox'); b.innerHTML=''; const map={'GA midi':'gaMidi','GA soir':'gaSoir','FL midi':'flMidi','FL soir':'flSoir','NY midi':'nyMidi','NY soir':'nySoir'}; const heures=cfg.heures||{}; const etat=cfg.tirages||{}; ['GA midi','GA soir','FL midi','FL soir','NY midi','NY soir'].forEach(t=>{const k=map[t]; const hs=heures[k]||''; let ferme=etat[k]==='FERME'||etat[t]==='FERME'; if(!ferme&&hs)ferme=isFerme(hs); b.innerHTML+=`<span class="tiraj ${ferme?'ferme':''}" onclick="toggleT(this,'${t}')">${t}${ferme?'':' '+(hs?'('+hs+')':'')}</span>`;});}
+function renderTiraj(){const b=document.getElementById('tirajBox'); b.innerHTML=''; const map={'GA midi':'gaMidi','GA soir':'gaSoir','FL midi':'flMidi','FL soir':'flSoir','NY midi':'nyMidi','NY soir':'nySoir'}; const heures=cfg.heures||{}; const etat=cfg.tirages||{}; ['GA midi','GA soir','FL midi','FL soir','NY midi','NY soir'].forEach(t=>{const k=map[t]; const hs=heures[k]||''; let ferme=etat[k]==='FERME'||etat[t]==='FERME'; if(!ferme&&hs)ferme=isFerme(hs); b.innerHTML+=`<span class="tiraj ${ferme?'ferme':''}" onclick="toggleT(this,'${t}')">${t}${ferme?' FÈMEN':''}</span>`;});}
 function toggleT(el,t){if(el.classList.contains('ferme')){alert(t+' FÈMEN');return;} el.classList.toggle('active'); if(selT.includes(t))selT=selT.filter(x=>x!==t); else selT.push(t); document.getElementById('nbT').innerText=selT.length||1; upd();}
 function showTab(id){document.getElementById('vendre').style.display=id==='vendre'?'block':'none'; document.getElementById('fichesTab').style.display=id==='fichesTab'?'block':'none'; document.getElementById('rapportTab').style.display=id==='rapportTab'?'block':'none'; if(id==='fichesTab')loadF();}
 function addLine(first){lineId++; const d=document.createElement('div'); d.className='line'; d.innerHTML=`<select id="j${lineId}"><option>Borlette</option><option>Mariage</option><option>Loto3</option></select><input id="b${lineId}" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Boul" onkeydown="kB(event,${lineId})"><input id="m${lineId}" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Miz" onkeydown="kM(event,${lineId})" oninput="upd()">`; document.getElementById('lines').appendChild(d); if(!first)setTimeout(()=>document.getElementById('b'+lineId).focus(),50);}
@@ -33,10 +33,35 @@ function kB(e,id){if(e.key==='ArrowDown'||e.key==='Enter'){e.preventDefault(); d
 function kM(e,id){if(e.key==='ArrowDown'||e.key==='Enter'){e.preventDefault(); addLine();}}
 function upd(){let t=0; for(let i=1;i<=lineId;i++){const m=document.getElementById('m'+i); if(m)t+=parseInt(m.value)||0;} document.getElementById('tot').innerText=t+'$'; document.getElementById('paye').innerText=(t*(selT.length||1))+'$';}
 function vann(){if(selT.length===0)return alert('Chwazi tiraj'); let corps='',has=false; for(let i=1;i<=lineId;i++){const b=document.getElementById('b'+i),m=document.getElementById('m'+i),j=document.getElementById('j'+i); if(b&&b.value&&m&&m.value){corps+=`${j.value.slice(0,3)} ${b.value} - ${m.value}$<br>`; has=true;}} if(!has)return alert('Mete boul'); const id=Date.now(),now=new Date(); const ticket=`<div class="ticket"><b>C&D VÉRITÉ LOTTO</b><br>${now.toLocaleString()}<br>Tirage: ${selT.join(', ')}<br>ID: ${id}<br>Vandè: ${curV}<br>.........................<br>${corps}.........................<br>${document.getElementById('tot').innerText} × ${selT.length} = <b>${document.getElementById('paye').innerText}</b><br><br>Mèsi</div>`; document.getElementById('prt').innerHTML=ticket; document.getElementById('prt').style.display='block'; const f={id,vendor:curV,tiraj:selT.join(','),total:parseInt(document.getElementById('tot').innerText)||0,nb:selT.length,ticket,time:Date.now()}; fichesData.push(f); localStorage.setItem('fiches',JSON.stringify(fichesData)); db.ref('fiches/'+id).set({id,vendor:curV,tiraj:selT.join(','),total:f.total,nbTiraj:selT.length,date:Date.now()}); window.print(); document.getElementById('lines').innerHTML=''; lineId=0; addLine(true); upd();}
-function loadF(){const c=document.getElementById('listF'); const list=fichesData.filter(f=>f.vendor===curV).reverse(); if(!list.length){c.innerHTML='Pa gen fich';return;} c.innerHTML=''; list.forEach(f=>{c.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #ccc"><span>${new Date(f.time).toLocaleString()}<br>${f.tiraj} - ${f.total*f.nb}$</span><button class="btn bK" style="width:auto;padding:6px" onclick="reprint(${f.id})">Kopye</button></div>`;});}
+function loadF(){const c=document.getElementById('listF'); const list=fichesData.filter(f=>f.vendor===curV).reverse(); if(!list.length){c.innerHTML='Pa gen fich lokal - ap chaje Firebase...'; db.ref('fiches').once('value',snap=>{let html=''; Object.values(snap.val()||{}).filter(f=>f.vendor===curV).reverse().forEach(f=>{html+=`<div class="line"><span>${new Date(f.date).toLocaleString()}<br>${f.tiraj} - ${f.total*(f.nbTiraj||1)}$</span></div>`;}); c.innerHTML=html||'Pa gen fich';}); return;} c.innerHTML=''; list.forEach(f=>{c.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #ccc"><span>${new Date(f.time).toLocaleString()}<br>${f.tiraj} - ${f.total*f.nb}$</span><button class="btn bK" style="width:auto;padding:6px" onclick="reprint(${f.id})">Kopye</button></div>`;});}
 function reprint(id){const f=fichesData.find(x=>x.id===id); if(f){document.getElementById('prt').innerHTML=f.ticket; document.getElementById('prt').style.display='block'; window.print();}}
 function getCom(){const c=cfg.commission; if(c===undefined) return {pct:10,active:true}; if(typeof c==='object') return {pct:parseInt(c.pct)||10, active:c.active!==false}; return {pct:parseInt(c)||10, active:true};}
-function genRap(){let v=0; const list=fichesData.filter(f=>f.vendor===curV); list.forEach(f=>v+=f.total*f.nb); const com=getCom(); const pct=com.active?com.pct:0; const comVal=Math.round(v*pct/100); document.getElementById('rap').innerHTML=`<div id="rapPrint" style="text-align:center;font-weight:bold;border:2px solid #000;padding:12px;background:#fff"><div>Vente: ${v}$</div><div>Commission (${pct}%): ${comVal}$ ${!com.active?'(DESACTIVE)':''}</div><div>Net: ${v-comVal}$</div><div style="font-size:12px;margin-top:6px">Vandè: ${curV} - ${new Date().toLocaleString()}</div></div>`;}
+function genRap(){
+ // Kounya li chaje nan Firebase tou pou pa gen 0$
+ db.ref('fiches').once('value',snap=>{
+  const all=Object.values(snap.val()||{}).concat(fichesData); const com=getCom(); const pct=com.active?com.pct:0;
+  const duVal=document.getElementById('du').value; const auVal=document.getElementById('au').value; const filtre=document.getElementById('fT').value;
+  let vente=0; let fichesFiltre=[];
+  all.forEach(f=>{
+   if(f.vendor!==curV) return;
+   const d=new Date(f.date||f.time); if(duVal){ if(d < new Date(duVal)) return; } if(auVal){ if(d > new Date(auVal+'T23:59:59')) return; }
+   if(filtre!=='tous'){ if(!(f.tiraj||'').includes(filtre)) return; }
+   const tot=(f.total||0)*(f.nbTiraj||f.nb||1); vente+=tot; fichesFiltre.push(f);
+  });
+  // dedup par ID
+  const uniq={}; fichesFiltre.forEach(f=>uniq[f.id]=f); vente=0; Object.values(uniq).forEach(f=>vente+= (f.total||0)*(f.nbTiraj||f.nb||1));
+  const comVal=Math.round(vente*pct/100); const net=vente-comVal;
+  document.getElementById('rap').innerHTML=`<div id="rapPrint" style="border:3px solid #000;padding:15px;text-align:center;background:#fff">
+  <h2 style="margin:5px">RAPPORT - ${curV}</h2>
+  <div style="font-size:20px">Du: ${duVal} Au: ${auVal}</div>
+  <hr>
+  <div style="font-size:22px;font-weight:bold">Vente Totale: ${vente}$</div>
+  <div style="font-size:20px">Commission (${pct}%): ${comVal}$ ${!com.active?'(DESACTIVE)':''}</div>
+  <div style="font-size:26px;font-weight:bold;background:#000;color:#FFD700;padding:10px;border-radius:8px;margin:10px 0">A PEYE / Net: ${net}$</div>
+  <div style="font-size:14px">Nbre Fiches: ${Object.keys(uniq).length} - ${new Date().toLocaleString()}</div>
+  </div>`;
+ });
+}
 function imprimeFiches(){const c=document.getElementById('listF').innerHTML; document.getElementById('prt').innerHTML=`<div style="text-align:center"><h3>Fiches - ${curV}</h3>${c}</div>`; document.getElementById('prt').style.display='block'; window.print();}
 function imprimeRapport(){const r=document.getElementById('rap').innerHTML; if(!r)return alert('Générer dabor'); document.getElementById('prt').innerHTML=r; document.getElementById('prt').style.display='block'; window.print();}
 </script></body></html>
