@@ -1,118 +1,76 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VENDEUR V79 KORIGE</title>
-<style>*{box-sizing:border-box}body{background:#0f172a;color:#fff;font-family:sans-serif;margin:0;padding:8px}h1{font-size:18px;text-align:center;color:#facc15;margin:4px}.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:10px;margin-bottom:8px}input,select{padding:8px;border-radius:6px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:14px;width:100%}button{background:#facc15;color:#000;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer}.tirage{display:flex;gap:6px;flex-wrap:wrap}.tirage label{background:#0f172a;padding:6px 10px;border-radius:20px;border:1px solid #334155;font-size:12px;cursor:pointer}.tirage input{width:auto}.tirage label.active{background:#facc15;color:#000;border-color:#facc15}#liste{max-height:200px;overflow:auto;background:#0f172a;border-radius:8px;padding:6px;margin-top:6px}.bloque{color:#ef4444;font-weight:bold;animation:blink 1s infinite}@keyframes blink{50%{opacity:0.5}}</style></head>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D V92 KORIGE TOTAL x TIRAJ</title>
+<style>*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:#f1f5f9;padding:8px;padding-bottom:90px}.loginPage{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f172a;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}.loginBox{background:#1e293b;border-radius:16px;padding:25px;width:100%;max-width:350px;border:2px solid #facc15;text-align:center}input,select{border-radius:10px;border:2px solid #cbd5e1;width:100%;background:#fff;color:#000}button{border-radius:10px;border:none;font-weight:bold;cursor:pointer}.btnY{background:#facc15;color:#000}.btnG{background:#22c55e;color:#fff}.card{background:#fff;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.1)}.tirajGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tirajItem{border:1px solid #e2e8f0;border-radius:8px;padding:10px;display:flex;gap:6px;font-size:12px;align-items:center}.sec{display:block}.blockedPage{position:fixed;top:0;left:0;width:100%;height:100%;background:#450a0a;z-index:99998;display:none;align-items:center;justify-content:center;padding:20px;text-align:center}</style></head>
 <body>
-<h1>🎫 C&D LOTTO <span id="idV">...</span> - <span id="stat">...</span></h1>
-<div id="openMsg"></div>
+<div id="loginPage" class="loginPage"><div class="loginBox"><div style="font-size:50px">🔐</div><h2 style="color:#facc15">C&D LOTTO</h2><input id="loginVendeur" placeholder="Non vandè" style="padding:14px;margin-top:8px"><input id="loginPass" type="password" placeholder="Modpas" style="padding:14px;margin-top:8px"><button onclick="doLogin()" class="btnY" style="width:100%;margin-top:12px;padding:14px">Konekte</button><div id="loginErr" style="color:#ef4444;font-size:12px;margin-top:10px"></div></div></div>
+<div id="blockedPage" class="blockedPage"><div style="background:#1e293b;padding:25px;border-radius:16px;border:2px solid #ef4444;max-width:350px;width:100%"><div style="font-size:60px">🔴</div><h2 style="color:#ef4444">KONT FERMÉ</h2><p style="color:#fff">Proprio a fèmen kont ou!</p><button onclick="location.reload()" class="btnY" style="width:100%;margin-top:15px;padding:12px">↩️ Rekonekte</button></div></div>
 
-<div class="card">
-<b>Tiraj (plizyè):</b>
-<div class="tirage" id="divTiraj">
-<label><input type="checkbox" value="GA MIDI" class="chkT"> GA MIDI</label>
-<label><input type="checkbox" value="GA SOIR" class="chkT"> GA SOIR</label>
-<label><input type="checkbox" value="FL MIDI" class="chkT"> FL MIDI</label>
-<label><input type="checkbox" value="FL SOIR" class="chkT"> FL SOIR</label>
-<label><input type="checkbox" value="NY MIDI" class="chkT"> NY MIDI</label>
-<label><input type="checkbox" value="NY SOIR" class="chkT"> NY SOIR</label>
+<div id="mainApp" style="display:none">
+<div style="background:#facc15;padding:10px;border-radius:12px;display:flex;justify-content:space-between;font-weight:bold;font-size:13px"><span id="vName"></span><span id="dateNow"></span><span style="background:#0f172a;color:#facc15;padding:3px 8px;border-radius:6px;font-size:10px">KOM 10%</span></div>
+
+<div class="card"><div style="font-weight:bold">Tiraj - <span id="heureAyiti" style="font-size:11px;color:#64748b"></span></div><div class="tirajGrid" id="tirajGrid"></div></div>
+
+<div class="card" style="border:2px solid #0f172a">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+<select id="tip" style="height:60px;font-size:15px;font-weight:bold;border:2px solid #0f172a;text-align:center"><option value="bolet">Bolet</option><option value="mariage">Maryaj</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select>
+<input id="boul" placeholder="Boul" style="padding:12px;text-align:center;font-weight:bold">
+<input id="montan" type="number" placeholder="Montan" style="padding:12px;text-align:center;font-weight:bold">
 </div>
-<div style="margin-top:8px"><b>Jeu (plizyè):</b>
-<div class="tirage" id="divJeu">
-<label><input type="checkbox" value="bolet" class="chkJ" checked> Bolet</label>
-<label><input type="checkbox" value="mariage" class="chkJ"> Mariage</label>
-<label><input type="checkbox" value="loto3" class="chkJ"> Loto3</label>
-<label><input type="checkbox" value="loto4" class="chkJ"> Loto4</label>
-<label><input type="checkbox" value="loto5" class="chkJ"> Loto5</label>
+<button id="btnAdd" class="btnG" style="width:100%;margin-top:8px;padding:12px">➕ Ajoute</button>
+<div id="liste" style="margin-top:8px;background:#f8fafc;border-radius:8px;padding:6px;min-height:60px"></div>
+<div style="display:flex;justify-content:space-between;margin-top:10px;font-weight:bold;font-size:18px"><span id="nFich">0 fich</span><span id="tTotal" style="color:#16a34a">Total: 0G</span></div>
+<div id="detailCalc" style="font-size:11px;color:#64748b;text-align:right;margin-top:2px"></div>
+<button onclick="valideFich()" class="btnY" style="width:100%;margin-top:10px;padding:14px;font-size:16px">✅ VALIDE - ENPRIME</button>
 </div></div>
-</div>
-
-<div class="card">
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-<div><label style="font-size:11px">Tip:</label><select id="tip"><option value="bolet">Bolet</option><option value="mariage">Mariage</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select></div>
-<div><label style="font-size:11px">Boul:</label><input id="boul" placeholder="Ex: 23" autocomplete="off"></div>
-<div><label style="font-size:11px">Montan:</label><input id="montan" type="number" placeholder="50"></div>
-</div>
-<button id="btnAdd" style="width:100%;margin-top:8px;background:#22c55e;color:#fff">➕ Ajoute (Enter)</button>
-<div id="limiteInfo" style="font-size:11px;margin-top:6px;color:#facc15"></div>
-<div id="liste"></div>
-<div style="display:flex;justify-content:space-between;margin-top:8px;font-weight:bold"><span id="nFich">Tikè 0 fich</span><span id="tTotal">Total: 0G</span></div>
-<button onclick="valide()" style="width:100%;margin-top:8px;background:#facc15;font-size:16px">✅ VALIDE - ENPRIME</button>
-<button onclick="location.reload()" style="width:100%;margin-top:6px;background:#334155;color:#fff">🗑️ Efase Tikè</button>
-</div>
-
-<div class="card"><b>📋 MON RAPPORT</b> <button onclick="loadMonRap()" style="padding:4px 8px">Refresh</button><div id="monRap" style="margin-top:6px;font-size:12px"></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, get, child, set, push } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-const cfg={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"};const app=initializeApp(cfg);const db=getDatabase(app);
+const cfg={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"}; const app=initializeApp(cfg); const db=getDatabase(app);
+let vendeur="", panier=[], TIRAJS=["GA MIDI","GA SOIR","FL MIDI","FL SOIR","NY MIDI","NY SOIR"];
 
-let vendeur=prompt("Non Vendeur? ex: vendeur1")||"vendeur1"; vendeur=vendeur.toLowerCase().replace(/\s+/g,''); document.getElementById('idV').innerText=vendeur;
-let panier=[]; let limites={bolet:1000,mariage:50,loto3:100,loto4:20,loto5:10}; let totalsDuJour={};
-
-async function init(){
-let s=await get(child(ref(db),'config'));
-if(!s.exists()){alert('Proprio pa konfigire');return;}
-let c=s.val();
-let etat=c.vendeurs?.[vendeur]||'ferme';
-document.getElementById('stat').innerText=etat.toUpperCase();
-document.getElementById('stat').style.color=etat==='ouvert'?'#22c55e':'#ef4444';
-if(etat!=='ouvert'){document.getElementById('openMsg').innerHTML=`<div style="background:#ef4444;color:#fff;padding:12px;border-radius:8px;text-align:center;font-weight:bold">🔴 ${vendeur} FERMÉ pa Proprio - Ou pa ka vann</div>`; document.getElementById('btnAdd').disabled=true; return;}
-if(c.limites) limites=c.limites;
-if(c.fermeture){let now=new Date(); let est=new Date(now.toLocaleString("en-US",{timeZone:"America/New_York"})); let hm=est.getHours()*60+est.getMinutes(); let tChecks=document.querySelectorAll('.chkT'); tChecks.forEach(ch=>{let lim=c.fermeture[ch.value]; if(lim){let [h,m]=lim.split(':').map(Number); let limMin=h*60+m; if(hm>=limMin){ch.disabled=true; ch.parentElement.style.opacity='0.3'; ch.parentElement.title='Fèmen '+lim;}}});}
-await calcTotals();
-}
-async function calcTotals(){
-let snap=await get(child(ref(db),'fiches')); totalsDuJour={}; if(!snap.exists()) return;
-let today=new Date().toISOString().split('T')[0];
-Object.values(snap.val()).forEach(f=>{ if(f.date.split('T')[0]!==today) return; (f.details||[]).forEach(d=>{ (f.tirajs||[]).forEach(t=>{ let k=t+'_'+(d.type||'bolet')+'_'+d.boul; if(!totalsDuJour[k]) totalsDuJour[k]=0; totalsDuJour[k]+=parseInt(d.montan||0); });});});
-}
-function getTirajSelected(){ return [...document.querySelectorAll('.chkT:checked')].map(c=>c.value); }
-document.getElementById('boul').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('montan').focus(); }});
-document.getElementById('montan').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addBoul(); }});
-
-window.addBoul=async()=>{
-let tirajs=getTirajSelected(); if(tirajs.length===0){alert('Chwazi omwen 1 tiraj');return;}
-let tip=document.getElementById('tip').value; let boul=document.getElementById('boul').value.trim(); let montan=parseInt(document.getElementById('montan').value);
-if(!boul||!montan){alert('Mete boul ak montan');return;}
-for(let t of tirajs){
-let k=t+'_'+tip+'_'+boul; let deja=totalsDuJour[k]||0; let lim=limites[tip]||1000;
-if(deja+montan>lim){alert(`🚫 BLOKE! Boul ${boul} (${tip}) pou ${t} deja rive ${deja}G / limit ${lim}G\nOu pa ka ajoute ${montan}G`); return;}
-}
-panier.push({type:tip,boul:boul,montan:montan});
-for(let t of tirajs){let k=t+'_'+tip+'_'+boul; if(!totalsDuJour[k]) totalsDuJour[k]=0; totalsDuJour[k]+=montan;}
-render(); document.getElementById('boul').value=''; document.getElementById('montan').value=''; document.getElementById('boul').focus();
+window.doLogin=async()=>{
+ let v=document.getElementById('loginVendeur').value.trim().toLowerCase(); let p=document.getElementById('loginPass').value.trim();
+ if(!v||!p){document.getElementById('loginErr').innerText="Mete non ak modpas";return;}
+ let s=await get(child(ref(db),'config/vendeurs/'+v)); if(!s.exists()){document.getElementById('loginErr').innerText="Vandè pa egziste";return;}
+ let d=s.val(); if(d.pass!==p){document.getElementById('loginErr').innerText="Modpas pa bon";return;}
+ if(d.statut==="ferme"){document.getElementById('blockedPage').style.display="flex"; document.getElementById('loginPage').style.display="none"; return;}
+ vendeur=v; document.getElementById('vName').innerText=vendeur; document.getElementById('loginPage').style.display="none"; document.getElementById('mainApp').style.display="block"; initV();
 };
+function initV(){
+ let g=document.getElementById('tirajGrid'); g.innerHTML=""; TIRAJS.forEach(t=>{ g.innerHTML+=`<label class="tirajItem"><input type="checkbox" value="${t}" class="chkT" onchange="render()"> ${t}</label>`; });
+ document.getElementById('dateNow').innerText=new Date().toLocaleDateString();
+ setInterval(()=>{ let n=new Date(); let est=new Date(n.toLocaleString("en-US",{timeZone:"America/New_York"})); document.getElementById('heureAyiti').innerText=est.toLocaleTimeString(); },1000);
+ render();
+}
+function getT(){ return [...document.querySelectorAll('.chkT:checked')].map(c=>c.value); }
+
 function render(){
-let div=document.getElementById('liste'); div.innerHTML=''; let totBase=0;
-panier.forEach((p,i)=>{ totBase+=p.montan; div.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #1e293b"><span>${p.type} ${p.boul}</span><span>${p.montan}G <button onclick="retire(${i})" style="padding:2px 6px;background:#ef4444;color:#fff">x</button></span></div>`;});
-let nbT = getTirajSelected().length || 1;
-let tot = totBase * nbT;
-document.getElementById('nFich').innerText=`Tikè ${panier.length} fich x ${nbT} tiraj`;
-document.getElementById('tTotal').innerText=`Total: ${tot}G`;
+ let div=document.getElementById('liste'); div.innerHTML=''; let base=0;
+ panier.forEach((p,i)=>{ base+=p.montan; div.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0"><span>${p.type} ${p.boul}</span><span>${p.montan}G <button onclick="retire(${i})" style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px">x</button></span></div>`; });
+ let nb=getT().length||1;
+ let total=base*nb; // KOREKSYON FINAL: TOTAL x NB TIRAJ
+ document.getElementById('nFich').innerText=`${panier.length} fich x ${nb} tiraj`;
+ document.getElementById('tTotal').innerText=`Total: ${total}G`;
+ document.getElementById('detailCalc').innerText= nb>1? `(${base}G x ${nb} tiraj = ${total}G)` : "";
 }
-window.retire=(i)=>{let p=panier[i]; let tirajs=getTirajSelected(); tirajs.forEach(t=>{let k=t+'_'+p.type+'_'+p.boul; if(totalsDuJour[k]) totalsDuJour[k]-=p.montan;}); panier.splice(i,1); render();};
+window.retire=(i)=>{ panier.splice(i,1); render(); };
 
-window.valide=async()=>{
-if(panier.length===0){alert('Panier vid');return;}
-let tirajs=getTirajSelected(); if(tirajs.length===0){alert('Chwazi tiraj');return;}
-let totalBase=panier.reduce((a,b)=>a+b.montan,0);
-let total=totalBase * tirajs.length;
-let id=push(child(ref(db),'fiches')).key;
-await set(ref(db,'fiches/'+id),{id:id,vendeur:vendeur,idVendeur:vendeur,tirajs:tirajs,tiraj:tirajs[0],details:panier,total:total,totalBase:totalBase,nbTiraj:tirajs.length,date:new Date().toISOString()});
-alert(`✅ Fich ${id.slice(-4)} valide ${total}G = ${totalBase}G x ${tirajs.length} tiraj`);
-panier=[]; render(); await calcTotals(); loadMonRap();
-window.print();
+document.getElementById('btnAdd').addEventListener('click',()=>{
+ let tip=document.getElementById('tip').value; let boul=document.getElementById('boul').value.trim(); let montan=parseInt(document.getElementById('montan').value);
+ let tirajs=getT(); if(tirajs.length===0){alert('Chwazi tiraj');return;}
+ if(!boul||!montan){alert('Mete boul ak montan');return;}
+ panier.push({type:tip,boul:boul,montan:montan}); render();
+ document.getElementById('boul').value=""; document.getElementById('montan').value=""; document.getElementById('boul').focus();
+});
+
+window.valideFich=async()=>{
+ if(panier.length===0){alert('Panier vid');return;}
+ let tirajs=getT(); if(tirajs.length===0){alert('Chwazi tiraj');return;}
+ let base=panier.reduce((a,b)=>a+b.montan,0);
+ let total=base*tirajs.length; // KOREKSYON: TOTAL FINAL
+ let id=push(child(ref(db),'fiches')).key;
+ await set(ref(db,'fiches/'+id),{id:id,vendeur:vendeur,tirajs:tirajs,details:panier,total:total,totalBase:base,nbTiraj:tirajs.length,date:new Date().toISOString()});
+ alert(`✅ Fich valide!\n${base}G x ${tirajs.length} = ${total}G\n${tirajs.join(' / ')}`);
+ panier=[]; render(); window.print();
 };
-
-window.loadMonRap=async()=>{
-let snap=await get(child(ref(db),'fiches')); let div=document.getElementById('monRap'); if(!snap.exists()){div.innerHTML='Pa gen fich';return;}
-let today=new Date().toISOString().split('T')[0]; let mine=Object.values(snap.val()).filter(f=> (f.vendeur||f.idVendeur)===vendeur && f.date.split('T')[0]===today);
-let vente=mine.reduce((a,b)=>a+parseInt(b.total||0),0); let com=Math.round(vente*0.1); let bal=vente-com;
-div.innerHTML=`Jodi a: Vente ${vente}G - Com ${com}G - Balance ${bal}G<br>${mine.length} fich`;
-};
-
-document.getElementById('btnAdd').addEventListener('click',addBoul);
-document.getElementById('tip').addEventListener('change',e=>{let info=document.getElementById('limiteInfo'); let lim=limites[e.target.value]||0; info.innerText=`Limit ${e.target.value}: ${lim}G pou chak boul / chak tiraj - Bloke pou tout vandè`;});
-document.getElementById('tip').dispatchEvent(new Event('change'));
-
-init(); loadMonRap();
 </script></body></html>
