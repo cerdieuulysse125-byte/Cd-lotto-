@@ -20,13 +20,6 @@
 .tabs{position:fixed;bottom:0;left:0;width:100%;background:#0f172a;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;padding:8px;z-index:9999}
 .tabBtn{background:#1e293b;color:#94a3b8;padding:14px 2px;border-radius:12px;font-size:11px;font-weight:800;border:none}
 .tabBtn.active{background:#facc15;color:#000}
-#ticketSantee{display:none}
-@media print{
- @page{size:58mm auto;margin:0}
- body *{display:none!important}
- #ticketSantee{display:flex!important;position:fixed;top:0;left:50%;transform:translateX(-50%);width:58mm;background:#fff;color:#000;justify-content:center;padding:0}
- #ticketContent{width:54mm;font-family:'Courier New',monospace;font-size:15px;line-height:1.35;font-weight:900;text-align:center;white-space:pre-line;padding:8px 2px}
-}
 </style></head>
 <body>
 
@@ -41,26 +34,24 @@
 <div class="row3"><select id="tip"><option value="bolet">Bolet</option><option value="mariage">Maryaj</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select><input id="boul" placeholder="BOUL" inputmode="numeric" maxlength="5"><input id="montan" placeholder="G" inputmode="numeric" type="number"></div>
 <button id="btnAdd" class="btnAdd">+ AJOUTE</button>
 <div id="liste" style="margin-top:10px;font-size:13px"></div>
-<div class="totalBox"><div class="totalLine"><span>Total Miz (Base)</span><span id="tBase">0G</span></div><div class="totalLine"><span id="tDetail">0G x 0 Tiraj</span><span></span></div><div class="totalFinal"><span>Total</span><span id="tTotal">0G</span></div></div>
+<div class="totalBox"><div class="totalLine"><span>Total Miz (Base)</span><span id="tBase">0G</span></div><div class="totalLine"><span id="tDetail">0G x 0 Tiraj</span></div><div class="totalFinal"><span>Total Final</span><span id="tTotal">0G</span></div></div>
 <button onclick="valideFich()" class="btnValide">✅ Validé + Imprimer</button>
 </div>
 </div>
 
-<div id="secKOPYE" class="sec"><div class="card"><b>📋 Kopye</b><div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin:12px 0"><input id="searchId" placeholder="ID 5 chif" style="padding:14px;border-radius:12px;border:2.5px solid #000;font-weight:800"><button onclick="chercheParId()" style="background:#0f172a;color:#facc15;padding:14px 18px;border-radius:12px;font-weight:900;border:none">CHÈCHE</button></div><div id="resultSearch"></div></div></div>
+<div id="secKOPYE" class="sec"><div class="card"><b>📋 Kopye - ID 5 chif</b><div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin:12px 0"><input id="searchId" placeholder="ID 5 chif" style="padding:14px;border-radius:12px;border:2.5px solid #000;font-weight:800"><button onclick="chercheParId()" style="background:#0f172a;color:#facc15;padding:14px 18px;border-radius:12px;font-weight:900;border:none">CHÈCHE</button></div><div id="resultSearch"></div></div></div>
 
 <div id="secRAPO" class="sec"><div class="card">
 <b>📊 Rapò</b>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0"><div><label style="font-size:11px;font-weight:800">Du</label><input id="rapDu" type="date" style="width:100%;padding:12px;border-radius:10px;border:2px solid #000"></div><div><label style="font-size:11px;font-weight:800">Au</label><input id="rapAu" type="date" style="width:100%;padding:12px;border-radius:10px;border:2px solid #000"></div></div>
 <div><label style="font-size:11px;font-weight:800">Tirage</label><select id="rapTiraj" style="width:100%;padding:12px;border-radius:10px;border:2px solid #000;font-weight:700"><option value="">Tous</option><option value="FL MIDI">FL MIDI</option><option value="FL SOIR">FL SOIR</option><option value="GA MIDI">GA MIDI</option><option value="GA SOIR">GA SOIR</option><option value="NY MIDI">NY MIDI</option><option value="NY SOIR">NY SOIR</option></select></div>
 <button onclick="genererRapport()" style="width:100%;padding:14px;background:#0f172a;color:#facc15;border:none;border-radius:12px;font-weight:900;margin-top:10px">🔍 Générer</button>
-<div id="rapData" style="margin-top:14px;background:#f8fafc;padding:14px;border-radius:12px;border:1.5px solid #e2e8f0;font-size:13px;line-height:28px">Apiye sou Générer</div>
+<div id="rapData" style="margin-top:14px;background:#f8fafc;padding:14px;border-radius:12px;border:1.5px solid #e2e8f0;font-size:13px;line-height:30px">Apiye sou Générer</div>
 <button id="btnPrintRap" onclick="printRapport()" style="display:none;width:100%;padding:14px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-weight:900;margin-top:10px">🖨️ Imprimer Rapport</button>
 </div></div>
 
 <div id="secFICHES" class="sec"><div class="card"><b>🎫 Mes Fiches</b><div id="listFiches"></div></div></div>
-
 <div class="tabs"><button onclick="showTab('VANN')" id="tabVANN" class="tabBtn active">📋<br>VANN</button><button onclick="showTab('KOPYE')" id="tabKOPYE" class="tabBtn">📋<br>KOPYE</button><button onclick="showTab('RAPO')" id="tabRAPO" class="tabBtn">📊<br>RAPÒ</button><button onclick="showTab('FICHES')" id="tabFICHES" class="tabBtn">📁<br>FICHES</button></div>
-<div id="ticketSantee"><div id="ticketContent"></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -70,12 +61,20 @@ let vendeur="tamouche", panier=[], vandeFerme=false;
 let TIRAJS=[{n:"FL MIDI",h:"13:15",m:795},{n:"FL SOIR",h:"21:20",m:1280},{n:"GA MIDI",h:"12:15",m:735},{n:"GA SOIR",h:"18:15",m:1095},{n:"NY MIDI",h:"14:15",m:855},{n:"NY SOIR",h:"21:30",m:1290}];
 
 function getDateHaiti(d=new Date()){ let h=new Date(d.toLocaleString("en-US",{timeZone:"America/New_York"})); return `${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`; }
+
+function printTicket58mm(text){
+  let w=window.open('','_blank','width=380,height=700');
+  w.document.write(`<html><head><title>Ticket</title><style>@page{size:58mm auto;margin:2mm}body{margin:0;padding:0;display:flex;justify-content:center;background:#fff}pre{width:58mm;max-width:58mm;font-family:'Courier New',monospace;font-size:17px;font-weight:900;line-height:1.4;text-align:center;white-space:pre-wrap;margin:0;padding:8px;color:#000}</style></head><body><pre>${text}</pre><script>setTimeout(()=>window.print(),400)<\/script></body></html>`);
+  w.document.close();
+}
+
 function init(){
  let g=document.getElementById('tirajGrid'); g.innerHTML=""; TIRAJS.forEach(t=>{ g.innerHTML+=`<label class="tirajItem" id="box-${t.n.replace(/ /g,'')}"><input type="checkbox" value="${t.n}" class="chkT" onchange="updT('${t.n}')"> ${t.n}<br>(${t.h})</label>`; });
  checkFermeture(); setInterval(checkFermeture,60000);
  let today=getDateHaiti(); document.getElementById('rapDu').value=today; document.getElementById('rapAu').value=today;
  setInterval(()=>{ let e=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); document.getElementById('heureAyiti').innerText=e.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); document.getElementById('dateNow').innerText=getDateHaiti()+' '+e.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); },1000);
- render(); loadAll(); document.getElementById('boul').addEventListener('input',e=>{ e.target.value=e.target.value.replace(/[^0-9]/g,''); });
+ render(); loadAll();
+ document.getElementById('boul').addEventListener('input',e=>{ e.target.value=e.target.value.replace(/[^0-9]/g,''); });
 }
 function checkFermeture(){
  let now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); let cur=now.getHours()*60+now.getMinutes(); let ouve=0;
@@ -99,7 +98,6 @@ document.getElementById('boul').addEventListener('keydown',e=>{ if(e.key==='Ente
 document.getElementById('montan').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addPanier(); }});
 window.showTab=(t)=>{ document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.tabBtn').forEach(b=>b.classList.remove('active')); document.getElementById('sec'+t).classList.add('active'); document.getElementById('tab'+t).classList.add('active'); if(t!=='VANN') loadAll(); };
 
-// RAPÒ KORIJMAN FINAL - VANDÈ FICH KORIJAN
 window.genererRapport=async()=>{
  let du=document.getElementById('rapDu').value || getDateHaiti();
  let au=document.getElementById('rapAu').value || getDateHaiti();
@@ -107,16 +105,15 @@ window.genererRapport=async()=>{
  let s=await get(child(ref(db),'fiches')); if(!s.exists()){document.getElementById('rapData').innerHTML="Pa gen fich";return;}
  let all=Object.values(s.val()).filter(f=> f.vendeur===vendeur);
  let filtres=all.filter(f=>{
-   let dHaiti=getDateHaiti(new Date(f.date)); // LÈ AYITI - KORIJMAN 7 FICH LA
+   let dHaiti=getDateHaiti(new Date(f.date));
    if(dHaiti<du||dHaiti>au) return false;
    if(tirajF &&!(f.tirajs||[]).includes(tirajF)) return false;
    return true;
  });
  let vente=filtres.reduce((a,b)=>a+(b.total||0),0);
  let kom=Math.round(vente*0.10);
- let paye=0; // ap kalkile si gen boul tire
+ let paye=0;
  let parTiraj={};
- // KORIJMAN DOUBLE LA - ITILIZE totalBase PA total
  filtres.forEach(f=>{
    let base = f.totalBase || Math.round(f.total / (f.nbTiraj||f.tirajs.length||1));
    (f.tirajs||[]).forEach(t=>{
@@ -128,29 +125,38 @@ window.genererRapport=async()=>{
  document.getElementById('rapData').innerHTML=`
  <div id="printZoneRap">
  <div style="text-align:center;font-weight:900;border-bottom:2px dashed #000;padding-bottom:8px;margin-bottom:10px">C&D LOTTO - RAPÒ<br><span style="font-size:11px;font-weight:400">${vendeur} - ${du} au ${au}</span></div>
- <div style="display:grid;grid-template-columns:1fr auto"><span>Du:</span><b>${du}</b></div>
- <div style="display:grid;grid-template-columns:1fr auto"><span>Au:</span><b>${au}</b></div>
- <div style="display:grid;grid-template-columns:1fr auto"><span>Tirage:</span><b>${tirajF||'Tous'}</b></div>
- <div style="display:grid;grid-template-columns:1fr auto"><span>Fich:</span><b>${filtres.length}</b></div>
- <hr style="border:none;border-top:1px dashed #000;margin:8px 0">
- <div style="display:grid;grid-template-columns:1fr auto"><span>Vente:</span><b>${vente}G</b></div>
- <div style="display:grid;grid-template-columns:1fr auto"><span>Commission (10%):</span><b>${kom}G</b></div>
- <div style="display:grid;grid-template-columns:1fr auto"><span>Payé:</span><b>${paye}G</b></div>
- <div style="display:grid;grid-template-columns:1fr auto;font-weight:900;font-size:18px;border-top:2.5px solid #000;margin-top:10px;padding-top:10px"><span>Balance Net:</span><span>${balans}G</span></div>
+ <div style="display:flex;justify-content:space-between"><span>Du:</span><b>${du}</b></div>
+ <div style="display:flex;justify-content:space-between"><span>Au:</span><b>${au}</b></div>
+ <div style="display:flex;justify-content:space-between"><span>Tirage:</span><b>${tirajF||'Tous'}</b></div>
+ <div style="display:flex;justify-content:space-between"><span>Fich:</span><b>${filtres.length}</b></div>
+ <hr>
+ <div style="display:flex;justify-content:space-between"><span>Vente:</span><b>${vente}G</b></div>
+ <div style="display:flex;justify-content:space-between"><span>Commission:</span><b>${kom}G</b></div>
+ <div style="display:flex;justify-content:space-between"><span>Payé:</span><b>${paye}G</b></div>
+ <div style="display:flex;justify-content:space-between;font-weight:900;font-size:18px;border-top:2.5px solid #000;margin-top:10px;padding-top:10px"><span>Balance Net:</span><span>${balans}G</span></div>
  <div style="margin-top:12px;background:#fff;padding:8px;border-radius:8px;border:1px solid #e2e8f0;font-size:11px"><b>Détail (Base):</b><br>${Object.keys(parTiraj).map(t=>`${t}: ${parTiraj[t]}G`).join('<br>')||'Aucun'}</div>
- </div>
- `;
+ </div>`;
  document.getElementById('btnPrintRap').style.display="block";
 };
+
 window.printRapport=()=>{
- let z=document.getElementById('printZoneRap');
- document.getElementById('ticketContent').innerHTML=z.innerText;
- window.print();
+ let du=document.getElementById('rapDu').value; let au=document.getElementById('rapAu').value; let tirajF=document.getElementById('rapTiraj').value||'Tous';
+ let rd=document.getElementById('rapData').innerText;
+ let ticket=`C&D LOTTO - RAPÒ
+
+Vandè: ${vendeur}
+Du: ${du} Au: ${au}
+Tirage: ${tirajF}
+
+${rd}
+----------------`;
+ printTicket58mm(ticket);
 };
+
 window.chercheParId=async()=>{ let q=document.getElementById('searchId').value.trim().toLowerCase(); if(!q){alert('Mete ID');return;} document.getElementById('resultSearch').innerHTML="⏳..."; let s=await get(child(ref(db),'fiches')); if(!s.exists()){document.getElementById('resultSearch').innerHTML="Pa gen fich";return;} let all=Object.values(s.val()); let found=all.find(f=> f.id.toLowerCase().includes(q) || f.id.slice(-5).toLowerCase()===q); if(!found){document.getElementById('resultSearch').innerHTML=`<div style="background:#fee2e2;padding:8px;border-radius:8px">❌ ${q.toUpperCase()} pa jwenn</div>`;return;} document.getElementById('resultSearch').innerHTML=`<div style="border:2px solid #22c55e;background:#dcfce7;padding:10px;border-radius:10px;font-size:12px"><b>✅ ${found.id.slice(-5).toUpperCase()} - ${found.total}G</b><br>${(found.tirajs||[]).join('/')} - ${(found.details||[]).map(d=>d.boul).join(',')}<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><button onclick="kopyeDirect('${found.id}')" style="background:#facc15;padding:10px;border:none;border-radius:8px;font-weight:900">📋 KOPYE</button><button onclick="reprintDirect('${found.id}')" style="background:#0f172a;color:#facc15;padding:10px;border:none;border-radius:8px;font-weight:900">🖨️ PRINT</button></div></div>`; };
 window.kopyeDirect=async(id)=>{ if(vandeFerme){alert('🚫 Fermé');return;} let s=await get(child(ref(db),'fiches/'+id)); if(!s.exists())return; let f=s.val(); panier=JSON.parse(JSON.stringify(f.details)); document.querySelectorAll('.chkT').forEach(c=>c.checked=false); document.querySelectorAll('.tirajItem').forEach(b=>b.classList.remove('on')); (f.tirajs||[]).forEach(tn=>{ let c=document.querySelector(`input[value="${tn}"]`); if(c&&!c.disabled){c.checked=true; document.getElementById('box-'+tn.replace(/ /g,'')).classList.add('on');}}); render(); showTab('VANN'); };
-window.reprintDirect=async(id)=>{ let s=await get(child(ref(db),'fiches/'+id)); if(!s.exists())return; let f=s.val(); let ticket=`C&D LOTTO\n${f.vendeur} - ${new Date(f.date).toLocaleString('fr-HT',{timeZone:'America/New_York'})}\n${(f.tirajs||[]).join(' / ')}\n----------------\n${(f.details||[]).map(p=>`${p.type.toUpperCase()} ${p.boul} ${p.montan}G x${f.nbTiraj}`).join('\n')}\n----------------\nTotal Miz: ${f.totalBase}G x ${f.nbTiraj} = ${f.total}G\nID:${f.id.slice(-5).toUpperCase()}\nMèsi!\n`; document.getElementById('ticketContent').innerText=ticket; window.print(); };
+window.reprintDirect=async(id)=>{ let s=await get(child(ref(db),'fiches/'+id)); if(!s.exists())return; let f=s.val(); let ticket=`C&D LOTTO - KOPI\n----------------\n${f.vendeur}\n${new Date(f.date).toLocaleString('fr-HT',{timeZone:'America/New_York'})}\n${(f.tirajs||[]).join(' / ')}\n----------------\n${(f.details||[]).map(p=>`${p.type.toUpperCase()} ${p.boul} ${p.montan}G x${f.nbTiraj}`).join('\n')}\n----------------\nTotal Miz: ${f.totalBase}G x ${f.nbTiraj} = ${f.total}G\nID:${f.id.slice(-5).toUpperCase()}\n`; printTicket58mm(ticket); };
 async function loadAll(){ genererRapport(); let s=await get(child(ref(db),'fiches')); if(!s.exists())return; let today=getDateHaiti(); let all=Object.values(s.val()).filter(f=> getDateHaiti(new Date(f.date))===today && f.vendeur===vendeur ); let lf=document.getElementById('listFiches'); if(lf){ lf.innerHTML=all.length?'':'Pa gen fich'; all.slice().reverse().forEach(f=>{ lf.innerHTML+=`<div style="border:1px solid #eee;padding:8px;border-radius:10px;margin:6px 0;font-size:12px"><b>${(f.tirajs||[]).join('/')} - ${f.total}G</b> <span style="font-size:10px;color:#64748b">(${f.totalBase}G x ${f.nbTiraj})</span><button onclick="reprintDirect('${f.id}')" style="float:right;background:#000;color:#facc15;padding:4px 10px;border-radius:6px">Print</button><br>${(f.details||[]).map(d=>d.boul).join(', ')}</div>`; }); } }
-window.valideFich=async()=>{ if(vandeFerme){alert('🚫 FERMÉ - RAPÒ sèlman');return;} if(panier.length===0){alert('Panier vid');return;} let tirajs=getT(); if(tirajs.length===0){alert('Chwazi tiraj');return;} let base=panier.reduce((a,b)=>a+b.montan,0); let total=base*tirajs.length; let id=push(child(ref(db),'fiches')).key; await set(ref(db,'fiches/'+id),{id:id,vendeur:vendeur,tirajs:tirajs,details:panier,total:total,totalBase:base,nbTiraj:tirajs.length,date:new Date().toISOString()}); let ticket=`C&D LOTTO\n${vendeur} - ${new Date().toLocaleString('fr-HT',{timeZone:'America/New_York'})}\n${tirajs.join(' / ')}\n----------------\n${panier.map(p=>`${p.type.toUpperCase()} ${p.boul} ${p.montan}G x${tirajs.length}`).join('\n')}\n----------------\nTotal Miz: ${base}G x ${tirajs.length} = ${total}G\nID:${id.slice(-5).toUpperCase()}\nMèsi - Bonne Chance!\n`; document.getElementById('ticketContent').innerText=ticket; window.print(); panier=[]; render(); loadAll(); };
+window.valideFich=async()=>{ if(vandeFerme){alert('🚫 FERMÉ - RAPÒ sèlman');return;} if(panier.length===0){alert('Panier vid');return;} let tirajs=getT(); if(tirajs.length===0){alert('Chwazi tiraj');return;} let base=panier.reduce((a,b)=>a+b.montan,0); let total=base*tirajs.length; let id=push(child(ref(db),'fiches')).key; await set(ref(db,'fiches/'+id),{id:id,vendeur:vendeur,tirajs:tirajs,details:panier,total:total,totalBase:base,nbTiraj:tirajs.length,date:new Date().toISOString()}); let ticket=`C&D LOTTO\n----------------\n${vendeur.toUpperCase()}\n${new Date().toLocaleString('fr-HT',{timeZone:'America/New_York'})}\n${tirajs.join(' / ')}\n----------------\n${panier.map(p=>`${p.type.toUpperCase()} ${p.boul} ${p.montan}G x${tirajs.length}`).join('\n')}\n----------------\nTotal Miz: ${base}G x ${tirajs.length}\nTOTAL: ${total}G\nID:${id.slice(-5).toUpperCase()}\nMèsi - Bonne Chance!`; printTicket58mm(ticket); panier=[]; render(); loadAll(); };
 init();
 </script></body></html>
