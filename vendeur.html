@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C&D VÉRITÉ LOTTO - V92 VENDEUR</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<style>
+body{font-family:Arial;background:#fff;margin:0;padding:0}
+.h{background:#000;color:#FFD700;padding:14px;text-align:center;font-weight:bold;font-size:20px}
+.card{padding:15px;max-width:420px;margin:0 auto}
+input{padding:12px;width:100%;margin:6px 0;border:2px solid #000;border-radius:8px;font-size:18px}
+.btn{padding:14px;width:100%;border:none;border-radius:10px;font-weight:bold;font-size:18px;cursor:pointer;margin:6px 0}
+.bK{background:#000;color:#FFD700}.tiraj{display:inline-block;padding:8px 12px;margin:4px;border:2px solid #000;border-radius:20px;font-weight:bold;cursor:pointer}
+.tiraj.active{background:#000;color:#FFD700}
+.ticket{border:2px dashed #000;padding:12px;margin:10px auto;max-width:340px;text-align:center;font-size:22px;font-weight:bold;line-height:1.5}
+.center{text-align:center}
+#blocked{background:#dc2626;color:#fff;padding:20px;text-align:center;font-size:24px;font-weight:bold;display:none;border-radius:10px;margin:10px}
+@media print{body *{visibility:hidden} #printTicket,#printTicket *{visibility:visible} #printTicket{position:absolute;left:0;top:0;width:100%;text-align:center;font-size:24px}}
+</style>
+</head>
+<body>
+<div class="h">C&D VÉRITÉ LOTTO</div>
+<div id="login" class="card center">
+<h2>Connexion Vendeur</h2>
+<input id="uName" placeholder="Non vendeur">
+<input id="uPass" type="password" placeholder="Modpas">
+<button class="btn bK" onclick="login()">Antre</button>
+<p id="lMsg"></p>
+</div>
+<div id="app" class="card" style="display:none">
+<h3 id="welcome" class="center"></h3>
+<div id="blocked">🔴 FÈMEN - Kontakte Proprio a</div>
+<div id="sell">
+<div class="center"><b>Chwazi Tirage (Total × Tiraj)</b></div>
+<div id="tirajBox" class="center"></div>
+<input id="bouleInput" placeholder="Ex: 12x10, 45x20">
+<div class="center" style="background:#f3f4f6;padding:10px;border-radius:10px;margin:8px 0">
+Total Boul: <b id="totB" style="font-size:22px">0$</b><br>
+Nb Tiraj: <b id="nbT" style="font-size:22px">1</b><br>
+<h2 style="margin:5px 0;color:#dc2626">A PEYE: <span id="aPeye">0$</span></h2>
+<small>Total × Tiraj</small>
+</div>
+<button class="btn bK" onclick="vann()">🖨️ Enprime Ticket</button>
+</div>
+<div id="printTicket" class="ticket" style="display:none"></div>
+</div>
+<script>
+const firebaseConfig={databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"};
+firebase.initializeApp(firebaseConfig); const db=firebase.database();
+let curV='', selT=[], total=0, cfg={};
+db.ref('config').on('value',s=>{cfg=s.val()||{}; loadTirages();});
+function loadTirages(){
+  const box=document.getElementById('tirajBox'); if(!box) return; box.innerHTML='';
+  const heures=cfg.heures||{}; const map={'GA midi':'gaMidi','GA soir':'gaSoir','FL midi':'flMidi','FL soir':'flSoir','NY midi':'nyMidi','NY soir':'nySoir'};
+  ['GA midi','GA soir','FL midi','FL soir','NY midi','NY soir'].forEach(t=>{
+    const h=heures[map[t]]||'--:--';
+    box.innerHTML+=`<span class="tiraj" data-t="${t}" onclick="toggleT(this,'${t}')">${t}<br><small>${h}</small></span>`;
+  });
+}
+function toggleT(el,t){
+  el.classList.toggle('active');
+  if(selT.includes(t)) selT=selT.filter(x=>x!==t); else selT.push(t);
+  updateTot();
+}
+function login(){
+  const n=uName.value.trim(), p=uPass.value.trim();
+  if(!n||!p) return lMsg.innerText='Mete non ak modpas';
+  db.ref('vendors/'+n).once('value',snap=>{
+    if(!snap.exists()){lMsg.innerText='❌ Vendeur pa egziste';return;}
+    const v=snap.val(); if(v.pass!==p){lMsg.innerText='❌ Modpas pa bon';return;}
+    if(v.status==='FERME'){lMsg.innerText='🔴 Ou FÈMEN';return;}
+    curV=n; login.style.display='none'; app.style.display='block';
+    welcome.innerText='Bonjou '+n+' - C&D VÉRITÉ LOTTO';
+    db.ref('vendors/'+n+'/status').on('value',s=>{
+      if(s.val()==='FERME'){blocked.style.display='block'; sell.style.display='none';}
+      else{blocked.style.display='none'; sell.style.display='block';}
+    });
+    loadTirages();
+  });
+}
+bouleInput.addEventListener('input',()=>{
+  let t=0; bouleInput.value.split(',').forEach(part=>{const m=part.split('x'); if(m.length==2) t+=parseInt(m[1])||0;});
+  total=t; updateTot();
+});
+function updateTot(){const nb=selT.length||1; totB.innerText=total+'$'; nbT.innerText=nb; aPeye.innerText=(total*nb)+'$';}
+function vann(){
+  if(total==0) return alert('Mete boul'); if(selT.length==0) return alert('Chwazi tiraj');
+  const id=Date.now();
+  const ticket=`<div style="text-align:center"><h2 style="margin:0">C&D VÉRITÉ LOTTO</h2>------------------------------<br>Vandè: ${curV}<br>${new Date().toLocaleString()}<br>Tiraj: ${selT.join(', ')}<br>------------------------------<br>${bouleInput.value.split(',').join('<br>')}<br>------------------------------<br>Total: ${total}$ × ${selT.length} = <b>${total*selT.length}$</b><br>Bòn chans!<br><small>ID:${id}</small></div>`;
+  printTicket.innerHTML=ticket; printTicket.style.display='block';
+  db.ref('fiches/'+id).set({id:id,vendor:curV,boules:bouleInput.value,total:total,nbTiraj:selT.length,tiraj:selT.join(', '),date:Date.now()});
+  window.print(); bouleInput.value=''; total=0; updateTot();
+}
+</script>
+</body>
+</html>
