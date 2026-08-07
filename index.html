@@ -2,122 +2,54 @@
 <html lang="ht">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>C&D Verite Lotto - Vendeur V96.2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CD LOTTO V97 ADMIN SYNC</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
-*{box-sizing:border-box;font-family:Arial}body{margin:0;background:#f1f5f9;padding:0 0 80px 0}
-.top-bar{background:#eab308;color:#000;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;font-weight:bold;border-radius:12px;margin:8px}
-.kom-badge{background:#000;color:#eab308;padding:6px 12px;border-radius:20px;font-size:13px}
-.status-box{margin:8px;background:#dcfce7;border:2px solid #22c55e;border-radius:12px;padding:10px;text-align:center;color:#166534;font-weight:bold}
-.status-ferme{background:#fee2e2!important;border-color:#ef4444!important;color:#991b1b!important}
-.card{background:#fff;border-radius:16px;padding:12px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);color:#000}
-.tiraj-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tiraj-item{border:1px solid #e2e8f0;border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;background:#fef2f2}
-.tiraj-item.checked{background:#dcfce7;border-color:#22c55e}
-.vente-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:8px 0}
-.btn-ajoute{background:#22c55e;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:bold;font-size:18px;width:100%}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#1e293b;display:flex;justify-content:space-around;padding:8px 0}
-.bottom-nav button{background:transparent;border:none;color:#94a3b8;display:flex;flex-direction:column;align-items:center;font-size:11px;padding:8px}
-.bottom-nav button.active{background:#eab308;color:#000;border-radius:12px;padding:8px 18px}
-.total-box{background:#0f172a;color:#fff;border-radius:12px;padding:10px;display:flex;justify-content:space-between}
-.bloque-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#ef4444;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;padding:30px;text-align:center}
+body{font-family:Arial;background:#0f172a;color:white;padding:15px}
+.card{background:#1e293b;padding:15px;border-radius:12px;margin:10px 0;border:1px solid #334155}
+.btn{padding:12px 18px;border-radius:8px;border:none;font-weight:bold;cursor:pointer;margin:5px}
+.btn-green{background:#22c55e;color:#000}.btn-red{background:#ef4444;color:#fff}.btn-blue{background:#3b82f6;color:#fff}
+input{padding:10px;border-radius:8px;border:none;width:90%;margin:5px 0}
+.badge{padding:4px 10px;border-radius:20px;font-size:12px}.on{background:#22c55e;color:#000}.off{background:#ef4444}
 </style>
 </head>
 <body>
-<div id="bloqueDiv" style="display:none" class="bloque-overlay">
-<h1 style="font-size:50px">⛔</h1><h1>VANDÈ FERMÉ</h1><h2 id="bloqueNom"></h2><p>Proprio fèmen ou. Ou pa ka vann.</p>
-<button onclick="localStorage.clear();location.href='/'" style="padding:15px 40px;border-radius:12px;border:none;background:white;color:red;font-weight:bold;font-size:18px;margin-top:20px">DEKONEKTE</button>
-</div>
-<div class="top-bar"><span id="vNameTop">tamouche</span><span id="dateTop"></span><span class="kom-badge">KOM 10%</span></div>
-<div id="statusBox" class="status-box">✅ Ouvè - Lè Ayiti: <span id="heureHaiti">08:31</span> - <span id="nbOuvert">6 ouvè</span></div>
-<div class="card">
-<b>Tiraj - (<span style="color:red" id="tirajCount">6 ouvè</span>)</b>
-<div class="tiraj-grid" style="margin-top:8px">
-<label class="tiraj-item"><input type="checkbox" class="tiraj-check" value="FL MIDI" checked><div><b>FL MIDI</b><br><small>(13:15)</small></div></label>
-<label class="tiraj-item"><input type="checkbox" class="tiraj-check" value="FL SOIR" checked><div><b>FL SOIR</b><br><small>(21:20)</small></div></label>
-<label class="tiraj-item"><input type="checkbox" class="tiraj-check" value="GA MIDI" checked><div><b>GA MIDI</b><br><small>(12:15)</small></div></label>
-<label class="tiraj-item"><input type="checkbox" class="tiraj-check" value="GA SOIR" checked><div><b>GA SOIR</b><br><small>(18:15)</small></div></label>
-<label class="tiraj-item"><input type="checkbox" class="tiraj-check" value="NY MIDI" checked><div><b>NY MIDI</b><br><small>(14:15)</small></div></label>
-<label class="tiraj-item"><input type="checkbox" class="tiraj-check" value="NY SOIR" checked><div><b>NY SOIR</b><br><small>(21:30)</small></div></label>
-</div>
-</div>
-<div class="card">
-<div style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:10px;padding:8px;font-size:13px;margin-bottom:8px">
-Vandè: <b id="vLabel">tamouche</b> | <span id="tirajInfo">6 tiraj chwazi</span><br>Total Miz <span id="calcDetail">0G x 0 = 0G</span>
-</div>
-<div class="vente-grid">
-<select id="typeJeu"><option value="Bolet">Bolet</option><option value="Loto3">Loto3</option><option value="Loto4">Loto4</option><option value="Maryaj">Maryaj</option></select>
-<input id="boulInput" placeholder="BOUL" type="number"><select id="gradeInput"><option value="">G</option><option value="1er">1er</option><option value="2em">2em</option><option value="3em">3em</option></select>
-</div>
-<input id="montantInput" placeholder="Montant (G)" type="number" style="width:100%;margin-bottom:8px">
-<button class="btn-ajoute" onclick="ajoute()">+ AJOUTE</button>
-<div class="total-box" style="margin-top:10px"><span>Total Miz (Base)<br><small id="totalDetail">0G x 0 Tiraj</small></span><span id="totalBase" style="font-size:20px;font-weight:bold">0G</span></div>
-<div id="fichList"></div>
-</div>
-<div class="bottom-nav">
-<button class="active" onclick="vann()">📄<br>VANN</button>
-<button onclick="kopye()">📋<br>KOPYE</button>
-<button onclick="rapo()">📊<br>RAPÒ</button>
-<button onclick="fiches()">📁<br>FICHES</button>
-</div>
+<h1>🔥 CD LOTTO V97 ADMIN SYNC FINAL</h1>
+<div class="card" style="border-color:#22c55e">✅ SYNC AKTIF - Firebase OK 🟢 Konekte</div>
+<div class="card"><h3>👥 Vandè yo - Fèmen = Fèmen tout kote</h3><div id="vendorsList">Chaje...</div><button class="btn btn-blue" onclick="addVendor()">+ Ajoute Vandè</button></div>
+<div class="card"><h3>🚫 Bloke Boul</h3><input id="boulBlock" placeholder="Ex: 45, 12"><button class="btn btn-red" onclick="blockBoul()">Bloke</button><button class="btn" onclick="clearBlocks()">Dewbloke</button><div id="blockedList"></div></div>
+<div class="card"><h3>📊 Fich Live</h3><div id="allFiches"></div><h3 id="totalVentes">Total: $0</h3><button class="btn btn-green" onclick="tirage()">🎯 TIRAJ</button><div id="gagnants"></div></div>
 <script>
-let vendeursDefault=[{non:"jean",pass:"123456",komisyon:10,ouvert:false},{non:"tamouche",pass:"123456",komisyon:10,ouvert:true},{non:"vendeur3",pass:"3333",komisyon:10,ouvert:true}];
-function getVendeurs(){try{return JSON.parse(localStorage.getItem('cdu_vendeurs'))||JSON.stringify(vendeursDefault)}catch(e){return vendeursDefault}}
-function saveVendeurs(v){localStorage.setItem('cdu_vendeurs',JSON.stringify(v))}
-let vendeurs=getVendeurs();if(!localStorage.getItem('cdu_vendeurs'))saveVendeurs(vendeurs);
-let vendeurActuel=localStorage.getItem('cdu_vendeur_actuel')||'tamouche';
-let fichCourant=JSON.parse(localStorage.getItem('cdu_fich_'+vendeurActuel)||'[]');
-function checkFerme(){
- let v=getVendeurs();let vd=v.find(x=>x.non.toLowerCase()===vendeurActuel.toLowerCase());
- if(vd&&vd.ouvert===false){
-   document.getElementById('bloqueDiv').style.display='flex';
-   document.getElementById('bloqueNom').innerText=vd.non.toUpperCase();
-   document.getElementById('statusBox').className='status-box status-ferme';
-   document.getElementById('statusBox').innerHTML='⛔ FERMÉ pa Proprio - Ou pa ka vann';
-   return true;
- }else{document.getElementById('bloqueDiv').style.display='none';return false;}
+const firebaseConfig = {
+  apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
+  authDomain: "cd-lotto.firebaseapp.com",
+  databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",
+  projectId: "cd-lotto",
+  storageBucket: "cd-lotto.firebasestorage.app",
+  messagingSenderId: "671091732195",
+  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6",
+  measurementId: "G-TWK9N38BS0"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+let vendors={}, fiches={}, blocks=[];
+db.ref('vendors').on('value', s=>{vendors=s.val()||{}; renderVendors();});
+db.ref('fiches').on('value', s=>{fiches=s.val()||{}; renderFiches();});
+db.ref('blocks').on('value', s=>{blocks=s.val()||[]; document.getElementById('blockedList').innerHTML=blocks.length?'Bloke: <b>'+blocks.join(', ')+'</b>':'Pa gen bloke';});
+function renderVendors(){
+ let h=''; for(let id in vendors){let v=vendors[id]; h+=`<div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;margin:5px;border-radius:8px"><span><b>${v.nom}</b> <span class="badge ${v.ouvert?'on':'off'}">${v.ouvert?'OUVÈ':'FÈMEN'}</span></span><span><button class="btn ${v.ouvert?'btn-red':'btn-green'}" onclick="toggleVendor('${id}',${!v.ouvert})">${v.ouvert?'Fèmen':'Louvri'}</button> <button class="btn" onclick="delVendor('${id}')">X</button></span></div>`;}
+ if(!Object.keys(vendors).length) h='<p>Pa gen vandè - Ajoute Jean</p>';
+ document.getElementById('vendorsList').innerHTML=h;
 }
-function init(){
- document.getElementById('vNameTop').innerText=vendeurActuel;
- document.getElementById('vLabel').innerText=vendeurActuel;
- document.getElementById('dateTop').innerText=new Date().toISOString().slice(0,10)+' '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
- updateTiraj();renderFich();checkFerme();
- setInterval(()=>{checkFerme();},2000);
- document.querySelectorAll('.tiraj-check').forEach(c=>c.addEventListener('change',updateTiraj));
-}
-function updateTiraj(){
- let checks=document.querySelectorAll('.tiraj-check:checked');let n=checks.length;
- document.getElementById('nbOuvert').innerText=n+' ouvè';document.getElementById('tirajCount').innerText=n+' ouvè';document.getElementById('tirajInfo').innerText=n+' tiraj chwazi';
- document.querySelectorAll('.tiraj-item').forEach(el=>{let inp=el.querySelector('input');if(inp.checked)el.classList.add('checked');else el.classList.remove('checked');});
- let totalBase=fichCourant.reduce((s,f)=>s+f.montant,0);
- document.getElementById('totalDetail').innerText=totalBase+'G x '+n+' Tiraj';
- document.getElementById('calcDetail').innerText=totalBase+'G x '+n+' = '+(totalBase*n)+'G';
-}
-function ajoute(){
- if(checkFerme()){alert('⛔ Vendeur FERMÉ');return}
- let type=document.getElementById('typeJeu').value;let boul=document.getElementById('boulInput').value.trim();let grade=document.getElementById('gradeInput').value||'1er';let mont=parseInt(document.getElementById('montantInput').value);
- if(!boul||!mont){alert('Mete BOUL ak Montant');return}
- let tirajSel=Array.from(document.querySelectorAll('.tiraj-check:checked')).map(c=>c.value);
- if(tirajSel.length==0){alert('Chwazi omwen 1 Tiraj');return}
- fichCourant.push({type,boul,grade,montant:mont,tiraj:tirajSel,heure:new Date().toLocaleTimeString()});
- localStorage.setItem('cdu_fich_'+vendeurActuel,JSON.stringify(fichCourant));
- document.getElementById('boulInput').value='';document.getElementById('montantInput').value='';
- renderFich();updateTiraj();
-}
-function renderFich(){let html='';let total=0;fichCourant.forEach((f,i)=>{total+=f.montant;html+=`<div style="background:#f8fafc;border-radius:8px;padding:6px;margin:4px 0;display:flex;justify-content:space-between"><span>${f.type} ${f.boul} ${f.grade} - ${f.montant}G (${f.tiraj.length}T)</span><span onclick="supprime(${i})" style="color:red">❌</span></div>`;});document.getElementById('fichList').innerHTML=html;document.getElementById('totalBase').innerText=total+'G';updateTiraj();}
-function supprime(i){fichCourant.splice(i,1);localStorage.setItem('cdu_fich_'+vendeurActuel,JSON.stringify(fichCourant));renderFich();}
-function vann(){
- if(checkFerme()){alert('⛔ Vendeur FERMÉ pa Proprio - Vant bloke');return}
- if(fichCourant.length==0){alert('Fich vid');return}
- let n=document.querySelectorAll('.tiraj-check:checked').length;let total=fichCourant.reduce((s,f)=>s+f.montant,0)*n;
- let key='cdu_ventes_'+vendeurActuel+'_'+new Date().toISOString().slice(0,10);
- let ventes=JSON.parse(localStorage.getItem(key)||'[]');ventes.push({fich:fichCourant,total,date:new Date().toISOString()});localStorage.setItem(key,JSON.stringify(ventes));
- fichCourant=[];localStorage.setItem('cdu_fich_'+vendeurActuel,JSON.stringify(fichCourant));renderFich();updateTiraj();alert('✅ Fich Vann! Total: '+total+'G');
-}
-function kopye(){let txt=fichCourant.map(f=>`${f.type} ${f.boul} ${f.montant}G`).join('\n');navigator.clipboard.writeText(txt);alert('Kopye!')}
-function rapo(){let key='cdu_ventes_'+vendeurActuel+'_'+new Date().toISOString().slice(0,10);let v=JSON.parse(localStorage.getItem(key)||'[]');let tot=v.reduce((s,x)=>s+x.total,0);alert('Rapò Jodi a: '+v.length+' fich - Total: '+tot+'G');}
-function fiches(){rapo()}
-init();
+function toggleVendor(id,o){db.ref('vendors/'+id+'/ouvert').set(o);}
+function addVendor(){let n=prompt('Non vandè?'); if(!n) return; let id=n.toLowerCase().replace(/\s+/g,'_')+'_'+Date.now().toString().slice(-4); db.ref('vendors/'+id).set({nom:n,ouvert:true});}
+function delVendor(id){if(confirm('Efase?')) db.ref('vendors/'+id).remove();}
+function blockBoul(){let v=document.getElementById('boulBlock').value; if(!v) return; let nums=v.split(',').map(s=>s.trim()).filter(Boolean); let nb=[...blocks,...nums]; nb=[...new Set(nb)]; db.ref('blocks').set(nb); document.getElementById('boulBlock').value='';}
+function clearBlocks(){db.ref('blocks').set([]);}
+function renderFiches(){let h='',t=0; for(let vid in fiches){for(let fid in fiches[vid]){let f=fiches[vid][fid]; t+=f.mise||0; h+=`<div style="background:#0f172a;padding:6px;margin:3px;border-radius:6px">📌 ${vendors[vid]?.nom||vid} - ${f.boul} - $${f.mise}</div>`;}} document.getElementById('allFiches').innerHTML=h||'Pa gen fich'; document.getElementById('totalVentes').innerText='Total: $'+t;}
+function tirage(){let w=prompt('Boul gayan?'); if(!w) return; let h='<h3>🏆 Gayan '+w+':</h3>'; let tp=0; for(let vid in fiches){for(let fid in fiches[vid]){let f=fiches[vid][fid]; if(f.boul==w){let p=f.mise*10; tp+=p; h+=`<div>${vendors[vid]?.nom} - ${f.boul} - $${f.mise} => $${p}</div>`;}}} h+=`<h2>Total: $${tp}</h2>`; document.getElementById('gagnants').innerHTML=h;}
 </script>
 </body>
 </html>
