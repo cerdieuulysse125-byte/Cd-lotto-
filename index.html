@@ -6,201 +6,133 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
-body{font-family:Arial;background:#f1f5f9;margin:0;padding:0}
-.h{background:#000;color:#FFD700;padding:18px;text-align:center;font-weight:bold;font-size:22px;position:sticky;top:0;z-index:20}
-.card{background:#fff;margin:12px;border-radius:12px;padding:15px;box-shadow:0 2px 6px #0002}
-.tab{display:flex;overflow-x:auto;gap:8px;margin:10px 12px}
-.tab button{padding:12px 16px;border:none;border-radius:10px;background:#ddd;font-weight:bold;white-space:nowrap}
-.tab button.active{background:#000;color:#FFD700}
-input,select{padding:11px;border:1px solid #ccc;border-radius:8px;width:100%;box-sizing:border-box;margin:4px 0;font-size:16px}
-.btn{padding:10px 14px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+*{box-sizing:border-box} body{font-family:Arial;background:#eef2f7;margin:0;padding:0}
+.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold;font-size:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 2px 6px #0002}
+.card h3{background:#000;color:#FFD700;padding:8px;border-radius:6px;margin:-12px -12px 10px -12px;text-align:center;font-size:15px}
+input,select{padding:8px;border:1px solid #bbb;border-radius:6px;width:100%;margin:3px 0;font-size:14px}
+.btn{padding:8px 12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
 .bG{background:#16a34a;color:#fff}.bR{background:#dc2626;color:#fff}.bB{background:#2563eb;color:#fff}.bK{background:#000;color:#FFD700}
-.row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #eee}
-.grand{font-size:18px;font-weight:bold}
-@media print{
-  body *{visibility:hidden}
-  #printArea,#printArea *{visibility:visible}
-  #printArea{position:absolute;left:0;top:0;width:100%;text-align:center;font-size:20px}
-}
+.row{display:flex;justify-content:space-between;align-items:center;padding:6px;border-bottom:1px solid #eee;font-size:13px}
+.f{display:flex;gap:6px}.f>div{flex:1}
+.small{font-size:12px;color:#555}
+@media print{body *{visibility:hidden} #printArea,#printArea *{visibility:visible} #printArea{position:absolute;left:0;top:0;width:100%;text-align:center;font-size:22px}}
 </style>
 </head>
 <body>
-<div class="h">C&D VÉRITÉ LOTTO - V93 PROPRIO</div>
+<div class="h">C&D VÉRITÉ LOTTO - V93 PROPRIO - SYNC AKTIF</div>
 
-<div class="tab">
-<button class="active" onclick="showTab('vendeurs',this)">Contrôle Vendeurs</button>
-<button onclick="showTab('config',this)">Prix / Limite / Heure</button>
-<button onclick="showTab('tirages',this)">Tableau Tirage</button>
-<button onclick="showTab('resultats',this)">Affichage Résultats</button>
-<button onclick="showTab('rapport',this)">Rapport</button>
-<button onclick="showTab('fiches',this)">Fich Live</button>
-</div>
-
-<!-- VENDEURS -->
-<div id="vendeurs" class="card">
-<h3>Contrôle Vendeurs (Ouvè / Fèmen) - ak Modpas</h3>
-<input id="vNom" placeholder="Non vandè">
-<input id="vPass" placeholder="Modpas">
-<button class="btn bB" onclick="addVendeur()">+ Ajouter Vendeur</button>
+<div class="grid">
+<!-- COL GAUCHE -->
+<div>
+<div class="card">
+<h3>Contrôle Vendeurs</h3>
 <div id="vList"></div>
+<div class="f"><div><input id="vNom" placeholder="Vendeur"></div><div><input id="vPass" placeholder="1234"></div><div><button class="btn bB" onclick="addV()">+ Ajouter</button></div></div>
 </div>
 
-<!-- CONFIG -->
-<div id="config" class="card" style="display:none">
-<h3>Prix Jeux / Limite Mise / Heure Fermeture</h3>
-<label>Prix 2 chif</label><input id="prix2" type="number" value="50">
-<label>Prix 3 chif</label><input id="prix3" type="number" value="500">
-<label>Prix 4 chif</label><input id="prix4" type="number" value="5000">
-<label>Limite mise pa fich</label><input id="limiteMise" type="number" value="5000">
-<label>Heure fermeture (ex: 20:00)</label><input id="heureFerm" type="time" value="20:00">
-<button class="btn bK" onclick="saveConfig()">Sauvegarder Config</button>
-<p id="configMsg"></p>
+<div class="card">
+<h3>Tableau d'Affichage Résultats</h3>
+<select id="resTirage"><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
+<input id="resDate" type="date">
+<div class="f"><div><input id="r1" placeholder="1er lot"></div><div><input id="r2" placeholder="2e lot"></div><div><input id="r3" placeholder="3e lot"></div></div>
+<div class="f"><div><input id="rl3" placeholder="Loto3"></div><div><input id="rl4" placeholder="Loto4"></div><div><input id="rl5" placeholder="Loto5"></div></div>
+<button class="btn bK" style="width:100%" onclick="saveRes()">Publier Résultat</button>
+<div id="resList" class="small"></div>
 </div>
 
-<!-- TIRAGES -->
-<div id="tirages" class="card" style="display:none">
-<h3>Tableau Tirage</h3>
-<input id="tNom" placeholder="Non tiraj (New York, Florida...)">
-<input id="tHeure" type="time">
-<button class="btn bB" onclick="addTirage()">+ Ajouter Tirage</button>
-<div id="tList"></div>
+<div class="card">
+<h3>Limite Mise Modifiable</h3>
+<div class="f"><div>Borlette</div><div><input id="lBor" type="number" value="1000"></div></div>
+<div class="f"><div>Mariage</div><div><input id="lMar" type="number" value="50"></div></div>
+<div class="f"><div>Loto3</div><div><input id="lL3" type="number" value="100"></div></div>
+<div class="f"><div>Loto4</div><div><input id="lL4" type="number" value="20"></div></div>
+<div class="f"><div>Loto5</div><div><input id="lL5" type="number" value="10"></div></div>
 </div>
 
-<!-- RESULTATS -->
-<div id="resultats" class="card" style="display:none">
-<h3>Tableau d'affichage Résultats</h3>
-<select id="rTirage"></select>
-<input id="rDate" type="date">
-<input id="r1er" placeholder="1er lot">
-<input id="r2em" placeholder="2em lot">
-<input id="r3em" placeholder="3em lot">
-<button class="btn bK" onclick="saveResultat()">Publier Résultat</button>
-<div id="rList"></div>
 </div>
 
-<!-- RAPPORT -->
-<div id="rapport" class="card" style="display:none">
-<h3>Rapport Vente</h3>
-<div style="display:flex;gap:6px">
-<input id="rapDu" type="date"><input id="rapAu" type="date">
-</div>
-<select id="rapTirage"><option value="tous">Tirage - Tous</option></select>
-<select id="rapVendeur"><option value="tous">Vendeurs - Tous</option></select>
-<button class="btn bK" onclick="genererRapport()">Générer Rapport</button>
-<div id="printArea" style="text-align:center">
-<div id="rapResult"></div>
-</div>
-<button class="btn bG" onclick="window.print()">🖨️ Imprimer Rapport - Gran ekriti Santre</button>
+<!-- COL DROITE -->
+<div>
+<div class="card">
+<h3>Prix Jeux Modifiable</h3>
+<b>Borlette</b>
+<div class="f"><div>1er lot <input id="p1" type="number" value="50"></div><div>2e lot <input id="p2" type="number" value="20"></div><div>3e lot <input id="p3" type="number" value="10"></div></div>
+<div class="f"><div>Loto3 <input id="pL3" type="number" value="500"></div><div>Loto4 <input id="pL4" type="number" value="5000"></div><div>Loto5 <input id="pL5" type="number" value="25000"></div></div>
 </div>
 
-<!-- FICHES LIVE -->
-<div id="fiches" class="card" style="display:none">
-<h3>Fich Live - Total × Tiraj</h3>
-<div id="fichesLive"></div>
-<button class="btn bR" onclick="if(confirm('Efase tout fich?')) db.ref('fiches').remove()">Efase tout fich</button>
+<div class="card">
+<h3>L'Heure Fermeture</h3>
+<div class="f"><div>GA midi</div><div><input id="hGA1" type="time" value="12:15"></div></div>
+<div class="f"><div>GA soir</div><div><input id="hGA2" type="time" value="18:25"></div></div>
+<div class="f"><div>FL midi</div><div><input id="hFL1" type="time" value="13:15"></div></div>
+<div class="f"><div>FL soir</div><div><input id="hFL2" type="time" value="21:15"></div></div>
+<div class="f"><div>NY midi</div><div><input id="hNY1" type="time" value="14:15"></div></div>
+<div class="f"><div>NY soir</div><div><input id="hNY2" type="time" value="21:30"></div></div>
+<button class="btn bK" style="width:100%" onclick="saveAll()">Sauvegarder Prix / Limite / Heure</button>
+</div>
+
+<div class="card">
+<h3>Rapport Vendeurs</h3>
+<div class="f"><div>Du <input id="du" type="date"></div><div>Au <input id="au" type="date"></div></div>
+<div class="f"><div><select id="fTirage"><option value="tous">Tirage - Tous</option><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select></div><div><select id="fVend"><option value="tous">Vendeurs - Tous</option></select></div></div>
+<button class="btn bK" style="width:100%" onclick="genRap()">Générer</button>
+<div id="printArea"><div id="rap"></div></div>
+<button class="btn bG" style="width:100%" onclick="window.print()">🖨️ Imprimer - Gran ekriti Santre</button>
+</div>
+</div>
 </div>
 
 <script>
 const firebaseConfig={databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
+firebase.initializeApp(firebaseConfig); const db=firebase.database();
 
-function showTab(id,btn){
-  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
-  document.getElementById(id).style.display='block';
-  document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
-// VENDEURS
-function addVendeur(){
-  const n=vNom.value.trim(), p=vPass.value.trim();
-  if(!n||!p) return alert("Non ak modpas obligatwa");
-  db.ref('vendors/'+n).set({name:n,pass:p,status:'OUVE',created:Date.now()});
-  vNom.value=''; vPass.value='';
-}
+function addV(){const n=vNom.value.trim(),p=vPass.value.trim(); if(!n||!p) return alert('Non ak modpas'); db.ref('vendors/'+n).set({name:n,pass:p,status:'OUVE'}); vNom.value='';vPass.value='';}
 db.ref('vendors').on('value',s=>{
-  vList.innerHTML=''; rapVendeur.innerHTML='<option value="tous">Vendeurs - Tous</option>';
-  s.forEach(c=>{
-    const v=c.val();
-    vList.innerHTML+=`<div class="row"><span><b>${v.name}</b> [${v.pass}] - <b class="${v.status=='OUVE'?'bG':'bR'}">${v.status}</b></span>
-    <span><button class="btn ${v.status=='OUVE'?'bR':'bG'}" onclick="db.ref('vendors/${v.name}/status').set('${v.status=='OUVE'?'FERME':'OUVE'}')">${v.status=='OUVE'?'Fèmen':'Louvri'}</button>
-    <button class="btn" onclick="if(confirm('Efase?')) db.ref('vendors/${v.name}').remove()">❌</button></span></div>`;
-    rapVendeur.innerHTML+=`<option value="${v.name}">${v.name}</option>`;
+  vList.innerHTML=''; fVend.innerHTML='<option value="tous">Vendeurs - Tous</option>';
+  s.forEach(c=>{const v=c.val(); if(!v.name) return;
+    vList.innerHTML+=`<div class="row"><span><b>${v.name}</b> &nbsp; ${v.pass}</span><span><button class="btn ${v.status=='OUVE'?'bG':'bR'}" onclick="db.ref('vendors/${v.name}/status').set('${v.status=='OUVE'?'FERME':'OUVE'}')">${v.status=='OUVE'?'Ouvert':'Fermer'}</button> <button class="btn" onclick="db.ref('vendors/${v.name}').remove()">❌</button></span></div>`;
+    fVend.innerHTML+=`<option value="${v.name}">${v.name}</option>`;
   });
 });
-// CONFIG
-function saveConfig(){
-  db.ref('config').set({prix2:prix2.value,prix3:prix3.value,prix4:prix4.value,limite:limiteMise.value,heure:heureFerm.value});
-  configMsg.innerText='✅ Config sove!';
+function saveAll(){
+  db.ref('config').set({
+    limites:{borlette:lBor.value,mariage:lMar.value,loto3:lL3.value,loto4:lL4.value,loto5:lL5.value},
+    prix:{p1:p1.value,p2:p2.value,p3:p3.value,pl3:pL3.value,pl4:pL4.value,pl5:pL5.value},
+    heures:{gaMidi:hGA1.value,gaSoir:hGA2.value,flMidi:hFL1.value,flSoir:hFL2.value,nyMidi:hNY1.value,nySoir:hNY2.value}
+  }); alert('✅ Sove!');
 }
-db.ref('config').on('value',s=>{ if(!s.exists()) return; const c=s.val(); prix2.value=c.prix2; prix3.value=c.prix3; prix4.value=c.prix4; limiteMise.value=c.limite; heureFerm.value=c.heure; });
-// TIRAGES
-function addTirage(){
-  const n=tNom.value.trim(), h=tHeure.value;
-  if(!n) return;
-  db.ref('tirages/'+n).set({name:n,heure:h});
-  tNom.value='';
-}
-db.ref('tirages').on('value',s=>{
-  tList.innerHTML=''; rTirage.innerHTML=''; rapTirage.innerHTML='<option value="tous">Tirage - Tous</option>';
-  s.forEach(c=>{
-    const t=c.val();
-    tList.innerHTML+=`<div class="row"><b>${t.name}</b> - ${t.heure} <button class="btn" onclick="db.ref('tirages/${t.name}').remove()">❌</button></div>`;
-    rTirage.innerHTML+=`<option value="${t.name}">${t.name}</option>`;
-    rapTirage.innerHTML+=`<option value="${t.name}">${t.name}</option>`;
-  });
+db.ref('config').on('value',s=>{ if(!s.exists()) return; const c=s.val();
+  if(c.limites){lBor.value=c.limites.borlette; lMar.value=c.limites.mariage; lL3.value=c.limites.loto3; lL4.value=c.limites.loto4; lL5.value=c.limites.loto5;}
+  if(c.prix){p1.value=c.prix.p1; p2.value=c.prix.p2; p3.value=c.prix.p3; pL3.value=c.prix.pl3; pL4.value=c.prix.pl4; pL5.value=c.prix.pl5;}
+  if(c.heures){hGA1.value=c.heures.gaMidi; hGA2.value=c.heures.gaSoir; hFL1.value=c.heures.flMidi; hFL2.value=c.heures.flSoir; hNY1.value=c.heures.nyMidi; hNY2.value=c.heures.nySoir;}
 });
-// RESULTATS
-function saveResultat(){
-  const t=rTirage.value,d=rDate.value;
-  if(!t||!d) return alert("Chwazi tiraj ak dat");
-  db.ref('resultats/'+d+'/'+t).set({lot1:r1er.value,lot2:r2em.value,lot3:r3em.value,date:d,tirage:t});
-  alert("Rezilta pibliye!");
+function saveRes(){
+  const t=resTirage.value,d=resDate.value; if(!t||!d) return alert('Chwazi tiraj ak dat');
+  db.ref('resultats/'+d+'_'+t).set({tirage:t,date:d,l1:r1.value,l2:r2.value,l3:r3.value,lt3:rl3.value,lt4:rl4.value,lt5:rl5.value}); alert('Rezilta pibliye!');
 }
 db.ref('resultats').on('value',s=>{
-  rList.innerHTML='';
-  s.forEach(d=>{ d.forEach(t=>{
-    const r=t.val(); rList.innerHTML+=`<div class="row"><b>${r.date} ${r.tirage}</b>: ${r.lot1} - ${r.lot2} - ${r.lot3}</div>`;
-  })});
+  resList.innerHTML=''; s.forEach(c=>{const r=c.val(); resList.innerHTML+=`<div>${r.date} ${r.tirage}: ${r.l1}-${r.l2}-${r.l3} | L3:${r.lt3} L4:${r.lt4} L5:${r.lt5}</div>`});
 });
-// FICHES LIVE - FIX undefined
-db.ref('fiches').on('value',s=>{
-  fichesLive.innerHTML='';
-  if(!s.exists()){fichesLive.innerHTML='Pa gen fich';return;}
-  s.forEach(c=>{
-    const f=c.val();
-    if(!f || typeof f!=='object' || f.boules===undefined) return; // ignore null / undefined bug
-    if(Array.isArray(f.boules)) return; // ancien format
-    fichesLive.innerHTML+=`<div class="row" style="flex-direction:column;align-items:flex-start;border:1px dashed #000;margin:5px 0">
-    <div><b>${f.vendor||'?'} - ID ${f.id||c.key}</b> | ${new Date(f.date).toLocaleString()} | ${f.tiraj||''}</div>
-    <div style="font-size:18px">${f.boules}</div>
-    <div class="grand">Total: ${f.total||0}$ × ${f.nbTiraj||1} = ${(f.total||0)*(f.nbTiraj||1)}$ <button class="btn bR" style="float:right" onclick="db.ref('fiches/${c.key}').remove()">Efase</button></div>
-    </div>`;
-  });
-});
-// RAPPORT
-function genererRapport(){
-  const du=new Date(rapDu.value), au=new Date(rapAu.value); const ft=rapTirage.value, fv=rapVendeur.value;
+function genRap(){
+  const duV=du.value?new Date(du.value):null, auV=au.value?new Date(au.value):null, ft=fTirage.value, fv=fVend.value;
   db.ref('fiches').once('value',s=>{
-    let vente=0, paye=0;
-    let html=`<h2 style="text-align:center">C&D VÉRITÉ LOTTO<br>RAPPORT</h2><p style="text-align:center">Du ${rapDu.value} Au ${rapAu.value}<br>Tirage: ${ft} - Vendeur: ${fv}</p><hr>`;
-    html+=`<table border="1" style="width:100%;border-collapse:collapse;text-align:center;font-size:18px"><tr><th>Date</th><th>Vendeur</th><th>Tiraj</th><th>Vente</th></tr>`;
-    s.forEach(c=>{
-      const f=c.val(); if(!f||!f.date) return;
-      const d=new Date(f.date);
-      if(rapDu.value && d<du) return; if(rapAu.value && d>au) return;
-      if(ft!=='tous' && f.tiraj && !f.tiraj.includes(ft)) return;
-      if(fv!=='tous' && f.vendor!==fv) return;
-      const v=(f.total||0)*(f.nbTiraj||1);
-      vente+=v;
-      html+=`<tr><td>${d.toLocaleDateString()}</td><td>${f.vendor}</td><td>${f.tiraj||''}</td><td>${v}$</td></tr>`;
+    let vente=0;
+    let html=`<h2 style="text-align:center">C&D VÉRITÉ LOTTO<br>RAPPORT</h2><p style="text-align:center">Du ${du.value} Au ${au.value}<br>Tiraj: ${ft} | Vandè: ${fv}</p><table border=1 style="width:100%;border-collapse:collapse;text-align:center;font-size:18px"><tr><th>Vandè</th><th>Tiraj</th><th>Vente</th></tr>`;
+    s.forEach(ch=>{
+      const f=ch.val(); if(!f||!f.date) return;
+      const d=new Date(f.date); if(duV&&d<duV) return; if(auV&&d>new Date(auV.getTime()+86400000)) return;
+      if(ft!=='tous'&&f.tiraj&&!f.tiraj.includes(ft)) return;
+      if(fv!=='tous'&&f.vendor!==fv) return;
+      const v=(f.total||0)*(f.nbTiraj||1); vente+=v;
+      html+=`<tr><td>${f.vendor}</td><td>${f.tiraj||''}</td><td>${v}$</td></tr>`;
     });
-    html+=`</table><br>`;
-    const commission = vente*0.2; // 20%
-    const balance = vente - paye - commission;
-    html+=`<div style="text-align:center;font-size:22px;font-weight:bold">
-    Vente: ${vente}$<br>Commission (20%): ${commission}$<br>Payé: ${paye}$<br>Balance Net: ${balance}$</div>`;
-    rapResult.innerHTML=html;
+    const comm=vente*0.15; const paye=0; const net=vente-comm-paye;
+    html+=`</table><div style="font-size:22px;font-weight:bold;text-align:center;margin-top:10px">
+    Vente: ${vente}$<br>Commission: ${comm}$<br>Payé: ${paye}$<br>Balance Net: ${net}$</div>`;
+    rap.innerHTML=html;
   });
 }
 </script>
