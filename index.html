@@ -3,53 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CD LOTTO V97 ADMIN SYNC</title>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<title>C&D VÉRITÉ LOTTO - V93 PROPRIO SYNC</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
-body{font-family:Arial;background:#0f172a;color:white;padding:15px}
-.card{background:#1e293b;padding:15px;border-radius:12px;margin:10px 0;border:1px solid #334155}
-.btn{padding:12px 18px;border-radius:8px;border:none;font-weight:bold;cursor:pointer;margin:5px}
-.btn-green{background:#22c55e;color:#000}.btn-red{background:#ef4444;color:#fff}.btn-blue{background:#3b82f6;color:#fff}
-input{padding:10px;border-radius:8px;border:none;width:90%;margin:5px 0}
-.badge{padding:4px 10px;border-radius:20px;font-size:12px}.on{background:#22c55e;color:#000}.off{background:#ef4444}
+body{font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:10px}
+.header{background:#000;color:#FFD700;padding:15px;text-align:center;font-size:22px;font-weight:bold;position:sticky;top:0;z-index:10}
+.card{background:#fff;border-radius:12px;padding:15px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn{padding:10px 18px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-green{background:#16a34a;color:#fff}
+.btn-red{background:#dc2626;color:#fff}
+.btn-blue{background:#2563eb;color:#fff}
+.vendor-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #eee}
+.status-OUVE{color:#16a34a;font-weight:bold} .status-FERME{color:#dc2626;font-weight:bold}
+.fiche-item{border:1px dashed #000;padding:8px;margin:5px 0;font-size:14px}
+.sync{position:fixed;bottom:10px;right:10px;background:#16a34a;color:#fff;padding:8px 12px;border-radius:20px;font-size:12px}
 </style>
 </head>
 <body>
-<h1>🔥 CD LOTTO V97 ADMIN SYNC FINAL</h1>
-<div class="card" style="border-color:#22c55e">✅ SYNC AKTIF - Firebase OK 🟢 Konekte</div>
-<div class="card"><h3>👥 Vandè yo - Fèmen = Fèmen tout kote</h3><div id="vendorsList">Chaje...</div><button class="btn btn-blue" onclick="addVendor()">+ Ajoute Vandè</button></div>
-<div class="card"><h3>🚫 Bloke Boul</h3><input id="boulBlock" placeholder="Ex: 45, 12"><button class="btn btn-red" onclick="blockBoul()">Bloke</button><button class="btn" onclick="clearBlocks()">Dewbloke</button><div id="blockedList"></div></div>
-<div class="card"><h3>📊 Fich Live</h3><div id="allFiches"></div><h3 id="totalVentes">Total: $0</h3><button class="btn btn-green" onclick="tirage()">🎯 TIRAJ</button><div id="gagnants"></div></div>
+<div class="header">C&D VÉRITÉ LOTTO - V93 PROPRIO SYNC FINAL<br><small style="font-size:12px;color:#fff">✅ SYNC AKTIF - Firebase OK 🟢 Konekte</small></div>
+
+<div class="card">
+<h3>Vandè yo - Fèmen = Fèmen tout kote</h3>
+<input id="vendorName" placeholder="Non vandè (ex: Jean)" style="padding:10px;width:60%">
+<button class="btn btn-blue" onclick="addVendor()">+ Ajoute Vandè</button>
+<div id="vendorList"></div>
+</div>
+
+<div class="card">
+<h3>Fich Live - Total × Tiraj</h3>
+<div id="fichesLive">Chargement...</div>
+</div>
+
+<div class="sync" id="syncStatus">SYNC AKTIF</div>
+
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
+  apiKey: "AIzaSyC...",
   authDomain: "cd-lotto.firebaseapp.com",
   databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",
   projectId: "cd-lotto",
-  storageBucket: "cd-lotto.firebasestorage.app",
-  messagingSenderId: "671091732195",
-  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6",
-  measurementId: "G-TWK9N38BS0"
+  appId: "1:..."
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-let vendors={}, fiches={}, blocks=[];
-db.ref('vendors').on('value', s=>{vendors=s.val()||{}; renderVendors();});
-db.ref('fiches').on('value', s=>{fiches=s.val()||{}; renderFiches();});
-db.ref('blocks').on('value', s=>{blocks=s.val()||[]; document.getElementById('blockedList').innerHTML=blocks.length?'Bloke: <b>'+blocks.join(', ')+'</b>':'Pa gen bloke';});
-function renderVendors(){
- let h=''; for(let id in vendors){let v=vendors[id]; h+=`<div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;margin:5px;border-radius:8px"><span><b>${v.nom}</b> <span class="badge ${v.ouvert?'on':'off'}">${v.ouvert?'OUVÈ':'FÈMEN'}</span></span><span><button class="btn ${v.ouvert?'btn-red':'btn-green'}" onclick="toggleVendor('${id}',${!v.ouvert})">${v.ouvert?'Fèmen':'Louvri'}</button> <button class="btn" onclick="delVendor('${id}')">X</button></span></div>`;}
- if(!Object.keys(vendors).length) h='<p>Pa gen vandè - Ajoute Jean</p>';
- document.getElementById('vendorsList').innerHTML=h;
+
+function addVendor(){
+  const name = document.getElementById('vendorName').value.trim();
+  if(!name) return alert("Mete non vandè");
+  db.ref('vendors/'+name).set({name:name,status:'OUVE',created:Date.now()});
+  document.getElementById('vendorName').value='';
 }
-function toggleVendor(id,o){db.ref('vendors/'+id+'/ouvert').set(o);}
-function addVendor(){let n=prompt('Non vandè?'); if(!n) return; let id=n.toLowerCase().replace(/\s+/g,'_')+'_'+Date.now().toString().slice(-4); db.ref('vendors/'+id).set({nom:n,ouvert:true});}
-function delVendor(id){if(confirm('Efase?')) db.ref('vendors/'+id).remove();}
-function blockBoul(){let v=document.getElementById('boulBlock').value; if(!v) return; let nums=v.split(',').map(s=>s.trim()).filter(Boolean); let nb=[...blocks,...nums]; nb=[...new Set(nb)]; db.ref('blocks').set(nb); document.getElementById('boulBlock').value='';}
-function clearBlocks(){db.ref('blocks').set([]);}
-function renderFiches(){let h='',t=0; for(let vid in fiches){for(let fid in fiches[vid]){let f=fiches[vid][fid]; t+=f.mise||0; h+=`<div style="background:#0f172a;padding:6px;margin:3px;border-radius:6px">📌 ${vendors[vid]?.nom||vid} - ${f.boul} - $${f.mise}</div>`;}} document.getElementById('allFiches').innerHTML=h||'Pa gen fich'; document.getElementById('totalVentes').innerText='Total: $'+t;}
-function tirage(){let w=prompt('Boul gayan?'); if(!w) return; let h='<h3>🏆 Gayan '+w+':</h3>'; let tp=0; for(let vid in fiches){for(let fid in fiches[vid]){let f=fiches[vid][fid]; if(f.boul==w){let p=f.mise*10; tp+=p; h+=`<div>${vendors[vid]?.nom} - ${f.boul} - $${f.mise} => $${p}</div>`;}}} h+=`<h2>Total: $${tp}</h2>`; document.getElementById('gagnants').innerHTML=h;}
+function toggleVendor(name,status){
+  db.ref('vendors/'+name+'/status').set(status);
+}
+function deleteVendor(name){
+  if(confirm("Efase "+name+" ?")) db.ref('vendors/'+name).remove();
+}
+db.ref('vendors').on('value', snap=>{
+  const list = document.getElementById('vendorList');
+  list.innerHTML='';
+  snap.forEach(child=>{
+    const v = child.val();
+    list.innerHTML+=`<div class="vendor-row">
+      <span><b>${v.name}</b> - <span class="status-${v.status}">${v.status} ${v.status=='OUVE'?'🟢':'🔴'}</span></span>
+      <span>
+        ${v.status=='OUVE'?`<button class="btn btn-red" onclick="toggleVendor('${v.name}','FERME')">Fèmen</button>`:`<button class="btn btn-green" onclick="toggleVendor('${v.name}','OUVE')">Louvri</button>`}
+        <button class="btn" onclick="deleteVendor('${v.name}')">❌</button>
+      </span>
+    </div>`;
+  });
+});
+db.ref('fiches').on('value', snap=>{
+  const div = document.getElementById('fichesLive');
+  div.innerHTML='';
+  if(!snap.exists()){div.innerHTML='Pa gen fich';return;}
+  snap.forEach(child=>{
+    const f = child.val();
+    if(!f || !f.boules) return;
+    div.innerHTML+=`<div class="fiche-item">
+      <b>${f.vendor||'?'} - ${f.id||''}</b> | ${new Date(f.date).toLocaleString()}<br>
+      ${f.boules} <br>
+      <b>Total: ${f.total||0}$ × ${f.nbTiraj||1} tiraj = ${(f.total||0)*(f.nbTiraj||1)}$ </b>
+      <button onclick="db.ref('fiches/${child.key}').remove()" style="float:right">Efase</button>
+    </div>`;
+  });
+});
 </script>
 </body>
 </html>
