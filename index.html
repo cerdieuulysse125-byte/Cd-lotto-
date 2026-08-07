@@ -1,94 +1,208 @@
 <!DOCTYPE html>
 <html lang="ht">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D VÉRITÉ LOTTO - V93 PROPRIO SYNC</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C&D VÉRITÉ LOTTO - V93 PROPRIO</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
-body{font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:10px}
-.header{background:#000;color:#FFD700;padding:15px;text-align:center;font-size:22px;font-weight:bold;position:sticky;top:0;z-index:10}
-.card{background:#fff;border-radius:12px;padding:15px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.btn{padding:10px 18px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.btn-green{background:#16a34a;color:#fff}
-.btn-red{background:#dc2626;color:#fff}
-.btn-blue{background:#2563eb;color:#fff}
-.vendor-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #eee}
-.status-OUVE{color:#16a34a;font-weight:bold} .status-FERME{color:#dc2626;font-weight:bold}
-.fiche-item{border:1px dashed #000;padding:8px;margin:5px 0;font-size:14px}
-.sync{position:fixed;bottom:10px;right:10px;background:#16a34a;color:#fff;padding:8px 12px;border-radius:20px;font-size:12px}
+body{font-family:Arial;background:#f1f5f9;margin:0;padding:0}
+.h{background:#000;color:#FFD700;padding:18px;text-align:center;font-weight:bold;font-size:22px;position:sticky;top:0;z-index:20}
+.card{background:#fff;margin:12px;border-radius:12px;padding:15px;box-shadow:0 2px 6px #0002}
+.tab{display:flex;overflow-x:auto;gap:8px;margin:10px 12px}
+.tab button{padding:12px 16px;border:none;border-radius:10px;background:#ddd;font-weight:bold;white-space:nowrap}
+.tab button.active{background:#000;color:#FFD700}
+input,select{padding:11px;border:1px solid #ccc;border-radius:8px;width:100%;box-sizing:border-box;margin:4px 0;font-size:16px}
+.btn{padding:10px 14px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.bG{background:#16a34a;color:#fff}.bR{background:#dc2626;color:#fff}.bB{background:#2563eb;color:#fff}.bK{background:#000;color:#FFD700}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #eee}
+.grand{font-size:18px;font-weight:bold}
+@media print{
+  body *{visibility:hidden}
+  #printArea,#printArea *{visibility:visible}
+  #printArea{position:absolute;left:0;top:0;width:100%;text-align:center;font-size:20px}
+}
 </style>
 </head>
 <body>
-<div class="header">C&D VÉRITÉ LOTTO - V93 PROPRIO SYNC FINAL<br><small style="font-size:12px;color:#fff">✅ SYNC AKTIF - Firebase OK 🟢 Konekte</small></div>
+<div class="h">C&D VÉRITÉ LOTTO - V93 PROPRIO</div>
 
-<div class="card">
-<h3>Vandè yo - Fèmen = Fèmen tout kote</h3>
-<input id="vendorName" placeholder="Non vandè (ex: Jean)" style="padding:10px;width:60%">
-<button class="btn btn-blue" onclick="addVendor()">+ Ajoute Vandè</button>
-<div id="vendorList"></div>
+<div class="tab">
+<button class="active" onclick="showTab('vendeurs',this)">Contrôle Vendeurs</button>
+<button onclick="showTab('config',this)">Prix / Limite / Heure</button>
+<button onclick="showTab('tirages',this)">Tableau Tirage</button>
+<button onclick="showTab('resultats',this)">Affichage Résultats</button>
+<button onclick="showTab('rapport',this)">Rapport</button>
+<button onclick="showTab('fiches',this)">Fich Live</button>
 </div>
 
-<div class="card">
+<!-- VENDEURS -->
+<div id="vendeurs" class="card">
+<h3>Contrôle Vendeurs (Ouvè / Fèmen) - ak Modpas</h3>
+<input id="vNom" placeholder="Non vandè">
+<input id="vPass" placeholder="Modpas">
+<button class="btn bB" onclick="addVendeur()">+ Ajouter Vendeur</button>
+<div id="vList"></div>
+</div>
+
+<!-- CONFIG -->
+<div id="config" class="card" style="display:none">
+<h3>Prix Jeux / Limite Mise / Heure Fermeture</h3>
+<label>Prix 2 chif</label><input id="prix2" type="number" value="50">
+<label>Prix 3 chif</label><input id="prix3" type="number" value="500">
+<label>Prix 4 chif</label><input id="prix4" type="number" value="5000">
+<label>Limite mise pa fich</label><input id="limiteMise" type="number" value="5000">
+<label>Heure fermeture (ex: 20:00)</label><input id="heureFerm" type="time" value="20:00">
+<button class="btn bK" onclick="saveConfig()">Sauvegarder Config</button>
+<p id="configMsg"></p>
+</div>
+
+<!-- TIRAGES -->
+<div id="tirages" class="card" style="display:none">
+<h3>Tableau Tirage</h3>
+<input id="tNom" placeholder="Non tiraj (New York, Florida...)">
+<input id="tHeure" type="time">
+<button class="btn bB" onclick="addTirage()">+ Ajouter Tirage</button>
+<div id="tList"></div>
+</div>
+
+<!-- RESULTATS -->
+<div id="resultats" class="card" style="display:none">
+<h3>Tableau d'affichage Résultats</h3>
+<select id="rTirage"></select>
+<input id="rDate" type="date">
+<input id="r1er" placeholder="1er lot">
+<input id="r2em" placeholder="2em lot">
+<input id="r3em" placeholder="3em lot">
+<button class="btn bK" onclick="saveResultat()">Publier Résultat</button>
+<div id="rList"></div>
+</div>
+
+<!-- RAPPORT -->
+<div id="rapport" class="card" style="display:none">
+<h3>Rapport Vente</h3>
+<div style="display:flex;gap:6px">
+<input id="rapDu" type="date"><input id="rapAu" type="date">
+</div>
+<select id="rapTirage"><option value="tous">Tirage - Tous</option></select>
+<select id="rapVendeur"><option value="tous">Vendeurs - Tous</option></select>
+<button class="btn bK" onclick="genererRapport()">Générer Rapport</button>
+<div id="printArea" style="text-align:center">
+<div id="rapResult"></div>
+</div>
+<button class="btn bG" onclick="window.print()">🖨️ Imprimer Rapport - Gran ekriti Santre</button>
+</div>
+
+<!-- FICHES LIVE -->
+<div id="fiches" class="card" style="display:none">
 <h3>Fich Live - Total × Tiraj</h3>
-<div id="fichesLive">Chargement...</div>
+<div id="fichesLive"></div>
+<button class="btn bR" onclick="if(confirm('Efase tout fich?')) db.ref('fiches').remove()">Efase tout fich</button>
 </div>
-
-<div class="sync" id="syncStatus">SYNC AKTIF</div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyC...",
-  authDomain: "cd-lotto.firebaseapp.com",
-  databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",
-  projectId: "cd-lotto",
-  appId: "1:..."
-};
+const firebaseConfig={databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"};
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db=firebase.database();
 
-function addVendor(){
-  const name = document.getElementById('vendorName').value.trim();
-  if(!name) return alert("Mete non vandè");
-  db.ref('vendors/'+name).set({name:name,status:'OUVE',created:Date.now()});
-  document.getElementById('vendorName').value='';
+function showTab(id,btn){
+  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  document.getElementById(id).style.display='block';
+  document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
 }
-function toggleVendor(name,status){
-  db.ref('vendors/'+name+'/status').set(status);
+// VENDEURS
+function addVendeur(){
+  const n=vNom.value.trim(), p=vPass.value.trim();
+  if(!n||!p) return alert("Non ak modpas obligatwa");
+  db.ref('vendors/'+n).set({name:n,pass:p,status:'OUVE',created:Date.now()});
+  vNom.value=''; vPass.value='';
 }
-function deleteVendor(name){
-  if(confirm("Efase "+name+" ?")) db.ref('vendors/'+name).remove();
+db.ref('vendors').on('value',s=>{
+  vList.innerHTML=''; rapVendeur.innerHTML='<option value="tous">Vendeurs - Tous</option>';
+  s.forEach(c=>{
+    const v=c.val();
+    vList.innerHTML+=`<div class="row"><span><b>${v.name}</b> [${v.pass}] - <b class="${v.status=='OUVE'?'bG':'bR'}">${v.status}</b></span>
+    <span><button class="btn ${v.status=='OUVE'?'bR':'bG'}" onclick="db.ref('vendors/${v.name}/status').set('${v.status=='OUVE'?'FERME':'OUVE'}')">${v.status=='OUVE'?'Fèmen':'Louvri'}</button>
+    <button class="btn" onclick="if(confirm('Efase?')) db.ref('vendors/${v.name}').remove()">❌</button></span></div>`;
+    rapVendeur.innerHTML+=`<option value="${v.name}">${v.name}</option>`;
+  });
+});
+// CONFIG
+function saveConfig(){
+  db.ref('config').set({prix2:prix2.value,prix3:prix3.value,prix4:prix4.value,limite:limiteMise.value,heure:heureFerm.value});
+  configMsg.innerText='✅ Config sove!';
 }
-db.ref('vendors').on('value', snap=>{
-  const list = document.getElementById('vendorList');
-  list.innerHTML='';
-  snap.forEach(child=>{
-    const v = child.val();
-    list.innerHTML+=`<div class="vendor-row">
-      <span><b>${v.name}</b> - <span class="status-${v.status}">${v.status} ${v.status=='OUVE'?'🟢':'🔴'}</span></span>
-      <span>
-        ${v.status=='OUVE'?`<button class="btn btn-red" onclick="toggleVendor('${v.name}','FERME')">Fèmen</button>`:`<button class="btn btn-green" onclick="toggleVendor('${v.name}','OUVE')">Louvri</button>`}
-        <button class="btn" onclick="deleteVendor('${v.name}')">❌</button>
-      </span>
+db.ref('config').on('value',s=>{ if(!s.exists()) return; const c=s.val(); prix2.value=c.prix2; prix3.value=c.prix3; prix4.value=c.prix4; limiteMise.value=c.limite; heureFerm.value=c.heure; });
+// TIRAGES
+function addTirage(){
+  const n=tNom.value.trim(), h=tHeure.value;
+  if(!n) return;
+  db.ref('tirages/'+n).set({name:n,heure:h});
+  tNom.value='';
+}
+db.ref('tirages').on('value',s=>{
+  tList.innerHTML=''; rTirage.innerHTML=''; rapTirage.innerHTML='<option value="tous">Tirage - Tous</option>';
+  s.forEach(c=>{
+    const t=c.val();
+    tList.innerHTML+=`<div class="row"><b>${t.name}</b> - ${t.heure} <button class="btn" onclick="db.ref('tirages/${t.name}').remove()">❌</button></div>`;
+    rTirage.innerHTML+=`<option value="${t.name}">${t.name}</option>`;
+    rapTirage.innerHTML+=`<option value="${t.name}">${t.name}</option>`;
+  });
+});
+// RESULTATS
+function saveResultat(){
+  const t=rTirage.value,d=rDate.value;
+  if(!t||!d) return alert("Chwazi tiraj ak dat");
+  db.ref('resultats/'+d+'/'+t).set({lot1:r1er.value,lot2:r2em.value,lot3:r3em.value,date:d,tirage:t});
+  alert("Rezilta pibliye!");
+}
+db.ref('resultats').on('value',s=>{
+  rList.innerHTML='';
+  s.forEach(d=>{ d.forEach(t=>{
+    const r=t.val(); rList.innerHTML+=`<div class="row"><b>${r.date} ${r.tirage}</b>: ${r.lot1} - ${r.lot2} - ${r.lot3}</div>`;
+  })});
+});
+// FICHES LIVE - FIX undefined
+db.ref('fiches').on('value',s=>{
+  fichesLive.innerHTML='';
+  if(!s.exists()){fichesLive.innerHTML='Pa gen fich';return;}
+  s.forEach(c=>{
+    const f=c.val();
+    if(!f || typeof f!=='object' || f.boules===undefined) return; // ignore null / undefined bug
+    if(Array.isArray(f.boules)) return; // ancien format
+    fichesLive.innerHTML+=`<div class="row" style="flex-direction:column;align-items:flex-start;border:1px dashed #000;margin:5px 0">
+    <div><b>${f.vendor||'?'} - ID ${f.id||c.key}</b> | ${new Date(f.date).toLocaleString()} | ${f.tiraj||''}</div>
+    <div style="font-size:18px">${f.boules}</div>
+    <div class="grand">Total: ${f.total||0}$ × ${f.nbTiraj||1} = ${(f.total||0)*(f.nbTiraj||1)}$ <button class="btn bR" style="float:right" onclick="db.ref('fiches/${c.key}').remove()">Efase</button></div>
     </div>`;
   });
 });
-db.ref('fiches').on('value', snap=>{
-  const div = document.getElementById('fichesLive');
-  div.innerHTML='';
-  if(!snap.exists()){div.innerHTML='Pa gen fich';return;}
-  snap.forEach(child=>{
-    const f = child.val();
-    if(!f || !f.boules) return;
-    div.innerHTML+=`<div class="fiche-item">
-      <b>${f.vendor||'?'} - ${f.id||''}</b> | ${new Date(f.date).toLocaleString()}<br>
-      ${f.boules} <br>
-      <b>Total: ${f.total||0}$ × ${f.nbTiraj||1} tiraj = ${(f.total||0)*(f.nbTiraj||1)}$ </b>
-      <button onclick="db.ref('fiches/${child.key}').remove()" style="float:right">Efase</button>
-    </div>`;
+// RAPPORT
+function genererRapport(){
+  const du=new Date(rapDu.value), au=new Date(rapAu.value); const ft=rapTirage.value, fv=rapVendeur.value;
+  db.ref('fiches').once('value',s=>{
+    let vente=0, paye=0;
+    let html=`<h2 style="text-align:center">C&D VÉRITÉ LOTTO<br>RAPPORT</h2><p style="text-align:center">Du ${rapDu.value} Au ${rapAu.value}<br>Tirage: ${ft} - Vendeur: ${fv}</p><hr>`;
+    html+=`<table border="1" style="width:100%;border-collapse:collapse;text-align:center;font-size:18px"><tr><th>Date</th><th>Vendeur</th><th>Tiraj</th><th>Vente</th></tr>`;
+    s.forEach(c=>{
+      const f=c.val(); if(!f||!f.date) return;
+      const d=new Date(f.date);
+      if(rapDu.value && d<du) return; if(rapAu.value && d>au) return;
+      if(ft!=='tous' && f.tiraj && !f.tiraj.includes(ft)) return;
+      if(fv!=='tous' && f.vendor!==fv) return;
+      const v=(f.total||0)*(f.nbTiraj||1);
+      vente+=v;
+      html+=`<tr><td>${d.toLocaleDateString()}</td><td>${f.vendor}</td><td>${f.tiraj||''}</td><td>${v}$</td></tr>`;
+    });
+    html+=`</table><br>`;
+    const commission = vente*0.2; // 20%
+    const balance = vente - paye - commission;
+    html+=`<div style="text-align:center;font-size:22px;font-weight:bold">
+    Vente: ${vente}$<br>Commission (20%): ${commission}$<br>Payé: ${paye}$<br>Balance Net: ${balance}$</div>`;
+    rapResult.innerHTML=html;
   });
-});
+}
 </script>
 </body>
 </html>
