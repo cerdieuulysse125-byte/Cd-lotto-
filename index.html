@@ -1,84 +1,88 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D PROPRIO V99</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V100</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f2f2f2}.h{background:#000;color:#FFD700;padding:14px;text-align:center;font-weight:bold;font-size:20px}.card{background:#fff;padding:12px;margin:10px;border-radius:12px;box-shadow:0 2px 6px #0002;max-width:600px;margin:10px auto}input,select{padding:12px;border:2px solid #000;border-radius:10px;font-size:16px;width:100%;margin:5px 0}select{width:100%}.btn{background:#000;color:#FFD700;font-weight:bold;border:none;padding:13px;width:100%;margin:6px 0;border-radius:10px;font-size:17px}.btnY{background:#FFD700;color:#000}.line{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #ddd}.badge{padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px}.open{background:#0f0;color:#000}.ferme{background:#f00;color:#fff}.tab{display:flex;background:#000;position:sticky;top:0;z-index:9}.tab button{flex:1;padding:13px;background:#000;color:#FFD700;border:none;font-weight:bold}.tab button.active{background:#FFD700;color:#000}</style>
+<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f2f2f2}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold}.card{background:#fff;padding:12px;margin:8px;border-radius:12px;max-width:650px;margin:8px auto}input,select{padding:11px;border:2px solid #000;border-radius:9px;font-size:15px;width:100%;margin:4px 0}.btn{background:#000;color:#FFD700;font-weight:bold;border:none;padding:12px;width:100%;margin:5px 0;border-radius:10px}.btnY{background:#FFD700;color:#000}.tab{display:flex;background:#000;overflow:auto;position:sticky;top:0;z-index:9}.tab button{padding:11px 8px;background:#000;color:#FFD700;border:none;font-weight:bold;white-space:nowrap;font-size:12px}.tab button.active{background:#FFD700;color:#000}.line{display:flex;justify-content:space-between;align-items:center;padding:7px;border-bottom:1px solid #ddd;gap:6px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fermeAuto{background:#ffcccc;color:red;font-size:10px;font-weight:bold;padding:3px 6px;border-radius:6px}</style>
 </head><body>
-<div class="h">C&D VÉRITÉ LOTTO - PROPRIO V99</div>
-<div class="tab"><button class="active" onclick="show('dash',this)">Dashboard</button><button onclick="show('tirages',this)">Tirages</button><button onclick="show('vendeurs',this)">Vendeurs</button><button onclick="show('rapports',this)">Rapports</button></div>
-
-<div id="dash" class="card">
-<h3>📊 Dashboard</h3><div id="stat" style="text-align:center;font-weight:bold"></div>
-<h4>💰 Komisyon Vandè</h4>
-<div style="display:flex;gap:8px;align-items:center;border:2px solid #000;padding:10px;border-radius:10px">
-<input id="comPct" type="number" value="10" style="width:90px"> %
-<label style="display:flex;align-items:center;gap:5px"><input id="comActive" type="checkbox" checked style="width:auto"> Aktive</label>
-<button class="btn btnY" style="width:auto;padding:8px 14px" onclick="saveCom()">Save</button>
-</div>
+<div class="h">C&D VÉRITÉ LOTTO - PROPRIO V100 ULTRA</div>
+<div class="tab">
+<button class="active" onclick="show('dash',this)">Dash</button>
+<button onclick="show('tirages',this)">Tirages</button>
+<button onclick="show('resultats',this)">Résultats</button>
+<button onclick="show('limites',this)">Limites/Prix</button>
+<button onclick="show('vendeurs',this)">Vendeurs</button>
+<button onclick="show('rapports',this)">Rapports</button>
 </div>
 
-<div id="tirages" class="card" style="display:none"><h3>⏰ Tirages & Heures</h3><div id="tirageList"></div><button class="btn" onclick="saveTirages()">Sauvegarder</button></div>
-
-<div id="vendeurs" class="card" style="display:none"><h3>👥 Vendeurs</h3><div style="display:flex;gap:6px"><input id="newV" placeholder="Non vendeur"><input id="newP" placeholder="Modpas" value="1234" style="width:110px"><button class="btn btnY" style="width:auto" onclick="addV()">Ajoute</button></div><div id="vList"></div></div>
-
-<div id="rapports" class="card" style="display:none">
-<h3>📑 Rapports Global</h3>
-<label>Du</label><input id="du" type="date">
-<label>Au</label><input id="au" type="date">
-<label>Tirage</label>
-<select id="filtreTirage"><option value="tous">Tirage - Tous</option><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
-<label>Vendeur</label>
-<select id="filtreVendeur"><option value="tous">Vendeur - Tous</option></select>
-<button class="btn" onclick="genGlobal()" style="background:#000;color:#FFD700">Générer</button>
-<div id="rapG"></div>
-<div id="fichesG"></div>
-<button class="btn" style="margin-top:10px" onclick="imprimeGlobal()">Enprime Rapport</button>
-<div id="prtG" style="display:none"></div>
+<div id="dash" class="card"><h3>📊 Dashboard</h3><div id="stat"></div>
+<h4>💰 Komisyon</h4><div style="display:flex;gap:6px;align-items:center;border:2px solid #000;padding:8px;border-radius:10px">
+<input id="comPct" type="number" value="10" style="width:80px">% <label><input id="comActive" type="checkbox" checked style="width:auto">Aktive</label><button class="btn btnY" style="width:auto;padding:7px" onclick="saveCom()">Save</button></div>
+<label style="margin-top:10px"><input id="autoClose" type="checkbox" checked style="width:auto"> Fermeture Auto lè lè rive</label>
 </div>
+
+<div id="tirages" class="card" style="display:none"><h3>⏰ Tirages - FERMETURE AUTO</h3><div id="tirageList"></div><button class="btn" onclick="saveTirages()">Sauvegarder Heures</button></div>
+
+<div id="resultats" class="card" style="display:none">
+<h3>🎯 Résultats Tirages</h3>
+<label>Tirage</label><select id="resTirage"><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
+<label>Date</label><input id="resDate" type="date">
+<div class="grid2"><div><label>1er Lot</label><input id="r1" placeholder="45"></div><div><label>2e Lot</label><input id="r2" placeholder="12"></div></div>
+<div class="grid2"><div><label>3e Lot</label><input id="r3" placeholder="89"></div><div><label>Loto3</label><input id="rL3" placeholder="123"></div></div>
+<div class="grid2"><div><label>Loto4</label><input id="rL4" placeholder="1234"></div><div><label>Loto5</label><input id="rL5" placeholder="12345"></div></div>
+<button class="btn" onclick="publierResultat()" style="background:green;color:#fff">PUBLIER & KORIJE FICH OTOMATIK</button>
+<div id="resHist"></div>
+</div>
+
+<div id="limites" class="card" style="display:none">
+<h3>⚙️ Limites Mise</h3><div class="grid2">
+<div><label>Bolèt max</label><input id="limBolet" type="number" value="1000"></div>
+<div><label>Maryaj max</label><input id="limMaryaj" type="number" value="50"></div>
+<div><label>Loto3 max</label><input id="limL3" type="number" value="100"></div>
+<div><label>Loto4 max</label><input id="limL4" type="number" value="20"></div>
+<div><label>Loto5 max</label><input id="limL5" type="number" value="10"></div>
+</div>
+<h3>💲 Prix Jeux</h3><div class="grid2">
+<div><label>1er Lot x</label><input id="p1" type="number" value="50"></div>
+<div><label>2e Lot x</label><input id="p2" type="number" value="20"></div>
+<div><label>3e Lot x</label><input id="p3" type="number" value="10"></div>
+<div><label>Maryaj x</label><input id="pM" type="number" value="1000"></div>
+<div><label>Loto3 x</label><input id="pL3" type="number" value="500"></div>
+<div><label>Loto4 x</label><input id="pL4" type="number" value="5000"></div>
+<div><label>Loto5 x</label><input id="pL5" type="number" value="25000"></div>
+</div>
+<button class="btn" onclick="saveLimitesPrix()">Sauvegarder Limites & Prix</button>
+</div>
+
+<div id="vendeurs" class="card" style="display:none"><h3>👥 Vendeurs</h3><div style="display:flex;gap:6px"><input id="newV" placeholder="Non"><input id="newP" value="1234" style="width:90px"><button class="btn btnY" style="width:auto" onclick="addV()">+</button></div><div id="vList"></div></div>
+
+<div id="rapports" class="card" style="display:none"><h3>📑 Rapports avec Gains</h3>
+<label>Du</label><input id="du" type="date"><label>Au</label><input id="au" type="date">
+<label>Tirage</label><select id="filtreTirage"><option value="tous">Tous</option><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
+<label>Vendeur</label><select id="filtreVendeur"><option value="tous">Tous</option></select>
+<button class="btn" onclick="genGlobal()">Générer</button><div id="rapG"></div><div id="fichesG"></div><button class="btn" onclick="imprimeGlobal()">Enprime</button></div>
 
 <script>
 const firebaseConfig={databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"}; firebase.initializeApp(firebaseConfig); const db=firebase.database();
 let cfg={},vendorsList={};
-
-function show(id,btn){['dash','tirages','vendeurs','rapports'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none'); document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(id==='rapports') loadVendeursForFiltre();}
-
-db.ref('config').on('value',s=>{cfg=s.val()||{}; renderTirages(); renderStat(); const com=cfg.commission; if(com){ document.getElementById('comPct').value=com.pct||10; document.getElementById('comActive').checked=com.active!==false; }});
-function renderStat(){const t=cfg.tirages||{}; const h=cfg.heures||{}; const com=cfg.commission||{pct:10,active:true}; document.getElementById('stat').innerHTML=`Heures: GA ${h.gaMidi||'--'}/${h.gaSoir||'--'} FL ${h.flMidi||'--'}/${h.flSoir||'--'} NY ${h.nyMidi||'--'}/${h.nySoir||'--'}<br>Etat: ${Object.entries(t).map(([k,v])=>k+':'+v).join(' | ')||'Tout OUVE'}<br>Komisyon: ${com.pct||10}% ${com.active!==false?'✅':'❌'}`;}
-function renderTirages(){const heures=cfg.heures||{}; const etat=cfg.tirages||{}; const list=[{id:'gaMidi',label:'GA midi'},{id:'gaSoir',label:'GA soir'},{id:'flMidi',label:'FL midi'},{id:'flSoir',label:'FL soir'},{id:'nyMidi',label:'NY midi'},{id:'nySoir',label:'NY soir'}]; let html=''; list.forEach(l=>{ html+=`<div class="line"><b>${l.label}</b><input id="h_${l.id}" type="time" value="${heures[l.id]||''}" style="width:125px"><select id="e_${l.id}" style="width:105px"><option value="OUVE" ${etat[l.id]!=='FERME'?'selected':''}>OUVE</option><option value="FERME" ${etat[l.id]==='FERME'?'selected':''}>FERME</option></select></div>`; }); document.getElementById('tirageList').innerHTML=html;}
-function saveTirages(){const heures={}; const tirages={}; ['gaMidi','gaSoir','flMidi','flSoir','nyMidi','nySoir'].forEach(id=>{ heures[id]=document.getElementById('h_'+id).value; tirages[id]=document.getElementById('e_'+id).value; }); db.ref('config/heures').set(heures); db.ref('config/tirages').set(tirages).then(()=>alert('Sove!')); }
-function saveCom(){const pct=parseInt(document.getElementById('comPct').value)||10; const active=document.getElementById('comActive').checked; db.ref('config/commission').set({pct,active}).then(()=>alert('Komisyon '+pct+'% '+(active?'Aktive':'Dezaktive')));}
-
-db.ref('vendors').on('value',s=>{vendorsList=s.val()||{}; let html=''; Object.entries(vendorsList).forEach(([k,v])=>{ html+=`<div class="line"><span><b>${k}</b> <span class="badge ${v.status==='FERME'?'ferme':'open'}">${v.status||'OUVE'}</span></span><span><button onclick="toggleV('${k}','${v.status||'OUVE'}')" style="padding:6px">${v.status==='FERME'?'Ouvri':'Fèmen'}</button> <button onclick="delV('${k}')" style="padding:6px;background:red;color:#fff;border:none;border-radius:6px">X</button></span></div>`; }); document.getElementById('vList').innerHTML=html||'Pa gen vandè'; loadVendeursForFiltre();});
-function addV(){const n=document.getElementById('newV').value.trim(); const p=document.getElementById('newP').value.trim()||'1234'; if(!n)return; db.ref('vendors/'+n).set({name:n,pass:p,status:'OUVE'}).then(()=>{document.getElementById('newV').value='';});}
+function show(id,btn){['dash','tirages','resultats','limites','vendeurs','rapports'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none'); document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');}
+db.ref('config').on('value',s=>{cfg=s.val()||{}; renderTirages(); renderStat();
+ const com=cfg.commission||{pct:10,active:true}; comPct.value=com.pct||10; comActive.checked=com.active!==false;
+ autoClose.checked=cfg.autoClose!==false;
+ const lim=cfg.limites||{}; limBolet.value=lim.bolet||1000; limMaryaj.value=lim.maryaj||50; limL3.value=lim.loto3||100; limL4.value=lim.loto4||20; limL5.value=lim.loto5||10;
+ const prx=cfg.prix||{}; p1.value=prx.p1||50; p2.value=prx.p2||20; p3.value=prx.p3||10; pM.value=prx.maryaj||1000; pL3.value=prx.loto3||500; pL4.value=prx.loto4||5000; pL5.value=prx.loto5||25000;
+});
+function isPast(h){if(!h)return false; const now=new Date(); const [hh,mm]=h.split(':').map(Number); if(isNaN(hh))return false; const f=new Date(); f.setHours(hh,mm||0,0,0); return now>=f;}
+function renderStat(){const h=cfg.heures||{}; stat.innerHTML=`GA ${h.gaMidi||'--'}/${h.gaSoir||'--'} FL ${h.flMidi||'--'}/${h.flSoir||'--'} NY ${h.nyMidi||'--'}/${h.nySoir||'--'}<br>Auto: ${cfg.autoClose!==false?'ON':'OFF'}`;}
+function renderTirages(){const heures=cfg.heures||{}; const etat=cfg.tirages||{}; const list=[{id:'gaMidi',label:'GA midi'},{id:'gaSoir',label:'GA soir'},{id:'flMidi',label:'FL midi'},{id:'flSoir',label:'FL soir'},{id:'nyMidi',label:'NY midi'},{id:'nySoir',label:'NY soir'}]; let html=''; list.forEach(l=>{ const hs=heures[l.id]||''; const past=isPast(hs)&&cfg.autoClose!==false; const st=etat[l.id]||'OUVE'; html+=`<div class="line"><b>${l.label}</b><input id="h_${l.id}" type="time" value="${hs}" style="width:115px"><select id="e_${l.id}" style="width:95px"><option ${st==='OUVE'?'selected':''}>OUVE</option><option ${st==='FERME'?'selected':''}>FERME</option></select>${past?'<span class="fermeAuto">FERME AUTO</span>':''}</div>`; }); tirageList.innerHTML=html;}
+function saveTirages(){const heures={},tirages={}; ['gaMidi','gaSoir','flMidi','flSoir','nyMidi','nySoir'].forEach(id=>{heures[id]=document.getElementById('h_'+id).value; tirages[id]=document.getElementById('e_'+id).value;}); db.ref('config/heures').set(heures); db.ref('config/tirages').set(tirages); db.ref('config/autoClose').set(autoClose.checked); alert('Sove!');}
+function saveCom(){db.ref('config/commission').set({pct:parseInt(comPct.value)||10,active:comActive.checked}).then(()=>alert('Sove'));}
+function saveLimitesPrix(){db.ref('config/limites').set({bolet:parseInt(limBolet.value)||1000,maryaj:parseInt(limMaryaj.value)||50,loto3:parseInt(limL3.value)||100,loto4:parseInt(limL4.value)||20,loto5:parseInt(limL5.value)||10}); db.ref('config/prix').set({p1:parseInt(p1.value)||50,p2:parseInt(p2.value)||20,p3:parseInt(p3.value)||10,maryaj:parseInt(pM.value)||1000,loto3:parseInt(pL3.value)||500,loto4:parseInt(pL4.value)||5000,loto5:parseInt(pL5.value)||25000}); alert('Limites & Prix sove');}
+function publierResultat(){const tirage=resTirage.value; const date=resDate.value||new Date().toISOString().split('T')[0]; if(!r1.value)return alert('Mete 1er lot'); const key=tirage.replace(/\s/g,'_')+'_'+date; db.ref('resultats/'+key).set({tirage,date,r1:r1.value,r2:r2.value,r3:r3.value,l3:rL3.value,l4:rL4.value,l5:rL5.value,ts:Date.now()}).then(()=>{alert('Pibliye! Koreksyon otomatik...'); korijeToutFich({tirage,r1:r1.value,r2:r2.value,r3:r3.value,l3:rL3.value,l4:rL4.value,l5:rL5.value});});}
+function korijeToutFich(res){db.ref('fiches').once('value',snap=>{let c=0; Object.entries(snap.val()||{}).forEach(([id,f])=>{if(f.tiraj&&f.tiraj.includes(res.tirage)){let gain=0; const prix=cfg.prix||{p1:50,p2:20,p3:10,maryaj:1000,loto3:500,loto4:5000,loto5:25000}; (f.details||[]).forEach(d=>{const b=(d.boul||'').toString(); const m=parseInt(d.mise)||0; const j=(d.jeu||'').toLowerCase(); if(j.includes('maryaj')){if((b.includes(res.r1)&&b.includes(res.r2))||(b.includes(res.r1)&&b.includes(res.r3))||(b.includes(res.r2)&&b.includes(res.r3))) gain+=m*prix.maryaj;} else if(j.includes('loto3')||b.length==3){if(b==res.l3)gain+=m*prix.loto3;} else if(j.includes('loto4')||b.length==4){if(b==res.l4)gain+=m*prix.loto4;} else if(j.includes('loto5')||b.length==5){if(b==res.l5)gain+=m*prix.loto5;} else{if(b==res.r1)gain+=m*prix.p1; else if(b==res.r2)gain+=m*prix.p2; else if(b==res.r3)gain+=m*prix.p3;}}); db.ref('fiches/'+id+'/gain').set(gain); c++;}}); alert(c+' fich korije');});}
+db.ref('resultats').on('value',s=>{let html='<h4>Istorik</h4>'; Object.values(s.val()||{}).sort((a,b)=>b.ts-a.ts).slice(0,10).forEach(r=>{html+=`<div class="line" style="font-size:12px"><span><b>${r.tirage} ${r.date}</b> 1:${r.r1} 2:${r.r2} 3:${r.r3} L3:${r.l3} L4:${r.l4} L5:${r.l5}</span></div>`;}); resHist.innerHTML=html; resDate.value=new Date().toISOString().split('T')[0];});
+db.ref('vendors').on('value',s=>{vendorsList=s.val()||{}; let html=''; Object.entries(vendorsList).forEach(([k,v])=>{html+=`<div class="line"><b>${k}</b><span><button onclick="toggleV('${k}','${v.status||'OUVE'}')" style="padding:5px">${v.status==='FERME'?'Ouvri':'Fèmen'}</button> <button onclick="delV('${k}')" style="padding:5px;background:red;color:#fff;border:none;border-radius:5px">X</button></span></div>`;}); vList.innerHTML=html; const sel=filtreVendeur; const cur=sel.value; sel.innerHTML='<option value="tous">Tous</option>'; Object.keys(vendorsList).forEach(k=>sel.innerHTML+=`<option value="${k}">${k}</option>`); sel.value=cur||'tous'; if(!du.value)du.value=new Date().toISOString().split('T')[0]; if(!au.value)au.value=new Date().toISOString().split('T')[0];});
+function addV(){if(!newV.value.trim())return; db.ref('vendors/'+newV.value.trim()).set({name:newV.value.trim(),pass:newP.value.trim()||'1234',status:'OUVE'}).then(()=>newV.value='');}
 function toggleV(n,st){db.ref('vendors/'+n+'/status').set(st==='FERME'?'OUVE':'FERME');}
-function delV(n){if(confirm('Efase '+n+'?')) db.ref('vendors/'+n).remove();}
-function loadVendeursForFiltre(){const sel=document.getElementById('filtreVendeur'); const cur=sel.value; sel.innerHTML='<option value="tous">Vendeur - Tous</option>'; Object.keys(vendorsList).forEach(k=>{ sel.innerHTML+=`<option value="${k}">${k}</option>`; }); if(cur) sel.value=cur; const today=new Date().toISOString().split('T')[0]; if(!document.getElementById('du').value) document.getElementById('du').value=today; if(!document.getElementById('au').value) document.getElementById('au').value=today;}
-
-function genGlobal(){
- db.ref('fiches').once('value',snap=>{
-  const all=snap.val()||{}; const duVal=document.getElementById('du').value; const auVal=document.getElementById('au').value; const fT=document.getElementById('filtreTirage').value; const fV=document.getElementById('filtreVendeur').value;
-  let total=0; let html=''; let count=0; let parVendeur={};
-  Object.values(all).forEach(f=>{
-   const d=new Date(f.date); if(duVal && d < new Date(duVal)) return; if(auVal && d > new Date(auVal+'T23:59:59')) return;
-   if(fT!=='tous' &&!(f.tiraj||'').includes(fT)) return;
-   if(fV!=='tous' && f.vendor!==fV) return;
-   const vente=(f.total||0)*(f.nbTiraj||1); total+=vente; count++; parVendeur[f.vendor]=(parVendeur[f.vendor]||0)+vente;
-   html+=`<div class="line"><span><b>${f.vendor}</b> - ${f.tiraj} - ${vente}$</span><span style="font-size:12px">${new Date(f.date).toLocaleString()}</span></div>`;
-  });
-  const com=cfg.commission||{pct:10,active:true}; const pct=com.active!==false?(com.pct||10):0; const comVal=Math.round(total*pct/100);
-  let detailVendeur=''; Object.entries(parVendeur).forEach(([k,v])=>{ detailVendeur+=`${k}: ${v}$ | `; });
-  document.getElementById('rapG').innerHTML=`<div id="rapPrint" style="border:3px solid #000;padding:12px;text-align:center;background:#fff;margin:10px 0">
-  <h3>RAPPORT ${duVal} - ${auVal}</h3>
-  <div>Tirage: ${fT} | Vendeur: ${fV}</div><hr>
-  <div style="font-size:20px;font-weight:bold">Fiches: ${count}</div>
-  <div style="font-size:22px;font-weight:bold">Vente Totale: ${total}$</div>
-  <div>Komisyon (${pct}%): ${comVal}$</div>
-  <div style="font-size:22px;font-weight:bold;background:#000;color:#FFD700;padding:8px;border-radius:8px;margin:8px 0">A PEYE / Net: ${total-comVal}$</div>
-  <div style="font-size:12px">${detailVendeur}</div>
-  <div style="font-size:11px;margin-top:6px">Genere: ${new Date().toLocaleString()}</div>
-  </div>`;
-  document.getElementById('fichesG').innerHTML=html||'<div style="text-align:center;padding:10px">Pa gen fich pou filtè sa yo</div>';
- });
-}
-function imprimeGlobal(){const r=document.getElementById('rapPrint'); const l=document.getElementById('fichesG').innerHTML; if(!r)return alert('Générer dabor'); document.getElementById('prtG').innerHTML=r.outerHTML+'<hr>'+l; document.getElementById('prtG').style.display='block'; const w=window.open('','','width=800'); w.document.write('<html><body>'+document.getElementById('prtG').innerHTML+'</body></html>'); w.document.close(); w.print();}
-</script>
-</body></html>
+function delV(n){if(confirm('Efase '+n+'?'))db.ref('vendors/'+n).remove();}
+function genGlobal(){db.ref('fiches').once('value',snap=>{let vente=0,gain=0,count=0,html=''; Object.values(snap.val()||{}).forEach(f=>{const d=new Date(f.date); if(du.value&&d<new Date(du.value))return; if(au.value&&d>new Date(au.value+'T23:59:59'))return; if(filtreTirage.value!=='tous'&&!(f.tiraj||'').includes(filtreTirage.value))return; if(filtreVendeur.value!=='tous'&&f.vendor!==filtreVendeur.value)return; vente+=(f.total||0)*(f.nbTiraj||1); gain+=f.gain||0; count++; html+=`<div class="line"><span><b>${f.vendor}</b> ${f.tiraj} ${(f.total||0)*(f.nbTiraj||1)}$ ${f.gain?'<b style="color:green">WIN:'+f.gain+'$</b>':''}</span></div>`;}); const com=cfg.commission||{pct:10,active:true}; const pct=com.active!==false?com.pct:0; const comV=Math.round(vente*pct/100); rapG.innerHTML=`<div style="border:3px solid #000;padding:10px;text-align:center;background:#fff"><div>Vente:${vente}$ Gains:${gain}$ Com:${comV}$</div><div style="background:#000;color:#FFD700;padding:8px;font-size:20px;font-weight:bold">NET:${vente-comV-gain}$</div></div>`; fichesG.innerHTML=html;});}
+function imprimeGlobal(){const w=window.open('','','width=800'); w.document.write('<html><body>'+rapG.innerHTML+fichesG.innerHTML+'</body></html>'); w.document.close(); w.print();}
+</script></body></html>
