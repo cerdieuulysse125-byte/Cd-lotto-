@@ -1,164 +1,37 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V112 AUTO</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f2f2f2}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold}.card{background:#fff;padding:14px;margin:10px;border-radius:14px;max-width:650px;margin:10px auto}input,select{padding:12px;border:2px solid #000;border-radius:12px;width:100%;margin:4px 0;font-size:16px;background:#fff}label{font-size:12px;font-weight:bold;display:block}.btn{background:#000;color:#FFD700;font-weight:bold;border:none;padding:14px;width:100%;margin:8px 0;border-radius:12px;font-size:16px}.tab{display:flex;background:#000;overflow-x:auto;position:sticky;top:0;z-index:99}.tab button{padding:12px 14px;background:#000;color:#FFD700;border:none;font-weight:bold;font-size:13px;white-space:nowrap}.tab button.active{background:#FFD700;color:#000}.line{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #ddd;gap:8px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.badge{padding:6px 12px;border-radius:20px;font-weight:bold;font-size:12px;border:none}.log{background:#111;color:#0f0;padding:10px;border-radius:8px;font-size:11px;white-space:pre-wrap;max-height:250px;overflow:auto;margin-top:8px}</style>
-</head><body>
-<div class="h">C&D PROPRIO V112 AUTO - MINWI + KORIJE AUTO</div>
-<div class="tab">
-<button class="active" onclick="showTab('tirages',this)">Tirages</button>
-<button onclick="showTab('resultats',this)">Résultats</button>
-<button onclick="showTab('limites',this)">Limites/Prix</button>
-<button onclick="showTab('vendeurs',this)">Vendeurs</button>
-<button onclick="showTab('rapports',this)">Rapports</button>
-</div>
-
-<div id="tirages" class="card">
-<h3>⏰ Heures - Heure EST Auto</h3>
-<div id="heureEST" style="font-size:12px;background:#e3f2fd;padding:8px;border-radius:8px;margin-bottom:8px"></div>
-<div style="background:#fff3cd;padding:8px;border-radius:8px;font-size:11px;margin-bottom:8px">✅ RÈG: A 12:00 AM minwi (EST), tout tiraj ap ouvè pou kont yo. Yo ap fèmen sèlman lè yo rive nan lè ou mete a. Ou pa bezwen manyen OUVE/FERMÉ ankò!</div>
-<div id="tirageList"></div>
-<label><input id="autoClose" type="checkbox" checked style="width:auto"> Fermeture Auto EST Aktive</label>
-<label><input id="autoOpen" type="checkbox" checked style="width:auto"> Ouverture Auto a Minwi Aktive</label>
-<button class="btn" onclick="saveTirages()">Sauvegarder</button>
-<button class="btn" style="background:#0a0;color:#fff" onclick="forceOpenAll()">☀️ OUVÈ TOUT KOUNYA (pou demen)</button>
-</div>
-
-<div id="resultats" class="card" style="display:none">
-<h3>🎯 Résultats - Auto Korije</h3>
-<select id="resTirage"><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select>
-<input id="resDate" type="date">
-<div class="grid2"><div><label>1er Lot</label><input id="r1"></div><div><label>2e Lot</label><input id="r2"></div></div>
-<div class="grid2"><div><label>3e Lot</label><input id="r3"></div><div><label>Loto3</label><input id="rL3"></div></div>
-<div class="grid2"><div><label>Loto4</label><input id="rL4"></div><div><label>Loto5</label><input id="rL5"></div></div>
-<button class="btn" onclick="publierResultat()" style="background:green;color:#fff;font-size:18px">PUBLIER - fich ap korije otomatik</button>
-<div id="korijeStatus" style="padding:10px;background:#000;color:#FFD700;border-radius:8px;min-height:40px">Tann...</div>
-<div id="logBox" class="log" style="display:none"></div>
-<div id="resHist"></div>
-</div>
-
-<div id="limites" class="card" style="display:none">
-<h3>Limites & Prix</h3>
-<div class="grid2"><div><label>Borlette 1000</label><input id="limBolet" type="number" value="1000"></div><div><label>Mariage 50</label><input id="limMaryaj" type="number" value="50"></div></div>
-<div class="grid2"><div><label>Lotto3 100</label><input id="limL3" type="number" value="100"></div><div><label>Lotto4 20</label><input id="limL4" type="number" value="20"></div></div>
-<div style="max-width:49%"><label>Lotto5 10</label><input id="limL5" type="number" value="10"></div>
-<div class="grid2"><div><label>1er lot 50</label><input id="p1" type="number" value="50"></div><div><label>2e lot 20</label><input id="p2" type="number" value="20"></div></div>
-<div class="grid2"><div><label>3e lot 10</label><input id="p3" type="number" value="10"></div><div><label>Mariage 1000</label><input id="pM" type="number" value="1000"></div></div>
-<div class="grid2"><div><label>Lotto3 500</label><input id="pL3" type="number" value="500"></div><div><label>Lotto4 5000</label><input id="pL4" type="number" value="5000"></div></div>
-<div style="max-width:49%"><label>Lotto5 25000</label><input id="pL5" type="number" value="25000"></div>
-<div style="display:flex;gap:10px;align-items:center;margin-top:12px"><div><label>Com %</label><input id="comPct" type="number" value="10" style="width:90px"></div><div><label>Aktive</label><input id="comActive" type="checkbox" checked style="width:20px;height:20px"></div><button class="btn" style="width:auto" onclick="saveCom()">Save</button></div>
-<button class="btn" onclick="saveLimitesPrix()">Sauvegarder</button>
-</div>
-
-<div id="vendeurs" class="card" style="display:none"><h3>Vendeurs OUVE/FERMÉ</h3><div style="display:flex;gap:6px"><input id="newV" placeholder="Non"><input id="newP" value="1234" style="width:90px"><button class="btn" style="width:auto;background:#FFD700;color:#000" onclick="addV()">+</button></div><div id="vList"></div></div>
-<div id="rapports" class="card" style="display:none"><h3>📑 Rapports</h3><input id="du" type="date"><input id="au" type="date"><select id="filtreTirage"><option value="tous">Tous</option><option>GA midi</option><option>GA soir</option><option>FL midi</option><option>FL soir</option><option>NY midi</option><option>NY soir</option></select><select id="filtreVendeur"><option value="tous">Tous</option></select><button class="btn" onclick="genGlobal()">Générer</button><div id="rapG"></div><div id="fichesG"></div></div>
-
-<script>
-const firebaseConfig={databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com"}; firebase.initializeApp(firebaseConfig); const db=firebase.database();
-let cfg={}, lastKorijeKey='';
-function showTab(id,btn){['tirages','resultats','limites','vendeurs','rapports'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none'); document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active');}
-function getLocalDateStr(){const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function getDateStrFromTS(ts){const d=new Date(ts); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function getESTNow(){const now=new Date(); const estStr=now.toLocaleString('en-US',{timeZone:'America/Port-au-Prince',hour12:false}); const parts=estStr.split(', '); const dPart=parts[0]; const tPart=parts[1]||'00:00:00'; const [h,m,s]=tPart.split(':').map(Number); return {full:estStr,dateStr:dPart, h:h, m:m, s:s, hm:h*60+m};}
-function isPastEST(hs){if(!hs) return false; const [hh,mm]=hs.split(':').map(Number); return getESTNow().hm >= (hh*60+(mm||0));}
-function updateESTClock(){
-  const est=getESTNow();
-  const el=document.getElementById('heureEST');
-  if(el) el.innerHTML='⏰ EST: <b>'+est.full+'</b> | Règ: Ouvè a 00:00, fèmen nan lè tiraj';
-  // AUTO OUVÈ A MINWI
-  if(cfg.autoOpen!==false && est.h===0 && est.m<5){
-    const today=getLocalDateStr();
-    const lastOpen=cfg.lastAutoOpen||'';
-    if(lastOpen!==today){
-      forceOpenAll(true);
-      db.ref('config/lastAutoOpen').set(today);
-    }
-  }
-  renderTirages();
-}
-setInterval(updateESTClock,15000);
-
-db.ref('config').on('value',s=>{cfg=s.val()||{}; const lim=cfg.limites||{}; if(lim.bolet) limBolet.value=lim.bolet; if(lim.maryaj) limMaryaj.value=lim.maryaj; if(lim.loto3) limL3.value=lim.loto3; if(lim.loto4) limL4.value=lim.loto4; if(lim.loto5) limL5.value=lim.loto5; const prx=cfg.prix||{}; if(prx.p1) p1.value=prx.p1; if(prx.p2) p2.value=prx.p2; if(prx.p3) p3.value=prx.p3; if(prx.maryaj) pM.value=prx.maryaj; if(prx.loto3) pL3.value=prx.loto3; if(prx.loto4) pL4.value=prx.loto4; if(prx.loto5) pL5.value=prx.loto5; comPct.value=(cfg.commission||{}).pct||10; comActive.checked=(cfg.commission||{}).active!==false; autoClose.checked=cfg.autoClose!==false; if(document.getElementById('autoOpen')) autoOpen.checked=cfg.autoOpen!==false; const today=getLocalDateStr(); if(!du.value) du.value=today; if(!au.value) au.value=today; if(!resDate.value) resDate.value=today; renderTirages();});
-
-function renderTirages(){
-  const he=cfg.heures||{}; const et=cfg.tirages||{};
-  const list=[{id:'gaMidi',l:'GA midi',h:'12:30'},{id:'gaSoir',l:'GA soir',h:'18:30'},{id:'flMidi',l:'FL midi',h:'13:30'},{id:'flSoir',l:'FL soir',h:'21:30'},{id:'nyMidi',l:'NY midi',h:'14:30'},{id:'nySoir',l:'NY soir',h:'22:30'}];
-  let html=''; list.forEach(o=>{
-    const val=he[o.id]||o.h;
-    const manualFerm = et[o.id]==='FERME';
-    const autoFerm = cfg.autoClose!==false && isPastEST(val);
-    const isFerme = manualFerm || autoFerm;
-    html+='<div class="line"><b>'+o.l+'</b><input id="h_'+o.id+'" type="time" value="'+val+'" style="width:110px"><select id="e_'+o.id+'" style="width:85px"><option '+(et[o.id]!=='FERME'?'selected':'')+'>OUVE</option><option '+(et[o.id]==='FERME'?'selected':'')+'>FERME</option></select>'+(isFerme?'<span style=color:red;font-size:10px;font-weight:bold>FERMÉ</span>':'<span style=color:green;font-size:10px;font-weight:bold>OUVE</span>')+'</div>';
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V117</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, get, set, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+const cfg={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"};
+const app=initializeApp(cfg); const db=getDatabase(app);
+let config={};
+function getEST(){ const now=new Date(); const est=new Date(now.toLocaleString("en-US",{timeZone:"America/New_York"})); const y=est.getFullYear(); const m=String(est.getMonth()+1).padStart(2,'0'); const d=String(est.getDate()).padStart(2,'0'); return {date:`${y}-${m}-${d}`, hm:est.getHours()*60+est.getMinutes(), full:est.toLocaleString(), h:est.getHours()}; }
+function render(){
+  const he=config.heures||{gaMidi:"12:15",flMidi:"13:15",nyMidi:"14:15",gaSoir:"18:15",flSoir:"21:20",nySoir:"21:30"};
+  const ti=config.tirages||{}; const list=[{id:'gaMidi',l:'GA MIDI',d:'12:15'},{id:'flMidi',l:'FL MIDI',d:'13:15'},{id:'nyMidi',l:'NY MIDI',d:'14:15'},{id:'gaSoir',l:'GA SOIR',d:'18:15'},{id:'flSoir',l:'FL SOIR',d:'21:20'},{id:'nySoir',l:'NY SOIR',d:'21:30'}];
+  let html=''; const est=getEST();
+  list.forEach(o=>{
+    const val=he[o.id]||o.d; const [hh,mm]=val.split(':').map(Number); const past=est.hm >= (hh*60+mm);
+    const st=ti[o.id]||'OUVE';
+    html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #ddd;gap:8px"><b style="width:90px">${o.l}</b><input id="h_${o.id}" type="time" value="${val}" style="width:115px;padding:8px;border:2px solid #000;border-radius:8px"><select id="e_${o.id}" style="width:90px;padding:8px;border:2px solid #000;border-radius:8px"><option ${st!=='FERME'?'selected':''}>OUVE</option><option ${st==='FERME'?'selected':''}>FERME</option></select>${past?'<span style=color:red;font-size:10px;font-weight:bold>FERMÉ</span>':'<span style=color:green;font-size:10px;font-weight:bold>OUVE</span>'}</div>`;
   });
-  document.getElementById('tirageList').innerHTML=html;
+  document.getElementById('tirajList').innerHTML=html;
+  document.getElementById('heureEST').innerHTML=`⏰ EST: ${est.full} | Date EST: ${est.date} - Règ: OUVE a 00:00, fèmen nan lè`;
+  // AUTO OUVE A MINWI
+  const today=est.date; const last=config.lastAutoOpen||'';
+  if(last!==today && config.autoOpen!==false){ set(ref(db,'config/tirages'),{gaMidi:'OUVE',gaSoir:'OUVE',flMidi:'OUVE',flSoir:'OUVE',nyMidi:'OUVE',nySoir:'OUVE'}); set(ref(db,'config/lastAutoOpen'),today); }
 }
-
-function saveTirages(){let he={},ti={}; ['gaMidi','gaSoir','flMidi','flSoir','nyMidi','nySoir'].forEach(id=>{he[id]=document.getElementById('h_'+id).value; ti[id]=document.getElementById('e_'+id).value;}); db.ref('config/heures').set(he); db.ref('config/tirages').set(ti); db.ref('config/autoClose').set(autoClose.checked); db.ref('config/autoOpen').set(autoOpen.checked); alert('Sove - EST');}
-function forceOpenAll(silent){const openState={gaMidi:'OUVE',gaSoir:'OUVE',flMidi:'OUVE',flSoir:'OUVE',nyMidi:'OUVE',nySoir:'OUVE'}; db.ref('config/tirages').set(openState); if(!silent) alert('Tout tiraj OUVE kounya! Yo ap fèmen nan lè yo chak'); renderTirages();}
-function saveCom(){db.ref('config/commission').set({pct:parseInt(comPct.value)||10,active:comActive.checked}).then(()=>alert('Sove'));}
-function saveLimitesPrix(){db.ref('config/limites').set({bolet:parseInt(limBolet.value),maryaj:parseInt(limMaryaj.value),loto3:parseInt(limL3.value),loto4:parseInt(limL4.value),loto5:parseInt(limL5.value)}); db.ref('config/prix').set({p1:parseInt(p1.value),p2:parseInt(p2.value),p3:parseInt(p3.value),maryaj:parseInt(pM.value),loto3:parseInt(pL3.value),loto4:parseInt(pL4.value),loto5:parseInt(pL5.value)}); alert('Sove');}
-
-function publierResultat(){
- if(!r1.value) return alert('Mete 1er lot');
- const tirage=resTirage.value; const date=resDate.value||getLocalDateStr();
- const key=tirage.replace(/\s/g,'_')+'_'+date;
- const data={tirage,date,r1:r1.value.trim().padStart(2,'0'),r2:r2.value.trim().padStart(2,'0'),r3:r3.value.trim().padStart(2,'0'),l3:rL3.value.trim(),l4:rL4.value.trim(),l5:rL5.value.trim(),ts:Date.now()};
- db.ref('resultats/'+key).set(data).then(()=>{ document.getElementById('korijeStatus').innerHTML='Pibliye '+tirage+' - fich ap korije otomatik...'; });
-}
-
-// AUTO KORIJE LÈ REZILTA AFICHE - SA OU TE MANDE A
-db.ref('resultats').on('child_added',snap=>{
-  const res=snap.val(); if(!res) return;
-  const key=snap.key;
-  if(key===lastKorijeKey) return;
-  lastKorijeKey=key;
-  setTimeout(()=>korijeFonksyon(res), 800);
-});
-db.ref('resultats').on('child_changed',snap=>{
-  const res=snap.val(); if(!res) return;
-  korijeFonksyon(res);
-});
-
-function korijeFonksyon(res){
- const prx={p1:parseInt(p1.value)||50,p2:parseInt(p2.value)||20,p3:parseInt(p3.value)||10,maryaj:parseInt(pM.value)||1000,loto3:parseInt(pL3.value)||500,loto4:parseInt(pL4.value)||5000,loto5:parseInt(pL5.value)||25000};
- document.getElementById('logBox').style.display='block';
- let log='🔄 AUTO KORIJE '+res.tirage+' '+res.date+' 1er='+res.r1+'\n';
- db.ref('fiches').once('value',snap=>{
-   const all=snap.val()||{}; let c=0,win=0,totalGain=0;
-   Object.keys(all).forEach(id=>{
-     const f=all[id]; if(!f.tiraj) return; if(!f.tiraj.includes(res.tirage)) return;
-     // Tcheke dat si genyen
-     if(f.dateStr && res.date && f.dateStr!==res.date) return;
-     let g=0; let details=f.details||[];
-     if(details.length===0 && f.ticketHtml){
-       const regex=/(\d{2,5})\D{1,8}(\d+)\$/g; let m;
-       while((m=regex.exec(f.ticketHtml))!==null){ if(m[1].length>=2) details.push({boul:m[1],mise:parseInt(m[2]),jeu:'Borlette'}); }
-     }
-     details.forEach(d=>{
-       const boul=(d.boul||'').toString().replace(/[^0-9]/g,''); const mise=parseInt(d.mise)||0; if(!boul) return;
-       const b2=boul.padStart(2,'0').slice(-2); const r1=res.r1.padStart(2,'0').slice(-2); const r2=res.r2.padStart(2,'0').slice(-2); const r3=res.r3.padStart(2,'0').slice(-2);
-       if(b2===r1 && res.r1){ g+=mise*prx.p1; log+='WIN 1er '+boul+' '+f.vendor+' '+mise*prx.p1+'$\n'; }
-       else if(b2===r2 && res.r2){ g+=mise*prx.p2; }
-       else if(b2===r3 && res.r3){ g+=mise*prx.p3; }
-       if(res.l3 && boul===res.l3) g+=mise*prx.loto3;
-       if(res.l4 && boul===res.l4) g+=mise*prx.loto4;
-       if(res.l5 && boul===res.l5) g+=mise*prx.loto5;
-     });
-     db.ref('fiches/'+id+'/gain').set(g);
-     c++; if(g>0) win++; totalGain+=g;
-   });
-   log+='Fich: '+c+' Win: '+win+' Peye: '+totalGain+'$';
-   document.getElementById('logBox').innerText=log;
-   document.getElementById('korijeStatus').innerHTML='✅ AUTO KORIJE: '+c+' fich, '+win+' genyen, '+totalGain+'$ | '+res.tirage+' '+res.date;
-   loadHist();
- });
-}
-
-function loadHist(){db.ref('resultats').once('value',s=>{const all=s.val()||{}; let h='<h4>Dènye Rezilta - Auto korije</h4>'; Object.values(all).sort((a,b)=>b.ts-a.ts).slice(0,15).forEach(r=>{h+='<div class="line" style="font-size:12px"><b>'+r.tirage+' '+r.date+'</b> 1:'+r.r1+' 2:'+r.r2+' 3:'+r.r3+' L3:'+r.l3+'</div>';}); document.getElementById('resHist').innerHTML=h;});}
-db.ref('resultats').on('value',loadHist);
-db.ref('vendors').on('value',s=>{
- const all=s.val()||{}; let h=''; Object.keys(all).forEach(k=>{const v=all[k]; const status=(v.status||'OUVE').toUpperCase(); const isOuve=status==='OUVE'; h+='<div class="line"><div><b>'+k+'</b><br><span style=font-size:11px>'+(v.pass||'')+'</span></div><div style="display:flex;gap:6px"><button onclick="toggleVendor(\''+k+'\')" class="badge" style="background:'+(isOuve?'#0a0':'#c00')+';color:#fff">'+(isOuve?'OUVE':'FERMÉ')+'</button><button onclick="db.ref(\'vendors/'+k+'\').remove()" style="background:red;color:#fff;border:none;border-radius:6px;padding:8px 10px">X</button></div></div>';}); document.getElementById('vList').innerHTML=h; const sel=document.getElementById('filtreVendeur'); if(!sel) return; const cur=sel.value; sel.innerHTML='<option value="tous">Tous</option>'+Object.keys(all).map(k=>'<option value="'+k+'">'+k+'</option>').join(''); if(cur) sel.value=cur;
-});
-function toggleVendor(name){db.ref('vendors/'+name+'/status').once('value',snap=>{const cur=(snap.val()||'OUVE').toUpperCase(); const next=cur==='OUVE'?'FERME':'OUVE'; db.ref('vendors/'+name+'/status').set(next).then(()=>alert(name+' '+next));});}
-function addV(){const n=newV.value.trim(); if(!n)return; db.ref('vendors/'+n).set({name:n,pass:newP.value||'1234',status:'OUVE'}).then(()=>newV.value='');}
-function genGlobal(){const duV=du.value,auV=au.value,fT=filtreTirage.value,fV=filtreVendeur.value; db.ref('fiches').once('value',snap=>{const all=Object.values(snap.val()||{}); let vente=0,gain=0,cnt=0,html=''; all.forEach(f=>{const fdStr=f.dateStr||getDateStrFromTS(f.date); if(duV&&fdStr<duV)return; if(auV&&fdStr>auV)return; if(fT!=='tous'&&!(f.tiraj||'').includes(fT))return; if(fV!=='tous'&&f.vendor!==fV)return; const v=(f.total||0)*(f.nbTiraj||1); vente+=v; gain+=f.gain||0; cnt++; const winStyle=f.gain>0?'background:#d4edda;border-left:5px solid green':''; html+='<div class="line" style="'+winStyle+'"><span><b>'+f.vendor+'</b> '+f.tiraj+' '+v+'$ '+(f.gain?'<b style=color:green>G:'+f.gain+'$</b>':'')+'</span></div>';}); const com=cfg.commission||{pct:10,active:true}; const pct=com.active?com.pct:0; const comV=Math.round(vente*pct/100); rapG.innerHTML='<div style="border:3px solid #000;padding:12px"><b>Vant:</b> '+vente+'$ <b>Com:</b> '+comV+'$ <b style=color:green>Gain:</b> '+gain+'$<div style="font-size:20px;font-weight:bold;background:#000;color:#FFD700;padding:8px;border-radius:8px;text-align:center">Net: '+(vente-comV-gain)+'$</div></div>'; fichesG.innerHTML=html;});}
-</script></body></html>
+onValue(ref(db,'config'),s=>{ config=s.val()||{}; render(); });
+async function loadRes(){ const s=await get(child(ref(db),'resultats')); const div=document.getElementById('resHist'); if(!s.exists()){div.innerHTML='Pa gen';return;} let html=''; Object.values(s.val()).sort((a,b)=>b.ts-a.ts).slice(0,15).forEach(r=>{ html+=`<div style="padding:6px;border-bottom:1px solid #eee;font-size:12px"><b>${r.tirage} ${r.date}</b> 1:${r.r1} 2:${r.r2} 3:${r.r3}</div>`;}); div.innerHTML=html; }
+onValue(ref(db,'resultats'),s=>{ loadRes(); if(s.exists()){ const all=Object.values(s.val()); const last=all.sort((a,b)=>b.ts-a.ts)[0]; if(last) korije(last); }});
+window.saveTirages=()=>{ let he={},ti={}; ['gaMidi','gaSoir','flMidi','flSoir','nyMidi','nySoir'].forEach(id=>{ const el=document.getElementById('h_'+id); if(el) he[id]=el.value; ti[id]=document.getElementById('e_'+id).value;}); set(ref(db,'config/heures'),he); set(ref(db,'config/tirages'),ti); set(ref(db,'config/lastAutoOpen'),getEST().date); set(ref(db,'config/autoOpen'),true); alert('Sove! Vandè yo ap pran chanjman an nan 5 segond'); };
+window.forceOpen=()=>{ set(ref(db,'config/tirages'),{gaMidi:'OUVE',gaSoir:'OUVE',flMidi:'OUVE',flSoir:'OUVE',nyMidi:'OUVE',nySoir:'OUVE'}); set(ref(db,'config/lastAutoOpen'),getEST().date); alert('✅ Tout OUVE kounya - V92 ap ouvè'); };
+window.publie=async()=>{ const tir=document.getElementById('resTirage').value; const d=document.getElementById('resDate').value; const r1=document.getElementById('r1').value.trim(); if(!r1)return alert('Mete 1er'); const data={tirage:tir,date:d,r1:r1,r2:document.getElementById('r2').value.trim(),r3:document.getElementById('r3').value.trim(),l3:document.getElementById('rL3').value.trim(),ts:Date.now()}; await set(ref(db,'resultats/'+tir.replace(/\s/g,'_')+'_'+d),data); document.getElementById('stat').innerText='Pibliye '+tir+' - ap korije...'; korije(data); };
+async function korije(res){ const s=await get(child(ref(db),'fiches')); if(!s.exists())return; const all=s.val(); let c=0,win=0,tot=0; for(let id in all){ const f=all[id]; if(!f.tirajs||!f.tirajs.includes(res.tirage))continue; const dHaiti=new Date(new Date(f.date).toLocaleString("en-US",{timeZone:"America/New_York"})).toISOString().split('T')[0]; if(f.dateStr&&f.dateStr!==res.date && dHaiti!==res.date)continue; let gain=0; (f.details||[]).forEach(det=>{ const b=det.boul.toString().padStart(2,'0').slice(-2); if(b===res.r1.padStart(2,'0').slice(-2)) gain+=det.montan*50; else if(b===res.r2.padStart(2,'0').slice(-2)) gain+=det.montan*20; else if(b===res.r3.padStart(2,'0').slice(-2)) gain+=det.montan*10; }); await set(ref(db,'fiches/'+id+'/gain'),gain); c++; if(gain>0)win++; tot+=gain; } document.getElementById('stat').innerHTML=`✅ AUTO KORIJE: ${c} fich, ${win} genyen, ${tot}G - ${res.tirage}`; }
+</script>
+<style>body{font-family:Arial;background:#f2f2f2;margin:0}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:bold}.card{background:#fff;padding:14px;margin:10px;border-radius:14px;max-width:620px;margin:10px auto}input,select{padding:10px;border:2px solid #000;border-radius:10px;width:100%;margin:4px 0}.btn{background:#000;color:#FFD700;padding:12px;width:100%;border:none;border-radius:10px;font-weight:bold;margin:6px 0}</style></head><body>
+<div class="h">C&D PROPRIO V117 - MENM BAZ AK V92</div>
+<div class="card"><div id="heureEST" style="background:#e3f2fd;padding:8px;border-radius:8px;font-size:12px;margin-bottom:8px"></div><div style="background:#d4edda;padding:8px;border-radius:8px;font-size:12px;border:2px solid green;margin-bottom:8px">✅ RÈG: A minwi tout OUVE otomatik, fèmen nan lè a. Vandè V92 ap tande proprio kounya!</div><div id="tirajList"></div><button class="btn" onclick="saveTirages()">Sauvegarder - fè enpak sou V92</button><button class="btn" style="background:green;color:#fff" onclick="forceOpen()">☀️ OUVÈ TOUT KOUNYA</button></div>
+<div class="card"><h3 style="margin:6px 0">🎯 Résultats - Auto korije fich</h3><select id="resTirage"><option>GA MIDI</option><option>GA SOIR</option><option>FL MIDI</option><option>FL SOIR</option><option>NY MIDI</option><option>NY SOIR</option></select><input id="resDate" type="date"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="r1" placeholder="1er Lot"><input id="r2" placeholder="2e Lot"><input id="r3" placeholder="3e Lot"><input id="rL3" placeholder="Loto3"></div><button class="btn" style="background:green;color:#fff" onclick="publie()">PUBLIER - korije tout fich otomatik</button><div id="stat" style="background:#000;color:#FFD700;padding:8px;border-radius:8px;margin-top:6px">Tann...</div><div id="resHist" style="margin-top:8px"></div></div>
+<script>document.getElementById('resDate').value=new Date().toISOString().split('T')[0];</script>
+</body></html>
