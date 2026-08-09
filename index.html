@@ -1,23 +1,32 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V126 +MARYAJ</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V127 3 MARYAJ</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f1f5f9;padding-bottom:140px}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{background:#fff;padding:12px;border-radius:12px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.1)}input,select,button{width:100%;padding:11px;border-radius:8px;border:1.5px solid #000;margin:4px 0}button{background:#000;color:#FFD700;font-weight:900;border:none}.tab{position:fixed;bottom:0;left:0;width:100%;background:#000;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px}.tab button{font-size:9px;padding:10px 2px;border-radius:20px;min-height:38px}.tab button.active{background:#FFD700;color:#000}.row{display:flex;justify-content:space-between;align-items:center;background:#f8f8f8;padding:8px;border-radius:8px;margin:4px 0}.table{width:100%;border-collapse:collapse;font-size:9px}.table th,.table td{border:1px solid #000;padding:4px;text-align:center}.table th{background:#000;color:#FFD700}</style>
+<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f1f5f9;padding-bottom:140px}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{background:#fff;padding:12px;border-radius:12px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.1)}input,select,button{width:100%;padding:11px;border-radius:8px;border:1.5px solid #000;margin:4px 0}button{background:#000;color:#FFD700;font-weight:900;border:none}.tab{position:fixed;bottom:0;left:0;width:100%;background:#000;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px}.tab button{font-size:9px;padding:10px 2px;border-radius:20px;min-height:38px}.tab button.active{background:#FFD700;color:#000}.row{display:flex;justify-content:space-between;align-items:center;background:#f8f8f8;padding:8px;border-radius:8px;margin:4px 0}.table{width:100%;border-collapse:collapse;font-size:8px}.table th,.table td{border:1px solid #000;padding:3px;text-align:center}.table th{background:#000;color:#FFD700}.maryaj{background:#fef9c3!important;font-weight:900}</style>
 </head><body>
-<div class="h">C&D PROPRIO V126 - +MARYAJ</div>
+<div class="h">C&D PROPRIO V127 - 3 MARYAJ</div>
 <div id="login" class="card" style="text-align:center;margin-top:30px"><h3>🔐 Proprio</h3><input id="code" type="password" placeholder="Modepas"><button onclick="go()">Antre</button><div id="loginErr" style="color:red"></div></div>
 <div id="app" style="display:none">
 <div id="sec1" class="sec">
-<div class="card"><h3>1. Liste Tirage</h3><div id="listTiraj"></div></div>
-<div class="card"><h3>Rezilta - Ak MARYAJ</h3>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input type="date" id="rDate"><select id="rTiraj"><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><select id="rPos"><option value="1">1er</option><option value="2">2e</option><option value="3">3e</option><option value="maryaj">MARYAJ</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select><input id="rNum" placeholder="Ex: 22-15 oswa 222"></div>
-<small style="font-size:10px;color:#666">Pou Maryaj mete 22-15 oswa 2215 (2 boul)</small>
-<button onclick="saveResult()" style="background:#22c55e;color:#fff">SAVE REZILTA</button></div>
-<div class="card"><h3>Tablo Afichaj - <span id="dateAff"></span></h3><div style="overflow:auto"><table class="table"><thead><tr><th>TIRAJ</th><th>1er</th><th>2e</th><th>3e</th><th>MARYAJ</th><th>L3</th><th>L4</th><th>L5</th></tr></thead><tbody id="tabAff"></tbody></table></div><button onclick="korijeTout()" style="background:#000;color:#FFD700;margin-top:6px">RE-KORIJE TOUT FICH YO</button></div>
+<div class="card" style="border:2px solid #000"><h3>1. Rezilta - 3 MARYAJ / TIRAJ</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input type="date" id="rDate"><select id="rTiraj" onchange="loadTirajRes()"><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div>
+<div style="background:#f8f8f8;padding:8px;border-radius:8px;margin:6px 0">
+<b>Lot yo:</b>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div>1er<input id="r1" placeholder="ex:11"></div><div>2e<input id="r2" placeholder="ex:18"></div><div>3e<input id="r3" placeholder="ex:74"></div></div>
+<b style="color:#b45309">3 MARYAJ - ouvè pou ou afiche:</b>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div>M1 (1-2)<input id="rm1" placeholder="1118"></div><div>M2 (1-3)<input id="rm2" placeholder="1174"></div><div>M3 (2-3)<input id="rm3" placeholder="1874"></div></div>
+<b>Loto:</b>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div>L3<input id="rl3" placeholder="111"></div><div>L4<input id="rl4" placeholder="1874"></div><div>L5<input id="rl5" placeholder="11118"></div></div>
 </div>
-<div id="sec2" class="sec" style="display:none"><div class="card"><h3>2. Limite Global Modifiable</h3><div id="limList"></div><button onclick="saveLim()">Sove Limit</button><div style="margin-top:10px;border-top:2px dashed #000;padding-top:10px"><h4>Vant Jodi a (Global)</h4><button onclick="loadJournal()" style="background:#444;color:#fff">Actualize</button><div id="journalView" style="font-size:11px;margin-top:6px"></div><button style="background:#ef4444;color:#fff;margin-top:6px" onclick="resetJournal()">♻️ Reset Jodi a</button></div></div></div>
+<button onclick="saveResultGlobal()" style="background:#22c55e;color:#fff;font-size:16px;padding:14px">💾 SAVE REZILTA GLOBAL - 9 POZ</button>
+<button onclick="autoFillMaryaj()" style="background:#444;color:#fff;margin-top:4px">⚡ Auto-ranpli 3 Maryaj ak 1er/2e/3e</button>
+</div>
+<div class="card"><h3>Tablo Afichaj - <span id="dateAff"></span></h3><div style="overflow:auto"><table class="table"><thead><tr><th>TIRAJ</th><th>1er</th><th>2e</th><th>3e</th><th>M1</th><th>M2</th><th>M3</th><th>L3</th><th>L4</th><th>L5</th></tr></thead><tbody id="tabAff"></tbody></table></div>
+<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><button onclick="korijeTout()" style="background:#000;color:#FFD700;padding:14px">RE-KORIJE TOUT FICH GLOBAL</button><button onclick="effaceRes()" style="background:#ef4444;color:#fff">Efase Tiraj Sa</button></div>
+</div>
+</div>
+<div id="sec2" class="sec" style="display:none"><div class="card"><h3>2. Limite Global</h3><div id="limList"></div><button onclick="saveLim()">Sove Limit</button><div style="margin-top:10px;border-top:2px dashed #000;padding-top:10px"><h4>Vant Jodi a</h4><button onclick="loadJournal()" style="background:#444;color:#fff">Actualize</button><div id="journalView" style="font-size:11px;margin-top:6px"></div><button style="background:#ef4444;color:#fff;margin-top:6px" onclick="resetJournal()">♻️ Reset Jodi a</button></div></div></div>
 <div id="sec3" class="sec" style="display:none"><div class="card"><h3>3. Heures</h3><div id="hList"></div><button onclick="saveH()">Sove Lè</button></div><div class="card"><h3>Ouvè/Fèmen</h3><div id="tFList"></div></div></div>
-<div id="sec4" class="sec" style="display:none"><div class="card"><h3>4. Prix Modifiable</h3><div id="prixList"></div><button onclick="savePrix()">Sove Prix</button></div></div>
+<div id="sec4" class="sec" style="display:none"><div class="card"><h3>4. Prix</h3><div id="prixList"></div><button onclick="savePrix()">Sove Prix</button></div></div>
 <div id="sec5" class="sec" style="display:none"><div class="card"><h3>5. Vendeurs</h3><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><input id="vCode" placeholder="code"><input id="vPass" placeholder="pass" value="1234"><select id="vStat"><option value="OUVE">Ouvert</option><option value="FERME">Fermé</option></select></div><button onclick="addV()">Ajouter</button><div id="vList"></div></div></div>
 <div id="sec6" class="sec" style="display:none"><div class="card"><h3>6. Rapport Proprio</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="rapDu" type="date"><input id="rapAu" type="date"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><select id="rapTiraj"><option value="">Tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select><select id="rapVendeur"><option value="">Tous vendeurs</option></select></div><button onclick="genRapP()">Générer</button><div id="rapData"></div></div></div>
 <div id="sec7" class="sec" style="display:none"><div class="card"><h3>7. Entète / Modepas</h3><input id="cfgProprioPass" placeholder="Modepas proprio"><button onclick="saveProprioPass()" style="background:#ef4444;color:#fff">Chanje Modepas</button><div style="height:1px;background:#ddd;margin:10px 0"></div><input id="cfgEntete" value="C&D VÉRITÉ LOTTO"><input id="cfgPied" value="Bonne chance!"><button onclick="saveCfg()">Sove Entête</button></div></div>
@@ -32,10 +41,54 @@ let defPrix={bolet:{g1:50,g2:20,g3:10}, maryaj:{g1:1000}, loto3:{g1:500}, loto4:
 function go(){ const e=document.getElementById('code').value.trim(); const s=config.proprioPass||'230788'; if(e!==s){ document.getElementById('loginErr').innerText="Pa bon, se: "+s; return; } document.getElementById('login').style.display='none'; document.getElementById('app').style.display='block'; renderAll(); loadJournal(); }
 function init(){ const t=new Date().toISOString().split('T')[0]; document.getElementById('rDate').value=t; document.getElementById('rapDu').value=t; document.getElementById('rapAu').value=t; db.ref('config').on('value',s=>{ config=s.val()||{}; renderAll(); }); db.ref('vendors').on('value',s=>{ vendors=s.val()||{}; renderV(); }); }
 function show(n){ document.querySelectorAll('.sec').forEach(x=>x.style.display='none'); document.getElementById('sec'+n).style.display='block'; document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active')); document.getElementById('b'+n).classList.add('active'); if(n===2) loadJournal(); }
-function renderAll(){ renderTiraj(); renderLim(); renderH(); renderTF(); renderPrix(); renderAff(); renderCfg(); }
-function renderTiraj(){ let h=''; tirajDef.forEach(t=>{ h+=`<div class="row"><span>${t.nom}</span><span>${(config.heures||{})[t.id]||t.defH}</span></div>`; }); document.getElementById('listTiraj').innerHTML=h; }
+function renderAll(){ renderLim(); renderH(); renderTF(); renderPrix(); renderAff(); renderCfg(); }
+function loadTirajRes(){ const date=document.getElementById('rDate').value; const tiraj=document.getElementById('rTiraj').value; const day=(config.resultats||{})[date]||{}; const r=day[tiraj]||{}; document.getElementById('r1').value=r['1']||''; document.getElementById('r2').value=r['2']||''; document.getElementById('r3').value=r['3']||''; document.getElementById('rm1').value=r['m1']||r['maryaj']||''; document.getElementById('rm2').value=r['m2']||''; document.getElementById('rm3').value=r['m3']||''; document.getElementById('rl3').value=r['loto3']||''; document.getElementById('rl4').value=r['loto4']||''; document.getElementById('rl5').value=r['loto5']||''; }
+function autoFillMaryaj(){ const a=document.getElementById('r1').value.trim().padStart(2,'0'); const b=document.getElementById('r2').value.trim().padStart(2,'0'); const c=document.getElementById('r3').value.trim().padStart(2,'0'); if(!a||!b||!c){ alert('Mete 1er 2e 3e anvan'); return; } document.getElementById('rm1').value=a+b; document.getElementById('rm2').value=a+c; document.getElementById('rm3').value=b+c; }
+function saveResultGlobal(){ const date=document.getElementById('rDate').value; const tiraj=document.getElementById('rTiraj').value; const data={'1':document.getElementById('r1').value.trim(),'2':document.getElementById('r2').value.trim(),'3':document.getElementById('r3').value.trim(),'m1':document.getElementById('rm1').value.trim().replace(/[^0-9]/g,''),'m2':document.getElementById('rm2').value.trim().replace(/[^0-9]/g,''),'m3':document.getElementById('rm3').value.trim().replace(/[^0-9]/g,''),'loto3':document.getElementById('rl3').value.trim(),'loto4':document.getElementById('rl4').value.trim(),'loto5':document.getElementById('rl5').value.trim()}; db.ref('config/resultats/'+date+'/'+tiraj).set(data).then(()=>{ alert('9 rezilta sove!'); renderAff(); korijeFichesGlobal(date,tiraj); }); }
+function effaceRes(){ const date=document.getElementById('rDate').value; const tiraj=document.getElementById('rTiraj').value; if(!confirm('Efase '+tiraj+'?')) return; db.ref('config/resultats/'+date+'/'+tiraj).remove().then(()=>{ loadTirajRes(); renderAff(); }); }
+// KOREKSYON GLOBAL - tout an menm tan
+function korijeFichesGlobal(date,tiraj){
+  db.ref('fiches').once('value').then(snap=>{
+    if(!snap.exists()) return;
+    const all=snap.val();
+    db.ref('config').once('value').then(cSnap=>{
+      const cfg=cSnap.val()||{}; const resAll=cfg.resultats||{}; const gains=cfg.gains||defPrix;
+      const tirajRes=(resAll[date]||{})[tiraj]||{};
+      const r1=tirajRes['1']||''; const r2=tirajRes['2']||''; const r3=tirajRes['3']||'';
+      const m1=tirajRes['m1']||''; const m2=tirajRes['m2']||''; const m3=tirajRes['m3']||'';
+      const l3=tirajRes['loto3']||''; const l4=tirajRes['loto4']||''; const l5=tirajRes['loto5']||'';
+      let count=0;
+      Object.values(all).filter(f=> f.dateStr===date && (f.tirajs||[]).includes(tiraj)).forEach(f=>{
+        let totGain=0;
+        (f.details||[]).forEach(d=>{
+          const boul=d.boul.replace(/[^0-9]/g,'');
+          const orig=d.boul;
+          if(d.type==='bolet'){
+            if(boul===r1) totGain+=d.montan*(gains.bolet?.g1||50);
+            if(boul===r2) totGain+=d.montan*(gains.bolet?.g2||20);
+            if(boul===r3) totGain+=d.montan*(gains.bolet?.g3||10);
+          }
+          if(d.type==='maryaj'){
+            // tcheke 3 maryaj yo
+            if(boul===m1 || boul===m2 || boul===m3) totGain+=d.montan*(gains.maryaj?.g1||1000);
+            // konpatibilite ansyen: si maryaj tape 22-15
+            const cleanOrig=orig.replace(/[^0-9]/g,'');
+            if(cleanOrig===m1||cleanOrig===m2||cleanOrig===m3) totGain+=0; // deja konte
+          }
+          if(d.type==='loto3' && boul===l3) totGain+=d.montan*(gains.loto3?.g1||500);
+          if(d.type==='loto4' && boul===l4) totGain+=d.montan*(gains.loto4?.g1||1000);
+          if(d.type==='loto5' && boul===l5) totGain+=d.montan*(gains.loto5?.g1||25000);
+        });
+        db.ref('fiches/'+f.id+'/gain').set(totGain); count++;
+      });
+      alert('Koreksyon GLOBAL fèt: '+count+' fich korije - 1er,2e,3e,M1,M2,M3,L3,L4,L5'); renderAff();
+    });
+  });
+}
+function korijeTout(){ const date=document.getElementById('rDate').value; ["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"].forEach(t=>korijeFichesGlobal(date,t)); }
+function renderAff(){ const date=document.getElementById('rDate').value; document.getElementById('dateAff').innerText=date; loadTirajRes(); const all=config.resultats||{}; const day=all[date]||{}; let html=''; ["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"].forEach(t=>{ const r=day[t]||{}; html+=`<tr><td>${t}</td><td>${r['1']||'-'}</td><td>${r['2']||'-'}</td><td>${r['3']||'-'}</td><td class="maryaj">${r['m1']||r['maryaj']||'-'}</td><td class="maryaj">${r['m2']||'-'}</td><td class="maryaj">${r['m3']||'-'}</td><td>${r['loto3']||'-'}</td><td>${r['loto4']||'-'}</td><td>${r['loto5']||'-'}</td></tr>`; }); document.getElementById('tabAff').innerHTML=html; }
 function renderLim(){ const lim=config.limites||defLim; let h=''; Object.keys(defLim).forEach(k=>{ h+=`<div style="display:grid;grid-template-columns:1fr 80px;gap:6px;margin:4px 0"><span>${k.toUpperCase()}</span><input id="lim_${k}" value="${lim[k]!==undefined?lim[k]:defLim[k]}" type="number"></div>`; }); document.getElementById('limList').innerHTML=h; }
-function saveLim(){ let lim={}; Object.keys(defLim).forEach(k=>{ lim[k]=parseInt(document.getElementById('lim_'+k).value)||0; }); db.ref('config/limites').set(lim).then(()=>alert('Limit sove: 1000/50/100/20/5 GLOBAL')); }
+function saveLim(){ let lim={}; Object.keys(defLim).forEach(k=>{ lim[k]=parseInt(document.getElementById('lim_'+k).value)||0; }); db.ref('config/limites').set(lim).then(()=>alert('Limit sove')); }
 function renderH(){ const he=config.heures||{}; let h=''; tirajDef.forEach(t=>{ h+=`<div style="display:grid;grid-template-columns:1fr 90px;gap:6px;margin:4px 0"><span>${t.nom}</span><input id="h_${t.id}" value="${he[t.id]||t.defH}" type="time"></div>`; }); document.getElementById('hList').innerHTML=h; }
 function saveH(){ let he={}; tirajDef.forEach(t=>{ he[t.id]=document.getElementById('h_'+t.id).value; }); db.ref('config/heures').set(he); alert('Lè sove'); }
 function renderTF(){ const tf=config.tirages||{}; let h=''; tirajDef.forEach(t=>{ const st=tf[t.id]||'OUVE'; h+=`<div class="row"><span>${t.nom}</span><span>${st}</span><button style="width:80px;background:${st==='OUVE'?'#ef4444':'#22c55e'};color:#fff;padding:6px" onclick="toggleT('${t.id}')">${st==='OUVE'?'FÈMEN':'OUVÈ'}</button></div>`; }); document.getElementById('tFList').innerHTML=h; }
@@ -45,58 +98,6 @@ function savePrix(){ let pr={}; pr.bolet={g1:parseInt(document.getElementById('p
 function renderV(){ let h=''; Object.keys(vendors).forEach(k=>{ const v=vendors[k]; const st=v.status||'OUVE'; h+=`<div class="row"><span><b>${k.toUpperCase()}</b> / ${v.pass||'1234'} ${st}</span><button style="width:60px;background:${st==='OUVE'?'#ef4444':'#22c55e'};color:#fff;padding:5px" onclick="toggleV('${k}')">${st==='OUVE'?'FERME':'OUVE'}</button></div>`; }); document.getElementById('vList').innerHTML=h; let hv='<option value="">Tous</option>'; Object.keys(vendors).forEach(k=>{ hv+=`<option value="${k}">${k.toUpperCase()}</option>`; }); document.getElementById('rapVendeur').innerHTML=hv; }
 function addV(){ const c=document.getElementById('vCode').value.trim().toLowerCase(); if(!c) return; db.ref('vendors/'+c).set({nom:c,pass:document.getElementById('vPass').value||'1234',status:document.getElementById('vStat').value}); }
 function toggleV(k){ const cur=vendors[k].status||'OUVE'; db.ref('vendors/'+k+'/status').set(cur==='OUVE'?'FERME':'OUVE'); }
-function saveResult(){
-  const date=document.getElementById('rDate').value;
-  const tiraj=document.getElementById('rTiraj').value;
-  const pos=document.getElementById('rPos').value;
-  let num=document.getElementById('rNum').value.trim();
-  if(!num){ alert('Mete nimewo'); return; }
-  // Pou maryaj: aksepte 22-15 oswa 2215 epi save jan li ye
-  if(pos==='maryaj'){ num=num.replace(/[^0-9\-]/g,''); }
-  db.ref('config/resultats/'+date+'/'+tiraj+'/'+pos).set(num).then(()=>{ document.getElementById('rNum').value=''; renderAff(); korijeFiches(date,tiraj); });
-}
-function korijeFiches(date,tiraj){
-  db.ref('fiches').once('value').then(snap=>{
-    if(!snap.exists()) return;
-    const all=snap.val();
-    db.ref('config').once('value').then(cSnap=>{
-      const cfg=cSnap.val()||{}; const resAll=cfg.resultats||{}; const gains=cfg.gains||defPrix;
-      const tirajRes=(resAll[date]||{})[tiraj]||{};
-      const maryajRes=(tirajRes['maryaj']||'').replace(/-/g,'').replace(/\s/g,'');
-      Object.values(all).filter(f=> f.dateStr===date && (f.tirajs||[]).includes(tiraj)).forEach(f=>{
-        let totGain=0;
-        (f.details||[]).forEach(d=>{
-          const boul=d.boul.trim().replace(/[^0-9]/g,'');
-          if(d.type==='bolet'){
-            if(boul===tirajRes['1']) totGain+=d.montan*(gains.bolet?.g1||50);
-            if(boul===tirajRes['2']) totGain+=d.montan*(gains.bolet?.g2||20);
-            if(boul===tirajRes['3']) totGain+=d.montan*(gains.bolet?.g3||10);
-          }
-          if(d.type==='maryaj'){
-            // maryaj 22-15 = 2215 oswa 22-15
-            const mClean=d.boul.replace(/[^0-9]/g,'');
-            if(mClean===maryajRes || d.boul===tirajRes['maryaj']) totGain+=d.montan*(gains.maryaj?.g1||1000);
-            // si maryaj otomatik = 1er+2e
-            const autoM=(tirajRes['1']||'')+(tirajRes['2']||'');
-            if(mClean===autoM) totGain+=d.montan*(gains.maryaj?.g1||1000);
-          }
-          if(d.type==='loto3' && boul===(tirajRes['loto3']||tirajRes['1'])) totGain+=d.montan*(gains.loto3?.g1||500);
-          if(d.type==='loto4' && boul===tirajRes['loto4']) totGain+=d.montan*(gains.loto4?.g1||1000);
-          if(d.type==='loto5' && boul===tirajRes['loto5']) totGain+=d.montan*(gains.loto5?.g1||25000);
-        });
-        db.ref('fiches/'+f.id+'/gain').set(totGain);
-      });
-      alert('Rezilta '+pos+' sove + fich korije!'); renderAff();
-    });
-  });
-}
-function korijeTout(){ const date=document.getElementById('rDate').value; ["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"].forEach(t=>korijeFiches(date,t)); }
-function renderAff(){
-  const date=document.getElementById('rDate').value; document.getElementById('dateAff').innerText=date;
-  const all=config.resultats||{}; const day=all[date]||{}; let html='';
-  ["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"].forEach(t=>{ const r=day[t]||{}; html+=`<tr><td>${t}</td><td>${r['1']||'-'}</td><td>${r['2']||'-'}</td><td>${r['3']||'-'}</td><td style="font-weight:900;background:#fef9c3">${r['maryaj']||'-'}</td><td>${r['loto3']||'-'}</td><td>${r['loto4']||'-'}</td><td>${r['loto5']||'-'}</td></tr>`; });
-  document.getElementById('tabAff').innerHTML=html;
-}
 function genRapP(){ const du=document.getElementById('rapDu').value; const au=document.getElementById('rapAu').value; const tf=document.getElementById('rapTiraj').value; const vf=document.getElementById('rapVendeur').value; db.ref('fiches').once('value',s=>{ let all=Object.values(s.val()||[]).filter(f=> f.dateStr>=du && f.dateStr<=au ); if(tf) all=all.filter(f=> (f.tirajs||[]).includes(tf)); if(vf) all=all.filter(f=> f.vendeur===vf); const vente=all.reduce((a,b)=>a+(b.total||0),0); const com=Math.round(vente*0.1); const apaye=all.reduce((a,b)=>a+(b.gain||0),0); const net=vente-com-apaye; document.getElementById('rapData').innerHTML=`<div style="border:2px dashed #000;padding:10px;text-align:center">Vente:${vente}$<br>Com:${com}$<br>A payer:${apaye}$<br>Net:${net}$<br>Fiches:${all.length}</div>`; }); }
 function renderCfg(){ document.getElementById('cfgEntete').value=config.entete||'C&D VÉRITÉ LOTTO'; document.getElementById('cfgPied').value=config.pied||'Bonne chance!'; document.getElementById('cfgProprioPass').value=config.proprioPass||'230788'; }
 function saveCfg(){ db.ref('config/entete').set(document.getElementById('cfgEntete').value); db.ref('config/pied').set(document.getElementById('cfgPied').value); alert('Sove'); }
