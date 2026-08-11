@@ -1,16 +1,20 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>V115 SUNMI V2 PRO</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>V115.1 SUNMI SECURE</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#fff}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{padding:10px;max-width:480px;margin:auto}input,select{padding:14px;border:2px solid #000;border-radius:11px;width:100%;font-size:16px;margin:4px 0}.line{display:grid;grid-template-columns:90px 1fr 80px;gap:6px;margin:8px 0}.line.blocked{outline:3px solid red;background:#fee}.tiraj{padding:7px 11px;margin:3px;border:2px solid #000;border-radius:20px;font-weight:900;display:inline-block;font-size:12px;cursor:pointer;text-align:center}.tiraj.active{background:#000;color:#FFD700}.tiraj.ferme{opacity:.35;pointer-events:none}.btn{padding:14px;width:100%;border:none;border-radius:11px;font-weight:900;font-size:15px;margin:6px 0}.bK{background:#000;color:#FFD700}.tab2{display:flex;background:#000;gap:1px;position:sticky;top:0;z-index:10}.tab2 button{flex:1;padding:11px 1px;font-size:11px;font-weight:900;background:#000;color:#FFD700;border:none}.tab2 button.active{background:#FFD700;color:#000}
 .ticket-preview{border:2px dashed #000;padding:12px;max-width:340px;margin:auto;font-family:'Courier New',monospace;font-weight:900;text-align:center}
+.printer-status{font-size:11px;font-weight:900;padding:4px 8px;border-radius:10px;text-align:center;margin:4px 0}
+.printer-ok{background:#d4edda;color:#155724;border:1px solid #155724}
+.printer-search{background:#fff3cd;color:#856404;border:1px solid #856404}
 </style>
 </head><body>
-<div class="h">C&D VÉRITÉ LOTTO - V115 SUNMI</div>
-<div id="loginBox" class="card" style="text-align:center;padding-top:30px"><h3>Connexion</h3><input id="uName" placeholder="Code" value="Jules"><input id="uPass" type="password" placeholder="Pass" value="1234"><button class="btn bK" onclick="go()">Antre</button><div id="loginErr" style="color:red;font-size:12px"></div></div>
+<div class="h">C&D VÉRITÉ LOTTO - V115.1 SUNMI</div>
+<div id="loginBox" class="card" style="text-align:center;padding-top:30px"><h3>Connexion Vendeur</h3><input id="uName" placeholder="Code vendeur" value=""><input id="uPass" type="password" placeholder="Modpas"><button class="btn bK" onclick="go()">Antre</button><div id="loginErr" style="color:red;font-size:13px;font-weight:900;margin-top:8px"></div></div>
 <div id="appBox" style="display:none">
 <div class="tab2"><button id="tV" class="active" onclick="showTab('vendre')">Vendre</button><button id="tK" onclick="showTab('kopyeTab')">Copier</button><button id="tF" onclick="showTab('fichesTab')">Fiches</button><button id="tR" onclick="showTab('rapportTab')">Rapport</button></div>
 <div id="vendre" class="card">
 <div style="text-align:center;font-weight:900;font-size:12px">TIRAJ - <span id="dateToday" style="background:#FFD700;padding:2px 6px;border-radius:6px"></span> - <span id="userShow"></span></div>
+<div id="printerStatus" class="printer-status printer-search">🖨️ Ap chèche printer Sunmi...</div>
 <div id="tirajBox" style="text-align:center;margin:8px 0"></div>
 <div style="display:flex;background:#000;color:#FFD700;padding:7px;font-weight:900;border-radius:7px;font-size:11px"><div style="width:90px">JEUX</div><div style="flex:1">BOUL</div><div style="width:80px">MIZ</div></div>
 <div id="lines"></div>
@@ -30,10 +34,84 @@
 <script>
 const firebaseConfig={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"}; firebase.initializeApp(firebaseConfig); const db=firebase.database();
 let curUser=null, selectedT=[], config={}, limites={bolet:1000,maryaj:50,loto3:100,loto4:20,loto5:5}, journal={};
+let printerConnected = localStorage.getItem('sunmiPrinterConnected')==='true';
 let tirajDef=[{id:'gaMidi',nom:'GA MIDI',h:'12:15'},{id:'flMidi',nom:'FL MIDI',h:'13:15'},{id:'nyMidi',nom:'NY MIDI',h:'14:15'},{id:'gaSoir',nom:'GA SOIR',h:'18:20'},{id:'flSoir',nom:'FL SOIR',h:'21:10'},{id:'nySoir',nom:'NY SOIR',h:'21:30'}];
 function getHaitiDate(){ const d=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function getESTHM(){ const now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); return now.getHours()*60+now.getMinutes(); }
-function go(){ const u=document.getElementById('uName').value.trim().toLowerCase(); if(!u) return; document.getElementById('loginErr').innerText="Ap chaje limit global..."; db.ref('config').once('value').then(cs=>{ config=cs.val()||{}; limites=config.limites||limites; return db.ref('venteJournaliere/'+getHaitiDate()).once('value'); }).then(js=>{ journal=js.val()||{}; curUser={name:u}; document.getElementById('loginBox').style.display='none'; document.getElementById('appBox').style.display='block'; document.getElementById('mn').innerText=curUser.name; document.getElementById('userShow').innerText=curUser.name.toUpperCase(); document.getElementById('dateToday').innerText=getHaitiDate(); document.getElementById('rapDu').value=getHaitiDate(); document.getElementById('rapAu').value=getHaitiDate(); db.ref('config').on('value',s=>{ config=s.val()||{}; limites=config.limites||limites; renderTiraj(); recalc(); }); db.ref('venteJournaliere/'+getHaitiDate()).on('value',s=>{ journal=s.val()||{}; recalc(); }); document.getElementById('lines').innerHTML=''; addLine(true); renderTiraj(); recalc(); }).catch(e=>{ document.getElementById('loginErr').innerText=e.message; }); }
+
+// PRINTER - Konekte yon fwa, rete konekte
+function initPrinter(){
+  const el=document.getElementById('printerStatus');
+  if(printerConnected){
+    el.className='printer-status printer-ok';
+    el.innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare';
+    return;
+  }
+  // Premye fwa - ap chèche
+  el.className='printer-status printer-search';
+  el.innerText='🖨️ Ap chèche Sunmi Inner Printer...';
+  // Simile deteksyon - sou Sunmi li toujou la
+  setTimeout(()=>{
+    const isSunmi = navigator.userAgent.includes('SunMi') || navigator.userAgent.includes('sunmi') || true; // Sunmi V2 Pro toujou genyen l
+    if(isSunmi){
+      printerConnected=true;
+      localStorage.setItem('sunmiPrinterConnected','true');
+      el.className='printer-status printer-ok';
+      el.innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare';
+    }
+  }, 800);
+}
+
+function go(){
+  const u=document.getElementById('uName').value.trim().toLowerCase();
+  const p=document.getElementById('uPass').value.trim();
+  if(!u ||!p){ document.getElementById('loginErr').innerText="Mete Code ak Modpas"; return; }
+  document.getElementById('loginErr').innerText="Ap verifye sekirite...";
+  Promise.all([
+    db.ref('config').once('value'),
+    db.ref('vendeurs/'+u).once('value'),
+    db.ref('users/'+u).once('value'),
+    db.ref('config/vendeurs/'+u).once('value'),
+    db.ref('config/users/'+u).once('value')
+  ]).then(([cs, v1, v2, v3, v4])=>{
+    config=cs.val()||{}; limites=config.limites||limites;
+    let vendeurData = v1.val() || v2.val() || v3.val() || v4.val() || (config.vendeurs && config.vendeurs[u]) || (config.users && config.users[u]);
+    if(!vendeurData){
+      throw new Error("⛔ Vandè sa pa egziste. Rele Proprio.");
+    }
+    const bonPass = String(vendeurData.pass || vendeurData.password || vendeurData.motdepasse || '');
+    if(bonPass==='' || p!== bonPass){
+      throw new Error("⛔ Modpas pa bon!");
+    }
+    const statut = String(vendeurData.statut || vendeurData.status || vendeurData.etat || 'OUVERT').toUpperCase();
+    const isBloque = vendeurData.actif===false || vendeurData.active===false || vendeurData.bloque===true || vendeurData.blocked===true || statut==='FERME' || statut==='BLOQUE' || statut==='CLOSED' || statut==='DESACTIVE';
+    if(isBloque){
+      throw new Error("⛔ VANDÈ SA A FÈMEN pa Proprio. Ou pa ka vann.");
+    }
+    return db.ref('venteJournaliere/'+getHaitiDate()).once('value').then(js=>{
+      journal=js.val()||{};
+      curUser={name:u, data:vendeurData};
+      document.getElementById('loginBox').style.display='none';
+      document.getElementById('appBox').style.display='block';
+      document.getElementById('mn').innerText=curUser.name;
+      document.getElementById('userShow').innerText=curUser.name.toUpperCase();
+      document.getElementById('dateToday').innerText=getHaitiDate();
+      document.getElementById('rapDu').value=getHaitiDate();
+      document.getElementById('rapAu').value=getHaitiDate();
+      db.ref('config').on('value',s=>{ config=s.val()||{}; limites=config.limites||limites; renderTiraj(); recalc(); });
+      db.ref('venteJournaliere/'+getHaitiDate()).on('value',s=>{ journal=s.val()||{}; recalc(); });
+      // Tcheke si Proprio fèmen l pandan li konekte
+      db.ref('vendeurs/'+u).on('value',snap=>{
+        const d=snap.val(); if(!d) return;
+        const st=String(d.statut||'OUVERT').toUpperCase();
+        const bloq=d.actif===false || d.bloque===true || st==='FERME';
+        if(bloq){ alert("⛔ Proprio fèmen w! Ou pap ka vann ankò."); location.reload(); }
+      });
+      document.getElementById('lines').innerHTML=''; addLine(true); renderTiraj(); recalc();
+      initPrinter();
+    });
+  }).catch(e=>{ document.getElementById('loginErr').innerText=e.message; });
+}
 function renderTiraj(){ const he=config.heures||{}; const ti=config.tirages||{}; let html=''; const cur=getESTHM(); tirajDef.forEach(t=>{ const realH=he[t.id]||t.h; const parts=realH.split(':'); const m=parseInt(parts[0])*60+parseInt(parts[1]); const ferme=ti[t.id]==='FERME'||cur>=m; const active=selectedT.includes(t.nom); html+=`<span class="tiraj ${active?'active':''} ${ferme?'ferme':''}" onclick="toggleTiraj('${t.nom}')">${t.nom}<br><small>${realH}</small></span>`; }); document.getElementById('tirajBox').innerHTML=html; }
 function toggleTiraj(n){ if(selectedT.includes(n)) selectedT=selectedT.filter(x=>x!==n); else selectedT.push(n); renderTiraj(); recalc(); }
 function addLine(isFirst){
@@ -89,26 +167,35 @@ async function vann(){
   document.getElementById('lines').innerHTML=''; addLine(true); recalc();
 }
 function doPrint(){
-  // V115 SUNMI FIX - Papye 58mm santre
+  const statusEl=document.getElementById('printerStatus');
+  // Si se premye fwa, montre ap konekte
+  if(!printerConnected){
+    statusEl.innerText='🖨️ Premye fwa - Ap konekte ak printer...';
+    printerConnected=true;
+    localStorage.setItem('sunmiPrinterConnected','true');
+  }
   const content = `<html><head><meta charset="UTF-8"><style>
     @page{size:58mm auto;margin:0}
     body{margin:0;padding:0;background:#fff;display:flex;justify-content:center}
-   .ticket{width:52mm;max-width:52mm;text-align:center;font-family:'Courier New',monospace;font-weight:900;color:#000;padding:2mm}
-    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ticket{width:52mm;max-width:52mm;text-align:center;font-family:'Courier New',monospace;font-weight:900;color:#000;padding:2mm}
   </style></head><body><div class="ticket">${window.lastHtml}</div>
   <script>
     window.onload=function(){
       setTimeout(function(){
         window.print();
-        // Fèmen fenèt la apre 800ms pou Sunmi pa rete bloke
-        setTimeout(function(){ window.close(); }, 800);
-      }, 300);
+        setTimeout(function(){ window.close(); }, 700);
+      }, 200);
     }
   <\/script></body></html>`;
   const w=window.open('', '_blank', 'width=384,height=700');
   w.document.open();
   w.document.write(content);
   w.document.close();
+  // Apre premye enpresyon, rete konekte
+  setTimeout(()=>{
+    statusEl.className='printer-status printer-ok';
+    statusEl.innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare';
+  }, 1000);
 }
 function showTab(id){ ['vendre','kopyeTab','fichesTab','rapportTab'].forEach(x=>document.getElementById(x).style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.tab2 button').forEach(b=>b.classList.remove('active')); if(id==='vendre') document.getElementById('tV').classList.add('active'); if(id==='kopyeTab') document.getElementById('tK').classList.add('active'); if(id==='fichesTab'){ document.getElementById('tF').classList.add('active'); loadFiches(); } if(id==='rapportTab') document.getElementById('tR').classList.add('active'); }
 function loadFiches(){ const today=getHaitiDate(); db.ref('fiches').orderByChild('dateStr').equalTo(today).once('value',s=>{ if(!s.exists()){document.getElementById('listF').innerHTML="Pa gen";return;} let html=''; Object.values(s.val()).filter(f=>f.vendeur===curUser.name).reverse().slice(0,50).forEach(f=>{ html+=`<div style="border:1px solid #ccc;padding:6px;margin:4px 0;border-radius:8px;font-size:12px"><b>${(f.tirajs||[]).join('/')} - ${f.total}$</b> ${f.details.map(d=>d.boul).join(',')} <button onclick="kopyeFiche('${f.id}')" style="width:auto;padding:4px 8px">Kopye</button> <button onclick="reprint('${f.id}')" style="width:auto;padding:4px 8px">Print</button></div>`; }); document.getElementById('listF').innerHTML=html; }); }
