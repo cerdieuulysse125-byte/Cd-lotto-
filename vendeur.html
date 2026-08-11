@@ -1,11 +1,11 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V114 FINAL 58mm</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>V115 SUNMI V2 PRO</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#fff}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{padding:10px;max-width:480px;margin:auto}input,select{padding:14px;border:2px solid #000;border-radius:11px;width:100%;font-size:16px;margin:4px 0}.line{display:grid;grid-template-columns:90px 1fr 80px;gap:6px;margin:8px 0}.line.blocked{outline:3px solid red;background:#fee}.tiraj{padding:7px 11px;margin:3px;border:2px solid #000;border-radius:20px;font-weight:900;display:inline-block;font-size:12px;cursor:pointer;text-align:center}.tiraj.active{background:#000;color:#FFD700}.tiraj.ferme{opacity:.35;pointer-events:none}.btn{padding:14px;width:100%;border:none;border-radius:11px;font-weight:900;font-size:15px;margin:6px 0}.bK{background:#000;color:#FFD700}.tab2{display:flex;background:#000;gap:1px;position:sticky;top:0;z-index:10}.tab2 button{flex:1;padding:11px 1px;font-size:11px;font-weight:900;background:#000;color:#FFD700;border:none}.tab2 button.active{background:#FFD700;color:#000}
 .ticket-preview{border:2px dashed #000;padding:12px;max-width:340px;margin:auto;font-family:'Courier New',monospace;font-weight:900;text-align:center}
 </style>
 </head><body>
-<div class="h">C&D VÉRITÉ LOTTO - V114 58mm</div>
+<div class="h">C&D VÉRITÉ LOTTO - V115 SUNMI</div>
 <div id="loginBox" class="card" style="text-align:center;padding-top:30px"><h3>Connexion</h3><input id="uName" placeholder="Code" value="Jules"><input id="uPass" type="password" placeholder="Pass" value="1234"><button class="btn bK" onclick="go()">Antre</button><div id="loginErr" style="color:red;font-size:12px"></div></div>
 <div id="appBox" style="display:none">
 <div class="tab2"><button id="tV" class="active" onclick="showTab('vendre')">Vendre</button><button id="tK" onclick="showTab('kopyeTab')">Copier</button><button id="tF" onclick="showTab('fichesTab')">Fiches</button><button id="tR" onclick="showTab('rapportTab')">Rapport</button></div>
@@ -69,20 +69,18 @@ async function vann(){
   let updates={}; updates['fiches/'+id]={id,vendeur:curUser.name,tirajs:selectedT,details,total,totalBase:base,nbTiraj:selectedT.length,date:new Date().toISOString(),dateStr,gain:0};
   Object.keys(map).forEach(k=>{ selectedT.forEach(t=>{ const cur=(curJ[t]&&curJ[t][k])||0; updates['venteJournaliere/'+dateStr+'/'+t+'/'+k]=cur+map[k]; }); });
   await db.ref().update(updates);
-  // TICKET 58mm - YON SEL PATI, GWO, SANTRE
-  const now=new Date();
-  const hms=now.toLocaleTimeString('fr-HT',{hour12:false});
-  const corps=details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:19px;line-height:22px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join('');
+  const now=new Date(); const hms=now.toLocaleTimeString('fr-HT',{hour12:false});
+  const corps=details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:20px;line-height:24px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join('');
   const html=`
-    <div style="font-size:26px;line-height:28px;font-weight:900;text-align:center;letter-spacing:1px">${config.entete||'C&D VERITE LOTTO'}</div>
-    <div style="font-size:15px;text-align:center;margin:4px 0">${dateStr} ${hms}<br>${curUser.name.toUpperCase()}</div>
-    <div style="border-top:2.5px dashed #000;margin:8px 0"></div>
-    <div style="font-size:16px;text-align:center">Tirage: <b>${selectedT.join('/')}</b><br>Id: <b style="font-size:24px">${id.slice(-5).toUpperCase()}</b></div>
-    <div style="border-top:2.5px dashed #000;margin:8px 0"></div>
+    <div style="font-size:28px;line-height:30px;font-weight:900;text-align:center;letter-spacing:1px">${config.entete||'C&D VERITE LOTTO'}</div>
+    <div style="font-size:16px;text-align:center;margin:5px 0">${dateStr} ${hms}<br>${curUser.name.toUpperCase()}</div>
+    <div style="border-top:3px dashed #000;margin:8px 0"></div>
+    <div style="font-size:17px;text-align:center">Tirage: <b>${selectedT.join('/')}</b><br>Id: <b style="font-size:26px">${id.slice(-5).toUpperCase()}</b></div>
+    <div style="border-top:3px dashed #000;margin:8px 0"></div>
     ${corps}
-    <div style="border-top:2.5px dashed #000;margin:8px 0"></div>
-    <div style="display:flex;justify-content:space-between;font-size:24px;line-height:28px"><span>TOTAL</span><span>${total}$</span></div>
-    <div style="border-top:2.5px dashed #000;margin:8px 0"></div>
+    <div style="border-top:3px dashed #000;margin:8px 0"></div>
+    <div style="display:flex;justify-content:space-between;font-size:26px;line-height:30px"><span>TOTAL</span><span>${total}$</span></div>
+    <div style="border-top:3px dashed #000;margin:8px 0"></div>
     <div style="font-size:15px;text-align:center">${config.pied||'Bonne chance!'}</div>
   `;
   window.lastHtml=html;
@@ -91,14 +89,31 @@ async function vann(){
   document.getElementById('lines').innerHTML=''; addLine(true); recalc();
 }
 function doPrint(){
-  const w=window.open('', '', 'width=380,height=700');
-  w.document.write(`<html><head><style>@page{size:58mm auto;margin:0} body{margin:0;padding:1mm;display:flex;justify-content:center;background:#fff}.ticket{width:52mm;text-align:center;font-family:'Courier New',monospace;font-weight:900;color:#000} </style></head><body><div class="ticket">${window.lastHtml}</div><script>setTimeout(()=>{window.print();},400)<\/script></body></html>`);
+  // V115 SUNMI FIX - Papye 58mm santre
+  const content = `<html><head><meta charset="UTF-8"><style>
+    @page{size:58mm auto;margin:0}
+    body{margin:0;padding:0;background:#fff;display:flex;justify-content:center}
+   .ticket{width:52mm;max-width:52mm;text-align:center;font-family:'Courier New',monospace;font-weight:900;color:#000;padding:2mm}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  </style></head><body><div class="ticket">${window.lastHtml}</div>
+  <script>
+    window.onload=function(){
+      setTimeout(function(){
+        window.print();
+        // Fèmen fenèt la apre 800ms pou Sunmi pa rete bloke
+        setTimeout(function(){ window.close(); }, 800);
+      }, 300);
+    }
+  <\/script></body></html>`;
+  const w=window.open('', '_blank', 'width=384,height=700');
+  w.document.open();
+  w.document.write(content);
   w.document.close();
 }
 function showTab(id){ ['vendre','kopyeTab','fichesTab','rapportTab'].forEach(x=>document.getElementById(x).style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.tab2 button').forEach(b=>b.classList.remove('active')); if(id==='vendre') document.getElementById('tV').classList.add('active'); if(id==='kopyeTab') document.getElementById('tK').classList.add('active'); if(id==='fichesTab'){ document.getElementById('tF').classList.add('active'); loadFiches(); } if(id==='rapportTab') document.getElementById('tR').classList.add('active'); }
 function loadFiches(){ const today=getHaitiDate(); db.ref('fiches').orderByChild('dateStr').equalTo(today).once('value',s=>{ if(!s.exists()){document.getElementById('listF').innerHTML="Pa gen";return;} let html=''; Object.values(s.val()).filter(f=>f.vendeur===curUser.name).reverse().slice(0,50).forEach(f=>{ html+=`<div style="border:1px solid #ccc;padding:6px;margin:4px 0;border-radius:8px;font-size:12px"><b>${(f.tirajs||[]).join('/')} - ${f.total}$</b> ${f.details.map(d=>d.boul).join(',')} <button onclick="kopyeFiche('${f.id}')" style="width:auto;padding:4px 8px">Kopye</button> <button onclick="reprint('${f.id}')" style="width:auto;padding:4px 8px">Print</button></div>`; }); document.getElementById('listF').innerHTML=html; }); }
 function searchById(){ const q=document.getElementById('searchId').value.trim().toLowerCase(); if(!q) return; db.ref('fiches').once('value',s=>{ const all=Object.values(s.val()||[]); const f=all.find(x=>x.id.toLowerCase().includes(q)||x.id.slice(-5).toLowerCase()===q); document.getElementById('resKopye').innerHTML=f?`<div style="border:2px solid #000;padding:8px;border-radius:8px"><b>${f.total}$</b> ${(f.tirajs||[]).join('/')} - ${f.details.map(d=>d.boul).join(',')}<br><br><button class="btn bK" onclick="kopyeFiche('${f.id}')">Kopye nan Vente</button> <button class="btn bK" onclick="reprint('${f.id}')">Re-Print</button></div>`:"Pa jwenn"; }); }
 function kopyeFiche(id){ db.ref('fiches/'+id).once('value',s=>{ const f=s.val(); if(!f) return; selectedT=f.tirajs||[]; document.getElementById('lines').innerHTML=''; f.details.forEach(d=>{ const row=addLine(); row.querySelector('.j').value=d.type; row.querySelector('.b').value=d.boul; row.querySelector('.m').value=d.montan; }); renderTiraj(); showTab('vendre'); recalc(); }); }
-function reprint(id){ db.ref('fiches/'+id).once('value',s=>{ const f=s.val(); if(!f) return; const corps=f.details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:19px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); window.lastHtml=`<div style="font-size:26px;text-align:center;font-weight:900">${config.entete||'C&D VERITE LOTTO'}</div><div style="text-align:center;font-size:14px">${f.dateStr}<br>${f.vendeur.toUpperCase()}</div><div style="border-top:2.5px dashed #000;margin:8px 0"></div><div style="text-align:center">Tirage: ${f.tirajs.join('/')} <br>Id: <b style="font-size:24px">${f.id.slice(-5).toUpperCase()}</b></div><div style="border-top:2.5px dashed #000;margin:8px 0"></div>${corps}<div style="border-top:2.5px dashed #000;margin:8px 0"></div><div style="display:flex;justify-content:space-between;font-size:24px"><span>TOTAL</span><span>${f.total}$</span></div><div style="border-top:2.5px dashed #000;margin:8px 0"></div><div style="text-align:center">${config.pied||'Bonne chance!'}</div>`; doPrint(); }); }
+function reprint(id){ db.ref('fiches/'+id).once('value',s=>{ const f=s.val(); if(!f) return; const corps=f.details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:20px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); window.lastHtml=`<div style="font-size:28px;text-align:center;font-weight:900">${config.entete||'C&D VERITE LOTTO'}</div><div style="text-align:center;font-size:15px">${f.dateStr}<br>${f.vendeur.toUpperCase()}</div><div style="border-top:3px dashed #000;margin:8px 0"></div><div style="text-align:center">Tirage: ${f.tirajs.join('/')} <br>Id: <b style="font-size:26px">${f.id.slice(-5).toUpperCase()}</b></div><div style="border-top:3px dashed #000;margin:8px 0"></div>${corps}<div style="border-top:3px dashed #000;margin:8px 0"></div><div style="display:flex;justify-content:space-between;font-size:26px"><span>TOTAL</span><span>${f.total}$</span></div><div style="border-top:3px dashed #000;margin:8px 0"></div><div style="text-align:center">${config.pied||'Bonne chance!'}</div>`; doPrint(); }); }
 function genRapV(){ const du=document.getElementById('rapDu').value||getHaitiDate(); const au=document.getElementById('rapAu').value||getHaitiDate(); const tf=document.getElementById('rapTiraj').value; db.ref('fiches').once('value',s=>{ let all=Object.values(s.val()||[]).filter(f=>f.vendeur===curUser.name && f.dateStr>=du && f.dateStr<=au); if(tf) all=all.filter(f=>(f.tirajs||[]).includes(tf)); const vente=all.reduce((a,b)=>a+(b.total||0),0); const com=Math.round(vente*0.1); const apaye=all.reduce((a,b)=>a+(b.gain||0),0); const net=vente-com-apaye; document.getElementById('rapData').innerHTML=`<div class="ticket-preview"><div style="text-align:center">Du ${du} Au ${au}<br>${tf||'Tous'}<br><br>Vente: ${vente}$<br>Commission: ${com}$<br>A payer: ${apaye}$<br><br><b>Balance net: ${net}$</b><br>Fiches: ${all.length}</div><br><button class="btn bK" onclick="window.print()">🖨️ Imprimer Rapport</button></div>`; }); }
 </script></body></html>
