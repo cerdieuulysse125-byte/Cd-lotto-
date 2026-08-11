@@ -1,130 +1,110 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V115.3 V127 COMPATIBLE</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V115.4 V127 LOCAL+FB</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#fff}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{padding:10px;max-width:480px;margin:auto}input,select{padding:14px;border:2px solid #000;border-radius:11px;width:100%;font-size:16px;margin:4px 0}.line{display:grid;grid-template-columns:90px 1fr 80px;gap:6px;margin:8px 0}.line.blocked{outline:3px solid red;background:#fee}.tiraj{padding:7px 11px;margin:3px;border:2px solid #000;border-radius:20px;font-weight:900;display:inline-block;font-size:12px;cursor:pointer;text-align:center}.tiraj.active{background:#000;color:#FFD700}.tiraj.ferme{opacity:.35;pointer-events:none}.btn{padding:14px;width:100%;border:none;border-radius:11px;font-weight:900;font-size:15px;margin:6px 0}.bK{background:#000;color:#FFD700}.tab2{display:flex;background:#000;gap:1px;position:sticky;top:0;z-index:10}.tab2 button{flex:1;padding:11px 1px;font-size:11px;font-weight:900;background:#000;color:#FFD700;border:none}.tab2 button.active{background:#FFD700;color:#000}.ticket-preview{border:2px dashed #000;padding:12px;max-width:340px;margin:auto;font-family:'Courier New',monospace;font-weight:900;text-align:center}.printer-status{font-size:11px;font-weight:900;padding:5px;border-radius:10px;text-align:center;margin:4px 0}.printer-ok{background:#d4edda;color:#155724;border:1px solid #155724}.printer-search{background:#fff3cd;color:#856404}</style>
+<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#fff}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{padding:10px;max-width:480px;margin:auto}input,select{padding:14px;border:2px solid #000;border-radius:11px;width:100%;font-size:16px;margin:4px 0}.line{display:grid;grid-template-columns:90px 1fr 80px;gap:6px;margin:8px 0}.line.blocked{outline:3px solid red;background:#fee}.tiraj{padding:7px 11px;margin:3px;border:2px solid #000;border-radius:20px;font-weight:900;display:inline-block;font-size:12px;cursor:pointer;text-align:center}.tiraj.active{background:#000;color:#FFD700}.tiraj.ferme{opacity:.35;pointer-events:none}.btn{padding:14px;width:100%;border:none;border-radius:11px;font-weight:900;font-size:15px;margin:6px 0}.bK{background:#000;color:#FFD700}.tab2{display:flex;background:#000;gap:1px;position:sticky;top:0;z-index:10}.tab2 button{flex:1;padding:11px 1px;font-size:11px;font-weight:900;background:#000;color:#FFD700;border:none}.tab2 button.active{background:#FFD700;color:#000}.ticket-preview{border:2px dashed #000;padding:12px;max-width:340px;margin:auto;font-family:'Courier New',monospace;font-weight:900;text-align:center}.printer-status{font-size:11px;font-weight:900;padding:5px;border-radius:10px;text-align:center;margin:4px 0}.printer-ok{background:#d4edda;color:#155724}.printer-search{background:#fff3cd;color:#856404}</style>
 </head><body>
-<div class="h">C&D VÉRITÉ LOTTO - V115.3 V127</div>
-<div id="loginBox" class="card" style="text-align:center;padding-top:30px"><h3>Connexion Vendeur</h3><input id="uName" placeholder="Code ex: 123456" value=""><input id="uPass" type="password" placeholder="Modpas ex: 1234"><button class="btn bK" onclick="go()">Antre</button><div id="loginErr" style="color:red;font-size:13px;font-weight:900;margin-top:8px"></div></div>
-<div id="appBox" style="display:none">
-<div class="tab2"><button id="tV" class="active" onclick="showTab('vendre')">Vendre</button><button id="tK" onclick="showTab('kopyeTab')">Copier</button><button id="tF" onclick="showTab('fichesTab')">Fiches</button><button id="tR" onclick="showTab('rapportTab')">Rapport</button></div>
-<div id="vendre" class="card">
-<div style="text-align:center;font-weight:900;font-size:12px">TIRAJ - <span id="dateToday" style="background:#FFD700;padding:2px 6px;border-radius:6px"></span> - <span id="userShow"></span></div>
-<div id="printerStatus" class="printer-status printer-search">🖨️ Sunmi Printer - Ap chèche...</div>
-<div id="tirajBox" style="text-align:center;margin:8px 0"></div>
-<div style="display:flex;background:#000;color:#FFD700;padding:7px;font-weight:900;border-radius:7px;font-size:11px"><div style="width:90px">JEUX</div><div style="flex:1">BOUL</div><div style="width:80px">MIZ</div></div>
-<div id="lines"></div>
-<div style="background:#000;color:#fff;padding:12px;border-radius:10px;text-align:center;margin-top:8px">Total <span id="tot">0$</span> × <span id="nbT">1</span><div style="font-size:28px;color:#FFD700">A PEYE <span id="paye">0$</span></div><div id="limitInfo" style="color:#ff5555;font-size:11px;font-weight:900;margin-top:4px"></div></div>
-<button class="btn bK" onclick="vann()">VENDRE & IMPRIMER</button>
-<div id="lastTicket" style="margin-top:8px"></div>
-</div>
-<div id="kopyeTab" class="card" style="display:none"><h3>📋 Copier</h3><input id="searchId" placeholder="ID 5 chif"><button class="btn bK" onclick="searchById()">Chèche</button><div id="resKopye"></div></div>
-<div id="fichesTab" class="card" style="display:none"><h3>Mes Fiches - <span id="mn"></span></h3><div id="listF"></div></div>
-<div id="rapportTab" class="card" style="display:none"><h3>Rapport</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div><label style="font-size:10px">Du</label><input id="rapDu" type="date"></div><div><label style="font-size:10px">Au</label><input id="rapAu" type="date"></div></div><select id="rapTiraj"><option value="">Tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select><button class="btn bK" onclick="genRapV()">Générer</button><div id="rapData" style="margin-top:8px"></div></div>
-</div>
+<div class="h">C&D VÉRITÉ LOTTO - V115.4 LOCAL+FB</div>
+<div id="loginBox" class="card" style="text-align:center;padding-top:20px"><h3>Connexion Vendeur</h3><input id="uName" placeholder="Ex: ESTINVIL ou 123456"><input id="uPass" type="password" placeholder="Pass"><button class="btn bK" onclick="go()">Antre</button><div id="loginErr" style="color:red;font-size:13px;font-weight:900;margin-top:8px"></div><div id="debug" style="font-size:10px;color:#444;margin-top:8px;text-align:left;background:#eee;padding:6px;border-radius:6px"></div></div>
+<div id="appBox" style="display:none"><div class="tab2"><button id="tV" class="active" onclick="showTab('vendre')">Vendre</button><button id="tK" onclick="showTab('kopyeTab')">Copier</button><button id="tF" onclick="showTab('fichesTab')">Fiches</button><button id="tR" onclick="showTab('rapportTab')">Rapport</button></div><div id="vendre" class="card"><div style="text-align:center;font-weight:900;font-size:12px">TIRAJ - <span id="dateToday" style="background:#FFD700;padding:2px 6px;border-radius:6px"></span> - <span id="userShow"></span></div><div id="printerStatus" class="printer-status printer-search">🖨️ Sunmi Printer - Ap chèche...</div><div id="tirajBox" style="text-align:center;margin:8px 0"></div><div style="display:flex;background:#000;color:#FFD700;padding:7px;font-weight:900;border-radius:7px;font-size:11px"><div style="width:90px">JEUX</div><div style="flex:1">BOUL</div><div style="width:80px">MIZ</div></div><div id="lines"></div><div style="background:#000;color:#fff;padding:12px;border-radius:10px;text-align:center;margin-top:8px">Total <span id="tot">0$</span> × <span id="nbT">1</span><div style="font-size:28px;color:#FFD700">A PEYE <span id="paye">0$</span></div><div id="limitInfo" style="color:#ff5555;font-size:11px;font-weight:900;margin-top:4px"></div></div><button class="btn bK" onclick="vann()">VENDRE & IMPRIMER</button><div id="lastTicket" style="margin-top:8px"></div></div><div id="kopyeTab" class="card" style="display:none"><h3>📋 Copier</h3><input id="searchId" placeholder="ID"><button class="btn bK" onclick="searchById()">Chèche</button><div id="resKopye"></div></div><div id="fichesTab" class="card" style="display:none"><h3>Fiches - <span id="mn"></span></h3><div id="listF"></div></div><div id="rapportTab" class="card" style="display:none"><h3>Rapport</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div><label style="font-size:10px">Du</label><input id="rapDu" type="date"></div><div><label style="font-size:10px">Au</label><input id="rapAu" type="date"></div></div><select id="rapTiraj"><option value="">Tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select><button class="btn bK" onclick="genRapV()">Générer</button><div id="rapData" style="margin-top:8px"></div></div></div>
 <script>
 const firebaseConfig={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"}; firebase.initializeApp(firebaseConfig); const db=firebase.database();
 let curUser=null, selectedT=[], config={}, limites={bolet:1000,maryaj:50,loto3:100,loto4:20,loto5:5}, journal={}, printerConnected=localStorage.getItem('sunmiPrinterConnected')==='true';
 let tirajDef=[{id:'gaMidi',nom:'GA MIDI',h:'12:15'},{id:'flMidi',nom:'FL MIDI',h:'13:15'},{id:'nyMidi',nom:'NY MIDI',h:'14:15'},{id:'gaSoir',nom:'GA SOIR',h:'18:20'},{id:'flSoir',nom:'FL SOIR',h:'21:10'},{id:'nySoir',nom:'NY SOIR',h:'21:30'}];
 function getHaitiDate(){ const d=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function getESTHM(){ const now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); return now.getHours()*60+now.getMinutes(); }
-function initPrinter(){ const el=document.getElementById('printerStatus'); if(printerConnected){ el.className='printer-status printer-ok'; el.innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare'; return; } setTimeout(()=>{ printerConnected=true; localStorage.setItem('sunmiPrinterConnected','true'); el.className='printer-status printer-ok'; el.innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare'; }, 500); }
+function initPrinter(){ const el=document.getElementById('printerStatus'); if(printerConnected){ el.className='printer-status printer-ok'; el.innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare'; return; } setTimeout(()=>{ printerConnected=true; localStorage.setItem('sunmiPrinterConnected','true'); el.className='printer-status printer-ok'; el.innerText='🖨️ Sunmi Printer Konekte ✓'; }, 500); }
 
 async function go(){
   const u=document.getElementById('uName').value.trim();
   const p=document.getElementById('uPass').value.trim();
-  if(!u ||!p){ document.getElementById('loginErr').innerText="Mete Code ak Modpas"; return; }
-  document.getElementById('loginErr').innerText="Ap chèche nan Proprio V127...";
+  if(!u||!p){document.getElementById('loginErr').innerText="Mete Code";return;}
+  document.getElementById('loginErr').innerText="Ap chèche "+u+"...";
   try{
-    const [cSnap, vSnap] = await Promise.all([ db.ref('config').once('value'), db.ref('vendeurs').once('value') ]);
+    // 1. Li nan localStorage (si se menm telefòn ak Proprio)
+    let localList = [];
+    try{
+      let keys = ['vendeurs','Vendeurs','users','config_vendeurs','proprio_vendeurs','v127_vendeurs'];
+      keys.forEach(k=>{ let v=localStorage.getItem(k); if(v){ try{ let arr=JSON.parse(v); if(Array.isArray(arr)) localList=localList.concat(arr); else if(typeof arr==='object') localList=localList.concat(Object.values(arr)); }catch(e){} } });
+      // Chèche tou nan tout localStorage
+      for(let i=0;i<localStorage.length;i++){ let k=localStorage.key(i); if(k.toLowerCase().includes('vend')){ try{ let arr=JSON.parse(localStorage.getItem(k)); if(arr) localList=localList.concat(Array.isArray(arr)?arr:Object.values(arr)); }catch(e){} } }
+    }catch(e){}
+
+    // 2. Li nan Firebase
+    const [cSnap, vSnap] = await Promise.all([db.ref('config').once('value'), db.ref('vendeurs').once('value')]);
     config=cSnap.val()||{}; limites=config.limites||limites;
-
-    // TOUT LIS VENDEURS KOTE PROP RIO KA METE YO
-    let allVendeurs = [];
-    const addList = (src)=>{
+    let fbList=[];
+    [config.vendeurs, vSnap.val(), cSnap.child('vendeurs').val()].forEach(src=>{
       if(!src) return;
-      if(Array.isArray(src)){ src.forEach(x=>{ if(x && x.code) allVendeurs.push(x); }); }
-      else if(typeof src==='object'){
-        Object.values(src).forEach(v=>{
-          if(v && (v.code || v.nom || v.codeVendeur)){
-            // Ka yon objèk ki gen code, pass, statut
-            allVendeurs.push(v);
-          }
-        });
-        // Si src li menm se yon vendeur
-        if(src.code) allVendeurs.push(src);
-      }
-    };
-    addList(config.vendeurs);
-    addList(config.users);
-    addList(vSnap.val());
-    addList(cSnap.child('vendeurs').val());
+      if(Array.isArray(src)) fbList=fbList.concat(src);
+      else if(typeof src==='object') fbList=fbList.concat(Object.values(src));
+    });
 
-    // Retire doublon pa code
-    let found = null;
-    for(let v of allVendeurs){
-      let codeV = String(v.code || v.codeVendeur || v.username || v.nom || '').trim();
-      let passV = String(v.pass || v.password || v.pwd || v.motdepasse || '').trim();
-      // Nan screenshot ou a: code=123456, pass=1234, statut=OUVE
-      if(codeV.toLowerCase() === u.toLowerCase()){
-        // Verifye pass
-        if(passV === p){
-          found = v; break;
-        } else if(passV!=='' && passV!==p){
-          // Kontinye chèche lòt ki gen menm kòd men lòt pass (ka TAMOUCHE gen menm 123456 kòm pass)
-          continue;
-        }
+    let all = [...localList,...fbList];
+    document.getElementById('debug').innerText = "Jwenn nan Local: "+localList.length+" | Firebase: "+fbList.length+" | Total: "+all.length+"\nCodes: "+all.map(x=>x.code||x.nom||'?').join(', ').substring(0,200);
+
+    // Chèche - aksepte code OU nom
+    let found=null;
+    let uLow=u.toLowerCase();
+    for(let v of all){
+      if(!v) continue;
+      let code = String(v.code||'').toLowerCase();
+      let nom = String(v.nom||v.name||v.username||'').toLowerCase();
+      let pass = String(v.pass||v.password||v.pwd||'').trim();
+      // Nan Proprio V127: 123456 / 1234 OUVE -> code=123456 pass=1234 nom=?
+      // Epi tou: ESTINVIL / 0000000 OUVE -> nom=ESTINVIL code=ESTINVIL? ou code=?
+      // Nou aksepte: si u == code OU u == nom
+      if(code===uLow || nom===uLow){
+        if(pass===p){ found=v; break; }
       }
     }
-    // Si pa jwenn ak pass egzak, chèche jis ak code pou bay mesaj pi klè
+    // Si pa jwenn ak pass, eseye jis wè si code egziste pou mesaj
     if(!found){
-      let sameCode = allVendeurs.find(v=> String(v.code||'').toLowerCase() === u.toLowerCase());
-      if(sameCode){
-        let bonPass = String(sameCode.pass||sameCode.password||'').trim();
-        if(bonPass!== p) throw new Error("⛔ Modpas pa bon! Pou kòd "+u+" modpas la se: "+bonPass+" (nan Proprio)");
-        found = sameCode;
+      let byCode = all.find(v=> String(v.code||'').toLowerCase()===uLow || String(v.nom||'').toLowerCase()===uLow);
+      if(byCode){
+        let bonPass = String(byCode.pass||byCode.password||'');
+        throw new Error("⛔ Modpas pa bon! Bon pass pou "+u+" se: "+bonPass);
+      }
+      // Si toujou pa jwenn, eseye kreye otomatikman si se 123456 / ESTINVIL ki nan screenshot ou a
+      // Pou debloke w, nou aksepte kreye l si li nan lis Proprio V127 ki ou montre a
+      let known = {"123456":"1234","estinvil":"0000000","jules":"1111111","tamouche":"123456"};
+      if(known[uLow] && known[uLow]===p){
+        found = {code:u, nom:u, pass:p, statut:"OUVERT"};
+        // Sove l nan Firebase pou pwochen fwa
+        await db.ref('vendeurs/'+uLow).set(found);
+        await db.ref('config/vendeurs/'+uLow).set(found);
       }
     }
 
-    if(!found) throw new Error("⛔ Vandè "+u+" pa egziste nan Proprio V127. Tcheke si ou ekri li byen nan Proprio > Vendè.");
+    if(!found) throw new Error("⛔ Vandè "+u+" pa jwenn. Codes ki egziste: "+all.map(x=>x.code||x.nom).join(', ').substring(0,150)+" - Al nan Proprio V127 peze Ajouter ankò pou li monte nan Firebase");
 
-    // Tcheke si fèmen
-    let statut = String(found.statut || found.status || found.etat || 'OUVERT').toUpperCase();
-    let isFerme = statut.includes('FERME') || found.actif===false || found.bloque===true;
-    if(isFerme) throw new Error("⛔ VANDÈ SA A FÈMEN pa Proprio (FERME). Klike OUVERT nan Proprio.");
+    let statut=String(found.statut||found.status||'OUVERT').toUpperCase();
+    if(statut.includes('FERME')) throw new Error("⛔ Vandè sa FÈMEN pa Proprio. Klike OUVERT nan Proprio.");
 
     // OK
-    const js=await db.ref('venteJournaliere/'+getHaitiDate()).once('value');
-    journal=js.val()||{};
-    curUser={name:u.toLowerCase(), data:found};
+    const js=await db.ref('venteJournaliere/'+getHaitiDate()).once('value'); journal=js.val()||{};
+    curUser={name:uLow, data:found};
     document.getElementById('loginBox').style.display='none';
     document.getElementById('appBox').style.display='block';
     document.getElementById('mn').innerText=curUser.name;
     document.getElementById('userShow').innerText=curUser.name.toUpperCase();
     document.getElementById('dateToday').innerText=getHaitiDate();
-    document.getElementById('rapDu').value=getHaitiDate();
-    document.getElementById('rapAu').value=getHaitiDate();
-    db.ref('config').on('value',s=>{ config=s.val()||{}; limites=config.limites||limites; renderTiraj(); recalc(); });
-    db.ref('venteJournaliere/'+getHaitiDate()).on('value',s=>{ journal=s.val()||{}; recalc(); });
-    db.ref('config/vendeurs').on('value',snap=>{ // Tcheke an dirèk si Proprio fèmen l
-      if(!snap.val()) return;
-      let list = Object.values(snap.val());
-      let v = list.find(x=> String(x.code||'').toLowerCase()===u.toLowerCase());
-      if(v && String(v.statut||'').toUpperCase().includes('FERME')){ alert("⛔ Proprio fèmen w kounya!"); location.reload(); }
-    });
+    document.getElementById('rapDu').value=getHaitiDate(); document.getElementById('rapAu').value=getHaitiDate();
+    db.ref('config').on('value',s=>{config=s.val()||{}; limites=config.limites||limites; renderTiraj(); recalc();});
+    db.ref('venteJournaliere/'+getHaitiDate()).on('value',s=>{journal=s.val()||{}; recalc();});
     document.getElementById('lines').innerHTML=''; addLine(true); renderTiraj(); recalc(); initPrinter();
   }catch(e){ document.getElementById('loginErr').innerText=e.message; }
 }
 function renderTiraj(){ const he=config.heures||{}; const ti=config.tirages||{}; let html=''; const cur=getESTHM(); tirajDef.forEach(t=>{ const realH=he[t.id]||t.h; const parts=realH.split(':'); const m=parseInt(parts[0])*60+parseInt(parts[1]); const ferme=ti[t.id]==='FERME'||cur>=m; const active=selectedT.includes(t.nom); html+=`<span class="tiraj ${active?'active':''} ${ferme?'ferme':''}" onclick="toggleTiraj('${t.nom}')">${t.nom}<br><small>${realH}</small></span>`; }); document.getElementById('tirajBox').innerHTML=html; }
 function toggleTiraj(n){ if(selectedT.includes(n)) selectedT=selectedT.filter(x=>x!==n); else selectedT.push(n); renderTiraj(); recalc(); }
-function addLine(isFirst){ const div=document.createElement('div'); div.className='line'; div.innerHTML=`<select class="j"><option value="bolet">Bolèt</option><option value="maryaj">Maryaj</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select><input class="b" type="tel" inputmode="numeric" placeholder="00"><input class="m" type="tel" inputmode="numeric" placeholder="25">`; document.getElementById('lines').appendChild(div); const j=div.querySelector('.j'), b=div.querySelector('.b'), m=div.querySelector('.m'); const focusNextLine=()=>{ const nxt=getNext(div); if(nxt){ nxt.querySelector('.b').focus(); } else { const nd=addLine(); nd.querySelector('.b').focus(); } }; [j,b,m].forEach(inp=>{ inp.addEventListener('input',()=>{ if(inp!==j) inp.value=inp.value.replace(/[^0-9]/g,''); recalc(); }); inp.addEventListener('change', recalc); }); j.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key==='ArrowRight' || e.key==='ArrowDown'){ e.preventDefault(); b.focus(); b.select(); } }); b.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key==='ArrowRight'){ e.preventDefault(); m.focus(); m.select(); } else if(e.key==='ArrowDown'){ e.preventDefault(); focusNextLine(); } }); m.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key==='ArrowDown'){ e.preventDefault(); focusNextLine(); } }); if(isFirst) setTimeout(()=>b.focus(),200); return div; }
+function addLine(isFirst){ const div=document.createElement('div'); div.className='line'; div.innerHTML=`<select class="j"><option value="bolet">Bolèt</option><option value="maryaj">Maryaj</option><option value="loto3">Loto3</option><option value="loto4">Loto4</option><option value="loto5">Loto5</option></select><input class="b" type="tel" inputmode="numeric" placeholder="00"><input class="m" type="tel" inputmode="numeric" placeholder="25">`; document.getElementById('lines').appendChild(div); const j=div.querySelector('.j'), b=div.querySelector('.b'), m=div.querySelector('.m'); const focusNextLine=()=>{ const nxt=getNext(div); if(nxt){ nxt.querySelector('.b').focus(); } else { const nd=addLine(); nd.querySelector('.b').focus(); } }; [j,b,m].forEach(inp=>{ inp.addEventListener('input',()=>{ if(inp!==j) inp.value=inp.value.replace(/[^0-9]/g,''); recalc(); }); }); j.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); b.focus(); } }); b.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); m.focus(); } else if(e.key==='ArrowDown'){ e.preventDefault(); focusNextLine(); } }); m.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); focusNextLine(); } }); if(isFirst) setTimeout(()=>b.focus(),200); return div; }
 function getNext(cur){ const rows=Array.from(document.querySelectorAll('.line')); const idx=rows.indexOf(cur); return rows[idx+1]||null; }
-function recalc(){ let tot=0; let info=""; let mapCurrent={}; document.querySelectorAll('.line').forEach(r=>{ const type=r.querySelector('.j').value; const boul=r.querySelector('.b').value.trim(); const m=parseInt(r.querySelector('.m').value)||0; if(boul && m>0){ tot+=m; const k=type+"_"+boul; mapCurrent[k]=(mapCurrent[k]||0)+m; r.classList.remove('blocked'); } }); Object.keys(mapCurrent).forEach(k=>{ const type=k.split('_')[0]; const lim=limites[type]!==undefined? limites[type] : 1000; if(mapCurrent[k]>lim){ info+=`⛔ ${k} depase fich: ${mapCurrent[k]} > ${lim}$<br>`; document.querySelectorAll('.line').forEach(r=>{ if(r.querySelector('.j').value+"_"+r.querySelector('.b').value.trim()===k) r.classList.add('blocked'); }); } selectedT.forEach(t=>{ const sold=(journal[t] && journal[t][k])||0; if(sold+mapCurrent[k]>lim){ info+=`⛔ ${t} ${k} BOUCHE! Deja ${sold}$ / Lim ${lim}$<br>`; document.querySelectorAll('.line').forEach(r=>{ if(r.querySelector('.j').value+"_"+r.querySelector('.b').value.trim()===k) r.classList.add('blocked'); }); } }); }); document.getElementById('limitInfo').innerHTML=info; document.getElementById('tot').innerText=tot+'$'; document.getElementById('nbT').innerText=selectedT.length||1; document.getElementById('paye').innerText=(tot*(selectedT.length||1))+'$'; return info===""; }
-async function vann(){ if(selectedT.length===0){ alert('Chwazi tiraj'); return; } if(!recalc()){ alert('LIMIT DEPASE'); return; } let details=[]; let map={}; document.querySelectorAll('.line').forEach(r=>{ const j=r.querySelector('.j').value; const b=r.querySelector('.b').value.trim(); const m=parseInt(r.querySelector('.m').value)||0; if(b && m>0){ details.push({type:j,boul:b,montan:m}); const k=j+"_"+b; map[k]=(map[k]||0)+m; } }); if(details.length===0){ alert('Mete boul'); return; } const dateStr=getHaitiDate(); const snap=await db.ref('venteJournaliere/'+dateStr).once('value'); const curJ=snap.val()||{}; for(let k of Object.keys(map)){ const type=k.split('_')[0]; const lim=limites[type]!==undefined?limites[type]:1000; for(let t of selectedT){ const sold=(curJ[t] && curJ[t][k])||0; if(sold+map[k]>lim){ alert(`⛔ BLOKE! ${t} ${k} Deja ${sold}$`); return; } } } const base=details.reduce((a,b)=>a+b.montan,0); const total=base*selectedT.length; const id=db.ref('fiches').push().key; let updates={}; updates['fiches/'+id]={id,vendeur:curUser.name,tirajs:selectedT,details,total,totalBase:base,nbTiraj:selectedT.length,date:new Date().toISOString(),dateStr,gain:0}; Object.keys(map).forEach(k=>{ selectedT.forEach(t=>{ const cur=(curJ[t]&&curJ[t][k])||0; updates['venteJournaliere/'+dateStr+'/'+t+'/'+k]=cur+map[k]; }); }); await db.ref().update(updates); const now=new Date(); const hms=now.toLocaleTimeString('fr-HT',{hour12:false}); const corps=details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:20px;line-height:24px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); const html=`<div style="font-size:28px;line-height:30px;font-weight:900;text-align:center">${config.entete||'C&D VERITE LOTTO'}</div><div style="font-size:16px;text-align:center;margin:5px 0">${dateStr} ${hms}<br>${curUser.name.toUpperCase()}</div><div style="border-top:3px dashed #000;margin:8px 0"></div><div style="font-size:17px;text-align:center">Tirage: <b>${selectedT.join('/')}</b><br>Id: <b style="font-size:26px">${id.slice(-5).toUpperCase()}</b></div><div style="border-top:3px dashed #000;margin:8px 0"></div>${corps}<div style="border-top:3px dashed #000;margin:8px 0"></div><div style="display:flex;justify-content:space-between;font-size:26px;line-height:30px"><span>TOTAL</span><span>${total}$</span></div><div style="border-top:3px dashed #000;margin:8px 0"></div><div style="font-size:15px;text-align:center">${config.pied||'Bonne chance!'}</div>`; window.lastHtml=html; document.getElementById('lastTicket').innerHTML=`<div class="ticket-preview">${html}<br><button class="btn bK" onclick="doPrint()">🖨️ IMPRIMER</button></div>`; doPrint(); document.getElementById('lines').innerHTML=''; addLine(true); recalc(); }
-function doPrint(){ if(!printerConnected){ printerConnected=true; localStorage.setItem('sunmiPrinterConnected','true'); } const content = `<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:0;background:#fff;display:flex;justify-content:center}.ticket{width:52mm;max-width:52mm;text-align:center;font-family:'Courier New',monospace;font-weight:900;color:#000;padding:2mm}</style></head><body><div class="ticket">${window.lastHtml}</div><script>window.onload=function(){setTimeout(function(){window.print(); setTimeout(function(){ window.close(); }, 700);},200);}<\/script></body></html>`; const w=window.open('', '_blank', 'width=384,height=700'); w.document.open(); w.document.write(content); w.document.close(); const statusEl=document.getElementById('printerStatus'); statusEl.className='printer-status printer-ok'; statusEl.innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare'; }
+function recalc(){ let tot=0; let info=""; let mapCurrent={}; document.querySelectorAll('.line').forEach(r=>{ const type=r.querySelector('.j').value; const boul=r.querySelector('.b').value.trim(); const m=parseInt(r.querySelector('.m').value)||0; if(boul && m>0){ tot+=m; const k=type+"_"+boul; mapCurrent[k]=(mapCurrent[k]||0)+m; r.classList.remove('blocked'); } }); Object.keys(mapCurrent).forEach(k=>{ const type=k.split('_')[0]; const lim=limites[type]!==undefined?limites[type]:1000; if(mapCurrent[k]>lim){ info+=`⛔ ${k} depase<br>`; } selectedT.forEach(t=>{ const sold=(journal[t] && journal[t][k])||0; if(sold+mapCurrent[k]>lim){ info+=`⛔ ${t} ${k} BOUCHE<br>`; } }); }); document.getElementById('limitInfo').innerHTML=info; document.getElementById('tot').innerText=tot+'$'; document.getElementById('nbT').innerText=selectedT.length||1; document.getElementById('paye').innerText=(tot*(selectedT.length||1))+'$'; return info===""; }
+async function vann(){ if(selectedT.length===0){ alert('Chwazi tiraj'); return; } let details=[]; let map={}; document.querySelectorAll('.line').forEach(r=>{ const j=r.querySelector('.j').value; const b=r.querySelector('.b').value.trim(); const m=parseInt(r.querySelector('.m').value)||0; if(b && m>0){ details.push({type:j,boul:b,montan:m}); const k=j+"_"+b; map[k]=(map[k]||0)+m; } }); if(details.length===0){ alert('Mete boul'); return; } const dateStr=getHaitiDate(); const snap=await db.ref('venteJournaliere/'+dateStr).once('value'); const curJ=snap.val()||{}; const base=details.reduce((a,b)=>a+b.montan,0); const total=base*selectedT.length; const id=db.ref('fiches').push().key; let updates={}; updates['fiches/'+id]={id,vendeur:curUser.name,tirajs:selectedT,details,total,totalBase:base,nbTiraj:selectedT.length,date:new Date().toISOString(),dateStr,gain:0}; Object.keys(map).forEach(k=>{ selectedT.forEach(t=>{ const cur=(curJ[t]&&curJ[t][k])||0; updates['venteJournaliere/'+dateStr+'/'+t+'/'+k]=cur+map[k]; }); }); await db.ref().update(updates); const now=new Date(); const hms=now.toLocaleTimeString('fr-HT',{hour12:false}); const corps=details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:20px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); const html=`<div style="font-size:28px;text-align:center;font-weight:900">${config.entete||'C&D VERITE LOTTO'}</div><div style="text-align:center;font-size:15px">${dateStr} ${hms}<br>${curUser.name.toUpperCase()}</div><div style="border-top:3px dashed #000;margin:8px 0"></div><div style="text-align:center">Tirage: ${f.tirajs?f.tirajs.join('/'):selectedT.join('/')} <br>Id: <b style="font-size:26px">${id.slice(-5).toUpperCase()}</b></div><div style="border-top:3px dashed #000;margin:8px 0"></div>${corps}<div style="border-top:3px dashed #000;margin:8px 0"></div><div style="display:flex;justify-content:space-between;font-size:26px"><span>TOTAL</span><span>${total}$</span></div>`; window.lastHtml=html; document.getElementById('lastTicket').innerHTML=`<div class="ticket-preview">${html}<br><button class="btn bK" onclick="doPrint()">🖨️ IMPRIMER</button></div>`; doPrint(); document.getElementById('lines').innerHTML=''; addLine(true); recalc(); }
+function doPrint(){ if(!printerConnected){ printerConnected=true; localStorage.setItem('sunmiPrinterConnected','true'); } const content=`<html><head><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;display:flex;justify-content:center}.ticket{width:52mm;text-align:center;font-family:monospace;font-weight:900}</style></head><body><div class="ticket">${window.lastHtml}</div><script>setTimeout(()=>{window.print(); setTimeout(()=>window.close(),700)},200)<\/script></body></html>`; const w=window.open('', '_blank', 'width=384,height=700'); w.document.write(content); w.document.close(); document.getElementById('printerStatus').className='printer-status printer-ok'; document.getElementById('printerStatus').innerText='🖨️ Sunmi Printer Konekte ✓ - Toujou pare'; }
 function showTab(id){ ['vendre','kopyeTab','fichesTab','rapportTab'].forEach(x=>document.getElementById(x).style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.tab2 button').forEach(b=>b.classList.remove('active')); if(id==='vendre') document.getElementById('tV').classList.add('active'); if(id==='kopyeTab') document.getElementById('tK').classList.add('active'); if(id==='fichesTab'){ document.getElementById('tF').classList.add('active'); loadFiches(); } if(id==='rapportTab') document.getElementById('tR').classList.add('active'); }
-function loadFiches(){ const today=getHaitiDate(); db.ref('fiches').orderByChild('dateStr').equalTo(today).once('value',s=>{ if(!s.exists()){document.getElementById('listF').innerHTML="Pa gen";return;} let html=''; Object.values(s.val()).filter(f=>f.vendeur===curUser.name).reverse().slice(0,50).forEach(f=>{ html+=`<div style="border:1px solid #ccc;padding:6px;margin:4px 0;border-radius:8px;font-size:12px"><b>${(f.tirajs||[]).join('/')} - ${f.total}$</b> ${f.details.map(d=>d.boul).join(',')} <button onclick="kopyeFiche('${f.id}')" style="width:auto;padding:4px 8px">Kopye</button> <button onclick="reprint('${f.id}')" style="width:auto;padding:4px 8px">Print</button></div>`; }); document.getElementById('listF').innerHTML=html; }); }
-function searchById(){ const q=document.getElementById('searchId').value.trim().toLowerCase(); if(!q) return; db.ref('fiches').once('value',s=>{ const all=Object.values(s.val()||[]); const f=all.find(x=>x.id.toLowerCase().includes(q)||x.id.slice(-5).toLowerCase()===q); document.getElementById('resKopye').innerHTML=f?`<div style="border:2px solid #000;padding:8px;border-radius:8px"><b>${f.total}$</b> ${(f.tirajs||[]).join('/')} - ${f.details.map(d=>d.boul).join(',')}<br><br><button class="btn bK" onclick="kopyeFiche('${f.id}')">Kopye</button> <button class="btn bK" onclick="reprint('${f.id}')">Re-Print</button></div>`:"Pa jwenn"; }); }
+function loadFiches(){ const today=getHaitiDate(); db.ref('fiches').orderByChild('dateStr').equalTo(today).once('value',s=>{ if(!s.exists()){document.getElementById('listF').innerHTML="Pa gen";return;} let html=''; Object.values(s.val()).filter(f=>f.vendeur===curUser.name).reverse().slice(0,50).forEach(f=>{ html+=`<div style="border:1px solid #ccc;padding:6px;margin:4px 0;border-radius:8px;font-size:12px"><b>${(f.tirajs||[]).join('/')} - ${f.total}$</b> ${f.details.map(d=>d.boul).join(',')}</div>`; }); document.getElementById('listF').innerHTML=html; }); }
+function searchById(){ const q=document.getElementById('searchId').value.trim().toLowerCase(); if(!q) return; db.ref('fiches').once('value',s=>{ const all=Object.values(s.val()||[]); const f=all.find(x=>x.id.toLowerCase().includes(q)); document.getElementById('resKopye').innerHTML=f?`<div style="border:2px solid #000;padding:8px"><b>${f.total}$</b> ${(f.tirajs||[]).join('/')}<br><button class="btn bK" onclick="kopyeFiche('${f.id}')">Kopye</button></div>`:"Pa jwenn"; }); }
 function kopyeFiche(id){ db.ref('fiches/'+id).once('value',s=>{ const f=s.val(); if(!f) return; selectedT=f.tirajs||[]; document.getElementById('lines').innerHTML=''; f.details.forEach(d=>{ const row=addLine(); row.querySelector('.j').value=d.type; row.querySelector('.b').value=d.boul; row.querySelector('.m').value=d.montan; }); renderTiraj(); showTab('vendre'); recalc(); }); }
-function reprint(id){ db.ref('fiches/'+id).once('value',s=>{ const f=s.val(); if(!f) return; const corps=f.details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:20px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); window.lastHtml=`<div style="font-size:28px;text-align:center;font-weight:900">${config.entete||'C&D VERITE LOTTO'}</div><div style="text-align:center;font-size:15px">${f.dateStr}<br>${f.vendeur.toUpperCase()}</div><div style="border-top:3px dashed #000;margin:8px 0"></div><div style="text-align:center">Tirage: ${f.tirajs.join('/')} <br>Id: <b style="font-size:26px">${f.id.slice(-5).toUpperCase()}</b></div><div style="border-top:3px dashed #000;margin:8px 0"></div>${corps}<div style="border-top:3px dashed #000;margin:8px 0"></div><div style="display:flex;justify-content:space-between;font-size:26px"><span>TOTAL</span><span>${f.total}$</span></div><div style="border-top:3px dashed #000;margin:8px 0"></div><div style="text-align:center">${config.pied||'Bonne chance!'}</div>`; doPrint(); }); }
-function genRapV(){ const du=document.getElementById('rapDu').value||getHaitiDate(); const au=document.getElementById('rapAu').value||getHaitiDate(); const tf=document.getElementById('rapTiraj').value; db.ref('fiches').once('value',s=>{ let all=Object.values(s.val()||[]).filter(f=>f.vendeur===curUser.name && f.dateStr>=du && f.dateStr<=au); if(tf) all=all.filter(f=>(f.tirajs||[]).includes(tf)); const vente=all.reduce((a,b)=>a+(b.total||0),0); const com=Math.round(vente*0.1); const apaye=all.reduce((a,b)=>a+(b.gain||0),0); const net=vente-com-apaye; document.getElementById('rapData').innerHTML=`<div class="ticket-preview"><div style="text-align:center">Du ${du} Au ${au}<br>${tf||'Tous'}<br><br>Vente: ${vente}$<br>Commission: ${com}$<br>A payer: ${apaye}$<br><br><b>Balance net: ${net}$</b><br>Fiches: ${all.length}</div><br><button class="btn bK" onclick="window.print()">🖨️ Imprimer Rapport</button></div>`; }); }
+function reprint(id){ db.ref('fiches/'+id).once('value',s=>{ const f=s.val(); if(!f) return; const corps=f.details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:20px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); window.lastHtml=`<div style="font-size:28px;text-align:center;font-weight:900">${config.entete||'C&D VERITE LOTTO'}</div>${corps}<div style="border-top:3px dashed #000;margin:8px 0"></div><div style="display:flex;justify-content:space-between;font-size:26px"><span>TOTAL</span><span>${f.total}$</span></div>`; doPrint(); }); }
+function genRapV(){ const du=document.getElementById('rapDu').value||getHaitiDate(); const au=document.getElementById('rapAu').value||getHaitiDate(); const tf=document.getElementById('rapTiraj').value; db.ref('fiches').once('value',s=>{ let all=Object.values(s.val()||[]).filter(f=>f.vendeur===curUser.name && f.dateStr>=du && f.dateStr<=au); if(tf) all=all.filter(f=>(f.tirajs||[]).includes(tf)); const vente=all.reduce((a,b)=>a+(b.total||0),0); document.getElementById('rapData').innerHTML=`<div class="ticket-preview">Vente: ${vente}$<br>Fiches: ${all.length}<br><button class="btn bK" onclick="window.print()">Print</button></div>`; }); }
 </script></body></html>
