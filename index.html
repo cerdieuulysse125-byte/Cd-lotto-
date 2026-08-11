@@ -1,126 +1,52 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V128 FIX SYNC</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V128.1 SECURE</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f1f5f9;padding-bottom:140px}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{background:#fff;padding:12px;border-radius:12px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.1)}input,select,button{width:100%;padding:11px;border-radius:8px;border:1.5px solid #000;margin:4px 0}button{background:#000;color:#FFD700;font-weight:900;border:none}.tab{position:fixed;bottom:0;left:0;width:100%;background:#000;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px}.tab button{font-size:9px;padding:10px 2px;border-radius:20px;min-height:38px}.tab button.active{background:#FFD700;color:#000}.row{display:flex;justify-content:space-between;align-items:center;background:#f8f8f8;padding:8px;border-radius:8px;margin:4px 0}.table{width:100%;border-collapse:collapse;font-size:8px}.table th,.table td{border:1px solid #000;padding:3px;text-align:center}.table th{background:#000;color:#FFD700}.maryaj{background:#fef9c3!important;font-weight:900}</style>
+<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f1f5f9;padding-bottom:140px}.h{background:#000;color:#FFD700;padding:12px;text-align:center;font-weight:900}.card{background:#fff;padding:12px;border-radius:12px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.1)}input,select,button{width:100%;padding:11px;border-radius:8px;border:1.5px solid #000;margin:4px 0}button{background:#000;color:#FFD700;font-weight:900;border:none}.tab{position:fixed;bottom:0;left:0;width:100%;background:#000;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px}.tab button{font-size:9px;padding:10px 2px;border-radius:20px;min-height:38px}.tab button.active{background:#FFD700;color:#000}.row{display:flex;justify-content:space-between;align-items:center;background:#f8f8f8;padding:8px;border-radius:8px;margin:4px 0}.table{width:100%;border-collapse:collapse;font-size:8px}.table th,.table td{border:1px solid #000;padding:3px;text-align:center}.table th{background:#000;color:#FFD700}</style>
 </head><body>
-<div class="h">C&D PROPRIO V128 - 3 MARYAJ - SYNC FIX</div>
-<div id="login" class="card" style="text-align:center;margin-top:30px"><h3>🔐 Proprio</h3><input id="code" type="password" placeholder="Modepas Proprio"><button onclick="go()">Antre</button><div id="loginErr" style="color:red"></div></div>
+<div class="h">C&D PROPRIO V128.1 SECURE</div>
+<div id="login" class="card" style="text-align:center;margin-top:30px"><h3>🔐 Proprio</h3><input id="code" type="password" placeholder="Modpas Proprio"><button onclick="go()">Antre</button><div id="loginErr" style="color:red;font-weight:900;font-size:13px;margin-top:6px"></div></div>
 <div id="app" style="display:none">
-<div id="sec1" class="sec"><div class="card" style="border:2px solid #000"><h3>1. Rezilta - 3 MARYAJ / TIRAJ</h3>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input type="date" id="rDate"><select id="rTiraj"><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div>
-<div style="background:#f8f8f8;padding:8px;border-radius:8px;margin:6px 0">
-<b>Lot yo:</b><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div>1er<input id="r1"></div><div>2e<input id="r2"></div><div>3e<input id="r3"></div></div>
-<b style="color:#b45309">3 MARYAJ:</b><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div>M1<input id="rm1"></div><div>M2<input id="rm2"></div><div>M3<input id="rm3"></div></div>
-<b>Loto:</b><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div>L3<input id="rl3"></div><div>L4<input id="rl4"></div><div>L5<input id="rl5"></div></div>
-</div>
-<button onclick="saveResultGlobal()" style="background:#22c55e;color:#fff;padding:14px">💾 SAVE REZILTA GLOBAL</button><button onclick="autoFillMaryaj()" style="background:#444;color:#fff">⚡ Auto Maryaj</button></div>
-<div class="card"><h3>Tablo Afichaj - <span id="dateAff"></span></h3><div style="overflow:auto"><table class="table"><thead><tr><th>TIRAJ</th><th>1er</th><th>2e</th><th>3e</th><th>M1</th><th>M2</th><th>M3</th><th>L3</th><th>L4</th><th>L5</th></tr></thead><tbody id="tabAff"></tbody></table></div></div></div>
-
-<div id="sec5" class="sec" style="display:none"><div class="card"><h3>5. Vendeurs - V128 SYNC FIREBASE ✓</h3>
-<div style="display:grid;grid-template-columns:1fr 1fr 120px;gap:6px"><input id="vCode" placeholder="code ex: ESTINVIL"><input id="vPass" placeholder="pass ex: 0000000"><select id="vStatut"><option value="OUVERT">Ouvert</option><option value="FERME">Fermé</option></select></div>
-<button onclick="addVendeur()" style="background:#000;color:#FFD700;padding:14px;font-size:16px">➕ Ajouter + Sync Firebase</button>
-<div id="syncStatus" style="font-size:11px;font-weight:900;text-align:center;padding:6px;margin:4px 0;border-radius:6px;background:#dbeafe;color:#1e40af">🔄 Sync: Ap tann Firebase...</div>
-<div id="vList"></div>
-<button onclick="syncAllToFirebase()" style="background:#2563eb;color:#fff;margin-top:10px">☁️ FORSE SYNC TOUT VANDEUR VÈS FIREBASE KOUNYA</button>
-</div></div>
-
-<div id="sec2" class="sec" style="display:none"><div class="card"><h3>2. Limite Global</h3><div id="limList"></div><button onclick="saveLim()">Sove Limit</button></div></div>
-<div id="sec3" class="sec" style="display:none"><div class="card"><h3>3. Heures / Prix / Entête</h3><div id="configBox"></div><button onclick="saveConfig()">Sove Config</button></div></div>
-<div id="sec4" class="sec" style="display:none"><div class="card"><h3>4. Rapport</h3><input type="date" id="rapDate"><button onclick="loadRapport()">Voir Rapport</button><div id="rapBox"></div></div></div>
-
-<div class="tab"><button onclick="showSec(1)" id="b1" class="active">Tirage</button><button onclick="showSec(2)" id="b2">Limite</button><button onclick="showSec(3)" id="b3">Heures</button><button onclick="showSec(5)" id="b5">Prix</button><button onclick="showSec(5)" id="b5b" style="background:#FFD700;color:#000">Vandè</button><button onclick="showSec(4)" id="b4">Rapport</button><button onclick="showSec(3)" id="b6">Entête</button></div>
+<div id="sec1" class="sec"><div class="card" style="border:2px solid #000"><h3>1. Rezilta</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input type="date" id="rDate"><select id="rTiraj"><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px"><div>1er<input id="r1"></div><div>2e<input id="r2"></div><div>3e<input id="r3"></div></div><button onclick="saveResultGlobal()" style="background:#22c55e;color:#fff">SAVE REZILTA</button></div></div>
+<div id="sec5" class="sec" style="display:none"><div class="card"><h3>5. Vendeurs - SYNC FIREBASE</h3><div style="display:grid;grid-template-columns:1fr 1fr 120px;gap:6px"><input id="vCode" placeholder="code"><input id="vPass" type="password" placeholder="pass"><select id="vStatut"><option value="OUVERT">Ouvert</option><option value="FERME">Fermé</option></select></div><button onclick="addVendeur()" style="padding:14px">➕ Ajouter + Sync Firebase</button><div id="syncStatus" style="font-size:11px;font-weight:900;text-align:center;padding:6px;margin:4px 0;border-radius:6px;background:#dbeafe">Sync...</div><div id="vList"></div><button onclick="syncAllToFirebase()" style="background:#2563eb;color:#fff;margin-top:10px">☁️ FORSE SYNC TOUT VÈS FIREBASE</button></div></div>
+<div id="sec2" class="sec" style="display:none"><div class="card"><h3>2. Limite</h3><div id="limList"></div><button onclick="saveLim()">Sove</button></div></div>
+<div id="sec3" class="sec" style="display:none"><div class="card"><h3>3. Config</h3>Entete<input id="cfgEntete"><br>Pied<input id="cfgPied"><br>Commission %<input id="cfgCom" type="number" value="10"><br>Modpas Proprio (pou chanje)<input id="cfgProprioPass" type="password" placeholder="Nouvo modpas Proprio"><button onclick="saveConfig()">Sove Config</button></div></div>
+<div id="sec4" class="sec" style="display:none"><div class="card"><h3>4. Rapport</h3><input type="date" id="rapDate"><button onclick="loadRapport()">Voir</button><div id="rapBox"></div></div></div>
+<div class="tab"><button onclick="showSec(1)" id="b1" class="active">Tirage</button><button onclick="showSec(2)" id="b2">Limite</button><button onclick="showSec(3)" id="b3">Config</button><button onclick="showSec(5)" id="b5" style="background:#FFD700;color:#000">Vandè</button><button onclick="showSec(4)" id="b4">Rapport</button></div>
 </div>
 <script>
 const firebaseConfig={databaseURL:"https://cerdieulotto-default-rtdb.firebaseio.com"}; firebase.initializeApp(firebaseConfig); const db=firebase.database();
 let config={};
-function go(){ if(document.getElementById('code').value===''){ document.getElementById('loginErr').innerText='Mete modpas'; return; } document.getElementById('login').style.display='none'; document.getElementById('app').style.display='block'; loadAll(); }
-function showSec(n){ document.querySelectorAll('.sec').forEach(s=>s.style.display='none'); document.getElementById('sec'+n).style.display='block'; document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active')); document.getElementById('b'+n).classList.add('active'); if(n===1) loadTirajRes(); if(n===5) loadVendeurs(); }
-function loadAll(){ db.ref('config').on('value',snap=>{ config=snap.val()||{}; document.getElementById('syncStatus').innerText='✅ Sync Firebase OK - '+Object.keys(config.vendeurs||{}).length+' vendeurs'; renderVendeurs(); }); loadVendeurs(); document.getElementById('rDate').valueAsDate=new Date(); }
 
-// ===== VENDEUR V128 FIX - SYNC FIREBASE =====
-function loadVendeurs(){
-  // Li nan Firebase + local
-  db.ref('config/vendeurs').once('value',snap=>{
-    let fb = snap.val()||{};
-    let local = [];
-    try{ let l=localStorage.getItem('vendeurs'); if(l) local=JSON.parse(l); }catch(e){}
-    // Si local gen plis, sync yo
-    if(local.length>Object.keys(fb).length){
-      document.getElementById('syncStatus').innerText='⚠️ Local gen '+local.length+' men Firebase gen '+Object.keys(fb).length+' - Peze SYNC';
+// MODPAS PROPRIO EGZAT - PA REPETE
+async function go(){
+  const input=document.getElementById('code').value.trim();
+  const err=document.getElementById('loginErr');
+  if(!input){ err.innerText="Mete modpas"; return; }
+  err.innerText="Ap verifye...";
+  try{
+    const snap=await db.ref('config').once('value');
+    config=snap.val()||{};
+    // Modpas Proprio sove nan Firebase: config/proprioPass
+    // Si pa genyen, nou itilize "CD2024" kòm defo premye fwa, apre ou ka chanje l nan Config
+    const bonPass=String(config.proprioPass||config.proprio_pass||config.passProprio||"CD2024").trim();
+    if(input!==bonPass){
+      // PA MONTRE KI MODPAS KI BON - JAN OU MANDE
+      throw new Error("⛔ Modpas pa bon!");
     }
-    renderVendeurs();
-  });
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    loadAll();
+  }catch(e){ err.innerText=e.message; }
 }
-function renderVendeurs(){
-  let list = config.vendeurs||{};
-  let html='';
-  Object.values(list).forEach(v=>{
-    let c = v.code||v.nom||''; let p = v.pass||v.password||''; let s = v.statut||'OUVERT';
-    let btnColor = s.includes('FERME')? '#16a34a' : '#ef4444';
-    let btnText = s.includes('FERME')? 'OUVERT' : 'FERME';
-    html+=`<div class="row"><span><b>${c}</b> / ${p} ${s}</span><button onclick="toggleVendeur('${c}')" style="width:80px;background:${btnColor};color:#fff;padding:6px;border-radius:20px">${btnText}</button></div>`;
-  });
-  if(html==='') html='<div style="text-align:center;color:#666;padding:10px">Pa gen vendeur nan Firebase. Peze SYNC pou monte sa yo ki nan telefòn ou.</div>';
-  document.getElementById('vList').innerHTML=html;
-}
-async function addVendeur(){
-  let code=document.getElementById('vCode').value.trim();
-  let pass=document.getElementById('vPass').value.trim();
-  let statut=document.getElementById('vStatut').value;
-  if(!code||!pass){ alert('Mete code ak pass'); return; }
-  let obj={code:code.toUpperCase(), nom:code.toUpperCase(), pass:pass, password:pass, statut:statut, actif: statut==='OUVERT', date: new Date().toISOString()};
-  // 1. Sove nan Firebase - SA KI TE MANK E NAN V127
-  await db.ref('config/vendeurs/'+code.toUpperCase()).set(obj);
-  await db.ref('vendeurs/'+code.toUpperCase()).set(obj);
-  await db.ref('config/vendeurs/'+code.toLowerCase()).set(obj); // pou V115.4 ka jwenn li ak miniscule
-  // 2. Sove local tou
-  let local=[]; try{ local=JSON.parse(localStorage.getItem('vendeurs')||'[]'); }catch(e){ local=[]; }
-  local=local.filter(x=> (x.code||'').toUpperCase()!==code.toUpperCase());
-  local.push(obj);
-  localStorage.setItem('vendeurs',JSON.stringify(local));
-  document.getElementById('vCode').value=''; document.getElementById('vPass').value='';
-  document.getElementById('syncStatus').innerText='✅ '+code+' sove nan Firebase + Local - Vendeur ka konekte kounya!';
-  renderVendeurs();
-}
-async function toggleVendeur(code){
-  let ref=db.ref('config/vendeurs/'+code);
-  let snap=await ref.once('value');
-  let v=snap.val(); if(!v){ v=(config.vendeurs||{})[code]; }
-  if(!v) return;
-  let newStatut = (v.statut||'OUVERT').includes('OUVERT')? 'FERME' : 'OUVERT';
-  v.statut=newStatut; v.actif=newStatut==='OUVERT';
-  await db.ref('config/vendeurs/'+code).update({statut:newStatut, actif:v.actif});
-  await db.ref('config/vendeurs/'+code.toLowerCase()).update({statut:newStatut, actif:v.actif});
-  await db.ref('vendeurs/'+code).update({statut:newStatut, actif:v.actif});
-  document.getElementById('syncStatus').innerText='✅ '+code+' kounya '+newStatut;
-}
-async function syncAllToFirebase(){
-  if(!confirm('Ou vle monte TOUT vendeur ki nan telefòn ou a nan Firebase pou Sunmi yo ka wè yo?')) return;
-  let local=[]; try{ local=JSON.parse(localStorage.getItem('vendeurs')||'[]'); }catch(e){ local=[]; }
-  // Ajoute sa ki nan image ou a si local vid
-  if(local.length===0){
-    local=[
-      {code:"123456",nom:"123456",pass:"1234",statut:"OUVERT",actif:true},
-      {code:"ESTINVIL",nom:"ESTINVIL",pass:"0000000",statut:"OUVERT",actif:true},
-      {code:"JULES",nom:"JULES",pass:"1111111",statut:"OUVERT",actif:true},
-      {code:"TAMOUCHE",nom:"TAMOUCHE",pass:"123456",statut:"OUVERT",actif:true}
-    ];
-  }
-  for(let v of local){
-    let c=String(v.code||v.nom||'').toUpperCase();
-    if(!c) continue;
-    let obj={code:c,nom:c,pass:String(v.pass||v.password||''),password:String(v.pass||v.password||''),statut:v.statut||'OUVERT',actif:true};
-    await db.ref('config/vendeurs/'+c).set(obj);
-    await db.ref('config/vendeurs/'+c.toLowerCase()).set(obj);
-    await db.ref('vendeurs/'+c).set(obj);
-  }
-  document.getElementById('syncStatus').innerText='✅ SYNC FINI - '+local.length+' vendeurs monte nan Firebase! Kounya V115.4 ap mache';
-  renderVendeurs();
-}
-function autoFillMaryaj(){ let a=document.getElementById('r1').value.trim(); let b=document.getElementById('r2').value.trim(); let c=document.getElementById('r3').value.trim(); if(!a||!b||!c){ alert('Mete 1er 2e 3e'); return; } document.getElementById('rm1').value=a.padStart(2,'0')+b.padStart(2,'0'); document.getElementById('rm2').value=a.padStart(2,'0')+c.padStart(2,'0'); document.getElementById('rm3').value=b.padStart(2,'0')+c.padStart(2,'0'); document.getElementById('rl3').value=a.padStart(2,'0')+b.charAt(0); }
-function saveResultGlobal(){ alert('Save - mete kòd orijinal ou isit la'); }
-function loadTirajRes(){}
+
+function showSec(n){ document.querySelectorAll('.sec').forEach(s=>s.style.display='none'); document.getElementById('sec'+n).style.display='block'; document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active')); document.getElementById('b'+n)?.classList.add('active'); if(n===5) renderVendeurs(); }
+function loadAll(){ db.ref('config').on('value',snap=>{ config=snap.val()||{}; document.getElementById('syncStatus').innerText='✅ Firebase OK - '+(Object.keys(config.vendeurs||{}).length)+' vendeurs'; document.getElementById('cfgEntete').value=config.entete||''; document.getElementById('cfgPied').value=config.pied||''; document.getElementById('cfgCom').value=config.commission||10; renderVendeurs(); }); document.getElementById('rDate').valueAsDate=new Date(); }
+function renderVendeurs(){ let list=config.vendeurs||{}; let html=''; Object.values(list).forEach(v=>{ let c=v.code||''; let p="••••••"; let s=v.statut||'OUVERT'; let btnColor=s.includes('FERME')?'#16a34a':'#ef4444'; let btnText=s.includes('FERME')?'OUVERT':'FERME'; html+=`<div class="row"><span><b>${c}</b> / ${p} ${s}</span><button onclick="toggleVendeur('${c}')" style="width:80px;background:${btnColor};color:#fff;padding:6px;border-radius:20px">${btnText}</button></div>`; }); if(!html) html='<div style="text-align:center;color:#666;padding:10px">Pa gen vendeur</div>'; document.getElementById('vList').innerHTML=html; }
+async function addVendeur(){ let code=document.getElementById('vCode').value.trim().toUpperCase(); let pass=document.getElementById('vPass').value.trim(); let statut=document.getElementById('vStatut').value; if(!code||!pass){ alert('Mete code ak pass'); return; } let obj={code:code,nom:code,pass:pass,password:pass,statut:statut,actif:statut==='OUVERT'}; await db.ref('config/vendeurs/'+code).set(obj); await db.ref('config/vendeurs/'+code.toLowerCase()).set(obj); await db.ref('vendeurs/'+code).set(obj); let local=[]; try{ local=JSON.parse(localStorage.getItem('vendeurs')||'[]'); }catch(e){} local=local.filter(x=>(x.code||'').toUpperCase()!==code); local.push(obj); localStorage.setItem('vendeurs',JSON.stringify(local)); document.getElementById('vCode').value=''; document.getElementById('vPass').value=''; document.getElementById('syncStatus').innerText='✅ '+code+' sove - modpas egzat: '+pass.length+' karaktè (pa repete)'; }
+async function toggleVendeur(code){ let snap=await db.ref('config/vendeurs/'+code).once('value'); let v=snap.val(); if(!v) return; let newStatut=(v.statut||'OUVERT').includes('OUVERT')?'FERME':'OUVERT'; await db.ref('config/vendeurs/'+code).update({statut:newStatut,actif:newStatut==='OUVERT'}); await db.ref('config/vendeurs/'+code.toLowerCase()).update({statut:newStatut,actif:newStatut==='OUVERT'}); await db.ref('vendeurs/'+code).update({statut:newStatut,actif:newStatut==='OUVERT'}); }
+async function syncAllToFirebase(){ let local=[]; try{ local=JSON.parse(localStorage.getItem('vendeurs')||'[]'); }catch(e){} if(local.length===0){ alert('Pa gen vendeur nan telefòn sa'); return; } for(let v of local){ let c=String(v.code||'').toUpperCase(); let obj={code:c,nom:c,pass:String(v.pass||''),password:String(v.pass||''),statut:v.statut||'OUVERT',actif:true}; await db.ref('config/vendeurs/'+c).set(obj); await db.ref('config/vendeurs/'+c.toLowerCase()).set(obj); await db.ref('vendeurs/'+c).set(obj); } document.getElementById('syncStatus').innerText='✅ SYNC FINI - '+local.length+' vendeurs'; }
+async function saveConfig(){ let ent=document.getElementById('cfgEntete').value; let pied=document.getElementById('cfgPied').value; let com=parseInt(document.getElementById('cfgCom').value)||10; let newPass=document.getElementById('cfgProprioPass').value.trim(); let updates={entete:ent,pied:pied,commission:com}; if(newPass){ updates.proprioPass=newPass; } await db.ref('config').update(updates); alert(newPass?'✅ Config + Nouvo modpas Proprio sove! (egzat)':'✅ Config sove!'); document.getElementById('cfgProprioPass').value=''; }
+function saveResultGlobal(){ alert('Fonksyon rezilta - kite kòd orijinal ou'); }
 function saveLim(){}
-function saveConfig(){}
 function loadRapport(){}
 </script></body></html>
