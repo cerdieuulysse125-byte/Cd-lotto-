@@ -57,90 +57,92 @@ function calcGainForTiraj(fiche, tirajNom){
 function calcGainTotal(fiche){
   let tot=0; (fiche.tirajs||[]).forEach(t=>{ tot+=calcGainForTiraj(fiche,t); }); if(tot===0) tot=parseInt(fiche.gain)||0; return tot;
 }
-async function genRapport(){
-var du=document.getElementById('du').value, au=document.getElementById('au').value, filV=document.getElementById('filVendeur').value, filT=document.getElementById('filTiraj').value;
-if(!du||!au){alert("Chwazi dat");return;}
-try{
-var fichSnap=await db.ref('proprios/'+PROP+'/fiches').once('value');
-var resuSnap=await db.ref('proprios/'+PROP+'/resultats').once('value');
-var prixSnap=await db.ref('proprios/'+PROP+'/config/prix').once('value');
-var vendSnap=await db.ref('proprios/'+PROP+'/vendeurs').once('value');
-var prix=prixSnap.exists()?prixSnap.val():PRIX;
-var resu=resuSnap.exists()?resuSnap.val():{};
-var comMap={}; if(vendSnap.exists()){vendSnap.forEach(v=>{comMap[v.key]=parseFloat(v.val().commission)||10;});}
+function genRapportProprio(){
+  const du=document.getElementById('rapDu').value; const au=document.getElementById('rapAu').value; const tirFiltre=document.getElementById('rapTirajProp').value; const vend=document.getElementById('rapVend').value;
+  if(!du||!au){ alert('Chwazi dat'); return; }
+  document.getElementById('rapBox').innerHTML='⏳ Ap kalkile rapò korije pa tiraj...';
+  db.ref('fiches').once('value',s=>{
+    let all=Object.values(s.val()||[]).filter(f=>f.dateStr>=du && f.dateStr<=au);
+    if(tirFiltre) all=all.filter(f=>(f.tirajs||[]).includes(tirFiltre));
+    if(vend) all=all.filter(f=>f.vendeur===vend);
 
-var vPar={}, pPar={}, comPar={}, detailParVendeur={};
-var vTot=0,pTot=0,comTot=0;
+    let vente=0, paye=0;
+    let detailParTiraj={};
+    all.forEach(f=>{
+      const nbT=(f.tirajs||[]).length||1;
+      if(tirFiltre){
+        // KORIJE: vente pa tiraj = total / nbT
+        const venteParTiraj=f.venteParTiraj!==undefined?f.venteParTiraj:(f.total/nbT);
+        vente+=venteParTiraj;
+        const g=calcGainForTiraj(f, tirFiltre);
+        paye+=g;
+        if(!detailParTiraj[tirFiltre]) detailParTiraj[tirFiltre]={vente:0,paye:0,fiches:0};
+        detailParTiraj[tirFiltre].vente+=venteParTiraj;
+        detailParTiraj[tirFiltre].paye+=g;
+        detailParTiraj[tirFiltre].fiches++;
+      } else {
+        vente+=f.total||0;
+        let totG=0; (f.tirajs||[]).forEach(tn=>{ totG+=calcGainForTiraj(f, tn); }); if(totG===0) totG=f.gain||0; paye+=totG;
+        // Pou detail
+        (f.tirajs||[]).forEach(tn=>{
+          if(!detailParTiraj[tn]) detailParTiraj[tn]={vente:0,paye:0,fiches:0};
+          const venteParTiraj=f.venteParTiraj!==undefined?f.venteParTiraj:(f.total/nbT);
+          detailParTiraj[tn].vente+=venteParTiraj;
+          detailParTiraj[tn].paye+=calcGainForTiraj(f, tn);
+          detailParTiraj[tn].fiches++;
+        });
+      }
+    });
 
-if(fichSnap.exists()){
-var seen=new Set();
-fichSnap.forEach(f=>{
-var fd=f.val();
-if(!fd.date||fd.date<du||fd.date>au)return;
-if(filV!=="tous" && fd.vendeur!==filV)return;
-var uniq=fd.id||fd.vendeur+fd.date+fd.boul+fd.miz+(fd.tirajs||[]).join('');
-if(seen.has(uniq))return; seen.add(uniq);
-if(seen.has(uniq)) return; seen.add(uniq);
-var miz=parseFloat(fd.miz)||0;
-if(!fd.tirajs ||!Array.isArray(fd.tirajs)) return;
-if(miz<=0) return;
-fd.tirajs.forEach(tir=>{
- if(filT!=="tous" && tir!==filT) return;
- if(!vPar[tir]){vPar[tir]=0; pPar[tir]=0; comPar[tir]=0;}
- if(!detailParVendeur[tir]) detailParVendeur[tir]={};
- if(!detailParVendeur[tir][fd.vendeur]) detailParVendeur[tir][fd.vendeur]={v:0,p:0,c:0};
- vPar[tir]+=miz; vTot+=miz;
- var comRate=(comMap && comMap[fd.vendeur])?comMap[fd.vendeur]:10;
- var com=miz*comRate/100;
- comPar[tir]+=com; comTot+=com;
- detailParVendeur[tir][fd.vendeur].v+=miz;
- detailParVendeur[tir][fd.vendeur].c+=com;
- var re=resu[fd.date] && resu[fd.date][tir];
- if(!re) return;
- var gain=0; var key=fd.jeux=="Bòlèt"?fd.jeux:fd.boul;
- if(key==="Borlettes"){if(fd.boul===re.borlet) gain=miz*50;}
- else if(key==="Mariage" && re.mariage && re.mariage.includes(fd.boul)) gain=miz*100;
- else if(key==="Loto3" && fd.boul===re.loto3) gain=miz*500;
- else if(key==="Loto4" && fd.boul===re.loto4) gain=miz*5000;
- else if(key==="Loto5" && fd.boul===re.loto5) gain=miz*25000;
- if(gain>0){
-  pPar[tir]+=gain; pTot+=gain;
-  detailParVendeur[tir][fd.vendeur].p+=gain;
- }
-});
-});
+    const uniq=getUniqueVendeurs();
+    let comP=config.commission||10;
+    if(vend && uniq[vend] && uniq[vend].commission!==undefined) comP=uniq[vend].commission;
+    // Si Tous vendeur, commission moyenne pondérée
+    let commission=0;
+    if(vend){
+      commission=Math.round(vente*comP/100);
+    } else {
+      // Kalkile commission pa vendeur
+      let allV=all;
+      let comTotal=0;
+      allV.forEach(f=>{
+        const nbT=(f.tirajs||[]).length||1;
+        let vte=f.total||0;
+        if(tirFiltre) vte=f.venteParTiraj!==undefined?f.venteParTiraj:(f.total/nbT);
+        const cv=uniq[f.vendeur]?.commission?? config.commission?? 10;
+        comTotal+=vte*cv/100;
+      });
+      commission=Math.round(comTotal);
+      comP='moy';
+    }
+    const balance=vente-commission-paye;
+
+    let htmlDetail='';
+    if(!tirFiltre){
+      htmlDetail='<div style="margin-top:10px;border-top:2px dashed #000;padding-top:6px"><b>Detail pa Tiraj (KORIJE):</b><br>';
+      Object.keys(detailParTiraj).sort().forEach(t=>{
+        const d=detailParTiraj[t];
+        htmlDetail+=`${t}: Vente ${d.vente}$ - Paye ${d.paye}$ - Fiches ${d.fiches}<br>`;
+      });
+      htmlDetail+='</div>';
+      htmlDetail+='<div style="font-size:9px;color:#666;margin-top:6px">Ex: Fich GA/FL 90=10 Total 20 -> GA vente=10 FL vente=10 (pa 20/20)</div>';
+    } else {
+      htmlDetail=`<div style="margin-top:8px;background:#dcfce7;padding:6px;border-radius:6px;font-size:11px">✅ KORIJE: Fich ak plizyè tiraj kounya divize<br>Ex: GA/FL 90=10 Total 20 -> Rapò ${tirFiltre} Vente=10 (pa 20)<br>Si genyen 1000 nan GA ak 1000 nan FL -> Rapò GA=1000 FL=1000 Tous=2000</div>`;
+    }
+
+    document.getElementById('rapBox').innerHTML=`
+    <div style="border:2px dashed #000;padding:10px;border-radius:10px;background:#fff;font-family:monospace;font-weight:900">
+      <div style="text-align:center">RAPPORT PROPRIO KORIJE ✅<br>Du: ${du} Au: ${au}<br>Tirage: ${tirFiltre||'Tous'}<br>Vendeur: ${vend||'Tous'} (${comP}%)<br>Fiches: ${all.length}</div>
+      <div style="border-top:2px dashed #000;margin:6px 0"></div>
+      Vente: ${vente}$<br>
+      Commission (${comP}${comP==='moy'?'% moy':'%'}): ${commission}$<br>
+      A payer: ${paye}$<br>
+      <div style="font-size:18px;text-align:center;background:#000;color:#FFD700;padding:6px;border-radius:8px;margin-top:6px">Balance net: ${balance}$</div>
+      <div style="font-size:9px;color:#666;text-align:center">Balance = Vente - Commission - A payer</div>
+      ${htmlDetail}
+      <button onclick="window.print()" style="margin-top:8px">🖨️ IMPRIMER</button>
+    </div>`;
+  });
 }
-
-document.getElementById('rV').innerText=vTot;
-document.getElementById('rC').innerText=comTot;
-document.getElementById('rP').innerText=pTot;
-document.getElementById('rN').innerText=vTot-comTot-pTot;
-
-var html=`<table class="table" style="width:100%;border-collapse:collapse"><tr><th>Tiraj</th><th>Vant</th><th>Kom</th><th>Peye</th><th>Nèt</th></tr>`;
-for(var t of TIRAJ){
- if(filT!=="tous" && t!==filT) continue;
- var vp=vPar[t]||0, pp=pPar[t]||0, cp=comPar[t]||0;
- if(vp===0 && pp===0 && filT==="tous") continue;
- html+=`<tr><td style="font-weight:900">${t}</td><td>${vp}</td><td>${cp}</td><td>${pp}</td><td>${vp-cp-pp}</td></tr>`;
- // DETAY PA VANDÈ POU TIRAJ SA A
- if(detailParVendeur[t]){
-  for(var v in detailParVendeur[t]){
-   var dv=detailParVendeur[t][v];
-   if(dv.v>0) html+=`<tr><td style="font-size:11px;padding-left:15px">- ${v}</td><td style="font-size:11px">${dv.v}</td><td style="font-size:11px">${dv.c}</td><td style="font-size:11px">${dv.p}</td><td style="font-size:11px">${dv.v-dv.c-dv.p}</td></tr>`;
-  }
- }
-}
-html+=`</table>`;
-document.getElementById('rapportDetail').innerHTML=html;
-
-}catch(e){alert("Erè: "+e.message);}
-}
-
-function doPrintRapport(){
- var c=document.getElementById('rapportDetail');
- if(!c||!c.innerHTML) return;
- var w=window.open('','_blank');
- w.document.write('<html><head><title>Rapo Proprio</title></head><body>'+c.innerHTML+'</body></html>');
- w.document.close(); w.print();
-}
+async function saveConfig(){ let ent=document.getElementById('cfgEntete').value.trim(); let pied=document.getElementById('cfgPied').value.trim(); let com=parseInt(document.getElementById('cfgCom').value)||10; let newPass=document.getElementById('cfgProprioPass').value.trim(); let upd={entete:ent,pied:pied,commission:com}; if(newPass) upd.proprioPass=newPass; await db.ref('config').update(upd); document.getElementById('cfgStatus').innerText=newPass?'✅ Config + modpas sove!':'✅ Config sove'; document.getElementById('cfgProprioPass').value=''; }
 </script></body></html>
