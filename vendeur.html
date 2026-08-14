@@ -74,9 +74,15 @@ var html=`<table style="width:100%;border-collapse:collapse;border:1px solid #cc
 for(var t of TIRAJ){
 async function genererRapport(){
  try{
-  var cont = document.getElementById('rapportDetail') || document.getElementById('zoneRapport') || document.getElementById('rapport');
-  if(cont) cont.innerHTML = '<div style="text-align:center;padding:20px">⏳ Ap kalkile... <br><small>Pa fèmen paj la</small></div>';
-  
+  for(var tir in vPar){
+  var vente = vPar[tir]||0;
+  var peye = pPar[tir]||0;
+  var gain = vente - (vente*0.1) - peye; // vente - komisyon - peye
+  html += `<div style="border:1px solid #ccc;margin:5px;padding:8px;border-radius:8px">
+    <b>TIRAJ ${tir}</b><br>
+    Vente: ${vente} Gdes | Peye: ${peye} Gdes | Gain: ${gain} Gdes
+  </div>`;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      }
   var duVal = document.getElementById('dateDu')?.value || document.getElementById('du')?.value;
   var auVal = document.getElementById('dateAu')?.value || document.getElementById('au')?.value;
   var filT = document.getElementById('filTiraj')?.value || document.getElementById('tiraj')?.value || "tous";
