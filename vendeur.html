@@ -100,77 +100,21 @@ function copyFicheToVendre(fid){
   });
 }
 function reprintFiche(fid){ db.ref('fiches/'+fid).once('value',s=>{ const f=s.val(); if(!f) return; const corps=(f.details||[]).map(d=>`<div style="display:flex;justify-content:space-between;font-size:18px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); lastHtml=`<div style="font-size:22px;text-align:center;font-weight:900">${config.entete||'C&D'}</div><div style="text-align:center;font-size:12px">${f.dateStr}<br>${f.vendeur}</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center">Tirage: <b>${(f.tirajs||[]).join('/')}</b><br>Id: <b>${f.id.slice(-5).toUpperCase()}</b></div><div style="border-top:2px dashed #000;margin:5px 0"></div>${corps}<div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:18px"><span>TOTAL</span><span>${f.total}$</span></div>`; doPrint(); }); }
-function genererRapport(){
- try{
-  var zone = document.getElementById('rapportDetail') || document.getElementById('zoneRapport') || document.getElementById('rapport');
-  if(zone) zone.innerHTML = '⏳ Ap kalkile rapò pa tiraj...';
-
-  var du = document.getElementById('dateDu')?.value || document.getElementById('du')?.value;
-  var au = document.getElementById('dateAu')?.value || document.getElementById('au')?.value;
-  var filT = document.getElementById('filTiraj')?.value || document.getElementById('tiraj')?.value || "tous";
-
-  var fiches = window.fiches || window.toutesFiches || [];
-  var resu = window.resultats || window.resu || {};
-  var comMap = window.comMap || {};
-
-  // Inisyalizasyon pa tiraj
-  var vPar={}, pPar={}, comPar={}, gPar={};
-  var vTot=0, pTot=0, comTot=0;
-
-  fiches.forEach(function(fd){
-    if(!fd.date) return;
-    if(du && fd.date < du) return;
-    if(au && fd.date > au) return;
-    if(!fd.tirajs ||!Array.isArray(fd.tirajs)) return;
-    var miz = parseFloat(fd.miz)||0;
-    if(miz<=0) return;
-
-    fd.tirajs.forEach(function(tir){
-      // KOREKSYON #1 - FILTAJ
-      if(filT!=="tous" && t!==filT) return;
-
-      if(!vPar[t]){vPar[t]=0; pPar[t]=0; comPar[t]=0; gPar[t]=0;}
-
-      vPar[t]+=miz; vTot+=miz;
-      var comRate = comMap[fd.vendeur]?parseFloat(comMap[fd.vendeur]):10;
-      var com = miz*comRate/100;
-      comPar[t]+=com; comTot+=com;
-
-      // KOREKSYON #2 - PEYE AN DETAY PA TIRAJ
-      var re = resu[fd.date] && resu[fd.date][tir];
-      var pey = 0;
-      if(re){
-        var b = (fd.boule||fd.numero||"").toString().trim();
-        if(b == re.p1) pey = miz * 50;
-        else if(b == re.p2) pey = miz * 20;
-        else if(b == re.p3) pey = miz * 10;
-      }
-      if(pey>0){
-        pPar[t]+=pey; pTot+=pey;
-      }
-      gPar[t] = vPar[t] - comPar[t] - pPar[t];
-    });
+async function genRapV(){
+  const du=document.getElementById('rapDu').value||getHaitiDate(); const au=document.getElementById('rapAu').value||getHaitiDate(); const tirFiltre=document.getElementById('rapTiraj').value;
+  document.getElementById('rapData').innerHTML="⏳ Ap kalkile kòrèk...";
+  const snap=await db.ref('fiches').once('value');
+  let all=Object.values(snap.val()||[]).filter(f=>f.vendeur===curUser.name && f.dateStr>=du && f.dateStr<=au);
+  if(tirFiltre) all=all.filter(f=>(f.tirajs||[]).includes(tirFiltre));
+  let vente=0, aPayer=0;
+  all.forEach(f=>{
+    const nbT=(f.tirajs||[]).length||1;
+    if(tirFiltre){ vente+=f.venteParTiraj!==undefined?f.venteParTiraj:(f.total/nbT); aPayer+=calcGainForTiraj(f, tirFiltre); }
+    else { vente+=f.total||0; aPayer+=calcGainTotal(f); }
   });
-
-  // AFICHAY AN DETAY PA TIRAJ
-  var html = `<div style="padding:10px">`;
-  html+= `<h3 style="text-align:center">Rapò ${du} - ${au}</h3>`;
-  for(var tir in vPar){
-    var v = vPar[tir]||0, p = pPar[tir]||0, c = comPar[tir]||0, g = gPar[tir]||0;
-    html+= `<div style="border:1px solid #ddd;margin:8px 0;padding:10px;border-radius:10px;background:#f9f9f9">
-      <b style="color:#6a0dad">TIRAJ ${tir}</b><br>
-      <span>Vente: <b>${v}</b> | Kom: <b>${c}</b> | Peye: <b style="color:red">${p}</b> | <span style="color:green">Gain: <b>${g}</b></span></span>
-    </div>`;
-  }
-  html+= `<hr><div style="text-align:center;font-weight:bold;font-size:18px">
-    TOTAL: Vente ${vTot} | Peye ${pTot} | Gain ${vTot - comTot - pTot}
-  </div></div>`;
-
-  if(zone) zone.innerHTML = html;
- }catch(e){
-  alert("Erè: "+e.message);
-  console.log(e);
- }
-  }
+  const commission=Math.round(vente*myCommission/100); const balanceNet=vente-commission-aPayer;
+  document.getElementById('rapData').innerHTML=`<div style="border:2px solid #000;padding:10px;border-radius:10px;background:#fff;font-family:monospace;font-weight:900;max-width:360px;margin:auto"><div style="text-align:center;font-size:12px;border-bottom:2px dashed #000;padding-bottom:5px">RAPPORT<br>${curUser.name} (${myCommission}%)<br>Du ${du} Au ${au}<br>Tirage: ${tirFiltre||'Tous'}<br><span style="color:#16a34a;font-size:10px">✅ KORIJE pa tiraj detaye </span></div><div style="margin-top:6px;font-size:13px;line-height:24px"><div style="display:flex;justify-content:space-between"><span>Vente:</span><span>${vente}$</span></div><div style="display:flex;justify-content:space-between"><span>Commission (${myCommission}%):</span><span>${commission}$</span></div><div style="display:flex;justify-content:space-between;color:#b91c1c"><span>A payer:</span><span>${aPayer}$</span></div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:17px"><span>Balance net:</span><span>${balanceNet}$</span></div><div style="font-size:9px;color:#666;text-align:center">Fiches: ${all.length}</div></div><button class="btn bK" style="margin-top:8px" onclick="doPrintRapport()">🖨️ IMPRIMER</button></div>`;
+  lastRapportHtml=`<div style="text-align:center;font-size:13px;font-weight:900">${config.entete||'C&D'}<br>RAPPORT ${curUser.name}<br>${du} au ${au}<br>${tirFiltre||'Tous'}</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="font-size:12px">Vente: ${vente}$<br>Commission: ${commission}$<br>A payer: ${aPayer}$</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center;font-size:15px">BALANCE NET<br><b style="font-size:20px">${balanceNet}$</b></div>`;
+}
 function doPrintRapport(){ if(!lastRapportHtml) return; const c=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;display:flex;justify-content:center}.ticket{width:52mm;text-align:center;font-family:monospace;font-weight:900}</style></head><body><div class="ticket">${lastRapportHtml}</div><script>setTimeout(()=>{window.print(); setTimeout(()=>window.close(),700)},300);<\/script></body></html>`; const w=window.open('','_blank','width=360,height=600'); w.document.open(); w.document.write(c); w.document.close(); }
 </script></body></html>
