@@ -127,14 +127,14 @@ function genererRapport(){
 
     fd.tirajs.forEach(function(tir){
       // KOREKSYON #1 - FILTAJ
-      if(filT!=="tous" && tir!==filT) return;
+      if(filT!=="tous" && t!==filT) return;
 
-      if(!vPar[tir]){vPar[tir]=0; pPar[tir]=0; comPar[tir]=0; gPar[tir]=0;}
+      if(!vPar[t]){vPar[t]=0; pPar[t]=0; comPar[t]=0; gPar[t]=0;}
 
-      vPar[tir]+=miz; vTot+=miz;
+      vPar[t]+=miz; vTot+=miz;
       var comRate = comMap[fd.vendeur]?parseFloat(comMap[fd.vendeur]):10;
       var com = miz*comRate/100;
-      comPar[tir]+=com; comTot+=com;
+      comPar[t]+=com; comTot+=com;
 
       // KOREKSYON #2 - PEYE AN DETAY PA TIRAJ
       var re = resu[fd.date] && resu[fd.date][tir];
@@ -146,9 +146,9 @@ function genererRapport(){
         else if(b == re.p3) pey = miz * 10;
       }
       if(pey>0){
-        pPar[tir]+=pey; pTot+=pey;
+        pPar[t]+=pey; pTot+=pey;
       }
-      gPar[tir] = vPar[tir] - comPar[tir] - pPar[tir];
+      gPar[t] = vPar[t] - comPar[t] - pPar[t];
     });
   });
 
