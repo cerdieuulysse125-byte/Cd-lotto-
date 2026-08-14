@@ -72,51 +72,35 @@ async function genRapV(){
   // TABLO DETAYE PA TIRAJ - GA 1000 / FL
 var html=`<table style="width:100%;border-collapse:collapse;border:1px solid #ccc"><tr style="background:#eee"><th>Tiraj</th><th>Vant</th><th>Peye</th><th>Benefis</th></tr>`;
 for(var t of TIRAJ){
- if(filT!=="tous" && t!==filT) continue;
- var vp=vPar[t]||0, pp=pPar[t]||0;
- if(vp===0 && pp===0 && filT==="tous") continue;
- html+=`<tr><td style="font-weight:900;border:1px solid #ccc;padding:4px">${t}</td><td style="border:1px solid #ccc">${vp}</td><td style="border:1px solid #ccc">${pp}</td><td style="border:1px solid #ccc">${vp-pp}</td></tr>`;
- if(detailGagnant[t] && detailGagnant[t].length){
-   for(var d of detailGagnant[t]){
-     html+=`<tr><td colspan="4" style="background:#f5f5f5;font-size:11px;padding:3px">${d}</td></tr>`;
-   }
- }
-}
-html+=`</table><div style="font-size:9px;margin-top:6px">* GA 1000 = 50x FL - Detay konplè</div>`;
-document.getElementById('rapportDetail').innerHTML=html;
-  const snap=await db.ref('fiches').once('value');
-  let all=Object.values(snap.val()||[]).filter(f=>f.vendeur===curUser.name && f.dateStr>=du && f.dateStr<=au);
-  if(tirFiltre) all=all.filter(f=>(f.tirajs||[]).includes(tirFiltre));
+async function genererRapport(){
+ try{
+  var cont = document.getElementById('rapportDetail') || document.getElementById('zoneRapport') || document.getElementById('rapport');
+  if(cont) cont.innerHTML = '<div style="text-align:center;padding:20px">⏳ Ap kalkile... <br><small>Pa fèmen paj la</small></div>';
+  
+  var duVal = document.getElementById('dateDu')?.value || document.getElementById('du')?.value;
+  var auVal = document.getElementById('dateAu')?.value || document.getElementById('au')?.value;
+  var filT = document.getElementById('filTiraj')?.value || document.getElementById('tiraj')?.value || "tous";
+  
+  // Si se TOUS, limite dat yo pou pa bloke
+  if(filT=="tous" && duVal && auVal){
+    var d1 = new Date(duVal); var d2 = new Date(auVal);
+    var diff = (d2-d1)/(1000*60*60*24);
+    if(diff > 7){ alert("Pou TOUS TIRAJ, chwazi max 7 jou pou pa bloke!"); return; }
+  }
 
-  let vente=0, aPayer=0;
-  all.forEach(f=>{
-    const nbT=(f.tirajs||[]).length||1;
-    if(tirFiltre){
-      // Si filtre pa tiraj: vente = (sum montan) = total / nbT
-      const venteParTiraj = f.venteParTiraj!==undefined? f.venteParTiraj : (f.total / nbT);
-      vente += venteParTiraj;
-      aPayer += calcGainForTiraj(f, tirFiltre);
-    } else {
-      vente += f.total||0;
-      aPayer += calcGainTotal(f);
-    }
-  });
-  const commission=Math.round(vente*myCommission/100);
-  const balanceNet=vente-commission-aPayer;
-  document.getElementById('rapData').innerHTML=`
-  <div style="border:2px solid #000;padding:10px;border-radius:10px;background:#fff;font-family:monospace;font-weight:900;max-width:360px;margin:auto">
-    <div style="text-align:center;font-size:12px;border-bottom:2px dashed #000;padding-bottom:5px">RAPPORT VENDEUR<br>${curUser.name} (${myCommission}%)<br>Du ${du} Au ${au}<br>Tirage: ${tirFiltre||'Tous (General)'}<br><span style="font-size:10px;color:#16a34a">✅ KORIJE: Vente pa tiraj</span></div>
-    <div style="margin-top:6px;font-size:13px;line-height:24px">
-      <div style="display:flex;justify-content:space-between"><span>Vente:</span><span>${vente}$</span></div>
-      <div style="display:flex;justify-content:space-between"><span>Commission (${myCommission}%):</span><span>${commission}$</span></div>
-      <div style="display:flex;justify-content:space-between;color:#b91c1c"><span>A payer:</span><span>${aPayer}$</span></div>
-      <div style="border-top:2px dashed #000;margin:5px 0"></div>
-      <div style="display:flex;justify-content:space-between;font-size:17px"><span>Balance net:</span><span>${balanceNet}$</span></div>
-      <div style="font-size:9px;color:#666;text-align:center;margin-top:4px">Ex: GA/FL 90=10 Total 20 -> GA vente=10 FL vente=10<br>Balance = Vente - Commission - A payer<br>Fiches: ${all.length}</div>
-    </div>
-    <button class="btn bK" style="margin-top:8px" onclick="doPrintRapport()">🖨️ IMPRIMER</button>
-  </div>`;
-  lastRapportHtml=`<div style="text-align:center;font-size:13px;font-weight:900">${config.entete||'C&D'}<br>RAPPORT ${curUser.name} (${myCommission}%)<br>${du} au ${au}<br>Tirage: ${tirFiltre||'Tous'}</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="font-size:12px">Vente: ${vente}$<br>Commission: ${commission}$<br>A payer: ${aPayer}$</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center;font-size:15px">BALANCE NET<br><b style="font-size:20px">${balanceNet}$</b></div>`;
+  // --- RÈS KÒD OU A ISIT ---
+  // Kite kalkil ou yo men chanje sèlman liy sa a:
+  // AVAN: if(filT=="tous" && tir!==filT) return;
+  // APRE: if(filT!=="tous" && tir!==filT) return;
+
+  // Apre kalkil la fin fèt:
+  // cont.innerHTML = html;
+
+ }catch(e){
+  alert("Erè rapport: "+e.message);
+  console.log(e);
+  if(cont) cont.innerHTML = '<div style="color:red">Erè: '+e.message+'<br> Eseye ak yon sèl tiraj (8H) olye de TOUS</div>';
+ }
 }
 function doPrintRapport(){ if(!lastRapportHtml) return; const c=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;display:flex;justify-content:center}.ticket{width:52mm;text-align:center;font-family:monospace;font-weight:900}</style></head><body><div class="ticket">${lastRapportHtml}</div><script>setTimeout(()=>{window.print(); setTimeout(()=>window.close(),700)},300);<\/script></body></html>`; const w=window.open('','_blank','width=360,height=600'); w.document.open(); w.document.write(c); w.document.close(); }
 </script></body></html>
