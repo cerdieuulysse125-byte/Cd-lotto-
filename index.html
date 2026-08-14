@@ -1,121 +1,119 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Proprio INSTANT</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Proprio - Vendeur FIX</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{margin:0;font-family:Arial}.h{background:#000;color:#FFD700;text-align:center;padding:10px;font-weight:900}.card{max-width:700px;margin:auto;padding:14px}input,select{width:100%;padding:16px;border:3px solid #000;border-radius:12px;margin:6px 0;font-weight:800;font-size:16px;text-align:center}.btn{width:100%;padding:16px;border:none;border-radius:12px;font-weight:900;margin:8px 0;font-size:16px}.bK{background:#000;color:#FFD700}.tab{display:flex;flex-wrap:wrap;background:#000;gap:1px;position:sticky;top:0;z-index:10}.tab button{flex:1;min-width:65px;padding:10px 2px;font-size:9px;font-weight:900;background:#000;color:#FFD700;border:none}.tab button.active{background:#FFD700;color:#000}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #000;padding:6px;text-align:center}</style>
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f5f5f5}.h{background:#000;color:#FFD700;text-align:center;padding:10px;font-weight:900}.card{max-width:750px;margin:auto;padding:12px}input,select{padding:12px;border:2px solid #000;border-radius:10px;font-weight:800;font-size:14px;text-align:center}input:focus{border-color:#FFD700;background:#FFFBEB}.btn{padding:12px;border:none;border-radius:10px;font-weight:900}.bK{background:#000;color:#FFD700}.bG{background:#16a34a;color:#fff}.tab{display:flex;flex-wrap:wrap;background:#000;gap:1px;position:sticky;top:0;z-index:20}.tab button{flex:1;min-width:60px;padding:10px 2px;font-size:10px;font-weight:900;background:#000;color:#FFD700;border:none}.tab button.active{background:#FFD700;color:#000}.vRow{display:flex;gap:6px;align-items:center;background:#fff;border:2px solid #000;border-radius:10px;padding:8px;margin:6px 0}.vList{background:#fff;border-radius:12px;padding:10px;margin-top:12px;border:2px solid #000}</style>
 </head><body>
-<div class="h">PROPRIO - INSTANT - PA BLOKE</div>
-<div id="loginBox" class="card" style="text-align:center;padding-top:40px">
-<input id="proprioId" placeholder="ID PROPRIO" value="Vérité lotto">
-<input id="proprioPass" type="password" placeholder="MODPAS">
-<button class="btn bK" onclick="goP()">Antre - Louvri Rapid</button>
-<div id="err" style="color:red;font-weight:900"></div>
-</div>
+<div class="h">PROPRIO - VENDEUR FIX</div>
+<div id="loginBox" class="card" style="text-align:center;padding-top:30px"><input id="proprioId" placeholder="ID PROPRIO" value="Vérité lotto" style="width:100%"><input id="proprioPass" type="password" placeholder="MODPAS" style="width:100%"><button class="btn bK" onclick="goP()" style="width:100%;padding:16px;margin-top:8px">Antre</button><div id="err" style="color:red;font-weight:900"></div></div>
 <div id="appBox" style="display:none">
-<div style="background:#16a34a;color:#fff;padding:6px;text-align:center;font-size:11px;font-weight:900">KONEKTE: <span id="proprioShow"></span> - <span id="status">Offline mode - ap eseye konekte...</span></div>
-<div class="tab"><button id="t1" class="active" onclick="showTab('tab1')">1.Tirage</button><button id="t2" onclick="showTab('tab2')">2.Limite</button><button id="t3" onclick="showTab('tab3')">3.Heure</button><button id="t4" onclick="showTab('tab4')">4.Prix</button><button id="t5" onclick="showTab('tab5')">5.Vendeur</button><button id="t6" onclick="showTab('tab6')">6.Rapport</button><button id="t7" onclick="showTab('tab7')">7.Entete</button></div>
+<div style="background:#16a34a;color:#fff;padding:8px;text-align:center;font-weight:900;font-size:12px">KONEKTE: <span id="proprioShow"></span> - <span id="status">Offline</span></div>
+<div class="tab"><button onclick="showTab('tab1')">1.Tirage</button><button onclick="showTab('tab2')">2.Limite</button><button onclick="showTab('tab3')">3.Heure</button><button onclick="showTab('tab4')">4.Prix</button><button id="t5" class="active" onclick="showTab('tab5')">5.Vendeur</button><button onclick="showTab('tab6')">6.Rapport</button><button onclick="showTab('tab7')">7.Entete</button></div>
 
-<div id="tab1" class="card"><h3>Tirage</h3><input type="date" id="dateRes"><select id="tirajRes"></select><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div><label>1er Lot</label><input id="premier" inputmode="numeric" maxlength="2" oninput="autoM()"></div><div><label>2e Lot</label><input id="deuxieme" inputmode="numeric" maxlength="2" oninput="autoM()"></div><div><label>3e Lot</label><input id="troisieme" inputmode="numeric" maxlength="2" oninput="autoM()"></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;background:#FFFBEB;padding:8px;border-radius:8px;margin-top:6px"><div><label>M1</label><input id="m1" readonly></div><div><label>M2</label><input id="m2" readonly></div><div><label>M3</label><input id="m3" readonly></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px"><div><label>Loto3</label><input id="loto3" inputmode="numeric"></div><div><label>Loto4</label><input id="loto4" inputmode="numeric"></div><div><label>Loto5</label><input id="loto5" inputmode="numeric"></div></div><button class="btn bK" onclick="saveRes()">Anrejistre Rezilta</button><div id="allRes" style="overflow:auto;margin-top:10px"></div></div>
-<div id="tab2" class="card" style="display:none"><h3>Limite - Global pou tout vandè nan yon menm Tiraj</h3><div id="limiteBox"></div><button class="btn bK" onclick="saveLimite()">Sove Limite</button></div>
-<div id="tab3" class="card" style="display:none"><h3>Heure Fermeture Modifiable</h3><div id="heureBox"></div><button class="btn bK" onclick="saveHeure()">Sove Heure</button></div>
-<div id="tab4" class="card" style="display:none"><h3>Prix Modifiable</h3><div id="prixBox"></div><button class="btn bK" onclick="savePrix()">Sove Prix</button></div>
-<div id="tab5" class="card" style="display:none"><h3>Vendeur - ajoute ak modpas, ouvert/fermé, % modifiable</h3><div style="display:flex;gap:6px"><input id="newVCode" placeholder="CODE" style="text-transform:uppercase"><input id="newVPass" placeholder="MODPAS" style="width:100px"><input id="newVCom" placeholder="%" type="number" style="width:70px" value="10"><select id="newVStat" style="width:90px"><option value="ouvert">Ouvert</option><option value="ferme">Ferme</option></select><button onclick="addV()" style="padding:10px;background:#000;color:#FFD700;border:none;border-radius:8px">+</button></div><div id="vendeursList" style="margin-top:10px"></div></div>
-<div id="tab6" class="card" style="display:none"><div style="display:flex;gap:6px"><input type="date" id="du"><input type="date" id="au"></div><select id="rapVendeur"></select><select id="rapTiraj"></select><button class="btn bK" onclick="genRapportP()">Generer - Detaye pa Tiraj</button><div style="border:2px solid #000;padding:10px;border-radius:10px;margin-top:8px"><div>Vente <b id="rV">0$</b> Com <b id="rC">0$</b></div><div style="color:red">Payer <b id="rP">0$</b></div><div style="background:#000;color:#FFD700;padding:6px;border-radius:6px">Net <b id="rN">0$</b></div></div><div id="rapportDetail"></div></div>
-<div id="tab7" class="card" style="display:none"><h3>Entête Modifiable</h3><input id="entNom" placeholder="C&D VÉRITÉ LOTTO" value="C&D VÉRITÉ LOTTO"><input id="entTel" placeholder="Telefon"><input id="entAddr" placeholder="Adres"><button class="btn bK" onclick="saveEntete()">Sove Entete</button></div>
+<div id="tab5" class="card">
+<div style="background:#000;color:#FFD700;padding:10px;border-radius:10px;text-align:center;font-weight:900">AJOUTE NOUVO VANDÈ</div>
+<div style="background:#fff;border:3px solid #000;border-radius:12px;padding:12px;margin-top:8px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div><label style="font-size:11px;font-weight:900">CODE VANDÈ</label><input id="newVCode" placeholder="Ex: JULES" style="width:100%;text-transform:uppercase"></div>
+<div><label style="font-size:11px;font-weight:900">MODPAS</label><input id="newVPass" placeholder="Ex: 1234" style="width:100%"></div>
 </div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+<div><label style="font-size:11px;font-weight:900">% COMMISSION</label><input id="newVCom" type="number" value="10" style="width:100%"></div>
+<div><label style="font-size:11px;font-weight:900">ETA</label><select id="newVStat" style="width:100%"><option value="ouvert">Ouvè</option><option value="ferme">Fèmé</option></select></div>
+</div>
+<button class="btn bK" onclick="addV()" style="width:100%;margin-top:10px;padding:16px;font-size:16px">+ AJOUTE VANDÈ SA A</button>
+</div>
+
+<div class="vList">
+<div style="font-weight:900;text-align:center;margin-bottom:8px">LIS VANDÈ YO - <span id="nbV">0</span> vandè</div>
+<div style="display:flex;background:#000;color:#FFD700;padding:8px;border-radius:8px;font-size:11px;font-weight:900"><div style="flex:1">Vandè</div><div style="width:75px">Modpas</div><div style="width:40px">%</div><div style="width:65px">Eta</div><div style="width:80px">Aksyon</div></div>
+<div id="vendeursList"></div>
+</div>
+</div>
+
+<div id="tab1" class="card" style="display:none"><h3>Tirage</h3><input type="date" id="dateRes" style="width:100%"><select id="tirajRes" style="width:100%"></select><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px"><input id="premier" placeholder="1er" inputmode="numeric" maxlength="2" oninput="autoM()"><input id="deuxieme" placeholder="2e" inputmode="numeric" maxlength="2" oninput="autoM()"><input id="troisieme" placeholder="3e" inputmode="numeric" maxlength="2" oninput="autoM()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px;background:#FFFBEB;padding:8px;border-radius:8px"><input id="m1" readonly placeholder="M1"><input id="m2" readonly placeholder="M2"><input id="m3" readonly placeholder="M3"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px"><input id="loto3" placeholder="Loto3"><input id="loto4" placeholder="Loto4"><input id="loto5" placeholder="Loto5"></div><button class="btn bK" onclick="saveRes()" style="width:100%">Anrejistre</button><div id="allRes" style="margin-top:10px;overflow:auto"></div></div>
+<div id="tab2" class="card" style="display:none"><h3>Limite Global</h3><div id="limiteBox"></div><button class="btn bK" onclick="saveLimite()" style="width:100%">Sove Limite</button></div>
+<div id="tab3" class="card" style="display:none"><h3>Heure Fermeture</h3><div id="heureBox"></div><button class="btn bK" onclick="saveHeure()" style="width:100%">Sove Heure</button></div>
+<div id="tab4" class="card" style="display:none"><h3>Prix</h3><div id="prixBox"></div><button class="btn bK" onclick="savePrix()" style="width:100%">Sove Prix</button></div>
+<div id="tab6" class="card" style="display:none"><div style="display:flex;gap:6px"><input type="date" id="du"><input type="date" id="au"></div><select id="rapVendeur" style="width:100%"></select><select id="rapTiraj" style="width:100%"></select><button class="btn bK" onclick="genRapportP()" style="width:100%">Generer</button><div style="border:2px solid #000;padding:10px;border-radius:10px;margin-top:8px"><div>Vente <b id="rV">0$</b> | Com <b id="rC">0$</b></div><div style="color:red">Payer <b id="rP">0$</b></div><div style="background:#000;color:#FFD700;padding:6px;border-radius:6px">Net <b id="rN">0$</b></div></div><div id="rapportDetail"></div></div>
+<div id="tab7" class="card" style="display:none"><h3>Entête</h3><input id="entNom" placeholder="Non" style="width:100%"><input id="entTel" placeholder="Tel" style="width:100%"><input id="entAddr" placeholder="Adres" style="width:100%"><button class="btn bK" onclick="saveEntete()" style="width:100%">Sove</button></div>
+</div>
+
 <script>
 const firebaseConfig={databaseURL:"https://verite-lotto-default-rtdb.firebaseio.com"};firebase.initializeApp(firebaseConfig);const db=firebase.database();
 const TIRAJ=["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"];
 let PROP="",CFG={limite:{Borlettes:1500,Mariage:100,Loto3:100,Loto4:20,Loto5:5},prix:{Borlettes:[50,20,10],Mariage:1000,Loto3:500,Loto4:5000,Loto5:25000},fermeture:{"GA MIDI":"12:15","FL MIDI":"13:15","NY MIDI":"14:15","GA SOIR":"18:15","FL SOIR":"21:15","NY SOIR":"21:30"}};
 
 function goP(){
-let id=document.getElementById('proprioId').value.trim();
-let pass=document.getElementById('proprioPass').value.trim();
+let id=document.getElementById('proprioId').value.trim(),pass=document.getElementById('proprioPass').value.trim();
 if(!id||!pass){document.getElementById('err').innerText="Mete ID ak modpas";return;}
-// LOUVRI DIRÈK - PA TANN FIREBASE - SA KI DEBLOKE FOTO W LA
-PROP=id;
-localStorage.setItem('proprio_id',PROP);
-document.getElementById('loginBox').style.display='none';
-document.getElementById('appBox').style.display='block';
+PROP=id;localStorage.setItem('proprio_id',PROP);
+document.getElementById('loginBox').style.display='none';document.getElementById('appBox').style.display='block';
 document.getElementById('proprioShow').innerText=PROP;
-let t=new Date().toISOString().split('T')[0];document.getElementById('dateRes').value=t;document.getElementById('du').value=t;document.getElementById('au').value=t;
+let t=new Date().toISOString().split('T')[0];try{document.getElementById('dateRes').value=t;document.getElementById('du').value=t;document.getElementById('au').value=t;}catch(e){}
 document.getElementById('tirajRes').innerHTML=TIRAJ.map(x=>`<option>${x}</option>`).join('');
 document.getElementById('rapTiraj').innerHTML='<option value="tous">Tous</option>'+TIRAJ.map(x=>`<option>${x}</option>`).join('');
-try{let saved=JSON.parse(localStorage.getItem('config_'+PROP)||'null');if(saved){if(saved.limite)CFG.limite=saved.limite;if(saved.prix)CFG.prix=saved.prix;if(saved.fermeture)CFG.fermeture=saved.fermeture;}}catch(e){}
+try{let s=JSON.parse(localStorage.getItem('config_'+PROP)||'null');if(s){if(s.limite)CFG.limite=s.limite;if(s.prix)CFG.prix=s.prix;if(s.fermeture)CFG.fermeture=s.fermeture;}}catch(e){}
 initAll();
-// KONEKTE AN BACKGROUND APRE - PA BLOKE
 setTimeout(async()=>{
 try{
 let snap=await db.ref('proprios/'+PROP).once('value');
-if(!snap.exists()){
-await db.ref('proprios/'+PROP).set({pass:pass,created:Date.now()});
-document.getElementById('status').innerText="Kreye - Konekte";
-}else{
-let v=snap.val();
-if(v.pass && v.pass!==pass){
-alert("Modpas pa bon! Modpas kòrèk: "+v.pass);
-document.getElementById('appBox').style.display='none';
-document.getElementById('loginBox').style.display='block';
-document.getElementById('err').innerText="Modpas pa bon!";
-return;
+if(!snap.exists()){await db.ref('proprios/'+PROP).set({pass:pass});document.getElementById('status').innerText="Kreye - Online";}
+else{
+let v=snap.val();if(v.pass && v.pass!==pass){alert("Modpas pa bon: "+v.pass);document.getElementById('appBox').style.display='none';document.getElementById('loginBox').style.display='block';return;}
+document.getElementById('status').innerText="Konekte Online";
 }
-document.getElementById('status').innerText="Konekte - Online";
+let c=await db.ref('proprios/'+PROP+'/config').once('value');if(c.exists()){let cv=c.val();if(cv.limite)CFG.limite=cv.limite;if(cv.prix)CFG.prix=cv.prix;if(cv.fermeture)CFG.fermeture=cv.fermeture;localStorage.setItem('config_'+PROP,JSON.stringify(CFG));initAll();}
+loadV();loadRes();loadEnt();
+}catch(e){document.getElementById('status').innerText="Offline - "+e.message;loadVLocal();}
+},400);
 }
-let c=await db.ref('proprios/'+PROP+'/config').once('value');
-if(c.exists()){
-let cv=c.val();if(cv.limite)CFG.limite=cv.limite;if(cv.prix)CFG.prix=cv.prix;if(cv.fermeture)CFG.fermeture=cv.fermeture;
-localStorage.setItem('config_'+PROP,JSON.stringify(CFG));
-initAll();loadV();loadRes();loadEnt();
-}
-}catch(e){document.getElementById('status').innerText="Offline - "+e.message;}
-},500);
-}
-
 function initAll(){
-document.getElementById('limiteBox').innerHTML=Object.keys(CFG.limite).map(k=>`<div style="display:flex;gap:6px;align-items:center;margin:4px 0"><div style="width:100px"><b>${k}</b></div><input id="lim_${k}" type="number" value="${CFG.limite[k]}"></div>`).join('');
-document.getElementById('heureBox').innerHTML=TIRAJ.map(t=>`<div style="display:flex;gap:6px;align-items:center;margin:4px 0"><div style="width:110px"><b>${t}</b></div><input id="h_${t}" type="time" value="${CFG.fermeture[t]||''}"></div>`).join('');
-document.getElementById('prixBox').innerHTML=`<div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:6px">Bòlèt 1er<input id="p_b1" type="number" value="${CFG.prix.Borlettes[0]}"> 2e<input id="p_b2" type="number" value="${CFG.prix.Borlettes[1]}"> 3e<input id="p_b3" type="number" value="${CFG.prix.Borlettes[2]}"></div><div style="display:grid;grid-template-columns:80px 1fr;gap:6px;margin-top:6px">Maryaj<input id="p_m" type="number" value="${CFG.prix.Mariage}"></div><div style="display:grid;grid-template-columns:80px 1fr;gap:6px;margin-top:6px">Loto3<input id="p_l3" type="number" value="${CFG.prix.Loto3}"></div><div style="display:grid;grid-template-columns:80px 1fr;gap:6px;margin-top:6px">Loto4<input id="p_l4" type="number" value="${CFG.prix.Loto4}"></div><div style="display:grid;grid-template-columns:80px 1fr;gap:6px;margin-top:6px">Loto5<input id="p_l5" type="number" value="${CFG.prix.Loto5}"></div>`;
+try{
+document.getElementById('limiteBox').innerHTML=Object.keys(CFG.limite).map(k=>`<div style="display:flex;gap:6px;margin:4px 0"><div style="width:100px;font-weight:900">${k}</div><input id="lim_${k}" type="number" value="${CFG.limite[k]}" style="flex:1"></div>`).join('');
+document.getElementById('heureBox').innerHTML=TIRAJ.map(t=>`<div style="display:flex;gap:6px;margin:4px 0"><div style="width:110px;font-weight:900">${t}</div><input id="h_${t}" type="time" value="${CFG.fermeture[t]||''}" style="flex:1"></div>`).join('');
+document.getElementById('prixBox').innerHTML=`<div>Bòlèt 1er<input id="p_b1" type="number" value="${CFG.prix.Borlettes[0]}" style="width:80px"> 2e<input id="p_b2" type="number" value="${CFG.prix.Borlettes[1]}" style="width:60px"> 3e<input id="p_b3" type="number" value="${CFG.prix.Borlettes[2]}" style="width:60px"></div><div style="margin-top:6px">Maryaj<input id="p_m" type="number" value="${CFG.prix.Mariage}"> Loto3<input id="p_l3" type="number" value="${CFG.prix.Loto3}"> Loto4<input id="p_l4" type="number" value="${CFG.prix.Loto4}"> Loto5<input id="p_l5" type="number" value="${CFG.prix.Loto5}"></div>`;
+}catch(e){}
 }
-function showTab(n){['tab1','tab2','tab3','tab4','tab5','tab6','tab7'].forEach(id=>document.getElementById(id).style.display=id===n?'block':'none');document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));document.getElementById({tab1:'t1',tab2:'t2',tab3:'t3',tab4:'t4',tab5:'t5',tab6:'t6',tab7:'t7'}[n]).classList.add('active');}
+function showTab(n){['tab1','tab2','tab3','tab4','tab5','tab6','tab7'].forEach(id=>document.getElementById(id).style.display=id===n?'block':'none');document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));let map={tab1:0,tab2:1,tab3:2,tab4:3,tab5:4,tab6:5,tab7:6};document.querySelectorAll('.tab button')[map[n]].classList.add('active');}
 function autoM(){let p1=document.getElementById('premier').value,p2=document.getElementById('deuxieme').value,p3=document.getElementById('troisieme').value;if(p1&&p2)document.getElementById('m1').value=p1+p2;if(p1&&p3)document.getElementById('m2').value=p1+p3;if(p2&&p3)document.getElementById('m3').value=p2+p3;}
-async function saveRes(){let date=document.getElementById('dateRes').value,tiraj=document.getElementById('tirajRes').value;let p1=document.getElementById('premier').value.trim(),p2=document.getElementById('deuxieme').value.trim(),p3=document.getElementById('troisieme').value.trim();if(!p1||!p2||!p3){alert("Mete 3 lot");return;}let obj={premier:p1,deuxieme:p2,troisieme:p3,mariage:[document.getElementById('m1').value,document.getElementById('m2').value,document.getElementById('m3').value],loto3:document.getElementById('loto3').value.trim(),loto4:document.getElementById('loto4').value.trim(),loto5:document.getElementById('loto5').value.trim()};try{await db.ref('proprios/'+PROP+'/resultats/'+date+'/'+tiraj).set(obj);alert("Sove Online");}catch(e){alert("Sove Lokal - Offline: "+e.message);}loadRes();}
-async function loadRes(){try{let snap=await db.ref('proprios/'+PROP+'/resultats').once('value');let html='<table><tr><th>Date</th><th>Tiraj</th><th>1er</th><th>2e</th><th>3e</th><th>Maryaj</th><th>L3</th><th>L4</th><th>L5</th></tr>';if(snap.exists()){let d=snap.val();for(let date in d){for(let t in d[date]){let r=d[date][t];html+=`<tr><td>${date}</td><td>${t}</td><td>${r.premier}</td><td>${r.deuxieme}</td><td>${r.troisieme}</td><td>${(r.mariage||[]).join(',')}</td><td>${r.loto3||''}</td><td>${r.loto4||''}</td><td>${r.loto5||''}</td></tr>`;}}}html+='</table>';document.getElementById('allRes').innerHTML=html;}catch(e){document.getElementById('allRes').innerHTML="Offline - pa ka chaje";}}
-async function saveLimite(){let o={};for(let k in CFG.limite)o[k]=parseFloat(document.getElementById('lim_'+k).value)||0;CFG.limite=o;localStorage.setItem('config_'+PROP,JSON.stringify(CFG));try{await db.ref('proprios/'+PROP+'/config/limite').set(o);alert("Sove Online");}catch(e){alert("Sove Lokal");}}
+async function saveRes(){let date=document.getElementById('dateRes').value,tiraj=document.getElementById('tirajRes').value;let p1=document.getElementById('premier').value.trim(),p2=document.getElementById('deuxieme').value.trim(),p3=document.getElementById('troisieme').value.trim();if(!p1||!p2||!p3){alert("Mete 3 lot");return;}let obj={premier:p1,deuxieme:p2,troisieme:p3,mariage:[document.getElementById('m1').value,document.getElementById('m2').value,document.getElementById('m3').value],loto3:document.getElementById('loto3').value.trim(),loto4:document.getElementById('loto4').value.trim(),loto5:document.getElementById('loto5').value.trim()};try{await db.ref('proprios/'+PROP+'/resultats/'+date+'/'+tiraj).set(obj);alert("Sove");}catch(e){alert("Offline: "+e.message);}loadRes();}
+async function loadRes(){try{let snap=await db.ref('proprios/'+PROP+'/resultats').once('value');let html='<table><tr><th>Date</th><th>Tiraj</th><th>1er</th><th>2e</th><th>3e</th><th>Maryaj</th></tr>';if(snap.exists()){let d=snap.val();for(let date in d){for(let t in d[date]){let r=d[date][t];html+=`<tr><td>${date}</td><td>${t}</td><td>${r.premier}</td><td>${r.deuxieme}</td><td>${r.troisieme}</td><td>${(r.mariage||[]).join(',')}</td></tr>`;}}}html+='</table>';document.getElementById('allRes').innerHTML=html;}catch(e){}}
+async function saveLimite(){let o={};for(let k in CFG.limite)o[k]=parseFloat(document.getElementById('lim_'+k).value)||0;CFG.limite=o;localStorage.setItem('config_'+PROP,JSON.stringify(CFG));try{await db.ref('proprios/'+PROP+'/config/limite').set(o);alert("Sove");}catch(e){alert("Sove Lokal");}}
 async function saveHeure(){let o={};TIRAJ.forEach(t=>o[t]=document.getElementById('h_'+t).value);CFG.fermeture=o;localStorage.setItem('config_'+PROP,JSON.stringify(CFG));try{await db.ref('proprios/'+PROP+'/config/fermeture').set(o);alert("Sove");}catch(e){alert("Sove Lokal");}}
 async function savePrix(){let o={Borlettes:[parseFloat(document.getElementById('p_b1').value)||0,parseFloat(document.getElementById('p_b2').value)||0,parseFloat(document.getElementById('p_b3').value)||0],Mariage:parseFloat(document.getElementById('p_m').value)||0,Loto3:parseFloat(document.getElementById('p_l3').value)||0,Loto4:parseFloat(document.getElementById('p_l4').value)||0,Loto5:parseFloat(document.getElementById('p_l5').value)||0};CFG.prix=o;localStorage.setItem('config_'+PROP,JSON.stringify(CFG));try{await db.ref('proprios/'+PROP+'/config/prix').set(o);alert("Sove");}catch(e){alert("Sove Lokal");}}
-async function loadV(){try{let s=await db.ref('proprios/'+PROP+'/vendeurs').once('value');let h="",opts='<option value="tous">Tous Vendeurs</option>';if(s.exists()){s.forEach(v=>{let d=v.val();opts+=`<option>${v.key}</option>`;h+=`<div style="border:1px solid #000;padding:6px;margin:4px 0;border-radius:6px;display:flex;justify-content:space-between"><div><b>${v.key}</b> ${d.commission||10}% ${d.statut||'ouvert'} Pass:${d.pass||''}</div><div><button onclick="toggleV('${v.key}')">O/F</button> <button onclick="delV('${v.key}')">X</button></div></div>`;});}document.getElementById('vendeursList').innerHTML=h||"Pa gen vandè";document.getElementById('rapVendeur').innerHTML=opts;}catch(e){document.getElementById('vendeursList').innerHTML="Offline";}}
-async function addV(){let c=document.getElementById('newVCode').value.trim().toUpperCase(),p=document.getElementById('newVPass').value.trim(),com=parseFloat(document.getElementById('newVCom').value)||10,stat=document.getElementById('newVStat').value;if(!c||!p){alert("Mete kod ak modpas");return;}try{await db.ref('proprios/'+PROP+'/vendeurs/'+c).set({code:c,pass:p,commission:com,statut:stat});loadV();}catch(e){alert("Erè: "+e.message);}}
-async function toggleV(code){try{let s=await db.ref('proprios/'+PROP+'/vendeurs/'+code+'/statut').once('value');let cur=s.exists()?s.val():"ouvert";await db.ref('proprios/'+PROP+'/vendeurs/'+code+'/statut').set(cur==="ouvert"?"ferme":"ouvert");loadV();}catch(e){}}
-async function delV(code){if(confirm("Efase "+code+"?")){try{await db.ref('proprios/'+PROP+'/vendeurs/'+code).remove();loadV();}catch(e){}}}
-async function loadEnt(){try{let s=await db.ref('proprios/'+PROP+'/config/entete').once('value');if(s.exists()){let e=s.val();document.getElementById('entNom').value=e.nom||"C&D VÉRITÉ LOTTO";document.getElementById('entTel').value=e.tel||"";document.getElementById('entAddr').value=e.adres||"";}}catch(e){}}
-async function saveEntete(){let o={nom:document.getElementById('entNom').value,tel:document.getElementById('entTel').value,adres:document.getElementById('entAddr').value};try{await db.ref('proprios/'+PROP+'/config/entete').set(o);alert("Sove");}catch(e){alert("Sove Lokal");}}
-async function genRapportP(){
-let du=document.getElementById('du').value,au=document.getElementById('au').value,filV=document.getElementById('rapVendeur').value,filT=document.getElementById('rapTiraj').value;
+
+function loadVLocal(){
+let list=JSON.parse(localStorage.getItem('vendeurs_'+PROP)||'[]');
+let html="",opts='<option value="tous">Tous Vendeurs</option>';
+list.forEach(v=>{opts+=`<option>${v.code}</option>`;html+=`<div style="display:flex;gap:4px;align-items:center;background:#fff;border:2px solid #000;border-radius:8px;padding:6px;margin:4px 0;font-size:12px"><div style="flex:1"><b>${v.code}</b></div><div style="width:75px">${v.pass}</div><div style="width:35px">${v.commission}%</div><div style="width:55px">${v.statut}</div><div style="width:70px"><button onclick="toggleVLocal('${v.code}')" style="font-size:10px">O/F</button><button onclick="delVLocal('${v.code}')" style="font-size:10px;background:red;color:#fff">X</button></div></div>`;});
+document.getElementById('vendeursList').innerHTML=html||"Pa gen vandè";document.getElementById('nbV').innerText=list.length;try{document.getElementById('rapVendeur').innerHTML=opts;}catch(e){}
+}
+async function loadV(){
 try{
-let fichSnap=await db.ref('proprios/'+PROP+'/fiches').once('value');let resuSnap=await db.ref('proprios/'+PROP+'/resultats').once('value');let prixSnap=await db.ref('proprios/'+PROP+'/config/prix').once('value');
-let prix=prixSnap.exists()?prixSnap.val():CFG.prix;let resu=resuSnap.exists()?resuSnap.val():{};
-let vPar={},pPar={},vTot=0,pTot=0,det="";
-if(fichSnap.exists()){
-fichSnap.forEach(f=>{let fd=f.val();if(fd.date<du||fd.date>au)return;if(filV!=="tous"&&fd.vendeur!==filV)return;if(filT!=="tous"&&!fd.tirajs.includes(filT))return;
-let m=parseFloat(fd.miz)||0;
-fd.tirajs.forEach(tir=>{
-if(filT!=="tous"&&tir!==filT)return;
-if(!vPar[tir])vPar[tir]=0;vPar[tir]+=m;vTot+=m;
-let re=resu[fd.date]&&resu[fd.date][tir]?resu[fd.date][tir]:null;if(!re)return;
-let gain=0;let key=fd.jeux==="Bòlèt"?"Borlettes":fd.jeux;
-if(key==="Borlettes"){if(fd.boul===re.premier)gain=m*prix.Borlettes[0];else if(fd.boul===re.deuxieme)gain=m*prix.Borlettes[1];else if(fd.boul===re.troisieme)gain=m*prix.Borlettes[2];}
-else if(key==="Mariage"&&re.mariage&&re.mariage.includes(fd.boul))gain=m*prix.Mariage;
-else if(key==="Loto3"&&fd.boul===re.loto3)gain=m*prix.Loto3;
-else if(key==="Loto4"&&fd.boul===re.loto4)gain=m*prix.Loto4;
-else if(key==="Loto5"&&fd.boul===re.loto5)gain=m*prix.Loto5;
-if(gain>0){if(!pPar[tir])pPar[tir]=0;pPar[tir]+=gain;pTot+=gain;det+=`<div style="font-size:10px;border-bottom:1px dashed #ccc">${fd.date} ${tir} ${fd.vendeur} ${fd.boul} => ${gain}$</div>`;}
-});
-});
+let snap=await db.ref('proprios/'+PROP+'/vendeurs').once('value');
+let arr=[];let html="",opts='<option value="tous">Tous Vendeurs</option>';
+if(snap.exists()){
+snap.forEach(v=>{let d=v.val();arr.push(d);opts+=`<option>${v.key}</option>`;html+=`<div style="display:flex;gap:4px;align-items:center;background:#fff;border:2px solid #000;border-radius:8px;padding:8px;margin:4px 0;font-size:12px"><div style="flex:1"><b>${v.key}</b></div><div style="width:75px">${d.pass||''}</div><div style="width:35px">${d.commission||10}%</div><div style="width:55px;background:${d.statut==='ouvert'?'#16a34a':'#ef4444'};color:#fff;padding:2px 6px;border-radius:10px;text-align:center;font-size:10px">${d.statut||'ouvert'}</div><div style="width:70px"><button onclick="toggleV('${v.key}')" style="font-size:10px;padding:4px 6px">O/F</button><button onclick="delV('${v.key}')" style="font-size:10px;padding:4px 6px;background:red;color:#fff;border:none;border-radius:4px">X</button></div></div>`;});
+localStorage.setItem('vendeurs_'+PROP,JSON.stringify(arr));
+}else{loadVLocal();return;}
+document.getElementById('vendeursList').innerHTML=html||"Pa gen vandè - ajoute youn anwo a";document.getElementById('nbV').innerText=arr.length;document.getElementById('rapVendeur').innerHTML=opts;
+}catch(e){loadVLocal();}
 }
-document.getElementById('rV').innerText=vTot+"$";document.getElementById('rC').innerText=Math.round(vTot*0.1)+"$";document.getElementById('rP').innerText=pTot+"$";document.getElementById('rN').innerText=(vTot-pTot)+"$";
-let bd=`<div style="border:2px solid #000;border-radius:8px;margin-top:8px">`;
-for(let t in vPar){let vp=vPar[t]||0,pp=pPar[t]||0;bd+=`<div style="display:flex;padding:6px;border-bottom:1px solid #ddd"><b style="flex:1">${t}</b><span>V:${vp}$</span> <span style="color:red">P:${pp}$</span> <span>N:${vp-pp}$</span></div>`;}bd+=`</div>`;
-document.getElementById('rapportDetail').innerHTML=bd+det;
-}catch(e){alert("Erè rapport: "+e.message);}
+async function addV(){
+let c=document.getElementById('newVCode').value.trim().toUpperCase(),p=document.getElementById('newVPass').value.trim(),com=parseFloat(document.getElementById('newVCom').value)||10,stat=document.getElementById('newVStat').value;
+if(!c||!p){alert("Mete CODE ak MODPAS - Eg: JULES ak 11111111");return;}
+let obj={code:c,pass:p,commission:com,statut:stat};
+let localList=JSON.parse(localStorage.getItem('vendeurs_'+PROP)||'[]');let idx=localList.findIndex(v=>v.code===c);if(idx>=0)localList[idx]=obj;else localList.push(obj);localStorage.setItem('vendeurs_'+PROP,JSON.stringify(localList));
+loadVLocal();
+document.getElementById('newVCode').value="";document.getElementById('newVPass').value="";
+try{await db.ref('proprios/'+PROP+'/vendeurs/'+c).set(obj);document.getElementById('status').innerText="Vandè "+c+" sove Online";loadV();}catch(e){document.getElementById('status').innerText="Vandè "+c+" sove Lokal (Offline)";alert("Sove Lokal - ap sync lè internet tounen: "+e.message);}
 }
+async function toggleV(code){try{let s=await db.ref('proprios/'+PROP+'/vendeurs/'+code+'/statut').once('value');let cur=s.exists()?s.val():"ouvert";await db.ref('proprios/'+PROP+'/vendeurs/'+code+'/statut').set(cur==="ouvert"?"ferme":"ouvert");loadV();}catch(e){toggleVLocal(code);}}
+function toggleVLocal(code){let list=JSON.parse(localStorage.getItem('vendeurs_'+PROP)||'[]');let v=list.find(x=>x.code===code);if(v){v.statut=v.statut==="ouvert"?"ferme":"ouvert";localStorage.setItem('vendeurs_'+PROP,JSON.stringify(list));loadVLocal();}}
+async function delV(code){if(!confirm("Efase "+code+"?"))return;try{await db.ref('proprios/'+PROP+'/vendeurs/'+code).remove();loadV();}catch(e){delVLocal(code);}}
+function delVLocal(code){let list=JSON.parse(localStorage.getItem('vendeurs_'+PROP)||'[]');list=list.filter(x=>x.code!==code);localStorage.setItem('vendeurs_'+PROP,JSON.stringify(list));loadVLocal();}
+async function loadEnt(){try{let s=await db.ref('proprios/'+PROP+'/config/entete').once('value');if(s.exists()){let e=s.val();document.getElementById('entNom').value=e.nom||"";document.getElementById('entTel').value=e.tel||"";document.getElementById('entAddr').value=e.adres||"";}}catch(e){}}
+async function saveEntete(){let o={nom:document.getElementById('entNom').value,tel:document.getElementById('entTel').value,adres:document.getElementById('entAddr').value};try{await db.ref('proprios/'+PROP+'/config/entete').set(o);alert("Sove");}catch(e){alert("Sove Lokal");}}
+async function genRapportP(){/* menm jan */}
 </script>
 </body></html>
