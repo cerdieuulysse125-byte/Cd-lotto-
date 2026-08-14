@@ -84,54 +84,63 @@ var miz=parseFloat(fd.miz)||0;
 if(!fd.tirajs) return;
 
 fd.tirajs.forEach(tir=>{
-if(filT!=="tous" && tir!==filT) return;
-if(!vPar[tir]){vPar[tir]=0; pPar[tir]=0; comPar[tir]=0; detailParVendeur[tir]={};}
-if(!detailParVendeur[tir][fd.vendeur]) detailParVendeur[tir][fd.vendeur]={v:0,p:0};
+ if(filT!=="tous" && tir!==filT) return;
+ if(!vPar[tir]){vPar[tir]=0; pPar[tir]=0; comPar[tir]=0;}
+ if(!detailParVendeur[tir]) detailParVendeur[tir]={};
+ if(!detailParVendeur[tir][fd.vendeur]) detailParVendeur[tir][fd.vendeur]={v:0,p:0,c:0};
 
-vPar[tir]+=miz; vTot+=miz;
-var com=miz*(comMap[fd.vendeur]||10)/100;
-comPar[tir]+=com; comTot+=com;
-detailParVendeur[tir][fd.vendeur].v+=miz;
+ vPar[tir]+=miz; vTot+=miz;
+ var com=miz*(comMap[fd.vendeur]||10)/100;
+ comPar[tir]+=com; comTot+=com;
+ detailParVendeur[tir][fd.vendeur].v+=miz;
+ detailParVendeur[tir][fd.vendeur].c+=com;
 
-var re=resu[fd.date] && resu[fd.date][tir]? resu[fd.date][tir] : null;
-if(!re) return;
-var gain=0; var key=fd.jeux==="Bòlèt"?"Borlettes":fd.jeux;
-if(key==="Borlettes"){if(fd.boul===re.premier)gain=miz*prix.Borlettes[0];else if(fd.boul===re.deuxieme)gain=miz*prix.Borlettes[1];else if(fd.boul===re.troisieme)gain=miz*prix.Borlettes[2];}
-else if(key==="Mariage" && re.mariage && re.mariage.includes(fd.boul))gain=miz*prix.Mariage;
-else if(key==="Loto3" && fd.boul===re.loto3)gain=miz*prix.Loto3;
-else if(key==="Loto4" && fd.boul===re.loto4)gain=miz*prix.Loto4;
-else if(key==="Loto5" && fd.boul===re.loto5)gain=miz*prix.Loto5;
-if(gain>0){
-pPar[tir]+=gain; pTot+=gain;
-detailParVendeur[tir][fd.vendeur].p+=gain;
-}
+ var re=resu[fd.date] && resu[fd.date][tir];
+ if(!re) return;
+ var gain=0; var key=fd.jeux=="Bòlèt"?fd.jeux:fd.boul;
+ if(key==="Borlettes"){if(fd.boul===re.borlet) gain=miz*50;}
+ else if(key==="Mariage" && re.mariage && re.mariage.includes(fd.boul)) gain=miz*100;
+ else if(key==="Loto3" && fd.boul===re.loto3) gain=miz*500;
+ else if(key==="Loto4" && fd.boul===re.loto4) gain=miz*5000;
+ else if(key==="Loto5" && fd.boul===re.loto5) gain=miz*25000;
+ if(gain>0){
+  pPar[tir]+=gain; pTot+=gain;
+  detailParVendeur[tir][fd.vendeur].p+=gain;
+ }
 });
 });
 }
 
-document.getElementById('rV').innerText=vTot+"$";
-document.getElementById('rC').innerText=Math.round(comTot)+"$";
-document.getElementById('rP').innerText=pTot+"$";
-document.getElementById('rN').innerText=(vTot-comTot-pTot)+"$";
+document.getElementById('rV').innerText=vTot;
+document.getElementById('rC').innerText=comTot;
+document.getElementById('rP').innerText=pTot;
+document.getElementById('rN').innerText=vTot-comTot-pTot;
 
-var html=`<table class="table"><tr><th>TIRAJ</th><th>Vente</th><th>Com</th><th>Peye</th><th>Net</th></tr>`;
+var html=`<table class="table" style="width:100%;border-collapse:collapse"><tr><th>Tiraj</th><th>Vant</th><th>Kom</th><th>Peye</th><th>Nèt</th></tr>`;
 for(var t of TIRAJ){
-if(filT!=="tous" && t!==filT) continue;
-var vp=vPar[t]||0, pp=pPar[t]||0, cp=comPar[t]||0;
-if(vp===0 && pp===0 && filT==="tous") continue;
-html+=`<tr><td style="font-weight:900;background:#fffde7">${t}</td><td>${vp}$</td><td>${Math.round(cp)}$</td><td style="color:${pp>0?'red':'green'};font-weight:900">${pp}$</td><td style="font-weight:900;background:${(vp-cp-pp)>=0?'#dcfce7':'#fee2e2'}">${vp-cp-pp}$</td></tr>`;
-// DETAY PA VANDÈ POU TIRAJ SA A
-if(detailParVendeur[t]){
-for(var v in detailParVendeur[t]){
-var dv=detailParVendeur[t][v];
-if(dv.v>0) html+=`<tr><td style="font-size:8px;padding-left:10px">↳ ${v}</td><td style="font-size:8px">${dv.v}$</td><td></td><td style="font-size:8px;color:red">${dv.p}$</td><td style="font-size:8px">${dv.v-dv.p}$</td></tr>`;
-}
-}
+ if(filT!=="tous" && t!==filT) continue;
+ var vp=vPar[t]||0, pp=pPar[t]||0, cp=comPar[t]||0;
+ if(vp===0 && pp===0 && filT==="tous") continue;
+ html+=`<tr><td style="font-weight:900">${t}</td><td>${vp}</td><td>${cp}</td><td>${pp}</td><td>${vp-cp-pp}</td></tr>`;
+ // DETAY PA VANDÈ POU TIRAJ SA A
+ if(detailParVendeur[t]){
+  for(var v in detailParVendeur[t]){
+   var dv=detailParVendeur[t][v];
+   if(dv.v>0) html+=`<tr><td style="font-size:11px;padding-left:15px">- ${v}</td><td style="font-size:11px">${dv.v}</td><td style="font-size:11px">${dv.c}</td><td style="font-size:11px">${dv.p}</td><td style="font-size:11px">${dv.v-dv.c-dv.p}</td></tr>`;
+  }
+ }
 }
 html+=`</table>`;
 document.getElementById('rapportDetail').innerHTML=html;
 
 }catch(e){alert("Erè: "+e.message);}
-  }
-async function saveConfig(){ let ent=document.getElementById('cfgEntete').value.trim(); let pied=document.getElementById('cfgPied').value.trim(); let com=parseInt(document.getElementById('cfgCom').value)||10; let newPass=document.getElementById('cfgProprioPass').value.trim(); let upd={entete:ent,pied:pied,commission:com}; if(newPass) upd.proprioPass=newPass; await db.ref('config').update(upd); document.getElementById('cfgStatus').innerText=newPass?'✅ Config + modpas sove!':'✅ Config sove'; document.getElementById('cfgProprioPass').value=''; }
+}
+
+function doPrintRapport(){
+ var c=document.getElementById('rapportDetail');
+ if(!c||!c.innerHTML) return;
+ var w=window.open('','_blank');
+ w.document.write('<html><head><title>Rapo Proprio</title></head><body>'+c.innerHTML+'</body></html>');
+ w.document.close(); w.print();
+}
 </script></body></html>
