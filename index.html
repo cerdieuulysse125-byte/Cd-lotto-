@@ -80,21 +80,21 @@ if(!fd.date||fd.date<du||fd.date>au)return;
 if(filV!=="tous" && fd.vendeur!==filV)return;
 var uniq=fd.id||fd.vendeur+fd.date+fd.boul+fd.miz+(fd.tirajs||[]).join('');
 if(seen.has(uniq))return; seen.add(uniq);
+if(seen.has(uniq)) return; seen.add(uniq);
 var miz=parseFloat(fd.miz)||0;
-if(!fd.tirajs) return;
-
+if(!fd.tirajs ||!Array.isArray(fd.tirajs)) return;
+if(miz<=0) return;
 fd.tirajs.forEach(tir=>{
  if(filT!=="tous" && tir!==filT) return;
  if(!vPar[tir]){vPar[tir]=0; pPar[tir]=0; comPar[tir]=0;}
  if(!detailParVendeur[tir]) detailParVendeur[tir]={};
  if(!detailParVendeur[tir][fd.vendeur]) detailParVendeur[tir][fd.vendeur]={v:0,p:0,c:0};
-
  vPar[tir]+=miz; vTot+=miz;
- var com=miz*(comMap[fd.vendeur]||10)/100;
+ var comRate=(comMap && comMap[fd.vendeur])?comMap[fd.vendeur]:10;
+ var com=miz*comRate/100;
  comPar[tir]+=com; comTot+=com;
  detailParVendeur[tir][fd.vendeur].v+=miz;
  detailParVendeur[tir][fd.vendeur].c+=com;
-
  var re=resu[fd.date] && resu[fd.date][tir];
  if(!re) return;
  var gain=0; var key=fd.jeux=="Bòlèt"?fd.jeux:fd.boul;
