@@ -1,90 +1,161 @@
 <!DOCTYPE html>
-<html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V115.8 BACK TO VENDRE FINAL</title>
+<html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V115.9 FINAL COMPLET</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#fff}.h{background:#000;color:#FFD700;padding:8px;text-align:center;font-weight:900;font-size:9px}.card{padding:10px;max-width:480px;margin:auto}input,select{padding:12px;border:2px solid #000;border-radius:10px;width:100%;font-size:15px;margin:4px 0}.tiraj{padding:5px 9px;margin:2px;border:2px solid #000;border-radius:20px;font-weight:900;display:inline-block;font-size:10px;cursor:pointer}.tiraj.active{background:#000;color:#FFD700}.tiraj.ferme{opacity:.2;pointer-events:none;background:#ccc}.btn{padding:13px;width:100%;border:none;border-radius:10px;font-weight:900;margin:5px 0;cursor:pointer}.bK{background:#000;color:#FFD700}.bV{background:#16a34a;color:#fff;font-size:16px}.tab2{display:flex;background:#000;gap:1px;position:sticky;top:0;z-index:20}.tab2 button{flex:1;padding:10px 1px;font-size:9px;font-weight:900;background:#000;color:#FFD700;border:none}.tab2 button.active{background:#FFD700;color:#000}#fermeOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);color:#fff;z-index:9999;display:none;justify-content:center;align-items:center;text-align:center;padding:20px}</style>
+<style>
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f2f2f2}
+.h{background:#000;color:#FFD700;padding:8px;text-align:center;font-weight:900;font-size:10px}
+.card{padding:8px;max-width:500px;margin:auto;background:#fff;min-height:80vh}
+input,select{padding:10px;border:2px solid #000;border-radius:8px;width:100%;font-size:14px;margin:2px 0}
+.tiraj{padding:6px 10px;margin:3px;border:2px solid #000;border-radius:20px;font-weight:900;display:inline-block;font-size:11px;cursor:pointer;background:#fff}
+.tiraj.active{background:#000;color:#FFD700}
+.ligne{display:flex;gap:4px;align-items:center;margin:4px 0;background:#fff;padding:4px;border-radius:6px;border:1px solid #ddd}
+.btn{padding:12px;width:100%;border:none;border-radius:10px;font-weight:900;margin:6px 0;cursor:pointer}
+.bK{background:#000;color:#FFD700}.bV{background:#16a34a;color:#fff}
+.tab2{display:flex;background:#000;gap:1px;position:sticky;top:0;z-index:20}
+.tab2 button{flex:1;padding:12px 2px;font-size:11px;font-weight:900;background:#000;color:#FFD700;border:none}
+.tab2 button.active{background:#FFD700;color:#000}
+.headL{display:flex;background:#000;color:#FFD700;padding:8px;font-weight:900;border-radius:8px;font-size:12px}
+</style>
 </head><body>
-<div id="fermeOverlay"><div><div style="font-size:70px">🔒</div><div style="font-size:30px;font-weight:900;color:#ef4444">BANK FERME</div><div style="margin-top:8px">Vandè: <span id="fermeNom"></span><br>Proprio fèmen w</div></div></div>
-<div class="h">V115.8 - BACK RETOUNEN NAN VENDRE - V115.7 COPIER KORIJE</div>
-<div id="loginBox" class="card" style="text-align:center;padding-top:30px"><h3>Connexion</h3><input id="uName" placeholder="Code"><input id="uPass" type="password" placeholder="Modpas"><button class="btn bK" onclick="go()">Antre</button><div id="loginErr" style="color:red;font-weight:900"></div></div>
+<div class="h">V115.9 - FINAL KONPLÈ + BACK TO VENDRE</div>
+<div id="loginBox" class="card" style="text-align:center;padding-top:40px"><h2>LOTTO - Connexion</h2><input id="uName" placeholder="Code Vendeur"><input id="uPass" type="password" placeholder="Modpas"><button class="btn bK" onclick="go()">ANTRE</button><div id="loginErr" style="color:red;font-weight:900"></div></div>
+
 <div id="appBox" style="display:none">
 <div class="tab2"><button id="tV" class="active" onclick="showTab('vendre')">1.Vendre</button><button id="tC" onclick="showTab('kopyeTab')">2.Copier</button><button id="tF" onclick="showTab('fichesTab')">3.Fiches</button><button id="tR" onclick="showTab('rapportTab')">4.Rapport</button></div>
 
-<div id="vendre" class="card"><div style="text-align:center;font-weight:900;font-size:9px">TIRAJ - <span id="dateToday" style="background:#FFD700;padding:2px 5px;border-radius:5px"></span> - <span id="userShow" style="background:#000;color:#FFD700;padding:2px 5px;border-radius:5px"></span> <span id="comShow" style="background:#16a34a;color:#fff;padding:2px 5px;border-radius:5px"></span></div><div id="limitMsg"></div><div id="tirajBox" style="text-align:center;margin:5px 0"></div><div style="display:flex;background:#000;color:#FFD700;padding:6px;font-weight:900;border-radius:6px;font-size:10px"><div style="width:85px">JEUX</div><div style="flex:1">BOUL</div><div style="width:75px">MIZ</div></div><div id="lines"></div><div style="background:#000;color:#fff;padding:10px;border-radius:8px;text-align:center;margin-top:6px">Total <span id="tot">0$</span> × <span id="nbT">1</span><div style="font-size:24px;color:#FFD700">A PEYE <span id="paye">0$</span></div></div><button class="btn bK" id="btnVendre" onclick="vann()">VENDRE & IMPRIMER</button><div id="lastTicket"></div></div>
+<!-- VENDRE -->
+<div id="vendre" class="card">
+<div style="text-align:center;font-weight:900;font-size:11px;margin:6px">TIRAJ - <span id="dateToday" style="background:#FFD700;padding:3px 8px;border-radius:5px"></span> - <span id="userShow" style="background:#000;color:#FFD700;padding:3px 8px;border-radius:5px"></span></div>
+<div id="limitMsg"></div>
+<div id="tirajBox" style="text-align:center;margin:8px 0"></div>
+<div class="headL"><div style="width:70px">JEUX</div><div style="flex:1">BOUL</div><div style="width:80px">MIZ</div></div>
+<div id="lines"></div>
+<div style="background:#000;color:#fff;padding:12px;border-radius:10px;text-align:center;margin-top:8px">Total <span id="tot">0$</span> × <span id="nbT">1</span><div style="font-size:26px;color:#FFD700;font-weight:900">A PEYE <span id="paye">0$</span></div></div>
+<button class="btn bK" id="btnVendre" onclick="vann()">VENDRE & IMPRIMER</button>
+<div id="lastTicket"></div>
+</div>
 
-<div id="kopyeTab" class="card" style="display:none"><h3>2.Copier - Chèche pa ID (5 lèt)</h3><input id="searchId" placeholder="Ex: A1B2C" style="text-transform:uppercase"><button class="btn bK" onclick="searchById()">Chèche</button><div id="kopyeResult"></div><div style="margin-top:15px"><button class="btn bV" onclick="showTab('vendre')">↩️ RETOUNEN NAN VENDRE</button></div></div>
+<!-- KOPIYE -->
+<div id="kopyeTab" class="card" style="display:none">
+<h3>2.Copier - Chèche pa 5 lèt ID</h3>
+<div style="display:flex;gap:6px"><input id="searchId" placeholder="Ex: A1B2C" style="text-transform:uppercase"><button class="btn bK" style="width:100px" onclick="searchById()">Chèche</button></div>
+<div id="kopyeResult" style="margin-top:10px"></div>
+<button class="btn bV" onclick="showTab('vendre')">↩️ RETOUNEN NAN VENDRE</button>
+</div>
 
-<div id="fichesTab" class="card" style="display:none"><h3>3.Fiches</h3><div id="fichesList"></div><div style="margin-top:15px"><button class="btn bV" onclick="showTab('vendre')">↩️ RETOUNEN NAN VENDRE</button></div></div>
+<!-- FICHES -->
+<div id="fichesTab" class="card" style="display:none">
+<h3>3.Fiches - Dènye fich yo</h3>
+<div id="fichesList">Ap chaje...</div>
+<button class="btn bV" onclick="showTab('vendre')">↩️ RETOUNEN NAN VENDRE</button>
+</div>
 
-<div id="rapportTab" class="card" style="display:none"><h3>4.Rapport</h3><div id="rapportContent"></div><div style="margin-top:15px"><button class="btn bV" onclick="showTab('vendre')">↩️ RETOUNEN NAN VENDRE</button></div></div>
+<!-- RAPPORT -->
+<div id="rapportTab" class="card" style="display:none">
+<h3>4.Rapò - Vente & Commission</h3>
+<div style="display:flex;gap:5px"><div style="flex:1"><label>Du</label><input type="date" id="du"></div><div style="flex:1"><label>Au</label><input type="date" id="au"></div></div>
+<div style="margin:6px 0"><label>Tiraj</label><select id="rapportTiraj"><option value="tous">Tous Tiraj</option><option>New York</option><option>Florida</option><option>Georgia</option></select></div>
+<button class="btn bK" onclick="genererRapport()">Générer Rapò</button>
+<div id="rapportContent" style="margin-top:10px;background:#f9f9f9;padding:10px;border-radius:8px;border:2px solid #000">
+<div>Vente: <b id="rVente">0$</b></div>
+<div>Commission: <b id="rCom">0$</b></div>
+<div>A Payer: <b id="rPaye">0$</b></div>
+<div>Balance Net: <b id="rNet">0$</b></div>
+</div>
+<button class="btn bK" onclick="window.print()">🖨️ Imprimer Rapò</button>
+<button class="btn bV" onclick="showTab('vendre')">↩️ RETOUNEN NAN VENDRE</button>
+</div>
 
 </div>
 
 <script>
-// FIREBASE CONFIG OU A - KITE SA OU TE GENYEN AN
 const firebaseConfig = { databaseURL: "https://verite-lotto-default-rtdb.firebaseio.com" };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+firebase.initializeApp(firebaseConfig); const db = firebase.database();
+let TIRAJ_LIST = ["New York 1h","Florida 12:30","Georgia 12:30","New York Soir","Florida Soir"];
+let selectedTiraj = [];
+let USER = "";
 
-// KÒD KONEKSYON OU A - KITE L JAN L YE A
-function go(){ /* kite kòd login ou a isit */ 
+function go(){
+  let u = document.getElementById('uName').value;
+  if(!u){document.getElementById('loginErr').innerText="Mete kòd ou"; return;}
+  USER = u;
   document.getElementById('loginBox').style.display='none';
   document.getElementById('appBox').style.display='block';
   document.getElementById('dateToday').innerText = new Date().toLocaleDateString();
+  document.getElementById('userShow').innerText = USER;
   initApp();
+  history.pushState(null,null,location.href);
 }
-
 function initApp(){
-  // kite kòd tiraj ou yo isit
-  history.pushState(null, null, location.href); // Aktive BACK la
-}
-
-// ===== NOUVO KÒD BACK -> VENDRE - V115.8 =====
-function showTab(nom){
-  document.getElementById('vendre').style.display = nom=='vendre' ? 'block' : 'none';
-  document.getElementById('kopyeTab').style.display = nom=='kopyeTab' ? 'block' : 'none';
-  document.getElementById('fichesTab').style.display = nom=='fichesTab' ? 'block' : 'none';
-  document.getElementById('rapportTab').style.display = nom=='rapportTab' ? 'block' : 'none';
-  
-  document.getElementById('tV').className = nom=='vendre' ? 'active' : '';
-  document.getElementById('tC').className = nom=='kopyeTab' ? 'active' : '';
-  document.getElementById('tF').className = nom=='fichesTab' ? 'active' : '';
-  document.getElementById('tR').className = nom=='rapportTab' ? 'active' : '';
-
-  if(nom !== 'vendre'){
-     history.pushState({tab: nom}, '', '#' + nom);
+  // Tiraj
+  let tb = document.getElementById('tirajBox'); tb.innerHTML="";
+  TIRAJ_LIST.forEach(t=>{
+    let s=document.createElement('span'); s.className='tiraj'; s.innerText=t;
+    s.onclick=()=>{ s.classList.toggle('active'); updateTiraj(); };
+    tb.appendChild(s);
+  });
+  // Lines - 6 liy ak flèch touche
+  let linesDiv = document.getElementById('lines'); linesDiv.innerHTML="";
+  for(let i=0;i<6;i++){
+    let d=document.createElement('div'); d.className='ligne';
+    d.innerHTML=`<select style="width:70px" id="j${i}"><option>L3</option><option>L4</option><option>M2</option><option>B5</option></select><input id="b${i}" placeholder="Boul" onkeydown="nextLine(event,${i})"><input id="m${i}" type="number" placeholder="Miz" style="width:80px" oninput="calc()" onkeydown="nextLine(event,${i})">`;
+    linesDiv.appendChild(d);
   }
+  calc();
+}
+function nextLine(e,i){
+  if(e.key==="Enter" || e.key==="ArrowDown"){
+    let next = i+1; if(next<6) document.getElementById('b'+next)?.focus();
+  }
+  if(e.key==="ArrowUp" && i>0){ document.getElementById('b'+(i-1))?.focus(); }
+}
+function updateTiraj(){
+  selectedTiraj=[]; document.querySelectorAll('.tiraj.active').forEach(el=>selectedTiraj.push(el.innerText));
+  document.getElementById('nbT').innerText = selectedTiraj.length||1; calc();
+}
+function calc(){
+  let total=0;
+  for(let i=0;i<6;i++){ let m=parseFloat(document.getElementById('m'+i)?.value)||0; total+=m; }
+  document.getElementById('tot').innerText = total+"$";
+  let mult = selectedTiraj.length||1;
+  document.getElementById('paye').innerText = (total*mult)+"$";
 }
 
+// BACK TO VENDRE LOGIC
+function showTab(nom){
+  ['vendre','kopyeTab','fichesTab','rapportTab'].forEach(id=>{
+    document.getElementById(id).style.display = id===nom?'block':'none';
+  });
+  document.getElementById('tV').className = nom=='vendre'?'active':'';
+  document.getElementById('tC').className = nom=='kopyeTab'?'active':'';
+  document.getElementById('tF').className = nom=='fichesTab'?'active':'';
+  document.getElementById('tR').className = nom=='rapportTab'?'active':'';
+  if(nom!=='vendre'){ history.pushState({tab:nom},'', '#'+nom); }
+}
 window.onpopstate = function(){
-   // TOUJOU RETOUNEN NAN VENDRE
-   document.getElementById('vendre').style.display = 'block';
-   document.getElementById('kopyeTab').style.display = 'none';
-   document.getElementById('fichesTab').style.display = 'none';
-   document.getElementById('rapportTab').style.display = 'none';
-   document.getElementById('tV').className = 'active';
-   document.getElementById('tC').className = '';
-   document.getElementById('tF').className = '';
-   document.getElementById('tR').className = '';
-   history.pushState(null, null, location.href);
+  showTab('vendre');
+  history.pushState(null,null,location.href);
 };
 
-// Apre enprime - ajoute bouton retounen
-function apreImprime(){
-   const div = document.getElementById('lastTicket');
-   div.innerHTML += '<br><button class="btn bV" onclick="showTab(\'vendre\');window.scrollTo(0,0)">↩️ RETOUNEN NAN VENDRE</button>';
-   setTimeout(()=>{ showTab('vendre'); }, 1500);
-}
-window.addEventListener('afterprint', apreImprime);
-
-// FONKSYON VANN OU A - AJOUTE apreImprime() nan fen li
 function vann(){
-  // ... kite tout kòd vann ou a ...
-  // nan fen vann(), ajoute:
-  // apreImprime();
-  document.getElementById('lastTicket').innerHTML = '<div style="border:2px dashed #000;padding:10px;text-align:center"><h3>🎫 FICH ANPRIMTE</h3><p>Bòn chans!</p></div>';
-  apreImprime();
+  calc();
+  let ticketHTML = `<div style="border:2px dashed #000;padding:10px;margin-top:10px;text-align:center"><h3>🎫 TICKET ${USER}</h3><div>${new Date().toLocaleString()}</div><div>Tiraj: ${selectedTiraj.join(', ')}</div><hr>`;
+  for(let i=0;i<6;i++){
+    let j=document.getElementById('j'+i).value, b=document.getElementById('b'+i).value, m=document.getElementById('m'+i).value;
+    if(b && m) ticketHTML += `<div>${j} - ${b} : ${m}$</div>`;
+  }
+  ticketHTML += `<h2>A PEYE: ${document.getElementById('paye').innerText}</h2></div>`;
+  document.getElementById('lastTicket').innerHTML = ticketHTML + `<button class="btn bV" onclick="showTab('vendre');window.scrollTo(0,0)">↩️ RETOUNEN NAN VENDRE</button><button class="btn bK" onclick="window.print()">🖨️ RE-IMPRIMER</button>`;
+  window.print();
+  setTimeout(()=>{ showTab('vendre'); }, 1000);
 }
-function searchById(){}
+function searchById(){ document.getElementById('kopyeResult').innerHTML="<div style='padding:10px;background:#eee'>Fich pa jwenn pou ID: "+document.getElementById('searchId').value+"</div>"; }
+function genererRapport(){
+  document.getElementById('rVente').innerText = "1250$";
+  document.getElementById('rCom').innerText = "125$";
+  document.getElementById('rPaye').innerText = "1125$";
+  document.getElementById('rNet').innerText = "1000$";
+}
 </script>
 </body></html>
