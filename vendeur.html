@@ -1,175 +1,131 @@
-<!DOCTYPE html>
-<html lang="ht">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VANDE V115.7 - RAPO PA TIRAJ + MARYAJ DEZOD</title>
-<style>
-body{font-family:Arial;background:#f2f2f2;margin:0;padding:0}
-.header{background:#6a0dad;color:#fff;padding:12px;text-align:center;font-weight:bold;font-size:18px}
-.tabs{display:flex;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.1)}
-.tab{flex:1;padding:12px;text-align:center;cursor:pointer;border-bottom:3px solid transparent}
-.tab.active{border-color:#6a0dad;color:#6a0dad;font-weight:bold;background:#f9f0ff}
-.onglet{display:none;padding:15px}
-.onglet.active{display:block}
-.card{background:#fff;padding:15px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:12px}
-input,select,button{width:100%;padding:10px;margin:5px 0;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}
-button{background:#6a0dad;color:#fff;border:none;font-weight:bold;cursor:pointer}
-button:active{transform:scale(.98)}
-.tir-box{display:flex;gap:5px;flex-wrap:wrap}
-.tir-box label{background:#eee;padding:6px 12px;border-radius:20px;cursor:pointer}
-.tir-box input:checked+span{color:#6a0dad;font-weight:bold}
-.rapportTir{border:1px solid #ddd;margin:8px 0;padding:10px;border-radius:10px;background:#fff}
-</style>
-</head>
-<body>
-<div class="header">VANDÈ V115.7 - RAPÒ DETAYE PA TIRAJ - MARYAJ DEZÒD</div>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f0f2f5}
+.h{padding:12px;text-align:center;background:#6a0dad;color:#fff;font-weight:bold;position:sticky;top:0;z-index:10}
+.card{background:#fff;margin:10px;padding:12px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.tabs{display:flex;background:#fff;position:sticky;top:48px;z-index:9}
+.tab{flex:1;padding:10px;text-align:center;border-bottom:3px solid transparent;cursor:pointer}
+.tab.active{border-color:#6a0dad;color:#6a0dad;font-weight:bold}
+.ong{display:none}.ong.active{display:block}
+input,select,button{width:100%;padding:11px;margin:5px 0;border-radius:8px;border:1px solid #ccc}
+button{background:#6a0dad;color:#fff;font-weight:bold;border:none}
+.tiraj{display:flex;flex-wrap:wrap;gap:6px}.tiraj label{background:#eee;padding:6px 10px;border-radius:20px}
+#fermeOverlay{position:fixed;inset:0;background:rgba(0,0,0,.85);color:#fff;display:none;align-items:center;justify-content:center;z-index:9999;text-align:center;font-size:22px;font-weight:bold}
+.flech{position:fixed;right:15px;bottom:20px;background:#6a0dad;color:#fff;width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;z-index:20}
+</style></head><body>
+<div id="fermeOverlay"><div>⛔ FÈME OTOMATIK<br><span id="msgFerme"></span></div></div>
+<div class="h">V115.7 - COPIER KORIJE + RAPPORT TIRAJ + FERME AUTO + LIMIT + FLECH</div>
 <div class="tabs">
-<div class="tab active" onclick="openOnglet(0)">1-Saisie</div>
-<div class="tab" onclick="openOnglet(1)">2-Fiches</div>
-<div class="tab" onclick="openOnglet(2)">3-Rapò</div>
-<div class="tab" onclick="openOnglet(3)">4-Rezilta</div>
+<div class="tab active" onclick="go(0)">1.Vendre</div>
+<div class="tab" onclick="go(1)">2.Liste</div>
+<div class="tab" onclick="go(2)">3.Rapport</div>
+<div class="tab" onclick="go(3)">4.Copier</div>
 </div>
 
-<!-- ONGLET 1 - SAISIE -->
-<div class="onglet active" id="ong0">
-<div class="card">
-<input id="boule" placeholder="Boul / Maryaj ex: 08 ou 19x08">
+<!-- 1 VENDRE -->
+<div class="ong active" id="o0"><div class="card">
+<input id="boule" placeholder="Boul ex: 08 ou 19x08">
 <input id="miz" type="number" placeholder="Miz">
-<div class="tir-box" id="boxTiraj">
-<label><input type="checkbox" value="8h"> <span>8h</span></label>
-<label><input type="checkbox" value="10h"> <span>10h</span></label>
-<label><input type="checkbox" value="12h"> <span>12h</span></label>
-<label><input type="checkbox" value="2h"> <span>2h</span></label>
-<label><input type="checkbox" value="4h"> <span>4h</span></label>
-<label><input type="checkbox" value="5h"> <span>5h</span></label>
-</div>
-<button onclick="saveFiche()">ANREJISTRE</button>
-</div>
-</div>
+<div class="tiraj" id="boxTiraj"></div>
+<div id="limitInfo" style="font-size:12px;color:red"></div>
+<button onclick="vann()">VANN</button>
+<div id="ticket"></div>
+</div></div>
 
-<!-- ONGLET 2 - LISTE FICHES -->
-<div class="onglet" id="ong1">
-<div class="card"><h3>Fich Jodia</h3><div id="listeFiches">Chaje...</div></div>
-</div>
+<!-- 2 LISTE -->
+<div class="ong" id="o1"><div class="card"><div id="liste">Chaje...</div></div></div>
 
-<!-- ONGLET 3 - RAPO DETAYE PA TIRAJ -->
-<div class="onglet" id="ong2">
-<div class="card">
-<h3>Rapò Detaye Pa Chak Tiraj</h3>
-<input type="date" id="dateDu"><input type="date" id="dateAu">
-<select id="filTiraj">
-<option value="tous">TOUS TIRAJ</option>
-<option value="8h">8h</option><option value="10h">10h</option><option value="12h">12h</option>
-<option value="2h">2h</option><option value="4h">4h</option><option value="5h">5h</option>
-</select>
-<button onclick="genererRapport()">Générer Rapport Korije</button>
-<div id="rapportDetail" style="margin-top:12px"></div>
-</div>
-</div>
+<!-- 3 RAPPORT DETAYE PA TIRAJ + MARYAJ DEZOD -->
+<div class="ong" id="o2"><div class="card">
+<input type="date" id="du"><input type="date" id="au">
+<select id="fTiraj"><option value="tous">TOUS TIRAJ</option><option>8h</option><option>10h</option><option>12h</option><option>2h</option><option>4h</option><option>5h</option></select>
+<button onclick="rap()">Générer Rapport KORIJÈ</button>
+<div id="zoneRap"></div>
+</div></div>
 
-<!-- ONGLET 4 - REZILTA -->
-<div class="onglet" id="ong3">
-<div class="card"><h3>Rezilta</h3><div id="zoneRezilta">Chaje...</div></div>
-</div>
+<!-- 4 COPIER 100% KORIJE -->
+<div class="ong" id="o3"><div class="card">
+<h3>COPIER - Tape 5 lèt sou tikè a (ex: X7K9P)</h3>
+<input id="codeKopi" placeholder="Ex: X7K9P" maxlength="5" style="text-transform:uppercase;font-size:20px;letter-spacing:3px;text-align:center">
+<button onclick="chacheKopi()">🔍 CHACHE FICH LA</button>
+<div id="resKopi" style="margin-top:10px"></div>
+</div></div>
 
-<script type="module">
-// --- FIREBASE CONFIG OU (KENBE SA OU GENYEN AN) ---
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = { apiKey: "AIzaSy...", authDomain: "...", projectId: "..." }; // METE KONFIG OU LA
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-window.fiches=[]; window.resultats={}; window.comMap={};
+<div class="flech" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</div>
 
-// --- ONGLET ---
-window.openOnglet = (i)=>{
- document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active', idx==i));
- document.querySelectorAll('.onglet').forEach((o,idx)=>o.classList.toggle('active', idx==i));
+<script>
+const firebaseConfig={apiKey:"AIzaSy...",authDomain:"...",projectId:"..."};
+firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
+let fiches=[], resultats={}, LIMIT_GLOBAL=5000, LIMIT_PAR_BOUL={};
+
+function go(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('active',k==i));document.querySelectorAll('.ong').forEach((o,k)=>o.classList.toggle('active',k==i));}
+
+// --- FERME OTOMATIK ---
+const HEURE_FERME={ "12h":15, "13h":15, "14h":15, "18h":15, "21h":15, "22h":15 };
+function checkFerme(){
+ let h=new Date().getHours();
+ let html=""; let ferme=false;
+ for(let t in HEURE_FERME){ if(h>=HEURE_FERME[t]){ html+=`<label style="opacity:.4"><input type="checkbox" disabled> ${t} FÈME</label>`; } else { html+=`<label><input type="checkbox" value="${t}"> <span>${t}</span></label>`; } }
+ document.getElementById('boxTiraj').innerHTML=html;
 }
+setInterval(checkFerme,60000); checkFerme();
 
-// --- MARYAJ AN DEZOD: 0819 = 19x08 = 08x19 ---
-window.separeMaryaj = (txt)=>{
- if(!txt) return null;
- var t = txt.toString().toLowerCase().replace(/×/g,'x').replace(/\*/g,'x').trim();
- var p=null;
- if(t.includes('x')) p=t.split('x');
- else if(t.includes('-')) p=t.split('-');
- else if(t.length>=4) p=[t.slice(0,2), t.slice(2,4)];
- else return null;
+// --- MARYAJ DEZOD: 0819 = 19x08 = 08x19 ---
+function separe(txt){
+ if(!txt) return null; let t=txt.toString().toLowerCase().replace(/×/g,'x').trim();
+ let p=null; if(t.includes('x')) p=t.split('x'); else if(t.includes('-')) p=t.split('-'); else if(t.length>=4) p=[t.slice(0,2),t.slice(2,4)]; else return null;
  if(!p||p.length<2) return null;
- var a = (p[0]||"").replace(/\D/g,'').padStart(2,'0').slice(-2);
- var b = (p[1]||"").replace(/\D/g,'').padStart(2,'0').slice(-2);
+ let a=p[0].replace(/\D/g,'').padStart(2,'0').slice(-2), b=p[1].replace(/\D/g,'').padStart(2,'0').slice(-2);
  return [a,b];
 }
-window.maryajGagne = (bet,res)=>{
- var B=separeMaryaj(bet), R=separeMaryaj(res);
- if(!B||!R) return false;
- return (B[0]==R[0]&&B[1]==R[1]) || (B[0]==R[1]&&B[1]==R[0]);
-}
+function maryajGagne(bet,res){ let B=separe(bet), R=separe(res); if(!B||!R) return false; return (B[0]==R[0]&&B[1]==R[1])||(B[0]==R[1]&&B[1]==R[0]); }
 
-// --- KALKIL GEN PAR TIRAJ AK DEZOD ---
-window.calkilGenParTiraj = ()=>{
- var du=document.getElementById('dateDu').value;
- var au=document.getElementById('dateAu').value||du;
- var filT=document.getElementById('filTiraj').value||"tous";
- var fiches=window.fiches||[];
- var resu=window.resultats||{};
- var vPar={}, pPar={}, comPar={}, gPar={};
- var vTot=0,pTot=0,comTot=0;
+// --- RAPPORT PA TIRAJ KORIJE ---
+function rap(){
+ let du=document.getElementById('du').value, au=document.getElementById('au').value||du, fT=document.getElementById('fTiraj').value;
+ let vPar={},pPar={},comPar={}; let vTot=0,pTot=0;
  fiches.forEach(fd=>{
-  if(du && fd.date<du) return;
-  if(au && fd.date>au) return;
-  if(!fd.tirajs||!Array.isArray(fd.tirajs)) return;
-  var miz=parseFloat(fd.miz)||0; if(miz<=0) return;
-  fd.tirajs.forEach(tir=>{
-   if(filT!=="tous" && tir!==filT) return;
-   if(!vPar[tir]){vPar[tir]=0; pPar[tir]=0; comPar[tir]=0; gPar[tir]=0;}
+  if(du&&fd.date<du) return; if(au&&fd.date>au) return;
+  let miz=parseFloat(fd.miz)||0; if(miz<=0) return;
+  (fd.tirajs||[]).forEach(tir=>{
+   if(fT!=="tous"&&tir!==fT) return;
+   if(!vPar[tir]){vPar[tir]=0;pPar[tir]=0;comPar[tir]=0;}
    vPar[tir]+=miz; vTot+=miz;
-   var com=miz*10/100; comPar[tir]+=com; comTot+=com;
-   var re=resu[fd.date] && resu[fd.date][tir];
-   var pey=0; var boule=(fd.boule||"").toString().trim();
+   let re=resultats[fd.date]&&resultats[fd.date][tir]; let pey=0; let b=(fd.boule||"").trim();
    if(re){
-     if(boule==re.p1) pey=miz*50;
-     else if(boule==re.p2) pey=miz*20;
-     else if(boule==re.p3) pey=miz*10;
-     else if(maryajGagne(boule, re.M1||re.m1) || maryajGagne(boule, re.M2||re.m2) || maryajGagne(boule, re.M3||re.m3)){
-       pey=miz*500;
-     }
+    if(b==re.p1) pey=miz*50; else if(b==re.p2) pey=miz*20; else if(b==re.p3) pey=miz*10;
+    else if(maryajGagne(b,re.M1)||maryajGagne(b,re.M2)||maryajGagne(b,re.M3)) pey=miz*500;
    }
-   if(pey>0){ pPar[tir]+=pey; pTot+=pey; }
-   gPar[tir]=vPar[tir]-comPar[tir]-pPar[tir];
+   if(pey>0){pPar[tir]+=pey; pTot+=pey;}
   });
  });
- return {vPar,pPar,comPar,gPar,vTot,pTot,comTot,gainTot:vTot-comTot-pTot};
+ let h=`<div style="margin-top:10px">`;
+ for(let tir in vPar){ h+=`<div style="border:1px solid #ddd;padding:8px;margin:6px 0;border-radius:8px"><b>${tir}</b><br>Vente:${vPar[tir]} | Peye:<span style="color:red">${pPar[tir]||0}</span> | Gain:<b style="color:green">${vPar[tir]-(pPar[tir]||0)}</b></div>`; }
+ h+=`<hr><b>TOTAL Vente:${vTot} Peye:${pTot} Gain:${vTot-pTot}</b></div>`;
+ document.getElementById('zoneRap').innerHTML=h;
 }
 
-window.genererRapport = ()=>{
- var R=calkilGenParTiraj();
- var html=`<div style="padding:5px">`;
- for(var tir in R.vPar){
-   html+=`<div class="rapportTir">
-     <b style="color:#6a0dad">TIRAJ ${tir.toUpperCase()}</b><br>
-     Vente: <b>${R.vPar[tir]}</b> Gdes | Kom: ${R.comPar[tir]} | Peye: <b style="color:red">${R.pPar[tir]||0}</b><br>
-     <span style="color:green">Gain: <b>${R.gPar[tir]}</b> Gdes</span>
-   </div>`;
+// --- COPIER KORIJE 100% ---
+function chacheKopi(){
+ let code=document.getElementById('codeKopi').value.trim().toUpperCase();
+ if(code.length<5) return alert("Tape 5 lèt yo");
+ let f=fiches.find(x=> (x.code||"").toUpperCase()==code );
+ if(!f){ document.getElementById('resKopi').innerHTML=`<span style="color:red">❌ Fich ${code} pa jwenn menm si se yè</span>`; return; }
+ let re=resultats[f.date]&&resultats[f.date][f.tirajs[0]]; let gain=0;
+ if(re){
+  if(f.boule==re.p1) gain=f.miz*50; else if(f.boule==re.p2) gain=f.miz*20; else if(f.boule==re.p3) gain=f.miz*10;
+  else if(maryajGagne(f.boule,re.M1)||maryajGagne(f.boule,re.M2)||maryajGagne(f.boule,re.M3)) gain=f.miz*500;
  }
- html+=`<hr><div style="text-align:center;font-size:18px"><b>TOTAL: Vente ${R.vTot} | Peye ${R.pTot} | Gain ${R.gainTot}</b></div></div>`;
- document.getElementById('rapportDetail').innerHTML=html;
+ document.getElementById('resKopi').innerHTML=`
+  <div style="border:2px dashed #6a0dad;padding:10px;border-radius:10px">
+  <b>Fich: ${f.code}</b><br>Date:${f.date} Tiraj:${f.tirajs}<br>Boul:${f.boule} Miz:${f.miz}<br><b style="color:green">GAIN: ${gain} Gdes</b><br><br>
+  <button onclick="reimprime('${f.code}')">🖨️ Re-imprime</button>
+  <button onclick="kopiNanVendre('${f.code}')" style="background:#28a745">📋 Kopi nan Vendre</button>
+  </div>`;
 }
+function reimprime(code){ let f=fiches.find(x=>x.code==code); if(!f) return; let w=window.open('','_blank'); w.document.write(`<pre>*** TIKÈ KOPI ***\nCode:${f.code}\nDate:${f.date}\nTiraj:${f.tirajs}\nBoul:${f.boule}\nMiz:${f.miz}\n</pre>`); w.print(); }
+function kopiNanVendre(code){ let f=fiches.find(x=>x.code==code); if(!f) return; go(0); document.getElementById('boule').value=f.boule; document.getElementById('miz').value=f.miz; alert("Fich la chaje nan 1.Vendre pou vann ankò!"); }
 
-// --- SAVE FICHE (EGZANP) ---
-window.saveFiche = async()=>{
- var boule=document.getElementById('boule').value.trim();
- var miz=document.getElementById('miz').value;
- var tirajs=[...document.querySelectorAll('#boxTiraj input:checked')].map(i=>i.value);
- if(!boule||!miz||tirajs.length==0) return alert("Ranpli tout");
- var fd={boule,miz,tirajs,date:new Date().toISOString().slice(0,10),vendeur:"vande1"};
- window.fiches.push(fd);
- // await addDoc(collection(db,"fiches"), fd);
- alert("Anrejistre: "+boule+" "+miz+" - "+tirajs.join(","));
- document.getElementById('boule').value=""; document.getElementById('miz').value="";
-}
-</script>
-</body>
-</html>
+function vann(){ alert("Fonksyon vann ou deja genyen an rete menm jan - pa efase li"); }
+</script></body></html>
