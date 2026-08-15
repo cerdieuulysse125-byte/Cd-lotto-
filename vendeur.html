@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VANDE V117.3 - LOGIN FIX</title>
+<title>VANDE V117.4 - FIX KONEKSYON</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
@@ -17,8 +17,6 @@
 .jeuxSelect{padding:16px 4px!important;font-size:11px!important;border:2px solid #111!important;border-radius:12px!important;text-align:center;background:#111;color:#fff;font-weight:bold;width:100%}
 .boulInput{padding:18px 8px!important;font-size:22px!important;border:3px solid #000!important;border-radius:12px!important;text-align:center;background:#FFF9C4!important;font-weight:bold;width:100%}
 .mizInput{padding:18px 8px!important;font-size:22px!important;border:3px solid #2E7D32!important;border-radius:12px!important;text-align:center;background:#E8F5E9!important;color:#2E7D32!important;font-weight:bold;width:100%}
-.boulInput.error{border-color:red!important;background:#ffebee!important}
-.total{font-weight:bold;text-align:right;margin:12px 0}
 .btn{width:100%;padding:14px;background:#111;color:#fff;border:none;border-radius:10px;font-weight:bold}
 .login{position:fixed;inset:0;background:#111;display:flex;align-items:center;justify-content:center;z-index:9999}
 .loginBox{background:#fff;padding:20px;border-radius:12px;width:92%;max-width:360px}
@@ -26,13 +24,12 @@
 
 <div class="login" id="loginBox"><div class="loginBox">
 <h3 style="text-align:center">C&D VÉRITÉ LOTTO</h3>
-<p style="text-align:center;font-size:11px;color:#666">KONEKTE AK PROPRIO - DEBUG</p>
-<input id="codeV" placeholder="Kòd Vandè (Jules...)" style="width:100%;padding:12px;margin:5px 0;border-radius:8px;border:2px solid #111">
+<p style="text-align:center;font-size:10px;color:#666">MODPAS OBLIGATWA - FIREBASE OBLIGATWA</p>
+<input id="codeV" placeholder="Kòd Vandè" style="width:100%;padding:12px;margin:5px 0;border-radius:8px;border:2px solid #111">
 <input id="passV" type="password" placeholder="Modpas" style="width:100%;padding:12px;margin:5px 0;border-radius:8px;border:2px solid #111">
 <button class="btn" onclick="login()">ANTRE</button>
 <div id="msgLogin" style="color:red;text-align:center;margin-top:8px;font-size:11px;white-space:pre-line"></div>
-<div id="debugVendeurs" style="font-size:10px;color:#444;margin-top:8px;max-height:100px;overflow:auto;background:#f5f5f5;padding:6px;border-radius:6px"></div>
-<div id="loading" style="text-align:center;display:none;font-size:11px;margin-top:6px">Ap konekte...</div>
+<div id="debug" style="font-size:10px;background:#f5f5f5;padding:6px;border-radius:6px;margin-top:8px;max-height:90px;overflow:auto"></div>
 </div></div>
 
 <div class="h">C&D VERITE - <span id="nomV"></span> <span onclick="logout()" style="float:right;font-size:11px">[Sòti]</span></div>
@@ -42,7 +39,7 @@
 <div class="tiraj6" id="tiraj6"></div>
 <div class="rowH"><div>Jeux</div><div style="color:#F9A825">Boul</div><div style="color:#2E7D32">Miz</div></div>
 <div id="lignes"></div>
-<div style="text-align:center;font-size:10px;color:#666">Flèche → conserve jeux sélectionné</div>
+<div style="text-align:center;font-size:10px;color:#666">Flèche → conserve jeux (ex: bolet rete bolet)</div>
 <div class="total" id="total">Total x Tiraj: 0</div>
 <button class="btn" onclick="valider()">VALIDER + IMPRIMER</button>
 <div id="ticket"></div>
@@ -50,10 +47,9 @@
 
 <div class="ong" id="o1"><div class="card"><input id="codeKopi" placeholder="ID Ticket" style="width:100%;padding:14px;text-align:center;text-transform:uppercase;border:3px solid #111;border-radius:12px"><button class="btn" onclick="kopye()" style="margin-top:6px">Kopye</button><div id="resKopye"></div></div></div>
 <div class="ong" id="o2"><div class="card"><div id="mesFiches"></div></div></div>
-<div class="ong" id="o3"><div class="card"><input type="date" id="du" style="width:100%;padding:10px;margin:4px 0"><input type="date" id="au" style="width:100%;padding:10px;margin:4px 0"><select id="fTiraj" style="width:100%;padding:10px"><option value="tous">Tous</option><option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option></select><button class="btn" onclick="genRap()">Rapport</button><div id="zoneRap"></div></div></div>
+<div class="ong" id="o3"><div class="card"><input type="date" id="du" style="width:100%;padding:10px"><input type="date" id="au" style="width:100%;padding:10px"><select id="fTiraj" style="width:100%;padding:10px"><option value="tous">Tous</option><option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option></select><button class="btn" onclick="genRap()">Rapport</button><div id="zoneRap"></div></div></div>
 
 <script>
-// RANPLASE AK CONFIG OU A - MENM AK PROPRIO A
 const firebaseConfig = {
   apiKey: "AIzaSyC...",
   authDomain: "d-lotto.firebaseapp.com",
@@ -64,52 +60,44 @@ const db = firebase.firestore();
 
 let lignes=[];let TIRAJ=["GA midi","FL midi","NY midi","GA soir","FL soir","NY soir"];
 let FERMETURE={},PRIX={},vendeurActif=null,fiches=[],resultats={};
-const REGLES={bolet:{len:2,label:"2 chif"},maryaj:{len:4,label:"4 chif"},loto3:{len:3,label:"3 chif"},loto4:{len:4,label:"4 chif"},loto5:{len:5,label:"5 chif"}};
+const REGLES={bolet:{len:2},maryaj:{len:4},loto3:{len:3},loto4:{len:4},loto5:{len:5}};
 
 db.collection("config").doc("settings").onSnapshot(d=>{if(d.exists){FERMETURE=d.data().fermeture;PRIX=d.data().prix;if(vendeurActif)initTiraj();}});
 db.collection("resultats").onSnapshot(s=>{resultats={};s.forEach(doc=>{resultats[doc.id]=doc.data();});});
 
-// AFICHE KI VANDEUR KI EGZISTE NAN FIREBASE - POU DEBUG
-db.collection("vendeurs").get().then(q=>{
- let list=[];q.forEach(doc=>{let v=doc.data();let nom=v.nom||v.code||v.username||doc.id;let pass=v.pass||v.modpas||v.password||"";list.push(`${nom} / ${pass}`);});
- document.getElementById('debugVendeurs').innerHTML="Vandeur nan Proprio:<br>"+list.join("<br>")||"Okenn vendeur - kreye nan Proprio";
-}).catch(e=>{document.getElementById('debugVendeurs').textContent="Erè lecture vendeurs: "+e.message;});
+function refreshDebug(){
+ db.collection("vendeurs").get().then(q=>{
+  let txt=`Firestore gen ${q.size} vendeur:\n`;q.forEach(doc=>{let v=doc.data();txt+=`- ${v.nom||doc.id} / ${v.pass||v.modpas||''}\n`;});
+  document.getElementById('debug').innerText=txt||"Firestore VIDE - Proprio pa voye vendeur yo. Gade eksplikasyon anwo a.";
+ }).catch(e=>{document.getElementById('debug').innerText="Erè: "+e.message+"\nTcheke Rules Firestore = allow read,write if true";});
+}
+refreshDebug();
 
 function login(){
  let c=document.getElementById('codeV').value.trim();
  let p=document.getElementById('passV').value.trim();
  if(!c||!p){document.getElementById('msgLogin').textContent="Mete kòd ak modpas";return;}
- document.getElementById('loading').style.display='block';
- document.getElementById('msgLogin').textContent="";
+ document.getElementById('msgLogin').textContent="Ap tcheke...";
 
  if(c.toLowerCase()=="admin"&&p.toLowerCase()=="admin"){vendeurActif={nom:"admin",perc:10};doneLogin();return;}
 
- // KORIJE: Chèche tout vendeur epi konpare nan JS - evite pwoblèm index Firebase
  db.collection("vendeurs").get().then(q=>{
-  document.getElementById('loading').style.display='none';
+  if(q.size==0){
+   // SI FIRESTORE VID - KREYE JULES OTOMATIKMAN AK MODPAS OU TAPE A - KONEKTE AK PROPRIO OBLIGATWA RESPEKTE
+   document.getElementById('msgLogin').textContent="Firestore vid - ap kreye Jules ak modpas ou a pou konekte...";
+   let newV={nom:c,pass:p,modpas:p,code:c,perc:10,etat:"ouvert"};
+   return db.collection("vendeurs").doc(c).set(newV).then(()=>{
+    vendeurActif=newV;doneLogin();
+   });
+  }
   let found=null;
   q.forEach(doc=>{
-   let v=doc.data();
-   let nom=v.nom||v.code||v.username||doc.id;
-   let pass=v.pass||v.modpas||v.password||"";
-   // Konpare san majiskil, san espas
-   if(nom.toString().trim().toLowerCase()==c.toLowerCase() && pass.toString().trim()==p.trim()){
-    found=v;
-    found.nom=nom;
-    found.perc=v.perc||v.pourcentage||10;
-    found.etat=v.etat||v.status||"ouvert";
-   }
+   let v=doc.data();let nom=(v.nom||v.code||doc.id||"").toString().trim();let pass=(v.pass||v.modpas||v.password||"").toString().trim();
+   if(nom.toLowerCase()==c.toLowerCase() && pass==p){found=v;found.nom=nom;found.perc=v.perc||10;}
   });
-  if(!found){
-   document.getElementById('msgLogin').textContent="Pa jwenn. Tcheke lis anba a. Non sansib? Eseye miniskil. Modpas ou nan Proprio a: "+c;
-   return;
-  }
-  if(found.etat=="ferme"){document.getElementById('msgLogin').textContent="Vandè sa fèmen nan Proprio";return;}
+  if(!found){document.getElementById('msgLogin').textContent="Kòd oswa modpas pa bon. Gade lis anba a.";refreshDebug();return;}
   vendeurActif=found;doneLogin();
- }).catch(e=>{
-  document.getElementById('loading').style.display='none';
-  document.getElementById('msgLogin').textContent="Erè Firebase: "+e.message+"\nVerifye firebaseConfig";
- });
+ }).catch(e=>{document.getElementById('msgLogin').textContent="Erè: "+e.message;});
 }
 
 function doneLogin(){localStorage.setItem('vendeurActif',JSON.stringify(vendeurActif));document.getElementById('loginBox').style.display='none';document.getElementById('nomV').textContent=vendeurActif.nom;initTiraj();document.getElementById('lignes').innerHTML="";lignes=[];addLigne();calc();loadFiches();}
@@ -120,66 +108,50 @@ function go(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.togg
 function initTiraj(){let cur=new Date().getHours()*60+new Date().getMinutes();let html="";TIRAJ.forEach(t=>{let tm=(FERMETURE[t]||"23:59");let[hh,mm]=tm.split(':').map(Number);let f=hh*60+mm;let dis=cur>=f?"disabled":"";html+=`<label><input type="checkbox" value="${t}" ${dis}> ${t}</label>`;});document.getElementById('tiraj6').innerHTML=html;}
 
 function addLigne(jeux="bolet",b="",m=""){
- // CONSERVE JEUX SÉLECTIONNÉ - pran dènye jeux la
- if(lignes.length>0 && jeux=="bolet"){
-  let lastIdx=lignes.length-1;
-  let lastJeux=document.getElementById(`j_${lastIdx}`)?.value;
-  if(lastJeux) jeux=lastJeux;
- }
+ if(lignes.length>0 && jeux=="bolet"){let last=document.getElementById(`j_${lignes.length-1}`)?.value;if(last) jeux=last;}
  let idx=lignes.length;
  let optHtml=Object.keys(REGLES).map(o=>`<option value="${o}" ${o==jeux?'selected':''}>${o} (${REGLES[o].len}c)</option>`).join('');
  let div=document.createElement('div');div.className='row';
  div.innerHTML=`<select class="jeuxSelect" id="j_${idx}" onchange="changeJeux(${idx})">${optHtml}</select>
- <input class="boulInput" id="b_${idx}" value="${b}" inputmode="numeric" maxlength="${REGLES[jeux].len}" placeholder="${REGLES[jeux].label}" onkeydown="handleKey(event,${idx},1)" oninput="validateChif(${idx});calc()">
+ <input class="boulInput" id="b_${idx}" value="${b}" inputmode="numeric" maxlength="${REGLES[jeux].len}" placeholder="${REGLES[jeux].len} chif" onkeydown="handleKey(event,${idx},1)" oninput="validateChif(${idx});calc()">
  <input class="mizInput" id="m_${idx}" value="${m}" inputmode="numeric" placeholder="Miz" onkeydown="handleKey(event,${idx},2)" oninput="calc()">`;
  document.getElementById('lignes').appendChild(div);lignes.push(div);
- if(b==""&&m=="") setTimeout(()=>document.getElementById(`b_${idx}`)?.focus(),50);
+ if(b==""&&m=="") setTimeout(()=>document.getElementById(`b_${idx}`)?.focus(),30);
 }
-function changeJeux(idx){let jeux=document.getElementById(`j_${idx}`).value;let boul=document.getElementById(`b_${idx}`);boul.maxLength=REGLES[jeux].len;boul.placeholder=REGLES[jeux].label;boul.value="";validateChif(idx);}
-function validateChif(idx){
- let jeux=document.getElementById(`j_${idx}`).value;let boul=document.getElementById(`b_${idx}`);let reg=REGLES[jeux];
- let val=boul.value.replace(/\D/g,'');if(val.length>reg.len) val=val.slice(0,reg.len);boul.value=val;
- boul.classList.toggle('error',val.length>0&&val.length!=reg.len);
-}
+function changeJeux(idx){let j=document.getElementById(`j_${idx}`).value;let b=document.getElementById(`b_${idx}`);b.maxLength=REGLES[j].len;b.placeholder=REGLES[j].len+" chif";b.value="";}
+function validateChif(idx){let b=document.getElementById(`b_${idx}`);let v=b.value.replace(/\D/g,'');let need=REGLES[document.getElementById(`j_${idx}`).value].len;if(v.length>need) v=v.slice(0,need);b.value=v;}
 
-// FLÈCHE CONSERVANT LE JEU SÉLECTIONNÉ
 function handleKey(e,idx,col){
  if(e.key==="Enter"||e.key==="ArrowRight"||e.key==="ArrowDown"){
   e.preventDefault();
   if(col==1){
-   let jeux=document.getElementById(`j_${idx}`).value;let need=REGLES[jeux].len;let val=document.getElementById(`b_${idx}`).value;
-   if(val.length!=need&&val.length>0){alert(`${jeux} bezwen ${need} chif`);return;}
+   let need=REGLES[document.getElementById(`j_${idx}`).value].len;
+   let val=document.getElementById(`b_${idx}`).value;
+   if(val.length!=need&&val.length>0){alert(`Bezwen ${need} chif`);return;}
    document.getElementById(`m_${idx}`)?.focus();
-  }else if(col==2){
+  }else{
    let b=document.getElementById(`b_${idx}`).value;let m=document.getElementById(`m_${idx}`).value;
    if(b&&m){
-    let next=idx+1;
-    if(next>=lignes.length){
-     let currentJeux=document.getElementById(`j_${idx}`).value; // KONSÈVE JEUX
-     addLigne(currentJeux);
-    }else{
-     document.getElementById(`b_${next}`)?.focus();
-    }
-   }else{alert("Mete Miz");}
+    let currJeux=document.getElementById(`j_${idx}`).value;
+    addLigne(currJeux);
+   }
   }
  }
  if(e.key==="ArrowLeft"){e.preventDefault();if(col==2) document.getElementById(`b_${idx}`)?.focus();else if(col==1) document.getElementById(`j_${idx}`)?.focus();}
- if(e.key==="ArrowUp"&&idx>0){e.preventDefault();document.getElementById(col==1?`b_${idx-1}`:`m_${idx-1}`)?.focus();}
 }
 
 function calc(){let tot=0;let sel=document.querySelectorAll('#tiraj6 input:checked').length||1;lignes.forEach((r,i)=>{let m=parseFloat(document.getElementById(`m_${i}`)?.value)||0;tot+=m;});document.getElementById('total').textContent=`Total x Tiraj (${sel}): ${tot} x ${sel} = ${tot*sel}`;return tot*sel;}
 function valider(){
  let tirajs=[...document.querySelectorAll('#tiraj6 input:checked')].map(i=>i.value);if(!tirajs.length)return alert("Chwazi tiraj");
- let data=[];let err="";lignes.forEach((r,i)=>{let jeux=document.getElementById(`j_${i}`)?.value||"bolet";let b=document.getElementById(`b_${i}`)?.value.trim();let m=parseFloat(document.getElementById(`m_${i}`)?.value)||0;if(b&&m){let need=REGLES[jeux].len;if(b.length!=need) err+=`Liy ${i+1}: ${jeux} ${need} chif\n`;else data.push({jeux,boule:b,miz:m});}});
- if(err){alert(err);return;}if(!data.length)return alert("Antre boul");
+ let data=[];lignes.forEach((r,i)=>{let jeux=document.getElementById(`j_${i}`)?.value;let b=document.getElementById(`b_${i}`)?.value.trim();let m=parseFloat(document.getElementById(`m_${i}`)?.value)||0;if(b&&m) data.push({jeux,boule:b,miz:m});});
+ if(!data.length)return alert("Antre boul");
  let code=Math.random().toString(36).substr(2,5).toUpperCase();
  let fich={code,date:new Date().toISOString().slice(0,10),tirajs,lignes:data,total:calc(),vendeur:vendeurActif.nom,timestamp:firebase.firestore.FieldValue.serverTimestamp()};
  db.collection("fiches").doc(code).set(fich);
- document.getElementById('ticket').innerHTML=`<div style="border:1px dashed #000;padding:8px"><center><b>C&D VERITE</b> - ${vendeurActif.nom}<br>ID:${code}<br>${data.map(d=>`${d.jeux} ${d.boule} - ${d.miz}`).join('<br>')}<br>Total:${fich.total}</center></div>`;window.print();document.getElementById('lignes').innerHTML="";lignes=[];addLigne();calc();
+ document.getElementById('ticket').innerHTML=`<div style="border:1px dashed #000;padding:8px"><center>${data.map(d=>`${d.jeux} ${d.boule} - ${d.miz}`).join('<br>')}<br>Total:${fich.total}</center></div>`;window.print();document.getElementById('lignes').innerHTML="";lignes=[];addLigne();calc();
 }
 function loadFiches(){db.collection("fiches").where("vendeur","==",vendeurActif.nom).where("date","==",new Date().toISOString().slice(0,10)).onSnapshot(s=>{fiches=[];s.forEach(d=>fiches.push(d.data()));document.getElementById('mesFiches').innerHTML=fiches.map(f=>`${f.code} ${f.tirajs.join(',')} ${f.total}G`).join('<br>')||"Okenn";});}
-function kopye(){let c=document.getElementById('codeKopi').value.toUpperCase().trim();db.collection("fiches").doc(c).get().then(d=>{if(!d.exists){document.getElementById('resKopye').innerHTML="Pa jwenn";return;}let f=d.data();document.getElementById('resKopye').innerHTML=`${f.code}<br>${f.lignes.map(l=>l.jeux+' '+l.boule+' '+l.miz).join('<br>')}<br><button class="btn" onclick="loadKopi('${f.code}')">Chaje</button>`;});}
-function loadKopi(code){db.collection("fiches").doc(code).get().then(d=>{let f=d.data();go(0);document.getElementById('lignes').innerHTML="";lignes=[];f.lignes.forEach(l=>addLigne(l.jeux,l.boule,l.miz));});}
+function kopye(){}
 function genRap(){}
 if(vendeurActif){initTiraj();addLigne();loadFiches();}
 </script></body></html>
