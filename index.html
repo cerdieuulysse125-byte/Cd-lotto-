@@ -204,22 +204,39 @@ function saveEntete(){
 function loadVendeurs(){if(!db)return;db.collection("vendeurs").onSnapshot(q=>{let html='<div class="vHeader"><div>Non</div><div>Modpas</div><div>%</div><div>Etat</div><div></div></div>';let sel='<option value="tous">Tous vendeurs</option>';q.forEach(d=>{let v=d.data();html+=`<div class="vRow"><div><b>${v.nom}</b></div><div>••••</div><div>${v.perc||10}%</div><div style="color:${v.etat=='ouvert'?'#00C853':'#FF0000'};font-weight:bold">${(v.etat||'ouvert').toUpperCase()}</div><div><button onclick="delV('${v.nom}')" style="background:#FF0000;color:#fff;border:none;border-radius:4px;padding:3px 7px">X</button></div></div>`;sel+=`<option value="${v.nom}">${v.nom}</option>`;});document.getElementById('listV').innerHTML=html;document.getElementById('fVendeur').innerHTML=sel;});}
 function saveVendeur(){let nom=document.getElementById('nomV').value.trim(),pass=document.getElementById('passV').value.trim(),perc=document.getElementById('percV').value||10,etat=document.getElementById('etatV').value;if(!nom||!pass){alert("Mete Non ak Modpas");return;}db.collection("vendeurs").doc(nom).set({nom,pass,modpas:pass,perc:parseFloat(perc),etat}).then(()=>{document.getElementById('nomV').value="";document.getElementById('passV').value="";});}
 function delV(n){if(confirm("Efase "+n+"?"))db.collection("vendeurs").doc(n).delete();}
-function genRap(){
- let du=document.getElementById('du').value,au=document.getElementById('au').value,fV=document.getElementById('fVendeur').value,fT=document.getElementById('fTiraj').value;
- if(!du||!au){alert("Chwazi Du ak Au");return;}
- document.getElementById('zoneRap').innerHTML='<div style="text-align:center;padding:10px">Ap kalkile...</div>';
- db.collection("fiches").get().then(snap=>{
-  db.collection("resultats").get().then(rSnap=>{
-   let res={};rSnap.forEach(d=>{res[d.id]=d.data();});
-   let vTot=0,pTot=0,parTiraj={};
-   snap.forEach(doc=>{let f=doc.data();if(!f.date||f.date<du||f.date>au)return;if(fV!="tous"&&f.vendeur!=fV)return;f.lignes.forEach(l=>{f.tirajs.forEach(tir=>{if(fT!="tous"&&tir!=fT)return;if(!parTiraj[tir])parTiraj[tir]={vente:0,payer:0};let miz=parseFloat(l.miz)||0;parTiraj[tir].vente+=miz;vTot+=miz;let rr=res[f.date]?.[tir];if(rr){let pay=0;if(l.jeux=="bolet"){if(l.boule==rr.p1)pay=miz*50;else if(l.boule==rr.p2)pay=miz*20;else if(l.boule==rr.p3)pay=miz*10;}if(l.jeux=="maryaj"&&rr.maryaj&&rr.maryaj.includes(l.boule))pay=miz*1000;parTiraj[tir].payer+=pay;pTot+=pay;}});});});
-   db.collection("vendeurs").get().then(vSnap=>{
-    let percs={};vSnap.forEach(d=>{percs[d.id]=parseFloat(d.data().perc)||10;});let c=0;snap.forEach(doc=>{let f=doc.data();if(f.date<du||f.date>au)return;if(fV!="tous"&&f.vendeur!=fV)return;let perc=percs[f.vendeur]||10;let vf=0;f.lignes.forEach(l=>{vf+=parseFloat(l.miz)||0;});vf*=(f.tirajs.length||1);c+=vf*perc/100;});
-    let bal=vTot-c-pTot;
-    let detail=Object.keys(parTiraj).map(t=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #ccc"><span>${t}</span><span>V:${parTiraj[t].vente} P:${parTiraj[t].payer}</span></div>`).join('');
-    document.getElementById('zoneRap').innerHTML=`<div class="rapBox"><div style="text-align:center;font-weight:bold;margin-bottom:8px">Du ${du} Au ${au}<br>Tirage: ${fT} | Vendeur: ${fV}</div>${detail||'<div>Okenn vant</div>'}<hr><div style="display:flex;justify-content:space-between"><span><b>Vente</b></span><span><b>${vTot}</b></span></div><div style="display:flex;justify-content:space-between"><span>Commission</span><span>${c.toFixed(0)}</span></div><div style="display:flex;justify-content:space-between"><span>A payer</span><span>${pTot}</span></div><div style="background:#000;color:#FFD600;padding:10px;border-radius:8px;font-weight:bold;text-align:center;margin-top:8px">Balance net: ${bal.toFixed(0)}</div><button onclick="window.print()" style="width:100%;margin-top:10px;padding:14px;background:#000;color:#FFD600;border:none;border-radius:8px;font-weight:bold">🖨️ Imprimer</button></div>`;
-   });
-  });
+async function genRapportProprio(){
+ const du=document.getElementById('du').value;
+ const au=document.getElementById('au').value;
+ const tir=document.getElementById('rapTirage')?.value || 'TOUS';
+ const vendFiltre=document.getElementById('filtreVendeur')?.value || 'TOUS';
+ 
+ const snap=await db.collection('ventes')
+   .where('dateStr','>=',du)
+   .where('dateStr','<=',au)
+   .get();
+ 
+ let vente=0, fich=0;
+ snap.forEach(d=>{
+   const v=d.data();
+   if(tir!=='TOUS' && !(v.tirages||[]).includes(tir)) return;
+   if(vendFiltre!=='TOUS' && v.vendeur!==vendFiltre) return;
+   vente+=Number(v.total)||0;
+   fich++;
  });
-}
+ 
+ const comm=vente*0.10;
+ const net=vente-comm;
+ 
+ document.getElementById('rapportRes').innerHTML=`
+   <div class="rapBox">
+   Du ${du} Au ${au}
+   Tirage ${tir}
+
+   Vente $${vente.toFixed(2)}
+   Commission $${comm.toFixed(2)}
+   Balance net $${net.toFixed(2)}
+   Nbre fich ${fich}
+   </div>`;
+ console.log("Fich jwenn:", fich, "Vente:", vente);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                       }
 </script></body></html>
