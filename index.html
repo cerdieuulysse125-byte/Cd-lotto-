@@ -1,154 +1,192 @@
 <!DOCTYPE html>
-<html lang="ht">
+<html lang="fr">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D VERITE - PROPRIO V140</title>
+<title>C&D PROPRIO V141 - 7 ONGLETS</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#000}.card{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}.hdr{background:#000;color:#fff;text-align:center;padding:12px;font-weight:bold}.tabs{display:flex;background:#111;position:sticky;top:0;z-index:30;overflow:auto}.tab{flex:1;padding:12px 6px;text-align:center;color:#888;font-size:10px;font-weight:bold;cursor:pointer;border-bottom:3px solid #111;white-space:nowrap}.tab.active{color:#fff;border-bottom-color:#fff}.content{padding:10px;flex:1}.panel{display:none}.panel.active{display:block}.inputBox{width:100%;padding:12px;border:2px solid #000;border-radius:10px;margin:6px 0;font-weight:bold}.btn{width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:12px;font-weight:bold;font-size:15px;margin:6px 0;cursor:pointer}.btn-out{background:#fff;color:#000;border:2.5px solid #000}.list{border:2.5px solid #000;border-radius:12px;padding:12px;margin:8px 0;font-size:12px;background:#fff}.rapBox{border:2.5px solid #000;border-radius:14px;padding:18px;margin-top:12px;background:#f9f9f9;white-space:pre-line;text-align:center;font-family:Courier,monospace;font-size:14px;line-height:1.8}.badge{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:bold;color:#fff}.badge-ferme{background:#d00}.badge-ouvert{background:#0a0}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#000}.card{max-width:650px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}.hdr{background:#000;color:#fff;text-align:center;padding:12px;font-weight:bold}.tabs{display:flex;background:#111;position:sticky;top:0;z-index:40;overflow-x:auto;scrollbar-width:none}.tab{flex:0 0 auto;padding:12px 10px;text-align:center;color:#888;font-size:9px;font-weight:bold;cursor:pointer;border-bottom:3px solid #111}.tab.active{color:#fff;border-bottom-color:#fff;background:#222}.content{padding:10px;flex:1}.panel{display:none}.panel.active{display:block}.inputBox{width:100%;padding:11px;border:2px solid #000;border-radius:10px;margin:5px 0;font-weight:bold;font-size:13px}.btn{width:100%;padding:13px;background:#000;color:#fff;border:none;border-radius:12px;font-weight:bold;font-size:14px;margin:6px 0;cursor:pointer}.btn-out{background:#fff;color:#000;border:2.5px solid #000}.list{border:2.5px solid #000;border-radius:12px;padding:12px;margin:8px 0;font-size:12px;background:#fff}.rapBox{border:2.5px solid #000;border-radius:14px;padding:18px;margin-top:12px;background:#f9f9f9;white-space:pre-line;text-align:center;font-family:Courier,monospace;font-size:13px;line-height:1.6}.row{display:flex;gap:6px}.row>*{flex:1}.badge{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:bold;color:#fff}.badge-ferme{background:#d00}.badge-ouvert{background:#0a0}.label{font-size:11px;font-weight:bold;margin-top:8px;display:block}
 </style>
 </head>
 <body>
 <div class="card">
-<div class="hdr">C&D VÉRITÉ - PROPRIO V140</div>
+<div class="hdr">C&D VÉRITÉ - PROPRIO V141 - 7 ONGLETS MODIFIABLE</div>
 <div id="loginDiv" style="padding:30px">
-<input id="propNom" placeholder="Proprio" class="inputBox" value="admin">
-<input id="propPass" type="password" placeholder="Modpas" class="inputBox" value="admin">
-<button class="btn" onclick="loginProprio()">ANTRE PROPRIO</button><p id="msg" style="color:red;text-align:center;margin-top:10px"></p>
+<input id="propNom" class="inputBox" value="admin"><input id="propPass" type="password" class="inputBox" value="admin">
+<button class="btn" onclick="loginProprio()">ANTRE PROPRIO</button><p id="msg" style="color:red;text-align:center"></p>
 </div>
 <div id="appDiv" style="display:none;flex-direction:column;flex:1">
 <div class="tabs">
-<div class="tab active" onclick="openTab(0)">1.VANDÈ</div>
-<div class="tab" onclick="openTab(1)">2.VANT</div>
-<div class="tab" onclick="openTab(2)">3.REZILTA</div>
-<div class="tab" onclick="openTab(3)">4.RAPÒ</div>
+<div class="tab active" onclick="openTab(0)">1.VENDEURS</div>
+<div class="tab" onclick="openTab(1)">2.FERMETURE</div>
+<div class="tab" onclick="openTab(2)">3.LIMITE MISE</div>
+<div class="tab" onclick="openTab(3)">4.PRIX</div>
+<div class="tab" onclick="openTab(4)">5.RAPPORT</div>
+<div class="tab" onclick="openTab(5)">6.ENTÊTE</div>
+<div class="tab" onclick="openTab(6)">7.TABLEAU RESULTAT</div>
 </div>
 <div class="content">
+
 <!-- 1 VENDEURS -->
 <div class="panel active" id="p0">
-<h4 style="text-align:center">JESYON VANDÈ - FERME/OUVERT</h4>
-<div style="display:flex;gap:6px">
-<input id="vNom" placeholder="Non vandè" class="inputBox" style="flex:1">
-<input id="vPass" placeholder="Modpas" class="inputBox" style="flex:1">
-</div>
-<div style="display:flex;gap:6px">
-<input id="vCom" type="number" value="10" placeholder="%" class="inputBox" style="flex:1">
-<select id="vEtat" class="inputBox" style="flex:1"><option value="OUVERT">OUVERT</option><option value="FERME">FERME</option></select>
-</div>
-<button class="btn" onclick="addVendeur()">➕ Ajoute / Modifye Vandè</button>
-<button class="btn btn-out" onclick="loadVendeurs()">🔄 Rechaje Vandè</button>
+<h4 style="text-align:center">1. VENDEURS - FERME/OUVERT - % MODIFIABLE</h4>
+<div class="row"><input id="vNom" placeholder="Non" class="inputBox"><input id="vPass" placeholder="Modpas" class="inputBox"></div>
+<div class="row"><input id="vCom" type="number" value="10" class="inputBox"><select id="vEtat" class="inputBox"><option value="OUVERT">OUVERT</option><option value="FERME">FERME</option></select></div>
+<button class="btn" onclick="addVendeur()">➕ Ajoute / Modifye</button>
+<button class="btn btn-out" onclick="loadVendeurs()">🔄 Rechaje</button>
 <div id="vendeursList"></div>
 </div>
-<!-- 2 VENTES -->
+
+<!-- 2 HEURE FERMETURE -->
 <div class="panel" id="p1">
-<h4 style="text-align:center">2. TOUT VANT</h4>
-<input id="searchV" class="inputBox" placeholder="Chèche vandè oswa boul..." oninput="filtrerVentes()">
-<button class="btn btn-out" onclick="loadVentes()">🔄 Rechaje Vant</button>
-<div id="ventesList"></div>
+<h4 style="text-align:center">2. L'HEURE FERMETURE - MODIFIABLE</h4>
+<p style="font-size:11px;text-align:center;color:#555">Vandè pap ka vann apre lè sa a</p>
+<div id="fermetureForm"></div>
+<button class="btn" onclick="saveFermeture()">💾 Sove Lè Fermeture</button>
 </div>
-<!-- 3 RESULTATS -->
+
+<!-- 3 LIMITE MISE -->
 <div class="panel" id="p2">
-<h4 style="text-align:center">3. REZILTA - PRIX MODIFIAB</h4>
+<h4 style="text-align:center">3. LIMITE MISE - MODIFIABLE</h4>
+<p style="font-size:11px;text-align:center;color:#555">Limit max pa boul / pa fich</p>
+<label class="label">BOLET max $</label><input id="limBolet" type="number" class="inputBox" value="500">
+<label class="label">MARYAJ max $</label><input id="limMaryaj" type="number" class="inputBox" value="500">
+<label class="label">LOTO3 max $</label><input id="limLoto3" type="number" class="inputBox" value="200">
+<label class="label">LOTO4 max $</label><input id="limLoto4" type="number" class="inputBox" value="100">
+<label class="label">LOTO5 max $</label><input id="limLoto5" type="number" class="inputBox" value="100">
+<label class="label">Total max pa fich $</label><input id="limTotal" type="number" class="inputBox" value="5000">
+<button class="btn" onclick="saveLimite()">💾 Sove Limit</button>
+</div>
+
+<!-- 4 PRIX -->
+<div class="panel" id="p3">
+<h4 style="text-align:center">4. PRIX - MODIFIABLE (vandè ap peye dapre sa)</h4>
+<label class="label">BOLET 1er lot x</label><input id="prixB1" type="number" class="inputBox" value="50">
+<label class="label">BOLET 2e lot x</label><input id="prixB2" type="number" class="inputBox" value="20">
+<label class="label">BOLET 3e lot x</label><input id="prixB3" type="number" class="inputBox" value="10">
+<label class="label">MARYAJ x</label><input id="prixMaryaj" type="number" class="inputBox" value="1000">
+<label class="label">LOTO3 x</label><input id="prixL3" type="number" class="inputBox" value="500">
+<label class="label">LOTO4 x</label><input id="prixL4" type="number" class="inputBox" value="5000">
+<label class="label">LOTO5 x</label><input id="prixL5" type="number" class="inputBox" value="25000">
+<button class="btn" onclick="savePrix()">💾 Sove Prix</button>
+</div>
+
+<!-- 5 RAPPORT -->
+<div class="panel" id="p4">
+<h4 style="text-align:center">5. RAPPORT - KALKIL KI MACHE</h4>
+<div class="row"><div><label class="label">Du</label><input id="du" type="date" class="inputBox"></div><div><label class="label">Au</label><input id="au" type="date" class="inputBox"></div></div>
+<select id="rapTirage" class="inputBox"><option value="TOUS">Tirage tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
+<select id="rapVendeur" class="inputBox"><option value="TOUS">Vandè tous</option></select>
+<button class="btn" onclick="genRapport()">📊 KALKIL RAPÒ</button>
+<div id="rapportRes"></div>
+<button class="btn btn-out" id="btnPrintRap" style="display:none" onclick="printRapport()">🖨️ Imprimer</button>
+</div>
+
+<!-- 6 ENTETE -->
+<div class="panel" id="p5">
+<h4 style="text-align:center">6. ENTÊTE TICKET - MODIFIABLE</h4>
+<label class="label">Non sou ticket</label><input id="entNom" class="inputBox" value="C&D VÉRITÉ LOTTO">
+<label class="label">Adresse</label><input id="entAdr" class="inputBox" value="Monterrey, MX">
+<label class="label">Telefòn</label><input id="entTel" class="inputBox" value="+52 81...">
+<label class="label">Footer ticket (mesi...)</label><input id="entFooter" class="inputBox" value="Mèsi, bòn chans! Jwe responsab">
+<label class="label">Logo text</label><input id="entLogo" class="inputBox" value="C&D">
+<button class="btn" onclick="saveEntete()">💾 Sove Entête</button>
+<div id="previewTicket" class="rapBox" style="margin-top:10px"></div>
+</div>
+
+<!-- 7 TABLEAU RESULTAT -->
+<div class="panel" id="p6">
+<h4 style="text-align:center">7. TABLEAU D'AFFICHAGE RÉSULTATS</h4>
 <input id="resDate" type="date" class="inputBox">
 <select id="resTir" class="inputBox"><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
-<input id="res1er" placeholder="1er Lò (ex: 12)" class="inputBox">
-<input id="res2e" placeholder="2e Lò" class="inputBox">
-<input id="res3e" placeholder="3e Lò" class="inputBox">
-<button class="btn" onclick="saveResultat()">💾 Sove Rezilta</button>
+<div class="row"><input id="res1er" placeholder="1er" class="inputBox"><input id="res2e" placeholder="2e" class="inputBox"><input id="res3e" placeholder="3e" class="inputBox"></div>
+<div class="row"><input id="resL3" placeholder="LOTO3" class="inputBox"><input id="resL4" placeholder="LOTO4" class="inputBox"><input id="resL5" placeholder="LOTO5" class="inputBox"></div>
+<button class="btn" onclick="saveResultat()">💾 Sove Rezilta - Afichage</button>
+<button class="btn btn-out" onclick="loadResultats()">🔄 Rechaje Tableau</button>
 <div id="resList"></div>
+<div class="rapBox" id="tableauPreview" style="background:#000;color:#0f0;font-size:16px"></div>
 </div>
-<!-- 4 RAPPORT -->
-<div class="panel" id="p3">
-<h4 style="text-align:center">4. RAPÒ PROPRIO - BOUTON KI MACHE</h4>
-<div style="display:flex;gap:6px"><div style="flex:1"><label style="font-size:11px;font-weight:bold">Du</label><input id="du" type="date" class="inputBox"></div><div style="flex:1"><label style="font-size:11px;font-weight:bold">Au</label><input id="au" type="date" class="inputBox"></div></div>
-<select id="rapTirage" class="inputBox"><option value="TOUS">Tirage (tous)</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
-<select id="rapVendeur" class="inputBox"><option value="TOUS">Vandè (tous)</option></select>
-<button class="btn" onclick="genRapport()">📊 KALKIL RAPÒ (KLIKE)</button>
-<div id="rapportRes"></div>
-<button class="btn btn-out" id="btnPrintRap" style="display:none" onclick="printRapport()">🖨️ Imprimer Rapò</button>
-<button class="btn btn-out" onclick="location.reload()">Dekonekte</button>
-</div>
+
 </div>
 </div>
 </div>
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
 firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
-const PRIX={BOLET_1ER:50, BOLET_2E:20, BOLET_3E:10, MARYAJ:1000, LOTO3:500, LOTO4:5000, LOTO5:25000};
-let allVendeurs=[], allVentes=[];
-function openTab(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active',idx===i)); if(i===0) loadVendeurs(); if(i===1) loadVentes(); if(i===2) loadResultats(); }
+let allVendeurs=[], allVentes=[], config={};
+const TIRAGES=["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"];
+function openTab(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active',idx===i));}
 function loginProprio(){
  const n=document.getElementById('propNom').value.trim(), p=document.getElementById('propPass').value.trim();
- if(n==='admin' && p==='admin'){ document.getElementById('loginDiv').style.display='none'; document.getElementById('appDiv').style.display='flex'; const t=new Date().toISOString().slice(0,10); document.getElementById('du').value=t; document.getElementById('au').value=t; document.getElementById('resDate').value=t; loadVendeurs(); loadVentes(); } else document.getElementById('msg').innerText="admin / admin";
+ if(n==='admin'&&p==='admin'){
+  document.getElementById('loginDiv').style.display='none'; document.getElementById('appDiv').style.display='flex';
+  const t=new Date().toISOString().slice(0,10); document.getElementById('du').value=t; document.getElementById('au').value=t; document.getElementById('resDate').value=t;
+  initFermetureForm(); loadAll();
+ } else document.getElementById('msg').innerText="admin/admin";
 }
-async function loadVendeurs(){
- const snap=await db.collection('vendeurs').get(); allVendeurs=[]; snap.forEach(d=>allVendeurs.push({id:d.id,...d.data()}));
- const el=document.getElementById('vendeursList'); const sel=document.getElementById('rapVendeur');
- sel.innerHTML='<option value="TOUS">Vandè (tous)</option>'+allVendeurs.map(v=>`<option value="${v.nom}">${v.nom}</option>`).join('');
- el.innerHTML=allVendeurs.map(v=>{
-  const etat=(v.etat||v.Etat||(v.actif===false?'FERME':'OUVERT')).toUpperCase();
-  const isF=etat.includes('FERM');
-  return `<div class="list"><b>${v.nom}</b> - ${v.modpas||''} - ${v.commission||10}% <span class="badge ${isF?'badge-ferme':'badge-ouvert'}">${etat}</span><br><div style="display:flex;gap:4px;margin-top:6px"><button class="btn btn-out" style="flex:1;padding:8px" onclick="setEtat('${v.id}','OUVERT')">✅ OUVRI</button><button class="btn" style="flex:1;padding:8px;background:#d00" onclick="setEtat('${v.id}','FERME')">⛔ FÈMEN</button><button class="btn btn-out" style="flex:1;padding:8px" onclick="editV('${v.id}')">✏️</button></div></div>`;
- }).join('');
+async function loadAll(){ await loadConfig(); await loadVendeurs(); await loadVentes(); await loadResultats(); }
+async function loadConfig(){
+ try{ const doc=await db.collection('config').doc('global').get(); if(doc.exists){ config=doc.data();
+  // Fermeture
+  TIRAGES.forEach(ti=>{ const el=document.getElementById('ferm_'+ti.replace(/\s/g,'_')); if(el && config.fermeture && config.fermeture[ti]) el.value=config.fermeture[ti]; });
+  // Limite
+  if(config.limites){ document.getElementById('limBolet').value=config.limites.BOLET||500; document.getElementById('limMaryaj').value=config.limites.MARYAJ||500; document.getElementById('limLoto3').value=config.limites.LOTO3||200; document.getElementById('limLoto4').value=config.limites.LOTO4||100; document.getElementById('limLoto5').value=config.limites.LOTO5||100; document.getElementById('limTotal').value=config.limites.TOTAL||5000; }
+  // Prix
+  if(config.prix){ document.getElementById('prixB1').value=config.prix.BOLET_1ER||50; document.getElementById('prixB2').value=config.prix.BOLET_2E||20; document.getElementById('prixB3').value=config.prix.BOLET_3E||10; document.getElementById('prixMaryaj').value=config.prix.MARYAJ||1000; document.getElementById('prixL3').value=config.prix.LOTO3||500; document.getElementById('prixL4').value=config.prix.LOTO4||5000; document.getElementById('prixL5').value=config.prix.LOTO5||25000; }
+  // Entete
+  if(config.entete){ document.getElementById('entNom').value=config.entete.nom||''; document.getElementById('entAdr').value=config.entete.adresse||''; document.getElementById('entTel').value=config.entete.tel||''; document.getElementById('entFooter').value=config.entete.footer||''; document.getElementById('entLogo').value=config.entete.logo||''; }
+  updatePreview();
+ }}catch(e){ console.log("Pa gen config ankò",e); }
 }
-async function addVendeur(){
- const nom=document.getElementById('vNom').value.trim(), modpas=document.getElementById('vPass').value.trim(), com=parseInt(document.getElementById('vCom').value)||10, etat=document.getElementById('vEtat').value;
- if(!nom||!modpas){alert("Non ak modpas");return;}
- const exist=allVendeurs.find(v=>v.nom.toLowerCase()===nom.toLowerCase());
- if(exist){ await db.collection('vendeurs').doc(exist.id).update({nom,modpas,commission:com,etat,Etat:etat,actif:etat==='OUVERT',status:etat}); }
- else { await db.collection('vendeurs').add({nom,modpas,commission:com,etat,Etat:etat,actif:etat==='OUVERT',status:etat,femen:etat==='FERME'}); }
- document.getElementById('vNom').value=''; document.getElementById('vPass').value=''; await loadVendeurs(); alert("Vandè sove: "+nom+" = "+etat);
+function initFermetureForm(){
+ const el=document.getElementById('fermetureForm'); el.innerHTML=TIRAGES.map(t=>`<label class="label">${t} - Lè fèmeture</label><input id="ferm_${t.replace(/\s/g,'_')}" type="time" class="inputBox" value="${t.includes('MIDI')?'12:00':'20:00'}">`).join('');
 }
-async function setEtat(id,etat){ await db.collection('vendeurs').doc(id).update({etat,Etat:etat,actif:etat==='OUVERT',status:etat,femen:etat==='FERME'}); await loadVendeurs(); alert("Kounya FERME/OUVERT chanje: "+etat); }
-function editV(id){ const v=allVendeurs.find(x=>x.id===id); if(!v)return; document.getElementById('vNom').value=v.nom; document.getElementById('vPass').value=v.modpas; document.getElementById('vCom').value=v.commission||10; document.getElementById('vEtat').value=(v.etat||'OUVERT').toUpperCase().includes('FERM')?'FERME':'OUVERT'; window.scrollTo(0,0); }
-async function loadVentes(){ const snap=await db.collection('ventes').orderBy('created','desc').limit(200).get(); allVentes=[]; snap.forEach(d=>allVentes.push({docId:d.id,...d.data()})); renderVentes(allVentes); }
-function filtrerVentes(){ const q=document.getElementById('searchV').value.toLowerCase(); renderVentes(allVentes.filter(v=> (v.vendeur||'').toLowerCase().includes(q) || (v.lignes||[]).some(l=>String(l.boul).includes(q)) )); }
-function renderVentes(list){ document.getElementById('ventesList').innerHTML=list.map(v=>`<div class="list"><b>${v.vendeur} - $${v.total} - ${(v.tirages||[]).join('/') } - ${v.dateStr}</b><br>${(v.lignes||[]).map(l=>l.jeux+' '+l.boul+' $'+l.miz).join(' | ')}</div>`).join('')||'<p style="text-align:center">Pa gen vant</p>'; }
-async function saveResultat(){ const dateStr=document.getElementById('resDate').value, tirage=document.getElementById('resTir').value, p1=document.getElementById('res1er').value.trim(), p2=document.getElementById('res2e').value.trim(), p3=document.getElementById('res3e').value.trim(); if(!dateStr||!p1){alert("Dat ak 1er obligatwa");return;} await db.collection('resultats').doc(`${dateStr}_${tirage}`).set({dateStr,tirage,premier:p1,deuxieme:p2,troisieme:p3,loto3:p1,bolet:p1,created:firebase.firestore.FieldValue.serverTimestamp()}); alert("Rezilta sove!"); loadResultats(); }
-async function loadResultats(){ const snap=await db.collection('resultats').orderBy('dateStr','desc').limit(30).get(); let html=''; snap.forEach(d=>{const r=d.data(); html+=`<div class="list">${r.dateStr} ${r.tirage} : 1er ${r.premier} - 2e ${r.deuxieme} - 3e ${r.troisieme}</div>`}); document.getElementById('resList').innerHTML=html; }
+async function saveFermeture(){
+ const ferm={}; TIRAGES.forEach(t=>{ ferm[t]=document.getElementById('ferm_'+t.replace(/\s/g,'_')).value; });
+ await db.collection('config').doc('global').set({fermeture:ferm},{merge:true}); alert("✅ Lè fermeture sove! Vandè ap respekte l"); config.fermeture=ferm;
+}
+async function saveLimite(){
+ const lim={BOLET:+document.getElementById('limBolet').value, MARYAJ:+document.getElementById('limMaryaj').value, LOTO3:+document.getElementById('limLoto3').value, LOTO4:+document.getElementById('limLoto4').value, LOTO5:+document.getElementById('limLoto5').value, TOTAL:+document.getElementById('limTotal').value};
+ await db.collection('config').doc('global').set({limites:lim},{merge:true}); alert("✅ Limit mise sove!"); config.limites=lim;
+}
+async function savePrix(){
+ const prix={BOLET_1ER:+document.getElementById('prixB1').value, BOLET_2E:+document.getElementById('prixB2').value, BOLET_3E:+document.getElementById('prixB3').value, MARYAJ:+document.getElementById('prixMaryaj').value, LOTO3:+document.getElementById('prixL3').value, LOTO4:+document.getElementById('prixL4').value, LOTO5:+document.getElementById('prixL5').value};
+ await db.collection('config').doc('global').set({prix},{merge:true}); alert("✅ Prix sove! Rapò ap kalkile ak nouvo prix"); config.prix=prix;
+}
+async function saveEntete(){
+ const ent={nom:document.getElementById('entNom').value, adresse:document.getElementById('entAdr').value, tel:document.getElementById('entTel').value, footer:document.getElementById('entFooter').value, logo:document.getElementById('entLogo').value};
+ await db.collection('config').doc('global').set({entete:ent},{merge:true}); alert("✅ Entête sove! Ticket ap gen nouvo non"); config.entete=ent; updatePreview();
+}
+function updatePreview(){
+ const nom=document.getElementById('entNom')?.value||'C&D VERITE'; const adr=document.getElementById('entAdr')?.value||''; const tel=document.getElementById('entTel')?.value||''; const foot=document.getElementById('entFooter')?.value||'Mèsi';
+ document.getElementById('previewTicket').innerHTML=`${nom}\n${adr} ${tel}\n----------------\nBOLET 12 $10\n----------------\n${foot}`;
+}
+async function loadVendeurs(){ const snap=await db.collection('vendeurs').get(); allVendeurs=[]; snap.forEach(d=>allVendeurs.push({id:d.id,...d.data()})); const el=document.getElementById('vendeursList'); const sel=document.getElementById('rapVendeur'); sel.innerHTML='<option value="TOUS">Vandè tous</option>'+allVendeurs.map(v=>`<option value="${v.nom}">${v.nom}</option>`).join(''); el.innerHTML=allVendeurs.map(v=>{const etat=(v.etat||v.Etat||(v.actif===false?'FERME':'OUVERT')).toUpperCase(); const isF=etat.includes('FERM'); return `<div class="list"><b>${v.nom}</b> - ${v.modpas} - ${v.commission||10}% <span class="badge ${isF?'badge-ferme':'badge-ouvert'}">${etat}</span><br><div class="row" style="margin-top:6px"><button class="btn btn-out" style="padding:8px" onclick="setEtat('${v.id}','OUVERT')">✅ OUVRI</button><button class="btn" style="padding:8px;background:#d00" onclick="setEtat('${v.id}','FERME')">⛔ FÈMEN</button><button class="btn btn-out" style="padding:8px" onclick="editV('${v.id}')">✏️</button></div></div>`}).join(''); }
+async function addVendeur(){ const nom=document.getElementById('vNom').value.trim(), modpas=document.getElementById('vPass').value.trim(), com=parseInt(document.getElementById('vCom').value)||10, etat=document.getElementById('vEtat').value; if(!nom||!modpas){alert("Non ak modpas");return;} const exist=allVendeurs.find(v=>v.nom.toLowerCase()===nom.toLowerCase()); if(exist){ await db.collection('vendeurs').doc(exist.id).update({nom,modpas,commission:com,etat,Etat:etat,actif:etat==='OUVERT',status:etat,femen:etat==='FERME'}); } else { await db.collection('vendeurs').add({nom,modpas,commission:com,etat,Etat:etat,actif:etat==='OUVERT',status:etat,femen:etat==='FERME'}); } document.getElementById('vNom').value=''; document.getElementById('vPass').value=''; await loadVendeurs(); }
+async function setEtat(id,etat){ await db.collection('vendeurs').doc(id).update({etat,Etat:etat,actif:etat==='OUVERT',status:etat,femen:etat==='FERME'}); await loadVendeurs(); }
+function editV(id){ const v=allVendeurs.find(x=>x.id===id); if(!v)return; document.getElementById('vNom').value=v.nom; document.getElementById('vPass').value=v.modpas; document.getElementById('vCom').value=v.commission||10; document.getElementById('vEtat').value=(v.etat||'OUVERT').toUpperCase().includes('FERM')?'FERME':'OUVERT'; }
+async function loadVentes(){ try{ const snap=await db.collection('ventes').orderBy('created','desc').limit(150).get(); allVentes=[]; snap.forEach(d=>allVentes.push({docId:d.id,...d.data()})); }catch(e){ const snap=await db.collection('ventes').limit(150).get(); allVentes=[]; snap.forEach(d=>allVentes.push({docId:d.id,...d.data()})); } }
+async function saveResultat(){ const dateStr=document.getElementById('resDate').value, tirage=document.getElementById('resTir').value, p1=document.getElementById('res1er').value.trim(), p2=document.getElementById('res2e').value.trim(), p3=document.getElementById('res3e').value.trim(), l3=document.getElementById('resL3').value.trim()||p1, l4=document.getElementById('resL4').value.trim(), l5=document.getElementById('resL5').value.trim(); if(!dateStr||!p1){alert("Dat ak 1er");return;} await db.collection('resultats').doc(`${dateStr}_${tirage}`).set({dateStr,tirage,premier:p1,deuxieme:p2,troisieme:p3,loto3:l3,loto4:l4,loto5:l5,bolet:p1,created:firebase.firestore.FieldValue.serverTimestamp()}); alert("Rezilta sove - Tableau ap afiche!"); loadResultats(); }
+async function loadResultats(){ const snap=await db.collection('resultats').orderBy('dateStr','desc').limit(20).get(); let html='', preview=''; snap.forEach(d=>{const r=d.data(); html+=`<div class="list">${r.dateStr} ${r.tirage} : 1er ${r.premier} 2e ${r.deuxieme} 3e ${r.troisieme} | L3 ${r.loto3} L4 ${r.loto4} L5 ${r.loto5} <button onclick="db.collection('resultats').doc('${d.id}').delete().then(()=>loadResultats())" style="float:right;color:red">X</button></div>`; preview+=`${r.tirage}: ${r.premier} - ${r.deuxieme} - ${r.troisieme}\n`;}); document.getElementById('resList').innerHTML=html; document.getElementById('tableauPreview').innerText=preview||"Pa gen rezilta"; }
 async function genRapport(){
  try{
   const du=document.getElementById('du').value, au=document.getElementById('au').value, tir=document.getElementById('rapTirage').value||'TOUS', vendFiltre=document.getElementById('rapVendeur').value||'TOUS';
-  if(!du||!au){alert("Chwazi Du ak Au");return;}
-  document.getElementById('rapportRes').innerHTML="<p style='text-align:center'>⏳ Ap kalkile... gade console (F12)</p>";
-  console.log("RECHÈCHE ventes du",du,"au",au);
+  if(!du||!au){alert("Du Au");return;}
+  document.getElementById('rapportRes').innerHTML="<p style='text-align:center'>⏳ Ap kalkile...</p>";
   const snap=await db.collection('ventes').where('dateStr','>=',du).where('dateStr','<=',au).get();
-  console.log("Fich jwenn:",snap.size);
-  if(snap.empty){ document.getElementById('rapportRes').innerHTML=`<div class="rapBox">Pa gen vant pou Du ${du} Au ${au}<br>Snap size 0<br>Al nan Firebase > ventes > gade si gen dateStr</div>`; return; }
-  let vente=0, fich=0; let detail={};
-  snap.forEach(doc=>{
-   const v=doc.data();
-   if(tir!=='TOUS' && !(v.tirages||[]).includes(tir)) return;
-   if(vendFiltre!=='TOUS' && v.vendeur!==vendFiltre) return;
-   vente+=Number(v.total)||0; fich++;
-   detail[v.vendeur]=(detail[v.vendeur]||0)+Number(v.total);
-  });
-  const commission=vente*0.10; const balanceNet=vente-commission;
-  let detTxt=Object.entries(detail).map(([k,val])=>`${k}: $${val}`).join('\n');
-  const txt=` C&D VÉRITÉ LOTTO
- RAPPORT PROPRIO V140
- Du ${du} Au ${au}
- Tirage (${tir}) Vandè (${vendFiltre})
-
- Vente $${vente.toFixed(2)}
- Commission 10% $${commission.toFixed(2)}
- Balance net $${balanceNet.toFixed(2)}
-
- Nbre fich ${fich}
-
- ${detTxt}
-`;
-  document.getElementById('rapportRes').innerHTML=`<div class="rapBox">${txt}</div>`;
-  document.getElementById('rapportRes').dataset.txt=txt;
-  document.getElementById('btnPrintRap').style.display='block';
- }catch(e){
-  console.error(e);
-  alert("Erè: "+e.message+"\nOu dwe kreye INDEX Firestore:\nCollection: ventes Fields: dateStr ASC");
-  document.getElementById('rapportRes').innerHTML=`<p style="color:red;text-align:center">Erè: ${e.message}<br><br>Klike sou lyen nan console Firebase pou kreye index dateStr</p>`;
- }
+  if(snap.empty){ document.getElementById('rapportRes').innerHTML=`<div class="rapBox">Pa gen vant Du ${du} Au ${au}</div>`; return; }
+  let vente=0, fich=0, detail={};
+  snap.forEach(doc=>{const v=doc.data(); if(tir!=='TOUS'&&!(v.tirages||[]).includes(tir))return; if(vendFiltre!=='TOUS'&&v.vendeur!==vendFiltre)return; vente+=Number(v.total)||0; fich++; detail[v.vendeur]=(detail[v.vendeur]||0)+Number(v.total); });
+  const prix=config.prix||{BOLET_1ER:50}; // prix ap soti nan config
+  const commission=vente*0.10; const net=vente-commission;
+  let detTxt=Object.entries(detail).map(([k,v])=>`${k}: $${v.toFixed(2)}`).join('\n');
+  const txt=` ${config.entete?.nom||'C&D VERITE'}\n RAPPORT PROPRIO V141\n Du ${du} Au ${au}\n Tirage ${tir} Vandè ${vendFiltre}\n------------------------------\n Vente $${vente.toFixed(2)}\n Commission $${commission.toFixed(2)}\n Net $${net.toFixed(2)}\n------------------------------\n Fich ${fich}\n------------------------------\n ${detTxt}\n Prix config: B1 x${prix.BOLET_1ER||50}`;
+  document.getElementById('rapportRes').innerHTML=`<div class="rapBox">${txt}</div>`; document.getElementById('rapportRes').dataset.txt=txt; document.getElementById('btnPrintRap').style.display='block';
+ }catch(e){ alert("Erè index: "+e.message); }
 }
-function printRapport(){ const txt=document.getElementById('rapportRes')?.dataset?.txt; if(!txt){alert("Jenere rapò anvan");return;} const win=window.open('', '_blank','width=380,height=700'); win.document.write(`<html><head><style>@page{size:58mm auto;margin:0;} html,body{margin:0;padding:0;display:flex;justify-content:center;} .ticket{width:58mm;padding:4mm 3mm;font-family:Courier,monospace;font-size:13px;text-align:center;white-space:pre-line;margin:0 auto;}</style></head><body><div class="ticket">${txt}</div><script>window.onload=function(){window.print(); setTimeout(()=>window.close(),800);}<\/script></body></html>`); win.document.close(); }
+function printRapport(){ const txt=document.getElementById('rapportRes')?.dataset?.txt; if(!txt)return; const w=window.open('', '_blank','width=380,height=700'); w.document.write(`<html><head><style>.ticket{width:58mm;padding:4mm;font-family:Courier,monospace;font-size:13px;text-align:center;white-space:pre-line}</style></head><body><div class="ticket">${txt}</div><script>window.print()<\/script></body></html>`); w.document.close(); }
+document.getElementById('entNom')?.addEventListener('input',updatePreview);
 </script>
 </body>
 </html>
