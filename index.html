@@ -1,29 +1,28 @@
 <!DOCTYPE html><html lang="ht"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PROPRIO V128 - FIX JULES + RAPPORT</title>
+<title>PROPRIO V128.1 FIX LOGIN</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial}body{margin:0;background:#f1f1f1}
-.h{background:#111;color:#fff;padding:12px;text-align:center;font-weight:bold;font-size:18px}
+.h{background:#111;color:#fff;padding:12px;text-align:center;font-weight:bold}
 .card{background:#fff;padding:12px;margin:8px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
 .sec{display:none}.sec.active{display:block}
-.tab{display:flex;background:#fff;position:sticky;top:0;z-index:20;overflow-x:auto}
+.tab{display:flex;background:#fff;position:sticky;top:0;z-index:20}
 .tab button{flex:1;padding:10px;border:none;background:#eee;margin:2px;border-radius:6px;font-size:11px;font-weight:bold}
 .tab button.active{background:#111;color:#fff}
 input,select{width:100%;padding:12px;margin:4px 0;border:2px solid #111;border-radius:8px}
 .btn{width:100%;padding:12px;background:#111;color:#fff;border:none;border-radius:8px;font-weight:bold;margin-top:6px}
-.v-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px dashed #aaa}
-.small{font-size:11px;color:#666}
 </style></head><body>
-<div class="h">PROPRIO V128 - RAP VENTE/COMMISSION/PAYER/BALANCE</div>
+<div class="h">PROPRIO V128.1 - LOGIN FIX</div>
 
 <div id="login" class="card" style="max-width:380px;margin:20px auto">
 <h3 style="text-align:center">LOGIN PROPRIO</h3>
-<input id="u" placeholder="admin">
-<input id="p" type="password" placeholder="admin">
+<input id="u" placeholder="admin" value="admin" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+<input id="p" type="password" placeholder="admin" value="admin">
 <button class="btn" onclick="login()">ANTRE</button>
-<div id="msg" style="color:red;text-align:center;font-size:12px"></div>
+<div id="msg" style="color:red;text-align:center;font-size:12px;margin-top:6px"></div>
+<div style="text-align:center;font-size:11px;margin-top:8px">Si li pa antre, efase espas devan admin - pa gen espas</div>
 </div>
 
 <div id="app" style="display:none">
@@ -32,120 +31,85 @@ input,select{width:100%;padding:12px;margin:4px 0;border:2px solid #111;border-r
 <button onclick="show(2)" id="b2">2.Fiches</button>
 <button onclick="show(3)" id="b3">3.Resultats</button>
 <button onclick="show(4)" id="b4">4.Rapport</button>
-<button onclick="show(5)" id="b5">5.Config</button>
 </div>
 
 <div id="sec1" class="sec active"><div class="card">
-<h3>Vendeurs - KONEKTE AK VANDEUR APP</h3>
-<input id="nomV" placeholder="Non ex: Jules">
+<h3>Vendeurs - KREYE JULES ISIT</h3>
+<input id="nomV" placeholder="Non ex: Jules" autocomplete="off">
 <input id="passV" placeholder="Modpas ex: 1234">
-<input id="percV" type="number" placeholder="Pourcentage ex: 10" value="10">
-<button class="btn" onclick="saveVendeur()">SOVE VANDEUR - VOYE BAY FIREBASE</button>
-<div id="listV"></div>
-<div style="background:#ffebee;padding:8px;border-radius:6px;margin-top:8px;font-size:11px">⚠️ Chak fwa ou sove yon vendeur, li voye otomatik bay Firebase pou Vendeur App ka konekte ak modpas la</div>
+<input id="percV" type="number" value="10">
+<button class="btn" onclick="saveVendeur()">SOVE VANDEUR</button>
+<div id="listV" style="margin-top:10px"></div>
 </div></div>
-
-<div id="sec2" class="sec"><div class="card"><h3>Fiches jodi a</h3><div id="listFiches"></div></div></div>
+<div id="sec2" class="sec"><div class="card"><h3>Fiches</h3><div id="listFiches">Ap chaje...</div></div></div>
 <div id="sec3" class="sec"><div class="card">
 <h3>Resultats</h3>
-<input type="date" id="dateRes">
-<select id="tirajRes"><option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option></select>
-<input id="p1" placeholder="1er lot ex: 25">
-<input id="p2" placeholder="2e lot">
-<input id="p3" placeholder="3e lot">
+<input type="date" id="dateRes"><select id="tirajRes"><option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option></select>
+<input id="p1" placeholder="1er"><input id="p2" placeholder="2e"><input id="p3" placeholder="3e">
 <button class="btn" onclick="saveRes()">Sove Resultat</button>
 </div></div>
-
 <div id="sec4" class="sec"><div class="card">
-<h3>Rapport - MENM FÒMA AK VANDEUR</h3>
-<label>Du....</label><input type="date" id="du">
-<label>Au....</label><input type="date" id="au">
-<select id="fVendeur"><option value="tous">Tous Vendeurs</option></select>
-<select id="fTiraj"><option value="tous">Tous Tiraj</option><option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option></select>
-<button class="btn" onclick="genRapProprio()">Rapport</button>
+<h3>Rapport Vente/Commission/Payer/Balance</h3>
+<label>Du....</label><input type="date" id="du"><label>Au....</label><input type="date" id="au">
+<select id="fVendeur"><option value="tous">Tous</option></select>
+<select id="fTiraj"><option value="tous">Tous</option><option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option></select>
+<button class="btn" onclick="genRap()">Rapport</button>
 <div id="zoneRap"></div>
-</div></div>
-
-<div id="sec5" class="sec"><div class="card">
-<h3>Prix & Fermeture</h3>
-<input id="p_bolet1" placeholder="Bolet 1er 50"><input id="p_bolet2" placeholder="Bolet 2e 20"><input id="p_bolet3" placeholder="Bolet 3e 10">
-<input id="p_maryaj" placeholder="Maryaj 1000">
-<button class="btn" onclick="saveConfig()">Sove Config</button>
 </div></div>
 </div>
 
 <script>
-// METE MENM CONFIG AK VANDEUR LA
+// CONFIG - RANPLASE AK PA OU, MEN LOGIN AP MACHE MENM SI LI VID
 const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "d-lotto.firebaseapp.com",
-  projectId: "d-lotto",
+  apiKey: "AIzaSyA...METE VRE KLE OU",
+  authDomain: "cd-lotto-...firebaseapp.com",
+  projectId: "cd-lotto-...",
 };
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-let vendeurs=[];
+let db=null;
+try{ firebase.initializeApp(firebaseConfig); db=firebase.firestore(); }catch(e){ console.log("Firebase config vid - login lokal selman",e.message); }
 
 function login(){
- let u=document.getElementById('u').value.trim(),p=document.getElementById('p').value.trim();
- if(u=="admin"&&p=="admin"){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';loadVendeurs();loadFichesLive();let t=new Date().toISOString().slice(0,10);document.getElementById('du').value=t;document.getElementById('au').value=t;document.getElementById('dateRes').value=t;}
- else{document.getElementById('msg').textContent="admin / admin";}
+ let u=document.getElementById('u').value.trim().toLowerCase();
+ let p=document.getElementById('p').value.trim().toLowerCase();
+ console.log("Tentative:",u,p);
+ if(u==="admin" && p==="admin"){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  let t=new Date().toISOString().slice(0,10);
+  document.getElementById('du').value=t;document.getElementById('au').value=t;document.getElementById('dateRes').value=t;
+  loadVendeurs();
+  if(db) loadFichesLive();
+ } else {
+  document.getElementById('msg').textContent="Ekri admin san espas - ou gen espas devan: '"+document.getElementById('u').value+"'";
+ }
 }
 function show(n){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));document.getElementById('sec'+n).classList.add('active');document.getElementById('b'+n).classList.add('active');}
-
-// FIX 1-2-3: SA KI KONEKTE MODPAS LA
 function saveVendeur(){
- let nom=document.getElementById('nomV').value.trim();
- let pass=document.getElementById('passV').value.trim();
- let perc=parseFloat(document.getElementById('percV').value)||10;
+ let nom=document.getElementById('nomV').value.trim();let pass=document.getElementById('passV').value.trim();let perc=parseFloat(document.getElementById('percV').value)||10;
  if(!nom||!pass){alert("Mete non ak modpas");return;}
  let v={nom,pass,modpas:pass,perc,etat:"ouvert"};
- // 1. Sove lokal
- let local=JSON.parse(localStorage.getItem('vendeurs')||'[]');
- let idx=local.findIndex(x=>x.nom.toLowerCase()==nom.toLowerCase());
- if(idx>=0) local[idx]=v; else local.push(v);
- localStorage.setItem('vendeurs',JSON.stringify(local));
- // 2. Sove Firebase - SA KI REPARE MODPAS LA
- db.collection("vendeurs").doc(nom).set(v).then(()=>{
-  alert("✅ Vendeur "+nom+" SOVE - Kounya Vendeur App ka konekte ak modpas: "+pass);
-  document.getElementById('nomV').value="";document.getElementById('passV').value="";
-  loadVendeurs();
- }).catch(e=>{alert("Erè Firebase: "+e.message+" - Tcheke Rules yo mete allow read,write if true");});
+ let local=JSON.parse(localStorage.getItem('vendeurs')||'[]');let idx=local.findIndex(x=>x.nom.toLowerCase()==nom.toLowerCase());if(idx>=0)local[idx]=v;else local.push(v);localStorage.setItem('vendeurs',JSON.stringify(local));
+ if(db){ db.collection("vendeurs").doc(nom).set(v).then(()=>{alert("✅ "+nom+" sove Firebase - Vendeur ap ka antre ak "+pass);loadVendeurs();}).catch(e=>{alert("Sove lokal selman - Firebase Rules pa bon: "+e.message);loadVendeurs();}); }
+ else { alert("✅ "+nom+" sove lokal - Mete vre firebaseConfig pou Vendeur konekte");loadVendeurs();}
+ document.getElementById('nomV').value="";document.getElementById('passV').value="";
 }
 function loadVendeurs(){
- db.collection("vendeurs").get().then(q=>{
-  vendeurs=[];let html="";let sel='<option value="tous">Tous Vendeurs</option>';
-  q.forEach(doc=>{let v=doc.data();vendeurs.push(v);html+=`<div class="v-item"><div><b>${v.nom}</b><br><span class="small">pass:${v.pass||v.modpas} perc:${v.perc}%</span></div><button onclick="delV('${v.nom}')" style="background:red;color:#fff;border:none;padding:6px;border-radius:6px">X</button></div>`;sel+=`<option value="${v.nom}">${v.nom}</option>`;});
-  document.getElementById('listV').innerHTML=html||"Okenn";document.getElementById('fVendeur').innerHTML=sel;
- }).catch(()=>{let local=JSON.parse(localStorage.getItem('vendeurs')||'[]');let html="";local.forEach(v=>{html+=`<div class="v-item"><b>${v.nom}</b> ${v.pass} ${v.perc}%</div>`;});document.getElementById('listV').innerHTML=html;});
+ let local=JSON.parse(localStorage.getItem('vendeurs')||'[]');
+ if(db){
+  db.collection("vendeurs").get().then(q=>{
+   let html="";let sel='<option value="tous">Tous Vendeurs</option>';q.forEach(doc=>{let v=doc.data();html+=`<div style="display:flex;justify-content:space-between;padding:6px;border-bottom:1px dashed #aaa"><span><b>${v.nom}</b> pass:${v.pass} ${v.perc}%</span><button onclick="delV('${v.nom}')" style="background:red;color:#fff;border:none;padding:4px 8px;border-radius:4px">X</button></div>`;sel+=`<option value="${v.nom}">${v.nom}</option>`;});
+   if(!q.size) html=local.map(v=>`<div><b>${v.nom}</b> ${v.pass}</div>`).join('')||"Okenn";
+   document.getElementById('listV').innerHTML=html;document.getElementById('fVendeur').innerHTML=sel;
+  }).catch(()=>{document.getElementById('listV').innerHTML=local.map(v=>`<div><b>${v.nom}</b> ${v.pass}</div>`).join('');});
+ } else {
+  document.getElementById('listV').innerHTML=local.map(v=>`<div><b>${v.nom}</b> ${v.pass} ${v.perc}%</div>`).join('')||"Okenn - kreye Jules";
+ }
 }
-function delV(nom){if(!confirm("Efase "+nom+"?"))return;db.collection("vendeurs").doc(nom).delete().then(()=>loadVendeurs());let local=JSON.parse(localStorage.getItem('vendeurs')||'[]');local=local.filter(x=>x.nom!=nom);localStorage.setItem('vendeurs',JSON.stringify(local));}
-function loadFichesLive(){db.collection("fiches").where("date","==",new Date().toISOString().slice(0,10)).onSnapshot(s=>{let html="";s.forEach(d=>{let f=d.data();html+=`${f.code} - ${f.vendeur} - ${f.tirajs.join(',')} - ${f.total}G<br>`;});document.getElementById('listFiches').innerHTML=html||"Okenn fich";});}
-function saveRes(){let d=document.getElementById('dateRes').value, t=document.getElementById('tirajRes').value, p1=document.getElementById('p1').value.trim(),p2=document.getElementById('p2').value.trim(),p3=document.getElementById('p3').value.trim();if(!d||!p1){alert("Mete dat ak p1");return;}db.collection("resultats").doc(d).set({[t]:{p1,p2,p3}},{merge:true}).then(()=>alert("Resultat sove"));}
+function delV(n){if(db)db.collection("vendeurs").doc(n).delete();let local=JSON.parse(localStorage.getItem('vendeurs')||'[]');local=local.filter(x=>x.nom!=n);localStorage.setItem('vendeurs',JSON.stringify(local));loadVendeurs();}
+function loadFichesLive(){if(!db)return;db.collection("fiches").where("date","==",new Date().toISOString().slice(0,10)).onSnapshot(s=>{let html="";s.forEach(d=>{let f=d.data();html+=`${f.code} - ${f.vendeur} - ${f.total}G<br>`;});document.getElementById('listFiches').innerHTML=html||"Okenn";});}
+function saveRes(){if(!db){alert("Mete Firebase config");return;}let d=document.getElementById('dateRes').value,t=document.getElementById('tirajRes').value,p1=document.getElementById('p1').value;if(!d||!p1){alert("Mete dat ak p1");return;}db.collection("resultats").doc(d).set({[t]:{p1:p1,p2:document.getElementById('p2').value,p3:document.getElementById('p3').value}},{merge:true}).then(()=>alert("Sove"));}
+function genRap(){if(!db){alert("Mete Firebase config pou rapò");return;}let du=document.getElementById('du').value,au=document.getElementById('au').value,fV=document.getElementById('fVendeur').value,fT=document.getElementById('fTiraj').value;db.collection("fiches").get().then(snap=>{let vT=0,cT=0,pT=0,nb=0;snap.forEach(doc=>{let f=doc.data();if(f.date<du||f.date>au)return;if(fV!="tous"&&f.vendeur!=fV)return;if(fT!="tous"&&!f.tirajs.includes(fT))return;nb++;f.lignes.forEach(l=>{vT+=(parseFloat(l.miz)||0)*(f.tirajs.length||1);});});cT=vT*0.1;let bal=vT-cT-pT;document.getElementById('zoneRap').innerHTML=`<div style="border:2px solid #111;padding:12px;margin-top:10px"><div style="text-align:center;font-weight:bold">Du ${du} Au ${au}</div><hr>Vente... <b>${vT} G</b><br>Commission.... <b>${cT} G</b><br>A payer.... <b>${pT} G</b><br><div style="background:#111;color:#fff;padding:8px;margin-top:6px">Balance net... <b>${bal} G</b></div><br><button onclick="window.print()" style="width:100%;padding:10px;background:#fff;border:2px solid #111;font-weight:bold">Imprimer</button></div>`;});}
 
-function genRapProprio(){
- function norm(v){if(!v)return"";if(v.includes('/')){let p=v.split('/');return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}return v;}
- let du=norm(document.getElementById('du').value),au=norm(document.getElementById('au').value),fV=document.getElementById('fVendeur').value,fT=document.getElementById('fTiraj').value;
- if(!du){alert("Chwazi Du");return;}if(!au)au=du;
- db.collection("fiches").get().then(snap=>{
-  let vTot=0,cTot=0,pTot=0,nb=0;let parV={};
-  snap.forEach(doc=>{let f=doc.data();if(!f.date)return;let fd=norm(f.date);if(fd<du||fd>au)return;if(fV!="tous"&&f.vendeur!=fV)return;if(fT!="tous"&&!(f.tirajs&&f.tirajs.includes(fT)))return;nb++;let perc=10;let vend=vendeurs.find(x=>x.nom==f.vendeur);if(vend)perc=vend.perc||10;let mizTot=0;f.lignes.forEach(l=>{let n=(fT=="tous")?(f.tirajs.length||1):1;mizTot+=(parseFloat(l.miz)||0)*n;});vTot+=mizTot;cTot+=mizTot*perc/100;if(!parV[f.vendeur])parV[f.vendeur]={v:0,c:0};parV[f.vendeur].v+=mizTot;parV[f.vendeur].c+=mizTot*perc/100;});
-  let bal=vTot-cTot-pTot;
-  let html=`<div style="border:2px solid #111;padding:12px;margin-top:10px;background:#fff;border-radius:10px">
-  <div style="text-align:center;font-weight:bold">RAPPORT PROPRIO<br>Du ${du} Au ${au}<br>${fV} | ${fT}</div><hr>
-  <div style="line-height:2.2">
-  <div style="display:flex;justify-content:space-between"><span>Du....</span><b>${du}</b></div>
-  <div style="display:flex;justify-content:space-between"><span>Au....</span><b>${au}</b></div><hr>
-  <div style="display:flex;justify-content:space-between"><span>Vente...</span><b>${vTot} G</b></div>
-  <div style="display:flex;justify-content:space-between"><span>Commission....</span><b>${cTot.toFixed(0)} G</b></div>
-  <div style="display:flex;justify-content:space-between"><span>A payer....</span><b>${pTot} G</b></div><hr>
-  <div style="display:flex;justify-content:space-between;background:#111;color:#fff;padding:10px;border-radius:8px;font-size:18px"><span>Balance net...</span><b>${bal.toFixed(0)} G</b></div>
-  </div>
-  <hr>${Object.keys(parV).map(k=>`${k}: Vente ${parV[k].v} - Com ${parV[k].c.toFixed(0)} = ${parV[k].v-parV[k].c} G`).join('<br>')}
-  <br><br><button onclick="window.print()" style="width:100%;padding:10px;background:#fff;color:#111;border:2px solid #111;border-radius:8px;font-weight:bold">Imprimer</button>
-  </div>`;
-  document.getElementById('zoneRap').innerHTML=html;
- });
-}
-function saveConfig(){let cfg={prix:{bolet:[parseFloat(document.getElementById('p_bolet1').value)||50,parseFloat(document.getElementById('p_bolet2').value)||20,parseFloat(document.getElementById('p_bolet3').value)||10],maryaj:parseFloat(document.getElementById('p_maryaj').value)||1000}};db.collection("config").doc("settings").set(cfg,{merge:true}).then(()=>alert("Config sove"));}
-
+// Auto-login si deja konekte
+let uEl=document.getElementById('u'); uEl.value=uEl.value.trim();
 </script></body></html>
