@@ -1,51 +1,140 @@
-<div class="panel" id="p3">
-<h3>4. PRIX - BÒLÈT + MARYAJ + LOTO</h3>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<div><label style="font-size:11px;font-weight:bold;color:#000">Bòlèt 1er lot x50</label><input id="prixB1" type="number" class="inputBox" value="50" placeholder="50"></div>
-<div><label style="font-size:11px;font-weight:bold;color:#000">Bòlèt 2e lot x20</label><input id="prixB2" type="number" class="inputBox" value="20" placeholder="20"></div>
-<div><label style="font-size:11px;font-weight:bold;color:#000">Bòlèt 3e lot x10</label><input id="prixB3" type="number" class="inputBox" value="10" placeholder="10"></div>
-<div><label style="font-size:11px;font-weight:bold;color:red">Maryaj 1000</label><input id="prixMaryaj" type="number" class="inputBox" value="1000" placeholder="1000"></div>
-<div><label style="font-size:11px;font-weight:bold;color:blue">Loto3 500</label><input id="prixLoto3" type="number" class="inputBox" value="500" placeholder="500"></div>
-<div><label style="font-size:11px;font-weight:bold;color:blue">Loto4 5000</label><input id="prixLoto4" type="number" class="inputBox" value="5000" placeholder="5000"></div>
-<div style="grid-column:span 2"><label style="font-size:11px;font-weight:bold;color:blue">Loto5 25000</label><input id="prixLoto5" type="number" class="inputBox" value="25000" placeholder="25000"></div>
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROPRIO V145 FINAL 7 ONGLE</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#111}.card{max-width:750px;margin:0 auto;background:#fff;color:#000;min-height:100vh}.hdr{background:#000;color:#fff;text-align:center;padding:14px;font-weight:900;font-size:15px}.tabs{display:flex;flex-wrap:wrap;background:#222;position:sticky;top:0;z-index:30}.tab{padding:10px 6px;color:#aaa;font-size:10px;font-weight:bold;cursor:pointer;border-bottom:3px solid #222;flex:1;text-align:center;min-width:54px}.tab.active{color:#fff;border-bottom-color:#00ff88;background:#000}.content{padding:12px}.panel{display:none}.panel.active{display:block}.inputBox{width:100%;padding:12px;border:2.5px solid #000;border-radius:10px;margin:6px 0;font-weight:bold;font-size:14px}.btn{width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:12px;font-weight:900;font-size:14px;margin:6px 0;cursor:pointer}.btn-green{background:#00ff88;color:#000}.btn-red{background:#ff0000;color:#fff}.list{border:2px solid #000;border-radius:10px;padding:10px;margin:6px 0;font-size:12px;background:#f5f5f5}.preview{background:#000;color:#0f0;padding:10px;border-radius:10px;font-family:Courier,monospace;font-size:11px;white-space:pre-line;margin:8px 0}.rapBox{border:3px solid #000;border-radius:14px;padding:18px;background:#f9f9f9;white-space:pre-line;text-align:center;font-family:Courier,monospace;font-size:15px;font-weight:bold;line-height:2}.label{font-size:11px;font-weight:900;margin-top:6px;display:block}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="hdr">PROPRIO V145 FINAL - 7 ONGLÈ KONPLÈ - DEZÒD + LIMIT + FERMETURE</div>
+<div class="tabs">
+<div class="tab active" onclick="openTab(0)">1.VANDÈ</div>
+<div class="tab" onclick="openTab(1)">2.FERMETURE</div>
+<div class="tab" onclick="openTab(2)">3.LIMITE</div>
+<div class="tab" onclick="openTab(3)">4.PRIX</div>
+<div class="tab" onclick="openTab(4)">5.RAPPORT</div>
+<div class="tab" onclick="openTab(5)">6.ENTÈTE</div>
+<div class="tab" onclick="openTab(6)">7.TABLEAU</div>
 </div>
-<button class="btn" onclick="savePrix()" style="margin-top:10px">💾 Save Prix</button>
-<div class="small" style="background:#000;color:#00ff88;padding:8px;border-radius:8px;margin-top:8px">
-✅ 1er=50 | 2e=20 | 3e=10 | Maryaj 1000 | Dezòd 27x12=12x27<br>
-Loto3=500 Loto4=5000 Loto5=25000
-</div>
+<div class="content">
+
+<!-- 1. VANDE -->
+<div class="panel active" id="p0">
+<h3>1. VANDÈ - Jere Vandè</h3>
+<input id="newNom" class="inputBox" placeholder="Non vandè ex: Jules">
+<input id="newPass" class="inputBox" placeholder="Modpas ex: 1234">
+<button class="btn btn-green" onclick="addVendeur()">+ Ajoute Vandè</button>
+<div id="vendeurList"></div>
+<div class="small" style="background:#eee;padding:8px;border-radius:8px;margin-top:8px;font-size:11px">Aktif = ka vann | Fèmen = pa ka konekte</div>
 </div>
 
+<!-- 2. FERMETURE -->
+<div class="panel" id="p1">
+<h3>2. FERMETURE - Lè Tiraj Fèmen</h3>
+<p style="font-size:11px">Mete lè chak tiraj fèmen. Vandè p ap ka chwazi tiraj la apre lè sa. Ex: GA MIDI 14:00</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<div><span class="label">GA MIDI</span><input id="f_GA MIDI" type="time" class="inputBox"></div>
+<div><span class="label">FL MIDI</span><input id="f_FL MIDI" type="time" class="inputBox"></div>
+<div><span class="label">NY MIDI</span><input id="f_NY MIDI" type="time" class="inputBox"></div>
+<div><span class="label">GA SOIR</span><input id="f_GA SOIR" type="time" class="inputBox"></div>
+<div><span class="label">FL SOIR</span><input id="f_FL SOIR" type="time" class="inputBox"></div>
+<div><span class="label">NY SOIR</span><input id="f_NY SOIR" type="time" class="inputBox"></div>
+</div>
+<button class="btn btn-green" onclick="saveFermeture()">💾 SAVE FERMETURE</button>
+<div class="preview" id="fermPreview">Pa gen fermeture</div>
+</div>
+
+<!-- 3. LIMITE -->
+<div class="panel" id="p2">
+<h3>3. LIMITE GLOBAL - Vandè 1+2+...=Limite + Fizyon 00</h3>
+<p style="font-size:11px;color:red;font-weight:bold">Si limite BOLET 00 = 5000$<br>Vandè1 3000 + Vandè2 2000 = 5000 → Vandè3 bloke sou 00<br>+ Si nan menm fich 00 $50 + 00 $100 → fizyone 00 $150</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<div><span class="label">BOLET Chak boul</span><input id="lim_BOLET" type="number" class="inputBox" value="5000"></div>
+<div><span class="label">MARYAJ Chak maryaj</span><input id="lim_MARYAJ" type="number" class="inputBox" value="5000"></div>
+<div><span class="label">LOTO3</span><input id="lim_LOTO3" type="number" class="inputBox" value="3000"></div>
+<div><span class="label">LOTO4</span><input id="lim_LOTO4" type="number" class="inputBox" value="2000"></div>
+<div><span class="label">LOTO5</span><input id="lim_LOTO5" type="number" class="inputBox" value="1000"></div>
+</div>
+<button class="btn btn-green" onclick="saveLimiteGlobal()">💾 SAVE LIMITE GLOBAL</button>
+<div class="preview" id="limiteLive">Chaje total jodi a...</div>
+</div>
+
+<!-- 4. PRIX -->
+<div class="panel" id="p3">
+<h3>4. PRIX - BÒLÈT 1er 2e 3e + MARYAJ + LOTO</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div><span class="label">Bòlèt 1er lot x50</span><input id="prixB1" type="number" class="inputBox" value="50"></div>
+<div><span class="label">Bòlèt 2e lot x20</span><input id="prixB2" type="number" class="inputBox" value="20"></div>
+<div><span class="label">Bòlèt 3e lot x10</span><input id="prixB3" type="number" class="inputBox" value="10"></div>
+<div><span class="label" style="color:red">Maryaj M1=M2=M3 1000</span><input id="prixMaryaj" type="number" class="inputBox" value="1000"></div>
+<div><span class="label" style="color:blue">Loto3 500</span><input id="prixLoto3" type="number" class="inputBox" value="500"></div>
+<div><span class="label" style="color:blue">Loto4 5000</span><input id="prixLoto4" type="number" class="inputBox" value="5000"></div>
+<div style="grid-column:span 2"><span class="label" style="color:blue">Loto5 25000</span><input id="prixLoto5" type="number" class="inputBox" value="25000"></div>
+</div>
+<button class="btn btn-green" onclick="savePrix()">💾 Save Prix</button>
+<div class="preview" style="color:#00ff88">✅ 1er=50 | 2e=20 | 3e=10 | M1=M2=M3=1000 Dezòd 27x12=12x27 OK | L3=500 L4=5000 L5=25000</div>
+</div>
+
+<!-- 5. RAPPORT -->
+<div class="panel" id="p4">
+<h3 style="text-align:center">5. RAPPORT SENP - DU AU VENDEURS TIRAGE</h3>
+<label class="label">Du</label><input type="date" id="rapportDu" class="inputBox">
+<label class="label">Au</label><input type="date" id="rapportAu" class="inputBox">
+<span class="label">Tirage (..., tous)</span><select id="rapportTirage" class="inputBox"><option value="TOUS">Tirage tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
+<span class="label">Vendeurs (..., tous)</span><select id="rapportVendeur" class="inputBox"><option value="TOUS">Vandè tous</option></select>
+<button class="btn" onclick="kalkilRapoProprio()">📊 Jenere Rapò Senp</button>
+<div id="rapportResult"></div>
+<button class="btn" onclick="printRapportProprio()" style="background:#fff;color:#000;border:2.5px solid #000">🖨️ Imprimer - Vente Commission A payer Balance net GWO LÈT</button>
+</div>
+
+<!-- 6. ENTETE -->
+<div class="panel" id="p5">
+<h3>6. ENTÈTE TICKET</h3>
+<span class="label">Non Lotto anlè ticket</span><input id="enteteNom" class="inputBox" placeholder="C&D VÉRITÉ LOTTO" value="C&D VÉRITÉ LOTTO">
+<span class="label">Footer anba ticket</span><input id="enteteFooter" class="inputBox" placeholder="Mèsi, bòn chans!" value="Mèsi, bòn chans!">
+<button class="btn btn-green" onclick="saveEntete()">💾 Save Entète</button>
+<div class="preview">C&D VÉRITÉ LOTTO\nDate 15/08/2026 02:12 PM\nTirage GA MIDI\nId ABC123 Vandè Jules\n--------------------------------\n BOLET   55   $10\n--------------------------------\n Total: $10\n--------------------------------\nMèsi, bòn chans!</div>
+</div>
+
+<!-- 7. TABLEAU -->
+<div class="panel" id="p6">
+<h3>7. TABLEAU - 1er 2e 3e + M1 M2 M3 + L3 L4 L5</h3>
+<input type="date" id="tabDate" class="inputBox">
+<select id="tabTirage" class="inputBox"><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
+<div style="display:flex;gap:6px"><div style="flex:1"><span class="label">1er Lot</span><input id="tab1" class="inputBox" inputmode="numeric" placeholder="55"></div><div style="flex:1"><span class="label">2e Lot</span><input id="tab2" class="inputBox" inputmode="numeric" placeholder="27"></div><div style="flex:1"><span class="label">3e Lot</span><input id="tab3" class="inputBox" inputmode="numeric" placeholder="12"></div></div>
+<div style="display:flex;gap:6px"><div style="flex:1"><span class="label" style="color:red">M1</span><input id="tabM1" class="inputBox" placeholder="55x27"></div><div style="flex:1"><span class="label" style="color:red">M2</span><input id="tabM2" class="inputBox" placeholder="55x12"></div><div style="flex:1"><span class="label" style="color:red">M3</span><input id="tabM3" class="inputBox" placeholder="27x12"></div></div>
+<div style="display:flex;gap:6px"><div style="flex:1"><span class="label" style="color:blue">LOTO3</span><input id="tabL3" class="inputBox" placeholder="555"></div><div style="flex:1"><span class="label" style="color:blue">LOTO4</span><input id="tabL4" class="inputBox" placeholder="2712"></div><div style="flex:1"><span class="label" style="color:blue">LOTO5</span><input id="tabL5" class="inputBox" placeholder="55527"></div></div>
+<button class="btn btn-green" onclick="saveTableau()">💾 SAVE TABLEAU - M1=M2=M3=1000 Dezòd</button>
+<div id="tableauPreview" class="preview">Pa gen rezilta</div>
+<div id="resList"></div>
+</div>
+
+</div>
+</div>
 <script>
-async function savePrix(){ 
- const p={
-   BOLET_1ER:parseInt(document.getElementById('prixB1').value)||50,
-   BOLET_2E:parseInt(document.getElementById('prixB2').value)||20,
-   BOLET_3E:parseInt(document.getElementById('prixB3').value)||10,
-   MARYAJ:parseInt(document.getElementById('prixMaryaj').value)||1000,
-   M1:parseInt(document.getElementById('prixMaryaj').value)||1000,
-   M2:parseInt(document.getElementById('prixMaryaj').value)||1000,
-   M3:parseInt(document.getElementById('prixMaryaj').value)||1000,
-   LOTO3:parseInt(document.getElementById('prixLoto3').value)||500,
-   LOTO4:parseInt(document.getElementById('prixLoto4').value)||5000,
-   LOTO5:parseInt(document.getElementById('prixLoto5').value)||25000
- }; 
- await db.collection('config').doc('global').set({prix:p},{merge:true}); 
- alert("✅ Prix save!\nBòlèt 1er="+p.BOLET_1ER+" 2e="+p.BOLET_2E+" 3e="+p.BOLET_3E+"\nMaryaj="+p.MARYAJ+" L3="+p.LOTO3+" L4="+p.LOTO4+" L5="+p.LOTO5); 
-}
-async function loadPrixConfig(){
- try{
-  const doc=await db.collection('config').doc('global').get();
-  if(doc.exists && doc.data().prix){
-   const pr=doc.data().prix;
-   document.getElementById('prixB1').value=pr.BOLET_1ER||50;
-   document.getElementById('prixB2').value=pr.BOLET_2E||20;
-   document.getElementById('prixB3').value=pr.BOLET_3E||10;
-   document.getElementById('prixMaryaj').value=pr.MARYAJ||1000;
-   document.getElementById('prixLoto3').value=pr.LOTO3||500;
-   document.getElementById('prixLoto4').value=pr.LOTO4||5000;
-   document.getElementById('prixLoto5').value=pr.LOTO5||25000;
-  }
- }catch(e){}
-}
+const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
+firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
+function openTab(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active',idx===i));}
+async function loadVendeurs(){ const s=await db.collection('vendeurs').get(); let html=''; let sel='<option value="TOUS">Vandè tous</option>'; const today=new Date().toISOString().slice(0,10); const vSnap=await db.collection('ventes').where('dateStr','==',today).get(); let tot={}, parV={}; vSnap.forEach(d=>{ const v=d.data(); parV[v.vendeur]=(parV[v.vendeur]||0)+Number(v.total||0); (v.tirages||[]).forEach(tir=>{ (v.lignes||[]).forEach(l=>{ const key=`${tir}|${l.jeux}|${l.boul.toUpperCase()}`; tot[key]=(tot[key]||0)+(parseFloat(l.miz)||0); }); }); }); s.forEach(d=>{ const v=d.data(); const tv=parV[v.nom]||0; html+=`<div class="list"><b>${v.nom}</b> - Vente jodi a: $${tv.toFixed(2)} ${v.actif===false?'<span style="color:red">FÈMEN</span>':'<span style="color:green">AKTIF</span>'} <button onclick="toggleV('${d.id}',${v.actif})" style="float:right;padding:4px 8px;background:#000;color:#fff;border:none;border-radius:6px">Ouvri/Fèmen</button></div>`; sel+=`<option value="${v.nom}">${v.nom}</option>`; }); let live='TOTAL JODI A (Vandè 1+2+...):\n'; for(let k in tot){ live+=k+" = $"+tot[k]+"\n"; } if(Object.keys(tot).length==0) live="Pa gen vant jodi a"; document.getElementById('vendeurList').innerHTML=html||"<p>Pa gen vandè</p>"; document.getElementById('rapportVendeur').innerHTML=sel; document.getElementById('limiteLive').innerText=live; try{ const cfg=await db.collection('config').doc('global').get(); if(cfg.exists){ const c=cfg.data(); if(c.fermeture){ for(let t in c.fermeture){ const el=document.getElementById('f_'+t); if(el) el.value=c.fermeture[t]; } document.getElementById('fermPreview').innerText=Object.entries(c.fermeture).map(([k,v])=>k+": "+v).join('\n')||"Pa gen fermeture"; } if(c.limites){ document.getElementById('lim_BOLET').value=c.limites.BOLET||5000; document.getElementById('lim_MARYAJ').value=c.limites.MARYAJ||5000; document.getElementById('lim_LOTO3').value=c.limites.LOTO3||3000; document.getElementById('lim_LOTO4').value=c.limites.LOTO4||2000; document.getElementById('lim_LOTO5').value=c.limites.LOTO5||1000; } if(c.prix){ document.getElementById('prixB1').value=c.prix.BOLET_1ER||50; document.getElementById('prixB2').value=c.prix.BOLET_2E||20; document.getElementById('prixB3').value=c.prix.BOLET_3E||10; document.getElementById('prixMaryaj').value=c.prix.MARYAJ||1000; document.getElementById('prixLoto3').value=c.prix.LOTO3||500; document.getElementById('prixLoto4').value=c.prix.LOTO4||5000; document.getElementById('prixLoto5').value=c.prix.LOTO5||25000; } if(c.entete){ document.getElementById('enteteNom').value=c.entete.nom||"C&D VÉRITÉ LOTTO"; document.getElementById('enteteFooter').value=c.entete.footer||"Mèsi, bòn chans!"; } } }catch(e){} }
+async function addVendeur(){ const nom=document.getElementById('newNom').value.trim(), modpas=document.getElementById('newPass').value.trim(); if(!nom||!modpas) return alert("Ranpli non modpas"); await db.collection('vendeurs').add({nom,modpas,actif:true}); document.getElementById('newNom').value=""; document.getElementById('newPass').value=""; loadVendeurs(); }
+async function toggleV(id,actif){ await db.collection('vendeurs').doc(id).update({actif:!actif}); loadVendeurs(); }
+async function saveFermeture(){ const f={}; ["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"].forEach(t=>{ f[t]=document.getElementById('f_'+t).value; }); await db.collection('config').doc('global').set({fermeture:f},{merge:true}); alert("✅ Fermeture save! Vandè p ap ka vann apre lè sa"); loadVendeurs(); }
+async function saveLimiteGlobal(){ const l={BOLET:parseInt(document.getElementById('lim_BOLET').value)||5000, MARYAJ:parseInt(document.getElementById('lim_MARYAJ').value)||5000, LOTO3:parseInt(document.getElementById('lim_LOTO3').value)||3000, LOTO4:parseInt(document.getElementById('lim_LOTO4').value)||2000, LOTO5:parseInt(document.getElementById('lim_LOTO5').value)||1000}; await db.collection('config').doc('global').set({limites:l},{merge:true}); alert("✅ Limite Global save! Vandè1+2+...=Limite"); loadVendeurs(); }
+async function savePrix(){ const p={BOLET_1ER:parseInt(document.getElementById('prixB1').value)||50, BOLET_2E:parseInt(document.getElementById('prixB2').value)||20, BOLET_3E:parseInt(document.getElementById('prixB3').value)||10, MARYAJ:parseInt(document.getElementById('prixMaryaj').value)||1000, M1:parseInt(document.getElementById('prixMaryaj').value)||1000, M2:parseInt(document.getElementById('prixMaryaj').value)||1000, M3:parseInt(document.getElementById('prixMaryaj').value)||1000, LOTO3:parseInt(document.getElementById('prixLoto3').value)||500, LOTO4:parseInt(document.getElementById('prixLoto4').value)||5000, LOTO5:parseInt(document.getElementById('prixLoto5').value)||25000}; await db.collection('config').doc('global').set({prix:p},{merge:true}); alert("✅ Prix save!\n1er="+p.BOLET_1ER+" 2e="+p.BOLET_2E+" 3e="+p.BOLET_3E+" Maryaj="+p.MARYAJ); }
+async function saveEntete(){ const nom=document.getElementById('enteteNom').value, footer=document.getElementById('enteteFooter').value; await db.collection('config').doc('global').set({entete:{nom,footer}},{merge:true}); alert("✅ Entète save"); }
+async function saveTableau(){ const dateStr=document.getElementById('tabDate').value||new Date().toISOString().slice(0,10); const tirage=document.getElementById('tabTirage').value; const p1=document.getElementById('tab1').value.trim(), p2=document.getElementById('tab2').value.trim(), p3=document.getElementById('tab3').value.trim(); const m1=document.getElementById('tabM1').value.trim(), m2=document.getElementById('tabM2').value.trim(), m3=document.getElementById('tabM3').value.trim(); const l3=document.getElementById('tabL3').value.trim(), l4=document.getElementById('tabL4').value.trim(), l5=document.getElementById('tabL5').value.trim(); if(!p1||!p2||!p3) return alert("Mete 1er 2e 3e"); await db.collection('resultats').add({dateStr,tirage,premier:p1,deuxieme:p2,troisieme:p3,maryaj1:m1,maryaj2:m2,maryaj3:m3,M1:m1,M2:m2,M3:m3,loto3:l3,loto4:l4,loto5:l5,created:firebase.firestore.FieldValue.serverTimestamp()}); alert("✅ Tableau Save "+tirage+" M1 "+m1+" M2 "+m2+" M3 "+m3); loadResultats(); }
+async function loadResultats(){ const snap=await db.collection('resultats').orderBy('dateStr','desc').limit(30).get(); let html='', preview=''; snap.forEach(d=>{ const r=d.data(); html+=`<div class="list"><b>${r.dateStr} ${r.tirage}</b> : 1er ${r.premier} 2e ${r.deuxieme} 3e ${r.troisieme}<br><b style="color:red">M1 ${r.maryaj1||r.M1||'-'} | M2 ${r.maryaj2||r.M2||'-'} | M3 ${r.maryaj3||r.M3||'-'}</b><br><b style="color:blue">L3 ${r.loto3||''} L4 ${r.loto4||''} L5 ${r.loto5||''}</b> <button onclick="db.collection('resultats').doc('${d.id}').delete().then(()=>loadResultats())" style="float:right;background:red;color:#fff;border:none;padding:4px 8px;border-radius:6px">X</button></div>`; preview+=`${r.tirage}: ${r.premier}-${r.deuxieme}-${r.troisieme} | M1:${r.maryaj1||r.M1} M2:${r.maryaj2||r.M2} M3:${r.maryaj3||r.M3} | L3:${r.loto3||'-'} L4:${r.loto4||'-'} L5:${r.loto5||'-'}\n`; }); document.getElementById('resList').innerHTML=html; document.getElementById('tableauPreview').innerText=preview||"Pa gen rezilta"; }
+function parseMaryajPair(str){ let parts=String(str||'').toLowerCase().split(/[^0-9]+/).filter(Boolean).map(x=>x.slice(-2)); if(parts.length<2){ let clean=String(str).replace(/[^0-9]/g,''); if(clean.length>=4) parts=[clean.slice(0,2), clean.slice(2,4)]; } if(parts.length>=2) return [parts[0].padStart(2,'0'), parts[1].padStart(2,'0')]; return null; }
+function isSameMaryajDezod(a,b){ const pa=parseMaryajPair(a); const pb=parseMaryajPair(b); if(!pa||!pb) return false; return (pa[0]===pb[0] && pa[1]===pb[1]) || (pa[0]===pb[1] && pa[1]===pb[0]); }
+function calculGainProprio(ligne, res){ if(!res) return 0; const miz=parseFloat(ligne.miz)||0; if(!miz) return 0; const boul=String(ligne.boul).trim(); const p1=String(res.premier||'').replace(/[^0-9]/g,'').slice(-2); const p2=String(res.deuxieme||'').replace(/[^0-9]/g,'').slice(-2); const p3=String(res.troisieme||'').replace(/[^0-9]/g,'').slice(-2); const PR={BOLET_1ER:50,BOLET_2E:20,BOLET_3E:10,M1:1000,M2:1000,M3:1000,LOTO3:500,LOTO4:5000,LOTO5:25000}; try{ const cfg=JSON.parse(localStorage.getItem('prixCfg')||'{}'); if(cfg.BOLET_1ER) PR.BOLET_1ER=cfg.BOLET_1ER; if(cfg.BOLET_2E) PR.BOLET_2E=cfg.BOLET_2E; if(cfg.BOLET_3E) PR.BOLET_3E=cfg.BOLET_3E; }catch(e){} if(ligne.jeux==='BOLET'){ const b=boul.replace(/[^0-9]/g,'').slice(-2); if(p1&&b===p1) return miz*PR.BOLET_1ER; if(p2&&b===p2) return miz*PR.BOLET_2E; if(p3&&b===p3) return miz*PR.BOLET_3E; } if(ligne.jeux==='LOTO3' && boul.replace(/[^0-9]/g,'')===String(res.loto3||'').replace(/[^0-9]/g,'')) return miz*PR.LOTO3; if(ligne.jeux==='LOTO4' && boul.replace(/[^0-9]/g,'')===String(res.loto4||'').replace(/[^0-9]/g,'')) return miz*PR.LOTO4; if(ligne.jeux==='LOTO5' && boul.replace(/[^0-9]/g,'')===String(res.loto5||'').replace(/[^0-9]/g,'')) return miz*PR.LOTO5; if(ligne.jeux==='MARYAJ'){ if(isSameMaryajDezod(boul, res.maryaj1||res.M1||'')) return miz*PR.M1; if(isSameMaryajDezod(boul, res.maryaj2||res.M2||'')) return miz*PR.M2; if(isSameMaryajDezod(boul, res.maryaj3||res.M3||'')) return miz*PR.M3; } return 0; }
+async function kalkilRapoProprio(){ const du=document.getElementById('rapportDu').value, au=document.getElementById('rapportAu').value, tirage=document.getElementById('rapportTirage').value, vendeurSel=document.getElementById('rapportVendeur').value; if(!du||!au){ alert("Chwazi Du Au"); return; } document.getElementById('rapportResult').innerHTML="⏳ Kalkil..."; const vSnap=await db.collection('ventes').where('dateStr','>=',du).where('dateStr','<=',au).limit(2000).get(); const rSnap=await db.collection('resultats').where('dateStr','>=',du).where('dateStr','<=',au).limit(500).get(); let resList=[]; rSnap.forEach(d=>resList.push(d.data())); let vente=0, aPayer=0, fich=0, parVendeur={}; vSnap.forEach(d=>{ const v=d.data(); if(vendeurSel!=="TOUS" && v.vendeur!==vendeurSel) return; if(tirage!=="TOUS" &&!(v.tirages||[]).includes(tirage)) return; vente+=Number(v.total)||0; fich++; parVendeur[v.vendeur]=(parVendeur[v.vendeur]||0)+Number(v.total); (v.tirages||[]).forEach(t=>{ if(tirage!=="TOUS" && t!==tirage) return; const res=resList.find(r=> r.dateStr===v.dateStr && r.tirage===t); if(res){ (v.lignes||[]).forEach(l=>{ aPayer+=calculGainProprio(l,res); }); } }); }); const commission=vente*0.10; const balanceNet=vente-commission-aPayer; const txt=`C&D VÉRITÉ LOTTO\nRAPPORT V145 7 ONGLE\nDu ${du} Au ${au}\nTirage ${tirage}\nVendeurs ${vendeurSel}\n--------------------------------\nVente $${vente.toFixed(2)}\nCommission $${commission.toFixed(2)}\nA payer $${aPayer.toFixed(2)}\nBalance net $${balanceNet.toFixed(2)}\n--------------------------------\nFich ${fich}\n${Object.entries(parVendeur).map(([n,s])=>`${n}: $${s.toFixed(2)}`).join('\n')}\n--------------------------------\n1er x50 2e x20 3e x10\nM1M2M3 x1000 Dezòd OK\nL3 x500 L4 x5000 L5 x25000`; document.getElementById('rapportResult').innerHTML=`<div class="rapBox">${txt}</div>`; document.getElementById('rapportResult').dataset.txt=txt; }
+function printRapportProprio(){ const txt=document.getElementById('rapportResult').dataset.txt; if(!txt) return; const w=window.open('','_blank','width=420,height=900'); w.document.write(`<html><head><style>@page{size:80mm auto;margin:0} html,body{margin:0;padding:0;display:flex;justify-content:center;background:#fff}.t{width:78mm;margin:0 auto;padding:6mm 3mm;font-family:Arial Black,Arial,sans-serif;font-size:22px;font-weight:900;text-align:center;white-space:pre-line;color:#000;line-height:2}</style></head><body><div class="t">${txt}</div><script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script></body></html>`); w.document.close(); }
+document.getElementById('rapportDu').valueAsDate=new Date(); document.getElementById('rapportAu').valueAsDate=new Date(); document.getElementById('tabDate').valueAsDate=new Date(); loadVendeurs(); loadResultats();
 </script>
+</body>
+</html>
