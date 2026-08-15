@@ -33,21 +33,87 @@ function addLine(isFirst){ const div=document.createElement('div'); div.style.di
 function recalc(){ let tot=0; getAllLines().forEach(r=>{ const m=parseInt(r.querySelector('.m').value)||0; if(r.querySelector('.b').value.trim()&&m>0) tot+=m; }); document.getElementById('tot').innerText=tot+'$'; document.getElementById('nbT').innerText=selectedT.length||1; document.getElementById('paye').innerText=(tot*(selectedT.length||1))+'$'; }
 function deduplicateFiche(){ let map={}; getAllLines().forEach(row=>{ const type=row.querySelector('.j').value; const boul=row.querySelector('.b').value.trim(); const m=parseInt(row.querySelector('.m').value)||0; if(!boul||!m) return; const key=type+"_"+boul; if(map[key]){ map[key].mise+=m; map[key].rows.push(row); } else { map[key]={mise:m, rows:[row], first:row}; } }); for(let key in map){ if(map[key].rows.length>1){ map[key].first.querySelector('.m').value=map[key].mise; map[key].rows.slice(1).forEach(r=>r.remove()); } } recalc(); return map; }
 function checkLimitGlobal(){ if(isFerme) return false; const limites=config.limites||{bolet:1000,maryaj:50,loto3:100,loto4:20,loto5:5}; const map=deduplicateFiche(); let html=''; let blocked=false; for(let key in map){ const [type,boul]=key.split('_'); const miseFiche=map[key].mise; let limitVal=limites[type]||1000; if(type==='bolet') limitVal=limites.bolet||1000; if(type==='maryaj') limitVal=limites.maryaj||50; if(type==='loto3') limitVal=limites.loto3||100; if(type==='loto4') limitVal=limites.loto4||20; if(type==='loto5') limitVal=limites.loto5||5; selectedT.forEach(tNom=>{ const dejaVann=(venteDuJour[tNom]&&venteDuJour[tNom][key])||0; if(dejaVann+miseFiche>limitVal){ html+=`<div class="limit-bad">⛔ ${tNom} ${boul} ${dejaVann}$/${limitVal}$ +${miseFiche}$ DEPASE</div>`; blocked=true; } }); } document.getElementById('limitMsg').innerHTML=html; const btn=document.getElementById('btnVendre'); btn.disabled=blocked||isFerme; btn.style.opacity=blocked||isFerme?'0.4':'1'; btn.innerText=blocked?'⛔ LIMIT DEPASE':'VENDRE & IMPRIMER'; return!blocked&&!isFerme; }
-async function vann(){ if(isFerme) return; if(selectedT.length===0){ alert('Chwazi tiraj'); return; } deduplicateFiche(); if(!checkLimitGlobal()){ alert('LIMIT DEPASE'); return; } let details=[]; let map={}; getAllLines().forEach(r=>{ const j=r.querySelector('.j').value; const b=r.querySelector('.b').value.trim(); const m=parseInt(r.querySelector('.m').value)||0; if(b&&m>0){ details.push({type:j,boul:b,montan:m}); const k=j+"_"+b; map[k]=(map[k]||0)+m; } }); if(details.length===0){ alert('Mete boul'); return; } const dateStr=getHaitiDate(); const snap=await db.ref('venteJournaliere/'+dateStr).once('value'); const curJ=snap.val()||{}; const limites=config.limites||{bolet:1000,maryaj(1908=0819):50,loto3:100,loto4:20,loto5:5}; for(let k in map){ let type=k.split('_')[0]; let limitVal=limites[type]||1000; if(type==='bolet') limitVal=limites.bolet||1000; if(type==='maryaj(1908=0819)') limitVal=limites.maryaj||50; if(type==='loto3') limitVal=limites.loto3||100; if(type==='loto4') limitVal=limites.loto4||20; if(type==='loto5') limitVal=limites.loto5||5; for(let tNom of selectedT){ const cur=(curJ[tNom]&&curJ[tNom][k])||0; if(cur+map[k]>limitVal){ alert(`LIMIT ${tNom} ${k} ${cur}+${map[k]}>${limitVal}`); return; } } } const id=db.ref('fiches').push().key; let updates={}; updates['fiches/'+id]={id,vendeur:curUser.name,tirajs:selectedT,details,total:details.reduce((a,b)=>a+b.montan,0)*selectedT.length,gain:0,date:new Date().toISOString(),dateStr,commission:myCommission, venteParTiraj: details.reduce((a,b)=>a+b.montan,0)}; Object.keys(map).forEach(k=>{ selectedT.forEach(t=>{ const cur=(curJ[t]&&curJ[t][k])||0; updates['venteJournaliere/'+dateStr+'/'+t+'/'+k]=cur+map[k]; }); }); await db.ref().update(updates); const hms=new Date().toLocaleTimeString('fr-HT',{hour12:false}); const corps=details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:19px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); lastHtml=`<div style="font-size:24px;text-align:center;font-weight:900">${config.entete||'C&D'}</div><div style="text-align:center;font-size:13px">${dateStr} ${hms}<br>${curUser.name} (${myCommission}%)</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center">Tirage: <b>${selectedT.join('/')}</b><br>Id: <b style="font-size:22px">${id.slice(-5).toUpperCase()}</b></div><div style="border-top:2px dashed #000;margin:5px 0"></div>${corps}<div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:20px"><span>TOTAL</span><span>${details.reduce((a,b)=>a+b.montan,0)*selectedT.length}$</span></div>`; document.getElementById('lastTicket').innerHTML=`<div style="border:2px dashed #000;padding:10px;max-width:340px;margin:auto;font-family:monospace;font-weight:900;text-align:center">${lastHtml}<br><button class="btn bK" onclick="doPrint()">🖨️ RE-IMPRIMER</button></div>`; doPrint(); document.getElementById('lines').innerHTML=''; addLine(true); recalc(); loadFiches(); }
+async function vann(){ if(isFerme) return; if(selectedT.length===0){ alert('Chwazi tiraj'); return; } deduplicateFiche(); if(!checkLimitGlobal()){ alert('LIMIT DEPASE'); return; } let details=[]; let map={}; getAllLines().forEach(r=>{ const j=r.querySelector('.j').value; const b=r.querySelector('.b').value.trim(); const m=parseInt(r.querySelector('.m').value)||0; if(b&&m>0){ details.push({type:j,boul:b,montan:m}); const k=j+"_"+b; map[k]=(map[k]||0)+m; } }); if(details.length===0){ alert('Mete boul'); return; } const dateStr=getHaitiDate(); const snap=await db.ref('venteJournaliere/'+dateStr).once('value'); const curJ=snap.val()||{}; const limites=config.limites||{bolet:1000,maryaj:50,loto3:100,loto4:20,loto5:5}; for(let k in map){ let type=k.split('_')[0]; let limitVal=limites[type]||1000; if(type==='bolet') limitVal=limites.bolet||1000; if(type==='maryaj') limitVal=limites.maryaj||50; if(type==='loto3') limitVal=limites.loto3||100; if(type==='loto4') limitVal=limites.loto4||20; if(type==='loto5') limitVal=limites.loto5||5; for(let tNom of selectedT){ const cur=(curJ[tNom]&&curJ[tNom][k])||0; if(cur+map[k]>limitVal){ alert(`LIMIT ${tNom} ${k} ${cur}+${map[k]}>${limitVal}`); return; } } } const id=db.ref('fiches').push().key; let updates={}; updates['fiches/'+id]={id,vendeur:curUser.name,tirajs:selectedT,details,total:details.reduce((a,b)=>a+b.montan,0)*selectedT.length,gain:0,date:new Date().toISOString(),dateStr,commission:myCommission, venteParTiraj: details.reduce((a,b)=>a+b.montan,0)}; Object.keys(map).forEach(k=>{ selectedT.forEach(t=>{ const cur=(curJ[t]&&curJ[t][k])||0; updates['venteJournaliere/'+dateStr+'/'+t+'/'+k]=cur+map[k]; }); }); await db.ref().update(updates); const hms=new Date().toLocaleTimeString('fr-HT',{hour12:false}); const corps=details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:19px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); lastHtml=`<div style="font-size:24px;text-align:center;font-weight:900">${config.entete||'C&D'}</div><div style="text-align:center;font-size:13px">${dateStr} ${hms}<br>${curUser.name} (${myCommission}%)</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center">Tirage: <b>${selectedT.join('/')}</b><br>Id: <b style="font-size:22px">${id.slice(-5).toUpperCase()}</b></div><div style="border-top:2px dashed #000;margin:5px 0"></div>${corps}<div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:20px"><span>TOTAL</span><span>${details.reduce((a,b)=>a+b.montan,0)*selectedT.length}$</span></div>`; document.getElementById('lastTicket').innerHTML=`<div style="border:2px dashed #000;padding:10px;max-width:340px;margin:auto;font-family:monospace;font-weight:900;text-align:center">${lastHtml}<br><button class="btn bK" onclick="doPrint()">🖨️ RE-IMPRIMER</button></div>`; doPrint(); document.getElementById('lines').innerHTML=''; addLine(true); recalc(); loadFiches(); }
 function doPrint(){ const c=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;display:flex;justify-content:center}.ticket{width:52mm;text-align:center;font-family:monospace;font-weight:900}</style></head><body><div class="ticket">${lastHtml}</div><script>setTimeout(()=>{window.print(); setTimeout(()=>window.close(),700)},300);<\/script></body></html>`; const w=window.open('','_blank','width=360,height=600'); w.document.open(); w.document.write(c); w.document.close(); }
 function showTab(id){ if(isFerme&&id!=='rapportTab'&&id!=='fichesTab'){ alert('🔒 BANK FERME'); return; } ['vendre','kopyeTab','fichesTab','rapportTab'].forEach(x=>document.getElementById(x).style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.tab2 button').forEach(b=>b.classList.remove('active')); if(id==='vendre') document.getElementById('tV').classList.add('active'); if(id==='kopyeTab') document.getElementById('tC').classList.add('active'); if(id==='fichesTab'){ document.getElementById('tF').classList.add('active'); loadFiches(); } if(id==='rapportTab') document.getElementById('tR').classList.add('active'); }
-function calcGainForTiraj(fiche, tirajNom){ if(!fiche.details) return 0; const p=config.prix||{}; const prix={bolet1:parseInt(p.bolet1)||50,bolet2:parseInt(p.bolet2)||20,bolet3:parseInt(p.bolet3)||10,marya:parseInt(p.maryaj)||1000,loto3:parseInt(p.loto3)||500,loto4:parseInt(p.loto4)||5000,loto5:parseInt(p.loto5)||25000}; const dayRes=resultats[fiche.dateStr]||{}; const res=dayRes[tirajNom]||{}; if(!res.r1 &&!res.rl3) return 0; let gain=0; fiche.details.forEach(d=>{ const boul=String(d.boul).trim(); const m=parseInt(d.montan)||0; if(d.type==='bolet'){ if(boul.padStart(2,'0')===String(res.r1||'').padStart(2,'0')) gain+=m*prix.bolet1; else if(boul.padStart(2,'0')===String(res.r2||'').padStart(2,'0')) gain+=m*prix.bolet2; else if(boul.padStart(2,'0')===String(res.r3||'').padStart(2,'0')) gain+=m*prix.bolet3; } if(d.type==='maryaj' && [String(res.rm1||''),String(res.rm2||''),String(res.rm3||'')].includes(boul)) gain+=m*prix.maryaj;function separeMaryaj(txt){
+function separeMaryaj(txt){
  if(!txt) return null;
  var t = txt.toString().toLowerCase().replace(/×/g,'x').replace(/\*/g,'x').trim();
- var p;
+ var p=null;
  if(t.includes('x')) p=t.split('x');
  else if(t.includes('-')) p=t.split('-');
  else if(t.length>=4) p=[t.slice(0,2), t.slice(2,4)];
  else return null;
  if(!p || p.length<2) return null;
- var a = p[0].replace(/\D/g,'').padStart(2,'0').slice(-2);
- var b = p[1].replace(/\D/g,'').padStart(2,'0').slice(-2);
+ var a = (p[0]||"").replace(/\D/g,'').padStart(2,'0').slice(-2);
+ var b = (p[1]||"").replace(/\D/g,'').padStart(2,'0').slice(-2);
+ if(a=="00" && b=="00") return null;
  return [a,b];
+}
+function maryajGagne(bet, res){
+ var B = separeMaryaj(bet);
+ var R = separeMaryaj(res);
+ if(!B ||!R) return false;
+ // 0819 = 19x08 = 08x19
+ return (B[0]==R[0] && B[1]==R[1]) || (B[0]==R[1] && B[1]==R[0]);
+}
+
+function calkilGenParTiraj(){
+ var du = document.getElementById('dateDu')?.value || "";
+ var au = document.getElementById('dateAu')?.value || du;
+ var filT = document.getElementById('filTiraj')?.value || "tous";
+
+ var fiches = window.fiches || window.toutesFiches || [];
+ var resu = window.resultats || window.resu || {};
+ var comMap = window.comMap || {};
+
+ var vPar={}, pPar={}, comPar={}, gPar={};
+ var vTot=0, pTot=0, comTot=0;
+
+ fiches.forEach(function(fd){
+  if(!fd.date || fd.date < du || fd.date > au) return;
+  if(!fd.tirajs ||!Array.isArray(fd.tirajs)) return;
+  var miz = parseFloat(fd.miz)||0;
+  if(miz<=0) return;
+
+  fd.tirajs.forEach(function(tir){
+   if(filT!=="tous" && tir!==filT) return;
+   if(!vPar[tir]){ vPar[tir]=0; pPar[tir]=0; comPar[tir]=0; gPar[tir]=0; }
+
+   vPar[tir]+=miz; vTot+=miz;
+   var com = miz * (parseFloat(comMap[fd.vendeur]||10))/100;
+   comPar[tir]+=com; comTot+=com;
+
+   // --- PEYE AN DETAY PA TIRAJ AK DEZÒD ---
+   var re = resu[fd.date] && resu[fd.date][tir];
+   var pey = 0;
+   var boule = (fd.boule||fd.numero||"").toString().trim();
+
+   if(re){
+     // BOUL SIMPLE
+     if(boule == re.p1) pey = miz*50;
+     else if(boule == re.p2) pey = miz*20;
+     else if(boule == re.p3) pey = miz*10;
+     else {
+       // MARYAJ M1 M2 M3 - AK DEZÒD
+       if(maryajGagne(boule, re.M1||re.m1) || maryajGagne(boule, re.M2||re.m2) || maryajGagne(boule, re.M3||re.m3)){
+         pey = miz*500;
+       }
+       // Si M yo se 0819, 0875 jan nan foto w la
+       if(!pey && re.maryaj){
+         for(var k in re.maryaj){
+           if(maryajGagne(boule, re.maryaj[k])){ pey=miz*500; break; }
+         }
+       }
+     }
+   }
+
+   if(pey>0){ pPar[tir]+=pey; pTot+=pey; }
+   gPar[tir] = vPar[tir] - comPar[tir] - pPar[tir];
+  });
+ });
+
+ return { vPar, pPar, comPar, gPar, vTot, pTot, comTot, gainTot: vTot-comTot-pTot };
 }
 function maryajGagne(bet, res){
  var B = separeMaryaj(bet);
@@ -178,21 +244,13 @@ function copyFicheToVendre(fid){
   });
 }
 function reprintFiche(fid){ db.ref('fiches/'+fid).once('value',s=>{ const f=s.val(); if(!f) return; const corps=(f.details||[]).map(d=>`<div style="display:flex;justify-content:space-between;font-size:18px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); lastHtml=`<div style="font-size:22px;text-align:center;font-weight:900">${config.entete||'C&D'}</div><div style="text-align:center;font-size:12px">${f.dateStr}<br>${f.vendeur}</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center">Tirage: <b>${(f.tirajs||[]).join('/')}</b><br>Id: <b>${f.id.slice(-5).toUpperCase()}</b></div><div style="border-top:2px dashed #000;margin:5px 0"></div>${corps}<div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:18px"><span>TOTAL</span><span>${f.total}$</span></div>`; doPrint(); }); }
-async function genRapV(){
-  const du=document.getElementById('rapDu').value||getHaitiDate(); const au=document.getElementById('rapAu').value||getHaitiDate(); const tirFiltre=document.getElementById('rapTiraj').value;
-  document.getElementById('rapData').innerHTML="⏳ Ap kalkile kòrèk...";
-  const snap=await db.ref('fiches').once('value');
-  let all=Object.values(snap.val()||[]).filter(f=>f.vendeur===curUser.name && f.dateStr>=du && f.dateStr<=au);
-  if(tirFiltre) all=all.filter(f=>(f.tirajs||[]).includes(tirFiltre));
-  let vente=0, aPayer=0;
-  all.forEach(f=>{
-    const nbT=(f.tirajs||[]).length||1;
-    if(tirFiltre){ vente+=f.venteParTiraj!==undefined?f.venteParTiraj:(f.total/nbT); aPayer+=calcGainForTiraj(f, tirFiltre); }
-    else { vente+=f.total||0; aPayer+=calcGainTotal(f); }
-  });
-  const commission=Math.round(vente*myCommission/100); const balanceNet=vente-commission-aPayer;
-  document.getElementById('rapData').innerHTML=`<div style="border:2px solid #000;padding:10px;border-radius:10px;background:#fff;font-family:monospace;font-weight:900;max-width:360px;margin:auto"><div style="text-align:center;font-size:12px;border-bottom:2px dashed #000;padding-bottom:5px">RAPPORT<br>${curUser.name} (${myCommission}%)<br>Du ${du} Au ${au}<br>Tirage: ${tirFiltre||'Tous'}<br><span style="color:#16a34a;font-size:10px">✅ KORIJE pa tiraj detaye </span></div><div style="margin-top:6px;font-size:13px;line-height:24px"><div style="display:flex;justify-content:space-between"><span>Vente:</span><span>${vente}$</span></div><div style="display:flex;justify-content:space-between"><span>Commission (${myCommission}%):</span><span>${commission}$</span></div><div style="display:flex;justify-content:space-between;color:#b91c1c"><span>A payer:</span><span>${aPayer}$</span></div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:17px"><span>Balance net:</span><span>${balanceNet}$</span></div><div style="font-size:9px;color:#666;text-align:center">Fiches: ${all.length}</div></div><button class="btn bK" style="margin-top:8px" onclick="doPrintRapport()">🖨️ IMPRIMER</button></div>`;
-  lastRapportHtml=`<div style="text-align:center;font-size:13px;font-weight:900">${config.entete||'C&D'}<br>RAPPORT ${curUser.name}<br>${du} au ${au}<br>${tirFiltre||'Tous'}</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="font-size:12px">Vente: ${vente}$<br>Commission: ${commission}$<br>A payer: ${aPayer}$</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center;font-size:15px">BALANCE NET<br><b style="font-size:20px">${balanceNet}$</b></div>`;
+function genererRapport(){
+ var R = calkilGenParTiraj();
+ var html = "";
+ for(var tir in R.vPar){
+   html+= `<div><b>${tir}</b> Vente:${R.vPar[tir]} Peye:${R.pPar[tir]||0} Gain:${R.gPar[tir]}</div>`;
+ }
+ document.getElementById('rapportDetail').innerHTML = html + `<hr>TOTAL Gain:${R.gainTot}`;
 }
 function doPrintRapport(){ if(!lastRapportHtml) return; const c=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;display:flex;justify-content:center}.ticket{width:52mm;text-align:center;font-family:monospace;font-weight:900}</style></head><body><div class="ticket">${lastRapportHtml}</div><script>setTimeout(()=>{window.print(); setTimeout(()=>window.close(),700)},300);<\/script></body></html>`; const w=window.open('','_blank','width=360,height=600'); w.document.open(); w.document.write(c); w.document.close(); }
 </script></body></html>
