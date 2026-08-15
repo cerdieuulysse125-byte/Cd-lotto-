@@ -1,56 +1,49 @@
 <!DOCTYPE html>
 <html lang="ht">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>C&D VERITE - Terminal v2 Pro</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C&D VERITE - 5 Jeux - Terminal v2 Pro</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Courier, monospace}
-body{background:#000;color:#000}
-.card{max-width:500px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
+body{background:#000}
+.card{max-width:520px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
 .hdr{background:#000;color:#fff;text-align:center;padding:12px;font-weight:bold}
 .tabs{display:flex;background:#111;position:sticky;top:0;z-index:10}
 .tab{flex:1;padding:12px 2px;text-align:center;color:#888;font-size:10px;font-weight:bold;cursor:pointer;border-bottom:3px solid #111}
 .tab.active{color:#fff;border-bottom-color:#fff}
-.content{padding:10px;flex:1;overflow:auto}
+.content{padding:10px;flex:1}
 .panel{display:none}.panel.active{display:block}
 .tirages{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
-.tir{border:2px solid #000;padding:8px 4px;border-radius:8px;text-align:center;font-size:11px;font-weight:bold;cursor:pointer}
+.tir{border:2px solid #000;padding:10px 4px;border-radius:8px;text-align:center;font-size:11px;font-weight:bold;cursor:pointer}
 .tir.sel{background:#000;color:#fff}
-.ligne{display:flex;gap:4px;margin:6px 0;align-items:center}
-.ligne select,.ligne input{border:2px solid #000;border-radius:8px;padding:10px 6px;font-size:15px;font-weight:bold;text-align:center}
-.ligne select{width:28%}.boul{width:32%}.miz{width:25%}.del{width:15%;background:#fff;border:2px solid red;color:red;border-radius:8px;padding:10px;font-weight:bold;cursor:pointer}
-input[type="number"]{inputmode:numeric; -moz-appearance:textfield}
-.totalBox{background:#000;color:#fff;border-radius:12px;padding:12px;text-align:center;font-size:18px;font-weight:bold;margin:10px 0}
+.ligne{display:flex;gap:4px;margin:8px 0;align-items:flex-start;background:#f5f5f5;padding:6px;border-radius:12px}
+.jeuxBox{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;width:44%}
+.jbtn{border:1.5px solid #000;border-radius:7px;padding:9px 1px;font-size:10px;font-weight:bold;text-align:center;cursor:pointer;background:#fff}
+.jbtn.sel{background:#000;color:#fff}
+.boul{width:27%;border:2px solid #000;border-radius:8px;padding:12px 4px;font-size:16px;font-weight:bold;text-align:center}
+.miz{width:17%;border:2px solid #000;border-radius:8px;padding:12px 2px;font-size:16px;font-weight:bold;text-align:center}
+.del{width:12%;background:#fff;border:2px solid red;color:red;border-radius:8px;padding:12px 0;font-weight:bold}
+.totalBox{background:#000;color:#fff;border-radius:12px;padding:14px;text-align:center;font-size:18px;font-weight:bold;margin:12px 0}
 .btn{width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:12px;font-weight:bold;font-size:16px;margin:6px 0;cursor:pointer}
 .btn-out{background:#fff;color:#000;border:2.5px solid #000}
-.ticketBox{width:58mm;margin:0 auto;text-align:center;font-size:12px;line-height:1.3;white-space:pre-line}
-@media print{body *{visibility:hidden}.ticketBox,.ticketBox *{visibility:visible}.ticketBox{position:absolute;left:0;top:0;width:58mm}}
 .list{border:1px solid #000;border-radius:10px;padding:10px;margin:6px 0;font-size:12px;cursor:pointer}
-.small{font-size:11px;color:#555;text-align:center}
+.ticketBox{width:58mm;margin:0 auto;text-align:center;font-size:13px;line-height:1.4;white-space:pre-line;font-family:Courier, monospace}
+.small{font-size:11px;color:#555;text-align:center;margin:6px 0}
 </style>
 </head>
 <body>
 <div class="card">
 <div class="hdr">C&D VÉRITÉ LOTTO - <span id="vNameHdr">Vandè</span></div>
-
 <div id="loginDiv" style="padding:30px">
-<input id="nom" placeholder="Non Vandè" style="width:100%;padding:16px;border:2.5px solid #000;border-radius:14px;margin:8px 0">
+<input id="nom" placeholder="Non Vandè (Jules)" style="width:100%;padding:16px;border:2.5px solid #000;border-radius:14px;margin:8px 0">
 <input id="pass" type="password" placeholder="Modpas" style="width:100%;padding:16px;border:2.5px solid #000;border-radius:14px;margin:8px 0">
 <button class="btn" onclick="login()">ANTRE</button><p id="msg" style="color:red;text-align:center;margin-top:10px"></p>
 </div>
-
 <div id="appDiv" style="display:none;flex-direction:column;flex:1">
-<div class="tabs">
-<div class="tab active" onclick="openTab(0)">1.VANT</div>
-<div class="tab" onclick="openTab(1)">2.KOPYE</div>
-<div class="tab" onclick="openTab(2)">3.FICH</div>
-<div class="tab" onclick="openTab(3)">4.RAPÒ</div>
-</div>
+<div class="tabs"><div class="tab active" onclick="openTab(0)">1.VANT</div><div class="tab" onclick="openTab(1)">2.KOPYE</div><div class="tab" onclick="openTab(2)">3.FICH</div><div class="tab" onclick="openTab(3)">4.RAPÒ</div></div>
 <div class="content">
-
-<!-- 1 VANT -->
 <div class="panel active" id="p0">
 <div class="small">TIRAJ MILTIP - Chwazi:</div>
 <div class="tirages">
@@ -61,149 +54,54 @@ input[type="number"]{inputmode:numeric; -moz-appearance:textfield}
 <div class="tir" id="t5" onclick="toggleTir('FL SOIR')">FL SOIR</div>
 <div class="tir" id="t6" onclick="toggleTir('NY SOIR')">NY SOIR</div>
 </div>
-<div class="small">Jeux - Boul - Miz - Efase (Flèche ↓ pou liy suivan)</div>
+<div class="small">Jeux | Boul | Miz | X - Enter ↓ = nouvo liy</div>
 <div id="lignes"></div>
-<button class="btn btn-out" onclick="addLigne()">+ Liy (↓)</button>
+<button class="btn btn-out" onclick="addLigne(lastJeux)">+ Liy (↓)</button>
 <div class="totalBox" id="totalBox">Total: $0 x 0 tiraj = $0</div>
 <button class="btn" onclick="validerEtImprimer()">💾 VALIDE & IMPRIMER</button>
 <div id="printArea" style="display:none"></div>
 </div>
-
-<!-- 2 KOPYE -->
-<div class="panel" id="p1">
-<h4 style="text-align:center">Kopye nenpòt ticket</h4>
-<input id="searchTicket" placeholder="Id ticket oswa dat" style="width:100%;padding:12px;border:2px solid #000;border-radius:10px;margin:8px 0" oninput="searchTickets()">
-<div id="copyList"></div>
-</div>
-
-<!-- 3 MES FICHES -->
-<div class="panel" id="p2">
-<h4 style="text-align:center">Lis Fich Jounen an - <span id="dateJour"></span></h4>
-<div id="fichesList"></div>
-</div>
-
-<!-- 4 RAPPORT -->
+<div class="panel" id="p1"><h4 style="text-align:center">Kopye nenpòt ticket</h4><div id="copyList"></div></div>
+<div class="panel" id="p2"><h4 style="text-align:center">Mes Fiches - <span id="dateJour"></span></h4><div id="fichesList"></div></div>
 <div class="panel" id="p3">
-<div style="display:flex;gap:4px">
-<input id="du" type="date" style="flex:1;padding:10px;border:2px solid #000;border-radius:8px">
-<input id="au" type="date" style="flex:1;padding:10px;border:2px solid #000;border-radius:8px">
-</div>
-<select id="rapTirage" style="width:100%;padding:10px;border:2px solid #000;border-radius:8px;margin:6px 0">
-<option value="TOUS">Tirage (TOUS)</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option>
-</select>
-<button class="btn" onclick="genRapport()">Jenere Rapò</button>
-<div id="rapportRes" style="margin-top:10px"></div>
-<button class="btn btn-out" onclick="printRapport()">🖨️ Imprimer Rapò</button>
-<button class="btn btn-out" onclick="logout()">Dekonekte</button>
-</div>
-
+<div style="display:flex;gap:4px"><input id="du" type="date" style="flex:1;padding:10px;border:2px solid #000;border-radius:8px"><input id="au" type="date" style="flex:1;padding:10px;border:2px solid #000;border-radius:8px"></div>
+<select id="rapTirage" style="width:100%;padding:10px;border:2px solid #000;border-radius:8px;margin:6px 0"><option value="TOUS">Tirage (TOUS)</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
+<button class="btn" onclick="genRapport()">Jenere Rapò</button><div id="rapportRes"></div><button class="btn btn-out" onclick="window.print()">🖨️ Imprimer</button><button class="btn btn-out" onclick="location.reload()">Dekonekte</button>
 </div>
 </div>
 </div>
-
+</div>
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
 firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
-let current=null, tiragesSel=new Set(), lignesData=[];
-let JEUX=["L3","MARIAGE","L4","L5"];
-
+let current=null, tiragesSel=new Set(), lignesData=[], lastJeux='BOLET';
 function openTab(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active',idx===i));}
-
-function toggleTir(n){if(tiragesSel.has(n)){tiragesSel.delete(n);document.getElementById('t'+(['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].indexOf(n)+1)).classList.remove('sel')}else{tiragesSel.add(n);document.getElementById('t'+(['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].indexOf(n)+1)).classList.add('sel')} calcTotal();}
-function addLigne(keepJeux=null){
- const id=lignesData.length;
- const jeux=keepJeux||'L3';
- lignesData.push({jeux,boul:'',miz:''});
- const div=document.createElement('div'); div.className='ligne'; div.id='lig'+id;
- div.innerHTML=`<select id="j${id}" onchange="lignesData[${id}].jeux=this.value">${JEUX.map(j=>`<option ${j===jeux?'selected':''}>${j}</option>`).join('')}</select>
- <input id="b${id}" class="boul" inputmode="numeric" pattern="[0-9]*" placeholder="Boul" oninput="lignesData[${id}].boul=this.value.replace(/[^0-9x]/g,'');calcTotal()" onkeydown="handleKey(event,${id},'b')">
- <input id="m${id}" class="miz" type="number" inputmode="numeric" placeholder="Miz" oninput="lignesData[${id}].miz=this.value;calcTotal()" onkeydown="handleKey(event,${id},'m')">
- <button class="del" onclick="delLigne(${id})">X</button>`;
- document.getElementById('lignes').appendChild(div);
- document.getElementById('b'+id).focus();
+function toggleTir(n){const m={'GA MIDI':1,'FL MIDI':2,'NY MIDI':3,'GA SOIR':4,'FL SOIR':5,'NY SOIR':6}; const el=document.getElementById('t'+m[n]); if(tiragesSel.has(n)){tiragesSel.delete(n);el.classList.remove('sel')}else{tiragesSel.add(n);el.classList.add('sel')} calcTotal();}
+function addLigne(jeuxKeep){ const id=Date.now()+Math.random(); const jeux=jeuxKeep||lastJeux||'BOLET'; lastJeux=jeux; const obj={id,jeux,boul:'',miz:''}; lignesData.push(obj);
+ const div=document.createElement('div'); div.className='ligne'; div.id='row_'+id;
+ div.innerHTML=`<div class="jeuxBox">
+  <div class="jbtn ${jeux==='BOLET'?'sel':''}" onclick="setJeux('${id}','BOLET',this)">BÒLÈT</div>
+  <div class="jbtn ${jeux==='MARYAJ'?'sel':''}" onclick="setJeux('${id}','MARYAJ',this)">MARYAJ</div>
+  <div class="jbtn ${jeux==='LOTO3'?'sel':''}" onclick="setJeux('${id}','LOTO3',this)">LOTO3</div>
+  <div class="jbtn ${jeux==='LOTO4'?'sel':''}" onclick="setJeux('${id}','LOTO4',this)">LOTO4</div>
+  <div class="jbtn ${jeux==='LOTO5'?'sel':''}" onclick="setJeux('${id}','LOTO5',this)">LOTO5</div>
+ </div>
+ <input class="boul" id="b_${id}" inputmode="numeric" placeholder="Boul" oninput="updateBoul('${id}',this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();addLigne(lastJeux)}">
+ <input class="miz" id="m_${id}" type="number" inputmode="numeric" placeholder="$" oninput="updateMiz('${id}',this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();addLigne(lastJeux)}">
+ <button class="del" onclick="delLigne('${id}')">X</button>`;
+ document.getElementById('lignes').appendChild(div); setTimeout(()=>document.getElementById('b_'+id).focus(),80);
 }
-function handleKey(e,id,field){
- if(e.key==='ArrowDown'||e.key==='Enter'){e.preventDefault(); const keep=document.getElementById('j'+id).value; addLigne(keep);}
- if(e.key==='ArrowUp'&&id>0){document.getElementById('b'+(id-1)).focus();}
-}
-function delLigne(id){document.getElementById('lig'+id).remove(); lignesData[id]=null; calcTotal();}
-function calcTotal(){let sum=0; lignesData.forEach(l=>{if(l&&l.miz) sum+=parseFloat(l.miz)||0}); const nb=tiragesSel.size||1; const tot=sum*nb; document.getElementById('totalBox').innerText=`Total: $${sum} x ${tiragesSel.size||0} tiraj = $${tot}`; return tot;}
-
-async function login(){
- const nom=document.getElementById('nom').value.trim(), pass=document.getElementById('pass').value.trim();
- const msg=document.getElementById('msg'); if(!nom||!pass){msg.innerText="Ranpli";return;}
- msg.innerText="Ap verifye...";
- try{const s=await db.collection('vendeurs').where('nom','==',nom).where('modpas','==',pass).get(); if(s.empty){msg.innerText="Pa kòrèk";return;}
- current={id:s.docs[0].id,...s.docs[0].data()}; document.getElementById('loginDiv').style.display='none'; document.getElementById('appDiv').style.display='flex'; document.getElementById('vNameHdr').innerText=nom;
- document.getElementById('dateJour').innerText=new Date().toLocaleDateString(); addLigne(); loadFiches(); }catch(e){msg.innerText=e.message}
-}
-
-function buildFicheHtml(data, isPrint=false){
- const tirageStr=Array.from(tiragesSel).join('/')||data.tirages?.join('/')||'';
- const dateStr=new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString();
- const idTicket=data.id||'TMP-'+Date.now().toString().slice(-6);
- return `
-  C&D VÉRITÉ LOTTO
- Date ${dateStr} Tirage ${tirageStr}
- Id ticket ${idTicket} Vandè ${current.nom}
-
-${data.lignes.map(l=>`${l.jeux} ${l.boul.padEnd(10)} $${l.miz}`).join('\n')}
-
- Total: $${data.total}
-
-  Mèsi, bòn chans!
-`;
-}
-
-async function validerEtImprimer(){
- if(tiragesSel.size==0){alert("Chwazi omwen 1 tiraj");return;}
- const lignes=lignesData.filter(l=>l&&l.boul&&l.miz); if(lignes.length==0){alert("Antre boul + miz");return;}
- const total=calcTotal();
- const docData={vendeur:current.nom, vendeurId:current.id, tirages:Array.from(tiragesSel), lignes, total, dateStr:new Date().toISOString().slice(0,10), created:firebase.firestore.FieldValue.serverTimestamp(), idTicket:'CD-'+Date.now().toString().slice(-7)};
- try{ const ref=await db.collection('ventes').add(docData);
-   const html=buildFicheHtml({...docData, id:ref.id});
-   document.getElementById('printArea').innerHTML=`<div class="ticketBox">${html}</div>`;
-   document.getElementById('printArea').style.display='block';
-   window.print();
-   // reset
-   lignesData=[]; document.getElementById('lignes').innerHTML=""; addLigne(); calcTotal(); loadFiches();
-   alert("Fich sove: "+ref.id);
- }catch(e){alert(e.message)}
-}
-
-async function loadFiches(){
- if(!current)return;
- const today=new Date().toISOString().slice(0,10);
- const snap=await db.collection('ventes').where('vendeurId','==',current.id).where('dateStr','==',today).orderBy('created','desc').limit(50).get();
- let h=""; snap.forEach(d=>{const v=d.data(); h+=`<div class="list" onclick="reprint('${d.id}')"><b>${v.idTicket||d.id}</b> - ${v.tirages?.join(',')} - $${v.total} - ${v.lignes.length} liy<br><span class="small">${v.lignes.map(l=>l.boul).join(', ')}</span></div>`});
- document.getElementById('fichesList').innerHTML=h||"<p class='small'>Pa gen fich</p>";
- document.getElementById('copyList').innerHTML=h;
-}
-
-async function searchTickets(){
- const q=document.getElementById('searchTicket').value.trim(); if(!q){loadFiches();return;}
- const snap=await db.collection('ventes').where('vendeurId','==',current.id).orderBy('created','desc').limit(100).get();
- let h=""; snap.forEach(d=>{const v=d.data(); if((v.idTicket||'').includes(q)||(v.dateStr||'').includes(q)){ h+=`<div class="list" onclick="copyTicket('${d.id}')"><b>${v.idTicket}</b> - ${v.tirages} - $${v.total}<br>${v.lignes.map(l=>l.jeux+' '+l.boul+' $'+l.miz).join(', ')}</div>`}});
- document.getElementById('copyList').innerHTML=h;
-}
-async function copyTicket(id){
- const doc=await db.collection('ventes').doc(id).get(); if(!doc.exists)return;
- const v=doc.data(); tiragesSel=new Set(v.tirages); document.querySelectorAll('.tir').forEach(t=>t.classList.toggle('sel', tiragesSel.has(t.innerText)));
- lignesData=[]; document.getElementById('lignes').innerHTML=""; v.lignes.forEach(l=>{addLigne(l.jeux); const idx=lignesData.length-1; lignesData[idx].boul=l.boul; lignesData[idx].miz=l.miz; document.getElementById('b'+idx).value=l.boul; document.getElementById('m'+idx).value=l.miz;}); calcTotal(); openTab(0);
-}
-async function reprint(id){ const doc=await db.collection('ventes').doc(id).get(); const v=doc.data(); const html=buildFicheHtml({...v, id:v.idTicket||id}); document.getElementById('printArea').innerHTML=`<div class="ticketBox">${html}</div>`; document.getElementById('printArea').style.display='block'; window.print();}
-
-async function genRapport(){
- const du=document.getElementById('du').value, au=document.getElementById('au').value, tir=document.getElementById('rapTirage').value;
- if(!du||!au){alert("Chwazi Du au");return;}
- let q=db.collection('ventes').where('vendeurId','==',current.id).where('dateStr','>=',du).where('dateStr','<=',au);
- const snap=await q.get(); let vente=0; let filtered=0;
- snap.forEach(d=>{const v=d.data(); if(tir==='TOUS'||v.tirages?.includes(tir)){vente+=v.total||0; filtered++;}});
- const com=vente*0.1, payer=vente*0.9;
- document.getElementById('rapportRes').innerHTML=`<div class="ticketBox" id="rapPrint"> C&D VÉRITÉ LOTTO<br> RAPPORT ${du} au ${au}<br> Tirage: ${tir}<br> Vandè: ${current.nom}<br>------------------------------<br> Vente: $${vente}<br> Commission 10%: $${com.toFixed(2)}<br> A payer: $${payer.toFixed(2)}<br> Balance net: $${payer.toFixed(2)}<br> Nbre fich: ${filtered}<br>------------------------------</div>`;
-}
-function printRapport(){ window.print(); }
-function logout(){ location.reload();}
+function setJeux(rowId,j,el){ const o=lignesData.find(x=>x.id==rowId); if(o)o.jeux=j; lastJeux=j; const row=document.getElementById('row_'+rowId); row.querySelectorAll('.jbtn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel');}
+function updateBoul(id,v){ const o=lignesData.find(x=>x.id==id); if(o)o.boul=v.replace(/[^0-9xX]/g,''); calcTotal();}
+function updateMiz(id,v){ const o=lignesData.find(x=>x.id==id); if(o)o.miz=v; calcTotal();}
+function delLigne(id){ const el=document.getElementById('row_'+id); if(el)el.remove(); lignesData=lignesData.filter(o=>o.id!=id); calcTotal();}
+function calcTotal(){let sum=0; lignesData.forEach(l=>{if(l.miz)sum+=parseFloat(l.miz)||0}); const nb=tiragesSel.size; document.getElementById('totalBox').innerText=`Total: $${sum} x ${nb} tiraj = $${sum*nb}`; return sum*nb;}
+async function login(){const nom=document.getElementById('nom').value.trim(), pass=document.getElementById('pass').value.trim(); const msg=document.getElementById('msg'); if(!nom||!pass){msg.innerText="Ranpli";return;} msg.innerText="Ap verifye..."; try{const s=await db.collection('vendeurs').where('nom','==',nom).where('modpas','==',pass).get(); if(s.empty){msg.innerText="Pa kòrèk";return;} current={id:s.docs[0].id,...s.docs[0].data()}; document.getElementById('loginDiv').style.display='none'; document.getElementById('appDiv').style.display='flex'; document.getElementById('vNameHdr').innerText=nom; document.getElementById('dateJour').innerText=new Date().toLocaleDateString(); addLigne('BOLET'); loadFiches();}catch(e){msg.innerText=e.message}}
+function buildFiche(v){const tStr=Array.from(tiragesSel).join('/')||v.tirages?.join('/')||''; const d=new Date().toLocaleString(); return ` C&D VÉRITÉ LOTTO\n Date ${d} Tirage ${tStr}\n Id ticket ${v.idTicket||''} Vandè ${current.nom}\n\n------------------------------\n${v.lignes.map(l=>` ${l.jeux.padEnd(6)} ${l.boul.padEnd(10)} $${l.miz}`).join('\n')}\n------------------------------\n Total: $${v.total}\n------------------------------\n Mèsi, bòn chans!`;}
+async function validerEtImprimer(){if(tiragesSel.size==0){alert("Chwazi tiraj");return;} const lignes=lignesData.filter(l=>l.boul&&l.miz); if(!lignes.length){alert("Antre boul+miz");return;} const total=calcTotal(); const data={vendeur:current.nom,vendeurId:current.id,tirages:Array.from(tiragesSel),lignes:lignes.map(l=>({jeux:l.jeux,boul:l.boul,miz:l.miz})),total,dateStr:new Date().toISOString().slice(0,10),created:firebase.firestore.FieldValue.serverTimestamp(),idTicket:'CD-'+Date.now().toString().slice(-6)}; try{const ref=await db.collection('ventes').add(data); document.getElementById('printArea').innerHTML=`<div class="ticketBox">${buildFiche({...data,idTicket:ref.id})}</div>`; document.getElementById('printArea').style.display='block'; window.print(); lignesData=[]; document.getElementById('lignes').innerHTML=""; addLigne(lastJeux); calcTotal(); loadFiches();}catch(e){alert(e.message)}}
+async function loadFiches(){if(!current)return; const today=new Date().toISOString().slice(0,10); const snap=await db.collection('ventes').where('vendeurId','==',current.id).where('dateStr','==',today).orderBy('created','desc').limit(50).get(); let h=""; snap.forEach(d=>{const v=d.data(); h+=`<div class="list" onclick="reprint('${d.id}')"><b>${v.idTicket||d.id.slice(-6)}</b> - ${v.tirages?.join(',')} - $${v.total} (${v.lignes.length} liy)</div>`}); document.getElementById('fichesList').innerHTML=h||"Pa gen fich"; document.getElementById('copyList').innerHTML=h||"Pa gen fich";}
+async function reprint(id){const doc=await db.collection('ventes').doc(id).get(); const v=doc.data(); document.getElementById('printArea').innerHTML=`<div class="ticketBox">${buildFiche({...v,idTicket:v.idTicket||id})}</div>`; document.getElementById('printArea').style.display='block'; window.print();}
+async function genRapport(){const du=document.getElementById('du').value, au=document.getElementById('au').value, tir=document.getElementById('rapTirage').value; if(!du||!au){alert("Chwazi dat");return;} const snap=await db.collection('ventes').where('vendeurId','==',current.id).where('dateStr','>=',du).where('dateStr','<=',au).get(); let vente=0,c=0; snap.forEach(d=>{const v=d.data(); if(tir==='TOUS'||v.tirages?.includes(tir)){vente+=v.total||0;c++;}}); const com=vente*0.1; document.getElementById('rapportRes').innerHTML=`<div class="ticketBox"> C&D VÉRITÉ LOTTO<br> RAPPORT ${du} au ${au}<br> Tirage: ${tir}<br> Vandè: ${current.nom}<br>------------------------------<br> Vente: $${vente}<br> Commission: $${com.toFixed(2)}<br> A payer: $${(vente-com).toFixed(2)}<br> Balance net: $${(vente-com).toFixed(2)}<br> Nbre: ${c}<br>------------------------------</div>`;}
 </script>
 </body>
 </html>
