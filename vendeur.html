@@ -115,52 +115,7 @@ function calkilGenParTiraj(){
 
  return { vPar, pPar, comPar, gPar, vTot, pTot, comTot, gainTot: vTot-comTot-pTot };
  }
-async function loadFiches(){ const today=getHaitiDate(); const snap=await db.ref('fiches').orderByChild('dateStr').equalTo(today).once('value'); if(!snap.exists()){ document.getElementById('listF').innerHTML="Pa gen fich jodi a - "+today; return; } let list=Object.values(snap.val()).filter(f=>f.vendeur===curUser.name).reverse().slice(0,50); let html=''; list.forEach(f=>{ const gain=calcGainTotal(f); const win=gain>0; html+=`<div style="border:${win?'3px solid #16a34a':'1px solid #ccc'};padding:7px;margin:5px 0;border-radius:9px;font-size:11px;background:${win?'#dcfce7':'#fff'}"><b>${(f.tirajs||[]).join('/')} - ${f.total}$</b> <span style="font-size:8px">${f.id.slice(-5).toUpperCase()} - ${f.dateStr}</span><br><span style="font-size:9px">${(f.details||[]).map(d=>d.type+':'+d.boul+'-'+d.montan+'$').join(' | ')}</span><br>${win?`<b style="color:#16a34a">🎉 GAIN: ${gain}$</b>`:`Gain: 0$`}<div style="display:flex;gap:4px;margin-top:4px"><button onclick="reprintFiche('${f.id}')" style="width:auto;padding:4px 8px;font-size:9px;background:#000;color:#FFD700;border-radius:12px">🖨️ Re-imprime</button><button onclick="copyFicheToVendre('${f.id}')" style="width:auto;padding:4px 8px;font-size:9px;background:#2563eb;color:#fff;border-radius:12px">📋 Kopi nan Vendre</button></div></div>`; }); document.getElementById('listF').innerHTML=html; }
 
-// COPIER KORIJE - CHÈCHE PA 5 LÈT + TOUJOU 4 ONGLES
-async function searchById(){
-  const qRaw=document.getElementById('searchId').value.trim().toUpperCase();
-  const box=document.getElementById('resKopye');
-  if(!qRaw){ box.innerHTML='<div style="color:red;font-weight:900">Mete ID a - 5 lèt ki sou tikè a</div>'; return; }
-  box.innerHTML='⏳ Ap chèche '+qRaw+'...';
-  try{
-    const snap=await db.ref('fiches').once('value');
-    const all=Object.values(snap.val()||[]);
-    // Chèche: dènye 5 lèt = q, oswa ID konplè gen q ladan, oswa q pi piti
-    const q=qRaw.replace(/[^A-Z0-9]/g,'');
-    let found=null;
-    // 1 - chèche egzak 5 lèt
-    found=all.find(f=>f.id.slice(-5).toUpperCase()===q);
-    // 2 - si pa jwenn, chèche si ID gen q ladan
-    if(!found) found=all.find(f=>f.id.toUpperCase().includes(q));
-    // 3 - si toujou pa jwenn, chèche sou premye 3 lèt
-    if(!found && q.length>=3) found=all.find(f=>f.id.slice(-5).toUpperCase().includes(q));
-
-    if(!found){
-      box.innerHTML=`<div style="background:#fee2e2;border:2px solid #ef4444;padding:10px;border-radius:8px;text-align:center"><b>❌ Pa jwenn fich ${qRaw}</b><br><span style="font-size:11px">Verifye ID a sou tikè a<br>Fiches jodi a: ${all.filter(f=>f.vendeur===curUser.name).length}<br>Total fich nan baz: ${all.length}</span><br><button onclick="loadFiches();showTab('fichesTab')" style="margin-top:6px;padding:6px 12px;background:#000;color:#FFD700;border-radius:12px;width:auto">Gade tout fich mwen yo nan 3.Fiches</button></div>`;
-      lastFoundFiche=null;
-      return;
-    }
-    lastFoundFiche=found;
-    const gain=calcGainTotal(found);
-    const win=gain>0;
-    box.innerHTML=`
-    <div style="border:2px solid ${win?'#16a34a':'#000'};padding:10px;border-radius:10px;background:${win?'#dcfce7':'#fff'};font-family:monospace;font-weight:900">
-      <div style="text-align:center;border-bottom:2px dashed #000;padding-bottom:6px">FICH JWENN ✅<br>ID: <span style="font-size:20px;background:#000;color:#FFD700;padding:2px 8px;border-radius:6px">${found.id.slice(-5).toUpperCase()}</span><br><span style="font-size:10px">ID konplè: ${found.id}</span></div>
-      <div style="font-size:12px;margin-top:6px;line-height:18px">
-        Date: ${found.dateStr}<br>Vendeur: ${found.vendeur}<br>Tirage: <b>${(found.tirajs||[]).join(' / ')}</b><br>Total: <b>${found.total}$</b> (Vente par tiraj: ${found.venteParTiraj||Math.round(found.total/((found.tirajs||[]).length||1))}$)<br>
-        <div style="border-top:1px dashed #000;margin:6px 0"></div>
-        ${(found.details||[]).map(d=>`<div style="display:flex;justify-content:space-between"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join('')}
-        <div style="border-top:2px dashed #000;margin:6px 0"></div>
-        ${win?`<div style="color:#16a34a;font-size:18px;text-align:center">🎉 GAIN: ${gain}$</div>`:`<div style="text-align:center;color:#666">Gain: 0$</div>`}
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
-        <button class="btn bK" onclick="reprintFiche('${found.id}')" style="margin:0">🖨️ Re-imprime</button>
-        <button class="btn" style="background:#2563eb;color:#fff;margin:0" onclick="copyFicheToVendre('${found.id}')">📋 Kopi nan Vendre</button>
-      </div>
-    </div>`;
-  }catch(e){ box.innerHTML='<div style="color:red">Erè: '+e.message+'</div>'; }
-}
 function copyFicheToVendre(fid){
   db.ref('fiches/'+fid).once('value',s=>{
     const f=s.val(); if(!f) return;
