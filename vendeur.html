@@ -36,7 +36,85 @@ function checkLimitGlobal(){ if(isFerme) return false; const limites=config.limi
 async function vann(){ if(isFerme) return; if(selectedT.length===0){ alert('Chwazi tiraj'); return; } deduplicateFiche(); if(!checkLimitGlobal()){ alert('LIMIT DEPASE'); return; } let details=[]; let map={}; getAllLines().forEach(r=>{ const j=r.querySelector('.j').value; const b=r.querySelector('.b').value.trim(); const m=parseInt(r.querySelector('.m').value)||0; if(b&&m>0){ details.push({type:j,boul:b,montan:m}); const k=j+"_"+b; map[k]=(map[k]||0)+m; } }); if(details.length===0){ alert('Mete boul'); return; } const dateStr=getHaitiDate(); const snap=await db.ref('venteJournaliere/'+dateStr).once('value'); const curJ=snap.val()||{}; const limites=config.limites||{bolet:1000,maryaj(1908=0819):50,loto3:100,loto4:20,loto5:5}; for(let k in map){ let type=k.split('_')[0]; let limitVal=limites[type]||1000; if(type==='bolet') limitVal=limites.bolet||1000; if(type==='maryaj(1908=0819)') limitVal=limites.maryaj||50; if(type==='loto3') limitVal=limites.loto3||100; if(type==='loto4') limitVal=limites.loto4||20; if(type==='loto5') limitVal=limites.loto5||5; for(let tNom of selectedT){ const cur=(curJ[tNom]&&curJ[tNom][k])||0; if(cur+map[k]>limitVal){ alert(`LIMIT ${tNom} ${k} ${cur}+${map[k]}>${limitVal}`); return; } } } const id=db.ref('fiches').push().key; let updates={}; updates['fiches/'+id]={id,vendeur:curUser.name,tirajs:selectedT,details,total:details.reduce((a,b)=>a+b.montan,0)*selectedT.length,gain:0,date:new Date().toISOString(),dateStr,commission:myCommission, venteParTiraj: details.reduce((a,b)=>a+b.montan,0)}; Object.keys(map).forEach(k=>{ selectedT.forEach(t=>{ const cur=(curJ[t]&&curJ[t][k])||0; updates['venteJournaliere/'+dateStr+'/'+t+'/'+k]=cur+map[k]; }); }); await db.ref().update(updates); const hms=new Date().toLocaleTimeString('fr-HT',{hour12:false}); const corps=details.map(d=>`<div style="display:flex;justify-content:space-between;font-size:19px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); lastHtml=`<div style="font-size:24px;text-align:center;font-weight:900">${config.entete||'C&D'}</div><div style="text-align:center;font-size:13px">${dateStr} ${hms}<br>${curUser.name} (${myCommission}%)</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center">Tirage: <b>${selectedT.join('/')}</b><br>Id: <b style="font-size:22px">${id.slice(-5).toUpperCase()}</b></div><div style="border-top:2px dashed #000;margin:5px 0"></div>${corps}<div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:20px"><span>TOTAL</span><span>${details.reduce((a,b)=>a+b.montan,0)*selectedT.length}$</span></div>`; document.getElementById('lastTicket').innerHTML=`<div style="border:2px dashed #000;padding:10px;max-width:340px;margin:auto;font-family:monospace;font-weight:900;text-align:center">${lastHtml}<br><button class="btn bK" onclick="doPrint()">🖨️ RE-IMPRIMER</button></div>`; doPrint(); document.getElementById('lines').innerHTML=''; addLine(true); recalc(); loadFiches(); }
 function doPrint(){ const c=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;display:flex;justify-content:center}.ticket{width:52mm;text-align:center;font-family:monospace;font-weight:900}</style></head><body><div class="ticket">${lastHtml}</div><script>setTimeout(()=>{window.print(); setTimeout(()=>window.close(),700)},300);<\/script></body></html>`; const w=window.open('','_blank','width=360,height=600'); w.document.open(); w.document.write(c); w.document.close(); }
 function showTab(id){ if(isFerme&&id!=='rapportTab'&&id!=='fichesTab'){ alert('🔒 BANK FERME'); return; } ['vendre','kopyeTab','fichesTab','rapportTab'].forEach(x=>document.getElementById(x).style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.tab2 button').forEach(b=>b.classList.remove('active')); if(id==='vendre') document.getElementById('tV').classList.add('active'); if(id==='kopyeTab') document.getElementById('tC').classList.add('active'); if(id==='fichesTab'){ document.getElementById('tF').classList.add('active'); loadFiches(); } if(id==='rapportTab') document.getElementById('tR').classList.add('active'); }
-function calcGainForTiraj(fiche, tirajNom){ if(!fiche.details) return 0; const p=config.prix||{}; const prix={bolet1:parseInt(p.bolet1)||50,bolet2:parseInt(p.bolet2)||20,bolet3:parseInt(p.bolet3)||10,maryaj(1908=0819):parseInt(p.maryaj)||1000,loto3:parseInt(p.loto3)||500,loto4:parseInt(p.loto4)||5000,loto5:parseInt(p.loto5)||25000}; const dayRes=resultats[fiche.dateStr]||{}; const res=dayRes[tirajNom]||{}; if(!res.r1 &&!res.rl3) return 0; let gain=0; fiche.details.forEach(d=>{ const boul=String(d.boul).trim(); const m=parseInt(d.montan)||0; if(d.type==='bolet'){ if(boul.padStart(2,'0')===String(res.r1||'').padStart(2,'0')) gain+=m*prix.bolet1; else if(boul.padStart(2,'0')===String(res.r2||'').padStart(2,'0')) gain+=m*prix.bolet2; else if(boul.padStart(2,'0')===String(res.r3||'').padStart(2,'0')) gain+=m*prix.bolet3; } if(d.type==='maryaj' && [String(res.rm1||''),String(res.rm2||''),String(res.rm3||'')].includes(boul)) gain+=m*prix.maryaj; if(d.type==='loto3' && res.rl3 && boul===String(res.rl3).trim()) gain+=m*prix.loto3; if(d.type==='loto4' && res.rl4 && boul===String(res.rl4).trim()) gain+=m*prix.loto4; if(d.type==='loto5' && res.rl5 && boul===String(res.rl5).trim()) gain+=m*prix.loto5; }); return gain; }
+function calcGainForTiraj(fiche, tirajNom){ if(!fiche.details) return 0; const p=config.prix||{}; const prix={bolet1:parseInt(p.bolet1)||50,bolet2:parseInt(p.bolet2)||20,bolet3:parseInt(p.bolet3)||10,marya:parseInt(p.maryaj)||1000,loto3:parseInt(p.loto3)||500,loto4:parseInt(p.loto4)||5000,loto5:parseInt(p.loto5)||25000}; const dayRes=resultats[fiche.dateStr]||{}; const res=dayRes[tirajNom]||{}; if(!res.r1 &&!res.rl3) return 0; let gain=0; fiche.details.forEach(d=>{ const boul=String(d.boul).trim(); const m=parseInt(d.montan)||0; if(d.type==='bolet'){ if(boul.padStart(2,'0')===String(res.r1||'').padStart(2,'0')) gain+=m*prix.bolet1; else if(boul.padStart(2,'0')===String(res.r2||'').padStart(2,'0')) gain+=m*prix.bolet2; else if(boul.padStart(2,'0')===String(res.r3||'').padStart(2,'0')) gain+=m*prix.bolet3; } if(d.type==='maryaj' && [String(res.rm1||''),String(res.rm2||''),String(res.rm3||'')].includes(boul)) gain+=m*prix.maryaj;function separeMaryaj(txt){
+ if(!txt) return null;
+ var t = txt.toString().toLowerCase().replace(/×/g,'x').replace(/\*/g,'x').trim();
+ var p;
+ if(t.includes('x')) p=t.split('x');
+ else if(t.includes('-')) p=t.split('-');
+ else if(t.length>=4) p=[t.slice(0,2), t.slice(2,4)];
+ else return null;
+ if(!p || p.length<2) return null;
+ var a = p[0].replace(/\D/g,'').padStart(2,'0').slice(-2);
+ var b = p[1].replace(/\D/g,'').padStart(2,'0').slice(-2);
+ return [a,b];
+}
+function maryajGagne(bet, res){
+ var B = separeMaryaj(bet);
+ var R = separeMaryaj(res);
+ if(!B ||!R) return false;
+ return (B[0]==R[0] && B[1]==R[1]) || (B[0]==R[1] && B[1]==R[0]);
+}
+
+function genererRapport(){
+ try{
+  var zone = document.getElementById('rapportDetail') || document.getElementById('zoneRapport');
+  if(zone) zone.innerHTML = '⏳ Ap kalkile...';
+
+  var du = document.getElementById('dateDu')?.value || document.getElementById('du')?.value;
+  var au = document.getElementById('dateAu')?.value || document.getElementById('au')?.value;
+  var filT = document.getElementById('filTiraj')?.value || "tous";
+
+  var fiches = window.fiches || [];
+  var resu = window.resultats || window.resu || {};
+  var comMap = window.comMap || {};
+
+  var vPar={}, pPar={}, comPar={}, gPar={};
+  var vTot=0, pTot=0, comTot=0;
+
+  fiches.forEach(function(fd){
+    if(!fd.date) return;
+    if(du && fd.date < du) return;
+    if(au && fd.date > au) return;
+    if(!fd.tirajs) return;
+    var miz = parseFloat(fd.miz)||0;
+    if(miz<=0) return;
+
+    fd.tirajs.forEach(function(tir){
+      if(filT!=="tous" && tir!==filT) return;
+      if(!vPar[tir]){vPar[tir]=0; pPar[tir]=0; comPar[tir]=0; gPar[tir]=0;}
+
+      vPar[tir]+=miz; vTot+=miz;
+      var com = miz * (comMap[fd.vendeur]||10) / 100;
+      comPar[tir]+=com; comTot+=com;
+
+      // PEYE AK DEZÒD MARYAJ
+      var re = resu[fd.date] && resu[fd.date][tir];
+      var pey = 0;
+      var b = (fd.boule||"").toString().trim();
+      if(re){
+        if(b == re.p1) pey = miz*50;
+        else if(b == re.p2) pey = miz*20;
+        else if(b == re.p3) pey = miz*10;
+        else if(maryajGagne(b, re.m1) || maryajGagne(b, re.m2) || maryajGagne(b, re.m3)){
+          pey = miz*500;
+        }
+      }
+      if(pey>0){ pPar[tir]+=pey; pTot+=pey; }
+    });
+  });
+
+  var html = `<div style="padding:10px"><h3 style="text-align:center">Rapò ${du} - ${au} (${filT})</h3>`;
+  for(var tir in vPar){
+    html+=`<div style="border:1px solid #ddd;margin:6px 0;padding:8px;border-radius:8px">
+      <b>${tir}</b><br>Vente:${vPar[tir]} | Peye:<b style="color:red">${pPar[tir]||0}</b> | Gain:<b style="color:green">${vPar[tir]-comPar[tir]-(pPar[tir]||0)}</b>
+    </div>`;
+  }
+  html+=`<hr><b>TOTAL: Vente ${vTot} | Peye ${pTot} | Gain ${vTot-comTot-pTot}</b></div>`;
+  if(zone) zone.innerHTML = html;
+
+ }catch(e){ alert("Erè:"+e.message); }
+  }; if(d.type==='loto3' && res.rl3 && boul===String(res.rl3).trim()) gain+=m*prix.loto3; if(d.type==='loto4' && res.rl4 && boul===String(res.rl4).trim()) gain+=m*prix.loto4; if(d.type==='loto5' && res.rl5 && boul===String(res.rl5).trim()) gain+=m*prix.loto5; }); return gain; }
 function calcGainTotal(fiche){ let tot=0; (fiche.tirajs||[]).forEach(t=>{ tot+=calcGainForTiraj(fiche,t); }); if(tot===0) tot=parseInt(fiche.gain)||0; return tot; }
 async function loadFiches(){ const today=getHaitiDate(); const snap=await db.ref('fiches').orderByChild('dateStr').equalTo(today).once('value'); if(!snap.exists()){ document.getElementById('listF').innerHTML="Pa gen fich jodi a - "+today; return; } let list=Object.values(snap.val()).filter(f=>f.vendeur===curUser.name).reverse().slice(0,50); let html=''; list.forEach(f=>{ const gain=calcGainTotal(f); const win=gain>0; html+=`<div style="border:${win?'3px solid #16a34a':'1px solid #ccc'};padding:7px;margin:5px 0;border-radius:9px;font-size:11px;background:${win?'#dcfce7':'#fff'}"><b>${(f.tirajs||[]).join('/')} - ${f.total}$</b> <span style="font-size:8px">${f.id.slice(-5).toUpperCase()} - ${f.dateStr}</span><br><span style="font-size:9px">${(f.details||[]).map(d=>d.type+':'+d.boul+'-'+d.montan+'$').join(' | ')}</span><br>${win?`<b style="color:#16a34a">🎉 GAIN: ${gain}$</b>`:`Gain: 0$`}<div style="display:flex;gap:4px;margin-top:4px"><button onclick="reprintFiche('${f.id}')" style="width:auto;padding:4px 8px;font-size:9px;background:#000;color:#FFD700;border-radius:12px">🖨️ Re-imprime</button><button onclick="copyFicheToVendre('${f.id}')" style="width:auto;padding:4px 8px;font-size:9px;background:#2563eb;color:#fff;border-radius:12px">📋 Kopi nan Vendre</button></div></div>`; }); document.getElementById('listF').innerHTML=html; }
 
