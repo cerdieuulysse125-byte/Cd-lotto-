@@ -1,45 +1,112 @@
 <!DOCTYPE html>
 <html lang="ht">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D VÉRITÉ LOTTO</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C&D VÉRITÉ - Vandè</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
-*{box-sizing:border-box}
-body{background:#000;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;font-family:Arial, sans-serif}
-.card{background:#fff;border-radius:24px;padding:28px;width:92%;max-width:400px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-h1{text-align:center;margin:0 0 5px 0;font-size:30px;letter-spacing:1px}
-.sub{text-align:center;font-size:14px;margin-bottom:20px;color:#333}
-input{width:100%;padding:16px;border:2.5px solid #000;border-radius:14px;margin:10px 0;font-size:16px;outline:none}
-button{width:100%;padding:16px;background:#000;color:#fff;border:none;border-radius:14px;font-size:18px;font-weight:bold;margin-top:12px;cursor:pointer}
-button:active{transform:scale(0.98)}
-#dashboard{display:none}
-.ticket{border:2px dashed #000;padding:15px;border-radius:12px;margin-top:15px}
-.badge{background:#000;color:#fff;padding:5px 10px;border-radius:20px;font-size:12px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
+body{background:#000;min-height:100vh;color:#000}
+.card{background:#fff;max-width:480px;margin:10px auto;border-radius:22px;overflow:hidden;min-height:95vh;display:flex;flex-direction:column}
+.header{background:#000;color:#fff;padding:18px;text-align:center}
+.header h1{font-size:22px}
+.header p{font-size:12px;opacity:0.8;margin-top:4px}
+.login{padding:30px}
+input{width:100%;padding:16px;border:2.5px solid #000;border-radius:14px;margin:8px 0;font-size:16px}
+.btn{width:100%;padding:16px;background:#000;color:#fff;border:none;border-radius:14px;font-weight:bold;font-size:17px;cursor:pointer;margin-top:10px}
+.btn-out{background:#fff;color:#000;border:2.5px solid #000}
+.tabs{display:flex;background:#111}
+.tab{flex:1;padding:14px 5px;text-align:center;color:#aaa;font-size:11px;font-weight:bold;cursor:pointer;border-bottom:3px solid transparent}
+.tab.active{color:#fff;border-bottom-color:#fff;background:#000}
+.content{flex:1;padding:18px;overflow:auto}
+.panel{display:none}
+.panel.active{display:block}
+.boule-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+.boule{border:2px solid #000;border-radius:10px;padding:12px;text-align:center;font-weight:bold;cursor:pointer}
+.boule.sel{background:#000;color:#fff}
+.row{display:flex;gap:8px}
+.chip{border:2px solid #000;border-radius:20px;padding:8px 14px;font-size:13px;font-weight:bold;cursor:pointer}
+.chip.sel{background:#000;color:#fff}
+.ticket{border:2px dashed #000;border-radius:14px;padding:14px;margin:10px 0}
+.small{font-size:12px;color:#666}
+.total{background:#000;color:#fff;border-radius:14px;padding:14px;text-align:center;font-size:20px;font-weight:bold;margin:12px 0}
+.list-item{border:1px solid #ddd;border-radius:12px;padding:12px;margin:8px 0;display:flex;justify-content:space-between}
 </style>
 </head>
 <body>
 <div class="card">
-<div id="loginDiv">
+<div class="header">
 <h1>C&D VÉRITÉ LOTTO</h1>
-<div class="sub">Login Vendeur - Modpas separe ak Proprio</div>
-<input id="nom" placeholder="Non Vendeur">
-<input id="pass" type="password" placeholder="Modpas Vendeur ••••">
-<button onclick="login()">ANTRE</button>
-<p id="msg" style="color:red;text-align:center;min-height:20px;margin-top:10px"></p>
+<p id="headerSub">Login Vandè</p>
 </div>
 
-<div id="dashboard">
-<h2 id="welcome" style="text-align:center"></h2>
-<p style="text-align:center">Ou konekte avèk siksè ✅</p>
-<div class="ticket">
-<p><b>Vandè:</b> <span id="vName"></span></p>
-<p>Kontni vant lotto ou ap vini isit la...</p>
-<p style="font-size:12px;color:#666">Firestore konekte: cd-lotto</p>
+<div id="loginDiv" class="login">
+<input id="nom" placeholder="Non Vandè (ex: Jules)">
+<input id="pass" type="password" placeholder="Modpas ••••">
+<button class="btn" onclick="login()">ANTRE</button>
+<p id="msg" style="color:red;text-align:center;margin-top:10px;min-height:20px"></p>
 </div>
-<button onclick="logout()" style="background:#fff;color:#000;border:2px solid #000;margin-top:20px">Dekonekte</button>
+
+<div id="appDiv" style="display:none;flex:1;flex-direction:column">
+<div class="tabs">
+<div class="tab active" onclick="openTab(0)">1.VANT</div>
+<div class="tab" onclick="openTab(1)">2.TIKÈ</div>
+<div class="tab" onclick="openTab(2)">3.RAPÒ</div>
+<div class="tab" onclick="openTab(3)">4.TIRAJ</div>
+</div>
+
+<div class="content">
+<!-- ONGLET 1: VANT -->
+<div class="panel active" id="p0">
+<h3>Vant Rapid</h3>
+<div class="small" style="margin:8px 0">Chwazi kalite:</div>
+<div class="row" style="flex-wrap:wrap">
+<div class="chip sel" id="c1" onclick="setType('LOTO3')">LOTO 3</div>
+<div class="chip" id="c2" onclick="setType('LOTO4')">LOTO 4</div>
+<div class="chip" id="c3" onclick="setType('MARIAGE')">MARIAGE</div>
+<div class="chip" id="c4" onclick="setType('LOTO5')">LOTO 5</div>
+</div>
+<input id="bouleInput" placeholder="Antre boul (ex: 45) - Enter pou ajoute" onkeypress="if(event.key==='Enter')addBoule()">
+<div class="boule-grid" id="bouleGrid"></div>
+<div class="row">
+<input id="montan" type="number" placeholder="Montan $ (ex: 10)" style="flex:1">
+<button class="btn" style="width:120px" onclick="addToTicket()">+ Ajoute</button>
+</div>
+<div id="ticketPreview"></div>
+<div class="total" id="totalDiv">Total: $0</div>
+<button class="btn" onclick="valideTicket()">✅ VALIDE TIKÈ</button>
+<button class="btn btn-out" onclick="clearTicket()">Efase</button>
+</div>
+
+<!-- ONGLET 2: TIKE -->
+<div class="panel" id="p1">
+<h3>Tikè Jodi a - <span id="vName2"></span></h3>
+<div id="listTickets"></div>
+</div>
+
+<!-- ONGLET 3: RAPO -->
+<div class="panel" id="p2">
+<h3>Rapò Jodi a</h3>
+<div class="ticket">
+<p>Total Tikè: <b id="rCount">0</b></p>
+<p>Total Vant: <b id="rVant">$0</b></p>
+<p>Komisyon 10%: <b id="rCom">$0</b></p>
+<p>Pou Remèt: <b id="rNet">$0</b></p>
+</div>
+<div class="small">Dat: <span id="rDate"></span></div>
+<button class="btn btn-out" onclick="loadRapport()">Rafrechi</button>
+</div>
+
+<!-- ONGLET 4: TIRAJ -->
+<div class="panel" id="p3">
+<h3>Rezilta Tiraj</h3>
+<div class="ticket" id="tirajDiv">Chaje...</div>
+<div class="small" style="margin-top:10px">Limit chak boul: <span id="limInfo">...</span></div>
+<button class="btn btn-out" onclick="logout()">Dekonekte</button>
+</div>
+
+</div>
 </div>
 </div>
 
@@ -47,47 +114,122 @@ button:active{transform:scale(0.98)}
 const firebaseConfig = {
   apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
   authDomain: "cd-lotto.firebaseapp.com",
-  databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",
   projectId: "cd-lotto",
   storageBucket: "cd-lotto.firebasestorage.app",
   messagingSenderId: "671091732195",
-  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6",
-  measurementId: "G-TWK9N38BS0"
+  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+let currentVendeur=null, typeVente='LOTO3', ticket=[], total=0;
+let limites={};
+
+function openTab(i){
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active',idx===i));
+}
+
+function setType(t){
+  typeVente=t;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  document.getElementById(t==='LOTO3'?'c1':t==='LOTO4'?'c2':t==='MARIAGE'?'c3':'c4').classList.add('sel');
+  document.getElementById('bouleInput').placeholder = t==='MARIAGE'? "Ex: 12x45" : "Ex: "+(t==='LOTO3'?"45":"1245");
+}
+
 async function login(){
-  const nom = document.getElementById('nom').value.trim();
-  const pass = document.getElementById('pass').value.trim();
-  const msg = document.getElementById('msg');
-  if(!nom || !pass){ msg.innerText="Ranpli tout chan yo"; return; }
+  const nom=document.getElementById('nom').value.trim();
+  const pass=document.getElementById('pass').value.trim();
+  const msg=document.getElementById('msg');
+  if(!nom||!pass){msg.innerText="Ranpli tout chan";return;}
   msg.innerText="Ap verifye...";
   try{
-    const snap = await db.collection('vendeurs').where('nom','==',nom).where('modpas','==',pass).get();
-    if(snap.empty){
-      const snap2 = await db.collection('vendeurs').where('nom','==',nom).get();
-      if(snap2.empty) msg.innerText="Vandè sa pa egziste";
-      else msg.innerText="Modpas pa kòrèk";
-    } else {
-      document.getElementById('loginDiv').style.display='none';
-      document.getElementById('dashboard').style.display='block';
-      document.getElementById('welcome').innerText="Bonjou "+nom+" !";
-      document.getElementById('vName').innerText=nom;
-      msg.innerText="";
+    const s=await db.collection('vendeurs').where('nom','==',nom).where('modpas','==',pass).get();
+    if(s.empty){msg.innerText="Non oswa modpas pa kòrèk";return;}
+    currentVendeur={id:s.docs[0].id,...s.docs[0].data()};
+    document.getElementById('loginDiv').style.display='none';
+    document.getElementById('appDiv').style.display='flex';
+    document.getElementById('headerSub').innerText="Vandè: "+nom+" ✅";
+    document.getElementById('vName2').innerText=nom;
+    loadLimites(); loadTickets(); loadRapport(); loadTiraj();
+  }catch(e){msg.innerText="Erè: "+e.message}
+}
+
+function addBoule(){
+  const v=document.getElementById('bouleInput').value.trim();
+  if(!v)return;
+  const g=document.getElementById('bouleGrid');
+  const d=document.createElement('div'); d.className='boule sel'; d.innerText=v;
+  d.onclick=()=>d.remove(); g.appendChild(d);
+  document.getElementById('bouleInput').value="";
+}
+
+function addToTicket(){
+  const grid=document.getElementById('bouleGrid').children;
+  const montan=parseFloat(document.getElementById('montan').value);
+  if(grid.length==0||!montan){alert("Chwazi boul + montan");return;}
+  for(let el of grid){
+    const boul=el.innerText;
+    if(limites[boul] && (limites[boul].total||0) + montan > limites[boul].limit){
+      alert("Boul "+boul+" depase limit "+limites[boul].limit); continue;
     }
-  } catch(e){
-    msg.innerText="Erè Firestore: "+e.message;
-    console.log(e);
+    ticket.push({boul, type:typeVente, montan});
+    total+=montan;
   }
+  document.getElementById('bouleGrid').innerHTML=""; document.getElementById('montan').value="";
+  renderTicket();
 }
-function logout(){
-  document.getElementById('dashboard').style.display='none';
-  document.getElementById('loginDiv').style.display='block';
-  document.getElementById('nom').value=""; 
-  document.getElementById('pass').value="";
-  document.getElementById('msg').innerText="";
+
+function renderTicket(){
+  let h=""; ticket.forEach((t,i)=>{h+=`<div class="list-item"><span>${t.type} - ${t.boul}</span><span>$${t.montan} <b onclick="removeItem(${i})" style="color:red;cursor:pointer"> X</b></span></div>`});
+  document.getElementById('ticketPreview').innerHTML=h;
+  document.getElementById('totalDiv').innerText="Total: $"+total;
 }
+
+function removeItem(i){ total-=ticket[i].montan; ticket.splice(i,1); renderTicket(); }
+function clearTicket(){ ticket=[]; total=0; document.getElementById('bouleGrid').innerHTML=""; renderTicket(); }
+
+async function valideTicket(){
+  if(ticket.length==0){alert("Tikè vid");return;}
+  const data={vendeur:currentVendeur.nom, vendeurId:currentVendeur.id, ticket:[...ticket], total, date:new Date(), dateStr:new Date().toISOString().slice(0,10), heure:new Date().toLocaleTimeString()};
+  try{
+    await db.collection('ventes').add(data);
+    alert("Tikè valide! $"+total); clearTicket(); loadTickets(); loadRapport();
+  }catch(e){alert("Erè: "+e.message)}
+}
+
+async function loadTickets(){
+  if(!currentVendeur)return;
+  const today=new Date().toISOString().slice(0,10);
+  const snap=await db.collection('ventes').where('vendeurId','==',currentVendeur.id).where('dateStr','==',today).orderBy('date','desc').get();
+  let h=""; snap.forEach(doc=>{const d=doc.data(); h+=`<div class="ticket"><div class="small">${d.heure} - $${d.total}</div>${d.ticket.map(t=>t.boul+"("+t.type+":$"+t.montan+")").join(", ")}</div>`});
+  document.getElementById('listTickets').innerHTML=h||"<p class='small'>Pa gen tikè jodi a</p>";
+}
+
+async function loadRapport(){
+  if(!currentVendeur)return;
+  const today=new Date().toISOString().slice(0,10);
+  const snap=await db.collection('ventes').where('vendeurId','==',currentVendeur.id).where('dateStr','==',today).get();
+  let sum=0; snap.forEach(d=>sum+=d.data().total||0);
+  document.getElementById('rCount').innerText=snap.size;
+  document.getElementById('rVant').innerText="$"+sum;
+  document.getElementById('rCom').innerText="$"+(sum*0.1).toFixed(2);
+  document.getElementById('rNet').innerText="$"+(sum*0.9).toFixed(2);
+  document.getElementById('rDate').innerText=today;
+}
+
+async function loadTiraj(){
+  try{
+    const s=await db.collection('parametres').doc('tirage').get();
+    document.getElementById('tirajDiv').innerHTML=s.exists?JSON.stringify(s.data(),null,2).replace(/\n/g,"<br>"):"Pa gen tiraj ankò";
+    const l=await db.collection('parametres').doc('limites').get();
+    if(l.exists){limites=l.data(); document.getElementById('limInfo').innerText=Object.keys(limites).length+" boul limite"}
+  }catch(e){document.getElementById('tirajDiv').innerText="Chaje..."}
+}
+async function loadLimites(){
+  try{const l=await db.collection('parametres').doc('limites').get(); if(l.exists)limites=l.data();}catch(e){}
+}
+function logout(){ location.reload(); }
 </script>
 </body>
 </html>
