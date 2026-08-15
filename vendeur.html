@@ -177,13 +177,6 @@ function copyFicheToVendre(fid){
   });
 }
 function reprintFiche(fid){ db.ref('fiches/'+fid).once('value',s=>{ const f=s.val(); if(!f) return; const corps=(f.details||[]).map(d=>`<div style="display:flex;justify-content:space-between;font-size:18px"><span>${d.type.toUpperCase()} ${d.boul}</span><span>${d.montan}$</span></div>`).join(''); lastHtml=`<div style="font-size:22px;text-align:center;font-weight:900">${config.entete||'C&D'}</div><div style="text-align:center;font-size:12px">${f.dateStr}<br>${f.vendeur}</div><div style="border-top:2px dashed #000;margin:5px 0"></div><div style="text-align:center">Tirage: <b>${(f.tirajs||[]).join('/')}</b><br>Id: <b>${f.id.slice(-5).toUpperCase()}</b></div><div style="border-top:2px dashed #000;margin:5px 0"></div>${corps}<div style="border-top:2px dashed #000;margin:5px 0"></div><div style="display:flex;justify-content:space-between;font-size:18px"><span>TOTAL</span><span>${f.total}$</span></div>`; doPrint(); }); }
-function genererRapport(){
- var R = calkilGenParTiraj();
- var html = "";
- for(var tir in R.vPar){
-   html+= `<div><b>${tir}</b> Vente:${R.vPar[tir]} Peye:${R.pPar[tir]||0} Gain:${R.gPar[tir]}</div>`;
- }
- document.getElementById('rapportDetail').innerHTML = html + `<hr>TOTAL Gain:${R.gainTot}`;
-}
+
 function doPrintRapport(){ if(!lastRapportHtml) return; const c=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;display:flex;justify-content:center}.ticket{width:52mm;text-align:center;font-family:monospace;font-weight:900}</style></head><body><div class="ticket">${lastRapportHtml}</div><script>setTimeout(()=>{window.print(); setTimeout(()=>window.close(),700)},300);<\/script></body></html>`; const w=window.open('','_blank','width=360,height=600'); w.document.open(); w.document.write(c); w.document.close(); }
 </script></body></html>
