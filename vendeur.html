@@ -110,6 +110,14 @@ const dateFichHaiti = new Date().toLocaleDateString('fr-HT', {
   timeZone: 'America/Port-au-Prince',
   day: '2-digit', month: '2-digit', year: 'numeric'
 }); // 15/08/2026
+const list=allVentes.filter(v=>v.dateStr===today);
+ const el=document.getElementById('fichesList');
+ if(!list.length){ el.innerHTML="<p style='text-align:center;padding:20px;font-weight:900'>Pa gen fich jodi a<br>0 fich - $0<br><br>Mete tiraj + boul chif sèlman + miz + flèche ⬇️ pou liy swivan</p>"; return; }
+ let totalJour=0; list.forEach(v=> totalJour+=Number(v.total)||0);
+ let parTiraj={}; list.forEach(v=>{ const parT=(Number(v.total)||0)/((v.tirages||[]).length||1); (v.tirages||[]).forEach(t=>{ parTiraj[t]=(parTiraj[t]||0)+parT; }); });
+ el.innerHTML=`<div style="background:#000;color:#00ff88;padding:12px;border-radius:12px;text-align:center;font-weight:900;margin-bottom:10px">MES FICHES ${today}<br>${list.length} FICH - TOTAL $${totalJour}<br>${Object.entries(parTiraj).map(([t,m])=>`${t}: $${m.toFixed(2)}`).join(' | ')}<br><small style="color:#fff">500/2=250 chak tiraj OK</small></div>`+
+ list.map(v=>`<div class="list"><b>🎫 ${v.idTicket||v.docId.slice(-6).toUpperCase()} - $${v.total} / ${v.tirages.length} = $${(v.total/(v.tirages.length||1)).toFixed(2)} chak</b><br><small>${(v.tirages||[]).join(' + ')}</small><br>${(v.lignes||[]).map(l=>`${l.jeux} ${l.boul} $${l.miz}`).join(' | ')}<br><button class="btn" style="padding:8px;margin-top:6px;background:#000" onclick="printTicketOnly(buildFicheTxt({vendeur:v.vendeur,tirages:v.tirages,lignes:v.lignes,total:v.total,idTicket:v.idTicket,docId:v.docId}))">🖨️ Re-Imprimer GWO LÈT SANTRE</button></div>`).join('');
+}
  const list=allVentes.filter(v=>v.dateStr===today);
  const el=document.getElementById('fichesList');
  if(!list.length){ el.innerHTML="<p style='text-align:center;padding:20px;font-weight:900'>Pa gen fich jodi a<br>0 fich - $0<br><br>Mete tiraj + boul chif sèlman + miz + flèche ⬇️ pou liy swivan</p>"; return; }
