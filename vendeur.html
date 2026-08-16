@@ -99,7 +99,14 @@ function renderCopy(list){document.getElementById('copyList').innerHTML=list.sli
 function copyTicket(id){const v=allVentes.find(x=>x.docId===id);tiragesSel=new Set(v.tirages);document.querySelectorAll('.tir').forEach(t=>t.classList.toggle('sel',tiragesSel.has(t.innerText.trim())));lignesData=[];document.getElementById('lignes').innerHTML="";v.lignes.forEach(l=>addLigne(l.jeux,false,l.boul,l.miz));calcTotal();openTab(0);setTimeout(()=>addLigne(lastJeux),200);}
 async function loadFiches(){
  await fetchAll();
- const today=new Date().toISOString().slice(0,10);
+ const nowHaiti = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Port-au-Prince' }); // 2026-08-15
+document.getElementById('dateDebut').value = nowHaiti;
+document.getElementById('dateFin').value = nowHaiti;
+
+const dateFichHaiti = new Date().toLocaleDateString('fr-HT', {
+  timeZone: 'America/Port-au-Prince',
+  day: '2-digit', month: '2-digit', year: 'numeric'
+}); // 15/08/2026
  const list=allVentes.filter(v=>v.dateStr===today);
  const el=document.getElementById('fichesList');
  if(!list.length){ el.innerHTML="<p style='text-align:center;padding:20px;font-weight:900'>Pa gen fich jodi a<br>0 fich - $0<br><br>Mete tiraj + boul chif sèlman + miz + flèche ⬇️ pou liy swivan</p>"; return; }
