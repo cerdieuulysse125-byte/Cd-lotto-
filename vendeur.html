@@ -98,14 +98,10 @@ function filtrerCopy(){const q=document.getElementById('searchTicket').value.toL
 function renderCopy(list){document.getElementById('copyList').innerHTML=list.slice(0,100).map(v=>`<div class="list"><b>🎫 ${v.idTicket||v.docId.slice(-6).toUpperCase()} - $${v.total} (${v.tirages.length} tiraj => $${(v.total/v.tirages.length).toFixed(2)}/chak)</b><br>${(v.tirages||[]).join(' + ')}<br>${(v.lignes||[]).map(l=>l.jeux+' '+l.boul+' $'+l.miz).join(' | ')}<br><button class="btn" style="padding:8px;background:#00a000" onclick="copyTicket('${v.docId}')">📋 KOPYE FLÈCH</button></div>`).join('');}
 function copyTicket(id){const v=allVentes.find(x=>x.docId===id);tiragesSel=new Set(v.tirages);document.querySelectorAll('.tir').forEach(t=>t.classList.toggle('sel',tiragesSel.has(t.innerText.trim())));lignesData=[];document.getElementById('lignes').innerHTML="";v.lignes.forEach(l=>addLigne(l.jeux,false,l.boul,l.miz));calcTotal();openTab(0);setTimeout(()=>addLigne(lastJeux),200);}
 async function loadFiches(){
- await fetchAll();
- // ANCIEN BOG: new Date().toISOString().split('T')[0]
-// NOUVO KORÈK - LÈ AYITI:
+ await fetchAll()
 const nowHaiti = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Port-au-Prince' }); // 2026-08-15
 document.getElementById('dateDebut').value = nowHaiti;
 document.getElementById('dateFin').value = nowHaiti;
-
-// Pou fich la tou:
 const dateFichHaiti = new Date().toLocaleDateString('fr-HT', {
   timeZone: 'America/Port-au-Prince',
   day: '2-digit', month: '2-digit', year: 'numeric'
