@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D V6.10 RAPÒ SEPARE</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D V6.11 RAPÒ PRIVE</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fff;color:#000;font-family:Arial;min-height:100vh}
 #login{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center}
@@ -24,29 +24,31 @@
 .tiragesRap{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
 .tiragesRap div{background:#fff;border:2px solid #000;padding:10px 1px;text-align:center;font-weight:900;font-size:10px}
 .tiragesRap div.on{background:#000;color:#FFD700}
+.priveBox{background:#000;color:#FFD700;padding:8px;text-align:center;font-weight:900;border:2px solid #000;margin:6px 0}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head><body>
 <div id="login"><div class="loginBox">
-<div style="background:#FFD700;padding:8px;font-weight:900">C&D V6.10 - RAPÒ SEPARE</div>
+<div style="background:#FFD700;padding:8px;font-weight:900">C&D V6.11 - RAPÒ PRIVE</div>
 <input id="nomV" placeholder="Non vandè" autocomplete="off" value=""><input id="passV" type="password" placeholder="Modpas" autocomplete="off" onkeydown="if(event.key==='Enter')checkPass()" inputmode="numeric" value="">
 <button onclick="checkPass()">🔓 OUVRI</button><div id="passErr" style="color:red;font-weight:900;margin-top:6px"></div>
+<div style="font-size:9px;text-align:left;border-top:2px solid #000;margin-top:8px;padding-top:4px;font-weight:900">RAPÒ PRIVE - chak vandè wè pa li sèlman</div>
 </div></div>
-<div class="h">C&D V6.10 - RAPÒ CHAK VANDÈ SEPARE</div><div class="g" id="gDate"></div>
+<div class="h" id="hTitle">C&D V6.11 - RAPÒ PRIVE</div><div class="g" id="gDate"></div>
 <div class="tabs"><div class="tab active" onclick="op(1)">1.VANT</div><div class="tab" onclick="op(2)">2.KOPYE</div><div class="tab" onclick="op(3)">3.FICH</div><div class="tab" onclick="op(4)">4.RAPÒ</div></div>
 <div id="p1" class="page active"><div class="tirages" id="tirages"></div><div class="total" id="lineInfo">Chwazi tiraj</div><div id="limitInfo" class="limitWarn">...</div><div id="rows"></div><div class="total" id="tot">Total $0</div><div class="btnV" onclick="valide()">💾 VALIDE</div></div>
 <div id="p2" class="page"><div id="copyBox"></div><div class="btnV" onclick="kopyeLast()">📋 KOPYE DÈNYE</div></div>
 <div id="p3" class="page"><input type="date" id="dateFich" style="width:100%;padding:7px;border:2px solid #000"><div id="fichBox"></div></div>
 <div id="p4" class="page"><div style="border:3px solid #000;padding:10px">
-<div style="background:#FFD700;padding:6px;font-weight:900;text-align:center">RAPÒ - CHAK VANDÈ SEPARE + TIRAJ + % MODIFIABLE</div>
+<div class="priveBox" id="priveInfo">RAPÒ PRIVE - SÈLMAN PA OU</div>
 <div style="display:flex;gap:4px;margin:6px 0"><input type="date" id="dateDebut" style="flex:1;padding:6px;border:2px solid #000"><input type="date" id="dateAu" style="flex:1;padding:6px;border:2px solid #000"></div>
-<div style="background:#000;color:#FFD700;padding:5px;font-weight:900;text-align:center;font-size:11px">CHWAZI TIRAJ (vid = tout)</div>
+<div style="background:#000;color:#FFD700;padding:5px;font-weight:900;text-align:center;font-size:11px">CHWAZI TIRAJ (vid = tout tiraj pa ou)</div>
 <div class="tiragesRap" id="tiragesRap"></div>
-<div style="display:flex;gap:4px;align-items:center;background:#FFD700;border:3px solid #000;padding:8px;margin:6px 0"><label style="font-weight:900;flex:1">% Komisyon:</label><input id="pourcentRap" type="number" value="10" min="0" max="100" style="width:90px;padding:10px;border:3px solid #000;font-weight:900;text-align:center;background:#fff;font-size:18px" oninput="rapDetail()"><span style="font-weight:900;font-size:18px">%</span></div>
-<div class="btnV" style="background:#FFD700;color:#000" onclick="rapDetail()">📊 KALKILE RAPÒ SEPARE</div>
-<div id="rapParTiraj" style="margin:6px 0"></div>
-<div id="rapParVendeur" style="margin:8px 0"></div>
+<div style="display:flex;gap:4px;align-items:center;background:#FFD700;border:3px solid #000;padding:8px;margin:6px 0"><label style="font-weight:900;flex:1">% Komisyon:</label><input id="pourcentRap" type="number" value="10" min="0" max="100" style="width:90px;padding:10px;border:3px solid #000;font-weight:900;text-align:center;background:#fff;font-size:18px" oninput="rapDetail()" readonly><span style="font-weight:900;font-size:18px">%</span></div>
+<div class="btnV" style="background:#FFD700;color:#000" onclick="rapDetail()">📊 KALKILE RAPÒ M</div>
+<div id="rapParTiraj"></div>
 <hr><div id="rLines" style="font-size:14px"></div>
+<div style="font-size:9px;background:#000;color:#FFD700;padding:5px;text-align:center;margin-top:8px">RAPÒ PRIVE - Jules pa wè Jean, Jean pa wè Jules</div>
 </div></div>
 <script>
 const firebaseConfig = {
@@ -66,7 +68,7 @@ function haitiNow(){return new Date(new Date().toLocaleString('en-US',{timeZone:
 function haitiISO(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});}
 function haitiFR(){return new Date().toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince',day:'2-digit',month:'2-digit',year:'numeric'});}
 function haitiHeure(){return new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince',hour:'2-digit',minute:'2-digit',hour12:true});}
-let vendeurNom="",vendeurPass="",lastJeux='BOLET',tirajSel=new Set(),tirajRapSel=new Set(),fiches=JSON.parse(localStorage.getItem('cdV5')||'[]');
+let vendeurNom="",vendeurPass="",vendeurCom=10,lastJeux='BOLET',tirajSel=new Set(),tirajRapSel=new Set(),fiches=JSON.parse(localStorage.getItem('cdV5')||'[]');
 window.addEventListener('load',()=>{localStorage.removeItem('vd_nom');localStorage.removeItem('vd_pass');document.getElementById('nomV').value='';document.getElementById('passV').value='';});
 async function checkPass(){
   const n=document.getElementById('nomV').value.trim(),p=document.getElementById('passV').value.trim();
@@ -78,7 +80,7 @@ async function checkPass(){
     const vd=s.docs[0].data();
     if(vd.ouvert===false){document.getElementById('passErr').innerText="⛔ FÈMEN";return;}
     if(vd.nom.toLowerCase()!==n.toLowerCase()){document.getElementById('passErr').innerText=`⛔ Non: ${vd.nom}`;return;}
-    vendeurNom=vd.nom; vendeurPass=vd.code;
+    vendeurNom=vd.nom; vendeurPass=vd.code; vendeurCom=vd.com||vd.pourcent||10;
     document.getElementById('login').style.display='none'; init();
   }catch(e){document.getElementById('passErr').innerText="❌ Erè";}
 }
@@ -104,62 +106,57 @@ async function valide(){
   if(!baseParTiraj)return alert('Mete boul');
   let list=[];document.querySelectorAll('.row').forEach(r=>{const j=r.querySelector('select').value,b=r.querySelector('.boul').value.trim(),m=parseInt(r.querySelector('.miz').value)||0;if(b&&m)list.push({jeux:j,boul:b,miz:m,mizParTiraj:m});});
   const idTicket=Math.floor(100000+Math.random()*900000);
-  const fich={id:idTicket,ticketId:idTicket,date:haitiFR(),dateISO:haitiISO(),heure:haitiHeure(),tirages:Array.from(tirajSel),nbTiraj:tirajSel.size,list,base:baseParTiraj,parTiraj:baseParTiraj,total:totalFich,vendeur:vendeurNom,code:vendeurPass};
+  const fich={id:idTicket,ticketId:idTicket,date:haitiFR(),dateISO:haitiISO(),heure:haitiHeure(),tirages:Array.from(tirajSel),nbTiraj:tirajSel.size,list,base:baseParTiraj,parTiraj:baseParTiraj,total:totalFich,vendeur:vendeurNom,code:vendeurPass,com:vendeurCom};
   fiches.unshift(fich);localStorage.setItem('cdV5',JSON.stringify(fiches));try{await db.collection('ventes').add(fich);}catch(e){}
   let w=window.open('','','width=400,height=700');
-  w.document.write(`<html><head><title>Ticket ${idTicket}</title><style>@page{size:80mm auto;margin:0}body{width:76mm;margin:0 auto;padding:4mm;font-family:Arial Black,Arial;font-weight:900;text-align:center;background:#fff;color:#000}.titre{font-size:30px;text-align:center}.ligne{border-top:4px solid #000;margin:12px 0}.info{font-size:20px;text-align:center;line-height:1.6}.jeux{font-size:24px;text-align:center;margin:8px 0}.totalBox{border:4px solid #000;padding:12px;margin:14px 0;text-align:center}</style></head><body><div class="titre">C&D VÉRITÉ LOTTO</div><div class="ligne"></div><div class="info">Dat: ${fich.date} ${fich.heure}<br>Tiraj: ${fich.tirages.join('+')}<br>Id Ticket: ${fich.ticketId}<br>Vandè: ${fich.vendeur}</div><div class="ligne"></div>${fich.list.map(l=>`<div class="jeux">${l.jeux} ${l.boul} $${l.miz}</div>`).join('')}<div class="ligne"></div><div class="totalBox"><div>CHAK TIRAJ $${fich.parTiraj}</div><div style="font-size:32px">TOTAL $${fich.total}</div><div style="font-size:14px">(${fich.parTiraj} x ${fich.nbTiraj})</div></div><script>window.onload=function(){setTimeout(()=>{print();close()},500)}<\/script></body></html>`);
+  w.document.write(`<html><head><title>Ticket ${idTicket}</title><style>@page{size:80mm auto;margin:0}body{width:76mm;margin:0 auto;padding:4mm;font-family:Arial Black,Arial;font-weight:900;text-align:center;background:#fff;color:#000}.titre{font-size:30px}.ligne{border-top:4px solid #000;margin:12px 0}.info{font-size:20px;text-align:center;line-height:1.6}.jeux{font-size:24px;text-align:center;margin:8px 0}.totalBox{border:4px solid #000;padding:12px;margin:14px 0;text-align:center}</style></head><body><div class="titre">C&D VÉRITÉ LOTTO</div><div class="ligne"></div><div class="info">Dat: ${fich.date} ${fich.heure}<br>Tiraj: ${fich.tirages.join('+')}<br>Id Ticket: ${fich.ticketId}<br>Vandè: ${fich.vendeur}</div><div class="ligne"></div>${fich.list.map(l=>`<div class="jeux">${l.jeux} ${l.boul} $${l.miz}</div>`).join('')}<div class="ligne"></div><div class="totalBox"><div>CHAK TIRAJ $${fich.parTiraj}</div><div style="font-size:32px">TOTAL $${fich.total}</div><div style="font-size:14px">(${fich.parTiraj} x ${fich.nbTiraj})</div></div><script>window.onload=function(){setTimeout(()=>{print();close()},500)}<\/script></body></html>`);
   document.getElementById('rows').innerHTML='';addLigne(lastJeux);refreshF();calc();
 }
-function refreshF(){const iso=document.getElementById('dateFich').value;let h='';fiches.filter(f=>!iso||f.dateISO==iso).forEach(f=>{h+=`<div class="fich"><b>${f.date} ${f.heure} ${f.tirages.join('+')} x${f.nbTiraj} ID:${f.ticketId||f.id}</b> ${f.vendeur}<br>${f.list.map(l=>l.jeux+' '+l.boul+'($'+l.miz+')').join(' - ')}<br>Chak $${f.parTiraj} Total $${f.total}</div>`;});document.getElementById('fichBox').innerHTML=h||'Pa gen';document.getElementById('copyBox').innerHTML=h;}
+function refreshF(){const iso=document.getElementById('dateFich').value;let h='';fiches.filter(f=>!iso||f.dateISO==iso).filter(f=>f.vendeur===vendeurNom).forEach(f=>{h+=`<div class="fich"><b>${f.date} ${f.heure} ${f.tirages.join('+')} x${f.nbTiraj} ID:${f.ticketId||f.id}</b><br>${f.list.map(l=>l.jeux+' '+l.boul+'($'+l.miz+')').join(' - ')}<br>Chak $${f.parTiraj} Total $${f.total}</div>`;});document.getElementById('fichBox').innerHTML=h||'Pa gen';document.getElementById('copyBox').innerHTML=h;}
 function kopyeLast(){if(!fiches[0])return;document.getElementById('rows').innerHTML='';fiches[0].list.forEach(l=>addLigne(l.jeux,l.boul,l.miz,false));tirajSel=new Set(fiches[0].tirages);document.querySelectorAll('#tirages div').forEach(el=>{if(tirajSel.has(el.dataset.t))el.classList.add('on');});addLigne(lastJeux);op(1);calc();}
+
+// RAPÒ PRIVE - SÈLMAN VANDÈ KONEKTE A
 function rapDetail(){
   const d1=document.getElementById('dateDebut').value,d2=document.getElementById('dateAu').value;
-  const pct=parseInt(document.getElementById('pourcentRap').value)||10;
-  let parT={},parV={},tot=0;
-  fiches.forEach(f=>{
+  const pct=vendeurCom||parseInt(document.getElementById('pourcentRap').value)||10;
+  document.getElementById('pourcentRap').value=pct;
+  let parT={},tot=0,nbFich=0;
+  // FILTRE SE SÈLMAN VANDÈ SA - PRIVE
+  fiches.filter(f=>f.vendeur===vendeurNom).forEach(f=>{
     if(f.dateISO>=d1&&f.dateISO<=d2){
       const tirajFiltre = tirajRapSel.size===0? f.tirages : f.tirages.filter(t=>tirajRapSel.has(t));
       if(tirajFiltre.length===0 && tirajRapSel.size>0)return;
       const nbCalc = tirajRapSel.size===0? f.nbTiraj : tirajFiltre.length;
       const totalCalc = (f.parTiraj||f.base)*nbCalc;
-      // Par tiraj
       tirajFiltre.forEach(t=>{if(!parT[t])parT[t]={v:0,nb:0};parT[t].v+=f.parTiraj||f.base;parT[t].nb+=1;});
-      // Par vendeur SEPARE
-      if(!parV[f.vendeur])parV[f.vendeur]={total:0,parT:{}};
-      parV[f.vendeur].total+=totalCalc;
-      tirajFiltre.forEach(t=>{
-        if(!parV[f.vendeur].parT[t])parV[f.vendeur].parT[t]=0;
-        parV[f.vendeur].parT[t]+=f.parTiraj||f.base;
-      });
-      tot+=totalCalc;
+      tot+=totalCalc; nbFich+=1;
     }
   });
-  // Tab tiraj
-  let htmlT='<div style="background:#000;color:#FFD700;padding:4px;font-weight:900;text-align:center">PA TIRAJ</div><table style="width:100%;border-collapse:collapse"><tr><th style="background:#FFD700;border:1px solid #000;padding:4px">Tiraj</th><th style="background:#FFD700;border:1px solid #000">Vente</th><th style="background:#FFD700;border:1px solid #000">Fich</th></tr>';
+  let htmlT=`<div style="background:#000;color:#FFD700;padding:6px;font-weight:900;text-align:center">RAPÒ PRIVE - ${vendeurNom.toUpperCase()} - PA TIRAJ</div><table style="width:100%;border-collapse:collapse"><tr><th style="background:#FFD700;border:1px solid #000;padding:6px">Tiraj</th><th style="background:#FFD700;border:1px solid #000">Vente pa ou</th><th style="background:#FFD700;border:1px solid #000">Fich</th></tr>`;
   Object.keys(parT).forEach(t=>{htmlT+=`<tr><td style="border:1px solid #000;padding:6px">${t}</td><td style="border:1px solid #000;padding:6px;text-align:center"><b>$${parT[t].v}</b></td><td style="border:1px solid #000;padding:6px;text-align:center">${parT[t].nb}</td></tr>`;});
   htmlT+='</table>';
+  if(Object.keys(parT).length===0)htmlT=`<div style="text-align:center;padding:15px;border:2px solid #000">Pa gen vant pou ${vendeurNom} nan dat sa</div>`;
   document.getElementById('rapParTiraj').innerHTML=htmlT;
-
-  // Tab chak vandè separe
-  let htmlV='<div style="background:#FFD700;padding:6px;font-weight:900;text-align:center;margin-top:10px;border:2px solid #000">CHAK VANDÈ SEPAREMAN</div><table style="width:100%;border-collapse:collapse"><tr><th style="background:#000;color:#FFD700;border:1px solid #000;padding:6px">Vandè</th><th style="background:#000;color:#FFD700;border:1px solid #000">Total</th><th style="background:#000;color:#FFD700;border:1px solid #000">Com '+pct+'%</th><th style="background:#000;color:#FFD700;border:1px solid #000">A Payer</th></tr>';
-  Object.keys(parV).forEach(v=>{
-    const tv=parV[v].total;
-    const com=Math.round(tv*pct/100);
-    const pay=tv-com;
-    let detailTiraj = Object.keys(parV[v].parT).map(t=>`${t}: $${parV[v].parT[t]}`).join(' | ');
-    htmlV+=`<tr><td style="border:1px solid #000;padding:6px"><b>${v}</b><br><span style="font-size:8px">${detailTiraj}</span></td><td style="border:1px solid #000;padding:6px;text-align:center"><b>$${tv}</b></td><td style="border:1px solid #000;padding:6px;text-align:center">$${com}</td><td style="border:1px solid #000;padding:6px;text-align:center;background:#FFD700"><b>$${pay}</b></td></tr>`;
-  });
-  htmlV+='</table>';
-  document.getElementById('rapParVendeur').innerHTML=htmlV||'<div>Pa gen vant</div>';
 
   const comTot=Math.round(tot*pct/100);
   const tirajTxt = tirajRapSel.size===0? 'Tout tiraj' : Array.from(tirajRapSel).join('+');
   document.getElementById('rLines').innerHTML=`
-    <div style="background:#000;color:#FFD700;padding:4px;text-align:center;font-weight:900">${tirajTxt} | ${Object.keys(parV).length} vandè</div>
-    <div style="display:flex;justify-content:space-between;padding:8px;font-size:18px;border:2px solid #000"><span>TOTAL JENERAL</span><b>$${tot}</b></div>
-    <div style="display:flex;justify-content:space-between;padding:8px;background:#FFD700;border:2px solid #000;font-size:16px"><span>Com Total ${pct}%</span><b>$${comTot}</b></div>
-    <div style="display:flex;justify-content:space-between;padding:10px;border-top:4px solid #000;font-size:22px;background:#fff"><span>A PAYER TOTAL</span><b>$${tot-comTot}</b></div>
+    <div style="background:#FFD700;padding:6px;font-weight:900;text-align:center;border:2px solid #000">${vendeurNom.toUpperCase()} | ${tirajTxt} | ${nbFich} fich</div>
+    <div style="display:flex;justify-content:space-between;padding:8px;font-size:18px;border:2px solid #000;background:#fff"><span>TOTAL VANT OU</span><b>$${tot}</b></div>
+    <div style="display:flex;justify-content:space-between;padding:8px;background:#FFD700;border:2px solid #000;font-size:16px"><span>Komisyon ${pct}%</span><b>$${comTot}</b></div>
+    <div style="display:flex;justify-content:space-between;padding:12px;border-top:4px solid #000;font-size:22px;background:#000;color:#FFD700"><span>A PAYER</span><b>$${tot-comTot}</b></div>
   `;
 }
-async function init(){await loadConfig();const iso=haitiISO();document.getElementById('dateDebut').value=iso;document.getElementById('dateAu').value=iso;document.getElementById('dateFich').value=iso;document.getElementById('gDate').innerText=`${haitiFR()} ${haitiHeure()} | ${vendeurNom}`;initTirage();addLigne();refreshF();calc();setInterval(()=>{document.getElementById('gDate').innerText=`${haitiFR()} ${haitiHeure()} | ${vendeurNom}`;checkFermeture();},60000);document.getElementById('dateFich').addEventListener('change',refreshF);}
+async function init(){
+  await loadConfig();
+  const iso=haitiISO();
+  document.getElementById('dateDebut').value=iso;document.getElementById('dateAu').value=iso;document.getElementById('dateFich').value=iso;
+  document.getElementById('gDate').innerText=`${haitiFR()} ${haitiHeure()} | ${vendeurNom} | PRIVE | ${vendeurCom}%`;
+  document.getElementById('hTitle').innerText=`C&D V6.11 - RAPÒ PRIVE - ${vendeurNom.toUpperCase()}`;
+  document.getElementById('priveInfo').innerText=`🔒 RAPÒ PRIVE - ${vendeurNom.toUpperCase()} SÈLMAN - ${vendeurCom}%`;
+  document.getElementById('pourcentRap').value=vendeurCom;
+  initTirage();addLigne();refreshF();calc();
+  setInterval(()=>{document.getElementById('gDate').innerText=`${haitiFR()} ${haitiHeure()} | ${vendeurNom} | PRIVE`;checkFermeture();},60000);
+  document.getElementById('dateFich').addEventListener('change',refreshF);
+}
 </script></body></html>
