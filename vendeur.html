@@ -1,168 +1,75 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D V6.12 1 KAZ WON</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D V6.14 RAPÒ VENDEUR</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fff;color:#000;font-family:Arial;min-height:100vh}
 #login{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center}
-.loginBox{background:#fff;border:3px solid #000;padding:18px;width:92%;max-width:350px;text-align:center;border-radius:12px}
-.loginBox input{width:100%;padding:10px;margin:5px 0;border:2px solid #000;font-weight:900;text-align:center;font-size:15px;background:#fff;border-radius:20px}
+.loginBox{background:#fff;border:3px solid #000;padding:18px;width:92%;max-width:350px;text-align:center;border-radius:14px}
+.loginBox input{width:100%;padding:10px;margin:5px 0;border:2px solid #000;font-weight:900;text-align:center;border-radius:20px}
 .loginBox button{width:100%;padding:11px;background:#FFD700;color:#000;font-weight:900;border:2px solid #000;border-radius:20px}
 .h{background:#FFD700;color:#000;text-align:center;padding:8px;font-weight:900;border-bottom:3px solid #000;font-size:11px}
 .g{background:#000;color:#FFD700;text-align:center;padding:5px;font-weight:900;font-size:10px}
-.tabs{display:flex;background:#fff;border-bottom:2px solid #000;position:sticky;top:0;z-index:99}.tab{flex:1;padding:10px 1px;text-align:center;font-size:9px;font-weight:900;border:1px solid #000;background:#fff;color:#000}.tab.active{background:#FFD700;color:#000}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #000;position:sticky;top:0;z-index:99}.tab{flex:1;padding:10px 1px;text-align:center;font-size:9px;font-weight:900;border:1px solid #000;background:#fff}.tab.active{background:#FFD700}
 .page{display:none;padding:6px;background:#fff;min-height:80vh}.page.active{display:block}
-.tirages{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0}
-.tirages div{background:#fff;border:2px solid #00A000;color:#000;padding:10px 1px;text-align:center;font-weight:900;position:relative;border-radius:12px;font-size:10px}
-.tirages div.on{background:#FFD700;border-color:#000}.tirages div.on::after{content:"✓";position:absolute;top:0px;right:3px;color:#F00;font-size:14px;font-weight:900}
+.tirages{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0}.tirages div{background:#fff;border:2px solid #00A000;padding:10px 1px;text-align:center;font-weight:900;border-radius:12px;font-size:10px;position:relative}.tirages div.on{background:#FFD700;border-color:#000}.tirages div.on::after{content:"✓";position:absolute;top:0;right:3px;color:#F00}
 .tirages div.off{background:#F00;color:#fff;pointer-events:none}
-.row{display:flex;gap:4px;margin:5px 0;align-items:center}.row select{flex:.8;height:34px;border:2px solid #000;font-weight:900;background:#fff;border-radius:12px;font-size:11px;padding:2px}
-.row input.boul{flex:.55;max-width:100px;height:34px;border:2px solid #000;font-weight:900;text-align:center;font-size:14px;border-radius:12px}
-.row input.miz{flex:.3;max-width:65px;height:34px;border:2px solid #000;font-weight:900;text-align:center;background:#FFD700;font-size:14px;border-radius:12px}
+.row{display:flex;gap:4px;margin:5px 0;align-items:center}.row select{flex:.8;height:34px;border:2px solid #000;font-weight:900;border-radius:12px;font-size:11px}
+.row input.boul{flex:.55;max-width:100px;height:34px;border:2px solid #000;font-weight:900;text-align:center;border-radius:12px}
+.row input.miz{flex:.3;max-width:65px;height:34px;border:2px solid #000;font-weight:900;text-align:center;background:#FFD700;border-radius:12px}
 .btnX{width:28px;height:34px;background:#fff;color:#F00;border:2px solid #F00;font-weight:900;border-radius:12px}.btnF{width:28px;height:34px;background:#000;color:#FFD700;border:2px solid #000;font-weight:900;border-radius:12px}
 .total{background:#fff;border:2px solid #000;padding:6px;text-align:center;font-weight:900;margin:6px 0;border-radius:12px;font-size:12px}
 .btnV{background:#000;color:#FFD700;padding:10px;text-align:center;font-weight:900;border:2px solid #000;margin:6px 0;border-radius:20px;font-size:12px}
 .fich{background:#f9f9f9;border:1px solid #000;padding:6px;margin:4px 0;font-size:9px;border-radius:10px}
-.limitWarn{color:#F00;border:2px solid #F00;background:#fff;padding:4px;text-align:center;font-weight:900;font-size:9px;border-radius:10px}
-/* YON SÈL KAZ TIRAJ - WON */
-.kazSel{border:2px solid #000;border-radius:16px;padding:8px;margin:8px 0;background:#fff}
-.kazSel select{width:100%;padding:8px;border:2px solid #000;border-radius:20px;font-weight:900;text-align:center;font-size:12px;background:#FFD700}
-.priveBox{background:#000;color:#FFD700;padding:6px;text-align:center;font-weight:900;border:2px solid #000;margin:6px 0;border-radius:12px;font-size:11px}
+.kaz{border:2px solid #000;border-radius:14px;padding:8px;margin:8px 0;background:#fff}
+.kaz select,.kaz input{width:100%;padding:8px;border:2px solid #000;border-radius:20px;font-weight:900;text-align:center;font-size:12px;background:#fff}
+.ligneRap{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #000;font-weight:900;font-size:13px}.ligneRap.b{background:#FFD700}.ligneRap.g{background:#000;color:#FFD700}.ligneRap.gr{background:#00A000;color:#fff}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head><body>
-<div id="login"><div class="loginBox">
-<div style="background:#FFD700;padding:6px;font-weight:900;border-radius:10px">C&D V6.12 - 1 KAZ</div>
-<input id="nomV" placeholder="Non vandè" autocomplete="off" value=""><input id="passV" type="password" placeholder="Modpas" autocomplete="off" onkeydown="if(event.key==='Enter')checkPass()" inputmode="numeric" value="">
-<button onclick="checkPass()">🔓 OUVRI</button><div id="passErr" style="color:red;font-weight:900;margin-top:6px;font-size:11px"></div>
-</div></div>
-<div class="h" id="hTitle">C&D V6.12 - 1 KAZ WON</div><div class="g" id="gDate"></div>
-<div class="tabs"><div class="tab active" onclick="op(1)">1.VANT</div><div class="tab" onclick="op(2)">2.KOPYE</div><div class="tab" onclick="op(3)">3.FICH</div><div class="tab" onclick="op(4)">4.RAPÒ</div></div>
-<div id="p1" class="page active"><div class="tirages" id="tirages"></div><div class="total" id="lineInfo">Chwazi tiraj</div><div id="limitInfo" class="limitWarn">...</div><div id="rows"></div><div class="total" id="tot">Total $0</div><div class="btnV" onclick="valide()">💾 VALIDE</div></div>
+<div id="login"><div class="loginBox"><div style="background:#FFD700;padding:6px;font-weight:900;border-radius:10px">C&D V6.14 VENDEUR</div><input id="nomV" placeholder="Non vandè" value=""><input id="passV" type="password" placeholder="Modpas" onkeydown="if(event.key==='Enter')checkPass()" value=""><button onclick="checkPass()">🔓 OUVRI</button><div id="passErr" style="color:red;font-weight:900;margin-top:6px"></div></div></div>
+<div class="h" id="hTitle">C&D V6.14 VENDEUR</div><div class="g" id="gDate"></div>
+<div class="tabs"><div class="tab active" onclick="op(1)">1.VANT</div><div class="tab" onclick="op(2)">2.KOPYE</div><div class="tab" onclick="op(3)">3.FICH</div><div class="tab active" onclick="op(4)">4.RAPÒ</div></div>
+<div id="p1" class="page active"><div class="tirages" id="tirages"></div><div class="total" id="lineInfo">Chwazi tiraj</div><div id="rows"></div><div class="total" id="tot">Total $0</div><div class="btnV" onclick="valide()">💾 VALIDE</div></div>
 <div id="p2" class="page"><div id="copyBox"></div><div class="btnV" onclick="kopyeLast()">📋 KOPYE DÈNYE</div></div>
 <div id="p3" class="page"><input type="date" id="dateFich" style="width:100%;padding:6px;border:2px solid #000;border-radius:12px"><div id="fichBox"></div></div>
-<div id="p4" class="page"><div style="border:3px solid #000;padding:8px;border-radius:14px">
-<div class="priveBox" id="priveInfo">🔒 RAPÒ PRIVE - JEAN SÈLMAN - 10%</div>
-<div style="display:flex;gap:4px;margin:6px 0"><input type="date" id="dateDebut" style="flex:1;padding:6px;border:2px solid #000;border-radius:12px;font-size:11px"><input type="date" id="dateAu" style="flex:1;padding:6px;border:2px solid #000;border-radius:12px;font-size:11px"></div>
+<div id="p4" class="page active"><div style="border:3px solid #000;border-radius:14px;padding:8px">
+<div style="background:#000;color:#FFD700;padding:8px;font-weight:900;text-align:center;border-radius:10px" id="titRap">RAPPORT VENDEUR</div>
 
-<!-- YON SÈL KAZ TIRAJ - WON PITI -->
-<div class="kazSel">
-<div style="font-weight:900;text-align:center;font-size:10px;margin-bottom:4px">CHWAZI TIRAJ (yon sèl kaz)</div>
-<select id="selTirajRap" onchange="rapDetail()">
-<option value="tous">TOUT TIRAJ PA OU</option>
-<option value="GA MIDI">GA MIDI</option>
-<option value="FL MIDI">FL MIDI</option>
-<option value="NY MIDI">NY MIDI</option>
-<option value="GA SOIR">GA SOIR</option>
-<option value="FL SOIR">FL SOIR</option>
-<option value="NY SOIR">NY SOIR</option>
-</select>
+<div class="kaz"><div style="font-size:10px;font-weight:900;text-align:center">Du... Au...</div><div style="display:flex;gap:4px;margin-top:4px"><input type="date" id="dateDebut" style="flex:1;padding:6px;border:2px solid #000;border-radius:12px;font-size:11px"><input type="date" id="dateAu" style="flex:1;padding:6px;border:2px solid #000;border-radius:12px;font-size:11px"></div></div>
+
+<div class="kaz"><div style="font-size:10px;font-weight:900;text-align:center">Tirage (..., tous)</div><select id="selTirajRap" onchange="calcRap()" style="background:#FFD700"><option value="tous">TOUS TIRAGES</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div>
+
+<div class="kaz" id="resRap" style="background:#f9f9f9">
+<div class="ligneRap"><span>Vente</span><b id="vVente">$0</b></div>
+<div class="ligneRap b"><span>Commission (10%)</span><b id="vCom">$0</b></div>
+<div class="ligneRap gr"><span>A payer (Gain kliyan)</span><b id="vApayer">$0</b></div>
+<div class="ligneRap g"><span>Balance net (Rete pou bòs)</span><b id="vBalance">$0</b></div>
 </div>
 
-<div style="display:flex;gap:4px;align-items:center;background:#FFD700;border:2px solid #000;padding:6px;margin:6px 0;border-radius:14px"><label style="font-weight:900;flex:1;font-size:11px">% Komisyon:</label><input id="pourcentRap" type="number" value="10" min="0" max="100" style="width:70px;padding:6px;border:2px solid #000;font-weight:900;text-align:center;background:#fff;font-size:14px;border-radius:12px" readonly><span style="font-weight:900">%</span></div>
-<div class="btnV" style="background:#FFD700;color:#000" onclick="rapDetail()">📊 KALKILE RAPÒ M</div>
-<div id="rapParTiraj"></div>
-<hr><div id="rLines" style="font-size:12px"></div>
+<div class="btnV" style="background:#FFD700;color:#000" onclick="calcRap()">📊 KALKILE</div>
+<div class="btnV" style="background:#000;color:#fff" onclick="imprimerVendeur()">🖨️ IMPRIMER RAPÒ</div>
+<div id="detTir" style="font-size:10px;margin-top:6px"></div>
+<div id="detGain" style="font-size:9px;margin-top:6px"></div>
 </div></div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
-  authDomain: "cd-lotto.firebaseapp.com",
-  databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",
-  projectId: "cd-lotto",
-  storageBucket: "cd-lotto.firebasestorage.app",
-  messagingSenderId: "671091732195",
-  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6",
-  measurementId: "G-TWK9N38BS0"
-};
+const firebaseConfig = {apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain: "cd-lotto.firebaseapp.com",databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",projectId: "cd-lotto",storageBucket: "cd-lotto.firebasestorage.app",messagingSenderId: "671091732195",appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6",measurementId: "G-TWK9N38BS0"};
 firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
-let LIMITS_GLOBAL={BOLET:1500,MARYAJ:100,LOTO3:100,LOTO4:20,LOTO5:5};
 let HEURES={GA_MIDI:"12:15",FL_MIDI:"13:15",NY_MIDI:"14:15",GA_SOIR:"18:15",FL_SOIR:"21:15",NY_SOIR:"22:15"};
+let PRIX={B1:50,B2:20,B3:10,MARYAJ:1000,L3:500,L4:5000,L5:25000},RESULTATS=[],vendeurNom="",vendeurPass="",vendeurCom=10,lastJeux='BOLET',tirajSel=new Set(),fiches=JSON.parse(localStorage.getItem('cdV5')||'[]');
+function haitiISO(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});}function haitiFR(){return new Date().toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince',day:'2-digit',month:'2-digit',year:'numeric'});}function haitiHeure(){return new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince',hour:'2-digit',minute:'2-digit',hour12:true});}
 function haitiNow(){return new Date(new Date().toLocaleString('en-US',{timeZone:'America/Port-au-Prince'}));}
-function haitiISO(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});}
-function haitiFR(){return new Date().toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince',day:'2-digit',month:'2-digit',year:'numeric'});}
-function haitiHeure(){return new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince',hour:'2-digit',minute:'2-digit',hour12:true});}
-let vendeurNom="",vendeurPass="",vendeurCom=10,lastJeux='BOLET',tirajSel=new Set(),fiches=JSON.parse(localStorage.getItem('cdV5')||'[]');
-window.addEventListener('load',()=>{localStorage.removeItem('vd_nom');localStorage.removeItem('vd_pass');document.getElementById('nomV').value='';document.getElementById('passV').value='';});
-async function checkPass(){
-  const n=document.getElementById('nomV').value.trim(),p=document.getElementById('passV').value.trim();
-  if(!n||!p){document.getElementById('passErr').innerText="⛔ VID";return;}
-  document.getElementById('passErr').innerText="⏳...";
-  try{
-    const s=await db.collection('vendeurs').where('code','==',p).get();
-    if(s.empty){document.getElementById('passErr').innerText="⛔ Modpas pa egziste";return;}
-    const vd=s.docs[0].data();
-    if(vd.ouvert===false){document.getElementById('passErr').innerText="⛔ FÈMEN";return;}
-    if(vd.nom.toLowerCase()!==n.toLowerCase()){document.getElementById('passErr').innerText=`⛔ Non: ${vd.nom}`;return;}
-    vendeurNom=vd.nom; vendeurPass=vd.code; vendeurCom=vd.com||vd.pourcent||10;
-    document.getElementById('login').style.display='none'; init();
-  }catch(e){document.getElementById('passErr').innerText="❌ Erè";}
-}
+async function checkPass(){const n=document.getElementById('nomV').value.trim(),p=document.getElementById('passV').value.trim();if(!n||!p){document.getElementById('passErr').innerText="⛔ VID";return;}document.getElementById('passErr').innerText="⏳...";try{const s=await db.collection('vendeurs').where('code','==',p).get();if(s.empty){document.getElementById('passErr').innerText="⛔ Modpas";return;}const vd=s.docs[0].data();if(vd.ouvert===false){document.getElementById('passErr').innerText="⛔ FÈMEN";return;}if(vd.nom.toLowerCase()!==n.toLowerCase()){document.getElementById('passErr').innerText=`⛔ Non: ${vd.nom}`;return;}vendeurNom=vd.nom;vendeurPass=vd.code;vendeurCom=vd.com||10;document.getElementById('login').style.display='none';init();}catch(e){document.getElementById('passErr').innerText="❌ Erè";}}
 function op(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i+1==n));document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i+1==n));}
-async function loadConfig(){try{const d=await db.collection('config').doc('main').get();if(d.exists){const c=d.data();if(c.LIMITS)LIMITS_GLOBAL=c.LIMITS;if(c.HEURES)HEURES=c.HEURES;}}catch(e){}document.getElementById('limitInfo').innerText=`LIMIT: B $${LIMITS_GLOBAL.BOLET} | M $${LIMITS_GLOBAL.MARYAJ}`;}
-function checkFermeture(){const now=haitiNow();const hm=now.getHours()*60+now.getMinutes();const parse=t=>{const [h,m]=t.split(':').map(Number);return h*60+m};const f={"GA MIDI":parse(HEURES.GA_MIDI),"FL MIDI":parse(HEURES.FL_MIDI),"NY MIDI":parse(HEURES.NY_MIDI),"GA SOIR":parse(HEURES.GA_SOIR),"FL SOIR":parse(HEURES.FL_SOIR),"NY SOIR":parse(HEURES.NY_SOIR)};document.querySelectorAll('#tirages div').forEach(el=>{const t=el.dataset.t;if(f[t]&&hm>=f[t])el.classList.add('off');else el.classList.remove('off');});}
-function initTirage(){
-  document.getElementById('tirages').innerHTML=['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].map(t=>`<div data-t="${t}">${t}</div>`).join('');
-  document.querySelectorAll('#tirages div').forEach(el=>el.onclick=()=>toggleT(el.dataset.t,el));
-  checkFermeture();
-}
-function toggleT(t,el){if(tirajSel.has(t)){tirajSel.delete(t);el.classList.remove('on');}else{tirajSel.add(t);el.classList.add('on');}calc();}
-function addLigne(jeu=lastJeux,b='',m='',focus=true){lastJeux=jeu;const id=Date.now()+Math.random().toString(36).substr(2,4);const d=document.createElement('div');d.className='row';d.id='l_'+id;d.innerHTML=`<select id="s_${id}" onchange="lastJeux=this.value"><option ${jeu=='BOLET'?'selected':''}>BOLET</option><option ${jeu=='MARYAJ'?'selected':''}>MARYAJ</option><option ${jeu=='LOTO3'?'selected':''}>LOTO3</option><option ${jeu=='LOTO4'?'selected':''}>LOTO4</option><option ${jeu=='LOTO5'?'selected':''}>LOTO5</option></select><input class="boul" id="b_${id}" type="text" inputmode="numeric" value="${b}" placeholder="Boul" oninput="this.value=this.value.replace(/[^0-9]/g,'');calc()" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('m_'+id).focus()}"><input class="miz" id="m_${id}" type="text" inputmode="numeric" value="${m}" placeholder="$" oninput="this.value=this.value.replace(/[^0-9]/g,'');calc()" onkeydown="if(event.key==='Enter'){event.preventDefault();nextL('${id}')}"><button class="btnX" onclick="delL('${id}')">X</button><button class="btnF" onclick="nextL('${id}')">↓</button>`;document.getElementById('rows').appendChild(d);if(focus)setTimeout(()=>document.getElementById('b_'+id)?.focus(),80);calc();}
-function nextL(id){const j=document.getElementById('s_'+id)?.value||lastJeux;lastJeux=j;addLigne(j,'','',true);}
-function delL(id){document.getElementById('l_'+id)?.remove();calc();if(!document.querySelectorAll('.row').length)addLigne(lastJeux);}
-function calc(){let baseParTiraj=0;document.querySelectorAll('.row').forEach(r=>{baseParTiraj+=parseInt(r.querySelector('.miz')?.value)||0;});const nb=tirajSel.size||1;const totalFich=baseParTiraj*nb;document.getElementById('lineInfo').innerText=tirajSel.size?Array.from(tirajSel).join(' + ')+` (${tirajSel.size})`:'Chwazi tiraj';document.getElementById('tot').innerText=`Total Fich $${totalFich} | Chak tiraj $${baseParTiraj}`;document.getElementById('tot').dataset.base=baseParTiraj;document.getElementById('tot').dataset.total=totalFich;}
-async function valide(){
-  if(!tirajSel.size)return alert('Cocher tiraj');
-  try{const s=await db.collection('vendeurs').where('code','==',vendeurPass).get();if(!s.empty){if(s.docs[0].data().ouvert===false){alert('⛔ OU FÈMEN');location.reload();return;}}}catch(e){}
-  const baseParTiraj=parseInt(document.getElementById('tot').dataset.base||0);const totalFich=parseInt(document.getElementById('tot').dataset.total||0);
-  if(!baseParTiraj)return alert('Mete boul');
-  let list=[];document.querySelectorAll('.row').forEach(r=>{const j=r.querySelector('select').value,b=r.querySelector('.boul').value.trim(),m=parseInt(r.querySelector('.miz').value)||0;if(b&&m)list.push({jeux:j,boul:b,miz:m});});
-  const idTicket=Math.floor(100000+Math.random()*900000);
-  const fich={id:idTicket,ticketId:idTicket,date:haitiFR(),dateISO:haitiISO(),heure:haitiHeure(),tirages:Array.from(tirajSel),nbTiraj:tirajSel.size,list,base:baseParTiraj,parTiraj:baseParTiraj,total:totalFich,vendeur:vendeurNom,code:vendeurPass,com:vendeurCom};
-  fiches.unshift(fich);localStorage.setItem('cdV5',JSON.stringify(fiches));try{await db.collection('ventes').add(fich);}catch(e){}
-  let w=window.open('','','width=400,height=700');
-  w.document.write(`<html><head><title>Ticket ${idTicket}</title><style>@page{size:80mm auto;margin:0}body{width:76mm;margin:0 auto;padding:4mm;font-family:Arial Black,Arial;font-weight:900;text-align:center;background:#fff;color:#000}.titre{font-size:30px}.ligne{border-top:4px solid #000;margin:12px 0}.info{font-size:20px;text-align:center;line-height:1.6}.jeux{font-size:24px;text-align:center;margin:8px 0}.totalBox{border:4px solid #000;padding:12px;margin:14px 0;text-align:center}</style></head><body><div class="titre">C&D VÉRITÉ LOTTO</div><div class="ligne"></div><div class="info">Dat: ${fich.date} ${fich.heure}<br>Tiraj: ${fich.tirages.join('+')}<br>Id Ticket: ${fich.ticketId}<br>Vandè: ${fich.vendeur}</div><div class="ligne"></div>${fich.list.map(l=>`<div class="jeux">${l.jeux} ${l.boul} $${l.miz}</div>`).join('')}<div class="ligne"></div><div class="totalBox"><div>CHAK TIRAJ $${fich.parTiraj}</div><div style="font-size:32px">TOTAL $${fich.total}</div><div style="font-size:14px">(${fich.parTiraj} x ${fich.nbTiraj})</div></div><script>window.onload=function(){setTimeout(()=>{print();close()},500)}<\/script></body></html>`);
-  document.getElementById('rows').innerHTML='';addLigne(lastJeux);refreshF();calc();
-}
-function refreshF(){const iso=document.getElementById('dateFich').value;let h='';fiches.filter(f=>!iso||f.dateISO==iso).filter(f=>f.vendeur===vendeurNom).forEach(f=>{h+=`<div class="fich"><b>${f.date} ${f.heure} ${f.tirages.join('+')} x${f.nbTiraj} ID:${f.ticketId||f.id}</b><br>${f.list.map(l=>l.jeux+' '+l.boul+'($'+l.miz+')').join(' - ')}<br>Chak $${f.parTiraj} Total $${f.total}</div>`;});document.getElementById('fichBox').innerHTML=h||'Pa gen';document.getElementById('copyBox').innerHTML=h;}
-function kopyeLast(){if(!fiches[0])return;document.getElementById('rows').innerHTML='';fiches[0].list.forEach(l=>addLigne(l.jeux,l.boul,l.miz,false));tirajSel=new Set(fiches[0].tirages);document.querySelectorAll('#tirages div').forEach(el=>{if(tirajSel.has(el.dataset.t))el.classList.add('on');});addLigne(lastJeux);op(1);calc();}
-function rapDetail(){
-  const d1=document.getElementById('dateDebut').value,d2=document.getElementById('dateAu').value;
-  const selT=document.getElementById('selTirajRap').value;
-  const pct=vendeurCom||10;
-  document.getElementById('pourcentRap').value=pct;
-  let parT={},tot=0,nbFich=0;
-  fiches.filter(f=>f.vendeur===vendeurNom).forEach(f=>{
-    if(f.dateISO>=d1&&f.dateISO<=d2){
-      const tirajFiltre = selT==='tous'? f.tirages : f.tirages.filter(t=>t===selT);
-      if(tirajFiltre.length===0)return;
-      const nbCalc = selT==='tous'? f.nbTiraj : tirajFiltre.length;
-      const totalCalc = (f.parTiraj||f.base)*nbCalc;
-      tirajFiltre.forEach(t=>{if(!parT[t])parT[t]={v:0,nb:0};parT[t].v+=f.parTiraj||f.base;parT[t].nb+=1;});
-      tot+=totalCalc; nbFich+=1;
-    }
-  });
-  let htmlT=`<div style="background:#000;color:#FFD700;padding:5px;font-weight:900;text-align:center;border-radius:10px;font-size:11px">RAPÒ PRIVE - ${vendeurNom.toUpperCase()} - PA TIRAJ</div><table style="width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden"><tr><th style="background:#FFD700;border:1px solid #000;padding:5px;font-size:11px">Tiraj</th><th style="background:#FFD700;border:1px solid #000;font-size:11px">Vente pa ou</th><th style="background:#FFD700;border:1px solid #000;font-size:11px">Fich</th></tr>`;
-  Object.keys(parT).forEach(t=>{htmlT+=`<tr><td style="border:1px solid #000;padding:5px;font-size:11px">${t}</td><td style="border:1px solid #000;padding:5px;text-align:center;font-size:12px"><b>$${parT[t].v}</b></td><td style="border:1px solid #000;padding:5px;text-align:center;font-size:11px">${parT[t].nb}</td></tr>`;});
-  htmlT+='</table>';
-  if(Object.keys(parT).length===0)htmlT=`<div style="text-align:center;padding:12px;border:2px solid #000;border-radius:12px;font-size:11px">Pa gen vant pou ${vendeurNom} - ${selT}</div>`;
-  document.getElementById('rapParTiraj').innerHTML=htmlT;
-
-  const comTot=Math.round(tot*pct/100);
-  document.getElementById('rLines').innerHTML=`
-    <div style="background:#FFD700;padding:5px;font-weight:900;text-align:center;border:2px solid #000;border-radius:12px;font-size:11px">${vendeurNom.toUpperCase()} | ${selT.toUpperCase()} | ${nbFich} fich</div>
-    <div style="display:flex;justify-content:space-between;padding:6px;font-size:13px;border:2px solid #000;background:#fff;border-radius:12px;margin-top:4px"><span>TOTAL VANT OU</span><b>$${tot}</b></div>
-    <div style="display:flex;justify-content:space-between;padding:6px;background:#FFD700;border:2px solid #000;font-size:12px;border-radius:12px;margin-top:4px"><span>Komisyon ${pct}%</span><b>$${comTot}</b></div>
-    <div style="display:flex;justify-content:space-between;padding:10px;border-top:3px solid #000;font-size:18px;background:#000;color:#FFD700;border-radius:12px;margin-top:4px"><span>A PAYER</span><b>$${tot-comTot}</b></div>
-  `;
-}
-async function init(){
-  await loadConfig();
-  const iso=haitiISO();
-  document.getElementById('dateDebut').value=iso;document.getElementById('dateAu').value=iso;document.getElementById('dateFich').value=iso;
-  document.getElementById('gDate').innerText=`${haitiFR()} ${haitiHeure()} | ${vendeurNom} | PRIVE`;
-  document.getElementById('hTitle').innerText=`C&D V6.12 - 1 KAZ WON - ${vendeurNom.toUpperCase()}`;
-  document.getElementById('priveInfo').innerText=`🔒 RAPÒ PRIVE - ${vendeurNom.toUpperCase()} SÈLMAN - ${vendeurCom}%`;
-  document.getElementById('pourcentRap').value=vendeurCom;
-  initTirage();addLigne();refreshF();calc();
-  setInterval(()=>{document.getElementById('gDate').innerText=`${haitiFR()} ${haitiHeure()} | ${vendeurNom}`;checkFermeture();},60000);
-  document.getElementById('dateFich').addEventListener('change',refreshF);
-}
+async function loadConfig(){try{const d=await db.collection('config').doc('main').get();if(d.exists){const c=d.data();if(c.HEURES)HEURES=c.HEURES;if(c.PRIX){PRIX.B1=parseInt(c.PRIX.B1)||50;PRIX.B2=parseInt(c.PRIX.B2)||20;PRIX.B3=parseInt(c.PRIX.B3)||10;PRIX.MARYAJ=parseInt(c.PRIX.MARYAJ)||1000;PRIX.L3=parseInt(c.PRIX.L3)||500;PRIX.L4=parseInt(c.PRIX.L4)||5000;PRIX.L5=parseInt(c.PRIX.L5)||25000;}}}catch(e){}}
+async function loadResultats(){try{const snap=await db.collection('resultats').get();RESULTATS=[];snap.forEach(d=>RESULTATS.push(d.data()));}catch(e){}}
+function initTirage(){document.getElementById('tirages').innerHTML=['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].map(t=>`<div data-t="${t}">${t}</div>`).join('');document.querySelectorAll('#tirages div').forEach(el=>el.onclick=()=>{if(tirajSel.has(el.dataset.t)){tirajSel.delete(el.dataset.t);el.classList.remove('on');}else{tirajSel.add(el.dataset.t);el.classList.add('on');}calc();});}
+function addLigne(jeu=lastJeux,b='',m=''){lastJeux=jeu;const id=Date.now()+Math.random().toString(36).substr(2,4);const d=document.createElement('div');d.className='row';d.id='l_'+id;d.innerHTML=`<select id="s_${id}"><option ${jeu=='BOLET'?'selected':''}>BOLET</option><option ${jeu=='MARYAJ'?'selected':''}>MARYAJ</option><option ${jeu=='LOTO3'?'selected':''}>LOTO3</option><option ${jeu=='LOTO4'?'selected':''}>LOTO4</option><option ${jeu=='LOTO5'?'selected':''}>LOTO5</option></select><input class="boul" id="b_${id}" value="${b}" placeholder="Boul" oninput="this.value=this.value.replace(/[^0-9]/g,'');calc()"><input class="miz" id="m_${id}" value="${m}" placeholder="$" oninput="this.value=this.value.replace(/[^0-9]/g,'');calc()"><button class="btnX" onclick="document.getElementById('l_${id}').remove();calc()">X</button><button class="btnF" onclick="addLigne(document.getElementById('s_${id}').value)">↓</button>`;document.getElementById('rows').appendChild(d);calc();}
+function calc(){let base=0;document.querySelectorAll('.row').forEach(r=>{base+=parseInt(r.querySelector('.miz')?.value)||0;});const nb=tirajSel.size||1;const tot=base*nb;document.getElementById('lineInfo').innerText=tirajSel.size?Array.from(tirajSel).join('+'):`Chwazi tiraj`;document.getElementById('tot').innerText=`Total Fich $${tot} | Chak $${base}`;document.getElementById('tot').dataset.base=base;document.getElementById('tot').dataset.total=tot;}
+async function valide(){if(!tirajSel.size)return alert('Tiraj');const base=parseInt(document.getElementById('tot').dataset.base||0);const total=parseInt(document.getElementById('tot').dataset.total||0);if(!base)return alert('Boul');let list=[];document.querySelectorAll('.row').forEach(r=>{const j=r.querySelector('select').value,b=r.querySelector('.boul').value.trim(),m=parseInt(r.querySelector('.miz').value)||0;if(b&&m)list.push({jeux:j,boul:b,miz:m});});const id=Math.floor(100000+Math.random()*900000);const fich={id,ticketId:id,date:haitiFR(),dateISO:haitiISO(),heure:haitiHeure(),tirages:Array.from(tirajSel),nbTiraj:tirajSel.size,list,base,parTiraj:base,total,vendeur:vendeurNom,code:vendeurPass,com:vendeurCom};fiches.unshift(fich);localStorage.setItem('cdV5',JSON.stringify(fiches));try{await db.collection('ventes').add(fich);}catch(e){}let w=window.open('','','width=400,height=700');w.document.write(`<html><body style="width:76mm;margin:0 auto;text-align:center;font-family:Arial Black"><div style="font-size:28px">C&D LOTTO</div><div>Dat:${fich.date} ${fich.heure}<br>Tiraj:${fich.tirages.join('+')}<br>ID:${fich.ticketId}<br>Vandè:${fich.vendeur}</div><hr>${fich.list.map(l=>`<div style="font-size:22px">${l.jeux} ${l.boul} $${l.miz}</div>`).join('')}<hr><div style="border:3px solid #000;padding:8px"><div>CHAK $${fich.parTiraj}</div><div style="font-size:28px">TOTAL $${fich.total}</div></div><script>setTimeout(()=>{print();close()},400)<\/script></body></html>`);document.getElementById('rows').innerHTML='';addLigne();refreshF();calc();}
+function refreshF(){const iso=document.getElementById('dateFich').value;let h='';fiches.filter(f=>!iso||f.dateISO==iso).filter(f=>f.vendeur===vendeurNom).forEach(f=>{h+=`<div class="fich"><b>${f.date} ${f.heure} ${f.tirages.join('+')} x${f.nbTiraj} ID:${f.ticketId}</b><br>${f.list.map(l=>l.jeux+' '+l.boul+'($'+l.miz+')').join(' - ')}<br>Chak $${f.parTiraj} Total $${f.total}</div>`;});document.getElementById('fichBox').innerHTML=h||'Pa gen';document.getElementById('copyBox').innerHTML=h;}
+function kopyeLast(){if(!fiches[0])return;document.getElementById('rows').innerHTML='';fiches[0].list.forEach(l=>addLigne(l.jeux,l.boul,l.miz));tirajSel=new Set(fiches[0].tirages);document.querySelectorAll('#tirages div').forEach(el=>{if(tirajSel.has(el.dataset.t))el.classList.add('on');});addLigne();calc();}
+function getGain(jeux,boul,miz,res){if(!res)return 0;boul=boul.trim();const r1=(res.r1||'').trim(),r2=(res.r2||'').trim(),r3=(res.r3||'').trim(),m1=(res.m1||'').trim(),m2=(res.m2||'').trim(),m3=(res.m3||'').trim(),l3=(res.l3||'').trim(),l4=(res.l4||'').trim(),l5=(res.l5||'').trim();if(jeux==='BOLET'){if(boul===r1)return miz*PRIX.B1;if(boul===r2)return miz*PRIX.B2;if(boul===r3)return miz*PRIX.B3;}if(jeux==='MARYAJ'){if(boul===m1||boul===m2||boul===m3)return miz*PRIX.MARYAJ;}if(jeux==='LOTO3'&&l3&&boul===l3)return miz*PRIX.L3;if(jeux==='LOTO4'&&l4&&boul===l4)return miz*PRIX.L4;if(jeux==='LOTO5'&&l5&&boul===l5)return miz*PRIX.L5;return 0;}
+let lastCalc={vente:0,com:0,apayer:0,balance:0,tirage:'',du:'',au:'',details:''};
+async function calcRap(){await loadResultats();const d1=document.getElementById('dateDebut').value,d2=document.getElementById('dateAu').value,selT=document.getElementById('selTirajRap').value;let parT={},tot=0,gainTot=0,gagnants=[];fiches.filter(f=>f.vendeur===vendeurNom).forEach(f=>{if(f.dateISO>=d1&&f.dateISO<=d2){const filt=selT==='tous'?f.tirages:f.tirages.filter(t=>t===selT);if(!filt.length)return;const nb=selT==='tous'?f.nbTiraj:filt.length;const calc= (f.parTiraj||f.base)*nb;filt.forEach(t=>{if(!parT[t])parT[t]={v:0,g:0};parT[t].v+=f.parTiraj||f.base;const res=RESULTATS.find(r=>r.date===f.dateISO&&r.tiraj===t);if(res){f.list.forEach(l=>{const g=getGain(l.jeux,l.boul,l.miz,res);if(g>0){parT[t].g+=g;gainTot+=g;gagnants.push(`${f.date} ${t} ${l.jeux} ${l.boul} $${l.miz} → $${g} (ID ${f.ticketId})`);}});}});tot+=calc;}});const com=Math.round(tot*vendeurCom/100);const bal=tot-com-gainTot;document.getElementById('vVente').innerText='$'+tot;document.getElementById('vCom').innerText='$'+com;document.getElementById('vApayer').innerText='$'+gainTot;document.getElementById('vBalance').innerText='$'+bal;let det='';Object.keys(parT).forEach(t=>{det+=`<div style="display:flex;justify-content:space-between;border-bottom:1px solid #000;padding:4px;font-size:11px"><span>${t}</span><span>V:$${parT[t].v} G:$${parT[t].g}</span></div>`;});document.getElementById('detTir').innerHTML=det;document.getElementById('detGain').innerHTML=gagnants.length?`<div style="border:2px solid #00A000;border-radius:10px;padding:6px;background:#f0fff0"><b>Ganyan:</b><br>${gagnants.join('<br>')}</div>`:`<div style="text-align:center;font-size:9px">Pa gen ganyan - ap korije aprè rezilta</div>`;lastCalc={vente:tot,com,apayer:gainTot,balance:bal,tirage:selT,du:d1,au:d2,details:det};}
+function imprimerVendeur(){const w=window.open('','','width=400,height=800');w.document.write(`<html><head><title>Rapport Vendeur ${vendeurNom}</title><style>body{width:76mm;margin:0 auto;font-family:Arial;font-weight:900;text-align:center}.ligne{display:flex;justify-content:space-between;border-bottom:1px solid #000;padding:6px;font-size:12px}.titre{font-size:18px;background:#FFD700;padding:8px;border:2px solid #000}</style></head><body><div class="titre">RAPPORT VENDEUR<br>${vendeurNom.toUpperCase()}</div><div style="font-size:11px;margin:6px 0">Du ${lastCalc.du} Au ${lastCalc.au}<br>Tirage: ${lastCalc.tirage.toUpperCase()}</div><hr><div class="ligne"><span>Vente</span><b>$${lastCalc.vente}</b></div><div class="ligne" style="background:#FFD700"><span>Commission ${vendeurCom}%</span><b>$${lastCalc.com}</b></div><div class="ligne" style="background:#00A000;color:#fff"><span>A payer (Gain kliyan)</span><b>$${lastCalc.apayer}</b></div><div class="ligne" style="background:#000;color:#FFD700;font-size:14px"><span>Balance net</span><b>$${lastCalc.balance}</b></div><hr><div style="font-size:9px;text-align:left">${lastCalc.details}</div><hr><div style="font-size:8px">Imprime ${haitiFR()} ${haitiHeure()} | ${vendeurNom}</div><script>setTimeout(()=>{print();},300)<\/script></body></html>`);}
+async function init(){await loadConfig();await loadResultats();const iso=haitiISO();document.getElementById('dateDebut').value=iso;document.getElementById('dateAu').value=iso;document.getElementById('dateFich').value=iso;document.getElementById('gDate').innerText=`${haitiFR()} ${haitiHeure()} | ${vendeurNom} | ${vendeurCom}%`;document.getElementById('hTitle').innerText=`C&D VENDEUR - ${vendeurNom.toUpperCase()} - PRIVE`;document.getElementById('titRap').innerText=`🔒 RAPPORT VENDEUR - ${vendeurNom.toUpperCase()} - ${vendeurCom}%`;initTirage();addLigne();refreshF();calc();calcRap();}
+init();
 </script></body></html>
