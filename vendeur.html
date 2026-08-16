@@ -2,97 +2,144 @@
 <html lang="ht">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D V4.10 FLÈCH + CHIF SÈLMAN</title>
+<title>C&D V4.10.1 FINAL</title>
 <style>
-body{margin:0;background:#000;color:#fff;font-family:Arial}
-.top{background:#fff;color:#000;text-align:center;padding:8px;font-weight:900}
-.green{background:#00FF00;color:#000;padding:8px;text-align:center;font-weight:900;font-size:12px}
-.tabs{display:flex;background:#222} .tabs div{flex:1;padding:12px;text-align:center;font-size:12px;font-weight:bold}
-.tabs .active{background:#fff;color:#000}
-.tirages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px}
-.tirages div{border:2px solid #fff;padding:12px;text-align:center;border-radius:12px;font-weight:900;cursor:pointer}
-.tirages .active{background:#FFD700;color:#000;border-color:#FFD700}
-.line{border:2px solid #00FF00;color:#00FF00;padding:8px;margin:8px;border-radius:10px;text-align:center;font-weight:bold;font-size:12px}
-.row{display:flex;gap:6px;padding:0 8px;margin:6px 0;align-items:center}
-.row input, .row select{flex:1;padding:16px;border-radius:12px;border:2px solid #000;font-size:20px;font-weight:900;text-align:center}
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial}
+.h{background:#000;color:#FFD700;text-align:center;padding:6px;font-weight:900;font-size:13px;border-bottom:2px solid #FFD700}
+.g{background:#00ff00;color:#000;text-align:center;padding:6px;font-weight:900;font-size:11px}
+.tabs{display:flex;background:#222;position:sticky;top:0;z-index:99}.tab{flex:1;padding:14px 2px;text-align:center;font-size:11px;font-weight:900;cursor:pointer;border-bottom:3px solid transparent}.tab.active{background:#fff;color:#000;border-bottom-color:#FFD700}
+.page{display:none;padding:8px}.page.active{display:block}
+.tirages{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:8px 0}.tirages div{border:2px solid #fff;border-radius:12px;padding:12px;text-align:center;font-weight:900;cursor:pointer;background:#111}.tirages .on{background:#FFD700;color:#000;border-color:#FFD700}
+.line{background:#000;border:2px solid #00ff00;color:#00ff00;border-radius:10px;padding:8px;text-align:center;font-weight:900;font-size:11px;margin:8px 0}
+.row{display:flex;gap:5px;margin:7px 0;align-items:center}
+.row select,.row input{flex:1;padding:15px;border-radius:12px;border:2px solid #000;text-align:center;font-weight:900;font-size:19px}
 .row input{inputmode:numeric}
-.btnX{width:55px;background:#fff;border:2px solid red;color:red;font-weight:900;border-radius:12px;font-size:20px;padding:14px}
-.btnFleche{width:55px;background:#FFD700;border:none;color:#000;font-weight:900;border-radius:12px;font-size:24px;padding:14px}
-.total{background:#000;color:#fff;padding:16px;text-align:center;border-radius:12px;margin:8px;font-weight:900;font-size:20px;border:2px solid #fff}
-.btnV{margin:8px;background:#000;color:#fff;border:2px solid #fff;padding:16px;border-radius:12px;text-align:center;font-weight:900;font-size:18px}
+.btnX{width:52px;padding:14px;background:#fff;color:red;border:2px solid red;border-radius:12px;font-weight:900;font-size:18px}
+.btnF{width:52px;padding:14px;background:#FFD700;color:#000;border:none;border-radius:12px;font-weight:900;font-size:22px}
+.total{background:#111;border:2px solid #fff;border-radius:12px;padding:14px;text-align:center;font-weight:900;font-size:16px;margin:8px 0}
+.btnV{background:#000;border:2px solid #fff;color:#fff;padding:16px;border-radius:12px;text-align:center;font-weight:900;margin:8px 0}
+.fich{background:#111;border:1px solid #333;border-radius:10px;padding:10px;margin:6px 0}
+input[type=date]{background:#fff}
 </style>
 </head>
 <body>
-<div class="top">C&D - Jules - V4.10 L3L4L5+M1M2M3 - DAT AYITI FIX</div>
-<div class="green">C&D VÉRITÉ LOTTO | M1=M2=M3=1000 | L3 x500 L4 x5000 L5 x25000</div>
-<div class="tabs"><div class="active">1.VANT</div><div>2.KOPYE</div><div>3.FICH</div><div>4.RAPÒ DETAY</div></div>
+<div class="h">C&D - Jules - V4.10.1 L3L4L5+M1M2M3 - DAT AYITI 15 FIX</div>
+<div class="g">C&D VÉRITÉ LOTTO | M1=M2=M3=1000 | L3 x500 L4 x5000 L5 x25000 | <span id="dateH"></span></div>
 
+<div class="tabs">
+<div class="tab active" onclick="op(1)">1.VANT</div>
+<div class="tab" onclick="op(2)">2.KOPYE</div>
+<div class="tab" onclick="op(3)">3.FICH</div>
+<div class="tab" onclick="op(4)">4.RAPÒ DETAY</div>
+</div>
+
+<!-- 1 VANT - FÒMA EGZAK FOTO A -->
+<div id="p1" class="page active">
 <div class="tirages" id="tirages">
-<div onclick="setT('GA MIDI',this)">GA MIDI</div><div onclick="setT('FL MIDI',this)">FL MIDI</div><div onclick="setT('NY MIDI',this)">NY MIDI</div>
-<div onclick="setT('GA SOIR',this)">GA SOIR</div><div onclick="setT('FL SOIR',this)">FL SOIR</div><div onclick="setT('NY SOIR',this)">NY SOIR</div>
+<div onclick="selT('GA MIDI',this)">GA MIDI</div><div onclick="selT('FL MIDI',this)">FL MIDI</div><div onclick="selT('NY MIDI',this)">NY MIDI</div>
+<div onclick="selT('GA SOIR',this)">GA SOIR</div><div onclick="selT('FL SOIR',this)">FL SOIR</div><div onclick="selT('NY SOIR',this)">NY SOIR</div>
 </div>
+<div class="line" id="lineInfo">Chwazi tiraj - L3L4L5+M1M2M3</div>
 
-<div class="line" id="lineInfo">GA MIDI: B 55-27-12 | M1:55x27 M2:55x12 M3:27x12 | L3:555 L4:2712 L5:55527</div>
-
-<!-- LIY 1 -->
+<div id="rows">
 <div class="row">
-<select id="type"><option>BOLET ▼</option><option>L3</option><option>L4</option><option>L5</option><option>M1</option><option>M2</option><option>M3</option></select>
-<input id="boul1" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="55" value="55">
-<input id="montan1" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="10" value="10">
-<button class="btnX" onclick="del(1)">X</button>
-<button class="btnFleche" onclick="nextLine(1)">↓</button>
+<select id="type1"><option>BOLET ▼</option><option>L3</option><option>L4</option><option>L5</option><option>M1</option><option>M2</option><option>M3</option></select>
+<input id="b1" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="55">
+<input id="m1" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="10">
+<button class="btnX" onclick="clearR(1)">X</button>
+<button class="btnF" onclick="addRow()">↓</button>
+</div>
 </div>
 
-<!-- LIY 2 - Kote ou make wouj la -->
-<div class="row">
-<input id="boul2" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Boul">
-<input id="montan2" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="$">
-<button class="btnX" onclick="del(2)">X</button>
-<button class="btnFleche" onclick="nextLine(2)">↓</button>
+<div class="total" id="tot">Total: $0 x 0 = $0 | Date du jour: <span id="totDate"></span></div>
+<div class="btnV" onclick="valide()">💾 VALIDE & IMPRIMER - 80MM SANTRE BOLD</div>
 </div>
 
-<div class="total" id="totalTxt">Total: $10 x 0 = $0 | Date: <span id="d"></span></div>
-<div class="btnV" onclick="valide()">💾 VALIDE & IMPRIMER - SUNMI 80MM</div>
+<!-- 2 KOPYE -->
+<div id="p2" class="page">
+<h3 style="text-align:center">2.KOPYE - Dènye fich</h3>
+<div id="copyBox"></div>
+<button class="btnV" onclick="kopyeLast()">📋 KOPYE DÈNYE A NAN VANT</button>
+</div>
+
+<!-- 3 FICH -->
+<div id="p3" class="page">
+<h3 style="text-align:center">3.FICH - Tout fich jodi a</h3>
+<div id="fichBox"></div>
+</div>
+
+<!-- 4 RAPÒ DETAY - AK DAT KORIJE 15 PA 16 -->
+<div id="p4" class="page">
+<h3 style="text-align:center">RAPÒ - 500/2=250 CHAK TIRAJ</h3>
+<div style="display:flex;gap:6px"><input type="date" id="d1"><input type="date" id="d2"></div>
+<select id="tRap"><option>Tirage Tous</option><option>GA</option><option>FL</option><option>NY</option></select>
+<button class="btnV" style="background:#FFD700;color:#000" onclick="rap()">📊 Jenere Rapò</button>
+<div id="rapRes" class="fich"></div>
+<p style="text-align:center;color:#FFD700">Date du jour: <b id="rapDate"></b><br>L'heure de l'Est: <b id="rapHeure"></b></p>
+</div>
 
 <script>
-// === FIX DAT AYITI 15/08 PA 16 ===
-function haitiISO(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'})}
-function haitiFR(){return new Date().toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince',day:'2-digit',month:'2-digit',year:'numeric'})}
-document.getElementById('d').innerText=haitiFR()+' '+new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince',hour:'2-digit',minute:'2-digit'})
+// ===== DAT AYITI FIX 15/08 PA 16 =====
+function isoH(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'})}
+function frH(){return new Date().toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince',day:'2-digit',month:'2-digit',year:'numeric'})}
+function heurH(){return new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true})}
+let tirajSel='';let fiches=JSON.parse(localStorage.getItem('cdF')||'[]');
 
-// === CHIF SÈLMAN NAN KLAVE A ===
-document.querySelectorAll('input[inputmode="numeric"]').forEach(inp=>{
-  inp.addEventListener('input',()=>{inp.value=inp.value.replace(/[^0-9]/g,'')}); // bloke lèt
-  inp.addEventListener('keydown',e=>{
-    if(e.key==='Enter' || e.key==='ArrowDown'){e.preventDefault();nextLine(inp.id.includes('1')?1:2)}
-    if(e.key==='ArrowUp'){e.preventDefault();prevLine(inp.id.includes('2')?2:1)}
-  });
-});
-
-// === FLÈCH POU AVANSE A LIY SUIVANTE ===
-function nextLine(n){
-  if(n==1){document.getElementById('boul2').focus()}
-  else{
-    // ajoute nouvo liy otomatik
-    let row=document.createElement('div');row.className='row';
-    row.innerHTML=`<input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Boul"><input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="$"><button class="btnX" onclick="this.parentElement.remove()">X</button><button class="btnFleche" onclick="nextLine(3)">↓</button>`;
-    document.body.insertBefore(row, document.querySelector('.total'));
-    row.querySelectorAll('input').forEach(i=>{i.addEventListener('input',()=>i.value=i.value.replace(/[^0-9]/g,'')); i.focus()})
-  }
-  calcTotal();
+function init(){
+  let iso=isoH(), fr=frH(), h=heurH();
+  document.getElementById('dateH').innerText=fr+' '+h;
+  document.getElementById('totDate').innerText=fr;
+  document.getElementById('rapDate').innerText=fr;
+  document.getElementById('rapHeure').innerText=h;
+  document.getElementById('d1').value=iso;document.getElementById('d2').value=iso;
+  refresh(); applyNumFilter();
 }
-function prevLine(n){if(n==2)document.getElementById('boul1').focus()}
-function del(n){document.getElementById('boul'+n).value='';document.getElementById('montan'+n).value='';calcTotal()}
-function setT(t,el){document.querySelectorAll('.tirages div').forEach(d=>d.classList.remove('active'));el.classList.add('active');document.getElementById('lineInfo').innerText=t+': B 55-27-12 | M1:55x27 M2:55x12 M3:27x12 | L3:555'}
-function calcTotal(){let m=parseInt(document.getElementById('montan1').value||0);document.getElementById('totalTxt').innerHTML=`Total: $${m} x 1 = $${m} | Date: ${haitiFR()}`;}
-document.getElementById('montan1').addEventListener('input',calcTotal);
+function op(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i+1==n));document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i+1==n)); if(n==2||n==3)refresh()}
+
+function selT(t,el){tirajSel=t;document.querySelectorAll('.tirages div').forEach(d=>d.classList.remove('on'));el.classList.add('on');document.getElementById('lineInfo').innerText=t+': B 55-27-12 | M1:55x27 M2:55x12 M3:27x12 | L3:555 L4:2712 L5:55527';}
+
+function clearR(n){document.getElementById('b'+n).value='';document.getElementById('m'+n).value='';calc()}
+
+// === CHIF SÈLMAN + FLÈCH ↓ POU AVANSE ===
+function applyNumFilter(){
+ document.querySelectorAll('input[inputmode="numeric"]').forEach(inp=>{
+  inp.oninput=()=>{inp.value=inp.value.replace(/\D/g,'');calc()};
+  inp.onkeydown=(e)=>{
+    if(e.key==='Enter' || e.key==='ArrowDown'){e.preventDefault(); let next=inp.parentElement.nextElementSibling; if(next && next.querySelector('input')) next.querySelector('input').focus(); else addRow();}
+    if(e.key==='ArrowUp'){e.preventDefault(); let prev=inp.parentElement.previousElementSibling; if(prev) prev.querySelector('input')?.focus();}
+  }
+ });
+}
+let rowCount=1;
+function addRow(){
+ rowCount++;let d=document.createElement('div');d.className='row';
+ d.innerHTML=`<input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Boul" id="b${rowCount}"><input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="$" id="m${rowCount}"><button class="btnX" onclick="this.parentElement.remove();calc()">X</button><button class="btnF" onclick="addRow()">↓</button>`;
+ document.getElementById('rows').appendChild(d);applyNumFilter();d.querySelector('input').focus();
+}
+function calc(){
+ let tot=0,c=0;document.querySelectorAll('#rows .row').forEach(r=>{let m=parseInt(r.querySelectorAll('input')[1]?.value||0); if(m>0){tot+=m;c++}});
+ document.getElementById('tot').innerHTML=`Total: $${tot} x ${c} = $${tot} | Date du jour: ${frH()}`;
+}
 
 function valide(){
-  const f={date:haitiFR(),heure:new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince'}),boul:document.getElementById('boul1').value,montan:document.getElementById('montan1').value};
-  // ENPRIMANTE SUNMI V2 PRO 80MM - GWO LÈT SANTRE BOLD
-  let w=window.open('','','width=380,height=600');
-  w.document.write(`<body style="width:80mm;text-align:center;font-family:monospace;font-weight:900"><h1 style="font-size:28px">C&D LOTTO</h1><div style="font-size:22px">${f.date} ${f.heure}</div><hr><div style="font-size:26px">${f.boul}</div><div style="font-size:22px">$${f.montan}</div><hr><script>print()<\/script>`);
+ if(!tirajSel)return alert('Chwazi tiraj!');let list=[];document.querySelectorAll('#rows .row').forEach(r=>{let b=r.querySelectorAll('input')[0]?.value, m=r.querySelectorAll('input')[1]?.value; if(b&&m) list.push({b,m})});
+ if(list.length==0)return alert('Mete boul!');
+ let fich={id:Date.now(),date:frH(),dateISO:isoH(),heure:heurH(),tiraj:tirajSel,list:list,total:list.reduce((s,x)=>s+parseInt(x.m),0)};
+ fiches.unshift(fich);localStorage.setItem('cdF',JSON.stringify(fiches));printF(fich);refresh();
 }
+
+function refresh(){
+ let html=fiches.map(f=>`<div class="fich"><b>${f.date} ${f.heure} - ${f.tiraj}</b><br>${f.list.map(l=>l.b+' ($'+l.m+')').join(' - ')}<br>Total $${f.total}<br><button onclick="printFid(${f.id})" style="width:100%;padding:10px;background:#FFD700;border:none;border-radius:8px;font-weight:900;margin-top:5px">🖨️ RE-ENPRIME</button></div>`).join('')||'Pa gen fich';
+ document.getElementById('fichBox').innerHTML=html;document.getElementById('copyBox').innerHTML=html;
+}
+function kopyeLast(){if(fiches[0]){op(1);document.getElementById('rows').innerHTML='';fiches[0].list.forEach((l,i)=>{if(i==0){document.getElementById('b1').value=l.b;document.getElementById('m1').value=l.m}else addRowSet(l.b,l.m)});calc()}}
+function addRowSet(b,m){rowCount++;let d=document.createElement('div');d.className='row';d.innerHTML=`<input type="text" inputmode="numeric" value="${b}" id="b${rowCount}"><input type="text" inputmode="numeric" value="${m}" id="m${rowCount}"><button class="btnX" onclick="this.parentElement.remove()">X</button><button class="btnF" onclick="addRow()">↓</button>`;document.getElementById('rows').appendChild(d);applyNumFilter()}
+
+function printF(f){let w=window.open('','','width=400,height=700');w.document.write(`<html><head><style>body{width:80mm;margin:0 auto;text-align:center;font-family:monospace;font-weight:900}h1{font-size:30px;margin:5px}.b{font-size:24px}.big{font-size:22px}</style></head><body><h1>C&D VERITE LOTTO</h1><div class="b">${f.date} ${f.heure}</div><div class="b">${f.tiraj}</div><hr>${f.list.map(l=>`<div class="big">${l.b} - $${l.m}</div>`).join('')}<hr><div class="big">TOTAL $${f.total}</div><div>500/2=250</div><div style="margin-top:10px">Mèsi!</div><script>window.print();setTimeout(()=>close(),600)<\/script></body></html>`)}
+function printFid(id){let f=fiches.find(x=>x.id==id);if(f)printF(f)}
+function rap(){let d1=document.getElementById('d1').value,d2=document.getElementById('d2').value,tot=0;fiches.forEach(f=>{if(f.dateISO>=d1&&f.dateISO<=d2)tot+=f.total});document.getElementById('rapRes').innerHTML=`Soti ${d1} rive ${d2}<br>Total Vant: <b>$${tot}</b><br>500/2=250 chak tiraj<br>Date du jour: ${frH()} - ${heurH()}`}
+
+window.onload=init;
 </script>
 </body>
 </html>
