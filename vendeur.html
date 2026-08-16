@@ -3,76 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D VÉRITÉ LOTTO V4.9.1</title>
+<title>C&D VERITE LOTTO V4.9.1 VENDEUR</title>
 <style>
-body{margin:0;font-family:Arial;background:#000;color:#fff}
-.header{background:#000;color:#FFD700;text-align:center;padding:10px;font-weight:bold}
-.tabs{display:flex;background:#222}
-.tabs div{flex:1;padding:12px;text-align:center;cursor:pointer}
-.tabs .active{background:#FFD700;color:#000;font-weight:bold}
-#RAPO{padding:15px}
-.date-box{display:flex;gap:10px;margin-bottom:10px}
-.date-box input, .date-box select{flex:1;padding:14px;border-radius:10px;border:none;font-weight:bold;font-size:16px}
-.btn{width:100%;padding:16px;background:#000;color:#FFD700;border:2px solid #FFD700;border-radius:12px;font-weight:bold;font-size:18px}
+*{box-sizing:border-box}body{margin:0;font-family:Arial, sans-serif;background:#000;color:#fff}
+.header{background:#111;color:#FFD700;text-align:center;padding:10px;font-weight:900;border-bottom:2px solid #FFD700;font-size:13px}
+.tabs{display:flex;background:#222;position:sticky;top:0;z-index:10}
+.tab{flex:1;padding:14px 2px;text-align:center;cursor:pointer;font-weight:bold;font-size:13px;border-bottom:3px solid transparent}
+.tab.active{background:#FFD700;color:#000;border-bottom:3px solid #FFD700}
+.page{display:none;padding:12px}.page.active{display:block}
+input,select{width:100%;padding:14px;margin:6px 0;border-radius:10px;border:none;font-size:16px;font-weight:bold}
+.btn{width:100%;padding:16px;margin-top:8px;background:#FFD700;color:#000;border:none;border-radius:12px;font-weight:900;font-size:17px;cursor:pointer}
+.btn-print{background:#000;color:#FFD700;border:2px solid #FFD700}
+.num-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.num{padding:12px;background:#222;text-align:center;border-radius:8px;cursor:pointer;font-weight:bold}
+.num.selected{background:#FFD700;color:#000}
+.fich{border:1px solid #333;padding:10px;border-radius:10px;margin:6px 0;background:#111}
+.date-row{display:flex;gap:8px}
 </style>
 </head>
 <body>
-<div class="header">C&D VÉRITÉ LOTTO- Jean - MES FICHES OK - CHIF SELMAN - FLÈCH</div>
+<div class="header">C&D VÉRITÉ LOTTO - Jean - V4.9.1 - DAT AYITI FIX - SUNMI V2 PRO 80MM</div>
 <div class="tabs">
-<div>1.VANT</div><div>2.KOPYE</div><div>3.FICH</div><div class="active">4.RAPÒ</div>
+<div class="tab active" onclick="show(1)">1.VANT</div>
+<div class="tab" onclick="show(2)">2.KOPYE</div>
+<div class="tab" onclick="show(3)">3.FICH</div>
+<div class="tab" onclick="show(4)">4.RAPÒ</div>
 </div>
 
-<div id="RAPO">
-<h2 style="text-align:center">RAPÒ - 500/2=250 CHAK TIRAJ</h2>
+<!-- ONGLET 1 VANT -->
+<div id="p1" class="page active">
+<h3>VANT - Chwazi Boul</h3>
+<input id="montan" type="number" placeholder="Montan (ex: 500)">
+<div class="num-grid" id="grid"></div>
+<input id="boulChwazi" placeholder="Boul chwazi" readonly>
+<div class="date-row"><input type="date" id="dateFich"><select id="tiraj"><option>New York Midi</option><option>New York Soir</option><option>Florida</option><option>Georgia</option></select></div>
+<button class="btn" onclick="vann()">✅ VANN + SOVE</button>
+<button class="btn btn-print" onclick="enprime()">🖨️ ENPRIME SUNMI 80MM</button>
+<p id="infoDate" style="text-align:center;color:#FFD700"></p>
+</div>
 
-<div class="date-box">
+<!-- ONGLET 2 KOPYE -->
+<div id="p2" class="page">
+<h3>KOPYE DÈNYE FICH</h3>
+<div id="lastFich">Pa gen fich</div>
+<button class="btn" onclick="kopye()">📋 KOPIYE</button>
+</div>
+
+<!-- ONGLET 3 FICH -->
+<div id="p3" class="page">
+<h3>MES FICHES</h3>
+<div id="lisFich"></div>
+</div>
+
+<!-- ONGLET 4 RAPÒ - SA OU TE VOYE A -->
+<div id="p4" class="page">
+<h2 style="text-align:center">RAPÒ - 500/2=250 CHAK TIRAJ</h2>
+<div class="date-row">
 <input type="date" id="dateDebut">
 <input type="date" id="dateFin">
 </div>
-
-<div class="date-box">
-<select id="tirageSelect"><option>Tirage Tous</option><option>New York</option><option>Florida</option></select>
-</div>
-
+<select id="tirageRap"><option>Tirage Tous</option><option>New York</option><option>Florida</option></select>
 <button class="btn" onclick="jenereRapò()">📊 Jenere Rapò</button>
-<p id="dateInfo" style="text-align:center;margin-top:15px;color:#FFD700"></p>
+<div id="resRapò" style="margin-top:10px;background:#111;padding:10px;border-radius:10px"></div>
+<p id="dateRapòInfo" style="text-align:center;color:#FFD700;margin-top:10px"></p>
 </div>
 
 <script>
-// ===== FIX DEFINITIF DAT AYITI - PA JANM 16 ANKÒ =====
-function getHaitiISO(){
-  return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});
-}
-function getHaitiFR(){
-  return new Date().toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince',day:'2-digit',month:'2-digit',year:'numeric'});
-}
-function getHaitiHeure(){
-  return new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince',hour:'2-digit',minute:'2-digit',hour12:true});
+// ===== FIX DAT AYITI - AMERICA/PORT-AU-PRINCE - PA JANM BAY 16 ANKÒ =====
+function haitiISO(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'})}
+function haitiFR(){return new Date().toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince',day:'2-digit',month:'2-digit',year:'numeric'})}
+function haitiHeure(){return new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true})}
+
+let fiches = JSON.parse(localStorage.getItem('fiches')||'[]');
+let selection = [];
+
+// INIT GRID 00-99
+const grid=document.getElementById('grid');
+for(let i=0;i<100;i++){let b=i.toString().padStart(2,'0');let d=document.createElement('div');d.className='num';d.textContent=b;d.onclick=()=>{d.classList.toggle('selected');if(selection.includes(b))selection=selection.filter(x=>x!=b);else selection.push(b);document.getElementById('boulChwazi').value=selection.join('-')};grid.appendChild(d)}
+
+function show(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i+1==n));document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i+1==n));if(n==3)aficheFich();if(n==4)initRapò();}
+
+function initRapò(){
+  const iso=haitiISO(), fr=haitiFR(), h=haitiHeure();
+  document.getElementById('dateDebut').value=iso;
+  document.getElementById('dateFin').value=iso;
+  document.getElementById('dateFich').value=iso;
+  document.getElementById('infoDate').innerHTML=`Date du jour: <b>${fr}</b> - ${h}`;
+  document.getElementById('dateRapòInfo').innerHTML=`Date du jour: <b>${fr}</b><br>L'heure de l'Est: <b>${h}</b>`;
 }
 
-// APLIKE DAT JODI A OTOMATIKMAN
-window.onload = function(){
-  const iso = getHaitiISO();
-  const fr = getHaitiFR();
-  const heure = getHaitiHeure();
-  document.getElementById('dateDebut').value = iso;
-  document.getElementById('dateFin').value = iso;
-  document.getElementById('dateInfo').innerHTML = `Date du jour: <b>${fr}</b> - L'heure de l'Est: <b>${heure}</b>`;
-  console.log("Dat korije: "+fr+" "+heure);
-};
+window.onload=()=>{initRapò();aficheFich()};
 
-// POU LÈ OU KREYE FICH
-function getDatePourFich(){
-  return getHaitiFR(); // Itilize sa nan fich ou yo, pa new Date()
+function vann(){
+  if(selection.length==0)return alert('Chwazi boul!');
+  const m=parseInt(document.getElementById('montan').value||0);
+  const fich={id:Date.now(),date:haitiFR(),dateISO:haitiISO(),heure:haitiHeure(),boul:[...selection],montan:m,tiraj:document.getElementById('tiraj').value,total:m};
+  fiches.unshift(fich);localStorage.setItem('fiches',JSON.stringify(fiches));
+  alert('Fich sove: '+fich.date+' '+fich.heure);selection=[];document.querySelectorAll('.num.selected').forEach(e=>e.classList.remove('selected'));document.getElementById('boulChwazi').value='';aficheFich();
+}
+
+function aficheFich(){
+  const c=document.getElementById('lisFich');const last=document.getElementById('lastFich');
+  if(fiches.length==0){c.innerHTML='Pa gen fich';return}
+  c.innerHTML=fiches.map(f=>`<div class="fich"><b>${f.date} ${f.heure}</b> - ${f.tiraj}<br>Boul: ${f.boul.join('-')} - $${f.montan}<br><button class="btn btn-print" onclick="enprimeFich(${f.id})">🖨️ RE-ENPRIME</button></div>`).join('');
+  if(last)last.innerHTML=`<div class="fich"><b>${fiches[0].date} ${fiches[0].heure}</b><br>${fiches[0].boul.join('-')} - $${fiches[0].montan}</div>`;
+}
+
+function kopye(){if(fiches.length>0){selection=[...fiches[0].boul];document.getElementById('boulChwazi').value=selection.join('-');show(1)}}
+
+// ===== ENPRIMANTE SUNMI V2 PRO 80MM - GWO LÈT SANTRE =====
+function enprime(){
+  if(fiches.length==0)return alert('Pa gen fich');
+  enprimeFich(fiches[0].id);
+}
+function enprimeFich(id){
+  const f=fiches.find(x=>x.id==id);
+  const win=window.open('','','width=380,height=600');
+  win.document.write(`<html><head><style>
+  body{font-family:monospace;text-align:center;font-weight:900;width:80mm;margin:0 auto}
+  h1{font-size:28px;margin:5px}.big{font-size:22px}.boul{font-size:20px;letter-spacing:2px}
+  </style></head><body>
+  <h1>C&D VERITE LOTTO</h1>
+  <div class="big">${f.date} ${f.heure}</div>
+  <div class="big">${f.tiraj}</div>
+  <hr><div class="boul">${f.boul.join(' - ')}</div>
+  <div class="big">Montan: $${f.montan}</div>
+  <div class="big">Total: $${f.total} - 500/2=250</div>
+  <hr><div>Mèsi!</div>
+  <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)}<\/script>
+  </body></html>`);
 }
 
 function jenereRapò(){
-  const d1 = document.getElementById('dateDebut').value;
-  const d2 = document.getElementById('dateFin').value;
-  // Konvèti ISO -> FR pou rapò
-  const fr1 = new Date(d1+'T12:00:00').toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince'});
-  const fr2 = new Date(d2+'T12:00:00').toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince'});
-  alert("Rapò soti "+fr1+" rive "+fr2+" - Lè Ayiti: "+getHaitiHeure());
+  const d1=document.getElementById('dateDebut').value;const d2=document.getElementById('dateFin').value;
+  const f1 = haitiFR(); // toujou dat Ayiti korèk
+  let tot=0;fiches.forEach(f=>{if(f.dateISO>=d1 && f.dateISO<=d2)tot+=f.total});
+  document.getElementById('resRapò').innerHTML=`Rapò soti <b>${new Date(d1+'T12:00:00').toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince'})}</b> rive <b>${new Date(d2+'T12:00:00').toLocaleDateString('fr-HT',{timeZone:'America/Port-au-Prince'})}</b><br>Total Vant: <b>$${tot}</b><br>500/2=250 chak tiraj<br><br><small>Date du jour: ${f1} - ${haitiHeure()}</small>`;
 }
 </script>
 </body>
