@@ -2,7 +2,7 @@
 <html lang="ht">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VANDÈ V4.9 - MES FICHES + CHIF SELMAN + FLÈCH</title>
+<title> C&D VÉRITÉ LOTTO</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="card">
-<div class="hdr">C&D V4.9 - <span id="vNameHdr">Vandè</span> - MES FICHES OK - CHIF SELMAN - FLÈCH</div>
+<div class="hdr">C&D VÉRITÉ LOTTO- <span id="vNameHdr">Vandè</span> - MES FICHES OK - CHIF SELMAN - FLÈCH</div>
 <div id="loginDiv" style="padding:30px"><input id="nom" class="inputBox" placeholder="Non Vandè"><input id="pass" type="password" class="inputBox" placeholder="Modpas"><button class="btn" onclick="login()">ANTRE</button><p id="msg" style="color:red;text-align:center;font-weight:900;margin-top:10px"></p></div>
 <div id="appDiv" style="display:none;flex-direction:column;flex:1">
 <div class="tabs"><div class="tab active" onclick="openTab(0)">1.VANT</div><div class="tab" onclick="openTab(1)">2.KOPYE</div><div class="tab" onclick="openTab(2)">3.FICH</div><div class="tab" onclick="openTab(3)">4.RAPÒ</div></div>
@@ -36,7 +36,7 @@ firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
 let current=null,tiragesSel=new Set(),lignesData=[],lastJeux='BOLET',allVentes=[],allResultats=[];
 const JEUX_LIST=['BOLET','MARYAJ','LOTO3','LOTO4','LOTO5'];
 let PRIX={BOLET_1ER:50,BOLET_2E:20,BOLET_3E:10,MARYAJ:1000,M1:1000,M2:1000,M3:1000,LOTO3:500,LOTO4:5000,LOTO5:25000};
-let ENTETE={nom:"C&D VÉRITÉ LOTTO",footer:"Mèsi, bòn chans!"};let FERMETURE={},LIMITES_GLOBAL={BOLET:5000,MARYAJ:5000,LOTO3:3000,LOTO4:2000,LOTO5:1000},TOTAL_VENTES_JOUR={};
+let ENTETE={nom:"C&D VÉRITÉ LOTTO",footer:"bòn chans, Lave chodyè w!"};let FERMETURE={},LIMITES_GLOBAL={BOLET:5000,MARYAJ:5000,LOTO3:3000,LOTO4:2000,LOTO5:1000},TOTAL_VENTES_JOUR={};
 function openTab(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active',idx===i));if(i===2)loadFiches();}
 async function loadConfig(){try{const d=await db.collection('config').doc('global').get();if(d.exists){const c=d.data();if(c.prix){PRIX={...PRIX,...c.prix};PRIX.M1=c.prix.MARYAJ||1000;PRIX.M2=c.prix.MARYAJ||1000;PRIX.M3=c.prix.MARYAJ||1000;}if(c.entete)ENTETE=c.entete;if(c.fermeture)FERMETURE=c.fermeture;if(c.limites)LIMITES_GLOBAL={...LIMITES_GLOBAL,...c.limites};}}catch(e){}}
 async function loadFermetureEtLimites(){try{const today=new Date().toISOString().slice(0,10);const s=await db.collection('ventes').where('dateStr','==',today).get();TOTAL_VENTES_JOUR={};s.forEach(d=>{const v=d.data();(v.tirages||[]).forEach(tir=>{(v.lignes||[]).forEach(l=>{const k=`${tir}|${l.jeux}|${String(l.boul).replace(/[^0-9x]/gi,'').toUpperCase()}`;TOTAL_VENTES_JOUR[k]=(TOTAL_VENTES_JOUR[k]||0)+(parseFloat(l.miz)||0);});});});checkFermeture();}catch(e){}}
