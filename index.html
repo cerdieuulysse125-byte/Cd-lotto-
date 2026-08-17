@@ -1,190 +1,152 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V8.0 2 KOLÒN + TI TABLO + OUVÈ/FÈMEN</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROPRIO V8.2 - TIRAJ CHWAZI + 9 KAZ</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial;background:#f5f5f5;font-size:11px}
 #login{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center}
 .loginBox{width:92%;max-width:360px;border:3px solid #000;border-radius:16px;padding:18px;text-align:center}
 .loginBox input{width:100%;padding:14px;margin:6px 0;border:3px solid #000;border-radius:12px;font-weight:900;text-align:center}
 .btnLogin{width:100%;padding:14px;background:#000;color:#FFD700;font-weight:900;border-radius:14px;border:3px solid #000}
-.hTop{background:#000;color:#FFD700;text-align:center;padding:9px;font-weight:900;font-size:11px;border-bottom:3px solid #FFD700}
-.hBlack{background:#FFD700;color:#000;text-align:center;padding:7px;font-weight:900;font-size:11px}
+.hTop{background:#000;color:#FFD700;text-align:center;padding:9px;font-weight:900;font-size:11px}
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:#000;padding:2px}
 .tab{padding:10px 2px;font-size:9px;font-weight:900;background:#fff;border:none;cursor:pointer}.tab.active{background:#FFD700}
 .page{display:none}.page.active{display:block}
-.card{border:3px solid #000;margin:6px;border-radius:12px;padding:10px;background:#fff}
+.card{border:3px solid #000;margin:6px;border-radius:12px;padding:8px;background:#fff}
 .btnSmall{padding:12px;border:3px solid #000;border-radius:12px;font-weight:900;font-size:11px;text-align:center;margin:6px 0;cursor:pointer}
-.inputDate{width:100%;padding:12px;border:3px solid #000;border-radius:12px;font-weight:900}
-.vandRow{display:grid;grid-template-columns:1.2fr 0.6fr 0.4fr 0.8fr 0.5fr;gap:4px;margin:5px 0;border:2px solid #000;border-radius:10px;padding:8px;align-items:center;background:#fff}
-.resGrid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.resCard{border:3px solid #000;border-radius:14px;padding:8px;background:#fff}
-.resCardHeader{background:#FFD700;text-align:center;padding:8px;border-radius:10px;font-weight:900;border:2px solid #000;margin-bottom:8px;font-size:11px}
-.inputRow{display:grid;grid-template-columns:40px 1fr 1fr 1fr;gap:4px;margin:4px 0;align-items:center}
-.inputRow label{font-weight:900;font-size:10px}
-.inputRow input{padding:10px;border:2px solid #000;border-radius:10px;font-weight:900;text-align:center;font-size:12px}
-.tiTabloAfiche{border:3px solid #000;border-radius:12px;margin-top:12px;overflow:hidden}
-.tiTabloAfiche th{background:#000;color:#FFD700;padding:8px;font-size:9px}
-.tiTabloAfiche td{padding:6px;border:1px solid #000;text-align:center;font-weight:900;font-size:9px}
-.tiTabloAfiche tr:nth-child(even){background:#FFD700}
-.globalFerme{background:#000;color:#FFD700;padding:12px;border-radius:12px;text-align:center;font-weight:900;border:3px solid #F00;margin:6px;font-size:11px}
-.globalOuvert{background:#0A0;color:#fff;padding:10px;border-radius:12px;text-align:center;font-weight:900;border:3px solid #000;margin:6px;font-size:10px}
+.inputDate{width:100%;padding:14px;border:3px solid #000;border-radius:16px;font-weight:900;font-size:13px;text-align:center}
+
+/* 9 TI KAZ */
+.kaz9Grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.kazItem{border:3px solid #000;border-radius:14px;padding:8px;background:#fff;text-align:center}
+.kazItem label{display:block;font-weight:900;font-size:10px;margin-bottom:4px;background:#FFD700;border-radius:6px;padding:4px;border:1px solid #000}
+.kazItem input{width:100%;padding:14px;border:3px solid #000;border-radius:12px;font-weight:900;text-align:center;font-size:16px;height:54px}
+.kazItem.auto input{background:#FFD700}
+
+.addVendeurGrid{display:grid;grid-template-columns:1fr 70px 50px 60px;gap:4px;margin-top:8px}
+.addVendeurGrid input{padding:10px 4px;border:2px solid #000;border-radius:10px;font-weight:900;font-size:11px;text-align:center;height:42px}
+.vandHeader{display:grid;grid-template-columns:1fr 60px 40px 70px 35px;gap:3px;font-weight:900;background:#FFD700;padding:6px 4px;border-radius:8px;border:2px solid #000;font-size:8px;text-align:center;margin-top:8px}
+.vandRow{display:grid;grid-template-columns:1fr 60px 40px 70px 35px;gap:3px;margin:4px 0;border:2px solid #000;border-radius:8px;padding:4px;background:#fff;align-items:center}
+.vandRow span{font-weight:900;font-size:10px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head><body>
 <div id="login"><div class="loginBox">
-<div style="background:#F00;color:#fff;padding:10px;border-radius:10px;font-weight:900;margin-bottom:10px">👑 PROPRIO V8.0 - 2 KOLÒN + TI TABLO</div>
-<input id="loginNom" type="text" placeholder="PROPRIO" value="PROPRIO"><input id="loginPass" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="1234" value="1234"><button class="btnLogin" onclick="loginP()">KONEKTE</button><div id="loginErr" style="color:red;font-weight:900;margin-top:8px;font-size:10px"></div>
+<div style="background:#F00;color:#fff;padding:10px;border-radius:10px;font-weight:900;margin-bottom:10px">👑 PROPRIO V8.2 - 9 KAZ</div>
+<input id="loginNom" type="text" value="PROPRIO"><input id="loginPass" type="tel" inputmode="numeric" value="1234"><button class="btnLogin" onclick="loginP()">KONEKTE</button><div id="loginErr" style="color:red;font-weight:900;margin-top:8px;font-size:10px"></div>
 </div></div>
-<div class="hTop">👑 PROPRIO MASTER - 8 ONGLÈ - V8.0 2 KOLÒN</div><div class="hBlack" id="hBlack">MASTER - 2 KOLÒN REZILTA + TI TABLO ANBA</div>
+<div class="hTop">👑 PROPRIO V8.2 - TIRAJ CHWAZI + 9 KAZ + TI TABLO BON</div>
 <div class="tabs">
-<button class="tab active" onclick="op(1)">1.VANDÈ</button><button class="tab" onclick="op(2)">2.HEURE</button><button class="tab" onclick="op(3)">3.LIMITE</button><button class="tab" onclick="op(4)">4.PRIX GLOBAL</button>
-<button class="tab" onclick="op(5)">5.RAPPORT</button><button class="tab" onclick="op(6)">6.RESULTATS</button><button class="tab" onclick="op(7)">7.PRIX VANDÈ</button><button class="tab" onclick="op(8)">8.FERMETURE</button>
+<button class="tab" onclick="op(1)">1.VANDÈ</button><button class="tab" onclick="op(2)">2.HEURE</button><button class="tab" onclick="op(3)">3.LIMITE</button><button class="tab" onclick="op(4)">4.PRIX GLOBAL</button>
+<button class="tab" onclick="op(5)">5.RAPPORT</button><button class="tab active" onclick="op(6)">6.RESULTATS</button><button class="tab" onclick="op(7)">7.PRIX VANDÈ</button><button class="tab" onclick="op(8)">8.FERMETURE</button>
 </div>
 
-<div id="p1" class="page active"><div class="card">
-<div style="background:#000;color:#FFD700;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #F00">1.VANDÈ - Non vandè1 modpas % ouvè/fèmen - Ajoute nouvo vandè</div>
-<div style="margin-top:10px;display:grid;grid-template-columns:1fr 0.7fr 0.5fr 0.6fr;gap:4px"><input id="newVNom" placeholder="Non vandè1" style="padding:12px;border:2px solid #000;border-radius:8px;font-weight:900"><input id="newVCode" type="tel" inputmode="numeric" placeholder="Modpas" style="padding:12px;border:2px solid #000;border-radius:8px;font-weight:900"><input id="newVCom" type="tel" inputmode="numeric" placeholder="%" value="10" style="padding:12px;border:2px solid #000;border-radius:8px;font-weight:900"><button class="btnSmall" style="background:#0A0;color:#fff;margin:0" onclick="addVendeur()">➕ AJOUTE</button></div>
-<div style="margin-top:8px;display:grid;grid-template-columns:1.2fr 0.6fr 0.4fr 0.8fr 0.5fr;gap:4px;font-weight:900;background:#FFD700;padding:6px;border-radius:8px;border:2px solid #000;font-size:9px"><span>Non</span><span>Modpas</span><span>%</span><span>Ouvè/Fèmen</span><span>X</span></div>
-<div id="listVandeurs" style="margin-top:4px"></div>
-</div></div>
+<div id="p1" class="page"><div class="card"><div style="background:#000;color:#FFD700;padding:8px;text-align:center;border-radius:10px;font-weight:900;border:2px solid #F00;font-size:10px">1.VANDÈ - Non modpas % ouvè/fèmen</div><div class="addVendeurGrid"><input id="newVNom" placeholder="Non"><input id="newVCode" type="tel" inputmode="numeric" placeholder="Modpas"><input id="newVCom" type="tel" inputmode="numeric" placeholder="%" value="10"><button class="btnSmall" style="background:#0A0;color:#fff;margin:0" onclick="addVendeur()">➕</button></div><div class="vandHeader"><span>Non</span><span>Modpas</span><span>%</span><span>O/F</span><span>X</span></div><div id="listVandeurs"></div></div></div>
+<div id="p2" class="page"><div class="card"><div style="background:#FFD700;padding:10px;text-align:center;border-radius:10px;font-weight:900;border:2px solid #000">2.HEURE FERMETURE</div><div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div><div style="font-weight:900;font-size:9px">GA MIDI 12h15</div><input id="h_GA_MIDI" type="time" class="inputDate" value="12:15"></div><div><div style="font-weight:900;font-size:9px">FL MIDI 13h15</div><input id="h_FL_MIDI" type="time" class="inputDate" value="13:15"></div><div><div style="font-weight:900;font-size:9px">NY MIDI 14h15</div><input id="h_NY_MIDI" type="time" class="inputDate" value="14:15"></div><div><div style="font-weight:900;font-size:9px">GA SOIR 18h15</div><input id="h_GA_SOIR" type="time" class="inputDate" value="18:15"></div><div><div style="font-weight:900;font-size:9px">FL SOIR 21h15</div><input id="h_FL_SOIR" type="time" class="inputDate" value="21:15"></div><div><div style="font-weight:900;font-size:9px">NY SOIR 22h15</div><input id="h_NY_SOIR" type="time" class="inputDate" value="22:15"></div></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:8px" onclick="saveHeures()">💾 SAVE</div></div></div>
+<div id="p3" class="page"><div class="card"><div style="background:#F00;color:#fff;padding:10px;text-align:center;border-radius:10px;font-weight:900;border:2px solid #000;font-size:10px">3.LIMITE GLOBAL</div><div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div><div style="font-weight:900;font-size:9px">Bòlèt 1500</div><input id="lim_BOLET" type="tel" inputmode="numeric" class="inputDate" value="1500"></div><div><div style="font-weight:900;font-size:9px">Maryaj 100</div><input id="lim_MARYAJ" type="tel" inputmode="numeric" class="inputDate" value="100"></div><div><div style="font-weight:900;font-size:9px">Loto3 100</div><input id="lim_LOTO3" type="tel" inputmode="numeric" class="inputDate" value="100"></div><div><div style="font-weight:900;font-size:9px">Loto4 20</div><input id="lim_LOTO4" type="tel" inputmode="numeric" class="inputDate" value="20"></div><div><div style="font-weight:900;font-size:9px">Loto5 5</div><input id="lim_LOTO5" type="tel" inputmode="numeric" class="inputDate" value="5"></div></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:8px" onclick="saveLimites()">💾 SAVE</div></div></div>
+<div id="p4" class="page"><div class="card"><div style="background:#000;color:#FFD700;padding:10px;text-align:center;border-radius:10px;font-weight:900;border:2px solid #000;font-size:10px">4.PRIX GLOBAL</div><div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div><div style="font-weight:900;font-size:9px">1er 50</div><input id="prix_B1" type="tel" inputmode="numeric" class="inputDate" value="50"></div><div><div style="font-weight:900;font-size:9px">2e 20</div><input id="prix_B2" type="tel" inputmode="numeric" class="inputDate" value="20"></div><div><div style="font-weight:900;font-size:9px">3e 10</div><input id="prix_B3" type="tel" inputmode="numeric" class="inputDate" value="10"></div><div><div style="font-weight:900;font-size:9px">M=1000</div><input id="prix_MARYAJ" type="tel" inputmode="numeric" class="inputDate" value="1000"></div><div><div style="font-weight:900;font-size:9px">L3 500</div><input id="prix_L3" type="tel" inputmode="numeric" class="inputDate" value="500"></div><div><div style="font-weight:900;font-size:9px">L4 5000</div><input id="prix_L4" type="tel" inputmode="numeric" class="inputDate" value="5000"></div><div><div style="font-weight:900;font-size:9px">L5 25000</div><input id="prix_L5" type="tel" inputmode="numeric" class="inputDate" value="25000"></div></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:8px" onclick="savePrixGlobal()">💾 SAVE</div></div></div>
+<div id="p5" class="page"><div class="card"><div style="background:#FFD700;padding:10px;text-align:center;border-radius:10px;font-weight:900;border:2px solid #000">5.RAPPORT</div><div style="margin-top:8px"><div style="font-weight:900;font-size:9px">Du...</div><input type="date" id="pRapDu" class="inputDate"></div><div style="margin-top:6px"><div style="font-weight:900;font-size:9px">Au...</div><input type="date" id="pRapAu" class="inputDate"></div><div style="margin-top:6px"><div style="font-weight:900;font-size:9px">Vendeurs</div><select id="pRapVendeur" class="inputDate"><option value="tous">tous</option></select></div><div style="margin-top:6px"><div style="font-weight:900;font-size:9px">Tirage</div><select id="pRapTir" class="inputDate"><option value="tous">tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:8px" onclick="calcRapP()">📊 KALKILE</div><div style="border:2px solid #000;border-radius:12px;padding:3px;margin-top:8px;background:#fff"><div style="display:flex;justify-content:space-between;padding:10px 8px;border-bottom:2px solid #000"><span>Vente</span><b id="pRapVente">$0</b></div><div style="display:flex;justify-content:space-between;padding:10px 8px;border-bottom:2px solid #000"><span>Commission</span><b id="pRapCom">$0</b></div><div style="display:flex;justify-content:space-between;padding:10px 8px;border-bottom:2px solid #000;background:#F00;color:#fff"><span>Gain</span><b id="pRapGain">$0</b></div><div style="display:flex;justify-content:space-between;padding:12px 8px;background:#000;color:#FFD700;border-radius:8px"><span>Balance</span><b id="pRapBal">$0</b></div></div></div></div>
 
-<div id="p2" class="page"><div class="card"><div style="background:#FFD700;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #000">2.HEURE FERMETURE MODIFIABLE</div><div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<div><div style="font-weight:900">GA MIDI 12h15</div><input id="h_GA_MIDI" type="time" class="inputDate" value="12:15"></div><div><div style="font-weight:900">FL MIDI 13h15</div><input id="h_FL_MIDI" type="time" class="inputDate" value="13:15"></div>
-<div><div style="font-weight:900">NY MIDI 14h15</div><input id="h_NY_MIDI" type="time" class="inputDate" value="14:15"></div><div><div style="font-weight:900">GA SOIR 18h15</div><input id="h_GA_SOIR" type="time" class="inputDate" value="18:15"></div>
-<div><div style="font-weight:900">FL SOIR 21h15</div><input id="h_FL_SOIR" type="time" class="inputDate" value="21:15"></div><div><div style="font-weight:900">NY SOIR 22h15</div><input id="h_NY_SOIR" type="time" class="inputDate" value="22:15"></div>
-</div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:10px" onclick="saveHeures()">💾 SAVE HEURES</div></div></div>
+<!-- 6.RESULTATS - V8.2 NOUVO DESIGN -->
+<div id="p6" class="page active"><div class="card">
+<div style="background:#000;color:#FFD700;padding:10px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #FFD700;font-size:11px">6.AFFICHAGE RÉSULTATS - 9 case - 1er 2e 3e M1 M2 M3 L3 L4 L5</div>
 
-<div id="p3" class="page"><div class="card"><div style="background:#F00;color:#fff;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #000">3.LIMITE GLOBAL MODIFIABLE</div><div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-weight:900">Bòlèt 1500</div><input id="lim_BOLET" type="tel" inputmode="numeric" class="inputDate" value="1500"></div><div><div style="font-weight:900">Maryaj 100</div><input id="lim_MARYAJ" type="tel" inputmode="numeric" class="inputDate" value="100"></div><div><div style="font-weight:900">Loto3 100</div><input id="lim_LOTO3" type="tel" inputmode="numeric" class="inputDate" value="100"></div><div><div style="font-weight:900">Loto4 20</div><input id="lim_LOTO4" type="tel" inputmode="numeric" class="inputDate" value="20"></div><div><div style="font-weight:900">Loto5 5</div><input id="lim_LOTO5" type="tel" inputmode="numeric" class="inputDate" value="5"></div></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:10px" onclick="saveLimites()">💾 SAVE LIMITE</div></div></div>
+<!-- ANBA DAT LA, METE TIRAJ CHWAZI -->
+<input type="date" id="resDate" class="inputDate" style="margin-top:10px" onchange="loadOneTiraj()">
+<select id="resTiraj" class="inputDate" style="margin-top:8px;background:#FFD700" onchange="loadOneTiraj()">
+<option value="GA MIDI">Tiraj - Chwazi - GA MIDI</option>
+<option value="FL MIDI">FL MIDI</option>
+<option value="NY MIDI">NY MIDI</option>
+<option value="GA SOIR">GA SOIR</option>
+<option value="FL SOIR">FL SOIR</option>
+<option value="NY SOIR">NY SOIR</option>
+</select>
 
-<div id="p4" class="page"><div class="card"><div style="background:#000;color:#FFD700;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #000">4.PRIX GLOBAL MODIFIABLE</div><div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-weight:900">1er lot 50</div><input id="prix_B1" type="tel" inputmode="numeric" class="inputDate" value="50"></div><div><div style="font-weight:900">2e lot 20</div><input id="prix_B2" type="tel" inputmode="numeric" class="inputDate" value="20"></div><div><div style="font-weight:900">3e lot 10</div><input id="prix_B3" type="tel" inputmode="numeric" class="inputDate" value="10"></div><div><div style="font-weight:900">M1=M2=M3=maryaj=1000</div><input id="prix_MARYAJ" type="tel" inputmode="numeric" class="inputDate" value="1000"></div><div><div style="font-weight:900">Loto3 500</div><input id="prix_L3" type="tel" inputmode="numeric" class="inputDate" value="500"></div><div><div style="font-weight:900">Loto4 5000</div><input id="prix_L4" type="tel" inputmode="numeric" class="inputDate" value="5000"></div><div><div style="font-weight:900">Loto5 25000</div><input id="prix_L5" type="tel" inputmode="numeric" class="inputDate" value="25000"></div></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:10px" onclick="savePrixGlobal()">💾 SAVE PRIX GLOBAL</div></div></div>
-
-<div id="p5" class="page"><div class="card"><div style="background:#FFD700;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #000">5.RAPPORT</div><div style="margin-top:10px"><div style="font-weight:900">Du...</div><input type="date" id="pRapDu" class="inputDate"></div><div style="margin-top:10px"><div style="font-weight:900">Au...</div><input type="date" id="pRapAu" class="inputDate"></div><div style="margin-top:10px"><div style="font-weight:900">Vendeurs</div><select id="pRapVendeur" class="inputDate"><option value="tous">tous</option></select></div><div style="margin-top:10px"><div style="font-weight:900">Tirage</div><select id="pRapTir" class="inputDate"><option value="tous">tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:12px" onclick="calcRapP()">📊 KALKILE</div><div style="border:3px solid #000;border-radius:16px;padding:4px;margin-top:12px;background:#fff"><div style="display:flex;justify-content:space-between;padding:14px 12px;border-bottom:2px solid #000"><span>Vente</span><b id="pRapVente">$0</b></div><div style="display:flex;justify-content:space-between;padding:14px 12px;border-bottom:2px solid #000"><span>Commission</span><b id="pRapCom">$0</b></div><div style="display:flex;justify-content:space-between;padding:14px 12px;border-bottom:2px solid #000;background:#F00;color:#fff"><span>Gain</span><b id="pRapGain">$0</b></div><div style="display:flex;justify-content:space-between;padding:16px 12px;background:#000;color:#FFD700;border-radius:10px"><span>Balance net</span><b id="pRapBal">$0</b></div></div><div class="btnSmall" style="background:#0A0;color:#fff;margin-top:12px" onclick="imprimeRapP()">🖨️ IMPRIMER</div></div></div>
-
-<div id="p6" class="page"><div class="card">
-<div style="background:#000;color:#FFD700;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #000">6.AFFICHAGE RÉSULTATS - 2 KOLÒN POU LIS - 9 case - 1er 2e 3e M1 M2 M3 Auto L3 L4 L5</div>
-<input type="date" id="resDate" class="inputDate" style="margin-top:8px" onchange="loadResultats2Col()">
-
-<!-- 2 KOLÒN POU LIS REZILTA YO -->
-<div class="resGrid2" id="resGrid2"></div>
-
-<div class="btnSmall" style="background:#0A0;color:#fff;margin-top:12px;padding:16px;font-size:12px" onclick="saveResultats2Col()">💾 SAVE REZILTA - Auto L3 L4 L5</div>
-
-<!-- YON TI TABLO ANBA APA POU AFICHE REZILTA YO -->
-<div class="tiTabloAfiche" style="margin-top:14px">
-<div style="background:#000;color:#FFD700;padding:10px;text-align:center;font-weight:900;font-size:11px">📊 TI TABLO ANBA APA POU AFICHE REZILTA YO - 17/08/2026</div>
-<table style="width:100%;border-collapse:collapse"><thead><tr><th>TIRAJ</th><th>1er</th><th>2e</th><th>3e</th><th>M1</th><th>M2</th><th>M3</th><th>L3</th><th>L4</th><th>L5</th></tr></thead><tbody id="tiTabloAficheBody"></tbody></table>
+<!-- APRÈ SA, 9 TI KAZ POU 1e 2e 3e M1 M2 M3 L3 L4 L5 -->
+<div class="kaz9Grid">
+<div class="kazItem"><label>1er lot</label><input id="kaz_r1" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="04" oninput="autoL3L4()"></div>
+<div class="kazItem"><label>2e lot</label><input id="kaz_r2" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="13" oninput="autoL3L4()"></div>
+<div class="kazItem"><label>3e lot</label><input id="kaz_r3" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="25" oninput="autoL3L4()"></div>
+<div class="kazItem"><label>M1</label><input id="kaz_m1" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0413"></div>
+<div class="kazItem"><label>M2</label><input id="kaz_m2" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0425"></div>
+<div class="kazItem"><label>M3</label><input id="kaz_m3" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="1325"></div>
+<div class="kazItem auto"><label>L3 - Auto</label><input id="kaz_l3" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="Auto"></div>
+<div class="kazItem auto"><label>L4 - Auto</label><input id="kaz_l4" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="Auto"></div>
+<div class="kazItem auto"><label>L5 - Auto</label><input id="kaz_l5" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="Auto"></div>
 </div>
 
-<div style="margin-top:8px;font-size:8px;font-weight:900;background:#FFD700;border:2px solid #000;border-radius:8px;padding:6px;text-align:center">2 KOLÒN: MIDI a gòch, SOIR a dwat - Yon ti tablo anba apa pou afiche tout rezilta - M3 pa koupe ankò!</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px">
+<button style="padding:14px;background:#0A0;color:#fff;border-radius:12px;font-weight:900;border:3px solid #000" onclick="saveOneResult()">💾 SAVE RÉSULTATS</button>
+<button style="padding:14px;background:#F00;color:#fff;border-radius:12px;font-weight:900;border:3px solid #000" onclick="effaceOneResult()">🗑️ EFACE TIRAJ</button>
+</div>
+
+<!-- TI TABLO ANBA A BON - OU TE DI BON -->
+<div style="border:3px solid #000;border-radius:12px;margin-top:14px;overflow:hidden">
+<div style="background:#000;color:#FFD700;padding:10px;text-align:center;font-weight:900;font-size:10px">📊 TI TABLO ANBA APA POU AFICHE REZILTA YO - <span id="tiDateLabel">17/08/2026</span></div>
+<table style="width:100%;border-collapse:collapse"><thead><tr>
+<th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">TIRAJ</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">1er</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">2e</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">3e</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">M1</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">M2</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">M3</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">L3</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">L4</th><th style="background:#000;color:#FFD700;padding:6px;font-size:7px;border:1px solid #000">L5</th>
+</tr></thead><tbody id="tiTabloAficheBody"></tbody></table>
+</div>
+
+<div style="margin-top:8px;font-size:8px;font-weight:900;background:#FFD700;border:2px solid #000;border-radius:8px;padding:6px;text-align:center">Anba dat la tiraj chwazi - 9 ti kaz 1e 2e 3e M1 M2 M3 L3 L4 L5 - Save - Ti tablo anba a bon!</div>
 </div></div>
 
-<div id="p7" class="page"><div class="card"><div style="background:#FFD700;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #000">7.PRIX PAR VANDÈ MODIFIABLE</div><select id="prixVendeurSel" class="inputDate" style="margin-top:8px" onchange="loadPrixVendeur()"><option value="">Chwazi vandè</option></select><div id="prixVendeurForm" style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;display:none"><div><div style="font-weight:900">1er lot</div><input id="pv_B1" type="tel" inputmode="numeric" class="inputDate" value="50"></div><div><div style="font-weight:900">2e lot</div><input id="pv_B2" type="tel" inputmode="numeric" class="inputDate" value="20"></div><div><div style="font-weight:900">3e lot</div><input id="pv_B3" type="tel" inputmode="numeric" class="inputDate" value="10"></div><div><div style="font-weight:900">Mariage</div><input id="pv_MARYAJ" type="tel" inputmode="numeric" class="inputDate" value="1000"></div><div><div style="font-weight:900">Loto3</div><input id="pv_L3" type="tel" inputmode="numeric" class="inputDate" value="500"></div><div><div style="font-weight:900">Loto4</div><input id="pv_L4" type="tel" inputmode="numeric" class="inputDate" value="5000"></div><div><div style="font-weight:900">Loto5</div><input id="pv_L5" type="tel" inputmode="numeric" class="inputDate" value="25000"></div></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:10px" onclick="savePrixVendeur()">💾 SAVE PRIX PAR VENDEUR</div></div></div>
-
-<div id="p8" class="page"><div class="card"><div style="background:#F00;color:#fff;padding:12px;text-align:center;border-radius:12px;font-weight:900;border:3px solid #000">8.FERMETURE GLOBAL</div><div id="proprioGlobalStatus" style="margin-top:10px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px"><button style="padding:16px;background:#F00;color:#fff;border-radius:16px;font-weight:900;border:3px solid #000" onclick="proprioFermeTout()">🔒 FÈMEN TOUT VANDÈ</button><button style="padding:16px;background:#0A0;color:#fff;border-radius:16px;font-weight:900;border:3px solid #000" onclick="proprioOuvreTout()">✅ OUVÈ TOUT VANDÈ</button></div><div id="listFermetures" style="margin-top:10px"></div><div class="btnSmall" style="background:#F00;color:#fff;margin-top:10px" onclick="logoutP()">🚪 DEKONEKTE</div></div></div>
+<div id="p7" class="page"><div class="card"><div style="background:#FFD700;padding:10px;text-align:center;border-radius:10px;font-weight:900;border:2px solid #000;font-size:10px">7.PRIX PAR VANDÈ</div><select id="prixVendeurSel" class="inputDate" style="margin-top:6px" onchange="loadPrixVendeur()"><option value="">Chwazi vandè</option></select><div id="prixVendeurForm" style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;display:none"><div><div style="font-weight:900;font-size:9px">1er</div><input id="pv_B1" type="tel" inputmode="numeric" class="inputDate" value="50"></div><div><div style="font-weight:900;font-size:9px">2e</div><input id="pv_B2" type="tel" inputmode="numeric" class="inputDate" value="20"></div><div><div style="font-weight:900;font-size:9px">3e</div><input id="pv_B3" type="tel" inputmode="numeric" class="inputDate" value="10"></div><div><div style="font-weight:900;font-size:9px">Mariage</div><input id="pv_MARYAJ" type="tel" inputmode="numeric" class="inputDate" value="1000"></div><div><div style="font-weight:900;font-size:9px">L3</div><input id="pv_L3" type="tel" inputmode="numeric" class="inputDate" value="500"></div><div><div style="font-weight:900;font-size:9px">L4</div><input id="pv_L4" type="tel" inputmode="numeric" class="inputDate" value="5000"></div><div><div style="font-weight:900;font-size:9px">L5</div><input id="pv_L5" type="tel" inputmode="numeric" class="inputDate" value="25000"></div></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:8px" onclick="savePrixVendeur()">💾 SAVE</div></div></div>
+<div id="p8" class="page"><div class="card"><div style="background:#F00;color:#fff;padding:10px;text-align:center;border-radius:10px;font-weight:900;border:2px solid #000">8.FERMETURE GLOBAL</div><div id="proprioGlobalStatus" style="margin-top:8px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px"><button style="padding:12px;background:#F00;color:#fff;border-radius:12px;font-weight:900;border:2px solid #000" onclick="proprioFermeTout()">🔒 FÈMEN TOUT</button><button style="padding:12px;background:#0A0;color:#fff;border-radius:12px;font-weight:900;border:2px solid #000" onclick="proprioOuvreTout()">✅ OUVÈ TOUT</button></div><div id="listFermetures" style="margin-top:8px"></div><div class="btnSmall" style="background:#F00;color:#fff;margin-top:8px" onclick="logoutP()">🚪 DEKONEKTE</div></div></div>
 
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6",measurementId:"G-TWK9N38BS0"};
 try{firebase.initializeApp(firebaseConfig);}catch(e){}const db=firebase.firestore();
 function haitiISO(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});}function op(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i+1==n));document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i+1==n));}
-let PRIX_GLOBAL={B1:50,B2:20,B3:10,MARYAJ:1000,L3:500,L4:5000,L5:25000},HORAIRES={'GA MIDI':'12:15','FL MIDI':'13:15','NY MIDI':'14:15','GA SOIR':'18:15','FL SOIR':'21:15','NY SOIR':'22:15'},LIMITES_GLOBAL={BOLET:1500,MARYAJ:100,LOTO3:100,LOTO4:20,LOTO5:5};
-let ventes=[],RESULTATS=[],fermetures=[],systemGlobal=null,vendeursList=[];
+let PRIX_GLOBAL={B1:50,B2:20,B3:10,MARYAJ:1000,L3:500,L4:5000,L5:25000},HORAIRES={},LIMITES_GLOBAL={},ventes=[],RESULTATS=[],fermetures=[],systemGlobal=null,vendeursList=[];
 db.collection('ventes').onSnapshot(s=>{ventes=[];s.forEach(d=>ventes.push({...d.data(),id:d.id}));});
-db.collection('resultats').onSnapshot(s=>{RESULTATS=[];s.forEach(d=>RESULTATS.push({...d.data(),id:d.id}));loadResultats2Col();loadTiTabloAfiche();});
+db.collection('resultats').onSnapshot(s=>{RESULTATS=[];s.forEach(d=>RESULTATS.push({...d.data(),id:d.id}));loadOneTiraj();loadTiTablo();});
 db.collection('fermetures').onSnapshot(s=>{fermetures=[];s.forEach(d=>fermetures.push({...d.data(),id:d.id}));loadFermetures();});
 db.collection('system').doc('global').onSnapshot(d=>{systemGlobal=d.exists?d.data():{closed:false};loadFermetures();});
 db.collection('vendeurs').onSnapshot(s=>{vendeursList=[];s.forEach(d=>vendeursList.push({id:d.id,...d.data()}));loadVendeursList();});
 db.collection('config').doc('horaires').onSnapshot(d=>{if(d.exists){HORAIRES=d.data();Object.keys(HORAIRES).forEach(k=>{const el=document.getElementById('h_'+k.replace(' ','_'));if(el)el.value=HORAIRES[k];});}});
-db.collection('config').doc('limites').onSnapshot(d=>{if(d.exists){LIMITES_GLOBAL=d.data();document.getElementById('lim_BOLET').value=LIMITES_GLOBAL.BOLET||1500;document.getElementById('lim_MARYAJ').value=LIMITES_GLOBAL.MARYAJ||100;document.getElementById('lim_LOTO3').value=LIMITES_GLOBAL.LOTO3||100;document.getElementById('lim_LOTO4').value=LIMITES_GLOBAL.LOTO4||20;document.getElementById('lim_LOTO5').value=LIMITES_GLOBAL.LOTO5||5;}});
-db.collection('config').doc('prixGlobal').onSnapshot(d=>{if(d.exists){PRIX_GLOBAL=d.data();document.getElementById('prix_B1').value=PRIX_GLOBAL.B1||50;document.getElementById('prix_B2').value=PRIX_GLOBAL.B2||20;document.getElementById('prix_B3').value=PRIX_GLOBAL.B3||10;document.getElementById('prix_MARYAJ').value=PRIX_GLOBAL.MARYAJ||1000;document.getElementById('prix_L3').value=PRIX_GLOBAL.L3||500;document.getElementById('prix_L4').value=PRIX_GLOBAL.L4||5000;document.getElementById('prix_L5').value=PRIX_GLOBAL.L5||25000;}});
-async function loginP(){const nom=document.getElementById('loginNom').value.trim(),pass=document.getElementById('loginPass').value.trim();const err=document.getElementById('loginErr');if(nom.toLowerCase()!=='proprio'||(pass!=='1234'&&pass!=='0000')){err.innerText='Se PROPRIO/1234';return;}document.getElementById('login').style.display='none';const iso=haitiISO();document.getElementById('resDate').value=iso;document.getElementById('pRapDu').value=iso;document.getElementById('pRapAu').value=iso;loadVendeursList();loadResultats2Col();loadTiTabloAfiche();loadFermetures();op(1);}function logoutP(){document.getElementById('login').style.display='flex';}
+db.collection('config').doc('limites').onSnapshot(d=>{if(d.exists){LIMITES_GLOBAL=d.data();if(document.getElementById('lim_BOLET')){document.getElementById('lim_BOLET').value=LIMITES_GLOBAL.BOLET||1500;document.getElementById('lim_MARYAJ').value=LIMITES_GLOBAL.MARYAJ||100;document.getElementById('lim_LOTO3').value=LIMITES_GLOBAL.LOTO3||100;document.getElementById('lim_LOTO4').value=LIMITES_GLOBAL.LOTO4||20;document.getElementById('lim_LOTO5').value=LIMITES_GLOBAL.LOTO5||5;}}});
+db.collection('config').doc('prixGlobal').onSnapshot(d=>{if(d.exists){PRIX_GLOBAL=d.data();if(document.getElementById('prix_B1')){document.getElementById('prix_B1').value=PRIX_GLOBAL.B1||50;document.getElementById('prix_B2').value=PRIX_GLOBAL.B2||20;document.getElementById('prix_B3').value=PRIX_GLOBAL.B3||10;document.getElementById('prix_MARYAJ').value=PRIX_GLOBAL.MARYAJ||1000;document.getElementById('prix_L3').value=PRIX_GLOBAL.L3||500;document.getElementById('prix_L4').value=PRIX_GLOBAL.L4||5000;document.getElementById('prix_L5').value=PRIX_GLOBAL.L5||25000;}}});
+async function loginP(){const nom=document.getElementById('loginNom').value.trim(),pass=document.getElementById('loginPass').value.trim();if(nom.toLowerCase()!=='proprio'||(pass!=='1234'&&pass!=='0000')){document.getElementById('loginErr').innerText='Se PROPRIO/1234';return;}document.getElementById('login').style.display='none';const iso=haitiISO();document.getElementById('resDate').value=iso;document.getElementById('pRapDu').value=iso;document.getElementById('pRapAu').value=iso;loadVendeursList();loadOneTiraj();loadTiTablo();loadFermetures();op(6);}function logoutP(){document.getElementById('login').style.display='flex';}
+function loadVendeursList(){let html='';const sel=document.getElementById('pRapVendeur');const selPrix=document.getElementById('prixVendeurSel');if(sel)sel.innerHTML='<option value="tous">tous</option>';if(selPrix)selPrix.innerHTML='<option value="">Chwazi vandè</option>';vendeursList.forEach(v=>{const isOpen=v.status!=='ferme';html+=`<div class="vandRow"><span>${v.nom}</span><span>${v.code}</span><span>${v.com||10}%</span><button style="padding:6px;border-radius:6px;border:2px solid #000;font-weight:900;font-size:8px;background:${isOpen?'#0A0':'#F00'};color:#fff" onclick="toggleVendeurStatus('${v.id}')">${isOpen?'OUVÈ':'FÈMEN'}</button><button style="padding:6px;background:#F00;color:#fff;border-radius:6px;border:2px solid #000;font-weight:900;font-size:10px" onclick="delVendeur('${v.id}')">X</button></div>`;if(sel)sel.innerHTML+=`<option value="${v.nom}">${v.nom}</option>`;if(selPrix)selPrix.innerHTML+=`<option value="${v.id}">${v.nom}</option>`;});document.getElementById('listVandeurs').innerHTML=html||'Pa gen vandè';}
+async function toggleVendeurStatus(id){const v=vendeursList.find(x=>x.id===id);if(!v)return;await db.collection('vendeurs').doc(id).update({status:v.status==='ferme'?'ouvè':'ferme'});}
+async function addVendeur(){const nom=document.getElementById('newVNom').value.trim().toUpperCase();const code=document.getElementById('newVCode').value.trim().replace(/[^0-9]/g,'');const com=parseInt(document.getElementById('newVCom').value)||10;if(!nom||!code)return alert('Non + modpas');await db.collection('vendeurs').add({nom,code,com,role:'vendeur',status:'ouvè',prix:{B1:PRIX_GLOBAL.B1,B2:PRIX_GLOBAL.B2,B3:PRIX_GLOBAL.B3,MARYAJ:PRIX_GLOBAL.MARYAJ,L3:PRIX_GLOBAL.L3,L4:PRIX_GLOBAL.L4,L5:PRIX_GLOBAL.L5}});document.getElementById('newVNom').value='';document.getElementById('newVCode').value='';}
+async function delVendeur(id){if(!confirm('Efase?'))return;await db.collection('vendeurs').doc(id).delete();}
+async function saveHeures(){const data={};['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].forEach(t=>{const el=document.getElementById('h_'+t.replace(' ','_'));if(el)data[t]=el.value;});await db.collection('config').doc('horaires').set(data);alert('✅ Save heures');}
+async function saveLimites(){const data={BOLET:parseInt(document.getElementById('lim_BOLET').value)||1500,MARYAJ:parseInt(document.getElementById('lim_MARYAJ').value)||100,LOTO3:parseInt(document.getElementById('lim_LOTO3').value)||100,LOTO4:parseInt(document.getElementById('lim_LOTO4').value)||20,LOTO5:parseInt(document.getElementById('lim_LOTO5').value)||5};await db.collection('config').doc('limites').set(data);alert('✅ Save limite');}
+async function savePrixGlobal(){const data={B1:parseInt(document.getElementById('prix_B1').value)||50,B2:parseInt(document.getElementById('prix_B2').value)||20,B3:parseInt(document.getElementById('prix_B3').value)||10,MARYAJ:parseInt(document.getElementById('prix_MARYAJ').value)||1000,L3:parseInt(document.getElementById('prix_L3').value)||500,L4:parseInt(document.getElementById('prix_L4').value)||5000,L5:parseInt(document.getElementById('prix_L5').value)||25000};await db.collection('config').doc('prixGlobal').set(data);alert('✅ Save prix');}
 
-function loadVendeursList(){
-  let html='';const sel=document.getElementById('pRapVendeur');const selPrix=document.getElementById('prixVendeurSel');
-  if(sel)sel.innerHTML='<option value="tous">tous - Tout vandè</option>';
-  if(selPrix){selPrix.innerHTML='<option value="">Chwazi vandè</option>';}
-  vendeursList.forEach(v=>{
-    const isOpen = v.status!=='ferme';
-    html+=`<div class="vandRow">
-      <span style="font-weight:900">${v.nom}</span>
-      <span style="font-weight:900">${v.code}</span>
-      <span style="font-weight:900">${v.com||10}%</span>
-      <button style="padding:8px;border-radius:8px;border:2px solid #000;font-weight:900;background:${isOpen?'#0A0':'#F00'};color:#fff" onclick="toggleVendeurStatus('${v.id}')">${isOpen?'🟢 OUVÈ':'🔴 FÈMEN'}</button>
-      <button style="padding:6px;background:#F00;color:#fff;border-radius:8px;border:2px solid #000;font-weight:900" onclick="delVendeur('${v.id}')">X</button>
-    </div>`;
-    if(sel)sel.innerHTML+=`<option value="${v.nom}">${v.nom}</option>`;
-    if(selPrix)selPrix.innerHTML+=`<option value="${v.id}">${v.nom}</option>`;
-  });
-  document.getElementById('listVandeurs').innerHTML=html||'Pa gen vandè - Ajoute nouvo vandè';
-}
-async function toggleVendeurStatus(id){
-  const v=vendeursList.find(x=>x.id===id);if(!v)return;
-  const newStatus = v.status==='ferme'?'ouvè':'ferme';
-  await db.collection('vendeurs').doc(id).update({status:newStatus});
-}
-async function addVendeur(){const nom=document.getElementById('newVNom').value.trim().toUpperCase();const code=document.getElementById('newVCode').value.trim().replace(/[^0-9]/g,'');const com=parseInt(document.getElementById('newVCom').value)||10;if(!nom||!code)return alert('Non vandè1 + modpas + %');await db.collection('vendeurs').add({nom,code,com,role:'vendeur',status:'ouvè',prix:{B1:PRIX_GLOBAL.B1,B2:PRIX_GLOBAL.B2,B3:PRIX_GLOBAL.B3,MARYAJ:PRIX_GLOBAL.MARYAJ,L3:PRIX_GLOBAL.L3,L4:PRIX_GLOBAL.L4,L5:PRIX_GLOBAL.L5}});document.getElementById('newVNom').value='';document.getElementById('newVCode').value='';alert(`✅ ${nom} ajoute - ${com}% - OUVÈ`);}async function delVendeur(id){if(!confirm('Efase vandè sa a?'))return;await db.collection('vendeurs').doc(id).delete();}
-async function saveHeures(){const data={};['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].forEach(t=>{const el=document.getElementById('h_'+t.replace(' ','_'));if(el)data[t]=el.value;});await db.collection('config').doc('horaires').set(data);alert('✅ Heure save');}
-async function saveLimites(){const data={BOLET:parseInt(document.getElementById('lim_BOLET').value)||1500,MARYAJ:parseInt(document.getElementById('lim_MARYAJ').value)||100,LOTO3:parseInt(document.getElementById('lim_LOTO3').value)||100,LOTO4:parseInt(document.getElementById('lim_LOTO4').value)||20,LOTO5:parseInt(document.getElementById('lim_LOTO5').value)||5};await db.collection('config').doc('limites').set(data);alert('✅ Limite save');}
-async function savePrixGlobal(){const data={B1:parseInt(document.getElementById('prix_B1').value)||50,B2:parseInt(document.getElementById('prix_B2').value)||20,B3:parseInt(document.getElementById('prix_B3').value)||10,MARYAJ:parseInt(document.getElementById('prix_MARYAJ').value)||1000,L3:parseInt(document.getElementById('prix_L3').value)||500,L4:parseInt(document.getElementById('prix_L4').value)||5000,L5:parseInt(document.getElementById('prix_L5').value)||25000};await db.collection('config').doc('prixGlobal').set(data);alert('✅ Prix global save');}
-
-// 2 KOLÒN REZILTA
-function loadResultats2Col(){
+// NOUVO LOGIC V8.2 - ANBA DAT LA TIRAJ CHWAZI + 9 KAZ
+function loadOneTiraj(){
   const iso=document.getElementById('resDate')?.value||haitiISO();
-  const grid=document.getElementById('resGrid2');if(!grid)return;
-  let html='';
-  const tirajs=['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'];
-  tirajs.forEach(tiraj=>{
-    const ex=RESULTATS.find(r=>r.date===iso&&r.tiraj===tiraj);
-    html+=`<div class="resCard">
-      <div class="resCardHeader">🎰 ${tiraj} ${tiraj.includes('MIDI')?'☀️':'🌙'}</div>
-      <div class="inputRow"><label>1er</label><input id="r_${tiraj}_r1" type="tel" inputmode="numeric" maxlength="2" value="${ex?.r1||''}" oninput="autoLoto('${tiraj}')" placeholder="04"><input id="r_${tiraj}_m1" type="tel" inputmode="numeric" maxlength="4" value="${ex?.m1||''}" placeholder="M1 0413"><button style="padding:8px;background:#F00;color:#fff;border-radius:8px;border:1px solid #000;font-weight:900;font-size:8px" onclick="effaceResultat('${tiraj}')">EFACE</button></div>
-      <div class="inputRow"><label>2e</label><input id="r_${tiraj}_r2" type="tel" inputmode="numeric" maxlength="2" value="${ex?.r2||''}" oninput="autoLoto('${tiraj}')" placeholder="13"><input id="r_${tiraj}_m2" type="tel" inputmode="numeric" maxlength="4" value="${ex?.m2||''}" placeholder="M2 0425"></div>
-      <div class="inputRow"><label>3e</label><input id="r_${tiraj}_r3" type="tel" inputmode="numeric" maxlength="2" value="${ex?.r3||''}" oninput="autoLoto('${tiraj}')" placeholder="25"><input id="r_${tiraj}_m3" type="tel" inputmode="numeric" maxlength="4" value="${ex?.m3||''}" placeholder="M3 1325"></div>
-      <div class="inputRow"><label>L3</label><input id="r_${tiraj}_l3" type="tel" inputmode="numeric" maxlength="3" value="${ex?.l3||''}" style="background:#FFD700" placeholder="Auto"><label style="font-size:8px">Auto</label></div>
-      <div class="inputRow"><label>L4</label><input id="r_${tiraj}_l4" type="tel" inputmode="numeric" maxlength="4" value="${ex?.l4||''}" style="background:#FFD700" placeholder="Auto"><label style="font-size:8px">Auto</label></div>
-      <div class="inputRow"><label>L5</label><input id="r_${tiraj}_l5" type="tel" inputmode="numeric" maxlength="5" value="${ex?.l5||''}" style="background:#FFD700" placeholder="Auto"><label style="font-size:8px">Auto</label></div>
-    </div>`;
-  });
-  grid.innerHTML=html;
-  loadTiTabloAfiche();
+  const tiraj=document.getElementById('resTiraj')?.value||'GA MIDI';
+  const ex=RESULTATS.find(r=>r.date===iso&&r.tiraj===tiraj);
+  document.getElementById('kaz_r1').value=ex?.r1||'';document.getElementById('kaz_r2').value=ex?.r2||'';document.getElementById('kaz_r3').value=ex?.r3||'';
+  document.getElementById('kaz_m1').value=ex?.m1||'';document.getElementById('kaz_m2').value=ex?.m2||'';document.getElementById('kaz_m3').value=ex?.m3||'';
+  document.getElementById('kaz_l3').value=ex?.l3||'';document.getElementById('kaz_l4').value=ex?.l4||'';document.getElementById('kaz_l5').value=ex?.l5||'';
+  loadTiTablo();
 }
+function autoL3L4(){
+  const r1=document.getElementById('kaz_r1').value||'';const r2=document.getElementById('kaz_r2').value||'';const r3=document.getElementById('kaz_r3').value||'';
+  if(r1&&r2&&r3){const l3=document.getElementById('kaz_l3');if(l3&&!l3.value) l3.value=r1+r2+r3.slice(0,1);}
+  if(r1&&r2){const l4=document.getElementById('kaz_l4');if(l4&&!l4.value) l4.value=r1+r2;}
+}
+async function saveOneResult(){
+  const iso=document.getElementById('resDate').value||haitiISO();const tiraj=document.getElementById('resTiraj').value||'GA MIDI';
+  const r1=document.getElementById('kaz_r1').value.trim().replace(/[^0-9]/g,'');const r2=document.getElementById('kaz_r2').value.trim().replace(/[^0-9]/g,'');const r3=document.getElementById('kaz_r3').value.trim().replace(/[^0-9]/g,'');
+  const m1=document.getElementById('kaz_m1').value.trim().replace(/[^0-9]/g,'');const m2=document.getElementById('kaz_m2').value.trim().replace(/[^0-9]/g,'');const m3=document.getElementById('kaz_m3').value.trim().replace(/[^0-9]/g,'');
+  const l3=document.getElementById('kaz_l3').value.trim().replace(/[^0-9]/g,'');const l4=document.getElementById('kaz_l4').value.trim().replace(/[^0-9]/g,'');const l5=document.getElementById('kaz_l5').value.trim().replace(/[^0-9]/g,'');
+  if(!r1&&!r2&&!r3&&!m1&&!m2&&!m3){return alert('Antre omwen 1er 2e 3e');}
+  const id=`${iso}_${tiraj.replace(' ','_')}`;await db.collection('resultats').doc(id).set({date:iso,tiraj,r1,r2,r3,m1,m2,m3,l3,l4,l5,timestamp:Date.now()});
+  alert(`✅ SAVE RÉSULTATS - ${tiraj} - ${iso} - 9 kaz - Ti tablo anba a bon!`);loadTiTablo();
+}
+async function effaceOneResult(){const iso=document.getElementById('resDate').value||haitiISO();const tiraj=document.getElementById('resTiraj').value;if(!confirm(`Efase ${tiraj} ${iso}?`))return;await db.collection('resultats').doc(`${iso}_${tiraj.replace(' ','_')}`).delete();loadOneTiraj();alert(`Efase ${tiraj}`);}
 
-function loadTiTabloAfiche(){
-  const iso=document.getElementById('resDate')?.value||haitiISO();
-  const tbody=document.getElementById('tiTabloAficheBody');if(!tbody)return;
-  let html='';
-  ['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].forEach(tiraj=>{
-    const ex=RESULTATS.find(r=>r.date===iso&&r.tiraj===tiraj);
-    if(ex&& (ex.r1||ex.r2||ex.r3)){
-      html+=`<tr><td>${tiraj}</td><td>${ex.r1||''}</td><td>${ex.r2||''}</td><td>${ex.r3||''}</td><td>${ex.m1||''}</td><td>${ex.m2||''}</td><td>${ex.m3||''}</td><td style="background:#FFD700">${ex.l3||''}</td><td style="background:#FFD700">${ex.l4||''}</td><td style="background:#FFD700">${ex.l5||''}</td></tr>`;
-    }
-  });
-  tbody.innerHTML=html||`<tr><td colspan="10" style="padding:12px">Pa gen rezilta pou ${iso} - Antre pi wo a</td></tr>`;
+function loadTiTablo(){
+  const iso=document.getElementById('resDate')?.value||haitiISO();document.getElementById('tiDateLabel').innerText=iso.split('-').reverse().join('/');
+  const tbody=document.getElementById('tiTabloAficheBody');if(!tbody)return;let html='';['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].forEach(tiraj=>{const ex=RESULTATS.find(r=>r.date===iso&&r.tiraj===tiraj);if(ex&&(ex.r1||ex.r2||ex.r3)){html+=`<tr><td style="border:1px solid #000;padding:5px;font-size:7px;font-weight:900">${tiraj}</td><td style="border:1px solid #000;padding:5px;font-size:8px">${ex.r1||''}</td><td style="border:1px solid #000;padding:5px;font-size:8px">${ex.r2||''}</td><td style="border:1px solid #000;padding:5px;font-size:8px">${ex.r3||''}</td><td style="border:1px solid #000;padding:5px;font-size:7px">${ex.m1||''}</td><td style="border:1px solid #000;padding:5px;font-size:7px">${ex.m2||''}</td><td style="border:1px solid #000;padding:5px;font-size:7px">${ex.m3||''}</td><td style="border:1px solid #000;padding:5px;font-size:7px;background:#FFD700">${ex.l3||''}</td><td style="border:1px solid #000;padding:5px;font-size:7px;background:#FFD700">${ex.l4||''}</td><td style="border:1px solid #000;padding:5px;font-size:7px;background:#FFD700">${ex.l5||''}</td></tr>`;}});tbody.innerHTML=html||`<tr><td colspan="10" style="padding:10px;text-align:center;font-size:8px">Pa gen rezilta pou ${iso}</td></tr>`;
 }
-
-function autoLoto(tiraj){
-  const r1=document.getElementById(`r_${tiraj}_r1`)?.value||'';const r2=document.getElementById(`r_${tiraj}_r2`)?.value||'';const r3=document.getElementById(`r_${tiraj}_r3`)?.value||'';
-  if(r1&&r2&&r3){const l3=document.getElementById(`r_${tiraj}_l3`);if(l3&&!l3.value) l3.value=r1+r2+r3.slice(0,1);}
-  if(r1&&r2){const l4=document.getElementById(`r_${tiraj}_l4`);if(l4&&!l4.value) l4.value=r1+r2;}
-}
-async function saveResultats2Col(){
-  const iso=document.getElementById('resDate').value||haitiISO();
-  for(let tiraj of ['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR']){
-    const r1=document.getElementById(`r_${tiraj}_r1`)?.value.trim().replace(/[^0-9]/g,'');const r2=document.getElementById(`r_${tiraj}_r2`)?.value.trim().replace(/[^0-9]/g,'');const r3=document.getElementById(`r_${tiraj}_r3`)?.value.trim().replace(/[^0-9]/g,'');
-    const m1=document.getElementById(`r_${tiraj}_m1`)?.value.trim().replace(/[^0-9]/g,'');const m2=document.getElementById(`r_${tiraj}_m2`)?.value.trim().replace(/[^0-9]/g,'');const m3=document.getElementById(`r_${tiraj}_m3`)?.value.trim().replace(/[^0-9]/g,'');
-    const l3=document.getElementById(`r_${tiraj}_l3`)?.value.trim().replace(/[^0-9]/g,'');const l4=document.getElementById(`r_${tiraj}_l4`)?.value.trim().replace(/[^0-9]/g,'');const l5=document.getElementById(`r_${tiraj}_l5`)?.value.trim().replace(/[^0-9]/g,'');
-    if(r1||r2||r3||m1||m2||m3||l3||l4||l5){
-      const id=`${iso}_${tiraj.replace(' ','_')}`;await db.collection('resultats').doc(id).set({date:iso,tiraj,r1:r1||'',r2:r2||'',r3:r3||'',m1:m1||'',m2:m2||'',m3:m3||'',l3:l3||'',l4:l4||'',l5:l5||'',timestamp:Date.now()});
-    }
-  }
-  alert('✅ 2 KOLÒN SAVE - Ti tablo anba apa ap afiche kounya!');
-  loadTiTabloAfiche();
-}
-async function effaceResultat(tiraj){if(!confirm(`Efase ${tiraj}?`))return;const iso=document.getElementById('resDate').value||haitiISO();const id=`${iso}_${tiraj.replace(' ','_')}`;await db.collection('resultats').doc(id).delete();loadResultats2Col();}
 function loadPrixVendeur(){const id=document.getElementById('prixVendeurSel').value;if(!id)return;const v=vendeursList.find(x=>x.id===id);if(!v)return;const prix=v.prix||PRIX_GLOBAL;document.getElementById('prixVendeurForm').style.display='grid';document.getElementById('pv_B1').value=prix.B1||50;document.getElementById('pv_B2').value=prix.B2||20;document.getElementById('pv_B3').value=prix.B3||10;document.getElementById('pv_MARYAJ').value=prix.MARYAJ||1000;document.getElementById('pv_L3').value=prix.L3||500;document.getElementById('pv_L4').value=prix.L4||5000;document.getElementById('pv_L5').value=prix.L5||25000;}
-async function savePrixVendeur(){const id=document.getElementById('prixVendeurSel').value;if(!id)return alert('Chwazi vandè');const data={B1:parseInt(document.getElementById('pv_B1').value)||50,B2:parseInt(document.getElementById('pv_B2').value)||20,B3:parseInt(document.getElementById('pv_B3').value)||10,MARYAJ:parseInt(document.getElementById('pv_MARYAJ').value)||1000,L3:parseInt(document.getElementById('pv_L3').value)||500,L4:parseInt(document.getElementById('pv_L4').value)||5000,L5:parseInt(document.getElementById('pv_L5').value)||25000};await db.collection('vendeurs').doc(id).update({prix:data});alert('✅ Prix par vendeur save');}
-function getPrix(nom){const v=vendeursList.find(x=>x.nom===nom);const c=v&&v.prix?v.prix:null;return{B1:c&&c.B1?c.B1:PRIX_GLOBAL.B1,B2:c&&c.B2?c.B2:PRIX_GLOBAL.B2,B3:c&&c.B3?c.B3:PRIX_GLOBAL.B3,MARYAJ:c&&c.MARYAJ?c.MARYAJ:PRIX_GLOBAL.MARYAJ,L3:c&&c.L3?c.L3:PRIX_GLOBAL.L3,L4:c&&c.L4?c.L4:PRIX_GLOBAL.L4,L5:c&&c.L5?c.L5:PRIX_GLOBAL.L5};}
-function calcGain(l,r,f){const prix=getPrix(f.vendeur);if(l.jeux==='BOLET'){if(l.boul===r.r1)return l.miz*prix.B1;if(l.boul===r.r2)return l.miz*prix.B2;if(l.boul===r.r3)return l.miz*prix.B3;}else if(l.jeux==='MARYAJ'){const mm=(a,b)=>{if(!a||!b)return false;a=a.toString().replace(/[^0-9]/g,'');b=b.toString().replace(/[^0-9]/g,'');if(a.length<4||b.length<4)return false;const aa=[a.slice(0,2),a.slice(2,4)],bb=[b.slice(0,2),b.slice(2,4)];return(aa[0]===bb[0]&&aa[1]===bb[1])||(aa[0]===bb[1]&&aa[1]===bb[0]);};if(mm(r.m1,l.boul)||mm(r.m2,l.boul)||mm(r.m3,l.boul))return l.miz*prix.MARYAJ;}else if(l.jeux==='LOTO3'&&r.l3&&l.boul===r.l3)return l.miz*prix.L3;else if(l.jeux==='LOTO4'&&r.l4&&l.boul===r.l4)return l.miz*prix.L4;else if(l.jeux==='LOTO5'&&r.l5&&l.boul===r.l5)return l.miz*prix.L5;return 0;}
-function calcRapP(){const du=document.getElementById('pRapDu').value,au=document.getElementById('pRapAu').value,vSel=document.getElementById('pRapVendeur').value,tirSel=document.getElementById('pRapTir').value;if(!du||!au)return alert('Chwazi Du Au');let tot=0,comTot=0,gainTot=0;ventes.filter(f=>f.dateISO>=du&&f.dateISO<=au).forEach(f=>{if(vSel!=='tous'&&f.vendeur!==vSel)return;if(tirSel!=='tous'&&!f.tirages.includes(tirSel))return;const ventePerTiraj=tirSel==='tous'?(f.parTiraj||0)*(f.nbTiraj||1):(f.parTiraj||0);tot+=ventePerTiraj;comTot+=Math.round(ventePerTiraj*(f.com||10)/100);if(tirSel==='tous'){f.tirages.forEach(t=>{const r=RESULTATS.find(x=>x.date===f.dateISO&&x.tiraj===t);if(r)f.list.forEach(l=>{gainTot+=calcGain(l,r,f);});});}else{const r=RESULTATS.find(x=>x.date===f.dateISO&&x.tiraj===tirSel);if(r)f.list.forEach(l=>{gainTot+=calcGain(l,r,f);});}});document.getElementById('pRapVente').innerText='$'+tot;document.getElementById('pRapCom').innerText='$'+comTot;document.getElementById('pRapGain').innerText='$'+gainTot;document.getElementById('pRapBal').innerText='$'+(tot-comTot-gainTot);}
-function imprimeRapP(){window.print();}
-function loadFermetures(){const el=document.getElementById('listFermetures');const globalEl=document.getElementById('proprioGlobalStatus');if(!el)return;let html='';fermetures.filter(f=>f.dateISO===haitiISO()).forEach(f=>{html+=`<div style="border:2px solid #000;border-radius:8px;padding:6px;margin:4px 0;background:#ffcccc;font-weight:900">🔒 ${f.vendeur} FÈMEN ${f.heure} - Vente $${f.venteTot}</div>`;});el.innerHTML=html||'Pa gen fèmti jodi a';if(globalEl){if(systemGlobal&&systemGlobal.closed){globalEl.innerHTML=`<div class="globalFerme">🔒 SISTÈM FÈMEN DEPI ${systemGlobal.heure} pa ${systemGlobal.by}</div>`;}else{globalEl.innerHTML=`<div class="globalOuvert">✅ SISTÈM OUVÈ</div>`;}}}
-async function proprioFermeTout(){const heure=new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince'});await db.collection('system').doc('global').set({closed:true,by:'PROPRIO',heure,date:haitiISO(),timestamp:Date.now()});alert('🔒 FÈMEN TOUT!');}
-async function proprioOuvreTout(){const heure=new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince'});await db.collection('system').doc('global').set({closed:false,by:'PROPRIO',heureOuvre:heure,date:haitiISO(),timestamp:Date.now()});alert('✅ OUVÈ TOUT!');}
+async function savePrixVendeur(){const id=document.getElementById('prixVendeurSel').value;if(!id)return alert('Chwazi vandè');const data={B1:parseInt(document.getElementById('pv_B1').value)||50,B2:parseInt(document.getElementById('pv_B2').value)||20,B3:parseInt(document.getElementById('pv_B3').value)||10,MARYAJ:parseInt(document.getElementById('pv_MARYAJ').value)||1000,L3:parseInt(document.getElementById('pv_L3').value)||500,L4:parseInt(document.getElementById('pv_L4').value)||5000,L5:parseInt(document.getElementById('pv_L5').value)||25000};await db.collection('vendeurs').doc(id).update({prix:data});alert('✅ Prix vendeur save');}
+function calcRapP(){const du=document.getElementById('pRapDu').value,au=document.getElementById('pRapAu').value,vSel=document.getElementById('pRapVendeur').value,tirSel=document.getElementById('pRapTir').value;if(!du||!au)return alert('Du Au');let tot=0,comTot=0,gainTot=0;ventes.filter(f=>f.dateISO>=du&&f.dateISO<=au).forEach(f=>{if(vSel!=='tous'&&f.vendeur!==vSel)return;if(tirSel!=='tous'&&!f.tirages.includes(tirSel))return;const v=tirSel==='tous'?(f.parTiraj||0)*(f.nbTiraj||1):(f.parTiraj||0);tot+=v;comTot+=Math.round(v*(f.com||10)/100);});document.getElementById('pRapVente').innerText='$'+tot;document.getElementById('pRapCom').innerText='$'+comTot;document.getElementById('pRapGain').innerText='$'+gainTot;document.getElementById('pRapBal').innerText='$'+(tot-comTot-gainTot);}
+function loadFermetures(){const el=document.getElementById('listFermetures');if(!el)return;let html='';fermetures.filter(f=>f.dateISO===haitiISO()).forEach(f=>{html+=`<div style="border:2px solid #000;border-radius:8px;padding:6px;margin:4px 0;background:#ffcccc;font-weight:900;font-size:9px">🔒 ${f.vendeur} FÈMEN ${f.heure}</div>`;});el.innerHTML=html||'Pa gen fèmti';}
+async function proprioFermeTout(){const heure=new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince'});await db.collection('system').doc('global').set({closed:true,by:'PROPRIO',heure,date:haitiISO(),timestamp:Date.now()});}
+async function proprioOuvreTout(){const heure=new Date().toLocaleTimeString('fr-HT',{timeZone:'America/Port-au-Prince'});await db.collection('system').doc('global').set({closed:false,by:'PROPRIO',heureOuvre:heure,date:haitiISO(),timestamp:Date.now()});}
 </script></body></html>
