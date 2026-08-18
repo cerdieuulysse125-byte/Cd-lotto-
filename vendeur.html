@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VANDÈ V7.8 - 6 TIRAJ + FIX BOUL</title>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VANDÈ V7.9 FINAL ESPAS + LIMITE GLOBAL</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial;background:#fff}
 #login{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center}
@@ -22,53 +22,33 @@
 .page{display:none}.page.active{display:block}
 .card{border:3px solid #000;margin:6px;border-radius:12px;padding:10px}
 .btnSmall{padding:12px;border:3px solid #000;border-radius:12px;font-weight:900;font-size:11px;text-align:center;margin:6px 0}
+.limiteInfo{background:#FFD700;border:3px solid #F00;border-radius:12px;padding:8px;margin:6px;font-weight:900;font-size:9px;text-align:center}
 @media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:fixed;left:0;top:0;width:100%;text-align:center;display:block!important}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head><body>
-<div id="login"><div class="loginBox"><div style="background:#000;color:#FFD700;padding:10px;border-radius:10px;font-weight:900;margin-bottom:10px">VANDÈ V7.8 - 6 TIRAJ + FIX</div><input id="loginNom" type="text" placeholder="Non JEAN"><input id="loginPass" type="tel" inputmode="numeric" placeholder="Modpas" oninput="this.value=this.value.replace(/[^0-9]/g,'')"><button class="btnLogin" onclick="loginV()">KONEKTE</button><div id="loginErr" style="color:red;font-weight:900;margin-top:8px;font-size:10px"></div></div></div>
-<div class="hTop" id="hTop">VENDEUR - JEAN - V7.8 6 TIRAJ</div><div class="hBlack" id="hBlack">2026-08-17 | JEAN | 10%</div>
+<div id="login"><div class="loginBox"><div style="background:#000;color:#FFD700;padding:10px;border-radius:10px;font-weight:900;margin-bottom:10px">VANDÈ V7.9 - ESPAS + LIMITE GLOBAL</div><input id="loginNom" type="text" placeholder="Non JEAN"><input id="loginPass" type="tel" inputmode="numeric" placeholder="Modpas" oninput="this.value=this.value.replace(/[^0-9]/g,'')"><button class="btnLogin" onclick="loginV()">KONEKTE</button><div id="loginErr" style="color:red;font-weight:900;margin-top:8px;font-size:10px"></div></div></div>
+<div class="hTop" id="hTop">VENDEUR - JEAN - V7.9 6 TIRAJ FIX</div><div class="hBlack" id="hBlack">2026-08-17 | JEAN | 10%</div>
 <div class="tabs"><button class="tab active" onclick="op(1)">1.VENTE</button><button class="tab" onclick="op(2)">2.KOPYE</button><button class="tab" onclick="op(3)">3.FICHES</button><button class="tab" onclick="op(4)">4.RAPPORT</button></div>
-
-<div id="p1" class="page active">
-<div id="globalStatus"></div><div id="statusFerme"></div>
-
-<!-- 6 KAK KI GEN TIRAJ YO - RETOUNEN -->
-<div class="tirajGrid">
-<button class="tirajBtn" id="btn_GA_MIDI" onclick="toggleT('GA MIDI')">GA MIDI</button>
-<button class="tirajBtn" id="btn_FL_MIDI" onclick="toggleT('FL MIDI')">FL MIDI</button>
-<button class="tirajBtn" id="btn_NY_MIDI" onclick="toggleT('NY MIDI')">NY MIDI</button>
-<button class="tirajBtn" id="btn_GA_SOIR" onclick="toggleT('GA SOIR')">GA SOIR</button>
-<button class="tirajBtn" id="btn_FL_SOIR" onclick="toggleT('FL SOIR')">FL SOIR</button>
-<button class="tirajBtn" id="btn_NY_SOIR" onclick="toggleT('NY SOIR')">NY SOIR</button>
-</div>
-<div class="combiBtn" id="combiBtn">Tiraj miltip - koche pou chwazi</div>
-
-<div id="lignesBox"></div>
-<div class="totalBar" id="totalBar">Total ×tiraj - $0 × 0 = $0 - Flèche ↓ kenbe je</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px"><div class="btnValide" onclick="valideFiche()">💾 VALIDER</div><div class="btnValide" style="background:#0A0" onclick="valideEtImprime()">🖨️ VALIDER + IMPRIMER SANTRÉ</div></div>
-</div>
-
+<div id="p1" class="page active"><div id="globalStatus"></div><div id="limiteInfo" class="limiteInfo">Limite Global Vandè1+Vandè2+... - Bòlèt 1500 Maryaj 100 L3 100 L4 20 L5 5 - Respekte</div><div class="tirajGrid"><button class="tirajBtn" id="btn_GA_MIDI" onclick="toggleT('GA MIDI')">GA MIDI</button><button class="tirajBtn" id="btn_FL_MIDI" onclick="toggleT('FL MIDI')">FL MIDI</button><button class="tirajBtn" id="btn_NY_MIDI" onclick="toggleT('NY MIDI')">NY MIDI</button><button class="tirajBtn" id="btn_GA_SOIR" onclick="toggleT('GA SOIR')">GA SOIR</button><button class="tirajBtn" id="btn_FL_SOIR" onclick="toggleT('FL SOIR')">FL SOIR</button><button class="tirajBtn" id="btn_NY_SOIR" onclick="toggleT('NY SOIR')">NY SOIR</button></div><div class="combiBtn" id="combiBtn">Tiraj miltip - koche pou chwazi</div><div id="lignesBox"></div><div class="totalBar" id="totalBar">Total ×tiraj - $0 × 0 = $0</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px"><div class="btnValide" onclick="valideFiche()">💾 VALIDER</div><div class="btnValide" style="background:#0A0" onclick="valideEtImprime()">🖨️ VALIDER + IMPRIMER SANTRÉ</div></div></div>
 <div id="p2" class="page"><div class="card"><input id="copyId" type="text" placeholder="ID Ticket" style="width:100%;padding:14px;border:3px solid #000;border-radius:12px;font-weight:900;text-align:center"><div class="btnSmall" style="background:#000;color:#FFD700" onclick="kopyeTicket()">📋 KOPYE</div><div id="kopyeResult"></div></div></div>
 <div id="p3" class="page"><div class="card"><input type="date" id="fichDate" style="width:100%;padding:10px;border:2px solid #000;border-radius:10px;font-weight:900"><div class="btnSmall" style="background:#FFD700" onclick="loadFiches()">🔄 CHAJE</div><div id="fichList"></div><div style="border:2px solid #000;border-radius:10px;padding:8px;margin-top:8px;background:#FFD700;display:flex;justify-content:space-between;font-weight:900"><span>Vente</span><b id="fichTotal">$0</b></div><div style="border:2px solid #000;border-radius:10px;padding:8px;margin-top:4px;background:#F00;color:#fff;display:flex;justify-content:space-between;font-weight:900"><span>Gain</span><b id="fichGain">$0</b></div><div style="border:2px solid #000;border-radius:10px;padding:8px;margin-top:4px;background:#000;color:#FFD700;display:flex;justify-content:space-between;font-weight:900"><span>Balance</span><b id="fichBal">$0</b></div></div></div>
 <div id="p4" class="page"><div class="card"><div style="margin-top:10px"><div style="font-weight:900">Du...</div><input type="date" id="rapDu" style="width:100%;padding:14px;border:3px solid #000;border-radius:14px;font-weight:900"></div><div style="margin-top:10px"><div style="font-weight:900">Au...</div><input type="date" id="rapAu" style="width:100%;padding:14px;border:3px solid #000;border-radius:14px;font-weight:900"></div><div style="margin-top:10px"><div style="font-weight:900">Tiraj</div><select id="rapTir" style="width:100%;padding:14px;border:3px solid #000;border-radius:14px;font-weight:900"><option value="tous">tous</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select></div><div class="btnSmall" style="background:#000;color:#FFD700;margin-top:12px;padding:14px" onclick="calcRap()">📊 KALKILE</div><div style="border:3px solid #000;border-radius:16px;padding:4px;margin-top:12px;background:#fff"><div style="display:flex;justify-content:space-between;padding:14px 12px;border-bottom:2px solid #000"><span>Vente</span><b id="rapVente">$0</b></div><div style="display:flex;justify-content:space-between;padding:14px 12px;border-bottom:2px solid #000"><span>Commission</span><b id="rapCom">$0</b></div><div style="display:flex;justify-content:space-between;padding:14px 12px;border-bottom:2px solid #000;background:#F00;color:#fff"><span>Gain</span><b id="rapGain">$0</b></div><div style="display:flex;justify-content:space-between;padding:16px 12px;background:#000;color:#FFD700;border-radius:10px"><span>Balance net</span><b id="rapBal">$0</b></div></div><div class="btnSmall" style="background:#F00;color:#fff" onclick="logoutV()">🚪 DEKONEKTE</div></div></div>
-
 <div id="printArea" style="display:none"></div>
-
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6",measurementId:"G-TWK9N38BS0"};
 try{firebase.initializeApp(firebaseConfig);}catch(e){}const db=firebase.firestore();
 function haitiISO(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});}function haitiTime(){return new Date().toLocaleTimeString('en-GB',{timeZone:'America/Port-au-Prince',hour12:false});}
 function op(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i+1==n));document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i+1==n));}
 let PRIX_GLOBAL={B1:50,B2:20,B3:10,MARYAJ:1000,L3:500,L4:5000,L5:25000},HORAIRES={'GA MIDI':'12:15','FL MIDI':'13:15','NY MIDI':'14:15','GA SOIR':'18:15','FL SOIR':'21:15','NY SOIR':'22:15'},LIMITES_GLOBAL={BOLET:1500,MARYAJ:100,LOTO3:100,LOTO4:20,LOTO5:5},currentV=null,tiragesSel=[],ventes=[],RESULTATS=[],vendeursList=[],ANTET={nom:"C&D VÉRITÉ LOTTO",tel:"",adresse:"",slogan:"Bòn chans, lave chodyè w"};
-db.collection('ventes').onSnapshot(s=>{ventes=[];s.forEach(d=>ventes.push({...d.data(),id:d.id}));loadFiches();calcRap();});
+db.collection('ventes').onSnapshot(s=>{ventes=[];s.forEach(d=>ventes.push({...d.data(),id:d.id}));loadFiches();calcRap();updateLimiteInfo();});
 db.collection('resultats').onSnapshot(s=>{RESULTATS=[];s.forEach(d=>RESULTATS.push(d.data()));loadFiches();calcRap();});
 db.collection('vendeurs').onSnapshot(s=>{vendeursList=[];s.forEach(d=>vendeursList.push({id:d.id,...d.data()}));});
 db.collection('config').doc('horaires').onSnapshot(d=>{if(d.exists)HORAIRES=d.data();});
 db.collection('config').doc('prixGlobal').onSnapshot(d=>{if(d.exists)PRIX_GLOBAL=d.data();});
-db.collection('config').doc('limites').onSnapshot(d=>{if(d.exists)LIMITES_GLOBAL=d.data();});
+db.collection('config').doc('limites').onSnapshot(d=>{if(d.exists){LIMITES_GLOBAL=d.data();updateLimiteInfo();}});
 db.collection('config').doc('antet').onSnapshot(d=>{if(d.exists)ANTET=d.data();});
-
+function updateLimiteInfo(){const el=document.getElementById('limiteInfo');if(!el)return;el.innerText=`Limite Global Vandè1+Vandè2+... Respekte - Bòlèt ${LIMITES_GLOBAL.BOLET||1500} Maryaj ${LIMITES_GLOBAL.MARYAJ||100} L3 ${LIMITES_GLOBAL.LOTO3||100} L4 ${LIMITES_GLOBAL.LOTO4||20} L5 ${LIMITES_GLOBAL.LOTO5||5}`;}
 async function loginV(){
   const nom=document.getElementById('loginNom').value.trim(),pass=document.getElementById('loginPass').value.trim().replace(/[^0-9]/g,'');
   const err=document.getElementById('loginErr');
@@ -78,25 +58,14 @@ async function loginV(){
   if(!found){err.innerText=`❌ ${nom}/${pass} pa jwenn`;return;}
   if(found.status==='ferme'){err.innerText=`⛔ ${found.nom} FÈMEN NAN PROPRIO`;return;}
   currentV=found;document.getElementById('login').style.display='none';
-  document.getElementById('hTop').innerText=`VENDEUR - ${found.nom.toUpperCase()} - V7.8 6 TIRAJ`;
+  document.getElementById('hTop').innerText=`VENDEUR - ${found.nom.toUpperCase()} - V7.9 FIX BOUL + LIMITE`;
   document.getElementById('hBlack').innerText=`${haitiISO()} | ${found.nom} | ${found.com||10}%`;
   const iso=haitiISO();document.getElementById('fichDate').value=iso;document.getElementById('rapDu').value=iso;document.getElementById('rapAu').value=iso;
   tiragesSel=[];updateTirajBtns();initLignes();op(1);
 }
 function logoutV(){currentV=null;document.getElementById('login').style.display='flex';}
-function toggleT(t){
-  const now=haitiTime();
-  if(HORAIRES[t]&&now>=HORAIRES[t]){alert(`⏰ ${t} fèmen depi ${HORAIRES[t]}`);return;}
-  const i=tiragesSel.indexOf(t);if(i>=0)tiragesSel.splice(i,1);else tiragesSel.push(t);updateTirajBtns();
-}
-function updateTirajBtns(){
-  ['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].forEach(t=>{
-    const b=document.getElementById('btn_'+t.replace(' ','_'));
-    if(b) b.classList.toggle('sel',tiragesSel.includes(t));
-  });
-  document.getElementById('combiBtn').innerText=tiragesSel.length?tiragesSel.join(' + ')+' ✓':'Tiraj miltip - koche pou chwazi';
-  calcTotal();
-}
+function toggleT(t){const now=haitiTime();if(HORAIRES[t]&&now>=HORAIRES[t]){alert(`⏰ ${t} fèmen depi ${HORAIRES[t]}`);return;}const i=tiragesSel.indexOf(t);if(i>=0)tiragesSel.splice(i,1);else tiragesSel.push(t);updateTirajBtns();}
+function updateTirajBtns(){['GA MIDI','FL MIDI','NY MIDI','GA SOIR','FL SOIR','NY SOIR'].forEach(t=>{const b=document.getElementById('btn_'+t.replace(' ','_'));if(b)b.classList.toggle('sel',tiragesSel.includes(t));});document.getElementById('combiBtn').innerText=tiragesSel.length?tiragesSel.join(' + ')+' ✓':'Tiraj miltip - koche pou chwazi';calcTotal();}
 function initLignes(){document.getElementById('lignesBox').innerHTML='';addLigne('BOLET','','');}
 function addLigne(jeux,boul,miz){
   const box=document.getElementById('lignesBox');const div=document.createElement('div');div.className='ligne1';
@@ -123,10 +92,10 @@ function nextLineWithSameJeu(curDiv){
   addLigne(jeuxActuel,'','');
   box.querySelectorAll('.ligne1')[box.querySelectorAll('.ligne1').length-1].querySelector('.inBoul').focus();
 }
-// FIX FINAL AK ESPAS VRE - #lignesBox.ligne1 - AK ESPAS!
+// FIX FINAL - AK ESPAS VRE - #lignesBox .ligne1
 function calcTotal(){
   let sum=0;
-  document.querySelectorAll('#lignesBox.ligne1').forEach(div=>{
+  document.querySelectorAll('#lignesBox .ligne1').forEach(div=>{
     const boul=div.querySelector('.inBoul').value.trim().replace(/[^0-9]/g,'');
     const miz=parseInt(div.querySelector('.inMiz').value.trim().replace(/[^0-9]/g,''))||0;
     if(boul!==''&&miz>0) sum+=miz;
@@ -134,41 +103,72 @@ function calcTotal(){
   const nb=tiragesSel.length;
   document.getElementById('totalBar').innerText=`Total ×tiraj - $${sum} × ${nb} = $${sum*nb} - Flèche ↓ kenbe je`;
 }
+// LIMITE GLOBAL VANDÈ1+VANDÈ2+...
+function getTotalMizGlobal(dateISO, tirajCible, jeux, boul){
+  let total=0;
+  ventes.forEach(f=>{
+    if(f.dateISO!==dateISO) return;
+    if(!f.tirages.includes(tirajCible)) return;
+    f.list.forEach(l=>{
+      if(l.jeux===jeux && l.boul===boul){
+        total+=l.miz;
+      }
+    });
+  });
+  return total;
+}
 async function valideFiche(){
   if(!currentV){alert('Konekte');return null;}
-  if(!tiragesSel.length){alert('Koche tiraj - Chwazi GA MIDI FL MIDI elatriye');return null;}
+  if(!tiragesSel.length){alert('Koche tiraj - FL SOIR elatriye');return null;}
   const allLines=[];
-  document.querySelectorAll('#lignesBox.ligne1').forEach(div=>{
+  document.querySelectorAll('#lignesBox .ligne1').forEach(div=>{
     const jeux=div.querySelector('.selJeux').value;
     const boul=div.querySelector('.inBoul').value.trim().replace(/[^0-9]/g,'');
     const miz=parseInt(div.querySelector('.inMiz').value.trim().replace(/[^0-9]/g,''))||0;
     if(boul!==''&&miz>0) allLines.push({jeux,boul,miz});
   });
-  if(!allLines.length){alert('Antre boul + Miz - Mete boul ak miz nan kaz yo');return null;}
+  if(!allLines.length){alert('Antre boul + Miz');return null;}
   const iso=haitiISO();
+  // LIMITE GLOBAL VANDÈ1+VANDÈ2+... DWE RESPEKTE
+  for(let tiraj of tiragesSel){
+    for(let l of allLines){
+      const limiteMax=LIMITES_GLOBAL[l.jeux]||LIMITES_GLOBAL.BOLET||1500;
+      const totalDeja=getTotalMizGlobal(iso,tiraj,l.jeux,l.boul);
+      if(totalDeja + l.miz > limiteMax){
+        alert(`⛔ LIMITE GLOBAL DEPASE!\n${l.jeux} ${l.boul} nan ${tiraj}\nDeja vann $${totalDeja} pa tout vandè (Vandè1+Vandè2+...)\nOu vle ajoute $${l.miz} = $${totalDeja+l.miz}\nLimite Global $${limiteMax}\nPa ka vann!`);
+        return null;
+      }
+    }
+  }
   const parTiraj=allLines.reduce((a,l)=>a+l.miz,0);
   const doc=await db.collection('ventes').add({vendeur:currentV.nom,code:currentV.code,com:currentV.com||10,dateISO:iso,tirages:[...tiragesSel],nbTiraj:tiragesSel.length,parTiraj,base:parTiraj,list:allLines,timestamp:Date.now()});
-  alert(`✅ VALIDE - $${parTiraj}×${tiragesSel.length}=$${parTiraj*tiragesSel.length}`);
+  alert(`✅ VALIDE - $${parTiraj}×${tiragesSel.length}=$${parTiraj*tiragesSel.length} - Limite Global Respekte`);
   initLignes();tiragesSel=[];updateTirajBtns();
   return {id:doc.id,vendeur:currentV.nom,dateISO:iso,tirages:[...tiragesSel],list:allLines,parTiraj,nbTiraj:tiragesSel.length};
 }
 function buildPrintHTML(fiche){
   const nom=ANTET.nom||"C&D VÉRITÉ LOTTO";
-  const tel=ANTET.tel||"";
-  const adr=ANTET.adresse||"";
-  const slo=ANTET.slogan||"Bòn chans, lave chodyè w";
+  const tel=ANTET.tel||"";const adr=ANTET.adresse||"";const slo=ANTET.slogan||"Bòn chans, lave chodyè w";
   return `<div style="font-family:monospace;text-align:center;width:280px;margin:0 auto;padding:10px;border:2px dashed #000"><div style="font-weight:900;font-size:16px">${nom}</div>${tel?`<div style="font-size:11px">Tél: ${tel}</div>`:''}${adr?`<div style="font-size:10px">${adr}</div>`:''}<div style="border-top:1px dashed #000;margin:8px 0"></div><div style="text-align:left;font-size:12px"><div>Vendeur.....: <b>${fiche.vendeur}</b></div><div>Date........: <b>${fiche.dateISO}</b></div><div>Tirage.....: <b>${fiche.tirages.join(' + ')}</b></div><div>Id ticket...: <b>${fiche.id.slice(0,8).toUpperCase()}</b></div></div><div style="border-top:1px dashed #000;margin:8px 0"></div><div style="font-weight:900;font-size:12px">Kontni fich la</div><table style="width:100%;font-size:12px;border-collapse:collapse;text-align:center"><tr style="border-bottom:1px solid #000;font-weight:900"><td>JEUX</td><td>BOUL</td><td>MIZ</td></tr>${fiche.list.map(l=>`<tr><td>${l.jeux}</td><td>${l.boul}</td><td>$${l.miz}</td></tr>`).join('')}</table><div style="border-top:1px dashed #000;margin:8px 0"></div><div style="font-size:13px;font-weight:900">Total: $${fiche.parTiraj} × ${fiche.nbTiraj} = $${fiche.parTiraj*fiche.nbTiraj}</div><div style="margin-top:12px;font-size:12px;font-weight:900">${slo}</div></div>`;
 }
 async function valideEtImprime(){
   if(!tiragesSel.length){alert('Koche tiraj');return;}
-  const allLines=[];document.querySelectorAll('#lignesBox.ligne1').forEach(div=>{
+  const allLines=[];document.querySelectorAll('#lignesBox .ligne1').forEach(div=>{
     const jeux=div.querySelector('.selJeux').value;
     const boul=div.querySelector('.inBoul').value.trim().replace(/[^0-9]/g,'');
     const miz=parseInt(div.querySelector('.inMiz').value.trim().replace(/[^0-9]/g,''))||0;
     if(boul!==''&&miz>0) allLines.push({jeux,boul,miz});
   });
   if(!allLines.length){alert('Antre boul + Miz');return;}
-  const iso=haitiISO();const parTiraj=allLines.reduce((a,l)=>a+l.miz,0);
+  const iso=haitiISO();
+  for(let tiraj of tiragesSel){
+    for(let l of allLines){
+      const limiteMax=LIMITES_GLOBAL[l.jeux]||1500;
+      const totalDeja=getTotalMizGlobal(iso,tiraj,l.jeux,l.boul);
+      if(totalDeja + l.miz > limiteMax){alert(`⛔ LIMITE GLOBAL ${l.jeux} ${l.boul} ${tiraj} Deja $${totalDeja}+$${l.miz}>$${limiteMax}`);return;}
+    }
+  }
+  const parTiraj=allLines.reduce((a,l)=>a+l.miz,0);
   const doc=await db.collection('ventes').add({vendeur:currentV.nom,code:currentV.code,com:currentV.com||10,dateISO:iso,tirages:[...tiragesSel],nbTiraj:tiragesSel.length,parTiraj,base:parTiraj,list:allLines,timestamp:Date.now()});
   const fiche={id:doc.id,vendeur:currentV.nom,dateISO:iso,tirages:[...tiragesSel],list:allLines,parTiraj,nbTiraj:tiragesSel.length};
   const area=document.getElementById('printArea');area.innerHTML=buildPrintHTML(fiche);area.style.display='block';
