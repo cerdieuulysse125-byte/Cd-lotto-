@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROPRIO V13.0 - KONPLÈ - C&D VERITE LOTTO</title>
+<title>PROPRIO V13.1 - MODPAS OBLIGATWA</title>
 <style>
 *{box-sizing:border-box;font-family:Arial Black,Arial;margin:0;padding:0}
 body{background:#000;color:#fff;padding:10px}
@@ -20,10 +20,32 @@ body{background:#000;color:#fff;padding:10px}
 .item{border:3px solid #000;border-radius:15px;padding:10px;margin:8px 0;background:#FFF8DC;font-weight:900;font-size:11px;color:#000}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+#loginProprio{position:fixed;left:0;top:0;width:100%;height:100%;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}
+.loginBox{background:#fff;border:5px solid #FFD500;border-radius:25px;padding:20px;width:100%;max-width:380px;text-align:center;color:#000}
+.loginBox h2{background:#FFD500;border:3px solid #000;border-radius:20px;padding:12px;font-size:16px;margin-bottom:15px}
+#printArea{display:none}
+@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%;display:block!important;background:#fff}}
 </style>
 </head>
 <body>
-<div class="top">PROPRIO - C&D VÉRITÉ LOTTO - V13.0 KONPLÈ<br><span style="font-size:11px">2026-08-19 - EST PAP - MODPAS RESPEKTE - PRIX MODIFYAB</span></div>
+
+<!-- LOGIN PROPRIO - MODPAS OBLIGATWA -->
+<div id="loginProprio">
+<div class="loginBox">
+<h2>🔒 PROPRIO - MODPAS OBLIGATWA - C&D LOTTO</h2>
+<div style="font-weight:900;font-size:11px;margin-bottom:10px">Antre MODPAS PROPRIO - RESPEKTE EST PAP</div>
+<input id="inpPropPass" class="kf" type="password" placeholder="MODPAS PROPRIO - Chif sèlman" inputmode="numeric" style="font-size:20px;letter-spacing:5px">
+<button type="button" class="btn btn-b" id="btnPropLogin" style="width:100%;height:60px;border-radius:50px;margin-top:10px;background:#000;color:#FFD500">🔓 KONEKTE - PROPRIO</button>
+<div id="msgPropLogin" style="margin-top:10px;font-weight:900;font-size:11px;color:red"></div>
+<div style="margin-top:15px;font-size:9px;font-weight:900">
+MODPAS DEFAULT: 1234<br>
+Ou ka chanje li nan 8.CONFIG<br>
+2026-08-19 EST PAP
+</div>
+</div>
+</div>
+
+<div class="top">PROPRIO - C&D VÉRITÉ LOTTO - V13.1<br><span style="font-size:11px">MODPAS OBLIGATWA RESPEKTE - PRIX MODIFYAB - LIMIT VANN/ENPRIME</span></div>
 
 <div class="menu">
 <button id="m1" class="active">1.VANDÈ</button>
@@ -37,85 +59,73 @@ body{background:#000;color:#fff;padding:10px}
 <button id="m9" style="background:red;color:#fff">X</button>
 </div>
 
-<!-- 1 VANDE -->
 <div id="o1" class="onglet active">
 <div class="card">
-<h3>1.VANDÈ - MODPAS OBLIGATWA RESPEKTE</h3>
+<h3>1.VANDÈ - MODPAS VANDÈ RESPEKTE</h3>
 <input id="vNom" class="kf" placeholder="NON VANDE - Ex: JEAN" style="text-transform:uppercase">
-<input id="vPass" class="kf" placeholder="MODPAS - Chif sèlman" inputmode="numeric">
+<input id="vPass" class="kf" placeholder="MODPAS VANDE - Chif sèlman" inputmode="numeric">
 <input id="vPour" class="kf" placeholder="POUR % - Ex: 10" inputmode="numeric" value="10">
 <button class="btn btn-y" id="btnAddV">➕ AJOUTE / MODIFIE VANDE</button>
 <div id="listV"></div>
 </div>
 </div>
 
-<!-- 2 HEURES -->
 <div id="o2" class="onglet">
 <div class="card">
-<h3>2.HEURES FERMETURE - EST PAP - Port au Prince</h3>
+<h3>2.HEURES FERMETURE - EST PAP</h3>
 <div id="heuresBox"></div>
 <button class="btn btn-y" id="btnSaveH">💾 SAUVEGARDE HEURES EST PAP</button>
 <div id="msgH" style="font-size:10px;font-weight:900;text-align:center"></div>
 </div>
 </div>
 
-<!-- 3 LIMITES -->
 <div id="o3" class="onglet">
 <div class="card">
-<h3>3.LIMITES - DOUBLE LIMIT V9.8 - PA VANDE + GLOBAL</h3>
+<h3>3.LIMITES - SI PA DEPASE = VANN+ENPRIME / SI DEPASE = PA KA VANN PA KA ENPRIME</h3>
 <select id="selLimV" class="kf"><option value="GLOBAL">GLOBAL - Tout vandè</option></select>
 <div class="grid2">
-<div><div style="font-size:10px;font-weight:900">BOLET Max</div><input id="limBolet" class="kf" value="9999"></div>
-<div><div style="font-size:10px;font-weight:900">MARYAJ Max (12×34=34×12)</div><input id="limMaryaj" class="kf" value="9999"></div>
-<div><div style="font-size:10px;font-weight:900">LOTO3 Max</div><input id="limLoto3" class="kf" value="9999"></div>
-<div><div style="font-size:10px;font-weight:900">LOTO4 Max</div><input id="limLoto4" class="kf" value="9999"></div>
-<div><div style="font-size:10px;font-weight:900">LOTO5 Max</div><input id="limLoto5" class="kf" value="9999"></div>
+<div><div style="font-size:10px;font-weight:900">BOLET Max</div><input id="limBolet" class="kf" value="500"></div>
+<div><div style="font-size:10px;font-weight:900">MARYAJ Max 12×34=34×12</div><input id="limMaryaj" class="kf" value="500"></div>
+<div><div style="font-size:10px;font-weight:900">LOTO3 Max</div><input id="limLoto3" class="kf" value="500"></div>
+<div><div style="font-size:10px;font-weight:900">LOTO4 Max</div><input id="limLoto4" class="kf" value="500"></div>
+<div><div style="font-size:10px;font-weight:900">LOTO5 Max</div><input id="limLoto5" class="kf" value="500"></div>
 </div>
 <button class="btn btn-y" id="btnSaveLim">💾 SAUVEGARDE LIMITES</button>
 <div id="msgLim" style="font-size:10px;font-weight:900;text-align:center"></div>
-<div style="font-size:9px;font-weight:900;margin-top:8px;background:#FFF8DC;border:2px solid #000;border-radius:10px;padding:8px">DOUBLE LIMIT: Si limit pa vandè depase OU limit global depase → ⛔ BLOKE - Jan V9.8<br>MARYAJ 12×34=34×12 konte menm boul - BON</div>
+<div style="font-size:9px;font-weight:900;margin-top:8px;background:#FFF8DC;border:2px solid #000;border-radius:10px;padding:8px">Depi Miz pa depase limit vandè oubyen global → Ka vann epi enprime<br>Si Miz depase limit vandè oubyen global → Pa ka vann pa ka enprime - JAN FOTO A</div>
 </div>
 </div>
 
-<!-- 4 PRIX -->
 <div id="o4" class="onglet">
 <div class="card">
-<h3>💰 4.PRIX PÈYMAN - MODIFYAB - JAN OU MANDE A</h3>
+<h3>💰 4.PRIX PÈYMAN - MODIFYAB</h3>
 <select id="selPrixV" class="kf"><option value="GLOBAL">GLOBAL - Tout vandè</option></select>
 <div class="grid2">
 <div><div style="font-size:10px;font-weight:900">Bòlèt 1e lo - 50</div><input id="prixLot1" class="kf" inputmode="numeric" value="50"></div>
 <div><div style="font-size:10px;font-weight:900">Bòlèt 2e lot - 20</div><input id="prixLot2" class="kf" inputmode="numeric" value="20"></div>
 <div><div style="font-size:10px;font-weight:900">Bòlèt 3e lot - 10</div><input id="prixLot3" class="kf" inputmode="numeric" value="10"></div>
-<div><div style="font-size:10px;font-weight:900">Maryaj (12×34=34×12) - 1000</div><input id="prixMaryaj" class="kf" inputmode="numeric" value="1000"></div>
+<div><div style="font-size:10px;font-weight:900">Maryaj 12×34=34×12 - 1000</div><input id="prixMaryaj" class="kf" inputmode="numeric" value="1000"></div>
 <div><div style="font-size:10px;font-weight:900">Loto3 - 500</div><input id="prixLoto3" class="kf" inputmode="numeric" value="500"></div>
 <div><div style="font-size:10px;font-weight:900">Loto4 - 5000</div><input id="prixLoto4" class="kf" inputmode="numeric" value="5000"></div>
 <div><div style="font-size:10px;font-weight:900">Loto5 - 25000</div><input id="prixLoto5" class="kf" inputmode="numeric" value="25000"></div>
 </div>
-<div style="background:#FFF8DC;border:3px solid #000;border-radius:15px;padding:10px;margin-top:10px;font-weight:900;font-size:10px">
-✅ Bòlèt 1e lo 50 / 2e lot 20 / 3e lot 10<br>
-✅ Maryaj (Nan lòd ou an dezòd, 12×34=34×12) 1000<br>
-✅ Loto3 500 / Loto4 5000 / Loto5 25000<br>
-Tout MODIFYAB - Vande ap kalkile Gain kliyan selon sa!
-</div>
-<button class="btn btn-y" id="btnSavePrix" style="height:60px;border-radius:50px">💾 SAUVEGARDE PRIX - RESPEKTE</button>
+<button class="btn btn-y" id="btnSavePrix" style="height:60px;border-radius:50px">💾 SAUVEGARDE PRIX</button>
 <div id="msgPrix" style="font-size:10px;font-weight:900;text-align:center"></div>
 </div>
 </div>
 
-<!-- 5 RESULTATS -->
 <div id="o5" class="onglet">
 <div class="card">
 <h3>5.RÉSULTATS - EST PAP</h3>
 <input type="date" id="dateRes" class="kf">
 <select id="selTirajRes" class="kf"><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
 <div class="grid3">
-<input id="resR1" class="kf" placeholder="1e lo - 2 chif">
+<input id="resR1" class="kf" placeholder="1e lo">
 <input id="resR2" class="kf" placeholder="2e lo">
 <input id="resR3" class="kf" placeholder="3e lo">
 </div>
-<div style="font-size:10px;font-weight:900;margin-top:6px">Maryaj (12×34)</div>
 <div class="grid3">
-<input id="resM1" class="kf" placeholder="M1 - 12x34">
+<input id="resM1" class="kf" placeholder="M1 12x34">
 <input id="resM2" class="kf" placeholder="M2">
 <input id="resM3" class="kf" placeholder="M3">
 </div>
@@ -124,15 +134,14 @@ Tout MODIFYAB - Vande ap kalkile Gain kliyan selon sa!
 <input id="resL4" class="kf" placeholder="Loto4">
 <input id="resL5" class="kf" placeholder="Loto5">
 </div>
-<button class="btn btn-g" id="btnSaveRes">💾 SAUVEGARDE RÉSULTATS - 12×34=34×12 BON</button>
+<button class="btn btn-g" id="btnSaveRes">💾 SAUVEGARDE RÉSULTATS</button>
 <div id="listRes"></div>
 </div>
 </div>
 
-<!-- 6 RAPPORT -->
 <div id="o6" class="onglet">
 <div class="card">
-<h3>6.RAPPORT - Du Au + Tirage + Vente + Commission + Gain kliyan + Balance net</h3>
+<h3>6.RAPPORT - Du Au + Tirage + Vente + Gain + Balance</h3>
 <input type="date" id="dateDu" class="kf">
 <input type="date" id="dateAu" class="kf">
 <select id="selRapV" class="kf"><option value="TOUS">TOUS VANDE</option></select>
@@ -143,7 +152,6 @@ Tout MODIFYAB - Vande ap kalkile Gain kliyan selon sa!
 </div>
 </div>
 
-<!-- 7 FICHES -->
 <div id="o7" class="onglet">
 <div class="card">
 <h3>7.FICHES - Tout vandè - EST PAP</h3>
@@ -154,23 +162,26 @@ Tout MODIFYAB - Vande ap kalkile Gain kliyan selon sa!
 </div>
 </div>
 
-<!-- 8 CONFIG -->
 <div id="o8" class="onglet">
 <div class="card">
-<h3>8.CONFIG - EST PAP</h3>
-<div style="font-size:10px;font-weight:900">Date PAP jodia: <span id="datePAP"></span> - Heure: <span id="heurePAP"></span></div>
-<div id="configInfo" style="margin-top:10px;font-size:10px;font-weight:900;background:#FFF8DC;border:2px solid #000;border-radius:10px;padding:10px">
-V13.0 KONPLÈ - Prix: Bòlèt 1e 50 / 2e 20 / 3e 10 / Maryaj 12×34=34×12=1000 / Loto3 500 / Loto4 5000 / Loto5 25000 - MODIFYAB<br>
-Double Limit V9.8 OK<br>
-Modpas Obligatwa Respekte<br>
-Flèch ↓ Boul swivant Kenbe je<br>
-Non tape dirèk<br>
-Chif sèlman<br>
+<h3>8.CONFIG - MODPAS PROPRIO - EST PAP</h3>
+<div style="font-size:10px;font-weight:900">Date PAP: <span id="datePAP"></span> - <span id="heurePAP"></span></div>
+<div style="margin-top:12px">
+<div style="font-size:11px;font-weight:900">Chanje Modpas Proprio</div>
+<input id="newPropPass" class="kf" type="password" placeholder="Nouvo Modpas Proprio" inputmode="numeric">
+<button class="btn btn-r" id="btnChangePropPass" style="height:60px;border-radius:50px">🔒 CHANJE MODPAS PROPRIO</button>
+<div id="msgPropPass" style="font-size:10px;font-weight:900;text-align:center"></div>
+</div>
+<div id="configInfo" style="margin-top:12px;font-size:10px;font-weight:900;background:#FFF8DC;border:2px solid #000;border-radius:10px;padding:10px">
+V13.1 - MODPAS PROPRIO OBLIGATWA<br>
+Prix: 1e 50 / 2e 20 / 3e 10 / Maryaj 12×34=34×12=1000 / L3 500 / L4 5000 / L5 25000 MODIFYAB<br>
+Limit: Pa depase = Vann+Enprime / Depase = Pa ka vann pa ka enprime<br>
+Modpas Vandè Respekte<br>
 </div>
 </div>
 </div>
 
-<div id="printArea" style="display:none"></div>
+<div id="printArea"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -184,21 +195,55 @@ document.getElementById('datePAP').innerText=dateStr;
 setInterval(()=>{document.getElementById('heurePAP').innerText=new Intl.DateTimeFormat('en-CA',{timeZone:"America/Port-au-Prince",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date())+" EST PAP";},1000);
 document.getElementById('dateRes').value=dateStr; document.getElementById('dateFich').value=dateStr; document.getElementById('dateDu').value=dateStr; document.getElementById('dateAu').value=dateStr;
 
+// MODPAS PROPRIO OBLIGATWA
+async function checkProprioLogin(){
+  const pass=document.getElementById('inpPropPass').value.trim();
+  if(!pass){document.getElementById('msgPropLogin').innerText="Antre modpas!"; return;}
+  try{
+    const snap=await get(ref(db,`proprio_pass`));
+    let vraiPass="1234";
+    if(snap.exists()) vraiPass=snap.val().pass||"1234";
+    if(pass==vraiPass){
+      localStorage.setItem("proprio_pass",pass);
+      document.getElementById('loginProprio').style.display='none';
+      loadVendeurs(); loadLimVendeurs(); loadHeures();
+    } else {
+      document.getElementById('msgPropLogin').innerText="⛔ MODPAS PROPRIO PA BON - RESPEKTE";
+    }
+  }catch(e){
+    if(pass=="1234"){localStorage.setItem("proprio_pass",pass); document.getElementById('loginProprio').style.display='none'; loadVendeurs(); loadLimVendeurs(); loadHeures();}
+    else document.getElementById('msgPropLogin').innerText="⛔ MODPAS PA BON - DEFAULT 1234";
+  }
+}
+
+document.getElementById('btnPropLogin').addEventListener('click',checkProprioLogin);
+document.getElementById('inpPropPass').addEventListener('keydown',(e)=>{if(e.key=="Enter") checkProprioLogin();});
+
+// AUTO LOGIN SI DEJA KONEKTE
+(async()=>{
+  const saved=localStorage.getItem("proprio_pass");
+  if(saved){
+    try{
+      const snap=await get(ref(db,`proprio_pass`));
+      let vrai="1234"; if(snap.exists()) vrai=snap.val().pass||"1234";
+      if(saved==vrai){document.getElementById('loginProprio').style.display='none';}
+    }catch(e){ if(saved=="1234") document.getElementById('loginProprio').style.display='none'; }
+  }
+})();
+
 function openO(n){
   document.querySelectorAll('.onglet').forEach(o=>o.classList.remove('active'));
   document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
   document.getElementById('o'+n).classList.add('active'); document.getElementById('m'+n).classList.add('active');
   if(n==1) loadVendeurs(); if(n==2) loadHeures(); if(n==3) loadLim(); if(n==4){loadPrixVendeurs(); loadPrix();} if(n==5) loadRes(); if(n==6) loadVendeursRap(); if(n==7) loadVendeursFich();
 }
-
-// 1 VANDE
 async function loadVendeurs(){
   const cont=document.getElementById('listV'); cont.innerHTML="Chargement...";
   const snap=await get(ref(db,`vendeurs`)); cont.innerHTML="";
   if(snap.exists()){
     Object.entries(snap.val()).forEach(([k,v])=>{
       const div=document.createElement('div'); div.className="item";
-      div.innerHTML=`<b>${v.nom}</b> - ${v.pour}% - ${v.status||"OUVERT"} - Pass:${v.pass}<br><div class="grid2"><button class="btn btn-b" data-edit="${k}">✏️ MODIFIE</button><button class="btn btn-r" data-del="${k}">❌ EFASÈ</button><button class="btn btn-y" data-toggle="${k}">${v.status=="FERME"?"🔓 OUVRI":"🔒 FÈME"}</button><button class="btn btn-g" data-voir="${v.nom}">👁️ FICHES</button></div>`;
+      div.innerHTML=`<b>${v.nom}</b> - ${v.pour}% - ${v.status||"OUVERT"} - Pass:${v.pass}<br><div class="grid2"><button class="btn btn-b" data-edit="${k}">✏️ MODIFIE</button><button class="btn btn-r" data-del="${k}">❌ EFASÈ</button><button class="btn btn-y" data-toggle="${k}">${v.status=="FERME"?"🔓 OUVRI":"🔒 FÈME"}</button></div>`;
       cont.appendChild(div);
     });
     cont.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm("Efase vandè?")) return; await remove(ref(db,`vendeurs/${b.dataset.del}`)); loadVendeurs();}));
@@ -211,144 +256,51 @@ document.getElementById('btnAddV').addEventListener('click',async()=>{
   if(!nom||!pass){alert("Non + Modpas obligatwa");return;}
   const snap=await get(ref(db,`vendeurs`)); let key=null;
   if(snap.exists()) Object.entries(snap.val()).forEach(([k,v])=>{if(v.nom==nom) key=k;});
-  if(key) await update(ref(db,`vendeurs/${key}`),{nom,pass,pour,status:"OUVERT"});
-  else await push(ref(db,`vendeurs`),{nom,pass,pour,status:"OUVERT"});
+  if(key) await update(ref(db,`vendeurs/${key}`),{nom,pass,pour,status:"OUVERT"}); else await push(ref(db,`vendeurs`),{nom,pass,pour,status:"OUVERT"});
   document.getElementById('vNom').value=""; document.getElementById('vPass').value=""; loadVendeurs();
 });
-
-// 2 HEURES
 async function loadHeures(){
-  const cont=document.getElementById('heuresBox'); cont.innerHTML="";
-  const tirages=["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"];
-  const snap=await get(ref(db,`heures`));
-  tirages.forEach(t=>{
-    const id=t.replace(' ','_'); const val=snap.exists()&&snap.val()[id]?snap.val()[id]:"";
-    const div=document.createElement('div'); div.innerHTML=`<div style="font-size:10px;font-weight:900">${t} - Heure fermeture EST PAP (HH:MM)</div><input id="h-${id}" class="kf" type="time" value="${val}">`; cont.appendChild(div);
-  });
+  const cont=document.getElementById('heuresBox'); cont.innerHTML=""; const tirages=["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"]; const snap=await get(ref(db,`heures`));
+  tirages.forEach(t=>{const id=t.replace(' ','_'); const val=snap.exists()&&snap.val()[id]?snap.val()[id]:""; const div=document.createElement('div'); div.innerHTML=`<div style="font-size:10px;font-weight:900">${t} - Heure fermeture EST PAP</div><input id="h-${id}" class="kf" type="time" value="${val}">`; cont.appendChild(div);});
 }
-document.getElementById('btnSaveH').addEventListener('click',async()=>{
-  const tirages=["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"];
-  let obj={}; tirages.forEach(t=>{const id=t.replace(' ','_'); const v=document.getElementById(`h-${id}`).value; if(v) obj[id]=v;});
-  await set(ref(db,`heures`),obj); document.getElementById('msgH').innerText="✅ HEURES SAUVEGARDE - EST PAP RESPEKTE";
-});
-
-// 3 LIMITES
+document.getElementById('btnSaveH').addEventListener('click',async()=>{const tirages=["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR"]; let obj={}; tirages.forEach(t=>{const id=t.replace(' ','_'); const v=document.getElementById(`h-${id}`).value; if(v) obj[id]=v;}); await set(ref(db,`heures`),obj); document.getElementById('msgH').innerText="✅ HEURES SAUVEGARDE - EST PAP";});
 async function loadLimVendeurs(){
   const sel=document.getElementById('selLimV'); sel.innerHTML='<option value="GLOBAL">GLOBAL - Tout vandè</option>'; const sel2=document.getElementById('selPrixV'); if(sel2) sel2.innerHTML='<option value="GLOBAL">GLOBAL - Tout vandè</option>'; const sel3=document.getElementById('selRapV'); const sel4=document.getElementById('selFichV'); if(sel3) sel3.innerHTML='<option value="TOUS">TOUS VANDE</option>'; if(sel4) sel4.innerHTML='<option value="TOUS">TOUS VANDE</option>';
-  const snap=await get(ref(db,`vendeurs`));
-  if(snap.exists()) Object.values(snap.val()).forEach(v=>{
-    const opt=document.createElement('option'); opt.value=v.nom; opt.textContent=v.nom; sel.appendChild(opt.cloneNode(true));
-    if(sel2) sel2.appendChild(opt.cloneNode(true));
-    if(sel3){const o=opt.cloneNode(true); sel3.appendChild(o);}
-    if(sel4){const o2=opt.cloneNode(true); sel4.appendChild(o2);}
-  });
+  const snap=await get(ref(db,`vendeurs`)); if(snap.exists()) Object.values(snap.val()).forEach(v=>{const opt=document.createElement('option'); opt.value=v.nom; opt.textContent=v.nom; sel.appendChild(opt.cloneNode(true)); if(sel2) sel2.appendChild(opt.cloneNode(true)); if(sel3) sel3.appendChild(opt.cloneNode(true)); if(sel4) sel4.appendChild(opt.cloneNode(true));});
 }
-async function loadLim(){
-  const v=document.getElementById('selLimV').value||"GLOBAL"; const path=v=="GLOBAL"?"limites_global":`limites/${v}`;
-  const snap=await get(ref(db,path));
-  if(snap.exists()){const l=snap.val(); document.getElementById('limBolet').value=l.BOLET||9999; document.getElementById('limMaryaj').value=l.MARYAJ||9999; document.getElementById('limLoto3').value=l.LOTO3||9999; document.getElementById('limLoto4').value=l.LOTO4||9999; document.getElementById('limLoto5').value=l.LOTO5||9999;}
-}
+async function loadLim(){const v=document.getElementById('selLimV').value||"GLOBAL"; const path=v=="GLOBAL"?"limites_global":`limites/${v}`; const snap=await get(ref(db,path)); if(snap.exists()){const l=snap.val(); document.getElementById('limBolet').value=l.BOLET||500; document.getElementById('limMaryaj').value=l.MARYAJ||500; document.getElementById('limLoto3').value=l.LOTO3||500; document.getElementById('limLoto4').value=l.LOTO4||500; document.getElementById('limLoto5').value=l.LOTO5||500;}}
 document.getElementById('selLimV').addEventListener('change',loadLim);
-document.getElementById('btnSaveLim').addEventListener('click',async()=>{
-  const v=document.getElementById('selLimV').value||"GLOBAL"; const lim={BOLET:parseInt(document.getElementById('limBolet').value)||9999, MARYAJ:parseInt(document.getElementById('limMaryaj').value)||9999, LOTO3:parseInt(document.getElementById('limLoto3').value)||9999, LOTO4:parseInt(document.getElementById('limLoto4').value)||9999, LOTO5:parseInt(document.getElementById('limLoto5').value)||9999};
-  const path=v=="GLOBAL"?"limites_global":`limites/${v}`; await set(ref(db,path),lim); document.getElementById('msgLim').innerText=`✅ LIMITES ${v} SAUVEGARDE - DOUBLE LIMIT V9.8`;
-});
-
-// 4 PRIX
+document.getElementById('btnSaveLim').addEventListener('click',async()=>{const v=document.getElementById('selLimV').value||"GLOBAL"; const lim={BOLET:parseInt(document.getElementById('limBolet').value)||500, MARYAJ:parseInt(document.getElementById('limMaryaj').value)||500, LOTO3:parseInt(document.getElementById('limLoto3').value)||500, LOTO4:parseInt(document.getElementById('limLoto4').value)||500, LOTO5:parseInt(document.getElementById('limLoto5').value)||500}; const path=v=="GLOBAL"?"limites_global":`limites/${v}`; await set(ref(db,path),lim); document.getElementById('msgLim').innerText=`✅ LIMITES ${v} SAUVEGARDE - PA DEPASE=VANN+ENPRIME / DEPASE=BLOKE`;});
 async function loadPrixVendeurs(){ await loadLimVendeurs(); }
-async function loadPrix(){
-  const vendeurSel=document.getElementById('selPrixV').value||"GLOBAL"; const path=vendeurSel=="GLOBAL"?"prix_global":`prix/${vendeurSel}`;
-  const snap=await get(ref(db,path));
-  if(snap.exists()){
-    const p=snap.val();
-    document.getElementById('prixLot1').value=p.lot1||50; document.getElementById('prixLot2').value=p.lot2||20; document.getElementById('prixLot3').value=p.lot3||10;
-    document.getElementById('prixMaryaj').value=p.maryaj||1000; document.getElementById('prixLoto3').value=p.loto3||500; document.getElementById('prixLoto4').value=p.loto4||5000; document.getElementById('prixLoto5').value=p.loto5||25000;
-  } else {
-    document.getElementById('prixLot1').value=50; document.getElementById('prixLot2').value=20; document.getElementById('prixLot3').value=10; document.getElementById('prixMaryaj').value=1000; document.getElementById('prixLoto3').value=500; document.getElementById('prixLoto4').value=5000; document.getElementById('prixLoto5').value=25000;
-  }
-}
+async function loadPrix(){const vendeurSel=document.getElementById('selPrixV').value||"GLOBAL"; const path=vendeurSel=="GLOBAL"?"prix_global":`prix/${vendeurSel}`; const snap=await get(ref(db,path)); if(snap.exists()){const p=snap.val(); document.getElementById('prixLot1').value=p.lot1||50; document.getElementById('prixLot2').value=p.lot2||20; document.getElementById('prixLot3').value=p.lot3||10; document.getElementById('prixMaryaj').value=p.maryaj||1000; document.getElementById('prixLoto3').value=p.loto3||500; document.getElementById('prixLoto4').value=p.loto4||5000; document.getElementById('prixLoto5').value=p.loto5||25000;} else {document.getElementById('prixLot1').value=50; document.getElementById('prixLot2').value=20; document.getElementById('prixLot3').value=10; document.getElementById('prixMaryaj').value=1000; document.getElementById('prixLoto3').value=500; document.getElementById('prixLoto4').value=5000; document.getElementById('prixLoto5').value=25000;}}
 document.getElementById('selPrixV').addEventListener('change',loadPrix);
-document.getElementById('btnSavePrix').addEventListener('click',async()=>{
-  const vendeurSel=document.getElementById('selPrixV').value||"GLOBAL";
-  const prix={lot1:parseInt(document.getElementById('prixLot1').value)||50, lot2:parseInt(document.getElementById('prixLot2').value)||20, lot3:parseInt(document.getElementById('prixLot3').value)||10, maryaj:parseInt(document.getElementById('prixMaryaj').value)||1000, loto3:parseInt(document.getElementById('prixLoto3').value)||500, loto4:parseInt(document.getElementById('prixLoto4').value)||5000, loto5:parseInt(document.getElementById('prixLoto5').value)||25000, update:Date.now()};
-  const path=vendeurSel=="GLOBAL"?"prix_global":`prix/${vendeurSel}`; await set(ref(db,path),prix); if(vendeurSel=="GLOBAL") await set(ref(db,`prix/GLOBAL`),prix);
-  document.getElementById('msgPrix').innerText=`✅ PRIX ${vendeurSel} - 1e ${prix.lot1} / 2e ${prix.lot2} / 3e ${prix.lot3} / Maryaj 12×34=34×12=${prix.maryaj} / L3 ${prix.loto3} / L4 ${prix.loto4} / L5 ${prix.loto5}`;
-});
-
-// 5 RESULTATS
-async function loadRes(){
-  const d=document.getElementById('dateRes').value||dateStr; const snap=await get(ref(db,`resultats/${d}`)); const cont=document.getElementById('listRes'); cont.innerHTML="";
-  if(snap.exists()) Object.entries(snap.val()).forEach(([t,r])=>{const div=document.createElement('div'); div.className="item"; div.innerHTML=`<b>${t}</b> - 1e ${r.r1} 2e ${r.r2} 3e ${r.r3} - M1 ${r.m1} M2 ${r.m2} M3 ${r.m3} - L3 ${r.l3} L4 ${r.l4} L5 ${r.l5}`; cont.appendChild(div);});
-}
-document.getElementById('btnSaveRes').addEventListener('click',async()=>{
-  const d=document.getElementById('dateRes').value||dateStr; const t=document.getElementById('selTirajRes').value;
-  const r={r1:document.getElementById('resR1').value.trim(), r2:document.getElementById('resR2').value.trim(), r3:document.getElementById('resR3').value.trim(), m1:normM(document.getElementById('resM1').value), m2:normM(document.getElementById('resM2').value), m3:normM(document.getElementById('resM3').value), l3:document.getElementById('resL3').value.trim(), l4:document.getElementById('resL4').value.trim(), l5:document.getElementById('resL5').value.trim(), date:d, tiraj:t};
-  await set(ref(db,`resultats/${d}/${t}`),r); loadRes(); alert(`✅ RESULTATS ${t} - ${d} - MARYAJ 12×34=34×12 BON`);
-});
+document.getElementById('btnSavePrix').addEventListener('click',async()=>{const vendeurSel=document.getElementById('selPrixV').value||"GLOBAL"; const prix={lot1:parseInt(document.getElementById('prixLot1').value)||50, lot2:parseInt(document.getElementById('prixLot2').value)||20, lot3:parseInt(document.getElementById('prixLot3').value)||10, maryaj:parseInt(document.getElementById('prixMaryaj').value)||1000, loto3:parseInt(document.getElementById('prixLoto3').value)||500, loto4:parseInt(document.getElementById('prixLoto4').value)||5000, loto5:parseInt(document.getElementById('prixLoto5').value)||25000, update:Date.now()}; const path=vendeurSel=="GLOBAL"?"prix_global":`prix/${vendeurSel}`; await set(ref(db,path),prix); if(vendeurSel=="GLOBAL") await set(ref(db,`prix/GLOBAL`),prix); document.getElementById('msgPrix').innerText=`✅ PRIX ${vendeurSel} - 1e ${prix.lot1} / 2e ${prix.lot2} / 3e ${prix.lot3} / Maryaj=${prix.maryaj} / L3 ${prix.loto3} / L4 ${prix.loto4} / L5 ${prix.loto5}`;});
+async function loadRes(){const d=document.getElementById('dateRes').value||dateStr; const snap=await get(ref(db,`resultats/${d}`)); const cont=document.getElementById('listRes'); cont.innerHTML=""; if(snap.exists()) Object.entries(snap.val()).forEach(([t,r])=>{const div=document.createElement('div'); div.className="item"; div.innerHTML=`<b>${t}</b> - 1e ${r.r1} 2e ${r.r2} 3e ${r.r3} - M1 ${r.m1} M2 ${r.m2} M3 ${r.m3} - L3 ${r.l3} L4 ${r.l4} L5 ${r.l5}`; cont.appendChild(div);});}
+document.getElementById('btnSaveRes').addEventListener('click',async()=>{const d=document.getElementById('dateRes').value||dateStr; const t=document.getElementById('selTirajRes').value; const r={r1:document.getElementById('resR1').value.trim(), r2:document.getElementById('resR2').value.trim(), r3:document.getElementById('resR3').value.trim(), m1:normM(document.getElementById('resM1').value), m2:normM(document.getElementById('resM2').value), m3:normM(document.getElementById('resM3').value), l3:document.getElementById('resL3').value.trim(), l4:document.getElementById('resL4').value.trim(), l5:document.getElementById('resL5').value.trim(), date:d, tiraj:t}; await set(ref(db,`resultats/${d}/${t}`),r); loadRes(); alert(`✅ RESULTATS ${t} - ${d}`);});
 document.getElementById('dateRes').addEventListener('change',loadRes);
-
-// 6 RAPPORT
 async function loadVendeursRap(){ await loadLimVendeurs(); }
-async function getPrixForV(v){
-  let PRIX={lot1:50,lot2:20,lot3:10,maryaj:1000,loto3:500,loto4:5000,loto5:25000};
-  try{
-    const s1=await get(ref(db,`prix/${v}`)); if(s1.exists()){const p=s1.val(); PRIX={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; return PRIX;}
-    const sG=await get(ref(db,`prix_global`)); if(sG.exists()){const p=sG.val(); PRIX={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; return PRIX;}
-  }catch(e){} return PRIX;
-}
+async function getPrixForV(v){let PRIX={lot1:50,lot2:20,lot3:10,maryaj:1000,loto3:500,loto4:5000,loto5:25000}; try{const s1=await get(ref(db,`prix/${v}`)); if(s1.exists()){const p=s1.val(); PRIX={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; return PRIX;} const sG=await get(ref(db,`prix_global`)); if(sG.exists()){const p=sG.val(); PRIX={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; return PRIX;}}catch(e){} return PRIX;}
 document.getElementById('btnGenRap').addEventListener('click',async()=>{
-  const du=document.getElementById('dateDu').value||dateStr; const au=document.getElementById('dateAu').value||du; const filV=document.getElementById('selRapV').value||"TOUS"; const filT=document.getElementById('selRapT').value||"TOUS";
-  const dDu=new Date(du); const dAu=new Date(au); let vente=0, gain=0, nb=0, comm=0; let detail="";
-  for(let d=new Date(dDu); d<=dAu; d.setDate(d.getDate()+1)){
-    const ds=d.toISOString().slice(0,10); const snapV=await get(ref(db,`ventes/${ds}`)); const snapR=await get(ref(db,`resultats/${ds}`)); if(!snapV.exists()) continue;
-    for(const [vNom, fichesObj] of Object.entries(snapV.val())){
-      if(filV!="TOUS" && vNom!=filV) continue;
-      const PRIX=await getPrixForV(vNom);
-      const snapPour=await get(ref(db,`vendeurs`)); let pour=10; if(snapPour.exists()) Object.values(snapPour.val()).forEach(vv=>{if(vv.nom==vNom) pour=vv.pour||10;});
-      Object.values(fichesObj).forEach(fiche=>{
-        const tirajFiltre=filT=="TOUS"?fiche.tiraj:fiche.tiraj.filter(t=>t==filT); if(tirajFiltre.length==0) return; const ratio=tirajFiltre.length/fiche.tiraj.length; nb++; const vt=fiche.total*ratio; vente+=vt; comm+=vt*pour/100;
-        if(snapR.exists()){
-          tirajFiltre.forEach(t=>{
-            if(!snapR.child(t).exists()) return; const res=snapR.child(t).val();
-            fiche.fiches.forEach(l=>{
-              const miz=parseInt(l.miz)||0;
-              if(l.type=="BOLET"){if(l.boul==res.r1) gain+=miz*PRIX.lot1*ratio; else if(l.boul==res.r2) gain+=miz*PRIX.lot2*ratio; else if(l.boul==res.r3) gain+=miz*PRIX.lot3*ratio;}
-              if(l.type=="MARYAJ"){const b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=miz*PRIX.maryaj*ratio;}
-              if(l.type=="LOTO3"&&l.boul==res.l3) gain+=miz*PRIX.loto3*ratio;
-              if(l.type=="LOTO4"&&l.boul==res.l4) gain+=miz*PRIX.loto4*ratio;
-              if(l.type=="LOTO5"&&l.boul==res.l5) gain+=miz*PRIX.loto5*ratio;
-            });
-          });
-        }
-        detail+=`${ds} ${vNom} ${fiche.id} ${tirajFiltre.join('/')} $${vt.toFixed(0)}<br>`;
-      });
-    }
-  }
-  const balance=vente-comm-gain;
-  document.getElementById('rapContent').innerHTML=`Du: ${du} Au: ${au} - Vendeur: ${filV} - Tirage: ${filT} EST PAP<br><br>Vente: $${vente.toFixed(0)}<br>Commission: $${comm.toFixed(0)}<br><b style="color:red">Gain kliyan: $${gain.toFixed(0)}</b><br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:8px;text-align:center">Balance net: $${balance.toFixed(0)}</div><br><div style="font-size:9px">${detail}</div><br>Prix: Bòlèt 1e 50 / 2e 20 / 3e 10 / Maryaj 12×34=34×12=1000 / L3 500 / L4 5000 / L5 25000 - MODIFYAB RESPEKTE`;
-  window.dernierRapProp={du,au,filV,filT,vente,comm,gain,balance,nb};
+  const du=document.getElementById('dateDu').value||dateStr; const au=document.getElementById('dateAu').value||du; const filV=document.getElementById('selRapV').value||"TOUS"; const filT=document.getElementById('selRapT').value||"TOUS"; const dDu=new Date(du); const dAu=new Date(au); let vente=0, gain=0, nb=0, comm=0; let detail="";
+  for(let d=new Date(dDu); d<=dAu; d.setDate(d.getDate()+1)){const ds=d.toISOString().slice(0,10); const snapV=await get(ref(db,`ventes/${ds}`)); const snapR=await get(ref(db,`resultats/${ds}`)); if(!snapV.exists()) continue; for(const [vNom, fichesObj] of Object.entries(snapV.val())){ if(filV!="TOUS" && vNom!=filV) continue; const PRIX=await getPrixForV(vNom); const snapPour=await get(ref(db,`vendeurs`)); let pour=10; if(snapPour.exists()) Object.values(snapPour.val()).forEach(vv=>{if(vv.nom==vNom) pour=vv.pour||10;}); Object.values(fichesObj).forEach(fiche=>{const tirajFiltre=filT=="TOUS"?fiche.tiraj:fiche.tiraj.filter(t=>t==filT); if(tirajFiltre.length==0) return; const ratio=tirajFiltre.length/fiche.tiraj.length; nb++; const vt=fiche.total*ratio; vente+=vt; comm+=vt*pour/100; if(snapR.exists()){tirajFiltre.forEach(t=>{if(!snapR.child(t).exists()) return; const res=snapR.child(t).val(); fiche.fiches.forEach(l=>{const miz=parseInt(l.miz)||0; if(l.type=="BOLET"){if(l.boul==res.r1) gain+=miz*PRIX.lot1*ratio; else if(l.boul==res.r2) gain+=miz*PRIX.lot2*ratio; else if(l.boul==res.r3) gain+=miz*PRIX.lot3*ratio;} if(l.type=="MARYAJ"){const b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=miz*PRIX.maryaj*ratio;} if(l.type=="LOTO3"&&l.boul==res.l3) gain+=miz*PRIX.loto3*ratio; if(l.type=="LOTO4"&&l.boul==res.l4) gain+=miz*PRIX.loto4*ratio; if(l.type=="LOTO5"&&l.boul==res.l5) gain+=miz*PRIX.loto5*ratio;});});} detail+=`${ds} ${vNom} ${fiche.id} ${tirajFiltre.join('/')} $${vt.toFixed(0)}<br>`;});}}
+  const balance=vente-comm-gain; document.getElementById('rapContent').innerHTML=`Du: ${du} Au: ${au} - Vendeur: ${filV} - Tirage: ${filT} EST PAP<br><br>Vente: $${vente.toFixed(0)}<br>Commission: $${comm.toFixed(0)}<br><b style="color:red">Gain kliyan: $${gain.toFixed(0)}</b><br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:8px;text-align:center">Balance net: $${balance.toFixed(0)}</div><br><div style="font-size:9px">${detail}</div>`; window.dernierRapProp={du,au,filV,filT,vente,comm,gain,balance,nb};
 });
-
-// 7 FICHES
 async function loadVendeursFich(){ await loadLimVendeurs(); }
-document.getElementById('btnLoadFich').addEventListener('click',async()=>{
-  const d=document.getElementById('dateFich').value||dateStr; const filV=document.getElementById('selFichV').value||"TOUS";
-  const snap=await get(ref(db,`ventes/${d}`)); const cont=document.getElementById('fichesContent'); cont.innerHTML="";
-  if(!snap.exists()){cont.innerHTML="Pa gen fich";return;}
-  Object.entries(snap.val()).forEach(([vNom,obj])=>{
-    if(filV!="TOUS" && vNom!=filV) return;
-    Object.entries(obj).forEach(([k,fiche])=>{
-      const div=document.createElement('div'); div.className="item"; div.innerHTML=`<b>${fiche.id}</b> - ${vNom} - ${fiche.tiraj.join('/')} - $${fiche.total}<br>${fiche.fiches.map(f=>`${f.type} ${f.boul} $${f.miz}`).join(' | ')}`; cont.appendChild(div);
-    });
-  });
+document.getElementById('btnLoadFich').addEventListener('click',async()=>{const d=document.getElementById('dateFich').value||dateStr; const filV=document.getElementById('selFichV').value||"TOUS"; const snap=await get(ref(db,`ventes/${d}`)); const cont=document.getElementById('fichesContent'); cont.innerHTML=""; if(!snap.exists()){cont.innerHTML="Pa gen fich";return;} Object.entries(snap.val()).forEach(([vNom,obj])=>{ if(filV!="TOUS" && vNom!=filV) return; Object.entries(obj).forEach(([k,fiche])=>{const div=document.createElement('div'); div.className="item"; div.innerHTML=`<b>${fiche.id}</b> - ${vNom} - ${fiche.tiraj.join('/')} - $${fiche.total}<br>${fiche.fiches.map(f=>`${f.type} ${f.boul} $${f.miz}`).join(' | ')}`; cont.appendChild(div);});});});
+
+// CHANJE MODPAS PROPRIO
+document.getElementById('btnChangePropPass').addEventListener('click',async()=>{
+  const newPass=document.getElementById('newPropPass').value.trim();
+  if(!newPass){alert("Antre nouvo modpas!"); return;}
+  await set(ref(db,`proprio_pass`),{pass:newPass, update:Date.now()});
+  localStorage.setItem("proprio_pass",newPass);
+  document.getElementById('msgPropPass').innerText=`✅ MODPAS PROPRIO CHANJE - NOUVO: ${newPass} - RESPEKTE`;
+  document.getElementById('newPropPass').value="";
 });
 
-document.getElementById('m1').addEventListener('click',()=>openO(1)); document.getElementById('m2').addEventListener('click',()=>openO(2)); document.getElementById('m3').addEventListener('click',()=>openO(3)); document.getElementById('m4').addEventListener('click',()=>openO(4)); document.getElementById('m5').addEventListener('click',()=>openO(5)); document.getElementById('m6').addEventListener('click',()=>openO(6)); document.getElementById('m7').addEventListener('click',()=>openO(7)); document.getElementById('m8').addEventListener('click',()=>openO(8)); document.getElementById('m9').addEventListener('click',()=>{if(confirm("Dekonekte Proprio?")) location.reload();});
-document.getElementById('btnPrintRap').addEventListener('click',()=>{
-  const r=window.dernierRapProp; if(!r){alert("Jenere rapport avan");return;}
-  const html=`<div style="text-align:center;font-family:monospace;font-weight:900;width:320px;margin:0 auto;color:#000;background:#fff;padding:12px"><div style="font-size:18px">RAPPORT PROPRIO</div><div style="font-size:12px">Du ${r.du} Au ${r.au} - ${r.filV} - ${r.filT} EST PAP</div><div style="margin:10px 0">----------------</div><div style="text-align:left;font-size:13px">Vente $${r.vente.toFixed(0)}<br>Commission $${r.comm.toFixed(0)}<br>Gain kliyan $${r.gain.toFixed(0)}<br><br>Balance net $${r.balance.toFixed(0)}</div></div>`;
-  const pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; setTimeout(()=>{window.print(); pa.style.display='none';},300);
-});
+document.getElementById('m1').addEventListener('click',()=>openO(1)); document.getElementById('m2').addEventListener('click',()=>openO(2)); document.getElementById('m3').addEventListener('click',()=>openO(3)); document.getElementById('m4').addEventListener('click',()=>openO(4)); document.getElementById('m5').addEventListener('click',()=>openO(5)); document.getElementById('m6').addEventListener('click',()=>openO(6)); document.getElementById('m7').addEventListener('click',()=>openO(7)); document.getElementById('m8').addEventListener('click',()=>openO(8));
+document.getElementById('m9').addEventListener('click',()=>{if(confirm("Dekonekte Proprio?")){localStorage.removeItem("proprio_pass"); location.reload();}});
+document.getElementById('btnPrintRap').addEventListener('click',()=>{const r=window.dernierRapProp; if(!r){alert("Jenere rapport avan");return;} const html=`<div style="text-align:center;font-family:monospace;font-weight:900;width:320px;margin:0 auto;color:#000;background:#fff;padding:12px"><div style="font-size:18px">RAPPORT PROPRIO</div><div style="font-size:12px">Du ${r.du} Au ${r.au} - ${r.filV} - ${r.filT} EST PAP</div><div style="margin:10px 0">----------------</div><div style="text-align:left;font-size:13px">Vente $${r.vente.toFixed(0)}<br>Commission $${r.comm.toFixed(0)}<br>Gain kliyan $${r.gain.toFixed(0)}<br><br>Balance net $${r.balance.toFixed(0)}</div></div>`; const pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; setTimeout(()=>{window.print(); pa.style.display='none';},300);});
 
 loadVendeurs(); loadLimVendeurs(); loadHeures();
 </script>
