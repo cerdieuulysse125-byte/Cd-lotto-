@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VANDE V10.13 - PRIX PROPRIO - NON TAPE - BOUL SWIVANT</title>
+<title>VANDE V10.14 - LIMIT VANN ENPRIME</title>
 <style>
 *{box-sizing:border-box;font-family:Arial Black,Arial;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:#fff;touch-action:manipulation}
@@ -46,7 +46,7 @@ body{background:#fff;touch-action:manipulation}
 <div style="font-weight:900;font-size:11px;margin-bottom:10px">Antre Non Vendeur + Modpas - RESPEKTE</div>
 <input id="inpLoginNom" class="kf" type="text" placeholder="NON VANDE - Tape non w" style="text-transform:uppercase" autocomplete="off">
 <input id="inpLoginPass" class="kf" type="password" placeholder="MODPAS - Chif sèlman" inputmode="numeric" style="font-size:20px;letter-spacing:5px">
-<button type="button" class="btnBig btnVal" id="btnLogin" style="width:100%;margin-top:10px">🔓 KONEKTE</button>
+<button type="button" class="btnBig btnVal" id="btnLogin" style="width:100%;margin-top:10px">🔓 KONEKTE - MODPAS RESPEKTE</button>
 <div id="loginMsg" style="margin-top:10px;font-weight:900;font-size:11px;color:red"></div>
 </div>
 </div>
@@ -74,25 +74,25 @@ body{background:#fff;touch-action:manipulation}
 </div>
 <div class="infoTiraj" id="infoTiraj">Chwazi tiraj - EST PAP</div>
 <div id="lignesContainer"></div>
-<div class="totalBar" id="totalBar">Total ×tiraj - $0 × 0 = $0 - Flèche ↓ kenbe je</div>
+<div class="totalBar" id="totalBar">Total ×tiraj - $0 × 0 = $0 - Flèche ↓ kenbe je - EST PAP</div>
 <div class="btns">
-<button type="button" class="btnBig btnVal" id="btnVal">💾 VALIDER</button>
-<button type="button" class="btnBig btnPrint" id="btnPrint">🖨️ VALIDER + IMPRIMER</button>
+<button type="button" class="btnBig btnVal" id="btnVal">💾 VALIDER - SI PA DEPASE LIMIT</button>
+<button type="button" class="btnBig btnPrint" id="btnPrint">🖨️ VALIDER + IMPRIMER - SI PA DEPASE</button>
 </div>
 </div>
 
 <div id="o2" class="onglet"><div class="card"><h3>2.COPIER</h3><div id="copierList"></div><button type="button" class="btn btn-y" id="btnReloadCopier">🔄 RELOAD</button></div></div>
-<div id="o3" class="onglet"><div class="card"><h3>3.FICHES - <span id="dateFich"></span></h3><div id="fichesList"></div><button type="button" class="btn btn-y" id="btnReloadFich">🔄 RELOAD</button></div></div>
+<div id="o3" class="onglet"><div class="card"><h3>3.FICHES JODIA - <span id="dateFich"></span></h3><div id="fichesList"></div><button type="button" class="btn btn-y" id="btnReloadFich">🔄 RELOAD FICHES</button></div></div>
 
 <div id="o4" class="onglet">
 <div class="card" style="border-width:4px">
-<div style="background:#FFD500;border:3px solid #000;border-radius:50px;padding:16px;text-align:center;font-weight:900;font-size:13px;margin-bottom:12px">4.RAPPORT - <span id="nomRap">...</span></div>
+<div style="background:#FFD500;border:3px solid #000;border-radius:50px;padding:16px;text-align:center;font-weight:900;font-size:13px;margin-bottom:12px">4.RAPPORT VANDÈ - <span id="nomRap">...</span></div>
 <div style="font-weight:900;font-size:12px;margin:8px 0 4px 10px">Du...</div><input type="date" id="dateDu" class="kf" style="border-radius:50px;height:60px">
 <div style="font-weight:900;font-size:12px;margin:8px 0 4px 10px">Au...</div><input type="date" id="dateAu" class="kf" style="border-radius:50px;height:60px">
 <div style="font-weight:900;font-size:12px;margin:8px 0 4px 10px">Tirage (..., tous)</div>
 <select id="selTirajRap" class="kf" style="border-radius:50px;height:60px"><option value="TOUS">Tous tirages</option><option>GA MIDI</option><option>FL MIDI</option><option>NY MIDI</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option></select>
 <button type="button" class="btnBig" id="btnGenRap" style="width:100%;background:#FFD500;border:3px solid #000;border-radius:50px;height:62px;font-weight:900;margin:12px 0">📊 JENERE RAPPORT</button>
-<div id="rapContent" style="border:3px solid #000;border-radius:20px;padding:14px;font-weight:900;font-size:12px;background:#FFF8DC;min-height:160px;line-height:1.6"></div>
+<div id="rapContent" style="border:3px solid #000;border-radius:20px;padding:14px;font-weight:900;font-size:12px;background:#FFF8DC;min-height:160px;line-height:1.6">Du Au + Tirage + Vente + Commission + Gain kliyan + Balance net<br>Prix: Bòlèt 1e 50 / 2e 20 / 3e 10 / Maryaj 12×34=34×12=1000 / L3 500 / L4 5000 / L5 25000 MODIFYAB</div>
 <button type="button" class="btnBig btn-b" id="btnPrintRap" style="width:100%;background:#000;color:#FFD500;border:3px solid #000;border-radius:50px;height:62px;font-weight:900;margin-top:12px">🖨️ IMPRIMER RAPPORT</button>
 </div>
 </div>
@@ -113,26 +113,18 @@ let tirajChwazi=[]; let lignes=[{type:"BOLET",boul:"",miz:""}];
 function chifSelman(val,type){ if(type=="MARYAJ") return val.replace(/[^0-9xX]/g,'').toLowerCase(); return val.replace(/[^0-9]/g,''); }
 
 async function checkLogin(){
-  const nomRaw=document.getElementById('inpLoginNom').value.trim().toUpperCase();
-  const pass=document.getElementById('inpLoginPass').value.trim();
+  const nomRaw=document.getElementById('inpLoginNom').value.trim().toUpperCase(); const pass=document.getElementById('inpLoginPass').value.trim();
   if(!nomRaw||!pass){document.getElementById('loginMsg').innerText="Tape NON + MODPAS!"; return;}
   const snap=await get(ref(db,`vendeurs`)); let ok=false; let pour=10; let vraiNom=nomRaw;
-  if(snap.exists()){
-    Object.values(snap.val()).forEach(v=>{
-      if(v.nom.toUpperCase()==nomRaw && v.pass==pass && v.status!="FERME"){ ok=true; pour=v.pour||10; vraiNom=v.nom; }
-    });
-  }
+  if(snap.exists()){ Object.values(snap.val()).forEach(v=>{ if(v.nom.toUpperCase()==nomRaw && v.pass==pass && v.status!="FERME"){ ok=true; pour=v.pour||10; vraiNom=v.nom; } }); }
   if(!ok){document.getElementById('loginMsg').innerText="⛔ NON oswa MODPAS PA BON"; return;}
-  vendeurActif=vraiNom; pourActif=pour;
-  localStorage.setItem("vendeur",vraiNom); localStorage.setItem("vendeurPass",pass);
-  document.getElementById('loginOverlay').style.display='none'; initApresLogin();
+  vendeurActif=vraiNom; pourActif=pour; localStorage.setItem("vendeur",vraiNom); localStorage.setItem("vendeurPass",pass); document.getElementById('loginOverlay').style.display='none'; initApresLogin();
 }
 function initApresLogin(){
   document.getElementById('nomV').innerText=vendeurActif; document.getElementById('nomTop').innerText=vendeurActif; document.getElementById('nomRap').innerText=vendeurActif;
   document.getElementById('pourV').innerText=pourActif+"%"; document.getElementById('pourTop').innerText=pourActif+"%";
   document.getElementById('dateTop').innerText=dateStr; document.getElementById('dateFich').innerText=dateStr;
-  document.getElementById('dateDu').value=dateStr; document.getElementById('dateAu').value=dateStr;
-  renderLignes(); updateTotal();
+  document.getElementById('dateDu').value=dateStr; document.getElementById('dateAu').value=dateStr; renderLignes(); updateTotal();
 }
 function openOnglet(n){
   document.querySelectorAll('.onglet').forEach(o=>o.classList.remove('active')); document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
@@ -160,12 +152,14 @@ function renderLignes(){
     document.getElementById(`down-${i}`).addEventListener('click',()=>addNewLigne(i,true));
   });
 }
-async function checkDoubleLimit(ligne){
-  let boul=ligne.boul; if(ligne.type=="MARYAJ") boul=normM(boul); const miz=parseInt(ligne.miz)||0; const type=ligne.type;
+
+// LIMIT FIX V10.14 - DEPI PA DEPASE = KA VANN + ENPRIME / DEPASE = PA KA VANN PA KA ENPRIME - JAN FOTO A
+async function checkDoubleLimit(ligne, ignoreCurrentForm){
+  let boul=ligne.boul; if(ligne.type=="MARYAJ") boul=normM(boul); const miz=parseInt(ligne.miz)||0; const type=ligne.type; const d=dateStr;
   try{
     const snapLimV=await get(ref(db,`limites/${vendeurActif}`)); const maxV=snapLimV.exists()?parseInt(snapLimV.val()[type]||999999):999999;
     const snapLimG=await get(ref(db,`limites_global`)); const maxG=snapLimG.exists()?parseInt(snapLimG.val()[type]||999999):999999;
-    const snapAll=await get(ref(db,`ventes/${dateStr}`)); let dejaV=0, dejaG=0;
+    const snapAll=await get(ref(db,`ventes/${d}`)); let dejaV=0, dejaG=0;
     if(snapAll.exists()){
       Object.entries(snapAll.val()).forEach(([vNom,vFiches])=>{
         Object.values(vFiches).forEach(fiche=>{
@@ -176,108 +170,106 @@ async function checkDoubleLimit(ligne){
         });
       });
     }
-    lignes.forEach(l=>{ if(l.boul==""||l.miz==""||l==ligne) return; if(l.type!=type) return; let m=false; if(type=="MARYAJ") m=normM(l.boul)==normM(boul); else m=l.boul==boul; if(m){dejaV+=parseInt(l.miz)||0; dejaG+=parseInt(l.miz)||0;}});
-    if((dejaV+miz)>maxV){alert(`⛔ LIMIT PA VANDÈ\n${type} ${boul}\nMax ${vendeurActif}: ${maxV}$`); return false;}
-    if((dejaG+miz)>maxG){alert(`⛔ LIMIT GLOBAL\n${type} ${boul}\nMax Global: ${maxG}$`); return false;}
+    if(!ignoreCurrentForm){
+      lignes.forEach(l=>{
+        if(l.boul==""||l.miz==""||l==ligne) return; if(l.type!=type) return; let m=false;
+        if(type=="MARYAJ") m=normM(l.boul)==normM(boul); else m=l.boul==boul;
+        if(m){dejaV+=parseInt(l.miz)||0; dejaG+=parseInt(l.miz)||0;}
+      });
+    }
+    if((dejaV+miz)>maxV){
+      alert(`⛔ LIMIT PA VANDÈ BLOKE - PA KA VANN - PA KA ENPRIME\n${type} ${boul}\nMax ${vendeurActif}: ${maxV}$\nDeja vann jodia: ${dejaV}$\nOu vle vann: ${miz}$\nTotal: ${dejaV+miz}$ > ${maxV}$`);
+      return false;
+    }
+    if((dejaG+miz)>maxG){
+      alert(`⛔ LIMIT GLOBAL BLOKE - PA KA VANN - PA KA ENPRIME\n${type} ${boul}\nMax Global: ${maxG}$\nDeja global: ${dejaG}$\nOu vle vann: ${miz}$\nTotal: ${dejaG+miz}$ > ${maxG}$`);
+      return false;
+    }
   }catch(e){}
   return true;
 }
+
+async function checkAllLimitsFinal(){
+  // Kalkile total chak boul nan fich sa a
+  const mapTotal={};
+  lignes.forEach(l=>{
+    if(l.boul.trim()==""||l.miz.trim()=="") return;
+    const key=l.type+"_"+(l.type=="MARYAJ"?normM(l.boul):l.boul);
+    if(!mapTotal[key]) mapTotal[key]={type:l.type, boul:l.type=="MARYAJ"?normM(l.boul):l.boul, miz:0};
+    mapTotal[key].miz+=parseInt(l.miz)||0;
+  });
+  for(const key in mapTotal){
+    const t=mapTotal[key];
+    const ok=await checkDoubleLimit({type:t.type, boul:t.boul, miz:t.miz.toString()}, true);
+    if(!ok) return false;
+  }
+  return true;
+}
+
 function addNewLigne(fromIndex, goToNextBoul){
   const l=lignes[fromIndex]; if(l.boul.trim()==""||l.miz.trim()==""){alert("Antre Boul + Miz"); return;}
-  checkDoubleLimit(l).then(ok=>{ if(!ok) return; const newType=l.type; lignes.splice(fromIndex+1,0,{type:newType,boul:"",miz:""}); renderLignes(); updateTotal(); if(goToNextBoul){ setTimeout(()=>{const nb=document.getElementById(`boul-${fromIndex+1}`); if(nb) nb.focus();},80);} });
+  checkDoubleLimit(l,false).then(ok=>{ if(!ok) return; const newType=l.type; lignes.splice(fromIndex+1,0,{type:newType,boul:"",miz:""}); renderLignes(); updateTotal(); if(goToNextBoul){ setTimeout(()=>{const nb=document.getElementById(`boul-${fromIndex+1}`); if(nb) nb.focus();},80);} });
 }
-function updateTotal(){let sum=0; lignes.forEach(l=>{if(l.boul!=""&&l.miz!="") sum+=parseInt(l.miz)||0;}); const nb=tirajChwazi.length||0; document.getElementById('totalBar').innerText=`Total ×tiraj - $${sum} × ${nb} = $${sum*nb} - Flèche ↓ kenbe je`; }
+function updateTotal(){let sum=0; lignes.forEach(l=>{if(l.boul!=""&&l.miz!="") sum+=parseInt(l.miz)||0;}); const nb=tirajChwazi.length||0; document.getElementById('totalBar').innerText=`Total ×tiraj - $${sum} × ${nb} = $${sum*nb} - Flèche ↓ kenbe je - EST PAP`; }
 document.querySelectorAll('.tiraj input').forEach(inp=>inp.addEventListener('change',()=>{
   tirajChwazi=Array.from(document.querySelectorAll('.tiraj input:checked')).map(i=>i.value);
   document.querySelectorAll('.tiraj label').forEach(lbl=>{lbl.innerText=lbl.innerText.replace(' ✓','');});
   tirajChwazi.forEach(t=>{const id={ "GA MIDI":"l1","FL MIDI":"l2","NY MIDI":"l3","GA SOIR":"l4","FL SOIR":"l5","NY SOIR":"l6"}[t]; if(id) document.getElementById(id).innerText=t+" ✓";});
-  document.getElementById('infoTiraj').innerText=tirajChwazi.length>0?tirajChwazi.join(' + ')+" ✓ EST PAP - "+dateStr:"Chwazi tiraj";
-  updateTotal();
+  document.getElementById('infoTiraj').innerText=tirajChwazi.length>0?tirajChwazi.join(' + ')+" ✓ EST PAP - "+dateStr:"Chwazi tiraj"; updateTotal();
 }));
-
 async function loadCopier(){
-  const cont=document.getElementById('copierList'); cont.innerHTML="Chargement...";
-  const snap=await get(ref(db,`ventes/${dateStr}/${vendeurActif}`)); if(!snap.exists()){cont.innerHTML="Pa gen fich";return;}
+  const cont=document.getElementById('copierList'); cont.innerHTML="Chargement..."; const snap=await get(ref(db,`ventes/${dateStr}/${vendeurActif}`)); if(!snap.exists()){cont.innerHTML="Pa gen fich";return;}
   cont.innerHTML=""; Object.entries(snap.val()).slice(-10).reverse().forEach(([k,fiche])=>{ const div=document.createElement('div'); div.className="ficheItem"; div.innerHTML=`<b>${fiche.id}</b> - ${fiche.tiraj.join('/')}<br>${fiche.fiches.map(f=>`${f.type} ${f.boul} $${f.miz}`).join(' | ')}<br>TOTAL $${fiche.total} <button class="btn btn-y" data-cop="${k}">📋 KOPIYE</button>`; cont.appendChild(div); });
   cont.querySelectorAll('[data-cop]').forEach(b=>b.addEventListener('click',async()=>{const s=await get(ref(db,`ventes/${dateStr}/${vendeurActif}/${b.dataset.cop}`)); if(s.exists()){const f=s.val(); tirajChwazi=f.tiraj; lignes=f.fiches.map(ff=>({type:ff.type,boul:ff.boul,miz:ff.miz.toString()})); document.querySelectorAll('.tiraj input').forEach(inp=>{inp.checked=tirajChwazi.includes(inp.value); const lbl=document.getElementById({ "GA MIDI":"l1","FL MIDI":"l2","NY MIDI":"l3","GA SOIR":"l4","FL SOIR":"l5","NY SOIR":"l6"}[inp.value]); if(lbl) lbl.innerText=inp.checked?inp.value+" ✓":inp.value;}); openOnglet(1); renderLignes(); updateTotal(); document.getElementById('infoTiraj').innerText=tirajChwazi.join(' + ')+" ✓ EST PAP - "+dateStr;}}));
 }
 async function loadFiches(){
-  const cont=document.getElementById('fichesList'); cont.innerHTML="Chargement...";
-  const snap=await get(ref(db,`ventes/${dateStr}/${vendeurActif}`)); if(!snap.exists()){cont.innerHTML="Pa gen fich";return;}
+  const cont=document.getElementById('fichesList'); cont.innerHTML="Chargement..."; const snap=await get(ref(db,`ventes/${dateStr}/${vendeurActif}`)); if(!snap.exists()){cont.innerHTML="Pa gen fich";return;}
   cont.innerHTML=""; Object.entries(snap.val()).reverse().forEach(([k,fiche])=>{ const div=document.createElement('div'); div.className="ficheItem"; div.innerHTML=`<b>${fiche.id}</b> - ${fiche.tiraj.join('/')}<br>${fiche.fiches.map(f=>`${f.type} ${f.boul} $${f.miz}`).join(' | ')}<br>TOTAL $${fiche.total}<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px"><button class="btn btn-b" data-reprint="${k}">🖨️ REIMPRIMER</button><button class="btn btn-r" data-del="${k}">❌ EFASÈ</button></div>`; cont.appendChild(div); });
   cont.querySelectorAll('[data-reprint]').forEach(b=>b.addEventListener('click',async()=>{const s=await get(ref(db,`ventes/${dateStr}/${vendeurActif}/${b.dataset.reprint}`)); if(s.exists()){const fiche=s.val(); const fichLignes=fiche.fiches.map(f=>`<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px dashed #999"><span style="width:100px;text-align:left;font-size:18px">${f.type}</span><span style="flex:1;text-align:center;font-size:20px;font-weight:900">${f.boul}</span><span style="width:70px;text-align:right;font-size:18px">$${f.miz}</span></div>`).join(''); const html=`<div style="text-align:center;font-family:monospace;font-weight:900;width:320px;margin:0 auto;color:#000;background:#fff;padding:12px"><div style="font-size:22px">C&D VÉRITÉ LOTTO</div><div style="font-size:14px;margin-top:10px">Date ${fiche.date} EST PAP</div><div style="font-size:14px">Tirages ${fiche.tiraj.join('/')} </div><div style="font-size:14px">Responsable ${vendeurActif}</div><div style="font-size:14px">Ticket ${fiche.id} - REPRINT</div><div style="margin:14px 0">----------------</div><div style="text-align:left">${fichLignes}</div><div style="margin:14px 0">----------------</div><div style="font-size:20px">TOTAL $${fiche.total}</div><div style="margin-top:32px;font-size:17px;text-transform:lowercase">bòn chans, lave chodyè w</div></div>`; const pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; setTimeout(()=>{window.print(); pa.style.display='none';},300);}}));
   cont.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async()=>{ if(!confirm("Efase?")) return; await remove(ref(db,`ventes/${dateStr}/${vendeurActif}/${b.dataset.del}`)); loadFiches(); }));
 }
-
-// PRIX PROPRIO MODIFYAB - BÒLÈT 1e 50 / 2e 20 / 3e 10 / MARYAJ 12×34=34×12 1000 / LOTO3 500 / LOTO4 5000 / LOTO5 25000
 async function getPrixActif(){
   let PRIX={lot1:50, lot2:20, lot3:10, maryaj:1000, loto3:500, loto4:5000, loto5:25000};
   try{
-    const snapV=await get(ref(db,`prix/${vendeurActif}`));
-    if(snapV.exists()){const p=snapV.val(); PRIX.lot1=parseInt(p.lot1||50); PRIX.lot2=parseInt(p.lot2||20); PRIX.lot3=parseInt(p.lot3||10); PRIX.maryaj=parseInt(p.maryaj||1000); PRIX.loto3=parseInt(p.loto3||500); PRIX.loto4=parseInt(p.loto4||5000); PRIX.loto5=parseInt(p.loto5||25000); return PRIX;}
-    const snapG=await get(ref(db,`prix_global`));
-    if(snapG.exists()){const p=snapG.val(); PRIX.lot1=parseInt(p.lot1||50); PRIX.lot2=parseInt(p.lot2||20); PRIX.lot3=parseInt(p.lot3||10); PRIX.maryaj=parseInt(p.maryaj||1000); PRIX.loto3=parseInt(p.loto3||500); PRIX.loto4=parseInt(p.loto4||5000); PRIX.loto5=parseInt(p.loto5||25000); return PRIX;}
-    const snapG2=await get(ref(db,`prix/GLOBAL`));
-    if(snapG2.exists()){const p=snapG2.val(); PRIX.lot1=parseInt(p.lot1||50); PRIX.lot2=parseInt(p.lot2||20); PRIX.lot3=parseInt(p.lot3||10); PRIX.maryaj=parseInt(p.maryaj||1000); PRIX.loto3=parseInt(p.loto3||500); PRIX.loto4=parseInt(p.loto4||5000); PRIX.loto5=parseInt(p.loto5||25000);}
-  }catch(e){}
-  return PRIX;
+    const snapV=await get(ref(db,`prix/${vendeurActif}`)); if(snapV.exists()){const p=snapV.val(); PRIX.lot1=parseInt(p.lot1||50); PRIX.lot2=parseInt(p.lot2||20); PRIX.lot3=parseInt(p.lot3||10); PRIX.maryaj=parseInt(p.maryaj||1000); PRIX.loto3=parseInt(p.loto3||500); PRIX.loto4=parseInt(p.loto4||5000); PRIX.loto5=parseInt(p.loto5||25000); return PRIX;}
+    const snapG=await get(ref(db,`prix_global`)); if(snapG.exists()){const p=snapG.val(); PRIX.lot1=parseInt(p.lot1||50); PRIX.lot2=parseInt(p.lot2||20); PRIX.lot3=parseInt(p.lot3||10); PRIX.maryaj=parseInt(p.maryaj||1000); PRIX.loto3=parseInt(p.loto3||500); PRIX.loto4=parseInt(p.loto4||5000); PRIX.loto5=parseInt(p.loto5||25000); return PRIX;}
+    const snapG2=await get(ref(db,`prix/GLOBAL`)); if(snapG2.exists()){const p=snapG2.val(); PRIX.lot1=parseInt(p.lot1||50); PRIX.lot2=parseInt(p.lot2||20); PRIX.lot3=parseInt(p.lot3||10); PRIX.maryaj=parseInt(p.maryaj||1000); PRIX.loto3=parseInt(p.loto3||500); PRIX.loto4=parseInt(p.loto4||5000); PRIX.loto5=parseInt(p.loto5||25000);}
+  }catch(e){} return PRIX;
 }
-
 async function genRap(){
-  const du=document.getElementById('dateDu').value||dateStr; const au=document.getElementById('dateAu').value||du; const filT=document.getElementById('selTirajRap').value||"TOUS";
-  const dDu=new Date(du); const dAu=new Date(au); let vente=0, gainKliyan=0, nbFich=0;
-  const PRIX=await getPrixActif();
+  const du=document.getElementById('dateDu').value||dateStr; const au=document.getElementById('dateAu').value||du; const filT=document.getElementById('selTirajRap').value||"TOUS"; const dDu=new Date(du); const dAu=new Date(au); let vente=0, gainKliyan=0, nbFich=0; const PRIX=await getPrixActif();
   for(let d=new Date(dDu); d<=dAu; d.setDate(d.getDate()+1)){
-    const ds=d.toISOString().slice(0,10); const snapV=await get(ref(db,`ventes/${ds}/${vendeurActif}`)); const snapR=await get(ref(db,`resultats/${ds}`));
-    if(!snapV.exists()) continue;
+    const ds=d.toISOString().slice(0,10); const snapV=await get(ref(db,`ventes/${ds}/${vendeurActif}`)); const snapR=await get(ref(db,`resultats/${ds}`)); if(!snapV.exists()) continue;
     Object.values(snapV.val()).forEach(fiche=>{
       const tirajFiltre=filT=="TOUS"?fiche.tiraj:fiche.tiraj.filter(t=>t==filT); if(tirajFiltre.length==0) return; const ratio=tirajFiltre.length/fiche.tiraj.length; nbFich++; vente+=fiche.total*ratio;
-      if(snapR.exists()){
-        tirajFiltre.forEach(t=>{
-          if(!snapR.child(t).exists()) return; const res=snapR.child(t).val();
-          fiche.fiches.forEach(l=>{
-            const miz=parseInt(l.miz)||0;
-            if(l.type=="BOLET"){
-              if(l.boul==res.r1) gainKliyan+=miz*PRIX.lot1*ratio;
-              else if(l.boul==res.r2) gainKliyan+=miz*PRIX.lot2*ratio;
-              else if(l.boul==res.r3) gainKliyan+=miz*PRIX.lot3*ratio;
-            }
-            if(l.type=="MARYAJ"){
-              const b=normM(l.boul); const m1=normM(res.m1||""), m2=normM(res.m2||""), m3=normM(res.m3||"");
-              if(b==m1||b==m2||b==m3) gainKliyan+=miz*PRIX.maryaj*ratio;
-            }
-            if(l.type=="LOTO3"&&l.boul==res.l3) gainKliyan+=miz*PRIX.loto3*ratio;
-            if(l.type=="LOTO4"&&l.boul==res.l4) gainKliyan+=miz*PRIX.loto4*ratio;
-            if(l.type=="LOTO5"&&l.boul==res.l5) gainKliyan+=miz*PRIX.loto5*ratio;
-          });
-        });
-      }
+      if(snapR.exists()){ tirajFiltre.forEach(t=>{ if(!snapR.child(t).exists()) return; const res=snapR.child(t).val(); fiche.fiches.forEach(l=>{const miz=parseInt(l.miz)||0; if(l.type=="BOLET"){if(l.boul==res.r1) gainKliyan+=miz*PRIX.lot1*ratio; else if(l.boul==res.r2) gainKliyan+=miz*PRIX.lot2*ratio; else if(l.boul==res.r3) gainKliyan+=miz*PRIX.lot3*ratio;} if(l.type=="MARYAJ"){const b=normM(l.boul); const m1=normM(res.m1||""), m2=normM(res.m2||""), m3=normM(res.m3||""); if(b==m1||b==m2||b==m3) gainKliyan+=miz*PRIX.maryaj*ratio;} if(l.type=="LOTO3"&&l.boul==res.l3) gainKliyan+=miz*PRIX.loto3*ratio; if(l.type=="LOTO4"&&l.boul==res.l4) gainKliyan+=miz*PRIX.loto4*ratio; if(l.type=="LOTO5"&&l.boul==res.l5) gainKliyan+=miz*PRIX.loto5*ratio;});});}
     });
   }
   const commission=vente*pourActif/100; const balanceNet=vente-commission-gainKliyan;
-  document.getElementById('rapContent').innerHTML=`Du: ${du} Au: ${au} EST PAP<br>Tirage: ${filT} - Vendeur: ${vendeurActif} - ${pourActif}%<br>Prix: Bòlèt 1e ${PRIX.lot1} / 2e ${PRIX.lot2} / 3e ${PRIX.lot3} / Maryaj 12×34=34×12=${PRIX.maryaj} / L3 ${PRIX.loto3} / L4 ${PRIX.loto4} / L5 ${PRIX.loto5}<br><br>Nombre fich: ${nbFich}<br><b>Vente: $${vente.toFixed(0)}</b><br>Commission ${pourActif}%: $${commission.toFixed(0)}<br><b style="color:red">Gain kliyan: $${gainKliyan.toFixed(0)}</b><br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:8px;text-align:center;font-size:14px">Balance net: $${balanceNet.toFixed(0)}</div><div style="margin-top:8px;font-size:9px">MODPAS RESPEKTE - PRIX PROPRIO MODIFYAB RESPEKTE</div>`;
+  document.getElementById('rapContent').innerHTML=`Du: ${du} Au: ${au} EST PAP<br>Tirage: ${filT} - Vendeur: ${vendeurActif} - ${pourActif}%<br>Prix: Bòlèt 1e ${PRIX.lot1} / 2e ${PRIX.lot2} / 3e ${PRIX.lot3} / Maryaj 12×34=34×12=${PRIX.maryaj} / L3 ${PRIX.loto3} / L4 ${PRIX.loto4} / L5 ${PRIX.loto5}<br><br>Nombre fich: ${nbFich}<br><b>Vente: $${vente.toFixed(0)}</b><br>Commission ${pourActif}%: $${commission.toFixed(0)}<br><b style="color:red">Gain kliyan: $${gainKliyan.toFixed(0)}</b><br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:8px;text-align:center;font-size:14px">Balance net: $${balanceNet.toFixed(0)}</div>`;
   window.dernierRap={du,au,filT,vente,commission,gainKliyan,balanceNet,nbFich,PRIX};
 }
-
 window.valider=async function(doPrint){
   const savedPass=localStorage.getItem("vendeurPass"); if(!vendeurActif||!savedPass){alert("⛔ MODPAS OBLIGATWA"); location.reload(); return;}
   const snapCheck=await get(ref(db,`vendeurs`)); let passOK=false; if(snapCheck.exists()) Object.values(snapCheck.val()).forEach(v=>{if(v.nom==vendeurActif&&v.pass==savedPass&&v.status!="FERME") passOK=true;}); if(!passOK){alert("⛔ MODPAS PA RESPEKTE"); localStorage.clear(); location.reload(); return;}
   const valides=lignes.filter(f=>f.boul.trim()!=""&&f.miz.trim()!="").map(f=>({...f,boul:f.type=="MARYAJ"?normM(f.boul):f.boul}));
   if(valides.length==0||tirajChwazi.length==0){alert("Chwazi tiraj + boul");return;}
   const cur=getHeurePAP(); const snapH=await get(ref(db,`heures`)); if(snapH.exists()){const h=snapH.val(); for(let t of tirajChwazi){const hm=h[t.replace(' ','_')]; if(!hm) continue; const [hh,mm]=hm.split(':').map(Number); if(cur>hh*60+mm){alert(`FÈMÈ ${t}`);return;}}}
+
+  // LIMIT FINAL - DEPI PA DEPASE = VANN + ENPRIME / DEPASE = PA KA VANN PA KA ENPRIME
+  const allOk=await checkAllLimitsFinal();
+  if(!allOk){ alert("⛔ VANT BLOKE - LIMIT DEPASE - PA KA VANN - PA KA ENPRIME"); return; }
+
   const id="T-"+Date.now().toString().slice(-6); const tot=valides.reduce((s,f)=>s+(parseInt(f.miz)||0),0)*tirajChwazi.length;
   await push(ref(db,`ventes/${dateStr}/${vendeurActif}`),{id,tiraj:tirajChwazi,fiches:valides,total:tot,date:dateStr,timestamp:Date.now(),vendeur:vendeurActif});
   const fichLignes=valides.map(f=>`<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px dashed #999"><span style="width:100px;text-align:left;font-size:18px">${f.type}</span><span style="flex:1;text-align:center;font-size:20px;font-weight:900;letter-spacing:2px">${f.boul}</span><span style="width:70px;text-align:right;font-size:18px">$${f.miz}</span></div>`).join('');
   const html=`<div style="text-align:center;font-family:monospace;font-weight:900;width:320px;margin:0 auto;color:#000;background:#fff;padding:12px"><div style="font-size:22px">C&D VÉRITÉ LOTTO</div><div style="font-size:14px;margin-top:10px">Date ${dateStr} EST PAP</div><div style="font-size:14px">Tirages ${tirajChwazi.join('/')} </div><div style="font-size:14px">Responsable ${vendeurActif}</div><div style="font-size:14px">Ticket ${id}</div><div style="margin:14px 0">----------------</div><div style="text-align:left">${fichLignes}</div><div style="margin:14px 0">----------------</div><div style="font-size:20px">TOTAL $${tot}</div><div style="margin-top:32px;font-size:17px;text-transform:lowercase">bòn chans, lave chodyè w</div></div>`;
-  const pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; if(doPrint) setTimeout(()=>{window.print(); pa.style.display='none';},300);
+  const pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; if(doPrint) setTimeout(()=>{window.print(); pa.style.display='none';},300); else pa.style.display='none';
   lignes=[{type:"BOLET",boul:"",miz:""}]; renderLignes(); updateTotal();
 }
 document.addEventListener('DOMContentLoaded',async()=>{
   const savedV=localStorage.getItem("vendeur"); const savedP=localStorage.getItem("vendeurPass");
-  if(savedV&&savedP){
-    const snap=await get(ref(db,`vendeurs`)); let ok=false; let p=10; if(snap.exists()) Object.values(snap.val()).forEach(v=>{if(v.nom==savedV&&v.pass==savedP&&v.status!="FERME"){ok=true; p=v.pour||10;}});
-    if(ok){vendeurActif=savedV; pourActif=p; document.getElementById('loginOverlay').style.display='none'; initApresLogin();}
-  }
+  if(savedV&&savedP){ const snap=await get(ref(db,`vendeurs`)); let ok=false; let p=10; if(snap.exists()) Object.values(snap.val()).forEach(v=>{if(v.nom==savedV&&v.pass==savedP&&v.status!="FERME"){ok=true; p=v.pour||10;}}); if(ok){vendeurActif=savedV; pourActif=p; document.getElementById('loginOverlay').style.display='none'; initApresLogin();} }
   document.getElementById('btnLogin').addEventListener('click',checkLogin);
   document.getElementById('inpLoginNom').addEventListener('keydown',(e)=>{if(e.key=="Enter"){document.getElementById('inpLoginPass').focus();}});
   document.getElementById('inpLoginPass').addEventListener('keydown',(e)=>{if(e.key=="Enter") checkLogin();});
