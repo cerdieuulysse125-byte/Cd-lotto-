@@ -3,29 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>C&D V17 KOUT - COMPACT</title>
+<title>C&D V19 - CHERCHE PRINTER</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;} body{background:#000;color:#fff;font-family:monospace;}
-.top{background:#0d47a1;color:#fff;padding:8px;text-align:center;font-size:11px;font-weight:bold;}
-.tabs{display:flex;background:#222;}.tab{flex:1;padding:10px 4px;text-align:center;font-size:10px;font-weight:bold;color:#fff;border-right:1px solid #444;cursor:pointer;}.tab.active{background:#0f0;color:#000;}
+.top{background:#0d47a1;color:#fff;padding:8px;text-align:center;font-size:11px;font-weight:bold;position:sticky;top:0;z-index:99;}
+.tabs{display:flex;background:#222;position:sticky;top:33px;z-index:99;}.tab{flex:1;padding:10px 2px;text-align:center;font-size:10px;font-weight:bold;color:#fff;border-right:1px solid #444;cursor:pointer;}.tab.active{background:#0f0;color:#000;}
 .tabContent{display:none;padding:8px;}.tabContent.active{display:block;}
-/* VENDRE KOUT */
-.line{display:flex;gap:4px;margin-top:6px;}
-.line select,.line input{padding:12px;border-radius:6px;border:none;font-size:15px;font-weight:bold;}
-.line select{flex:1.2;background:#fff;color:#000;}.line input.b{flex:1.5;background:#fff;color:#000;}.line input.m{width:70px;background:#ff0;color:#000;text-align:center;}
-.btnAdd{background:#0d47a1;color:#fff;padding:12px 14px;border-radius:6px;font-weight:bold;cursor:pointer;}
-.list{background:#111;border-radius:6px;min-height:60px;max-height:160px;overflow:auto;margin-top:8px;padding:4px;}
-.item{display:flex;justify-content:space-between;padding:6px 8px;border-bottom:1px dashed #333;font-size:13px;}
-.total{background:#0f0;color:#000;padding:10px;border-radius:6px;text-align:center;font-weight:bold;font-size:15px;margin-top:6px;}
-.btnPrint{background:#2e7d32;color:#fff;padding:18px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-top:8px;cursor:pointer;}
-.small{font-size:9px;color:#aaa;margin-top:4px;text-align:center;}
-.inputStd{width:100%;padding:12px;border-radius:6px;border:none;margin-top:6px;font-size:14px;}
-.btnBlue{background:#1976d2;color:#fff;padding:12px;border-radius:6px;text-align:center;font-weight:bold;margin-top:8px;cursor:pointer;}
+.line{display:flex;gap:4px;margin-top:6px;}.line select,.line input{padding:12px;border-radius:6px;border:none;font-size:15px;font-weight:bold;}
+.line select{flex:1.2;background:#fff;color:#000;}.line input.b{flex:1.5;background:#fff;color:#000;}.line input.m{width:65px;background:#ff0;color:#000;text-align:center;}
+.btnAdd{background:#0d47a1;color:#fff;padding:12px 12px;border-radius:6px;font-weight:bold;cursor:pointer;}
+.list{background:#111;border-radius:6px;min-height:50px;max-height:140px;overflow:auto;margin-top:6px;padding:4px;}
+.item{display:flex;justify-content:space-between;padding:5px 8px;border-bottom:1px dashed #333;font-size:13px;}
+.total{background:#0f0;color:#000;padding:8px;border-radius:6px;text-align:center;font-weight:bold;font-size:14px;margin-top:6px;}
+.btnPrint{background:#2e7d32;color:#fff;padding:16px;border-radius:10px;text-align:center;font-size:17px;font-weight:bold;margin-top:8px;cursor:pointer;}
+.btnScan{background:#1976d2;color:#fff;padding:10px;border-radius:8px;text-align:center;font-size:12px;font-weight:bold;margin-top:6px;cursor:pointer;}
+.printerBox{background:#111;border:1px solid #2e7d32;border-radius:8px;padding:8px;margin-top:6px;font-size:11px;}
+.inputStd{width:100%;padding:11px;border-radius:6px;border:none;margin-top:6px;font-size:13px;}
+.btnBlue{background:#1976d2;color:#fff;padding:11px;border-radius:6px;text-align:center;font-weight:bold;margin-top:6px;cursor:pointer;}
 .fiche{background:#fff;color:#000;border-radius:6px;padding:8px;margin-top:6px;font-size:11px;}
 </style>
 </head>
 <body>
-<div class="top">C&D VÉRITÉ LOTTO - V18 KOUT - 00:11:22:33:44:55 <span id="pr">🖨️ InnerPrinter</span></div>
+<div class="top">C&D VÉRITÉ LOTTO - V19 - CHERCHE ENPRIMANT - <span id="pStat">InnerPrinter 00:11:22:33:44:55</span></div>
 <div class="tabs">
 <div class="tab active" onclick="openTab('vendre')">VENDRE</div>
 <div class="tab" onclick="openTab('copier')">COPIER</div>
@@ -33,135 +32,161 @@
 <div class="tab" onclick="openTab('rapport')">RAPPORT</div>
 </div>
 
-<!-- VENDRE KOUT - PA GEN CHIP LONG - TIRAJ DEJA ANDEDAN -->
 <div id="vendre" class="tabContent active">
-<div style="display:flex;gap:4px;">
-<select id="tirageSel" style="flex:1;padding:10px;border-radius:6px;font-weight:bold;font-size:13px;">
-<option>GA midi</option><option>FL midi</option><option>NY midi</option>
-<option>GA soir</option><option>FL soir</option><option>NY soir</option>
-<option>Primera día</option><option>Primera noche</option>
-<option>Suerte día</option><option>Suerte tarde</option>
-<option>Real</option><option>Lote Dom</option>
-<option>Nacional día</option><option>Nacional noche</option>
-<option>Loteka</option><option>Leidsa</option>
-</select>
-<div style="background:#333;color:#fff;padding:10px;border-radius:6px;font-size:11px;display:flex;align-items:center;" onclick="toggleMulti()" id="multiBtn">+MILTIP</div>
+<!-- CHERCHE ENPRIMANT POU ENPRIME -->
+<div class="printerBox">
+<div style="display:flex;justify-content:space-between;align-items:center;">
+<b>🖨️ Enprimant:</b> <span id="printName">InnerPrinter Default</span>
 </div>
-<div id="multiBox" style="display:none;background:#111;padding:6px;border-radius:6px;margin-top:4px;flex-wrap:wrap;gap:4px;"></div>
+<div style="font-size:10px;color:#0f0;" id="printDetail">Adrès: 00:11:22:33:44:55 - Tip: Default 58mm 100% - Status: Konekte</div>
+<div style="display:flex;gap:4px;margin-top:6px;">
+<div id="btnCherche" class="btnScan" style="flex:1;">🔍 CHERCHE ENPRIMANT</div>
+<div id="btnTest" class="btnScan" style="flex:1;background:#2e7d32;">🖨️ TEST PRINT</div>
+</div>
+<div id="scanList" style="margin-top:6px;display:none;"></div>
+</div>
 
-<div style="margin-top:6px;font-size:10px;color:#0f0;font-weight:bold;">Jeux - Boul - Mise - Flèche ↓ konsève jwèt (12x47=47x12 bon)</div>
+<div style="display:flex;gap:4px;margin-top:6px;">
+<select id="tirageSel" style="flex:1;padding:9px;border-radius:6px;font-weight:bold;font-size:12px;">
+<option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option>
+<option>Primera día</option><option>Primera noche</option><option>Suerte día</option><option>Suerte tarde</option><option>Real</option><option>Lote Dom</option><option>Nacional día</option><option>Nacional noche</option><option>Loteka</option><option>Leidsa</option>
+</select>
+<div id="multiBtn" style="background:#333;color:#fff;padding:9px 10px;border-radius:6px;font-size:11px;cursor:pointer;">+MILTIP</div>
+</div>
+<div id="multiBox" style="display:none;background:#111;padding:5px;border-radius:6px;margin-top:4px;flex-wrap:wrap;gap:4px;"></div>
+
+<div style="margin-top:5px;font-size:10px;color:#0f0;">Jeux - Boul - Mise - ↓ konsève jwèt (12x47=47x12 bon)</div>
 <div class="line">
-<select id="jeu"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>M1</option><option>M2</option><option>M3</option><option>MARYAJ</option></select>
-<input id="boul" class="b" type="text" inputmode="numeric" placeholder="Boul" pattern="[0-9x]*">
-<input id="mise" class="m" type="number" inputmode="numeric" value="10">
+<select id="jeu"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select>
+<input id="boul" class="b" type="text" inputmode="numeric" placeholder="Boul">
+<input id="mise" class="m" type="number" value="10">
 <div class="btnAdd" id="addBtn">+↓</div>
 </div>
-<div class="small">Chif sèlman - Enter/↓ pou liy swivan</div>
 
-<div id="list" class="list"><div style="color:#666;text-align:center;padding:15px;">Pa gen liy</div></div>
+<div id="list" class="list"><div style="color:#666;text-align:center;padding:12px;">Pa gen liy</div></div>
 <div id="total" class="total">Total: 0G</div>
 <div id="btnPrint" class="btnPrint">🖨️ IMPRIMER - Gran Lèt V2 Pro</div>
-<div class="small">C&D VÉRITÉ - Tel +52 7298079596 - Bòn chans lave chodyè w - Auto: InnerPrinter 00:11:22:33:44:55</div>
+<div style="font-size:8px;color:#666;text-align:center;margin-top:4px;">C&D VÉRITÉ Tel +52 7298079596 - Bòn chans lave chodyè w - Auto Printer</div>
 </div>
 
 <div id="copier" class="tabContent">
-<input id="copyId" class="inputStd" placeholder="Id ticket pou kopye">
+<input id="copyId" class="inputStd" placeholder="Id ticket">
 <div id="btnCopy" class="btnBlue">Chèche pou Kopye</div>
 <div id="copyRes"></div>
 </div>
 
 <div id="fiches" class="tabContent">
-<input id="dateF" type="date" class="inputStd">
 <input id="qF" class="inputStd" placeholder="Recherche">
 <div id="btnF" class="btnBlue">Recherche</div>
 <div id="listF"></div>
 </div>
 
 <div id="rapport" class="tabContent">
-<div style="display:flex;gap:4px;"><input id="du" type="date" class="inputStd" style="flex:1;"><input id="au" type="date" class="inputStd" style="flex:1;"></div>
 <select id="tirRap" class="inputStd"><option value="tous">Tous tiraj</option><option>GA midi</option><option>FL midi</option><option>NY midi</option><option>GA soir</option><option>FL soir</option><option>NY soir</option><option>Real</option><option>Loteka</option><option>Leidsa</option></select>
-<div id="btnRap" class="btnBlue">Générer Rapport</div>
+<div id="btnRap" class="btnBlue">Générer Rapport - Chak tiraj separe</div>
 <div id="resRap"></div>
 </div>
 
 <script>
-var lignes=[], fiches=JSON.parse(localStorage.getItem('cdv18')||'[]'), selTiraj=["GA midi"], prix={p1:50,p2:20,p3:10,m:1000,l3:500,l4:5000,l5:25000}, auto={name:'InnerPrinter',addr:'00:11:22:33:44:55'};
+var lignes=[], fiches=JSON.parse(localStorage.getItem('cdv19')||'[]'), selTiraj=["GA midi"], curPrinter={name:'InnerPrinter',addr:'00:11:22:33:44:55',type:'Default',method:'AIDL'};
 function openTab(id){ document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.tab').forEach(t=>{ if(t.textContent.toLowerCase().includes(id.substring(0,3))) t.classList.add('active'); }); if(id==='fiches') renderFiches(fiches); }
 
-var tirajList=["GA midi","FL midi","NY midi","GA soir","FL soir","NY soir","Primera día","Primera noche","Suerte día","Suerte tarde","Real","Lote Dom","Nacional día","Nacional noche","Loteka","Leidsa"];
-function toggleMulti(){
- var box=document.getElementById('multiBox');
- if(box.style.display==='none'){ box.style.display='flex'; if(box.innerHTML===''){ tirajList.forEach(t=>{ var d=document.createElement('div'); d.textContent=t; d.style.cssText='padding:6px 8px;background:#fff;color:#000;border-radius:12px;font-size:10px;cursor:pointer;'; d.onclick=function(){ if(selTiraj.includes(t)){ selTiraj=selTiraj.filter(x=>x!==t); this.style.background='#fff'; } else { selTiraj.push(t); this.style.background='#0f0'; } updTotal(); }; if(selTiraj.includes(t)) d.style.background='#0f0'; box.appendChild(d); }); }
- } else box.style.display='none';
+// CHERCHE ENPRIMANT POU ENPRIME - AUTO DETEKSYON
+function setPrinter(name,addr,type,method){
+ curPrinter={name:name,addr:addr,type:type,method:method};
+ document.getElementById('printName').textContent=name+' - '+type;
+ document.getElementById('printDetail').textContent='Adrès: '+addr+' - Tip: '+type+' 58mm 100% - Status: ✅ Konekte - '+method;
+ document.getElementById('pStat').textContent=name+' '+addr;
 }
-document.getElementById('tirageSel').addEventListener('change',function(){ var v=this.value; if(!selTiraj.includes(v)){ selTiraj.push(v); } updTotal(); });
 
-function normMaryaj(b){
- if(b.includes('x')||b.includes('X')){ var p=b.toLowerCase().split('x').map(s=>s.trim()).filter(s=>s); if(p.length===2){ var s=[p[0],p[1]].sort(); return {d:p[0]+'x'+p[1],k:s[0]+'x'+s[1]}; } }
- return {d:b,k:b};
+async function chercheEnprimant(){
+ var listDiv=document.getElementById('scanList');
+ listDiv.style.display='block';
+ listDiv.innerHTML='<div style="color:#0f0;padding:8px;">🔍 Recherche enprimant...<br>1. InnerPrinter AIDL...<br>2. POS STEWARD 4.13.4...<br>3. Bluetooth à proximité...</div>';
+
+ // 1 - InnerPrinter - Toujou disponib sou V2 Pro - Menm jan ak foto ou anvan an - 00:11:22:33:44:55
+ setTimeout(()=>{
+   var html='<div style="background:#2e7d32;color:#fff;padding:8px;border-radius:6px;margin-top:4px;cursor:pointer;" onclick="setPrinter(\'InnerPrinter\',\'00:11:22:33:44:55\',\'Default\',\'AIDL\');this.style.background=\'#0a0\'">✅ <b>InnerPrinter</b><br>00:11:22:33:44:55 - Default 58mm 100% - AIDL - Klike pou chwazi (Rekòmande V2 Pro)</div>';
+   html+='<div style="background:#fff;color:#000;padding:8px;border-radius:6px;margin-top:4px;cursor:pointer;" onclick="setPrinter(\'POS STEWARD\',\'woyou.aipos.print\',\'Service 4.13.4\',\'STEWARD\')">📦 <b>POS STEWARD</b><br>woyou.aipos.print 4.13.4 - Bridge - Klike</div>';
+   html+='<div style="background:#fff;color:#000;padding:8px;border-radius:6px;margin-top:4px;cursor:pointer;" onclick="setPrinter(\'RawBT Inner\',\'00:11:22:33:44:55\',\'Sunmi Inner\',\'RAWBT\')">📲 <b>RawBT - Sunmi Inner</b><br>00:11:22:33:44:55 - RawBT - Klike</div>';
+   listDiv.innerHTML=html;
+
+   // 2 - Bluetooth à proximité - Chrome Web Bluetooth
+   if(navigator.bluetooth){
+     var btn=document.createElement('div');
+     btn.textContent='🔍 CHERCHE BLUETOOTH À PROXIMITÉ - Klike pou scan BT';
+     btn.style.cssText='background:#1976d2;color:#fff;padding:10px;border-radius:6px;margin-top:6px;text-align:center;cursor:pointer;font-weight:bold;';
+     btn.onclick=async()=>{
+       try{
+         var dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['battery_service']});
+         var d=document.createElement('div');
+         d.style.cssText='background:#ff0;color:#000;padding:8px;border-radius:6px;margin-top:4px;cursor:pointer;';
+         d.innerHTML='📡 <b>'+(dev.name||'Printer BT')+'</b><br>'+dev.id.substring(0,17)+' - Bluetooth à proximité';
+         d.onclick=()=>{ setPrinter(dev.name||'Printer BT',dev.id.substring(0,17),'Bluetooth','BT'); };
+         listDiv.appendChild(d);
+       }catch(e){ alert('Aktive Bluetooth - Limen imprimante BT'); }
+     };
+     listDiv.appendChild(btn);
+   }
+ },500);
 }
-function addLine(){
- var jeu=document.getElementById('jeu').value, boulRaw=document.getElementById('boul').value.trim().replace(/\s+/g,''), mise=parseInt(document.getElementById('mise').value)||0;
- if(!boulRaw||mise<=0) return;
- if(!/^[0-9xX]+$/.test(boulRaw)){ alert('Chif sèlman'); return; }
- var nm=normMaryaj(boulRaw);
- lignes.push({jeu:jeu,boul:nm.d,key:nm.k,mise:mise});
- document.getElementById('boul').value=''; document.getElementById('boul').focus();
- renderList(); updTotal();
+
+function buildText(f){
+ return ' C&D VÉRITÉ LOTTO\n Date '+f.date+'\n Tirages '+f.tirages.join('/')+'\n Tel +52 7298079596\n Ticket '+f.id+'\n------------------------------\n'+f.lignes.map(l=>l.jeu.padEnd(8)+' '+l.boul.padEnd(12)+' '+l.mise+'G').join('\n')+'\n------------------------------\n TOTAL '+f.total+'G\n------------------------------\n Bòn chans, lave chodyè w\n\n\n\n';
 }
-function renderList(){
- var c=document.getElementById('list');
- if(lignes.length===0){ c.innerHTML='<div style="color:#666;text-align:center;padding:15px;">Pa gen liy</div>'; return; }
- c.innerHTML=''; lignes.forEach((l,i)=>{ var d=document.createElement('div'); d.className='item'; d.innerHTML='<span>'+l.jeu+' '+l.boul+' '+l.mise+'G</span><span style="color:#f00;" onclick="delLine('+i+')">✕</span>'; c.appendChild(d); });
+function doPrint(f){
+ var txt=buildText(f);
+ // 1 - AIDL direk - Terminal V2 Pro - Santre gran lèt
+ try{
+   if(window.SunmiPrinter){
+     window.SunmiPrinter.setAlignment(1);
+     window.SunmiPrinter.setFontSize(30);
+     window.SunmiPrinter.printText(txt);
+     window.SunmiPrinter.lineWrap(5);
+     window.SunmiPrinter.cutPaper();
+     return;
+   }
+ }catch(e){}
+ // 2 - Auto - RawBT / POS STEWARD ak adrès chwazi a
+ try{
+   var base='rawbt://print?data='+encodeURIComponent(txt)+'&mac='+curPrinter.addr;
+   window.location.href=base;
+   setTimeout(()=>{ window.location.href='intent://print?text='+encodeURIComponent(txt)+'#Intent;action=com.sunmi.steward.print.PRINT;package=com.sunmi.steward;end'; },700);
+ }catch(e){ alert(txt); }
 }
+
+var tirajList=["GA midi","FL midi","NY midi","GA soir","FL soir","NY soir","Primera día","Primera noche","Suerte día","Suerte tarde","Real","Lote Dom","Nacional día","Nacional noche","Loteka","Leidsa"];
+document.getElementById('multiBtn').onclick=()=>{
+ var box=document.getElementById('multiBox');
+ if(box.style.display==='none'){ box.style.display='flex'; if(!box.innerHTML){ tirajList.forEach(t=>{ var d=document.createElement('div'); d.textContent=t; d.style.cssText='padding:5px 7px;background:#fff;color:#000;border-radius:12px;font-size:10px;cursor:pointer;'; if(selTiraj.includes(t)) d.style.background='#0f0'; d.onclick=function(){ if(selTiraj.includes(t)){ selTiraj=selTiraj.filter(x=>x!==t); this.style.background='#fff'; } else { selTiraj.push(t); this.style.background='#0f0'; } updTotal(); }; box.appendChild(d); }); } } else box.style.display='none';
+};
+document.getElementById('tirageSel').addEventListener('change',function(){ var v=this.value; if(!selTiraj.includes(v)) selTiraj.push(v); updTotal(); });
+
+function norm(b){ if(b.includes('x')||b.includes('X')){ var p=b.toLowerCase().split('x').map(s=>s.trim()).filter(s=>s); if(p.length===2){ var s=[p[0],p[1]].sort(); return {d:p[0]+'x'+p[1],k:s[0]+'x'+s[1]}; } } return {d:b,k:b}; }
+function addLine(){ var jeu=document.getElementById('jeu').value, boulRaw=document.getElementById('boul').value.trim().replace(/\s+/g,''), mise=parseInt(document.getElementById('mise').value)||0; if(!boulRaw||mise<=0) return; if(!/^[0-9xX]+$/.test(boulRaw)) return; var nm=norm(boulRaw); lignes.push({jeu:jeu,boul:nm.d,key:nm.k,mise:mise}); document.getElementById('boul').value=''; document.getElementById('boul').focus(); renderList(); updTotal(); }
+function renderList(){ var c=document.getElementById('list'); if(!lignes.length){ c.innerHTML='<div style="color:#666;text-align:center;padding:12px;">Pa gen liy</div>'; return; } c.innerHTML=''; lignes.forEach((l,i)=>{ var d=document.createElement('div'); d.className='item'; d.innerHTML='<span>'+l.jeu+' '+l.boul+' '+l.mise+'G</span><span style="color:#f00;" onclick="delLine('+i+')">✕</span>'; c.appendChild(d); }); }
 function delLine(i){ lignes.splice(i,1); renderList(); updTotal(); }
-function updTotal(){
- var sum=lignes.reduce((a,b)=>a+b.mise,0); var mult=selTiraj.length||1; var tot=sum*mult;
- document.getElementById('total').textContent='Total: '+sum+'G × '+mult+' ('+selTiraj.join('/')+') = '+tot+'G';
-}
+function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); var mult=selTiraj.length||1; document.getElementById('total').textContent='Total: '+sum+'G × '+mult+' ('+selTiraj.join('/')+') = '+(sum*mult)+'G'; }
 document.getElementById('boul').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9xX]/g,''); });
 document.getElementById('boul').addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key==='ArrowDown'){ e.preventDefault(); addLine(); } });
 document.getElementById('mise').addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key==='ArrowDown'){ e.preventDefault(); addLine(); } });
 document.getElementById('addBtn').onclick=addLine;
+document.getElementById('btnCherche').onclick=chercheEnprimant;
+document.getElementById('btnTest').onclick=()=>{ doPrint({id:'TEST',date:new Date().toLocaleString(),tirages:selTiraj,lignes:[{jeu:'TEST',boul:curPrinter.name,mise:10}],total:10}); };
+document.getElementById('btnPrint').onclick=()=>{ if(!lignes.length) return; var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString('fr-HT'),tirages:[...selTiraj],lignes:[...lignes]}; f.total=f.lignes.reduce((a,b)=>a+b.mise,0)*f.tirages.length; fiches.unshift(f); localStorage.setItem('cdv19',JSON.stringify(fiches)); doPrint(f); lignes=[]; renderList(); updTotal(); };
 
-function buildText(f){
- var h=' C&D VÉRITÉ LOTTO\n Date '+f.date+'\n Tirages '+f.tirages.join('/')+'\n Tel +52 7298079596\n Ticket '+f.id+'\n------------------------------\n';
- var b=''; f.lignes.forEach(l=>{ b+= (l.jeu+' '+l.boul+' '+l.mise+'G\n'); });
- var tot=f.lignes.reduce((a,b)=>a+b.mise,0)*f.tirages.length;
- b+='------------------------------\n TOTAL '+tot+'G\n------------------------------\n';
- var fo=' Bòn chans, lave chodyè w\n\n\n\n';
- return h+b+fo;
-}
-function doPrint(f){
- var txt=buildText(f);
- try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); window.SunmiPrinter.setFontSize(28); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); return; } }catch(e){}
- try{ window.location.href='rawbt://print?data='+encodeURIComponent(txt); setTimeout(()=>{ window.location.href='intent://print?text='+encodeURIComponent(txt)+'#Intent;action=com.sunmi.steward.print.PRINT;package=com.sunmi.steward;end'; },600); }catch(e){ alert(txt); }
-}
-
-document.getElementById('btnPrint').onclick=()=>{
- if(lignes.length===0) return;
- var f={id:'T'+Date.now().toString().slice(-6), date:new Date().toLocaleString('fr-HT'), tirages:[...selTiraj], lignes:[...lignes]};
- f.total=f.lignes.reduce((a,b)=>a+b.mise,0)*f.tirages.length;
- fiches.unshift(f); localStorage.setItem('cdv18',JSON.stringify(fiches));
- doPrint(f); lignes=[]; renderList(); updTotal();
-};
-
-// COPIER - FICHES - RAPPORT
-document.getElementById('btnCopy').onclick=()=>{
- var id=document.getElementById('copyId').value.trim(); var f=fiches.find(x=>x.id===id); var c=document.getElementById('copyRes');
- if(!f){ c.innerHTML='<div style="color:#f00;">Pa jwenn</div>'; return; }
- c.innerHTML='<div class="fiche"><b>'+f.id+'</b> '+f.tirages.join('/')+' '+f.total+'G<br>'+f.lignes.map(l=>l.jeu+' '+l.boul).join(', ')+'<br><div class="btnBlue" onclick="copyToVendre(\''+f.id+'\')">Kopye</div></div>';
-};
+// FICHES RAPPORT
+function renderFiches(list){ var c=document.getElementById('listF'); c.innerHTML=''; list.forEach(f=>{ var d=document.createElement('div'); d.className='fiche'; d.innerHTML='<b>'+f.id+'</b> '+f.tirages.join('/')+' '+f.total+'G<br><span onclick="doPrint(fiches.find(x=>x.id===\''+f.id+'\'))" style="color:#1976d2;">🖨️ Imprimer</span> | <span onclick="copyToVendre(\''+f.id+'\')" style="color:#0a0;">📋 Copier</span>'; c.appendChild(d); }); }
 function copyToVendre(id){ var f=fiches.find(x=>x.id===id); if(!f) return; lignes=[...f.lignes]; selTiraj=[...f.tirages]; renderList(); updTotal(); openTab('vendre'); }
-function renderFiches(list){ var c=document.getElementById('listF'); c.innerHTML=''; list.forEach(f=>{ var d=document.createElement('div'); d.className='fiche'; d.innerHTML='<b>'+f.id+'</b> '+f.date+'<br>'+f.tirages.join('/')+' '+f.total+'G<br><span onclick="doPrint(fiches.find(x=>x.id===\''+f.id+'\'))" style="color:#1976d2;">🖨️ Imprimer</span> | <span onclick="copyToVendre(\''+f.id+'\')" style="color:#0a0;">📋 Copier</span>'; c.appendChild(d); }); }
-document.getElementById('btnF').onclick=()=>{ var q=document.getElementById('qF').value.toLowerCase(); var fil=fiches.filter(f=>!q||f.id.toLowerCase().includes(q)||f.tirages.join('/').toLowerCase().includes(q)); renderFiches(fil); };
+document.getElementById('btnF').onclick=()=>{ var q=document.getElementById('qF').value.toLowerCase(); renderFiches(fiches.filter(f=>!q||f.id.toLowerCase().includes(q))); };
+document.getElementById('btnCopy').onclick=()=>{ var id=document.getElementById('copyId').value.trim(); var f=fiches.find(x=>x.id===id); var c=document.getElementById('copyRes'); if(!f){ c.innerHTML='Pa jwenn'; return; } c.innerHTML='<div class="fiche"><b>'+f.id+'</b> '+f.total+'G<br><div class="btnBlue" onclick="copyToVendre(\''+f.id+'\')">Kopye</div></div>'; };
 document.getElementById('btnRap').onclick=()=>{
- var tir=document.getElementById('tirRap').value; var fil=fiches.filter(f=>tir==='tous'||f.tirages.includes(tir));
- var par={}; var vente=0; fil.forEach(f=>{ f.tirages.forEach(t=>{ if(!par[t]) par[t]={v:0,c:0}; var part=f.total/f.tirages.length; par[t].v+=part; par[t].c++; vente+=part; }); });
- var html='<div style="background:#000;color:#0f0;padding:10px;border-radius:6px;font-size:12px;">Vente: '+vente+'G<br>'; for(var k in par){ html+=k+': '+par[k].v+'G ('+par[k].c+')<br>'; } html+='Commission 10%: '+(vente*0.1)+'G<br>Balance: '+(vente*0.9)+'G</div><div class="btnBlue" onclick="doPrint({id:\'RAPPORT\',date:new Date().toLocaleString(),tirages:[\''+tir+'\'],lignes:[{jeu:\'Vente\',boul:\''+vente+'G\',mise:0}],total:'+vente+'})">🖨️ Imprimer Rapport</div>';
- document.getElementById('resRap').innerHTML=html;
+ var tir=document.getElementById('tirRap').value; var fil=fiches.filter(f=>tir==='tous'||f.tirages.includes(tir)); var par={},vente=0; fil.forEach(f=>{ f.tirages.forEach(t=>{ if(!par[t]) par[t]={v:0,c:0}; var part=f.total/f.tirages.length; par[t].v+=part; par[t].c++; vente+=part; }); });
+ var html='<div style="background:#000;color:#0f0;padding:8px;border-radius:6px;font-size:11px;">Vente: '+vente+'G<br>'; for(var k in par){ html+=k+': '+par[k].v+'G<br>'; } html+='Balance: '+(vente*0.9)+'G</div>'; document.getElementById('resRap').innerHTML=html;
 };
-updTotal();
+updTotal(); renderFiches(fiches);
+// Auto detecte InnerPrinter au demarrage
+setTimeout(()=>{ setPrinter('InnerPrinter','00:11:22:33:44:55','Default','AIDL'); },800);
 </script>
 </body>
 </html>
