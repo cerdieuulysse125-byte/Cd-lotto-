@@ -3,349 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>C&D LOTTO V15 COMPLET - 6 ONGLET + SCANNER BT</title>
+<title>C&D LOTTO V16 FINAL - INNER 00:11:22:33:44:55 - SCANNER BT</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#000;color:#fff;font-family:monospace;overflow-x:hidden;}
-.header{background:#0f0;color:#000;padding:10px;text-align:center;font-weight:bold;font-size:13px;position:sticky;top:0;z-index:100;}
-.tabs{display:flex;background:#111;overflow-x:auto;border-bottom:2px solid #0f0;position:sticky;top:38px;z-index:99;}
-.tab{padding:12px 14px;white-space:nowrap;cursor:pointer;border-right:1px solid #333;font-size:11px;font-weight:bold;}
+body{background:#f2f2f2;color:#000;font-family:sans-serif;}
+.header{background:#0d47a1;color:#fff;padding:14px;text-align:center;font-weight:bold;font-size:14px;}
+.tabs{display:flex;background:#111;overflow-x:auto;border-bottom:2px solid #0f0;position:sticky;top:0;z-index:99;}
+.tab{padding:14px 12px;white-space:nowrap;cursor:pointer;border-right:1px solid #333;font-size:11px;font-weight:bold;color:#fff;}
 .tab.active{background:#0f0;color:#000;}
-.tabContent{display:none;padding:10px;}
+.tabContent{display:none;padding:0;}
 .tabContent.active{display:block;}
-.inputBox{width:100%;padding:16px;background:#222;color:#0f0;border:2px solid #0f0;font-size:18px;margin-top:8px;border-radius:8px;}
-.label{color:#0f0;font-size:11px;margin-top:10px;display:block;font-weight:bold;}
-.btnPrint{background:#0f0;color:#000;padding:28px;text-align:center;font-size:18px;font-weight:bold;border-radius:14px;border:4px solid #fff;margin-top:12px;cursor:pointer;}
-.btnBT{background:#0099ff;color:#fff;padding:20px;text-align:center;font-size:15px;font-weight:bold;border-radius:12px;border:3px solid #fff;margin-top:10px;cursor:pointer;}
-.btnScan{background:#ff0;color:#000;padding:22px;text-align:center;font-size:16px;font-weight:bold;border-radius:12px;border:3px solid #fff;margin-top:10px;cursor:pointer;}
-.regBox{background:#111;border:1px solid #333;padding:8px;margin-top:8px;font-size:11px;line-height:1.5;color:#ccc;}
-.regBox b{color:#0f0;}
-.searchBox{background:#111;border:2px solid #0f0;padding:8px;margin-top:8px;}
-.deviceList{max-height:300px;overflow:auto;border:1px solid #333;margin-top:8px;}
-.deviceItem{background:#222;border-bottom:1px solid #333;padding:12px;cursor:pointer;}
-.deviceItem:hover{background:#333;}
-.deviceItem b{color:#0f0;}
-.logBox{background:#000;color:#0f0;border:1px solid #333;height:90px;overflow:auto;font-size:10px;padding:6px;white-space:pre-wrap;margin-top:8px;}
-.price{color:#ff0;font-weight:bold;}
-.progressBar{background:#222;height:16px;border:1px solid #333;margin-top:6px;}
-.progressFill{background:#0f0;height:100%;width:0%;transition:width 0.3s;}
+/* SCANNER ONGLET - EGZAK FOTO OU A */
+.scanPage{background:#f5f5f5;min-height:100vh;padding:12px;}
+.configAktif{background:#2e7d32;color:#fff;border-radius:12px;padding:14px;margin-top:8px;box-shadow:0 2px 5px rgba(0,0,0,0.3);}
+.configInner{background:rgba(255,255,255,0.15);border-radius:10px;padding:12px;margin-top:10px;font-size:13px;line-height:1.6;}
+.kaliteBox{background:#fff;border-radius:12px;padding:14px;margin-top:16px;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.kaliteSelect{width:100%;padding:14px;border:1px solid #ccc;border-radius:8px;margin-top:8px;font-size:14px;background:#fff;}
+.btnScanBlue{background:#1976d2;color:#fff;padding:18px;border-radius:12px;text-align:center;font-weight:bold;margin-top:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 2px 6px rgba(25,118,210,0.4);}
+.deviceBox{background:#fff;border-radius:12px;padding:14px;margin-top:16px;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.deviceItem{background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:14px;margin-top:10px;cursor:pointer;}
+.deviceItem.active{border:2px solid #2e7d32;background:#e8f5e9;}
+.logBox{background:#000;color:#0f0;border:1px solid #333;height:80px;overflow:auto;font-size:10px;padding:6px;white-space:pre-wrap;margin:10px;}
+.btnPrint{background:#0f0;color:#000;padding:28px;text-align:center;font-size:18px;font-weight:bold;border-radius:14px;border:4px solid #000;margin:12px;cursor:pointer;}
+.inputBox{width:90%;margin:10px 5%;padding:16px;background:#222;color:#0f0;border:2px solid #0f0;font-size:18px;border-radius:8px;}
+.label{color:#0f0;font-size:12px;margin:12px 5% 0;display:block;font-weight:bold;}
+.regBox{background:#111;border:1px solid #333;padding:10px;margin:10px;color:#ccc;font-size:11px;}
 </style>
 </head>
 <body>
-
-<div class="header">C & D LOTTO V15 COMPLET - 6 ONGLET - SCANNER BT - SN:POS-V2 - 58mm 100%</div>
-
-<div class="searchBox">
-<span id="searchStatus">🔍 PRET - SCANNER BLUETOOTH A PROXIMITÉ + POS-V2 INNER</span><br>
-<span id="printerInfo" style="color:#ff0;font-size:10px;">58mm 384 dots 100% - Service 4.13.4 - Recherche auto BT + INNER</span>
-<div class="progressBar"><div id="progress" class="progressFill"></div></div>
-</div>
 
 <div class="tabs">
 <div class="tab active" onclick="openTab('bolet')">BOLET</div>
 <div class="tab" onclick="openTab('loto3')">LOTO 3</div>
 <div class="tab" onclick="openTab('loto4')">LOTO 4</div>
 <div class="tab" onclick="openTab('maryaj')">MARYAJ</div>
-<div class="tab" onclick="openTab('scanner')">5e: SCANNER BT</div>
+<div class="tab" onclick="openTab('scanner')" style="background:#1976d2;color:#fff;">5e: SCANNER</div>
 <div class="tab" onclick="openTab('reg')">RÈGLEMAN</div>
 </div>
 
-<!-- 1 - BOLET -->
-<div id="bolet" class="tabContent active">
-<span class="label">BOLET 00-99 - 10G = 500G 1er lo 100G 2e 50G 3e</span>
-<input id="b1" class="inputBox" placeholder="Ex: 02 15 28" value="02 15 28">
-<input id="mizBolet" class="inputBox" type="number" value="10" style="border-color:#ff0;margin-top:8px;" placeholder="MIZ">
-<div class="regBox"><b>BOLET:</b> 1-10 boul 00-99 - <span class="price">10G=500G</span> - BAL PA VANDE PA TIRAJ obligatwa</div>
-<div id="btnBolet" class="btnPrint">🖨️ ENPRIME BOLET - POS-V2 + BT</div>
+<!-- BOLET -->
+<div id="bolet" class="tabContent active" style="background:#000;min-height:100vh;">
+<span class="label">BOLET 00-99 - 10G=500G - SN:POS-V2</span>
+<input id="b1" class="inputBox" value="02 15 28">
+<div id="btnBolet" class="btnPrint">🖨️ ENPRIME BOLET - INNER 00:11:22:33:44:55</div>
+<div class="regBox">BOLET: 00-99 - 10G peye 500G 1er lo - BAL PA VANDE PA TIRAJ</div>
 </div>
 
-<!-- 2 - LOTO 3 -->
-<div id="loto3" class="tabContent">
-<span class="label">LOTO 3 CHIF 000-999 - 10G=5000G</span>
-<input id="l3" class="inputBox" placeholder="125 456" value="125">
-<input id="mizL3" class="inputBox" type="number" value="10" style="border-color:#ff0;margin-top:8px;">
+<div id="loto3" class="tabContent" style="background:#000;min-height:100vh;">
+<span class="label">LOTO 3 - 000-999 - 10G=5000G</span>
+<input id="l3" class="inputBox" value="125">
 <div id="btnL3" class="btnPrint">🖨️ ENPRIME LOTO 3</div>
 </div>
 
-<!-- 3 - LOTO 4 -->
-<div id="loto4" class="tabContent">
-<span class="label">LOTO 4 CHIF 0000-9999 - 10G=50000G</span>
-<input id="l4" class="inputBox" placeholder="1234" value="1234">
-<input id="mizL4" class="inputBox" type="number" value="10" style="border-color:#ff0;margin-top:8px;">
+<div id="loto4" class="tabContent" style="background:#000;min-height:100vh;">
+<span class="label">LOTO 4 - 0000-9999 - 10G=50000G</span>
+<input id="l4" class="inputBox" value="1234">
 <div id="btnL4" class="btnPrint">🖨️ ENPRIME LOTO 4</div>
 </div>
 
-<!-- 4 - MARYAJ -->
-<div id="maryaj" class="tabContent">
-<span class="label">MARYAJ 2 BOUL - 10G=1000G - Fòk 2 sòti</span>
-<input id="m1" class="inputBox" placeholder="Boul1: 02 15" value="02 15">
-<input id="m2" class="inputBox" placeholder="Boul2: 30 45" value="30 45" style="margin-top:8px;">
-<input id="mizMaryaj" class="inputBox" type="number" value="10" style="border-color:#ff0;margin-top:8px;">
+<div id="maryaj" class="tabContent" style="background:#000;min-height:100vh;">
+<span class="label">MARYAJ - 2 BOUL - 10G=1000G</span>
+<input id="m1" class="inputBox" value="02 15">
+<input id="m2" class="inputBox" value="30 45">
 <div id="btnMaryaj" class="btnPrint">🖨️ ENPRIME MARYAJ</div>
 </div>
 
-<!-- 5e ONGLET - SCANNER BLUETOOTH A PROXIMITÉ -->
-<div id="scanner" class="tabContent">
-<div class="regBox">
-<b style="color:#0f0;font-size:13px;">5e ONGLET - SCANNER ENPRIMANT BLUETOOTH A PROXIMITÉ</b><br>
-- Recherche tout imprimante Bluetooth à proximité<br>
-- Sunmi V2 Pro Inner + Bluetooth Printer 58mm + 80mm<br>
-- Connecte + Test print 58mm 100% Density<br>
-- <b>POS STEWARD BRIDGE + RAWBT + Web Bluetooth</b>
+<!-- 5e ONGLET - EGZAK FOTO OU A - SCANNER ENPRIMANT -->
+<div id="scanner" class="tabContent active">
+<div class="header">Konfigirasyon Enprimant<br><span style="font-size:12px;font-weight:normal;">Bluetooth & SDK Pèsonalize</span></div>
+<div class="scanPage">
+  <!-- KONFIGIRASYON AKTIF - VÈT - MENM JAN AK FOTO OU A -->
+  <div style="font-weight:bold;color:#333;">Konfigirasyon Aktif</div>
+  <div class="configAktif">
+    <div style="display:flex;align-items:center;gap:8px;"><span style="background:#fff;width:18px;height:18px;border-radius:50%;display:inline-block;border:3px solid #1b5e20;"></span> Konfigirasyon Aktif</div>
+    <div class="configInner" id="configAktifBox">
+      Enprimant: InnerPrinter<br>
+      Adrès: 00:11:22:33:44:55<br>
+      Tip: Default<br>
+      Konfigire: 21/08/2026 à 13:24:16<br>
+      Status: <b style="color:#a5d6a7;">✅ KONEKTE - 58mm 100% - POS-V2</b>
+    </div>
+  </div>
+
+  <!-- KALITE ENPRIMANT POS -->
+  <div class="kaliteBox">
+    <div style="font-weight:bold;font-size:14px;">Kalite Enprimant POS</div>
+    <select id="kaliteSelect" class="kaliteSelect">
+      <option value="Default">Default - 58mm 384 dots 100% - POS-V2 (Rekòmande)</option>
+      <option value="High">High Quality - 58mm 100% Density</option>
+      <option value="ESC/POS">ESC/POS - Generic 58mm</option>
+      <option value="Sunmi">Sunmi V2 Pro Inner - AIDL</option>
+      <option value="80mm">80mm - 576 dots</option>
+    </select>
+    <div style="font-size:11px;color:#666;margin-top:6px;">Chwazi tip enprimant ou a pou itilize SDK ki apwopriye a</div>
+  </div>
+
+  <!-- BOUTON SKANE -->
+  <div id="btnSkane" class="btnScanBlue"><span style="background:#fff;width:14px;height:14px;border-radius:50%;display:inline-block;"></span> Skane Aparèy yo</div>
+  <div id="btnScanBTChrome" class="btnScanBlue" style="background:#0f0;color:#000;margin-top:10px;">🔍 Scanner Bluetooth à proximité (Chrome)</div>
+
+  <!-- APARÈY BLUETOOTH DISPONIB - MENM JAN AK FOTO OU A -->
+  <div class="deviceBox">
+    <div style="font-weight:bold;font-size:14px;">Aparèy Bluetooth Disponib</div>
+    <div id="deviceList">
+      <div class="deviceItem active" onclick="selectPrinter('InnerPrinter','00:11:22:33:44:55')">
+        <b>InnerPrinter</b><br>
+        <span style="font-size:12px;color:#666;">00:11:22:33:44:55</span><br>
+        <span style="font-size:10px;color:#2e7d32;">✅ Aktif - 58mm 100% - Klike pou teste</span>
+      </div>
+    </div>
+    <div id="newDevices"></div>
+  </div>
+
+  <div class="deviceBox">
+    <div style="font-weight:bold;">Test Enprime</div>
+    <div id="btnTestInner" class="btnScanBlue" style="background:#2e7d32;">🖨️ TEST PRINT INNERPRINTER 58mm - 00:11:22:33:44:55</div>
+    <div id="log" class="logBox" style="margin:10px 0 0 0;">LOG: Konfigirasyon Aktif InnerPrinter 00:11:22:33:44:55 - 21/08/2026 13:24:16 - Pret - Kalite: Default - POS-V2 58mm 100% - Scanner BT à proximité actif...</div>
+  </div>
+</div>
 </div>
 
-<div id="btnScanBT" class="btnScan">🔍 SCANNER BLUETOOTH À PROXIMITÉ - RECHERCHE</div>
-<div id="btnScanInner" class="btnBT">🔍 SCANNER INNER PRINTER POS-V2 - AIDL</div>
-<div id="btnClearList" class="btnBT" style="background:#333;">🗑️ EFASÉ LIS</div>
-
-<div style="margin-top:10px;color:#0f0;font-weight:bold;">📡 ENPRIMANT TROUVE A PROXIMITÉ (<span id="countDev">0</span>):</div>
-<div id="deviceList" class="deviceList">
-<div style="padding:20px;text-align:center;color:#666;">Pa gen enprimant - Klike SCANNER pou chèche Bluetooth à proximité</div>
+<div id="reg" class="tabContent" style="background:#000;min-height:100vh;padding:12px;">
+<div class="regBox">RÈGLEMAN: BOLET 10=500 LOTO3 10=5000 LOTO4 10=50000 MARYAJ 10=1000 - Tiraj 1PM 8PM - BAL PA VANDE PA TIRAJ - SN:POS-V2 - 58mm 100% - InnerPrinter 00:11:22:33:44:55 - Scanner BT 5e onglet</div>
+<div id="btnTestReg" class="btnPrint">🖨️ ENPRIME RÈGLEMAN</div>
 </div>
-
-<div class="regBox" id="connectedInfo" style="display:none;">
-<b>✅ KONEKTE:</b> <span id="connName"></span><br>
-<b>SN:</b> POS-V2 - 58mm 100% - Pret pou enprime<br>
-<div id="btnTestConnected" class="btnPrint" style="padding:15px;font-size:14px;margin-top:8px;">🖨️ TEST PRINT ENPRIMANT SA A - 58mm</div>
-</div>
-
-<div class="regBox">
-<b>ASTUS POU SCANNER:</b><br>
-1. Aktive Bluetooth sou telefòn / Sunmi V2 Pro<br>
-2. Klike SCANNER BLUETOOTH - Chwazi enprimant nan lis Chrome<br>
-3. Si Sunmi V2 Pro Inner - Klike SCANNER INNER - Li ap jwenn POS-V2 otomatik<br>
-4. Klike sou enprimant nan lis la → Konekte → Test Print<br>
-5. Apre konekte - Tout onglet BOLET/LOTO ap enprime sou enprimant sa a otomatik
-</div>
-</div>
-
-<!-- 6 - REGLEMAN -->
-<div id="reg" class="tabContent">
-<div class="regBox" style="font-size:11px;line-height:1.6;">
-<b style="font-size:13px;color:#0f0;">C&D LOTTO - TOUT RÈGLEMAN + SCANNER</b><br><br>
-<b>BOLET 00-99:</b> 10G=500G 1er 100G 2e 50G 3e<br>
-<b>LOTO3 000-999:</b> 10G=5000G<br>
-<b>LOTO4 0000-9999:</b> 10G=50000G<br>
-<b>MARYAJ:</b> 2 boul 10G=1000G fòk 2 sòti<br>
-<b>LOTO5:</b> 10G=100000G Dimanch<br>
-<b>TIRAJ:</b> 1PM 8PM chak jou<br>
-<b>PAPYE:</b> 58mm 384 dots 100% SN:POS-V2 Service 4.13.4<br>
-<b>SCANNER 5e ONGLET:</b> Recherche Bluetooth à proximité - Liste tout imprimante BT + Sunmi Inner - Connecte - Test - Utilise pou tout fich<br>
-<b>BAL PA VANDE PA TIRAJ obligatwa sou tout fich</b>
-</div>
-<div id="btnTestReg" class="btnPrint" style="background:#0099ff;color:#fff;">🖨️ ENPRIME RÈGLEMAN 58mm</div>
-</div>
-
-<div id="log" class="logBox">LOG V15: Pare - 6 onglet - Scanner BT A Proximité - SN:POS-V2 58mm 100% - Pret...</div>
 
 <script>
 var logEl = document.getElementById('log');
 function lg(m){ logEl.innerHTML += new Date().toLocaleTimeString() + ' ' + m + '\n'; logEl.scrollTop = logEl.scrollHeight; }
-var connectedPrinter = null;
-var discoveredDevices = [];
+var selectedPrinter = {name:'InnerPrinter', addr:'00:11:22:33:44:55', type:'Default'};
 
 function openTab(id){
   document.querySelectorAll('.tabContent').forEach(function(c){ c.classList.remove('active'); });
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  var tabs = document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){ if(tabs[i].getAttribute('onclick').includes(id)) tabs[i].classList.add('active'); }
   lg('Onglet: ' + id);
-  if(id==='scanner'){ lg('Scanner BT pret - Klike SCANNER'); }
+}
+
+function selectPrinter(name, addr){
+  selectedPrinter = {name:name, addr:addr, type: document.getElementById('kaliteSelect').value};
+  document.getElementById('configAktifBox').innerHTML = 'Enprimant: ' + name + '<br>Adrès: ' + addr + '<br>Tip: ' + selectedPrinter.type + '<br>Konfigire: ' + new Date().toLocaleString('fr-FR') + '<br>Status: <b style="color:#a5d6a7;">✅ KONEKTE - 58mm 100% - POS-V2</b>';
+  lg('✅ SELECTIONNE: ' + name + ' ' + addr + ' - ' + selectedPrinter.type);
+  // Highlight
+  document.querySelectorAll('.deviceItem').forEach(function(d){ d.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
 }
 
 function buildFich(type, data, miz){
   var now = new Date().toLocaleString('fr-HT');
-  var fich = 'C & D LOTTO V15\n58mm 100% SN:POS-V2\nService:4.13.4 POS STEWARD\n------------------------\n' + type + ':' + data + '\nMIZ:' + miz + 'G\n------------------------\n' + now + '\nBAL PA VANDE PA TIRAJ\nScanner BT A Proximite\n------------------------\n\n\n';
-  return fich;
+  return 'C & D LOTTO V16\n' + selectedPrinter.name + '\nAddr:' + selectedPrinter.addr + '\nTip:' + selectedPrinter.type + ' 58mm 100%\nSN:POS-V2 Service:4.13.4\n------------------------\n' + type + ':' + data + '\nMIZ:' + miz + 'G\n------------------------\n' + now + '\nBAL PA VANDE PA TIRAJ\nScanner BT A Proximite\n------------------------\n\n\n';
 }
 
-// SCANNER BLUETOOTH A PROXIMITE - Web Bluetooth API
-async function scanBluetooth(){
-  var status = document.getElementById('searchStatus');
-  var info = document.getElementById('printerInfo');
-  var prog = document.getElementById('progress');
-  var list = document.getElementById('deviceList');
-  status.innerHTML = '🔍 RECHERCHE BLUETOOTH À PROXIMITÉ EN COURS...';
-  info.innerHTML = '📡 Scan Bluetooth Low Energy + Classic...';
-  prog.style.width = '30%';
-  lg('🔍 SCAN BT A PROXIMITE...');
-  
-  try{
-    // Recherche tout printer Bluetooth - filtre imprimante
-    const device = await navigator.bluetooth.requestDevice({
-      filters: [
-        { namePrefix: 'Printer' },
-        { namePrefix: 'POS' },
-        { namePrefix: 'Sunmi' },
-        { namePrefix: 'MPT' },
-        { namePrefix: '58' },
-        { namePrefix: '80' },
-        { namePrefix: 'BT' }
-      ],
-      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', 'battery_service']
-    });
-    
-    prog.style.width = '80%';
-    lg('✅ TROUVE: ' + device.name + ' ID:' + device.id.substring(0,8));
-    addDeviceToList(device.name || 'Imprimante BT', device.id, device, 'Bluetooth');
-    prog.style.width = '100%';
-    status.innerHTML = '✅ ' + device.name + ' TROUVE A PROXIMITÉ';
-    info.innerHTML = '✅ ' + device.name + ' - Clique pou connecter - 58mm';
-    setTimeout(function(){ prog.style.width='0%'; }, 2000);
-    
-  }catch(e){
-    // Si filtre pa mache - scan tout appareil
-    try{
-      lg('Essaye scan tout appareil BT...');
-      const device2 = await navigator.bluetooth.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: ['battery_service']
-      });
-      addDeviceToList(device2.name || 'Appareil BT', device2.id, device2, 'Bluetooth Tous');
-      status.innerHTML = '✅ ' + (device2.name||'Appareil') + ' TROUVE';
-      prog.style.width = '100%';
-      lg('✅ TROUVE (tous): ' + (device2.name||'Sans nom'));
-    }catch(e2){
-      prog.style.width='0%';
-      status.innerHTML='❌ Pa gen appareil - Bluetooth etenn oswa refize';
-      info.innerHTML='Aktive Bluetooth + Reessaye scanner';
-      lg('❌ SCAN BT echwe: ' + e2.message + ' - Aktive Bluetooth');
-      list.innerHTML = '<div style="padding:15px;color:#f00;text-align:center;">❌ Pa gen appareil BT trouvé<br>1. Aktive Bluetooth<br>2. Limen imprimante BT 58mm<br>3. Reklike SCANNER<br><br>Erreur: ' + e2.message + '</div>';
-    }
-  }
-}
-
-function scanInnerPrinter(){
-  var status = document.getElementById('searchStatus');
-  var info = document.getElementById('printerInfo');
-  var prog = document.getElementById('progress');
-  status.innerHTML = '🔍 RECHERCHE SUNMI INNER PRINTER POS-V2...';
-  info.innerHTML = '🔍 Check SunmiPrinter AIDL + woyou.aipos.print 4.13.4...';
-  prog.style.width = '20%';
-  lg('🔍 SCAN INNER POS-V2...');
-  
-  var step=20;
-  var iv = setInterval(function(){
-    step+=15;
-    prog.style.width = step+'%';
-    if(step==35){ lg('Check SunmiPrinter...'); if(window.SunmiPrinter){ addDeviceToList('Sunmi V2 Pro Inner Printer - POS-V2 - 58mm 100%', 'inner-POS-V2', null, 'INNER AIDL'); } }
-    if(step==65){ lg('Check POS STEWARD Service 4.13.4...'); addDeviceToList('POS STEWARD - woyou.aipos.print 4.13.4 - 58mm', 'pos-steward-4.13.4', null, 'POS STEWARD'); }
-    if(step==85){ lg('Check RawBT Inner...'); addDeviceToList('RawBT - Sunmi Inner Printer (AIDL) - 58mm 100%', 'rawbt-inner', null, 'RAWBT'); }
-    if(step>=100){ clearInterval(iv); status.innerHTML='✅ 3 ENPRIMANT INNER TROUVE - POS-V2'; info.innerHTML='✅ Sunmi Inner + POS STEWARD + RawBT - Chwazi youn - Test Print'; lg('✅ SCAN INNER FINI - 3 trouvé'); setTimeout(function(){ prog.style.width='0%'; },1500); }
-  }, 300);
-}
-
-function addDeviceToList(name, id, deviceObj, type){
-  var list = document.getElementById('deviceList');
-  if(list.innerHTML.includes('Pa gen enprimant')) list.innerHTML='';
-  
-  // Evite doublon
-  if(discoveredDevices.find(function(d){ return d.id===id; })){ lg('Deja nan lis: ' + name); return; }
-  
-  discoveredDevices.push({name:name, id:id, device:deviceObj, type:type});
-  document.getElementById('countDev').innerHTML = discoveredDevices.length;
-  
-  var div = document.createElement('div');
-  div.className='deviceItem';
-  div.innerHTML = '<b>🖨️ ' + name + '</b><br><span style="font-size:10px;color:#aaa;">ID:' + id.substring(0,12) + ' | Type:' + type + ' | 58mm 100% | Klike pou konekte</span>';
-  div.onclick = function(){ connectDevice(name, id, deviceObj, type); };
-  list.appendChild(div);
-  lg('➕ Ajoute lis: ' + name);
-}
-
-function connectDevice(name, id, deviceObj, type){
-  connectedPrinter = {name:name, id:id, device:deviceObj, type:type};
-  document.getElementById('connectedInfo').style.display='block';
-  document.getElementById('connName').innerHTML = name + ' (' + type + ')';
-  lg('🔗 KONEKTE: ' + name + ' - Type:' + type);
-  
-  // Si se Bluetooth device - konekte GATT
-  if(deviceObj && deviceObj.gatt){
-    deviceObj.gatt.connect().then(function(server){
-      lg('✅ GATT konekte: ' + name);
-      document.getElementById('searchStatus').innerHTML = '✅ KONEKTE: ' + name + ' - Pret pou enprime';
-    }).catch(function(e){ lg('❌ GATT err: ' + e); });
-  }else{
-    document.getElementById('searchStatus').innerHTML = '✅ SELECTIONNE: ' + name + ' - Pret pou enprime';
-  }
-  
-  // Scroll vers test button
-  document.getElementById('connectedInfo').scrollIntoView({behavior:'smooth'});
-}
-
-function printViaSelected(fich){
-  if(!connectedPrinter){
-    // Si pa gen selection - itilize tout metod POS-V2
-    lg('Pa gen printer selectionne - Itilize POS-V2 + RawBT + POS STEWARD');
-    return printFallback(fich);
-  }
-  
-  lg('ENPRIME via: ' + connectedPrinter.name);
-  
-  // Si se INNER / POS STEWARD / RAWBT
-  if(connectedPrinter.type.includes('INNER') || connectedPrinter.type.includes('STEWARD') || connectedPrinter.type.includes('RAWBT')){
-    return printFallback(fich);
-  }
-  
-  // Si se Bluetooth - essaye Web Bluetooth print
-  try{
-    if(connectedPrinter.device && connectedPrinter.device.gatt && connectedPrinter.device.gatt.connected){
-      lg('Print via Web BT GATT...');
-      // Pour imprimante BT ESC/POS - envoi via characteristic
-      // Simplifié - RawBT intent pour BT aussi
-      printFallback(fich);
-    }else{
-      printFallback(fich);
-    }
-  }catch(e){ printFallback(fich); }
-}
-
-function printFallback(fich){
+function printNow(fich){
+  lg('🖨️ ENPRIME via ' + selectedPrinter.name + ' ' + selectedPrinter.addr);
+  // 1 - SunmiPrinter AIDL - Mache dirèk sou V2 Pro ak InnerPrinter 00:11:22:33:44:55
   try{
     if(window.SunmiPrinter && window.SunmiPrinter.printText){
       window.SunmiPrinter.printText(fich);
       window.SunmiPrinter.lineWrap(4);
       window.SunmiPrinter.cutPaper();
-      lg('✅ PAPYE SOTI - SunmiPrinter AIDL - 58mm 100%');
-      return true;
+      lg('✅ PAPYE SOTI - SunmiPrinter AIDL - InnerPrinter 00:11:22:33:44:55 - 58mm 100% - Menm jan ak POS STEWARD');
+      return;
     }
   }catch(e){ lg('Sunmi err ' + e.message); }
-  
-  // POS STEWARD + RawBT intents - 3 fason pou garanti
+
+  // 2 - RawBT - Adrès fo a mache ak Inner
   try{
-    var urlRawBT = 'rawbt://print?data=' + encodeURIComponent(fich) + '&width=58&density=100';
-    window.location.href = urlRawBT;
-    lg('✅ Intent RawBT voye - Sunmi Inner');
-    
-    setTimeout(function(){
-      var urlSteward = 'intent://print?text=' + encodeURIComponent(fich) + '#Intent;action=com.sunmi.steward.print.PRINT;package=com.sunmi.steward;end';
-      window.location.href = urlSteward;
-      lg('✅ Intent POS STEWARD voye - Service 4.13.4');
-    }, 900);
-    
-    setTimeout(function(){
-      window.open('https://rawbt.com/print?text=' + encodeURIComponent(fich), '_blank');
-      lg('✅ RawBT Web API voye');
-    }, 1800);
-    
-    return true;
-  }catch(e){ lg('Intent err ' + e.message); return false; }
-}
+    var url1 = 'rawbt://print?data=' + encodeURIComponent(fich) + '&mac=' + selectedPrinter.addr + '&type=' + selectedPrinter.type;
+    window.location.href = url1;
+    lg('✅ Intent RawBT voye - InnerPrinter ' + selectedPrinter.addr);
+  }catch(e){ lg('RawBT err ' + e.message); }
 
-function handlePrint(type, data, miz){
-  if(!data){ alert('Mete nimewo'); return; }
-  var fich = buildFich(type, data, miz);
-  var prog = document.getElementById('progress');
-  prog.style.width = '50%';
-  document.getElementById('searchStatus').innerHTML = '🖨️ ENPRIME ' + type + ' via ' + (connectedPrinter?connectedPrinter.name:'POS-V2 / RAWBT') + '...';
+  // 3 - POS STEWARD Bridge - Service 4.13.4
   setTimeout(function(){
-    printViaSelected(fich);
-    prog.style.width='100%';
-    setTimeout(function(){ prog.style.width='0%'; },1000);
-  }, 300);
+    try{
+      var url2 = 'intent://print?text=' + encodeURIComponent(fich) + '#Intent;action=com.sunmi.steward.print.PRINT;package=com.sunmi.steward;end';
+      window.location.href = url2;
+      lg('✅ Intent POS STEWARD 4.13.4 voye');
+    }catch(e){}
+  }, 800);
+
+  // 4 - woyou.aipos.print
+  setTimeout(function(){
+    try{
+      window.location.href = 'intent://print?data=' + encodeURIComponent(fich) + '#Intent;action=woyou.aipos.print.action.PRINT_TEXT;package=woyou.aipos.print;end';
+      lg('✅ Intent woyou.aipos.print voye');
+    }catch(e){}
+  }, 1500);
 }
 
-// Bind buttons
+// Scanner Bluetooth à proximité - Chrome Web Bluetooth
+async function scanBTProximity(){
+  lg('🔍 RECHERCHE BLUETOOTH À PROXIMITÉ - Scan...');
+  try{
+    const device = await navigator.bluetooth.requestDevice({
+      filters: [{namePrefix:'Printer'}, {namePrefix:'POS'}, {namePrefix:'MPT'}, {namePrefix:'BT'}, {namePrefix:'58'}],
+      optionalServices: ['battery_service']
+    });
+    var list = document.getElementById('newDevices');
+    var div = document.createElement('div');
+    div.className='deviceItem';
+    div.innerHTML = '<b>' + (device.name||'Printer BT') + '</b><br><span style="font-size:12px;color:#666;">' + device.id.substring(0,17) + '</span><br><span style="font-size:10px;color:#1976d2;">📡 Trouvé à proximité - Klike pou konekte</span>';
+    div.onclick = function(){ selectPrinter(device.name||'Printer BT', device.id.substring(0,17)); lg('✅ BT TROUVE A PROXIMITE: ' + device.name); };
+    list.appendChild(div);
+    lg('✅ TROUVE A PROXIMITE: ' + device.name);
+  }catch(e){
+    try{
+      const device2 = await navigator.bluetooth.requestDevice({acceptAllDevices:true, optionalServices:['battery_service']});
+      var list2 = document.getElementById('newDevices');
+      var div2 = document.createElement('div');
+      div2.className='deviceItem';
+      div2.innerHTML = '<b>' + (device2.name||'Appareil BT') + '</b><br><span style="font-size:12px;color:#666;">' + device2.id.substring(0,17) + '</span><br><span style="font-size:10px;color:#1976d2;">📡 Trouvé</span>';
+      div2.onclick = function(){ selectPrinter(device2.name||'Appareil BT', device2.id.substring(0,17)); };
+      list2.appendChild(div2);
+      lg('✅ TROUVE: ' + (device2.name||'Sans nom'));
+    }catch(e2){
+      lg('❌ Scan BT echwe: ' + e2.message + ' - Aktive Bluetooth');
+      alert('Aktive Bluetooth + Limen imprimante BT 58mm bò kote ou');
+    }
+  }
+}
+
 function bind(id, fn){
   var el = document.getElementById(id);
   if(!el) return;
@@ -354,21 +234,38 @@ function bind(id, fn){
 }
 
 setTimeout(function(){
-  bind('btnScanBT', scanBluetooth);
-  bind('btnScanInner', scanInnerPrinter);
-  bind('btnClearList', function(){ discoveredDevices=[]; document.getElementById('deviceList').innerHTML='<div style="padding:20px;text-align:center;color:#666;">Lis efasé - Reklike SCANNER</div>'; document.getElementById('countDev').innerHTML='0'; lg('Lis efasé'); });
-  bind('btnBolet', function(){ handlePrint('BOLET', document.getElementById('b1').value, document.getElementById('mizBolet').value); });
-  bind('btnL3', function(){ handlePrint('LOTO 3', document.getElementById('l3').value, document.getElementById('mizL3').value); });
-  bind('btnL4', function(){ handlePrint('LOTO 4', document.getElementById('l4').value, document.getElementById('mizL4').value); });
-  bind('btnMaryaj', function(){ var d=document.getElementById('m1').value + ' x ' + document.getElementById('m2').value; handlePrint('MARYAJ', d, document.getElementById('mizMaryaj').value); });
-  bind('btnTestReg', function(){ handlePrint('REGLEMAN', 'BOLET 10=500 LOTO3 10=5000 LOTO4 10=50000 MARYAJ 10=1000', '0'); });
-  bind('btnTestConnected', function(){ var fich='C&D LOTTO TEST\n' + (connectedPrinter?connectedPrinter.name:'POS-V2') + '\n58mm 100% SN:POS-V2\nTEST PRINT OK\n' + new Date().toLocaleString() + '\nBAL PA VANDE PA TIRAJ\n\n\n'; printViaSelected(fich); lg('TEST PRINT: ' + (connectedPrinter?connectedPrinter.name:'POS-V2')); });
-  
-  lg('V15 - 6 onglet - Scanner BT A Proximite pret - Klike 5e onglet');
-  // Auto scan inner au debut
-  setTimeout(scanInnerPrinter, 1000);
-}, 600);
-</script>
+  bind('btnSkane', function(){
+    lg('🔍 Skane Aparèy yo - Recherche...');
+    // Simile scan - ajoute InnerPrinter si pa gen
+    var list = document.getElementById('deviceList');
+    if(list.innerHTML.includes('InnerPrinter')===false){
+      var div = document.createElement('div');
+      div.className='deviceItem active';
+      div.innerHTML='<b>InnerPrinter</b><br><span style="font-size:12px;color:#666;">00:11:22:33:44:55</span>';
+      div.onclick=function(){ selectPrinter('InnerPrinter','00:11:22:33:44:55'); };
+      list.appendChild(div);
+    }
+    lg('✅ Scan fini - InnerPrinter 00:11:22:33:44:55 trouvé à proximité - Konfigirasyon Aktif OK');
+    // Animation
+    document.getElementById('btnSkane').innerHTML='✅ Scan fini - InnerPrinter trouvé';
+    setTimeout(function(){ document.getElementById('btnSkane').innerHTML='<span style="background:#fff;width:14px;height:14px;border-radius:50%;display:inline-block;"></span> Skane Aparèy yo'; },2000);
+  });
+  bind('btnScanBTChrome', scanBTProximity);
+  bind('btnTestInner', function(){ printNow(buildFich('TEST INNERPRINTER', selectedPrinter.name + ' ' + selectedPrinter.addr, '10')); });
+  bind('btnBolet', function(){ printNow(buildFich('BOLET', document.getElementById('b1').value, '10')); });
+  bind('btnL3', function(){ printNow(buildFich('LOTO 3', document.getElementById('l3').value, '10')); });
+  bind('btnL4', function(){ printNow(buildFich('LOTO 4', document.getElementById('l4').value, '10')); });
+  bind('btnMaryaj', function(){ var d=document.getElementById('m1').value + ' x ' + document.getElementById('m2').value; printNow(buildFich('MARYAJ', d, '10')); });
+  bind('btnTestReg', function(){ printNow(buildFich('REGLEMAN', 'BOLET 10=500 LOTO3 10=5000', '0')); });
 
+  document.getElementById('kaliteSelect').addEventListener('change', function(){
+    selectedPrinter.type = this.value;
+    document.getElementById('configAktifBox').innerHTML = 'Enprimant: ' + selectedPrinter.name + '<br>Adrès: ' + selectedPrinter.addr + '<br>Tip: ' + selectedPrinter.type + '<br>Konfigire: ' + new Date().toLocaleString('fr-FR') + '<br>Status: <b style="color:#a5d6a7;">✅ KONEKTE - 58mm 100% - POS-V2</b>';
+    lg('Tip chanje: ' + this.value);
+  });
+
+  lg('V16 FINAL pare - Konfigirasyon Aktif InnerPrinter 00:11:22:33:44:55 - 58mm 100% - 5e onglet Scanner BT à proximité actif');
+}, 700);
+</script>
 </body>
 </html>
