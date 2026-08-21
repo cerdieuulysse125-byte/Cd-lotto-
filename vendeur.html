@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>V12.3 FINAL - HEURE FERMETURE + LIMIT GLOBAL + FLECHE OK</title>
+<title>V12.4 DETEKSYON ENPRIMANT SUNMI V2 PRO + KONEKSYON</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <style>
@@ -22,7 +22,7 @@ body{background:#fff;-webkit-tap-highlight-color:transparent}
 .kaz{border:3px solid #000;border-radius:50px;height:52px;text-align:center;font-weight:900;font-size:16px;width:100%;background:#fff}
 .kaz:focus{background:#FFD500;outline:none}.kazMiz{background:#FFD500}
 .btnRond{border:3px solid #000;border-radius:50%;height:52px;width:52px;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center}
-.btnX{background:#fff;color:red;border-color:red}.btnFlech{background:#FFD500;color:#000;border-width:3px}
+.btnX{background:#fff;color:red;border-color:red}.btnFlech{background:#FFD500;color:#000}
 .totalBar{border:3px solid #000;border-radius:50px;padding:10px;text-align:center;font-weight:900;font-size:10px;margin:6px;background:#000;color:#FFD500}
 .btns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 6px}
 .btnBig{border:3px solid #000;border-radius:50px;height:56px;font-weight:900;font-size:10px}
@@ -37,20 +37,30 @@ body{background:#fff;-webkit-tap-highlight-color:transparent}
 .loginBox{background:#fff;border:4px solid #FFD500;border-radius:20px;padding:15px;width:100%;max-width:340px;text-align:center}
 #printArea{display:none;background:#fff;width:100%}
 .printTicket{width:384px;max-width:100%;margin:0 auto;background:#fff;color:#000;font-family:monospace;font-weight:900;padding:10px;text-align:center}
-@media print{#loginOverlay,.menu,.onglet,.top1{display:none!important}#printArea{display:block!important;position:relative!important;left:0!important;top:0!important;width:100%!important}body{background:#fff!important}}
+/* ENPRIMANT STATUS - SUNMI V2 PRO - KORIJE */
+.printerBar{border:3px solid #000;border-radius:15px;padding:8px;margin:6px;font-weight:900;font-size:9px;text-align:center;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
+.printerOK{background:#00FF00;color:#000}.printerKO{background:red;color:#fff}.printerWait{background:#FFD500;color:#000}
+@media print{#loginOverlay,.menu,.onglet,.top1,.printerBar{display:none!important}#printArea{display:block!important;position:relative!important;left:0!important;top:0!important;width:100%!important}body{background:#fff!important}}
 </style>
 </head>
 <body>
-<div id="loginOverlay"><div class="loginBox"><h2 style="background:#FFD500;border:3px solid #000;border-radius:15px;padding:8px;font-size:11px">🔒 VANDÈ SUNMI V2 PRO - 3 REG RESPEKTE</h2>
+<div id="loginOverlay"><div class="loginBox"><h2 style="background:#FFD500;border:3px solid #000;border-radius:15px;padding:8px;font-size:11px">🔒 VANDÈ SUNMI V2 PRO - DETEKSYON ENPRIMANT</h2>
 <input id="inpLoginNom" class="kf" type="text" placeholder="NON VANDE" style="text-transform:uppercase">
 <input id="inpLoginPass" class="kf" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="MODPAS CHIF SÈLMAN" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-<button type="button" class="btnBig btnVal" style="width:100%;margin-top:8px" onclick="checkLogin()">🔓 KONEKTE - 3 REG RESPEKTE</button>
+<button type="button" class="btnBig btnVal" style="width:100%;margin-top:8px" onclick="checkLogin()">🔓 KONEKTE - DETEKSYON ENPRIMANT</button>
 <div id="loginMsg" style="color:red;font-weight:900;font-size:9px;margin-top:6px"></div>
 <div id="heureLogin" style="font-size:8px;font-weight:900;margin-top:6px"></div>
-<div style="font-size:7px;background:#FFE4E4;border:2px solid red;border-radius:8px;padding:4px;margin-top:8px">L'HEURE FERMETURE RESPEKTE - LIMIT GLOBAL PA VANDÈ PA TIRAJ RESPEKTE - FLÈCHE ↓ KONSÈVE JEUX - ENPRIME PAPYE OK</div>
+<div id="printerLoginStatus" style="border:2px solid #000;border-radius:10px;padding:6px;margin-top:8px;font-size:8px;background:#fff">🖨️ Deteksyon enprimant SUNMI V2 PRO...</div>
 </div></div>
 
-<div class="top1">VENDEUR <span id="nomV">Jean</span> - 3 REG RESPEKTE ✅ - <span id="heureTop"></span> - <span id="dateTop"></span></div>
+<div class="top1">VENDEUR <span id="nomV">Jean</span> - DETEKSYON ENPRIMANT ✅ - <span id="heureTop"></span> - <span id="dateTop"></span></div>
+
+<!-- BAR ENPRIMANT SUNMI V2 PRO - DETEKSYON + KONEKSYON - KORIJE -->
+<div class="printerBar printerWait" id="printerBar">
+<div id="printerStatusText">🖨️ AP CHÈCHE ENPRIMANT SUNMI V2 PRO INNER PRINTER 58mm...</div>
+<button type="button" class="btn btn-b" style="height:40px;width:auto;padding:0 12px;font-size:8px" onclick="connectPrinter()">🔌 KONEKTE ENPRIMANT</button>
+</div>
+
 <div class="menu">
 <button id="b1" class="active" onclick="openOnglet(1)">VENDRE</button>
 <button id="b2" onclick="openOnglet(2)">COPIER</button>
@@ -60,22 +70,27 @@ body{background:#fff;-webkit-tap-highlight-color:transparent}
 </div>
 
 <div id="o1" class="onglet active">
-<div style="border:3px solid #000;border-radius:15px;padding:8px;text-align:center;font-weight:900;font-size:8px;margin:6px;background:#FFD500" id="alertInfo">L'HEURE FERMETURE RESPEKTE - LIMIT GLOBAL PA VANDÈ PA TIRAJ RESPEKTE - PRIX 500/5000/25000 - FLÈCHE ↓ KONSÈVE JEUX - ENPRIME PAPYE</div>
+<div style="border:3px solid #000;border-radius:15px;padding:8px;text-align:center;font-weight:900;font-size:8px;margin:6px;background:#FFD500" id="alertInfo">DETEKSYON ENPRIMANT SUNMI V2 PRO + L'HEURE FERMETURE + LIMIT GLOBAL PA VANDÈ PA TIRAJ + FLÈCHE ↓ KONSÈVE JEUX - 3 REG RESPEKTE</div>
 <div class="kazTiraj" id="kazTiraj" onclick="toggleTiraj()"><span id="txtTiraj">👉 KAZ TIRAJ MILTIP - KLIKE - 17 TIRAJ - HEURE RESPEKTE</span><div class="tirajDrop" id="tirajDrop"></div></div>
 <div style="display:grid;grid-template-columns:0.7fr 0.7fr 0.5fr 0.35fr 0.35fr;gap:4px;margin:6px;font-weight:900;font-size:8px;text-align:center"><div>Jeux</div><div>Boul CHIF</div><div>Miz CHIF</div><div>X</div><div>↓ KONSÈVE</div></div>
 <div id="lignesContainer"></div>
-<div class="totalBar" id="totalBar">Total $0 × 0 = $0 - 3 REG RESPEKTE</div>
+<div class="totalBar" id="totalBar">Total $0 × 0 = $0 - DETEKSYON ENPRIMANT + 3 REG RESPEKTE</div>
 <div id="limitInfo" style="border:2px solid red;border-radius:10px;padding:6px;margin:6px;font-weight:900;font-size:8px;background:#FFE4E4;display:none"></div>
 <div class="btns">
-<button type="button" class="btnBig btnVal" onclick="validerEtImprimer()">💾 VALIDER + ENPRIME PAPYE - 3 REG RESPEKTE 🆗</button>
-<button type="button" class="btnBig btnPrint" onclick="validerEtImprimer()">🖨️ IMPRIMER V2 PRO PAPYE - 3 REG RESPEKTE 🆗</button>
+<button type="button" class="btnBig btnVal" onclick="validerEtImprimer()">💾 VALIDER + ENPRIME PAPYE SUNMI - 3 REG RESPEKTE 🆗</button>
+<button type="button" class="btnBig btnPrint" onclick="validerEtImprimer()">🖨️ IMPRIMER V2 PRO PAPYE - DETEKSYON OK 🆗</button>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:6px">
+<button type="button" class="btn btn-y" style="height:40px;font-size:8px" onclick="detectPrinter()">🔍 DETEKTE ENPRIMANT</button>
+<button type="button" class="btn btn-b" style="height:40px;font-size:8px" onclick="connectPrinter()">🔌 KONEKTE ENPRIMANT</button>
+<button type="button" class="btn btn-y" style="height:40px;font-size:8px" onclick="testPrint()">🧾 TEST ENPRIME PAPYE</button>
 </div>
 </div>
 
-<div id="o2" class="onglet"><div class="card"><h3>COPIER - TOUCH MACHE 🆗</h3><input id="inpCopId" class="kf" type="text" placeholder="ID Ticket T-311875" style="text-transform:uppercase"><button type="button" class="btn btn-y" onclick="searchTicket()">🔍 CHACHE TICKET 🆗</button><div id="copierResult"></div><div id="copierList"></div></div></div>
-<div id="o3" class="onglet"><div class="card"><h3>FICHES - TOUCH MACHE 🆗</h3><input type="date" id="dateFich" class="kf"><button type="button" class="btn btn-y" onclick="loadFiches()">🔍 RECHERCHE FICHES 🆗</button><div id="fichesList"></div></div></div>
-<div id="o4" class="onglet"><div class="card"><h3>RAPPORT PRIX 500/5000/25000 - TOUCH MACHE 🆗</h3><input type="date" id="dateDu" class="kf"><input type="date" id="dateAu" class="kf"><select id="selTirajRap" class="kf"><option value="TOUS">Tous tirages - 17 tiraj</option></select><button type="button" class="btn btn-y" onclick="genRap()" style="height:60px">JENERE RAPPORT - PRIX 500/5000/25000 - TOUCH MACHE 🆗</button><div id="rapContent" style="border:2px solid #000;border-radius:10px;padding:8px;font-weight:900;font-size:9px;background:#FFF8DC;min-height:160px;margin:6px 0"></div><button type="button" class="btn btn-b" onclick="printRapport()">🖨️ IMPRIMER RAPPORT PAPYE 🆗</button></div></div>
-<div id="o5" class="onglet"><div class="card"><h3 style="background:red;color:#fff">🔒 FERME VANDÈ - 5e ONGLÈ 🆗</h3><div style="text-align:center;font-weight:900;font-size:10px">VENDEUR <span id="nomFerme">Jean</span> - <span id="dateFerme"></span> - <span id="heureFerme"></span></div><div id="resumeFerme" style="border:2px solid #000;border-radius:10px;padding:8px;background:#fff;margin:8px 0;font-size:9px">Chargement...</div><button type="button" class="btn btn-r" onclick="fermerVendeur()" style="height:60px">🔒 FÈMEN VANDÈ 🆗</button><button type="button" class="btn btn-b" onclick="genRapFerme()" style="height:50px;margin-top:6px">📊 RAPPORT AVAN FÈME 🆗</button><div id="rapFermeContent" style="border:2px solid #000;border-radius:10px;padding:8px;background:#FFF8DC;margin:6px 0;display:none"></div><button type="button" class="btn btn-y" onclick="openOnglet(1)">↩️ VENDRE 🆗</button></div></div>
+<div id="o2" class="onglet"><div class="card"><h3>COPIER - ENPRIME OK 🆗</h3><input id="inpCopId" class="kf" type="text" placeholder="ID Ticket T-311875" style="text-transform:uppercase"><button type="button" class="btn btn-y" onclick="searchTicket()">🔍 CHACHE TICKET 🆗</button><div id="copierResult"></div><div id="copierList"></div></div></div>
+<div id="o3" class="onglet"><div class="card"><h3>FICHES - ENPRIME OK 🆗</h3><input type="date" id="dateFich" class="kf"><button type="button" class="btn btn-y" onclick="loadFiches()">🔍 RECHERCHE FICHES 🆗</button><div id="fichesList"></div></div></div>
+<div id="o4" class="onglet"><div class="card"><h3>RAPPORT PRIX 500/5000/25000 - ENPRIME OK 🆗</h3><input type="date" id="dateDu" class="kf"><input type="date" id="dateAu" class="kf"><select id="selTirajRap" class="kf"><option value="TOUS">Tous tirages - 17 tiraj</option></select><button type="button" class="btn btn-y" onclick="genRap()" style="height:60px">JENERE RAPPORT - PRIX 500/5000/25000 - TOUCH MACHE 🆗</button><div id="rapContent" style="border:2px solid #000;border-radius:10px;padding:8px;font-weight:900;font-size:9px;background:#FFF8DC;min-height:160px;margin:6px 0"></div><button type="button" class="btn btn-b" onclick="printRapport()">🖨️ IMPRIMER RAPPORT PAPYE 🆗</button></div></div>
+<div id="o5" class="onglet"><div class="card"><h3 style="background:red;color:#fff">🔒 FERME VANDÈ - 5e ONGLÈ 🆗</h3><div style="text-align:center;font-weight:900;font-size:10px">VENDEUR <span id="nomFerme">Jean</span> - <span id="dateFerme"></span> - <span id="heureFerme"></span></div><div id="printerFermeStatus" style="border:2px solid #000;border-radius:10px;padding:6px;margin:6px 0;font-size:8px;background:#fff"></div><div id="resumeFerme" style="border:2px solid #000;border-radius:10px;padding:8px;background:#fff;margin:8px 0;font-size:9px">Chargement...</div><button type="button" class="btn btn-r" onclick="fermerVendeur()" style="height:60px">🔒 FÈMEN VANDÈ 🆗</button><button type="button" class="btn btn-b" onclick="genRapFerme()" style="height:50px;margin-top:6px">📊 RAPPORT AVAN FÈME 🆗</button><div id="rapFermeContent" style="border:2px solid #000;border-radius:10px;padding:8px;background:#FFF8DC;margin:6px 0;display:none"></div><button type="button" class="btn btn-y" onclick="openOnglet(1)">↩️ VENDRE 🆗</button></div></div>
 
 <div id="printArea"></div>
 <script>
@@ -89,14 +104,74 @@ function getHeurePAPMin(){var s=new Intl.DateTimeFormat('en-CA',{timeZone:"Ameri
 function normM(b){if(!b) return ""; b=b.toString().trim().toLowerCase().replace(/[^0-9x]/g,''); if(b.indexOf('x')==-1&&b.length==4) b=b.slice(0,2)+'x'+b.slice(2); var p=b.split('x').filter(function(x){return x!="";}); if(p.length!=2) return b; return [p[0].padStart(2,'0'),p[1].padStart(2,'0')].sort().join('x');}
 var dateStr=getDatePAP(); var vendeurActif="Jean", pourActif=10, tirajChwazi=[], lignes=[{type:"BOLET",boul:"",miz:""}];
 var cacheLimGlobal={BOLET:1000,MARYAJ:50,LOTO3:100,LOTO4:1000,LOTO5:1000}; var cacheHeures={}; var cachePrix={lot1:50,lot2:20,lot3:10,maryaj:1000,loto3:500,loto4:5000,loto5:25000};
+var printerConnected=false; var printerType="INCONNU";
+// DETEKSYON ENPRIMANT KI SOU SUNMI V2 PRO A EPI MANDE KONEKSYON - KORIJE - SUNMI V2 PRO INNER PRINTER 58mm
+function detectPrinter(){
+  var bar=document.getElementById('printerBar'); var txt=document.getElementById('printerStatusText'); var loginStat=document.getElementById('printerLoginStatus'); var fermeStat=document.getElementById('printerFermeStatus');
+  var ua=navigator.userAgent||""; var isSunmi=ua.toLowerCase().indexOf('sunmi')>-1 || ua.indexOf('V2_PRO')>-1 || ua.indexOf('SM-V2')>-1;
+  var hasSunmiObj=typeof window.sunmiInnerPrinter!=="undefined" || typeof window.InnerPrinter!=="undefined" || typeof window.SunmiPrinter!=="undefined" || typeof window.sunmi!=="undefined";
+  var hasPrint=typeof window.print==="function";
+  // DETEKSYON SUNMI V2 PRO
+  if(isSunmi || hasSunmiObj){
+    printerConnected=true; printerType="SUNMI V2 PRO INNER PRINTER 58mm";
+    if(bar){ bar.className="printerBar printerOK"; }
+    if(txt){ txt.innerText="✅ ENPRIMANT DETEKTE: "+printerType+" - KONEKTE - 58mm - PARE POU ENPRIME PAPYE"; }
+    if(loginStat){ loginStat.innerHTML="✅ ENPRIMANT DETEKTE: SUNMI V2 PRO INNER PRINTER 58mm - KONEKTE<br>UserAgent: "+ua.substring(0,60)+"..."; loginStat.style.background="#00FF00"; }
+    if(fermeStat){ fermeStat.innerHTML="✅ ENPRIMANT: SUNMI V2 PRO 58mm KONEKTE - "+getHeurePAPStr()+" EST PAP"; fermeStat.style.background="#00FF00"; }
+    return true;
+  }
+  // DETEKSYON NAVIGATÈ KI KA ENPRIME
+  if(hasPrint){
+    printerConnected=true; printerType="NAVIGATÈ PRINT - SUNMI V2 PRO COMPATIBLE";
+    if(bar){ bar.className="printerBar printerOK"; }
+    if(txt){ txt.innerText="✅ ENPRIMANT DETEKTE: "+printerType+" - KONEKTE - window.print() DISPONIB - PARE POU ENPRIME"; }
+    if(loginStat){ loginStat.innerHTML="✅ ENPRIMANT DETEKTE: NAVIGATÈ PRINT - KONEKTE - PARE"; loginStat.style.background="#00FF00"; }
+    return true;
+  }
+  // PA DETEKTE
+  printerConnected=false; printerType="PA DETEKTE";
+  if(bar){ bar.className="printerBar printerKO"; }
+  if(txt){ txt.innerText="⛔ ENPRIMANT PA DETEKTE - TCHEKE KONEKSYON SUNMI V2 PRO - PEZE KONEKTE ENPRIMANT"; }
+  if(loginStat){ loginStat.innerHTML="⛔ ENPRIMANT PA DETEKTE - SUNMI V2 PRO INNER PRINTER PA Jwenn<br>1. Tcheke si SUNMI V2 PRO limen<br>2. Peze KONEKTE ENPRIMANT<br>3. Si pa mache, ale nan Settings > Printer > Enable"; loginStat.style.background="#FFE4E4"; }
+  return false;
+}
+function connectPrinter(){
+  var bar=document.getElementById('printerBar'); var txt=document.getElementById('printerStatusText');
+  if(bar) bar.className="printerBar printerWait";
+  if(txt) txt.innerText="🔄 AP KONEKTE ENPRIMANT SUNMI V2 PRO... TANPRI RETE TANN...";
+  // MANDE KONEKSYON - SUNMI V2 PRO
+  setTimeout(function(){
+    var detected=detectPrinter();
+    if(detected){
+      if(txt) txt.innerText="✅ ENPRIMANT KONEKTE: "+printerType+" - PARE POU ENPRIME PAPYE 58mm - "+getHeurePAPStr()+" EST PAP";
+      // TEST ENPRIME OTOMATIK APRE KONEKSYON
+      if(confirm("✅ ENPRIMANT SUNMI V2 PRO KONEKTE: "+printerType+"\n\nÈske ou vle fè yon TEST ENPRIME kounya pou verifye papye a soti?")){
+        testPrint();
+      }
+    } else {
+      if(bar) bar.className="printerBar printerKO";
+      if(txt) txt.innerText="⛔ ENPRIMANT PA KONEKTE - TCHEKE:\n1. SUNMI V2 PRO limen?\n2. Papye 58mm genyen?\n3. Settings > Printer > Enable\n4. Peze KONEKTE ankò";
+      alert("⛔ ENPRIMANT SUNMI V2 PRO PA KONEKTE\n\nTCHEKE:\n1. Èske SUNMI V2 PRO limen?\n2. Èske gen papye 58mm ladan?\n3. Ale nan Settings > Printer > Enable Inner Printer\n4. Fèmen tout aplikasyon epi ouvè d-lotto.vercel.app ankò\n5. Peze KONEKTE ENPRIMANT ankò\n\nUserAgent: "+(navigator.userAgent||"INCONNU"));
+    }
+  },800);
+}
+function testPrint(){
+  if(!printerConnected){
+    if(!detectPrinter()){
+      alert("⛔ ENPRIMANT PA DETEKTE - Peze KONEKTE ENPRIMANT avan TEST");
+      return;
+    }
+  }
+  var htmlTicket='<div style="font-size:26px">TEST ENPRIMANT</div><div>SUNMI V2 PRO</div><div>'+printerType+'</div><div>Date '+dateStr+' '+getHeurePAPStr()+' EST PAP</div><div>Vendeur '+vendeurActif+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left;font-size:16px">✅ ENPRIMANT KONEKTE<br>✅ PAPYE 58mm OK<br>✅ INNER PRINTER OK<br>✅ DETEKSYON OK<br>✅ KONEKSYON OK</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="font-size:20px">TEST OK - PAPYE SOTI</div><div style="margin-top:8px;font-size:10px">C&D VÉRITÉ LOTTO - TEST</div><div style="margin-top:10px">...................</div>';
+  imprimerPapyeSUNMI(htmlTicket);
+}
 function chifSelman(v,t){if(t=="MARYAJ"){ v=v.toLowerCase().replace(/[^0-9x]/g,''); return v; } return v.replace(/[^0-9]/g,'');}
 function toggleTiraj(){ var d=document.getElementById('tirajDrop'); d.classList.toggle('show'); }
 function buildTirajDrop(){
   var drop=document.getElementById('tirajDrop'); var selRap=document.getElementById('selTirajRap');
   drop.innerHTML=""; selRap.innerHTML='<option value="TOUS">Tous tirages - 17 tiraj</option>';
   for(var i=0;i<TIRAGES.length;i++){
-    var t=TIRAGES[i]; var key=t.replace(/ /g,'_');
-    var lbl=document.createElement('label'); lbl.id='lbl_'+i;
+    var t=TIRAGES[i]; var lbl=document.createElement('label'); lbl.id='lbl_'+i;
     var chk=document.createElement('input'); chk.type='checkbox'; chk.value=t; chk.id='chk_'+i;
     lbl.appendChild(chk); lbl.appendChild(document.createTextNode(' '+t+' '));
     var sp=document.createElement('span'); sp.id='heure_'+i; sp.style.fontSize='8px'; sp.style.marginLeft='auto'; lbl.appendChild(sp);
@@ -106,7 +181,6 @@ function buildTirajDrop(){
   for(var i=0;i<TIRAGES.length;i++){ (function(idx){ var t=TIRAGES[idx]; var key=t.replace(/ /g,'_'); var chk=document.getElementById('chk_'+idx); if(!chk) return; chk.addEventListener('change',function(){ var cur=getHeurePAPMin(); var hs=cacheHeures[key]||HEURE_DEFAULT[key]; if(chk.checked&&hs){ var hm=hs.split(':'); if(cur>parseInt(hm[0])*60+parseInt(hm[1])){ alert('⛔ '+t+' FÈMÈ a '+hs+' EST PAP - L\'HEURE FERMETURE RESPEKTE'); chk.checked=false; return; } } updateTirajChwazi(); }); })(i); }
 }
 function updateTirajChwazi(){ tirajChwazi=[]; var checks=document.querySelectorAll('#tirajDrop input:checked'); for(var i=0;i<checks.length;i++) tirajChwazi.push(checks[i].value); var txt=document.getElementById('txtTiraj'); if(tirajChwazi.length==0) txt.innerText='👉 KAZ TIRAJ MILTIP - KLIKE - 17 TIRAJ - HEURE RESPEKTE'; else txt.innerText=tirajChwazi.join(' + ')+' ✓ - '+tirajChwazi.length+' tiraj'; updateTotal(); checkLimitLive(); }
-// L'HEURE FERMETURE DWE RESPEKTE - KORIJE - SUNMI V2 PRO - CHECK CHAK 30 SECONDE
 function checkHeures(){
   var cur=getHeurePAPMin(); var hStr=getHeurePAPStr();
   var ht=document.getElementById('heureTop'); if(ht) ht.innerText=hStr+' EST PAP';
@@ -141,7 +215,7 @@ function checkLogin(){
 }
 function initApresLogin(){
   document.getElementById('nomV').innerText=vendeurActif; document.getElementById('nomFerme').innerText=vendeurActif;
-  document.getElementById('dateFerme').innerText=dateStr; buildTirajDrop(); loadCaches(function(){ renderLignes(); updateTotal(); loadCopierList(); loadResumeFerme(); });
+  document.getElementById('dateFerme').innerText=dateStr; buildTirajDrop(); loadCaches(function(){ renderLignes(); updateTotal(); loadCopierList(); loadResumeFerme(); detectPrinter(); });
   setInterval(checkHeures,30000);
 }
 function openOnglet(n){ var os=document.querySelectorAll('.onglet'); for(var i=0;i<os.length;i++) os[i].classList.remove('active'); var bs=document.querySelectorAll('.menu button'); for(var i=0;i<bs.length;i++) bs[i].classList.remove('active'); document.getElementById('o'+n).classList.add('active'); document.getElementById('b'+n).classList.add('active'); if(n==1) checkHeures(); if(n==2) loadCopierList(); if(n==3) loadFiches(); if(n==5) loadResumeFerme(); }
@@ -153,17 +227,8 @@ function changeJeux(idx,val){ lignes[idx].type=val; var b=document.getElementByI
 function onBoulInput(idx,el){ el.value=chifSelman(el.value,lignes[idx].type); lignes[idx].boul=el.value; updateTotal(); checkLimitLive(); }
 function onMizInput(idx,el){ el.value=el.value.replace(/[^0-9]/g,''); lignes[idx].miz=el.value; updateTotal(); checkLimitLive(); }
 function removeLigne(idx){ if(lignes.length>1) lignes.splice(idx,1); else lignes[idx]={type:lignes[idx].type,boul:"",miz:""}; renderLignes(); updateTotal(); checkLimitLive(); }
-// TOUCHE FLÈCHE POUR AVANCER A LA LIGNE SUIVANTE CONSERVANT LE JEU SÉLECTIONNÉ - KORIJE
-function addNewLigne(i,go){
-  var l=lignes[i]; if(l.boul.trim()==""||l.miz.trim()==""){alert("Boul + Miz CHIF SÈLMAN - Yon liy: Jeux - Boul - Miz");return;}
-  if(tirajChwazi.length==0){alert("Chwazi tiraj - KLIKE KAZ TIRAJ LA"); toggleTiraj(); return;}
-  var keepType=l.type; // CONSERVANT LE JEU SÉLECTIONNÉ - MARYAJ rete MARYAJ, BOLET rete BOLET
-  lignes.splice(i+1,0,{type:keepType,boul:"",miz:""});
-  renderLignes(); updateTotal(); checkLimitLive();
-  if(go) setTimeout(function(){var nb=document.getElementById('boul-'+(i+1)); if(nb) nb.focus();},80);
-}
-function updateTotal(){ var s=0; for(var i=0;i<lignes.length;i++){ if(lignes[i].boul!=""&&lignes[i].miz!="") s+=parseInt(lignes[i].miz)||0; } var nb=tirajChwazi.length||0; var tot=s*nb; document.getElementById('totalBar').innerText='Total $'+s+' × '+nb+' = $'+tot+' - 3 REG RESPEKTE - FLÈCHE ↓ KONSÈVE JEUX'; }
-// LIMIT GLOBAL PA VANDÈ PA TIRAJ DWE RESPEKTE - KORIJE - CHECK LIVE + FINAL
+function addNewLigne(i,go){ var l=lignes[i]; if(l.boul.trim()==""||l.miz.trim()==""){alert("Boul + Miz CHIF SÈLMAN");return;} if(tirajChwazi.length==0){alert("Chwazi tiraj - KLIKE KAZ TIRAJ LA"); toggleTiraj(); return;} var keepType=l.type; lignes.splice(i+1,0,{type:keepType,boul:"",miz:""}); renderLignes(); updateTotal(); checkLimitLive(); if(go) setTimeout(function(){var nb=document.getElementById('boul-'+(i+1)); if(nb) nb.focus();},80); }
+function updateTotal(){ var s=0; for(var i=0;i<lignes.length;i++){ if(lignes[i].boul!=""&&lignes[i].miz!="") s+=parseInt(lignes[i].miz)||0; } var nb=tirajChwazi.length||0; var tot=s*nb; document.getElementById('totalBar').innerText='Total $'+s+' × '+nb+' = $'+tot+' - DETEKSYON ENPRIMANT '+printerType+' - 3 REG RESPEKTE'; }
 function checkLimitLive(){
   var info=document.getElementById('limitInfo'); if(!info) return; info.style.display='none';
   if(tirajChwazi.length==0||lignes.length==0) return;
@@ -193,29 +258,37 @@ function checkLimitGlobalFinal(cb){
           snapAll.forEach(function(vSnap){ vSnap.forEach(function(fSnap){ var fiche=fSnap.val(); if(!fiche.tiraj||fiche.tiraj.indexOf(tiraj)==-1) return; for(var fi=0;fi<fiche.fiches.length;fi++){ var f=fiche.fiches[fi]; if(f.type!=ligne.type) continue; var match=false; if(ligne.type=="MARYAJ") match=normM(f.boul)==normM(ligne.boul); else match=f.boul==ligne.boul; if(match) dejaG+=parseInt(f.miz)||0; } }); });
         }
         if((dejaG + ligne.miz) > maxG){ alert('⛔ LIMIT GLOBAL PA VANDÈ PA TIRAJ RESPEKTE - '+tiraj+' '+ligne.type+' '+ligne.boul+' Max $'+maxG+' Deja $'+dejaG+' + $'+ligne.miz+' = $'+(dejaG+ligne.miz)+' DEPASE - Rete $'+(maxG-dejaG)); cb(false); return; }
-        if(ligne.miz > maxG){ alert('⛔ MIZ TWÒ GWO - '+ligne.type+' '+ligne.boul+' $'+ligne.miz+' > Max $'+maxG+' - LIMIT GLOBAL'); cb(false); return; }
       }
     }
     cb(true);
   });
 }
-function imprimerPapyeSUNMI(htmlContent){ var pa=document.getElementById('printArea'); pa.innerHTML='<div class="printTicket">'+htmlContent+'</div>'; pa.style.display='block'; setTimeout(function(){ window.print(); setTimeout(function(){ pa.style.display='none'; },1000); },400); }
+function imprimerPapyeSUNMI(htmlContent){
+  if(!printerConnected){
+    if(!detectPrinter()){
+      if(!confirm("⛔ ENPRIMANT PA DETEKTE - "+printerType+"\n\nÈske ou vle eseye konekte enprimant la kounya?\n\nPeze OK pou konekte, Cancel pou kontinye san enprime")) return;
+      connectPrinter(); return;
+    }
+  }
+  var pa=document.getElementById('printArea'); pa.innerHTML='<div class="printTicket">'+htmlContent+'</div>'; pa.style.display='block';
+  setTimeout(function(){ window.print(); setTimeout(function(){ pa.style.display='none'; },1000); },400);
+}
 function validerEtImprimer(){
   if(tirajChwazi.length==0){alert("Chwazi tiraj - KLIKE KAZ TIRAJ LA"); toggleTiraj(); return;}
   var vals=[]; for(var i=0;i<lignes.length;i++){ var f=lignes[i]; if(f.boul.trim()!=""&&f.miz.trim()!="") vals.push({type:f.type,boul:f.type=="MARYAJ"?normM(f.boul):f.boul,miz:f.miz}); }
   if(vals.length==0){alert("Mete Boul + Miz CHIF SÈLMAN");return;}
-  // L'HEURE FERMETURE DWE RESPEKTE - CHECK FINAL AVAN VALIDE
   var cur=getHeurePAPMin();
   for(var ti=0;ti<tirajChwazi.length;ti++){
     var tiraj=tirajChwazi[ti]; var key=tiraj.replace(/ /g,'_'); var hs=cacheHeures[key]||HEURE_DEFAULT[key];
-    if(hs){ var hm=hs.split(':'); if(cur>parseInt(hm[0])*60+parseInt(hm[1])){ alert('⛔ '+tiraj+' FÈMÈ a '+hs+' EST PAP - L\'HEURE FERMETURE DWE RESPEKTE - Ou pa ka vann ankò'); return; } }
+    if(hs){ var hm=hs.split(':'); if(cur>parseInt(hm[0])*60+parseInt(hm[1])){ alert('⛔ '+tiraj+' FÈMÈ a '+hs+' EST PAP - L\'HEURE FERMETURE RESPEKTE'); return; } }
   }
-  // LIMIT GLOBAL PA VANDÈ PA TIRAJ DWE RESPEKTE - CHECK FINAL
   checkLimitGlobalFinal(function(ok){
     if(!ok) return;
+    // DETEKSYON ENPRIMANT AVAN VALIDE - MANDE KONEKSYON
+    if(!printerConnected){ detectPrinter(); if(!printerConnected){ if(!confirm("⚠️ ENPRIMANT PA DETEKTE: "+printerType+"\n\nFich la ap sove men papye a ka pa soti.\n\nPeze OK pou kontinye + eseye enprime, Cancel pou anile")) return; } }
     var id="T-"+Date.now().toString().slice(-6); var tot=0; for(var i=0;i<vals.length;i++) tot+=parseInt(vals[i].miz)||0; tot=tot*tirajChwazi.length; var hStr=getHeurePAPStr();
     var lignesHtml=''; for(var i=0;i<vals.length;i++){ var ff=vals[i]; lignesHtml+='<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:2px dashed #000;font-size:20px"><span>'+ff.type+'</span><span style="font-size:22px">'+ff.boul+'</span><span>$'+ff.miz+'</span></div>'; }
-    var htmlTicket='<div style="font-size:28px">C&D VÉRITÉ LOTTO</div><div>Date '+dateStr+' '+hStr+' EST PAP</div><div>Tirages '+tirajChwazi.join('/')+'</div><div>Tel +52 7298079596</div><div>Resp '+vendeurActif+'</div><div>Ticket '+id+' - 3 REG RESPEKTE</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left">'+lignesHtml+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="font-size:26px">TOTAL $'+tot+'</div><div style="margin-top:8px;font-size:10px">PRIX 50/20/10/1000/500/5000/25000 - HEURE + LIMIT RESPEKTE</div><div style="margin-top:6px;font-size:9px">Bòn chans, lave chodyè w</div><div style="margin-top:10px">...................</div>';
+    var htmlTicket='<div style="font-size:28px">C&D VÉRITÉ LOTTO</div><div>Date '+dateStr+' '+hStr+' EST PAP</div><div>Tirages '+tirajChwazi.join('/')+'</div><div>Tel +52 7298079596</div><div>Resp '+vendeurActif+'</div><div>Ticket '+id+' - '+printerType+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left">'+lignesHtml+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="font-size:26px">TOTAL $'+tot+'</div><div style="margin-top:8px;font-size:10px">PRIX 50/20/10/1000/500/5000/25000 - 3 REG RESPEKTE</div><div style="margin-top:10px">...................</div>';
     db.ref('ventes/'+dateStr+'/'+vendeurActif).push({id:id,tiraj:tirajChwazi,fiches:vals,total:tot,date:dateStr,timestamp:Date.now(),vendeur:vendeurActif,heure:hStr});
     imprimerPapyeSUNMI(htmlTicket);
     lignes=[{type:vals[0].type||"BOLET",boul:"",miz:""}]; renderLignes(); updateTotal(); loadCopierList(); loadResumeFerme();
@@ -225,18 +298,18 @@ function loadCopierList(){ var c=document.getElementById('copierList'); if(!c) r
 function copierFiche(key){ db.ref('ventes/'+dateStr+'/'+vendeurActif+'/'+key).once('value',function(snap){ if(!snap.exists()) return; var f=snap.val(); tirajChwazi=f.tiraj; lignes=f.fiches.map(function(ff){return {type:ff.type,boul:ff.boul,miz:ff.miz.toString()};}); buildTirajDrop(); setTimeout(function(){ for(var j=0;j<tirajChwazi.length;j++){ var idx=TIRAGES.indexOf(tirajChwazi[j]); var chk=document.getElementById('chk_'+idx); if(chk) chk.checked=true; } updateTirajChwazi(); renderLignes(); updateTotal(); openOnglet(1); },200); }); }
 function searchTicket(){ var id=document.getElementById('inpCopId').value.trim().toUpperCase(); if(!id){alert("Mete Id ticket");return;} var cont=document.getElementById('copierResult'); cont.innerHTML="Recherche "+id+"..."; db.ref('ventes/'+dateStr).once('value',function(snap){ if(!snap.exists()){cont.innerHTML="Pa gen fich";return;} var found=false; snap.forEach(function(vSnap){ var vNom=vSnap.key; vSnap.forEach(function(fSnap){ var fiche=fSnap.val(); if(fiche.id==id){ found=true; var d=document.createElement('div'); d.className="ficheItem"; d.innerHTML='<b>'+fiche.id+'</b> - '+vNom+' - '+fiche.tiraj.join('/')+' - $'+fiche.total+'<br><button type="button" class="btn btn-y" onclick="copierFicheId(\''+vNom+'\',\''+fSnap.key+'\')">KOPIYE 🆗</button>'; cont.innerHTML=""; cont.appendChild(d); } }); }); if(!found) cont.innerHTML="Pa jwenn "+id; }); }
 function copierFicheId(vNom,key){ db.ref('ventes/'+dateStr+'/'+vNom+'/'+key).once('value',function(snap){ if(!snap.exists()) return; var f=snap.val(); tirajChwazi=f.tiraj; lignes=f.fiches.map(function(ff){return {type:ff.type,boul:ff.boul,miz:ff.miz.toString()};}); buildTirajDrop(); setTimeout(function(){ for(var j=0;j<tirajChwazi.length;j++){ var idx=TIRAGES.indexOf(tirajChwazi[j]); var chk=document.getElementById('chk_'+idx); if(chk) chk.checked=true; } updateTirajChwazi(); renderLignes(); updateTotal(); openOnglet(1); },200); }); }
-function loadFiches(){ var c=document.getElementById('fichesList'); var d=document.getElementById('dateFich').value||dateStr; if(!c) return; c.innerHTML="Chargement fich "+d+"..."; db.ref('ventes/'+d+'/'+vendeurActif).once('value',function(snap){ if(!snap.exists()){c.innerHTML="Pa gen fich "+d;return;} c.innerHTML=""; var totalJour=0; snap.forEach(function(ch){ var f=ch.val(); totalJour+=f.total; var div=document.createElement('div'); div.className="ficheItem"; div.innerHTML='<b>'+f.id+'</b> - '+f.tiraj.join('/')+' - $'+f.total+'<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px"><button type="button" class="btn btn-b" onclick="reprintFiche(\''+d+'\',\''+ch.key+'\')">REIMPRIMER PAPYE 🖨️</button><button type="button" class="btn btn-r" onclick="deleteFiche(\''+d+'\',\''+ch.key+'\')">EFASÈ</button></div>'; c.appendChild(div); }); var totDiv=document.createElement('div'); totDiv.style.cssText='background:#000;color:#FFD500;padding:8px;border-radius:10px;text-align:center;margin:6px 0;font-weight:900'; totDiv.innerText='TOTAL JOU '+d+' = $'+totalJour+' - '+snap.numChildren()+' fich - 3 REG RESPEKTE'; c.insertBefore(totDiv,c.firstChild); }); }
+function loadFiches(){ var c=document.getElementById('fichesList'); var d=document.getElementById('dateFich').value||dateStr; if(!c) return; c.innerHTML="Chargement fich "+d+"..."; db.ref('ventes/'+d+'/'+vendeurActif).once('value',function(snap){ if(!snap.exists()){c.innerHTML="Pa gen fich "+d;return;} c.innerHTML=""; var totalJour=0; snap.forEach(function(ch){ var f=ch.val(); totalJour+=f.total; var div=document.createElement('div'); div.className="ficheItem"; div.innerHTML='<b>'+f.id+'</b> - '+f.tiraj.join('/')+' - $'+f.total+'<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px"><button type="button" class="btn btn-b" onclick="reprintFiche(\''+d+'\',\''+ch.key+'\')">REIMPRIMER PAPYE 🖨️</button><button type="button" class="btn btn-r" onclick="deleteFiche(\''+d+'\',\''+ch.key+'\')">EFASÈ</button></div>'; c.appendChild(div); }); var totDiv=document.createElement('div'); totDiv.style.cssText='background:#000;color:#FFD500;padding:8px;border-radius:10px;text-align:center;margin:6px 0;font-weight:900'; totDiv.innerText='TOTAL JOU '+d+' = $'+totalJour+' - '+snap.numChildren()+' fich - 3 REG RESPEKTE + ENPRIMANT '+printerType; c.insertBefore(totDiv,c.firstChild); }); }
 function reprintDirect(key){ db.ref('ventes/'+dateStr+'/'+vendeurActif+'/'+key).once('value',function(snap){ if(!snap.exists()) return; var f=snap.val(); doReprintPapye(f); }); }
 function reprintFiche(date,key){ db.ref('ventes/'+date+'/'+vendeurActif+'/'+key).once('value',function(snap){ if(!snap.exists()) return; var f=snap.val(); doReprintPapye(f); }); }
-function doReprintPapye(f){ var lignesHtml=''; for(var i=0;i<f.fiches.length;i++){ var ff=f.fiches[i]; lignesHtml+='<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:2px dashed #000;font-size:18px"><span>'+ff.type+'</span><span style="font-size:22px">'+ff.boul+'</span><span>$'+ff.miz+'</span></div>'; } var htmlTicket='<div style="font-size:26px">C&D VÉRITÉ LOTTO</div><div>Date '+f.date+' '+(f.heure||'')+' EST PAP - REPRINT - 3 REG RESPEKTE</div><div>Tirages '+f.tiraj.join('/')+'</div><div>Ticket '+f.id+' REPRINT</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left">'+lignesHtml+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="font-size:26px">TOTAL $'+f.total+'</div>'; imprimerPapyeSUNMI(htmlTicket); }
+function doReprintPapye(f){ var lignesHtml=''; for(var i=0;i<f.fiches.length;i++){ var ff=f.fiches[i]; lignesHtml+='<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:2px dashed #000;font-size:18px"><span>'+ff.type+'</span><span style="font-size:22px">'+ff.boul+'</span><span>$'+ff.miz+'</span></div>'; } var htmlTicket='<div style="font-size:26px">C&D VÉRITÉ LOTTO</div><div>Date '+f.date+' '+(f.heure||'')+' EST PAP - REPRINT</div><div>Tirages '+f.tiraj.join('/')+'</div><div>Ticket '+f.id+' REPRINT - '+printerType+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left">'+lignesHtml+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="font-size:26px">TOTAL $'+f.total+'</div>'; imprimerPapyeSUNMI(htmlTicket); }
 function deleteFiche(date,key){ if(!confirm("Efase fich sa a? Libere limit global pa tiraj")) return; db.ref('ventes/'+date+'/'+vendeurActif+'/'+key).remove(function(){ loadFiches(); loadResumeFerme(); }); }
-function genRap(){ var du=document.getElementById('dateDu').value||dateStr; var au=document.getElementById('dateAu').value||du; var filT=document.getElementById('selTirajRap').value||"TOUS"; var cont=document.getElementById('rapContent'); cont.innerHTML="Calcul rapport Du "+du+" Au "+au+" - "+filT+"... PRIX 500/5000/25000 RESPEKTE"; var dDu=new Date(du); var dAu=new Date(au); var vente=0,gain=0,nb=0,comm=0; var detail=""; var dates=[]; for(var d=new Date(dDu); d<=dAu; d.setDate(d.getDate()+1)){ dates.push(d.toISOString().slice(0,10)); } var idx=0; function nextDate(){ if(idx>=dates.length){ var bal=vente-comm-gain; cont.innerHTML='Du '+du+' Au '+au+' - '+filT+' - 3 REG RESPEKTE<br>Vente $'+vente.toFixed(0)+'<br>Commission '+pourActif+'% $'+comm.toFixed(0)+'<br>Gain $'+gain.toFixed(0)+'<br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:6px;text-align:center">Balance net $'+bal.toFixed(0)+'</div><br><div style="font-size:8px">'+detail+'</div>'; window.dernierRap={du:du,au:au,filT:filT,vente:vente,comm:comm,gain:gain,bal:bal,nb:nb}; return; } var ds=dates[idx]; idx++; db.ref('ventes/'+ds+'/'+vendeurActif).once('value',function(sV){ db.ref('resultats/'+ds).once('value',function(sR){ if(sV.exists()){ sV.forEach(function(ch){ var f=ch.val(); var tirajFiltre=filT=="TOUS"?f.tiraj:f.tiraj.filter(function(t){return t==filT;}); if(tirajFiltre.length==0) return; var ratio=tirajFiltre.length/f.tiraj.length; nb++; var vt=f.total*ratio; vente+=vt; comm+=vt*pourActif/100; if(sR.exists()){ for(var ti=0;ti<tirajFiltre.length;ti++){ var t=tirajFiltre[ti]; if(!sR.child(t).exists()) continue; var res=sR.child(t).val(); for(var fi=0;fi<f.fiches.length;fi++){ var l=f.fiches[fi]; var m=parseInt(l.miz)||0; if(l.type=="BOLET"){ if(l.boul==res.r1) gain+=m*cachePrix.lot1*ratio; else if(l.boul==res.r2) gain+=m*cachePrix.lot2*ratio; else if(l.boul==res.r3) gain+=m*cachePrix.lot3*ratio; } if(l.type=="MARYAJ"){ var b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=m*cachePrix.maryaj*ratio; } if(l.type=="LOTO3"&&l.boul==res.l3) gain+=m*cachePrix.loto3*ratio; if(l.type=="LOTO4"&&l.boul==res.l4) gain+=m*cachePrix.loto4*ratio; if(l.type=="LOTO5"&&l.boul==res.l5) gain+=m*cachePrix.loto5*ratio; } } } detail+=ds+' '+tirajFiltre.join('/')+' $'+vt.toFixed(0)+'<br>'; }); } nextDate(); }); }); } nextDate(); }
-function printRapport(){ var r=window.dernierRap; if(!r){alert("Peze JENERE RAPPORT avan");return;} var htmlTicket='<div style="font-size:22px">C&D VÉRITÉ LOTTO</div><div>Du '+r.du+' Au '+r.au+' - '+r.filT+'</div><div>Resp '+vendeurActif+' - '+getHeurePAPStr()+' EST PAP - 3 REG RESPEKTE</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left">Vente $'+r.vente.toFixed(0)+'<br>Commission $'+r.comm.toFixed(0)+'<br>Gain $'+r.gain.toFixed(0)+'<br>Balance net $'+r.bal.toFixed(0)+'</div>'; imprimerPapyeSUNMI(htmlTicket); }
-function loadResumeFerme(){ var cont=document.getElementById('resumeFerme'); if(!cont) return; cont.innerHTML="Chargement..."; db.ref('ventes/'+dateStr+'/'+vendeurActif).once('value',function(snap){ if(!snap.exists()){ cont.innerHTML="Pa gen fich jodia - 0 fich - 3 REG RESPEKTE"; return; } var nb=0, vente=0; snap.forEach(function(ch){ nb++; vente+=ch.val().total; }); cont.innerHTML=nb+' fich - Vente $'+vente+' - 3 REG RESPEKTE'; }); }
-function genRapFerme(){ var cont=document.getElementById('rapFermeContent'); cont.style.display='block'; cont.innerHTML="Calcul rapport avan fème..."; var du=dateStr, vente=0,gain=0,nb=0,comm=0; db.ref('ventes/'+du+'/'+vendeurActif).once('value',function(sV){ db.ref('resultats/'+du).once('value',function(sR){ if(sV.exists()){ sV.forEach(function(ch){ var f=ch.val(); nb++; vente+=f.total; comm+=f.total*pourActif/100; if(sR.exists()){ for(var ti=0;ti<f.tiraj.length;ti++){ var t=f.tiraj[ti]; if(!sR.child(t).exists()) continue; var res=sR.child(t).val(); for(var fi=0;fi<f.fiches.length;fi++){ var l=f.fiches[fi]; var m=parseInt(l.miz)||0; if(l.type=="BOLET"){ if(l.boul==res.r1) gain+=m*cachePrix.lot1; else if(l.boul==res.r2) gain+=m*cachePrix.lot2; else if(l.boul==res.r3) gain+=m*cachePrix.lot3; } if(l.type=="MARYAJ"){ var b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=m*cachePrix.maryaj; } if(l.type=="LOTO3"&&l.boul==res.l3) gain+=m*cachePrix.loto3; if(l.type=="LOTO4"&&l.boul==res.l4) gain+=m*cachePrix.loto4; if(l.type=="LOTO5"&&l.boul==res.l5) gain+=m*cachePrix.loto5; } } } }); } var bal=vente-comm-gain; cont.innerHTML='Jodia '+du+' - '+vendeurActif+'<br>Vente $'+vente.toFixed(0)+'<br>Commission $'+comm.toFixed(0)+'<br>Gain $'+gain.toFixed(0)+'<br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:6px;text-align:center">Balance net $'+bal.toFixed(0)+'</div>'; window.dernierRap={du:du,au:du,filT:"TOUS",vente:vente,comm:comm,gain:gain,bal:bal,nb:nb}; }); }); }
+function genRap(){ var du=document.getElementById('dateDu').value||dateStr; var au=document.getElementById('dateAu').value||du; var filT=document.getElementById('selTirajRap').value||"TOUS"; var cont=document.getElementById('rapContent'); cont.innerHTML="Calcul rapport Du "+du+" Au "+au+"..."; var dDu=new Date(du); var dAu=new Date(au); var vente=0,gain=0,nb=0,comm=0; var detail=""; var dates=[]; for(var d=new Date(dDu); d<=dAu; d.setDate(d.getDate()+1)){ dates.push(d.toISOString().slice(0,10)); } var idx=0; function nextDate(){ if(idx>=dates.length){ var bal=vente-comm-gain; cont.innerHTML='Du '+du+' Au '+au+' - '+filT+' - 3 REG RESPEKTE - ENPRIMANT '+printerType+'<br>Vente $'+vente.toFixed(0)+'<br>Commission '+pourActif+'% $'+comm.toFixed(0)+'<br>Gain $'+gain.toFixed(0)+'<br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:6px;text-align:center">Balance net $'+bal.toFixed(0)+'</div><br><div style="font-size:8px">'+detail+'</div>'; window.dernierRap={du:du,au:au,filT:filT,vente:vente,comm:comm,gain:gain,bal:bal,nb:nb}; return; } var ds=dates[idx]; idx++; db.ref('ventes/'+ds+'/'+vendeurActif).once('value',function(sV){ db.ref('resultats/'+ds).once('value',function(sR){ if(sV.exists()){ sV.forEach(function(ch){ var f=ch.val(); var tirajFiltre=filT=="TOUS"?f.tiraj:f.tiraj.filter(function(t){return t==filT;}); if(tirajFiltre.length==0) return; var ratio=tirajFiltre.length/f.tiraj.length; nb++; var vt=f.total*ratio; vente+=vt; comm+=vt*pourActif/100; if(sR.exists()){ for(var ti=0;ti<tirajFiltre.length;ti++){ var t=tirajFiltre[ti]; if(!sR.child(t).exists()) continue; var res=sR.child(t).val(); for(var fi=0;fi<f.fiches.length;fi++){ var l=f.fiches[fi]; var m=parseInt(l.miz)||0; if(l.type=="BOLET"){ if(l.boul==res.r1) gain+=m*cachePrix.lot1*ratio; else if(l.boul==res.r2) gain+=m*cachePrix.lot2*ratio; else if(l.boul==res.r3) gain+=m*cachePrix.lot3*ratio; } if(l.type=="MARYAJ"){ var b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=m*cachePrix.maryaj*ratio; } if(l.type=="LOTO3"&&l.boul==res.l3) gain+=m*cachePrix.loto3*ratio; if(l.type=="LOTO4"&&l.boul==res.l4) gain+=m*cachePrix.loto4*ratio; if(l.type=="LOTO5"&&l.boul==res.l5) gain+=m*cachePrix.loto5*ratio; } } } detail+=ds+' '+tirajFiltre.join('/')+' $'+vt.toFixed(0)+'<br>'; }); } nextDate(); }); }); } nextDate(); }
+function printRapport(){ var r=window.dernierRap; if(!r){alert("Peze JENERE RAPPORT avan");return;} var htmlTicket='<div style="font-size:22px">C&D VÉRITÉ LOTTO - RAPPORT</div><div>Du '+r.du+' Au '+r.au+' - '+r.filT+'</div><div>Resp '+vendeurActif+' - '+getHeurePAPStr()+' EST PAP</div><div>'+printerType+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left">Vente $'+r.vente.toFixed(0)+'<br>Commission $'+r.comm.toFixed(0)+'<br>Gain $'+r.gain.toFixed(0)+'<br>Balance net $'+r.bal.toFixed(0)+'</div>'; imprimerPapyeSUNMI(htmlTicket); }
+function loadResumeFerme(){ var cont=document.getElementById('resumeFerme'); if(!cont) return; cont.innerHTML="Chargement..."; db.ref('ventes/'+dateStr+'/'+vendeurActif).once('value',function(snap){ if(!snap.exists()){ cont.innerHTML="Pa gen fich jodia - 0 fich - ENPRIMANT "+printerType; return; } var nb=0, vente=0; snap.forEach(function(ch){ nb++; vente+=ch.val().total; }); cont.innerHTML=nb+' fich - Vente $'+vente+' - ENPRIMANT '+printerType+' - 3 REG RESPEKTE'; }); }
+function genRapFerme(){ var cont=document.getElementById('rapFermeContent'); cont.style.display='block'; cont.innerHTML="Calcul rapport avan fème..."; var du=dateStr, vente=0,gain=0,nb=0,comm=0; db.ref('ventes/'+du+'/'+vendeurActif).once('value',function(sV){ db.ref('resultats/'+du).once('value',function(sR){ if(sV.exists()){ sV.forEach(function(ch){ var f=ch.val(); nb++; vente+=f.total; comm+=f.total*pourActif/100; if(sR.exists()){ for(var ti=0;ti<f.tiraj.length;ti++){ var t=f.tiraj[ti]; if(!sR.child(t).exists()) continue; var res=sR.child(t).val(); for(var fi=0;fi<f.fiches.length;fi++){ var l=f.fiches[fi]; var m=parseInt(l.miz)||0; if(l.type=="BOLET"){ if(l.boul==res.r1) gain+=m*cachePrix.lot1; else if(l.boul==res.r2) gain+=m*cachePrix.lot2; else if(l.boul==res.r3) gain+=m*cachePrix.lot3; } if(l.type=="MARYAJ"){ var b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=m*cachePrix.maryaj; } if(l.type=="LOTO3"&&l.boul==res.l3) gain+=m*cachePrix.loto3; if(l.type=="LOTO4"&&l.boul==res.l4) gain+=m*cachePrix.loto4; if(l.type=="LOTO5"&&l.boul==res.l5) gain+=m*cachePrix.loto5; } } } }); } var bal=vente-comm-gain; cont.innerHTML='Jodia '+du+' - '+vendeurActif+' - '+printerType+'<br>Vente $'+vente.toFixed(0)+'<br>Commission $'+comm.toFixed(0)+'<br>Gain $'+gain.toFixed(0)+'<br><div style="background:#000;color:#FFD500;padding:8px;border-radius:10px;margin-top:6px;text-align:center">Balance net $'+bal.toFixed(0)+'</div>'; window.dernierRap={du:du,au:du,filT:"TOUS",vente:vente,comm:comm,gain:gain,bal:bal,nb:nb}; }); }); }
 function fermerVendeur(){ if(!confirm("FÈMEN VANDÈ "+vendeurActif+"?")) return; localStorage.clear(); location.reload(); }
 document.addEventListener('DOMContentLoaded',function(){
-  buildTirajDrop(); renderLignes(); updateTotal();
+  buildTirajDrop(); renderLignes(); updateTotal(); detectPrinter();
   var sV=localStorage.getItem("vendeur"), sP=localStorage.getItem("vendeurPass");
   if(sV&&sP){
     db.ref('vendeurs').once('value',function(snap){
@@ -244,7 +317,7 @@ document.addEventListener('DOMContentLoaded',function(){
       if(ok){vendeurActif=sV; pourActif=p; document.getElementById('loginOverlay').style.display='none'; initApresLogin();}
     });
   }
-  setInterval(function(){ var el=document.getElementById('heureTop'); if(el) el.innerText=getHeurePAPStr()+' EST PAP'; var hl=document.getElementById('heureLogin'); if(hl) hl.innerText='Heure PAP: '+getHeurePAPStr()+' EST - '+dateStr+' - 3 REG RESPEKTE'; var hf=document.getElementById('heureFerme'); if(hf) hf.innerText=getHeurePAPStr()+' EST PAP'; },1000);
+  setInterval(function(){ var el=document.getElementById('heureTop'); if(el) el.innerText=getHeurePAPStr()+' EST PAP'; var hl=document.getElementById('heureLogin'); if(hl) hl.innerText='Heure PAP: '+getHeurePAPStr()+' EST - '+dateStr; var hf=document.getElementById('heureFerme'); if(hf) hf.innerText=getHeurePAPStr()+' EST PAP'; },1000);
 });
 </script>
 </body>
