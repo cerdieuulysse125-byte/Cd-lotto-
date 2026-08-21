@@ -1,144 +1,99 @@
 <!DOCTYPE html>
-<html lang="ht">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D LOTTO - V13.1 VALIDER FIX</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:monospace;padding:10px}
-.header{background:#00ff00;color:#000;padding:12px;text-align:center;font-weight:bold;border-radius:8px;font-size:13px}
-.info{border:1px solid #0f0;padding:10px;margin-top:12px;border-radius:8px;font-size:12px}
-button{width:100%;padding:18px;margin-top:10px;border:none;border-radius:10px;font-size:17px;font-weight:bold;cursor:pointer;display:block}
-.btn-test{background:#0099ff;color:#fff}
-.btn-print{background:#ff9900;color:#000;border:3px solid #fff}
-.btn-small{background:#222;color:#0f0;padding:10px;font-size:13px}
-input{width:100%;padding:14px;margin-top:8px;background:#111;color:#0f0;border:1px solid #0f0;border-radius:8px;font-size:16px}
-.log{background:#111;color:#0f0;padding:8px;margin-top:10px;border-radius:8px;font-size:10px;height:90px;overflow:auto;border:1px solid #333;white-space:pre-wrap}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>C&D LOTTO V13.2 TOUCH FIX</title>
 </head>
-<body>
+<body style="background:#000;color:#fff;font-family:Arial;padding:10px;margin:0;touch-action:manipulation;">
 
-<div class="header" id="printerState">SUNMI V2 PRO POS-V2 - KONEKTE DIRÈK - 58mm 100%</div>
-
-<div class="info" id="printerInfo">
-Ticket Format:58mm<br>
-Current Print Density:100%<br>
-SN:POS-V2 - Print Service 4.13.4<br>
-Status: <span style="color:#0f0">PARE - VALIDER AKTIF</span>
+<div style="background:#0f0;color:#000;padding:15px;text-align:center;font-weight:bold;font-size:16px;">
+SUNMI V2 PRO POS-V2 - TOUCH FIX V13.2 - 58mm 100%
 </div>
 
-<input type="text" id="bolet" placeholder="BOLET" value="02 15 28">
-<input type="text" id="loto" placeholder="LOTO" value="45 67">
-<input type="text" id="maryaj" placeholder="MARYAJ" value="02x15">
-<input type="number" id="montant" placeholder="MONTAN $" value="2">
+<div style="background:#111;border:2px solid #0f0;padding:10px;margin-top:10px;">
+Ticket:58mm - Density:100% - SN:POS-V2 - TOUCH:AKTIF
+</div>
 
-<button type="button" class="btn-test" id="btnTest">1 - Print Test - DIRECT 58mm</button>
-<button type="button" class="btn-print" id="btnValider">2 - VALIDER + ENPRIME PAPYE - KLIKE LA</button>
-<button type="button" class="btn-small" id="btnSample">TEST FICH SAMPLE</button>
+<input id="b" value="02 15 28" style="width:100%;padding:20px;margin-top:15px;background:#222;color:#0f0;border:2px solid #0f0;font-size:20px;">
 
-<div class="log" id="log">LOG: V13.1 - Bouton VALIDER FIX - Pare...
+<input id="l" value="45 67" style="width:100%;padding:20px;margin-top:10px;background:#222;color:#0f0;border:2px solid #0f0;font-size:20px;">
+
+<!-- BOUTON GWO - TOUCH FIX - DIV OLYE BUTTON -->
+<div id="t1" style="background:#0099ff;color:#fff;padding:30px;margin-top:20px;text-align:center;font-size:22px;font-weight:bold;border-radius:15px;border:4px solid #fff;touch-action:manipulation;user-select:none;-webkit-user-select:none;">
+👆 TOUCHE 1 - PRINT TEST
+</div>
+
+<div id="t2" style="background:#ff9900;color:#000;padding:35px;margin-top:15px;text-align:center;font-size:24px;font-weight:bold;border-radius:15px;border:5px solid #fff;touch-action:manipulation;user-select:none;-webkit-user-select:none;">
+👆👆 TOUCHE 2 - VALIDER + ENPRIME
+</div>
+
+<div id="log" style="background:#111;color:#0f0;padding:10px;margin-top:15px;border:1px solid #333;height:100px;overflow:auto;font-size:12px;">
+LOG TOUCH: Pare... Touche bouton yo...
 </div>
 
 <script>
 var logEl = document.getElementById('log');
-function log(msg){
-  logEl.innerHTML += new Date().toLocaleTimeString() + ' ' + msg + '\n';
-  logEl.scrollTop = logEl.scrollHeight;
-  console.log(msg);
-}
+function lg(m){ logEl.innerHTML += m + '\n'; logEl.scrollTop = logEl.scrollHeight; console.log(m); }
 
-// FONKSYON ENPRIME DIRÈK - KORIJE - PA BLOKE
-function printDirectSunmi(textBrut){
-  var ESC = String.fromCharCode(27);
-  var GS = String.fromCharCode(29);
-  var cmd = ESC + '@' + ESC + '!' + String.fromCharCode(0) + ESC + 'a' + String.fromCharCode(0);
-  cmd += textBrut + '\n\n\n' + GS + 'V' + String.fromCharCode(66) + String.fromCharCode(0);
-  
-  log('>>> AP ENPRIME: ' + textBrut.substring(0,30));
-  
+function printRaw(t){
+  lg('ENPRIME: ' + t.substring(0,20));
   try{
-    // 1. Sunmi natif
-    if(window.SunmiPrinter && typeof window.SunmiPrinter.printText === 'function'){
-      window.SunmiPrinter.printText(textBrut);
-      window.SunmiPrinter.lineWrap(3);
-      try{ window.SunmiPrinter.cutPaper(); }catch(e){}
-      log('OK SUNMI NATIF - Papye soti');
-      return;
-    }
-    // 2. RawBT direct - SA KI PI ENPOTAN - Pa bezwen SunmiPrinter
-    var data = encodeURIComponent(cmd);
-    var url = 'rawbt://esc?data=' + data + '&width=384';
-    log('RAWBT DIRECT: rawbt://esc?width=384');
-    window.location.href = url;
-    // 3. Fallback apre 1 sec si rawbt pa mache - itilize intent
-    setTimeout(function(){
-      log('Fallback intent Sunmi...');
-      var intentUrl = 'intent://print?data=' + data + '#Intent;package=woyou.aipos.print;action=woyou.aipos.print;end';
-      // Pa fè 2 fwa - kite rawbt mache
-    }, 1000);
-  }catch(e){
-    log('ERÈ: ' + e.message);
-    // Menm si erè - eseye rawbt kanmenm
-    try{
-      window.location.href = 'rawbt://print?data=' + encodeURIComponent(textBrut);
-    }catch(e2){
-      log('Erè rawbt: ' + e2.message);
-    }
-  }
+    var d = encodeURIComponent(t + '\n\n\n');
+    // Touch fix - itilize location.href ki mache sou SUNMI
+    window.location.href = 'rawbt://print?data=' + d + '&width=384';
+    lg('RAWBT OK - Papye dwe soti');
+  }catch(e){ lg('ERR: ' + e); }
 }
 
-function printTestDirect(){
-  log('BOUTON TEST KLIKE');
-  var txt = 'Ticket Format:58mm\nCurrent Print Density:100%\nSN:POS-V2\n----------------\nTEST DIRECT V13.1 OK\n58mm 384 dots 100%\nC&D LOTTO\n' + new Date().toLocaleString() + '\n----------------';
-  printDirectSunmi(txt);
+// TOUCH FIX - TOUCHSTART + CLICK + ontouch
+function addTouch(id, fn){
+  var el = document.getElementById(id);
+  if(!el){ lg('Pa jwenn ' + id); return; }
+  // Tout metod touch
+  el.addEventListener('touchstart', function(e){ e.preventDefault(); lg('TOUCHSTART ' + id); fn(); }, {passive:false});
+  el.addEventListener('touchend', function(e){ e.preventDefault(); }, {passive:false});
+  el.addEventListener('click', function(){ lg('CLICK ' + id); fn(); });
+  el.addEventListener('mousedown', function(){ lg('MOUSEDOWN ' + id); });
+  el.ontouchstart = function(){ lg('ONTOUCH ' + id); fn(); return false; };
+  el.onclick = fn;
+  lg('Touch ajoute pou ' + id + ' OK');
 }
 
-function printFichSample(){
-  log('BOUTON SAMPLE KLIKE');
-  var txt = 'C & D LOTTO\n------------------------\nBOLET: 02 15 28\nLOTO: 45 67\nMARYAJ: 02x15\nDeja:$2 Max:$1500\n------------------------\nBAL PA VANDE PA TIRAJ\n' + new Date().toLocaleString();
-  printDirectSunmi(txt);
+function testPrint(){
+  lg('>>> BOUTON 1 TOUCHE OK');
+  alert('BOUTON 1 TOUCHE OK - AP ENPRIME TEST');
+  printRaw('Ticket Format:58mm\nDensity:100%\nSN:POS-V2\nTEST V13.2 TOUCH OK\n' + new Date().toLocaleString() + '\n58mm 384 dots');
 }
 
-function validerEtImprimer(){
-  log('>>> BOUTON VALIDER KLIKE - ANTRE OK');
-  var bolet = document.getElementById('bolet').value || '02 15 28';
-  var loto = document.getElementById('loto').value || '45 67';
-  var maryaj = document.getElementById('maryaj').value || '02x15';
-  var montant = document.getElementById('montant').value || '2';
-  
-  if(!bolet && !loto && !maryaj){
-    alert('Mete BOLET oswa LOTO');
-    log('VALIDE - Pa gen boul - Antre boul');
-    return;
-  }
-  
-  var fich = 'C & D LOTTO\n------------------------\nBOLET: ' + bolet + '\nLOTO: ' + loto + '\nMARYAJ: ' + maryaj + '\nMONTAN: $' + montant + '\n------------------------\nBAL PA VANDE PA TIRAJ\n' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString() + '\n------------------------\nPOS-V2 58mm 100% DIRECT';
-  
-  log('FICH VALIDE - ' + bolet + ' - AP ENPRIME');
-  printDirectSunmi(fich);
-  log('VALIDER OK - Papye dwe soti');
+function validerPrint(){
+  lg('>>> BOUTON 2 VALIDER TOUCHE OK - ANTRE');
+  alert('BOUTON VALIDER TOUCHE OK - AP ENPRIME FICH');
+  var bolet = document.getElementById('b').value;
+  var loto = document.getElementById('l').value;
+  var fich = 'C&D LOTTO\nBOLET:' + bolet + '\nLOTO:' + loto + '\n' + new Date().toLocaleString() + '\nPOS-V2 58mm 100% DIRECT';
+  printRaw(fich);
+  lg('VALIDER TOUCHE OK - Papye soti');
 }
 
-// FIX BOUTON - Ajoute event listener - Pa inline sèlman
-document.addEventListener('DOMContentLoaded', function(){
-  log('DOM Ready - Bouton aktif');
-  document.getElementById('btnTest').addEventListener('click', printTestDirect);
-  document.getElementById('btnValider').addEventListener('click', validerEtImprimer);
-  document.getElementById('btnSample').addEventListener('click', printFichSample);
-  
-  // Test si bouton mache
-  document.getElementById('btnValider').style.background = '#ff9900';
-  log('BOUTON VALIDER AKTIF - KLIKE Kounya');
+// Aktive touch apre DOM
+setTimeout(function(){
+  lg('Aktive touch...');
+  addTouch('t1', testPrint);
+  addTouch('t2', validerPrint);
+  lg('TOUCHE AKTIF - KLIKE KOUNYA');
+  // Flash bouton pou montre aktif
+  document.getElementById('t2').style.background = '#ffff00';
+  setTimeout(function(){ document.getElementById('t2').style.background = '#ff9900'; }, 500);
+}, 500);
+
+// Backup si touch pa mache - klavye
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ lg('ENTER KLIKE - VALIDER'); validerPrint(); }
 });
 
-// Backup - si DOM deja ready
-if(document.readyState !== 'loading'){
-  document.getElementById('btnTest').onclick = printTestDirect;
-  document.getElementById('btnValider').onclick = validerEtImprimer;
-  document.getElementById('btnSample').onclick = printFichSample;
-  log('Backup onclick OK');
-}
+lg('V13.2 TOUCH FIX pare - Touche bouton yo ak dwèt');
 </script>
+
 </body>
 </html>
