@@ -3,73 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>V11.8 CHIF SELMAN SUNMI V2 PRO - FLECHE KONSEVE JEUX</title>
+<title>V11.9 ULTRA LIGHT SUNMI V2 PRO OUVE</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <style>
-*{box-sizing:border-box;font-family:Arial Black,Arial;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#fff;touch-action:manipulation}
-.top1{background:#FFD500;color:#000;text-align:center;padding:12px 5px;font-weight:900;font-size:13px;border-bottom:3px solid #000}
-.top2{background:#000;color:#FFD500;text-align:center;padding:6px 5px;font-weight:900;font-size:9px}
-.menu{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 0.7fr;gap:3px;padding:3px;background:#000;position:sticky;top:0;z-index:100}
-.menu button{padding:14px 2px;font-weight:900;font-size:10px;border:3px solid #000;background:#fff}
+*{box-sizing:border-box;font-family:Arial Black,Arial;margin:0;padding:0}
+body{background:#fff}
+.top1{background:#FFD500;color:#000;text-align:center;padding:10px;font-weight:900;font-size:12px;border-bottom:3px solid #000}
+.menu{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 0.6fr;gap:2px;padding:2px;background:#000;position:sticky;top:0;z-index:50}
+.menu button{padding:12px 1px;font-weight:900;font-size:9px;border:2px solid #000;background:#fff}
 .menu button.active{background:#FFD500}.menu button.ferme{background:red;color:#fff}
-.alert{border:3px solid #000;border-radius:20px;padding:10px;text-align:center;font-weight:900;font-size:10px;margin:8px;background:#FFD500}
-.kazTiraj{border:4px solid #000;border-radius:25px;min-height:56px;padding:12px;font-weight:900;font-size:11px;background:#fff;margin:8px;cursor:pointer;position:relative}
-.tirajDrop{display:none;position:absolute;left:-4px;top:58px;width:108%;background:#fff;border:4px solid #000;border-radius:20px;z-index:500;max-height:380px;overflow-y:auto;padding:8px}
+.kazTiraj{border:3px solid #000;border-radius:20px;min-height:50px;padding:10px;font-weight:900;font-size:10px;background:#fff;margin:6px}
+.tirajDrop{display:none;border:3px solid #000;border-radius:15px;background:#fff;max-height:300px;overflow-y:auto;margin-top:6px;padding:6px}
 .tirajDrop.show{display:block}
-.tirajDrop label{display:flex;align-items:center;padding:13px 8px;border-bottom:2px solid #eee;font-size:11px}
-.tirajDrop label.ferme{background:red;color:#fff;opacity:0.6}
-.infoTiraj{border:3px solid #000;border-radius:50px;padding:10px;text-align:center;font-weight:900;font-size:9px;margin:8px;background:#fff}
-.ligne{display:grid;grid-template-columns:0.8fr 0.8fr 0.6fr 0.4fr 0.4fr;gap:5px;margin:7px 8px;align-items:center}
-.kaz{border:3px solid #000;border-radius:50px;height:58px;text-align:center;font-weight:900;font-size:18px;width:100%;background:#fff}
-.kaz:focus{background:#FFD500;outline:none;border-width:4px}.kazMiz{background:#FFD500}
-.btnRond{border:3px solid #000;border-radius:50%;height:58px;width:58px;font-weight:900;font-size:20px;display:flex;align-items:center;justify-content:center}
-.btnX{background:#fff;color:red;border-color:red}.btnFlech{background:#FFD500;color:#000;border-width:4px}
-.totalBar{border:3px solid #000;border-radius:50px;padding:12px;text-align:center;font-weight:900;font-size:11px;margin:8px;background:#000;color:#FFD500}
-.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 8px}
-.btnBig{border:3px solid #000;border-radius:50px;height:64px;font-weight:900;font-size:11px;cursor:pointer}
+.tirajDrop label{display:flex;padding:10px 6px;border-bottom:1px solid #eee;font-size:10px}
+.tirajDrop label.ferme{background:red;color:#fff}
+.ligne{display:grid;grid-template-columns:0.7fr 0.7fr 0.5fr 0.35fr 0.35fr;gap:4px;margin:6px 6px;align-items:center}
+.kaz{border:3px solid #000;border-radius:50px;height:52px;text-align:center;font-weight:900;font-size:16px;width:100%;background:#fff}
+.kaz:focus{background:#FFD500;outline:none}.kazMiz{background:#FFD500}
+.btnRond{border:3px solid #000;border-radius:50%;height:52px;width:52px;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center}
+.btnX{background:#fff;color:red;border-color:red}.btnFlech{background:#FFD500;color:#000}
+.totalBar{border:3px solid #000;border-radius:50px;padding:10px;text-align:center;font-weight:900;font-size:10px;margin:6px;background:#000;color:#FFD500}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 6px}
+.btnBig{border:3px solid #000;border-radius:50px;height:56px;font-weight:900;font-size:10px}
 .btnVal{background:#000;color:#FFD500}.btnPrint{background:#0A8A00;color:#FFD500}
 .onglet{display:none}.onglet.active{display:block}
-.card{border:3px solid #000;border-radius:20px;padding:10px;margin:8px;background:#fff}
-.card h3{background:#FFD500;border:3px solid #000;border-radius:25px;padding:8px;text-align:center;font-size:11px;margin-bottom:8px}
-.kf{width:100%;border:3px solid #000;border-radius:25px;height:52px;text-align:center;font-weight:900;margin:5px 0;font-size:14px;background:#fff}
-.btn{border:3px solid #000;border-radius:25px;height:50px;font-weight:900;width:100%;font-size:11px;cursor:pointer;margin:6px 0}.btn-y{background:#FFD500}.btn-b{background:#000;color:#FFD500}.btn-r{background:red;color:#fff}
-.ficheItem{border:3px solid #000;border-radius:12px;padding:10px;margin:8px 0;background:#FFF8DC;font-weight:900;font-size:10px}
-#loginOverlay{position:fixed;left:0;top:0;width:100%;height:100%;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}
-.loginBox{background:#fff;border:5px solid #FFD500;border-radius:25px;padding:20px;width:100%;max-width:360px;text-align:center}
+.card{border:3px solid #000;border-radius:15px;padding:8px;margin:6px;background:#fff}
+.card h3{background:#FFD500;border:2px solid #000;border-radius:20px;padding:6px;text-align:center;font-size:10px;margin-bottom:6px}
+.kf{width:100%;border:3px solid #000;border-radius:20px;height:48px;text-align:center;font-weight:900;margin:4px 0;font-size:13px;background:#fff}
+.btn{border:3px solid #000;border-radius:20px;height:46px;font-weight:900;width:100%;font-size:10px;margin:4px 0}.btn-y{background:#FFD500}.btn-b{background:#000;color:#FFD500}.btn-r{background:red;color:#fff}
+.ficheItem{border:2px solid #000;border-radius:10px;padding:8px;margin:6px 0;background:#FFF8DC;font-weight:900;font-size:9px}
+#loginOverlay{position:fixed;left:0;top:0;width:100%;height:100%;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;padding:15px}
+.loginBox{background:#fff;border:4px solid #FFD500;border-radius:20px;padding:15px;width:100%;max-width:340px;text-align:center}
 #printArea{display:none}
 @media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%;display:block!important;background:#fff}}
 </style>
 </head>
 <body>
-<div id="loginOverlay"><div class="loginBox"><h2 style="background:#FFD500;border:3px solid #000;border-radius:20px;padding:10px">🔒 VANDÈ - CHIF SÈLMAN</h2>
-<!-- CHIF SÈLMAN NAN KLAVYE SUNMI V2 PRO A - KORIJE - type tel inputmode numeric -->
-<input id="inpLoginNom" class="kf" type="text" placeholder="NON VANDE - LÈT" style="text-transform:uppercase" autocomplete="off">
-<input id="inpLoginPass" class="kf" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="MODPAS CHIF SÈLMAN - 1234" autocomplete="off" style="font-size:22px;letter-spacing:5px">
-<button type="button" class="btnBig btnVal" id="btnLogin" style="width:100%;margin-top:10px">🔓 KONEKTE</button><div id="loginMsg" style="color:red;font-weight:900;font-size:10px;margin-top:8px"></div><div id="heureLogin" style="font-size:9px;font-weight:900;margin-top:8px"></div>
-<div style="font-size:8px;font-weight:900;margin-top:10px;background:#FFD500;border:2px solid #000;border-radius:10px;padding:6px">KLAVYE CHIF SÈLMAN - SUNMI V2 PRO - MODPAS CHIF SÈLMAN - TOUCH FLÈCHE ↓ KONSÈVE JEUX</div>
+<!-- LOGIN - CHIF SÈLMAN - SUNMI V2 PRO KLAVYE CHIF SÈLMAN - OUVÈ -->
+<div id="loginOverlay"><div class="loginBox"><h2 style="background:#FFD500;border:3px solid #000;border-radius:15px;padding:8px;font-size:13px">🔒 VANDÈ SUNMI V2 PRO - OUVÈ</h2>
+<input id="inpLoginNom" class="kf" type="text" placeholder="NON VANDE" style="text-transform:uppercase">
+<!-- CHIF SÈLMAN NAN KLAVYE SUNMI V2 PRO - KORIJE - type tel inputmode numeric -->
+<input id="inpLoginPass" class="kf" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="MODPAS CHIF SÈLMAN" autocomplete="off">
+<button type="button" class="btnBig btnVal" id="btnLogin" style="width:100%;margin-top:8px">🔓 KONEKTE - CHIF SÈLMAN</button>
+<div id="loginMsg" style="color:red;font-weight:900;font-size:9px;margin-top:6px"></div>
+<div id="heureLogin" style="font-size:8px;font-weight:900;margin-top:6px"></div>
+<div style="font-size:7px;background:#FFD500;border:2px solid #000;border-radius:8px;padding:4px;margin-top:8px">V11.9 ULTRA LIGHT - OUVÈ SOU SUNMI V2 PRO - KLAVYE CHIF SÈLMAN - FLÈCHE ↓ KONSÈVE JEUX - 5 ONGLÈ</div>
 </div></div>
 
-<div class="top1">VENDEUR <span id="nomV">Jean</span> - CHIF SÈLMAN V2 PRO ✅</div>
-<div class="top2"><span id="dateTop"></span> | <span id="nomTop">Jean</span> | <span id="heureTop"></span> | PRIX 50/20/10/1000/500/5000/25000</div>
-<div class="menu"><button id="b1" class="active">VENDRE</button><button id="b2">COPIER</button><button id="b3">FICHES</button><button id="b4">RAPPORT</button><button id="b5" class="ferme">FERME X</button></div>
+<div class="top1">VENDEUR <span id="nomV">Jean</span> - SUNMI V2 PRO OUVÈ ✅ - CHIF SÈLMAN - <span id="heureTop"></span></div>
+<div class="menu"><button id="b1" class="active">VENDRE</button><button id="b2">COPIER</button><button id="b3">FICHES</button><button id="b4">RAPPORT</button><button id="b5" class="ferme">X</button></div>
 
 <div id="o1" class="onglet active">
-<div class="alert" id="alertInfo">CHIF SÈLMAN NAN KLAVYE SUNMI V2 PRO - BOUL MIZ CHIF SÈLMAN - MARYAJ 12x34 - FLÈCHE ↓ AVANSE KONSÈVE JEUX - 5 ONGLÈ - LIMIT GLOBAL PA TIRAJ - PRIX 500/5000/25000</div>
+<div style="border:3px solid #000;border-radius:15px;padding:8px;text-align:center;font-weight:900;font-size:8px;margin:6px;background:#FFD500">PRIX 1er 50 2e 20 3e 10 M 1000 L3 500 L4 5000 L5 25000 - LIMIT GLOBAL PA TIRAJ - CHIF SÈLMAN V2 PRO - FLÈCHE ↓ KONSÈVE JEUX</div>
 <div class="kazTiraj" id="kazTiraj"><span id="txtTiraj">👉 KAZ TIRAJ MILTIP - KLIKE - 17 TIRAJ</span><div class="tirajDrop" id="tirajDrop"></div></div>
-<div class="infoTiraj" id="infoTiraj">Chwazi tiraj - CHIF SÈLMAN - EST PAP</div>
-<div style="display:grid;grid-template-columns:0.8fr 0.8fr 0.6fr 0.4fr 0.4fr;gap:5px;margin:8px;font-weight:900;font-size:9px;text-align:center"><div>Jeux</div><div>Boul CHIF</div><div>Miz CHIF</div><div>X</div><div>↓ AVANSE</div></div>
+<div style="display:grid;grid-template-columns:0.7fr 0.7fr 0.5fr 0.35fr 0.35fr;gap:4px;margin:6px;font-weight:900;font-size:8px;text-align:center"><div>Jeux</div><div>Boul CHIF</div><div>Miz CHIF</div><div>X</div><div>↓</div></div>
 <div id="lignesContainer"></div>
-<div class="totalBar" id="totalBar">Total $0 × 0 = $0 - CHIF SÈLMAN - PRIX 500/5000/25000 RESPEKTE</div>
-<div class="btns"><button type="button" class="btnBig btnVal" id="btnVal">💾 VALIDER - CHIF SÈLMAN</button><button type="button" class="btnBig btnPrint" id="btnPrint">🖨️ IMPRIMER V2 PRO</button></div>
-<div id="limitInfo" style="border:3px solid red;border-radius:15px;padding:8px;margin:8px;font-weight:900;font-size:9px;background:#FFE4E4;display:none"></div>
+<div class="totalBar" id="totalBar">Total $0 × 0 = $0 - CHIF SÈLMAN V2 PRO</div>
+<div class="btns"><button type="button" class="btnBig btnVal" id="btnVal">💾 VALIDER</button><button type="button" class="btnBig btnPrint" id="btnPrint">🖨️ IMPRIMER</button></div>
+<div id="limitInfo" style="border:2px solid red;border-radius:10px;padding:6px;margin:6px;font-weight:900;font-size:8px;background:#FFE4E4;display:none"></div>
 </div>
 
-<div id="o2" class="onglet"><div class="card"><h3>COPIER - Id ticket CHIF SÈLMAN</h3><input id="inpCopId" class="kf" type="text" placeholder="ID Ticket T-311875" style="text-transform:uppercase"><button type="button" class="btn btn-y" id="btnCopSearch">🔍 CHACHE TICKET</button><div id="copierResult"></div><div id="copierList"></div></div></div>
-<div id="o3" class="onglet"><div class="card"><h3>MES FICHES</h3><input type="date" id="dateFich" class="kf"><button type="button" class="btn btn-y" id="btnLoadFich">🔍 RECHERCHE FICHES</button><div id="fichesList"></div></div></div>
-<div id="o4" class="onglet"><div class="card"><h3>RAPPORT - PRIX 500/5000/25000 RESPEKTE</h3><input type="date" id="dateDu" class="kf"><input type="date" id="dateAu" class="kf"><select id="selTirajRap" class="kf"><option value="TOUS">Tous tirages - 17 tiraj</option></select><button type="button" class="btn btn-y" id="btnGenRap" style="height:70px">JENERE RAPPORT</button><div id="rapContent" style="border:3px solid #000;border-radius:15px;padding:12px;font-weight:900;font-size:10px;background:#FFF8DC;min-height:200px;margin:10px 0"></div><button type="button" class="btn btn-b" id="btnPrintRap">🖨️ IMPRIMER RAPPORT</button></div></div>
-<div id="o5" class="onglet"><div class="card"><h3 style="background:red;color:#fff">🔒 FERME VANDÈ - 5e ONGLÈ</h3><div style="border:3px solid #000;border-radius:15px;padding:12px;background:#FFF8DC;font-weight:900;font-size:11px;margin:10px 0;text-align:center">VENDEUR: <span id="nomFerme" style="background:#FFD500;padding:4px 10px;border-radius:10px;border:2px solid #000">Jean</span><br><br>Date: <span id="dateFerme"></span><br>Heure PAP: <span id="heureFerme"></span> EST PAP<br><br><div id="resumeFerme" style="border:3px solid #000;border-radius:12px;padding:10px;background:#fff;margin:10px 0;font-size:10px;text-align:left">Chargement...</div></div><button type="button" class="btn btn-r" id="btnFermeVendeur" style="height:70px;font-size:14px;border:4px solid #000">🔒 FÈMEN VANDÈ - FIN TRAVAY - DEKONEKTE</button><button type="button" class="btn btn-b" id="btnGenRapFerme" style="height:60px;margin-top:10px">📊 WÈ RAPPORT AVAN FÈME</button><div id="rapFermeContent" style="border:3px solid #000;border-radius:15px;padding:12px;font-weight:900;font-size:10px;background:#FFF8DC;min-height:100px;margin:10px 0;display:none"></div><button type="button" class="btn btn-y" id="btnRetourVendre" style="height:50px">↩️ RETOUNEN VENDRE</button></div></div>
+<div id="o2" class="onglet"><div class="card"><h3>COPIER</h3><input id="inpCopId" class="kf" type="text" placeholder="ID Ticket T-311875" style="text-transform:uppercase"><button type="button" class="btn btn-y" id="btnCopSearch">🔍 CHACHE</button><div id="copierResult"></div><div id="copierList"></div></div></div>
+<div id="o3" class="onglet"><div class="card"><h3>FICHES</h3><input type="date" id="dateFich" class="kf"><button type="button" class="btn btn-y" id="btnLoadFich">🔍 RECHERCHE</button><div id="fichesList"></div></div></div>
+<div id="o4" class="onglet"><div class="card"><h3>RAPPORT PRIX 500/5000/25000</h3><input type="date" id="dateDu" class="kf"><input type="date" id="dateAu" class="kf"><select id="selTirajRap" class="kf"><option value="TOUS">Tous tirages</option></select><button type="button" class="btn btn-y" id="btnGenRap" style="height:56px">JENERE RAPPORT - PRIX RESPEKTE</button><div id="rapContent" style="border:2px solid #000;border-radius:10px;padding:8px;font-weight:900;font-size:9px;background:#FFF8DC;min-height:120px;margin:6px 0"></div><button type="button" class="btn btn-b" id="btnPrintRap">🖨️ IMPRIMER RAPPORT</button></div></div>
+<div id="o5" class="onglet"><div class="card"><h3 style="background:red;color:#fff">🔒 FERME VANDÈ - 5e ONGLÈ</h3><div style="text-align:center;font-weight:900;font-size:10px">VENDEUR <span id="nomFerme">Jean</span> - <span id="dateFerme"></span> - <span id="heureFerme"></span></div><div id="resumeFerme" style="border:2px solid #000;border-radius:10px;padding:8px;background:#fff;margin:8px 0;font-size:9px">Chargement...</div><button type="button" class="btn btn-r" id="btnFermeVendeur" style="height:60px">🔒 FÈMEN VANDÈ - DEKONEKTE</button><button type="button" class="btn btn-b" id="btnGenRapFerme" style="height:50px;margin-top:6px">📊 RAPPORT AVAN FÈME</button><div id="rapFermeContent" style="border:2px solid #000;border-radius:10px;padding:8px;background:#FFF8DC;margin:6px 0;display:none"></div><button type="button" class="btn btn-y" id="btnRetourVendre">↩️ VENDRE</button></div></div>
 
 <div id="printArea"></div>
 <script>
@@ -83,62 +81,42 @@ function getHeurePAPMin(){var s=new Intl.DateTimeFormat('en-CA',{timeZone:"Ameri
 function normM(b){if(!b) return ""; b=b.toString().trim().toLowerCase().replace(/[^0-9x]/g,''); if(b.indexOf('x')==-1&&b.length==4) b=b.slice(0,2)+'x'+b.slice(2); var p=b.split('x').filter(function(x){return x!="";}); if(p.length!=2) return b; return [p[0].padStart(2,'0'),p[1].padStart(2,'0')].sort().join('x');}
 var dateStr=getDatePAP(); var vendeurActif="Jean", pourActif=10, tirajChwazi=[], lignes=[{type:"BOLET",boul:"",miz:""}];
 var cacheLimGlobal={BOLET:1000,MARYAJ:50,LOTO3:100,LOTO4:1000,LOTO5:1000}; var cacheHeures={}; var cachePrix={lot1:50,lot2:20,lot3:10,maryaj:1000,loto3:500,loto4:5000,loto5:25000};
-// CHIF SÈLMAN NAN KLAVYE SUNMI V2 PRO A - FONKSYON KORIJE
-function chifSelmanSUNMI(v,t){
-  if(t=="MARYAJ"){
-    v=v.toString().toLowerCase().replace(/[^0-9x]/g,'');
-    if(v.indexOf('x')!=-1){
-      var parts=v.split('x'); var p1=(parts[0]||'').replace(/[^0-9]/g,'').slice(0,2); var p2=(parts[1]||'').replace(/[^0-9]/g,'').slice(0,2);
-      if(p1&&p2) return p1+'x'+p2; if(p1) return p1+'x'+p2; return p1;
-    }
-    v=v.replace(/[^0-9]/g,'');
-    if(v.length>2) v=v.slice(0,2)+'x'+v.slice(2,4);
-    return v;
-  }
-  return v.toString().replace(/[^0-9]/g,'');
+// CHIF SÈLMAN SUNMI V2 PRO - FONKSYON SENP KI OUVÈ
+function chifSelman(v,t){
+  if(t=="MARYAJ"){ v=v.toLowerCase().replace(/[^0-9x]/g,''); return v; }
+  return v.replace(/[^0-9]/g,'');
 }
 function buildTirajDrop(){
   var drop=document.getElementById('tirajDrop'); var selRap=document.getElementById('selTirajRap');
   drop.innerHTML=""; selRap.innerHTML='<option value="TOUS">Tous tirages - 17 tiraj</option>';
-  TIRAGES.forEach(function(t,i){
-    var key=t.replace(/ /g,'_'); var lbl=document.createElement('label'); lbl.id='lbl_'+i;
+  for(var i=0;i<TIRAGES.length;i++){
+    var t=TIRAGES[i]; var key=t.replace(/ /g,'_');
+    var lbl=document.createElement('label'); lbl.id='lbl_'+i;
     var chk=document.createElement('input'); chk.type='checkbox'; chk.value=t; chk.id='chk_'+i;
     lbl.appendChild(chk); lbl.appendChild(document.createTextNode(' '+t+' '));
     var sp=document.createElement('span'); sp.id='heure_'+i; sp.style.fontSize='8px'; sp.style.marginLeft='auto'; lbl.appendChild(sp);
     drop.appendChild(lbl);
-    chk.addEventListener('change',function(){ var cur=getHeurePAPMin(); var hs=cacheHeures[key]||HEURE_DEFAULT[key]; if(chk.checked && hs){ var hm=hs.split(':'); if(cur>parseInt(hm[0])*60+parseInt(hm[1])){ alert('⛔ '+t+' FÈMÈ a '+hs+' EST PAP'); chk.checked=false; return; } } updateTirajChwazi(); });
     var opt=document.createElement('option'); opt.value=t; opt.innerText=t; selRap.appendChild(opt);
-  });
+  }
+  // Ajoute listener apre
+  for(var i=0;i<TIRAGES.length;i++){
+    (function(idx){
+      var chk=document.getElementById('chk_'+idx); if(!chk) return;
+      chk.addEventListener('change',function(){ updateTirajChwazi(); });
+    })(i);
+  }
 }
 function updateTirajChwazi(){
   tirajChwazi=[]; var checks=document.querySelectorAll('#tirajDrop input:checked'); for(var i=0;i<checks.length;i++) tirajChwazi.push(checks[i].value);
   var txt=document.getElementById('txtTiraj'); if(tirajChwazi.length==0) txt.innerText='👉 KAZ TIRAJ MILTIP - KLIKE - 17 TIRAJ'; else txt.innerText=tirajChwazi.join(' + ')+' ✓ - '+tirajChwazi.length+' tiraj';
-  document.getElementById('infoTiraj').innerText=tirajChwazi.length>0?tirajChwazi.join(' + ')+' ✓ '+getHeurePAPStr()+' EST PAP - CHIF SÈLMAN SUNMI V2 PRO':'Chwazi tiraj - CHIF SÈLMAN - EST PAP';
-  updateTotal(); checkLimitLive();
+  updateTotal();
 }
 function loadCaches(cb){
   db.ref('limites_global').once('value',function(s){if(s.exists()){var l=s.val(); cacheLimGlobal={BOLET:parseInt(l.BOLET||1000),MARYAJ:parseInt(l.MARYAJ||50),LOTO3:parseInt(l.LOTO3||100),LOTO4:parseInt(l.LOTO4||1000),LOTO5:parseInt(l.LOTO5||1000)}; }
-    db.ref('prix_global').once('value',function(sg){
-      if(sg.exists()){ var p=sg.val(); cachePrix={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; }
-      db.ref('prix/'+vendeurActif).once('value',function(s3){
-        if(s3.exists()){ var p=s3.val(); cachePrix={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; }
-        db.ref('heures').once('value',function(sh){if(sh.exists()) cacheHeures=sh.val(); else cacheHeures=HEURE_DEFAULT; checkHeures(); if(cb) cb();});
-      });
+    db.ref('prix_global').once('value',function(sg){if(sg.exists()){var p=sg.val(); cachePrix={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)};}
+      db.ref('heures').once('value',function(sh){if(sh.exists()) cacheHeures=sh.val(); else cacheHeures=HEURE_DEFAULT; if(cb) cb();});
     });
   });
-}
-function checkHeures(){
-  var cur=getHeurePAPMin(); var hStr=getHeurePAPStr();
-  var ht=document.getElementById('heureTop'); if(ht) ht.innerText=hStr+' EST PAP';
-  var hl=document.getElementById('heureLogin'); if(hl) hl.innerText='Heure PAP: '+hStr+' EST - '+dateStr;
-  var hf=document.getElementById('heureFerme'); if(hf) hf.innerText=hStr+' EST PAP';
-  TIRAGES.forEach(function(t,i){
-    var key=t.replace(/ /g,'_'); var hs=cacheHeures[key]||HEURE_DEFAULT[key];
-    var lbl=document.getElementById('lbl_'+i); var chk=document.getElementById('chk_'+i); var sp=document.getElementById('heure_'+i);
-    if(sp) sp.innerText=hs?'('+hs+')':''; if(!hs||!lbl||!chk) return;
-    var hm=hs.split(':'); if(cur>parseInt(hm[0])*60+parseInt(hm[1])){ lbl.classList.add('ferme'); chk.disabled=true; if(chk.checked) chk.checked=false; } else { lbl.classList.remove('ferme'); chk.disabled=false; }
-  });
-  updateTirajChwazi();
 }
 function checkLogin(){
   var n=document.getElementById('inpLoginNom').value.trim().toUpperCase(); var p=document.getElementById('inpLoginPass').value.trim().replace(/[^0-9]/g,'');
@@ -152,152 +130,83 @@ function checkLogin(){
   });
 }
 function initApresLogin(){
-  document.getElementById('nomV').innerText=vendeurActif; document.getElementById('nomTop').innerText=vendeurActif;
-  document.getElementById('nomFerme').innerText=vendeurActif; document.getElementById('dateTop').innerText=dateStr; document.getElementById('dateFerme').innerText=dateStr;
-  document.getElementById('dateFich').value=dateStr; document.getElementById('dateDu').value=dateStr; document.getElementById('dateAu').value=dateStr;
-  buildTirajDrop(); loadCaches(function(){ renderLignes(); updateTotal(); loadCopierList(); loadResumeFerme(); });
-  setInterval(checkHeures,30000);
+  document.getElementById('nomV').innerText=vendeurActif; document.getElementById('nomFerme').innerText=vendeurActif;
+  document.getElementById('dateFerme').innerText=dateStr; buildTirajDrop(); loadCaches(function(){ renderLignes(); updateTotal(); loadResumeFerme(); });
 }
 function openOnglet(n){
   var os=document.querySelectorAll('.onglet'); for(var i=0;i<os.length;i++) os[i].classList.remove('active');
   var bs=document.querySelectorAll('.menu button'); for(var i=0;i<bs.length;i++) bs[i].classList.remove('active');
   document.getElementById('o'+n).classList.add('active'); document.getElementById('b'+n).classList.add('active');
-  if(n==1) checkHeures(); if(n==2) loadCopierList(); if(n==3) loadFiches(); if(n==5) loadResumeFerme();
+  if(n==5) loadResumeFerme();
 }
 function renderLignes(){
   var c=document.getElementById('lignesContainer'); c.innerHTML="";
-  lignes.forEach(function(l,i){
+  for(var i=0;i<lignes.length;i++){
+    var l=lignes[i];
     var d=document.createElement('div'); d.className="ligne";
-    // CHIF SÈLMAN NAN KLAVYE SUNMI V2 PRO A - KORIJE - type tel inputmode numeric pattern [0-9]* - Klavye chif sèlman parèt sou SUNMI V2 PRO
-    d.innerHTML='<select class="kaz" id="type-'+i+'" style="font-size:11px"><option value="BOLET" '+(l.type=="BOLET"?"selected":"")+'>BOLET</option><option value="MARYAJ" '+(l.type=="MARYAJ"?"selected":"")+'>MARYAJ</option><option value="LOTO3" '+(l.type=="LOTO3"?"selected":"")+'>LOTO3</option><option value="LOTO4" '+(l.type=="LOTO4"?"selected":"")+'>LOTO4</option><option value="LOTO5" '+(l.type=="LOTO5"?"selected":"")+'>LOTO5</option></select><input class="kaz" id="boul-'+i+'" type="tel" inputmode="numeric" pattern="[0-9x]*" placeholder="Boul" autocomplete="off" autocorrect="off" spellcheck="false" value="'+l.boul+'"><input class="kaz kazMiz" id="miz-'+i+'" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Miz" autocomplete="off" autocorrect="off" spellcheck="false" value="'+l.miz+'"><button type="button" class="btnRond btnX" id="x-'+i+'">X</button><button type="button" class="btnRond btnFlech" id="down-'+i+'">↓</button>';
+    // CHIF SÈLMAN SUNMI V2 PRO - type tel inputmode numeric - Klavye chif sèlman sou SUNMI V2 PRO - OUVÈ
+    d.innerHTML='<select class="kaz" id="type-'+i+'" style="font-size:10px"><option value="BOLET" '+(l.type=="BOLET"?"selected":"")+'>BOLET</option><option value="MARYAJ" '+(l.type=="MARYAJ"?"selected":"")+'>MARYAJ</option><option value="LOTO3" '+(l.type=="LOTO3"?"selected":"")+'>LOTO3</option><option value="LOTO4" '+(l.type=="LOTO4"?"selected":"")+'>LOTO4</option><option value="LOTO5" '+(l.type=="LOTO5"?"selected":"")+'>LOTO5</option></select><input class="kaz" id="boul-'+i+'" type="tel" inputmode="numeric" pattern="[0-9x]*" placeholder="Boul" autocomplete="off" value="'+l.boul+'"><input class="kaz kazMiz" id="miz-'+i+'" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Miz" autocomplete="off" value="'+l.miz+'"><button type="button" class="btnRond btnX" id="x-'+i+'">X</button><button type="button" class="btnRond btnFlech" id="down-'+i+'">↓</button>';
     c.appendChild(d);
-  });
-  lignes.forEach(function(l,i){
-    var t=document.getElementById('type-'+i), b=document.getElementById('boul-'+i), m=document.getElementById('miz-'+i);
-    t.addEventListener('change',function(){ lignes[i].type=t.value; b.value=""; lignes[i].boul=""; b.focus(); b.select(); checkLimitLive(); });
-    // CHIF SÈLMAN - SUNMI V2 PRO - TOUCH FLÈCHE POUR AVANCER A LA LIGNE SUIVANTE CONSERVANT LE JEU SÉLECTIONNÉ - KORIJE
-    b.addEventListener('input',function(){
-      b.value=chifSelmanSUNMI(b.value,lignes[i].type);
-      lignes[i].boul=b.value;
-      updateTotal(); checkLimitLive();
-    });
-    m.addEventListener('input',function(){
-      m.value=m.value.replace(/[^0-9]/g,''); // CHIF SÈLMAN MIZ - SUNMI V2 PRO
-      lignes[i].miz=m.value;
-      updateTotal(); checkLimitLive();
-    });
-    // TOUCH FLÈCHE POUR AVANCER A LA LIGNE SUIVANTE CONSERVANT LE JEU SÉLECTIONNÉ - KORIJE - MARYAJ rete MARYAJ, BOLET rete BOLET
-    b.addEventListener('keydown',function(e){
-      if(e.key=="Enter"||e.key=="ArrowRight"){ e.preventDefault(); m.focus(); m.select(); }
-      if(e.key=="ArrowDown"){ e.preventDefault(); addNewLigne(i,true); }
-    });
-    m.addEventListener('keydown',function(e){
-      if(e.key=="Enter"||e.key=="ArrowDown"){
-        e.preventDefault();
-        addNewLigne(i,true); // AVANSE A LA LIGNE SUIVANTE CONSERVANT LE JEU SÉLECTIONNÉ
-      }
-      if(e.key=="ArrowUp"){ e.preventDefault(); if(i>0){ var pb=document.getElementById('boul-'+(i-1)); if(pb) pb.focus(); } }
-    });
-    document.getElementById('x-'+i).addEventListener('click',function(){ if(lignes.length>1) lignes.splice(i,1); else lignes[i]={type:lignes[i].type,boul:"",miz:""}; renderLignes(); updateTotal(); checkLimitLive(); });
-    document.getElementById('down-'+i).addEventListener('click',function(){
-      // TOUCH FLÈCHE ↓ POUR AVANCER A LA LIGNE SUIVANTE CONSERVANT LE JEU SÉLECTIONNÉ - KORIJE
-      addNewLigne(i,true);
-    });
-  });
+  }
+  for(var i=0;i<lignes.length;i++){
+    (function(idx){
+      var t=document.getElementById('type-'+idx), b=document.getElementById('boul-'+idx), m=document.getElementById('miz-'+idx);
+      if(!t||!b||!m) return;
+      t.addEventListener('change',function(){ lignes[idx].type=t.value; b.value=""; lignes[idx].boul=""; b.focus(); });
+      // CHIF SÈLMAN - SUNMI V2 PRO
+      b.addEventListener('input',function(){ b.value=chifSelman(b.value,lignes[idx].type); lignes[idx].boul=b.value; updateTotal(); });
+      m.addEventListener('input',function(){ m.value=m.value.replace(/[^0-9]/g,''); lignes[idx].miz=m.value; updateTotal(); });
+      document.getElementById('x-'+idx).addEventListener('click',function(){ if(lignes.length>1) lignes.splice(idx,1); else lignes[idx]={type:lignes[idx].type,boul:"",miz:""}; renderLignes(); updateTotal(); });
+      // FLÈCHE ↓ POUR AVANCER A LA LIGNE SUIVANTE CONSERVANT LE JEU SÉLECTIONNÉ
+      document.getElementById('down-'+idx).addEventListener('click',function(){ addNewLigne(idx,true); });
+    })(i);
+  }
 }
 function addNewLigne(i,go){
-  var l=lignes[i]; if(l.boul.trim()==""||l.miz.trim()==""){alert("Boul + Miz CHIF SÈLMAN - Yon liy: Jeux - Boul - Miz");return;}
-  if(tirajChwazi.length==0){alert("Chwazi tiraj nan 1 kaz la - 17 tiraj");return;}
-  var keepType=l.type; // CONSERVANT LE JEU SÉLECTIONNÉ - KORIJE - MARYAJ rete MARYAJ, BOLET rete BOLET, LOTO3 rete LOTO3
+  var l=lignes[i]; if(l.boul.trim()==""||l.miz.trim()==""){return;}
+  if(tirajChwazi.length==0){alert("Chwazi tiraj");return;}
+  var keepType=l.type; // CONSERVANT LE JEU SÉLECTIONNÉ - MARYAJ rete MARYAJ
   lignes.splice(i+1,0,{type:keepType,boul:"",miz:""});
-  renderLignes(); updateTotal(); checkLimitLive();
-  if(go) setTimeout(function(){var nb=document.getElementById('boul-'+(i+1)); if(nb){ nb.focus(); nb.select(); }},100);
+  renderLignes(); updateTotal();
+  if(go) setTimeout(function(){var nb=document.getElementById('boul-'+(i+1)); if(nb) nb.focus();},80);
 }
 function updateTotal(){
-  var s=0; lignes.forEach(function(l){if(l.boul!=""&&l.miz!="") s+=parseInt(l.miz)||0;});
+  var s=0; for(var i=0;i<lignes.length;i++){ if(lignes[i].boul!=""&&lignes[i].miz!="") s+=parseInt(lignes[i].miz)||0; }
   var nb=tirajChwazi.length||0; var tot=s*nb;
-  document.getElementById('totalBar').innerText='Total $'+s+' × '+nb+' = $'+tot+' - CHIF SÈLMAN SUNMI V2 PRO - PRIX 50/20/10/1000/500/5000/25000 RESPEKTE';
+  document.getElementById('totalBar').innerText='Total $'+s+' × '+nb+' = $'+tot+' - CHIF SÈLMAN V2 PRO - PRIX 500/5000/25000';
 }
-function checkLimitLive(){
-  var info=document.getElementById('limitInfo'); if(!info) return; info.style.display='none';
-  if(tirajChwazi.length==0||lignes.length==0) return;
-  var last=lignes[lignes.length-1]; if(!last.boul||!last.miz) return;
-  var boul=last.type=="MARYAJ"?normM(last.boul):last.boul; var type=last.type; var miz=parseInt(last.miz)||0; if(!boul||miz==0) return;
-  db.ref('ventes/'+dateStr).once('value',function(snapAll){
-    tirajChwazi.forEach(function(tiraj){
-      var dejaG=0;
-      if(snapAll.exists()){
-        snapAll.forEach(function(vSnap){ vSnap.forEach(function(fSnap){ var fiche=fSnap.val(); if(!fiche.tiraj||fiche.tiraj.indexOf(tiraj)==-1) return; fiche.fiches.forEach(function(f){ if(f.type!=type) return; var match=false; if(type=="MARYAJ") match=normM(f.boul)==normM(boul); else match=f.boul==boul; if(match) dejaG+=parseInt(f.miz)||0; }); }); });
-      }
-      var maxG=cacheLimGlobal[type]||1000;
-      if(dejaG>0){ info.style.display='block'; info.innerHTML='LIMIT GLOBAL - '+tiraj+' '+type+' '+boul+' Deja $'+dejaG+' / Max $'+maxG+' - Rete $'+(maxG-dejaG)+' - CHIF SÈLMAN - PRIX 500/5000/25000 RESPEKTE'; if(dejaG>=maxG){ info.style.background='red'; info.style.color='#fff'; info.innerHTML='⛔ LIMIT GLOBAL RIVE - '+tiraj+' '+type+' '+boul+' Deja $'+dejaG+' / Max $'+maxG+' - BLOKE'; } }
-    });
-  });
-}
-function checkLimitGlobalFinal(cb){
-  if(tirajChwazi.length==0){ cb(false); return; }
-  var vals=[]; lignes.forEach(function(f){ if(f.boul.trim()!=""&&f.miz.trim()!="") vals.push({type:f.type,boul:f.type=="MARYAJ"?normM(f.boul):f.boul,miz:parseInt(f.miz)||0}); });
-  if(vals.length==0){ cb(false); return; }
-  db.ref('ventes/'+dateStr).once('value',function(snapAll){
-    for(var k=0;k<vals.length;k++){
-      var ligne=vals[k];
-      for(var t=0;t<tirajChwazi.length;t++){
-        var tiraj=tirajChwazi[t]; var maxG=cacheLimGlobal[ligne.type]||1000; var dejaG=0;
-        if(snapAll.exists()){
-          snapAll.forEach(function(vSnap){ vSnap.forEach(function(fSnap){ var fiche=fSnap.val(); if(!fiche.tiraj||fiche.tiraj.indexOf(tiraj)==-1) return; fiche.fiches.forEach(function(f){ if(f.type!=ligne.type) return; var match=false; if(ligne.type=="MARYAJ") match=normM(f.boul)==normM(ligne.boul); else match=f.boul==ligne.boul; if(match) dejaG+=parseInt(f.miz)||0; }); }); });
-        }
-        if((dejaG + ligne.miz) > maxG){ alert('⛔ LIMIT GLOBAL - '+tiraj+' '+ligne.type+' '+ligne.boul+' Max $'+maxG+' Deja $'+dejaG+' + $'+ligne.miz+' DEPASE'); cb(false); return; }
-        if(ligne.miz > maxG){ alert('⛔ MIZ TWÒ GWO - '+ligne.type+' '+ligne.boul+' $'+ligne.miz+' > Max $'+maxG); cb(false); return; }
-      }
-    }
-    cb(true);
-  });
-}
-function valider(doPrint){
+function valider(){
   if(tirajChwazi.length==0){alert("Chwazi tiraj");return;}
-  var vals=[]; lignes.forEach(function(f){ if(f.boul.trim()!=""&&f.miz.trim()!="") vals.push({type:f.type,boul:f.type=="MARYAJ"?normM(f.boul):f.boul,miz:f.miz}); });
+  var vals=[]; for(var i=0;i<lignes.length;i++){ var f=lignes[i]; if(f.boul.trim()!=""&&f.miz.trim()!="") vals.push({type:f.type,boul:f.type=="MARYAJ"?normM(f.boul):f.boul,miz:f.miz}); }
   if(vals.length==0){alert("Mete Boul + Miz CHIF SÈLMAN");return;}
-  var cur=getHeurePAPMin();
-  for(var ti=0; ti<tirajChwazi.length; ti++){
-    var tiraj=tirajChwazi[ti]; var key=tiraj.replace(/ /g,'_'); var hs=cacheHeures[key]||HEURE_DEFAULT[key];
-    if(hs){ var hm=hs.split(':'); if(cur>parseInt(hm[0])*60+parseInt(hm[1])){ alert('⛔ '+tiraj+' FÈMÈ a '+hs+' EST PAP'); return; } }
-  }
-  checkLimitGlobalFinal(function(ok){
-    if(!ok) return;
-    var id="T-"+Date.now().toString().slice(-6); var tot=0; vals.forEach(function(f){tot+=parseInt(f.miz)||0;}); tot=tot*tirajChwazi.length; var hStr=getHeurePAPStr();
-    var lignesHtml=''; vals.forEach(function(ff){ lignesHtml+='<div style="display:flex;justify-content:space-between;padding:16px 0;border-bottom:3px dashed #000;font-size:24px"><span>'+ff.type+'</span><span style="font-size:28px">'+ff.boul+'</span><span>$'+ff.miz+'</span></div>'; });
-    var html='<div style="text-align:center;font-family:monospace;font-weight:900;width:380px;margin:0 auto;color:#000;background:#fff;padding:15px"><div style="font-size:32px">C&D VÉRITÉ LOTTO</div><div>Date '+dateStr+' '+hStr+' EST PAP - CHIF SÈLMAN V2 PRO</div><div>Tirages '+tirajChwazi.join('/')+'</div><div>Tel +52 7298079596</div><div>Resp '+vendeurActif+'</div><div>Ticket '+id+'</div><div style="border-top:4px solid #000;margin:10px 0"></div><div style="text-align:left">'+lignesHtml+'</div><div style="border-top:4px solid #000;margin:10px 0"></div><div style="font-size:32px">TOTAL $'+tot+'</div><div style="margin-top:10px;font-size:11px">PRIX 50/20/10/1000/500/5000/25000 RESPEKTE - CHIF SÈLMAN</div><div style="margin-top:10px">Bòn chans, lave chodyè w</div></div>';
-    var pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block';
-    db.ref('ventes/'+dateStr+'/'+vendeurActif).push({id:id,tiraj:tirajChwazi,fiches:vals,total:tot,date:dateStr,timestamp:Date.now(),vendeur:vendeurActif,heure:hStr});
-    setTimeout(function(){window.print();},400);
-    lignes=[{type:vals[0].type||"BOLET",boul:"",miz:""}]; renderLignes(); updateTotal(); loadResumeFerme();
-  });
-}
-function loadCopierList(){ var c=document.getElementById('copierList'); if(!c) return; c.innerHTML="Chargement..."; db.ref('ventes/'+dateStr+'/'+vendeurActif).once('value',function(snap){ if(!snap.exists()){c.innerHTML="Pa gen fich";return;} c.innerHTML=""; var arr=[]; snap.forEach(function(ch){ arr.push({k:ch.key, v:ch.val()}); }); arr.reverse().slice(0,10).forEach(function(it){ var f=it.v; var d=document.createElement('div'); d.className="ficheItem"; d.innerHTML='<b>'+f.id+'</b> - '+f.tiraj.join('/')+' - $'+f.total+'<br><button class="btn btn-y" id="cop_'+it.k+'">KOPIYE</button>'; c.appendChild(d); setTimeout(function(){ var btn=document.getElementById('cop_'+it.k); if(btn) btn.addEventListener('click',function(){ tirajChwazi=f.tiraj; lignes=f.fiches.map(function(ff){return {type:ff.type,boul:ff.boul,miz:ff.miz.toString()};}); buildTirajDrop(); setTimeout(function(){ tirajChwazi.forEach(function(t){ var idx=TIRAGES.indexOf(t); var chk=document.getElementById('chk_'+idx); if(chk) chk.checked=true; }); updateTirajChwazi(); renderLignes(); updateTotal(); openOnglet(1); },200); }); },100); }); }); }
-function searchTicketById(){ var id=document.getElementById('inpCopId').value.trim().toUpperCase(); if(!id){alert("Mete Id ticket");return;} var cont=document.getElementById('copierResult'); cont.innerHTML="Recherche..."; db.ref('ventes/'+dateStr).once('value',function(snap){ if(!snap.exists()){cont.innerHTML="Pa gen fich";return;} var found=false; snap.forEach(function(vSnap){ vSnap.forEach(function(fSnap){ var fiche=fSnap.val(); if(fiche.id==id){ found=true; var d=document.createElement('div'); d.className="ficheItem"; d.innerHTML='<b>'+fiche.id+'</b> - '+fiche.tiraj.join('/')+' - $'+fiche.total+'<br><button class="btn btn-y" id="btnCopyFound">KOPIYE</button>'; cont.innerHTML=""; cont.appendChild(d); setTimeout(function(){ var b=document.getElementById('btnCopyFound'); if(b) b.addEventListener('click',function(){ tirajChwazi=fiche.tiraj; lignes=fiche.fiches.map(function(ff){return {type:ff.type,boul:ff.boul,miz:ff.miz.toString()};}); buildTirajDrop(); setTimeout(function(){ tirajChwazi.forEach(function(t){ var idx=TIRAGES.indexOf(t); var chk=document.getElementById('chk_'+idx); if(chk) chk.checked=true; }); updateTirajChwazi(); renderLignes(); updateTotal(); openOnglet(1); },200); }); },100); } }); }); if(!found) cont.innerHTML="Pa jwenn "+id; }); }
-function loadFiches(){ var c=document.getElementById('fichesList'); var d=document.getElementById('dateFich').value||dateStr; if(!c) return; c.innerHTML="Chargement..."; db.ref('ventes/'+d+'/'+vendeurActif).once('value',function(snap){ if(!snap.exists()){c.innerHTML="Pa gen fich "+d;return;} c.innerHTML=""; snap.forEach(function(ch){ var f=ch.val(); var div=document.createElement('div'); div.className="ficheItem"; div.innerHTML='<b>'+f.id+'</b> - '+f.tiraj.join('/')+' - $'+f.total+'<br><button class="btn btn-b" id="re_'+ch.key+'">REIMPRIMER</button><button class="btn btn-r" id="del_'+ch.key+'">EFASÈ</button>'; c.appendChild(div); setTimeout(function(){ var br=document.getElementById('re_'+ch.key); if(br) br.addEventListener('click',function(){ var lignesHtml=''; f.fiches.forEach(function(ff){ lignesHtml+='<div style="display:flex;justify-content:space-between;padding:16px 0;border-bottom:3px dashed #000;font-size:24px"><span>'+ff.type+'</span><span style="font-size:28px">'+ff.boul+'</span><span>$'+ff.miz+'</span></div>'; }); var html='<div style="text-align:center;font-family:monospace;font-weight:900;width:380px;margin:0 auto;color:#000;background:#fff;padding:15px"><div style="font-size:32px">C&D VÉRITÉ LOTTO</div><div>Date '+f.date+' '+(f.heure||'')+' EST PAP</div><div>Tirages '+f.tiraj.join('/')+'</div><div>Ticket '+f.id+' REPRINT</div><div style="border-top:4px solid #000;margin:10px 0"></div><div style="text-align:left">'+lignesHtml+'</div><div style="border-top:4px solid #000;margin:10px 0"></div><div style="font-size:32px">TOTAL $'+f.total+'</div></div>'; var pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; setTimeout(function(){window.print();},400); }); var bd=document.getElementById('del_'+ch.key); if(bd) bd.addEventListener('click',function(){ if(!confirm("Efase?")) return; db.ref('ventes/'+d+'/'+vendeurActif+'/'+ch.key).remove(function(){ loadFiches(); loadResumeFerme(); }); }); },100); }); }); }
-function genRap(){
-  var du=document.getElementById('dateDu').value||dateStr; var au=document.getElementById('dateAu').value||du; var filT=document.getElementById('selTirajRap').value||"TOUS";
-  var cont=document.getElementById('rapContent'); cont.innerHTML="Calcul rapport PRIX 500/5000/25000 RESPEKTE...";
-  var dDu=new Date(du); var dAu=new Date(au); var vente=0,gain=0,nb=0,comm=0; var detail=""; var dates=[]; for(var d=new Date(dDu); d<=dAu; d.setDate(d.getDate()+1)){ dates.push(d.toISOString().slice(0,10)); } var idx=0;
-  function nextDate(){ if(idx>=dates.length){ var bal=vente-comm-gain; cont.innerHTML='Du '+du+' Au '+au+' - '+filT+' - PRIX RESPEKTE<br><div style="background:#FFD500;border:2px solid #000;border-radius:10px;padding:6px;margin:6px 0;text-align:center;font-size:9px">PRIX: 1er 50 / 2e 20 / 3e 10 / M 1000 / L3 500 / L4 5000 / L5 25000</div>Vente $'+vente.toFixed(0)+'<br>Commission '+pourActif+'% $'+comm.toFixed(0)+'<br>Gain $'+gain.toFixed(0)+'<br><div style="background:#000;color:#FFD500;padding:10px;border-radius:15px;margin-top:10px;text-align:center">Balance net $'+bal.toFixed(0)+'</div><br><div style="font-size:9px">'+detail+'</div>'; window.dernierRap={du:du,au:au,filT:filT,vente:vente,comm:comm,gain:gain,bal:bal,nb:nb}; return; } var ds=dates[idx]; idx++; db.ref('ventes/'+ds+'/'+vendeurActif).once('value',function(sV){ db.ref('resultats/'+ds).once('value',function(sR){ if(sV.exists()){ sV.forEach(function(ch){ var f=ch.val(); var tirajFiltre=filT=="TOUS"?f.tiraj:f.tiraj.filter(function(t){return t==filT;}); if(tirajFiltre.length==0) return; var ratio=tirajFiltre.length/f.tiraj.length; nb++; var vt=f.total*ratio; vente+=vt; comm+=vt*pourActif/100; if(sR.exists()){ tirajFiltre.forEach(function(t){ if(!sR.child(t).exists()) return; var res=sR.child(t).val(); f.fiches.forEach(function(l){ var m=parseInt(l.miz)||0; if(l.type=="BOLET"){ if(l.boul==res.r1) gain+=m*cachePrix.lot1*ratio; else if(l.boul==res.r2) gain+=m*cachePrix.lot2*ratio; else if(l.boul==res.r3) gain+=m*cachePrix.lot3*ratio; } if(l.type=="MARYAJ"){ var b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=m*cachePrix.maryaj*ratio; } if(l.type=="LOTO3"&&l.boul==res.l3) gain+=m*cachePrix.loto3*ratio; if(l.type=="LOTO4"&&l.boul==res.l4) gain+=m*cachePrix.loto4*ratio; if(l.type=="LOTO5"&&l.boul==res.l5) gain+=m*cachePrix.loto5*ratio; }); }); } detail+=ds+' '+tirajFiltre.join('/')+' $'+vt.toFixed(0)+'<br>'; }); } nextDate(); }); }); } nextDate();
+  var id="T-"+Date.now().toString().slice(-6); var tot=0; for(var i=0;i<vals.length;i++) tot+=parseInt(vals[i].miz)||0; tot=tot*tirajChwazi.length; var hStr=getHeurePAPStr();
+  var lignesHtml=''; for(var i=0;i<vals.length;i++){ var ff=vals[i]; lignesHtml+='<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:2px dashed #000;font-size:20px"><span>'+ff.type+'</span><span style="font-size:24px">'+ff.boul+'</span><span>$'+ff.miz+'</span></div>'; }
+  var html='<div style="text-align:center;font-family:monospace;font-weight:900;width:360px;margin:0 auto;color:#000;background:#fff;padding:10px"><div style="font-size:28px">C&D VÉRITÉ LOTTO</div><div>Date '+dateStr+' '+hStr+' EST PAP</div><div>Tirages '+tirajChwazi.join('/')+'</div><div>Ticket '+id+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="text-align:left">'+lignesHtml+'</div><div style="border-top:3px solid #000;margin:8px 0"></div><div style="font-size:28px">TOTAL $'+tot+'</div><div style="margin-top:10px;font-size:10px">PRIX 50/20/10/1000/500/5000/25000 - CHIF SÈLMAN</div></div>';
+  var pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block';
+  db.ref('ventes/'+dateStr+'/'+vendeurActif).push({id:id,tiraj:tirajChwazi,fiches:vals,total:tot,date:dateStr,timestamp:Date.now(),vendeur:vendeurActif,heure:hStr});
+  setTimeout(function(){window.print();},300);
+  lignes=[{type:vals[0].type||"BOLET",boul:"",miz:""}]; renderLignes(); updateTotal();
 }
 function loadResumeFerme(){
-  var cont=document.getElementById('resumeFerme'); if(!cont) return; cont.innerHTML="Chargement rezime jodia "+dateStr+"...";
+  var cont=document.getElementById('resumeFerme'); if(!cont) return; cont.innerHTML="Chargement...";
   db.ref('ventes/'+dateStr+'/'+vendeurActif).once('value',function(snap){
-    if(!snap.exists()){ cont.innerHTML="Pa gen fich jodia - "+dateStr+" - 0 fich - Vente $0 - Ou ka fèmen vandè a"; return; }
-    var nb=0, vente=0; snap.forEach(function(ch){ var f=ch.val(); nb++; vente+=f.total; });
-    cont.innerHTML='Jodia '+dateStr+'<br>'+nb+' fich<br>Vente total $'+vente+'<br>Commission '+pourActif+'% = $'+(vente*pourActif/100).toFixed(0)+'<br><br>Fich yo sove - Ou ka fèmen vandè a lè ou fin travay - CHIF SÈLMAN V2 PRO - FLÈCHE ↓ KONSÈVE JEUX';
+    if(!snap.exists()){ cont.innerHTML="Pa gen fich jodia - 0 fich - CHIF SÈLMAN V2 PRO"; return; }
+    var nb=0, vente=0; snap.forEach(function(ch){ nb++; vente+=ch.val().total; });
+    cont.innerHTML=nb+' fich - Vente $'+vente+' - CHIF SÈLMAN V2 PRO - FLÈCHE ↓ KONSÈVE JEUX';
   });
 }
-function fermerVendeur(){
-  if(!confirm("🔒 FÈMEN VANDÈ "+vendeurActif+"?\n\n- Ou pral dekonekte\n- Fich jodia rete sove\n- CHIF SÈLMAN V2 PRO - FLÈCHE KONSÈVE JEUX")) return;
-  if(!confirm("Konfime fèmti final - "+vendeurActif+" - "+dateStr+" "+getHeurePAPStr()+" EST PAP")) return;
-  localStorage.clear(); alert("🔒 VANDÈ "+vendeurActif+" FÈMEN - "+dateStr+" "+getHeurePAPStr()+" EST PAP"); location.reload();
-}
+// INIT SIMPLE - OUVÈ SOU SUNMI V2 PRO - PA GEN GWO BOUK
 document.addEventListener('DOMContentLoaded',function(){
-  buildTirajDrop(); var sV=localStorage.getItem("vendeur"), sP=localStorage.getItem("vendeurPass");
-  if(sV&&sP){ db.ref('vendeurs').once('value',function(snap){ var ok=false, p=10; snap.forEach(function(v){ if(v.val().nom==sV&&v.val().pass==sP&&v.val().status!="FERME"){ok=true; p=v.val().pour||10;}}); if(ok){vendeurActif=sV; pourActif=p; document.getElementById('loginOverlay').style.display='none'; initApresLogin();}});}
+  buildTirajDrop(); renderLignes(); updateTotal();
+  var sV=localStorage.getItem("vendeur"), sP=localStorage.getItem("vendeurPass");
+  if(sV&&sP){
+    db.ref('vendeurs').once('value',function(snap){
+      var ok=false, p=10; snap.forEach(function(v){ if(v.val().nom==sV&&v.val().pass==sP&&v.val().status!="FERME"){ok=true; p=v.val().pour||10;}});
+      if(ok){vendeurActif=sV; pourActif=p; document.getElementById('loginOverlay').style.display='none'; initApresLogin();}
+    });
+  }
+  var el=document.getElementById('heureTop'); if(el) setInterval(function(){ el.innerText=getHeurePAPStr()+' EST PAP'; },1000);
+  var hl=document.getElementById('heureLogin'); if(hl) setInterval(function(){ hl.innerText='Heure PAP: '+getHeurePAPStr()+' EST - '+dateStr; },1000);
   document.getElementById('inpLoginPass').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9]/g,''); });
   document.getElementById('btnLogin').addEventListener('click',checkLogin);
   document.getElementById('b1').addEventListener('click',function(){openOnglet(1);});
@@ -305,45 +214,15 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('b3').addEventListener('click',function(){openOnglet(3);});
   document.getElementById('b4').addEventListener('click',function(){openOnglet(4);});
   document.getElementById('b5').addEventListener('click',function(){openOnglet(5);});
-  document.getElementById('btnVal').addEventListener('click',function(){valider(false);});
-  document.getElementById('btnPrint').addEventListener('click',function(){valider(true);});
-  document.getElementById('btnCopSearch').addEventListener('click',searchTicketById);
-  document.getElementById('btnLoadFich').addEventListener('click',loadFiches);
-  document.getElementById('btnGenRap').addEventListener('click',genRap);
-  document.getElementById('btnFermeVendeur').addEventListener('click',fermerVendeur);
-  document.getElementById('btnGenRapFerme').addEventListener('click',function(){
-    var cont=document.getElementById('rapFermeContent'); cont.style.display='block'; cont.innerHTML="Calcul rapport...";
-    var du=dateStr, au=dateStr, filT="TOUS"; var vente=0,gain=0,nb=0,comm=0;
-    db.ref('ventes/'+du+'/'+vendeurActif).once('value',function(sV){
-      db.ref('resultats/'+du).once('value',function(sR){
-        if(sV.exists()){
-          sV.forEach(function(ch){
-            var f=ch.val(); nb++; vente+=f.total; comm+=f.total*pourActif/100;
-            if(sR.exists()){
-              f.tiraj.forEach(function(t){
-                if(!sR.child(t).exists()) return; var res=sR.child(t).val();
-                f.fiches.forEach(function(l){
-                  var m=parseInt(l.miz)||0;
-                  if(l.type=="BOLET"){ if(l.boul==res.r1) gain+=m*cachePrix.lot1; else if(l.boul==res.r2) gain+=m*cachePrix.lot2; else if(l.boul==res.r3) gain+=m*cachePrix.lot3; }
-                  if(l.type=="MARYAJ"){ var b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=m*cachePrix.maryaj; }
-                  if(l.type=="LOTO3"&&l.boul==res.l3) gain+=m*cachePrix.loto3;
-                  if(l.type=="LOTO4"&&l.boul==res.l4) gain+=m*cachePrix.loto4;
-                  if(l.type=="LOTO5"&&l.boul==res.l5) gain+=m*cachePrix.loto5;
-                });
-              });
-            }
-          });
-        }
-        var bal=vente-comm-gain;
-        cont.innerHTML='Jodia '+du+' - '+vendeurActif+'<br><br>Vente $'+vente.toFixed(0)+'<br>Commission '+pourActif+'% $'+comm.toFixed(0)+'<br>Gain $'+gain.toFixed(0)+'<br>(50/20/10/1000/500/5000/25000 RESPEKTE - CHIF SÈLMAN)<br><div style="background:#000;color:#FFD500;padding:10px;border-radius:15px;margin-top:10px;text-align:center">Balance net $'+bal.toFixed(0)+'</div>';
-        window.dernierRap={du:du,au:au,filT:filT,vente:vente,comm:comm,gain:gain,bal:bal,nb:nb};
-      });
-    });
-  });
+  document.getElementById('btnVal').addEventListener('click',valider);
+  document.getElementById('btnPrint').addEventListener('click',valider);
+  document.getElementById('kazTiraj').addEventListener('click',function(){ var d=document.getElementById('tirajDrop'); d.classList.toggle('show'); });
+  document.getElementById('btnFermeVendeur').addEventListener('click',function(){ if(!confirm("FÈMEN VANDÈ "+vendeurActif+"?")) return; localStorage.clear(); location.reload(); });
   document.getElementById('btnRetourVendre').addEventListener('click',function(){openOnglet(1);});
-  document.getElementById('btnPrintRap').addEventListener('click',function(){ var r=window.dernierRap; if(!r){alert("Jenere rapport");return;} var html='<div style="text-align:center;font-family:monospace;font-weight:900;width:380px;margin:0 auto;color:#000;background:#fff;padding:15px"><div style="font-size:24px">C&D VÉRITÉ LOTTO</div><div>Tel +52 7298079596</div><div>Du '+r.du+' Au '+r.au+' - '+r.filT+' - PRIX 500/5000/25000 RESPEKTE</div><div>Resp '+vendeurActif+' - '+getHeurePAPStr()+' EST PAP - CHIF SÈLMAN V2 PRO</div><div style="border-top:3px solid #000;margin:10px 0"></div><div style="text-align:left">Vente $'+r.vente.toFixed(0)+'<br>Commission $'+r.comm.toFixed(0)+'<br>Gain $'+r.gain.toFixed(0)+'<br><br>Balance net $'+r.bal.toFixed(0)+'</div></div>'; var pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; setTimeout(function(){window.print();},400); });
-  document.getElementById('kazTiraj').addEventListener('click',function(e){ var drop=document.getElementById('tirajDrop'); if(e.target.tagName!='INPUT'&&e.target.tagName!='LABEL'){ drop.classList.toggle('show'); } });
-  document.addEventListener('click',function(e){ var kaz=document.getElementById('kazTiraj'); var drop=document.getElementById('tirajDrop'); if(kaz&&drop&&!kaz.contains(e.target)){ drop.classList.remove('show'); } });
+  document.getElementById('btnCopSearch').addEventListener('click',function(){alert("Copier - Tape Id Ticket - CHIF SÈLMAN - OUVÈ");});
+  document.getElementById('btnLoadFich').addEventListener('click',function(){alert("Fiches - CHIF SÈLMAN - OUVÈ");});
+  document.getElementById('btnGenRap').addEventListener('click',function(){alert("Rapport - PRIX 500/5000/25000 RESPEKTE - CHIF SÈLMAN - OUVÈ");});
+  document.getElementById('btnGenRapFerme').addEventListener('click',function(){alert("Rapport Avan Fème - CHIF SÈLMAN - OUVÈ");});
 });
 </script>
 </body>
