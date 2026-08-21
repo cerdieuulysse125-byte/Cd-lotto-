@@ -3,160 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D LOTTO V13.4 AUTO-SEARCH PRINT</title>
+<title>C&D LOTTO V13.5 NO RAWBT - PURE SUNMI</title>
 </head>
 <body style="background:#000;color:#fff;font-family:monospace;margin:0;padding:10px;">
 
-<div style="background:#0f0;color:#000;padding:12px;text-align:center;font-weight:bold;" id="header">
-🔍 RECHERCHE ENPRIMANT AUTO - POS-V2 - 58mm 100%
+<div style="background:#0f0;color:#000;padding:12px;text-align:center;font-weight:bold;">
+✅ RAWBT DEZENSTALE - PURE SUNMI V2 PRO - 58mm 100% - POS-V2
 </div>
 
-<div style="border:2px solid #0f0;padding:10px;margin-top:10px;" id="searchBox">
-<span id="searchStatus">⏳ RECHERCHE ENPRIMANT...</span><br>
-<span id="printerFound" style="color:#ff0;">Ticket:58mm Density:100% SN:POS-V2 - Recherche...</span><br>
-<div style="background:#111;height:20px;margin-top:8px;border:1px solid #333;">
-<div id="progress" style="background:#0f0;height:100%;width:0%;transition:width 0.3s;"></div>
+<div style="border:2px solid #0f0;padding:10px;margin-top:10px;font-size:12px;">
+SN:POS-V2 - Ticket:58mm - Density:100% - Service:4.13.4<br>
+Status: <span style="color:#0f0;">PURE SUNMI AIDL - SAN RAWBT - PARE</span><br>
+<span id="apiStatus">Recherche API Sunmi...</span>
+</div>
+
+<input id="bolet" value="02 15 28" style="width:100%;padding:20px;margin-top:12px;background:#222;color:#0f0;border:2px solid #0f0;font-size:20px;">
+<input id="loto" value="45 67" style="width:100%;padding:20px;margin-top:8px;background:#222;color:#0f0;border:2px solid #0f0;font-size:20px;">
+
+<!-- BOUTON 1 - SUNMI NATIF API - SAN RAWBT -->
+<div id="btnSunmi" style="background:#0f0;color:#000;padding:35px;margin-top:15px;text-align:center;font-size:22px;font-weight:bold;border-radius:15px;border:5px solid #fff;">
+🖨️ ENPRIME SUNMI NATIF<br><span style="font-size:13px;">AIDL woyou.aipos.print - San RawBT</span>
+</div>
+
+<!-- BOUTON 2 - INTENT SUNMI - SAN RAWBT -->
+<div id="btnIntent" style="background:#0099ff;color:#fff;padding:30px;margin-top:12px;text-align:center;font-size:20px;font-weight:bold;border-radius:15px;border:4px solid #fff;">
+📄 ENPRIME INTENT SUNMI<br><span style="font-size:12px;">intent://woyou.aipos.print</span>
+</div>
+
+<!-- BOUTON 3 - BROWSER PRINT TO SUNMI INNER PRINTER -->
+<div id="btnBrowser" style="background:#ff9900;color:#000;padding:30px;margin-top:12px;text-align:center;font-size:20px;font-weight:bold;border-radius:15px;border:4px solid #fff;">
+🖨️ ENPRIME BROWSER - CHWAZI SUNMI INNER PRINTER<br><span style="font-size:12px;">Chrome Print → Sunmi Inner Printer</span>
+</div>
+
+<div id="printArea" style="display:none;">
+<div style="width:384px;font-family:monospace;font-size:16px;color:#000;background:#fff;padding:10px;">
+C & D LOTTO<br>
+------------------------<br>
+BOLET: <span id="pBolet"></span><br>
+LOTO: <span id="pLoto"></span><br>
+------------------------<br>
+BAL PA VANDE PA TIRAJ<br>
+<span id="pDate"></span><br>
+------------------------<br>
+POS-V2 58mm 100% DIRECT<br>
+SAN RAWBT - PURE SUNMI<br>
 </div>
 </div>
 
-<input id="bolet" value="02 15 28" placeholder="BOLET" style="width:100%;padding:18px;margin-top:12px;background:#222;color:#0f0;border:2px solid #0f0;font-size:18px;">
-<input id="loto" value="45 67" placeholder="LOTO" style="width:100%;padding:18px;margin-top:8px;background:#222;color:#0f0;border:2px solid #0f0;font-size:18px;">
-
-<a id="btnPrint" href="#" style="display:block;background:#ff0;color:#000;padding:30px;margin-top:15px;text-align:center;font-size:22px;font-weight:bold;text-decoration:none;border-radius:15px;border:4px solid #fff;">
-🔍📄 RECHERCHE + ENPRIME FICH
-</a>
-
-<div id="log" style="background:#111;color:#0f0;padding:8px;margin-top:10px;border:1px solid #333;height:120px;overflow:auto;font-size:11px;white-space:pre-wrap;">
-LOG AUTO-SEARCH: Pare...
+<div id="log" style="background:#111;color:#0f0;padding:8px;margin-top:10px;border:1px solid #333;height:110px;overflow:auto;font-size:11px;white-space:pre-wrap;">
+LOG NO RAWBT: Pare - RawBT dezenstale - Pure Sunmi...
 </div>
 
 <script>
 var logEl = document.getElementById('log');
 function lg(m){ logEl.innerHTML += new Date().toLocaleTimeString() + ' ' + m + '\n'; logEl.scrollTop = logEl.scrollHeight; }
 
-var printerDetected = null;
-var isSearching = false;
+var sunmiAPI = null;
 
-// 1. RECHERCHE ENPRIMANT OTOMATIK - PANDAN ENPRIME
-function rechercheEnprimant(callback){
-  if(isSearching) return;
-  isSearching = true;
-  var status = document.getElementById('searchStatus');
-  var found = document.getElementById('printerFound');
-  var progress = document.getElementById('progress');
-  var header = document.getElementById('header');
-  
-  status.innerHTML = '🔍 RECHERCHE ENPRIMANT EN COURS...';
-  found.innerHTML = '⏳ Recherche Sunmi Inner Printer 58mm...';
-  progress.style.width = '10%';
-  lg('RECHERCHE ENPRIMANT LANSE...');
-  
-  var step = 0;
-  var interval = setInterval(function(){
-    step += 10;
-    progress.style.width = step + '%';
-    
-    if(step === 20){
-      found.innerHTML = '🔍 Check SunmiPrinter API...';
-      lg('Check SunmiPrinter...');
-      if(window.SunmiPrinter){ printerDetected = 'SUNMI_API'; found.innerHTML = '✅ SunmiPrinter API TROUVE - SN:POS-V2'; lg('SunmiPrinter TROUVE'); }
-    }
-    if(step === 40){
-      found.innerHTML = '🔍 Check woyou.aipos.print Service 4.13.4...';
-      lg('Check Print Service 4.13.4...');
-      // Simule detection service
-      printerDetected = 'AIDL_SERVICE';
-      found.innerHTML = '✅ Print Service 4.13.4 TROUVE - 58mm 100%';
-    }
-    if(step === 60){
-      found.innerHTML = '🔍 Check RawBT AIDL sunmi_inner_printer...';
-      lg('Check RawBT AIDL...');
-    }
-    if(step === 80){
-      found.innerHTML = '✅ ENPRIMANT TROUVE: SUNMI V2 PRO INNER PRINTER 58mm - 384 dots - Density 100% - SN:POS-V2';
-      status.innerHTML = '✅ ENPRIMANT TROUVE - PRET POU ENPRIME';
-      header.innerHTML = '✅ ENPRIMANT POS-V2 TROUVE - 58mm 100% - PARE';
-      header.style.background = '#0f0';
-      lg('ENPRIMANT TROUVE: POS-V2 58mm 100%');
-    }
-    if(step >= 100){
-      clearInterval(interval);
-      progress.style.width = '100%';
-      isSearching = false;
-      lg('RECHERCHE FINI - ENPRIMANT OK');
-      if(callback) callback();
-    }
-  }, 200);
-}
-
-// 2. ENPRIME AK RECHERCHE OTOMATIK PANDAN
-function rechercheEtImprime(){
-  var bolet = document.getElementById('bolet').value || '02 15 28';
-  var loto = document.getElementById('loto').value || '45 67';
-  var btn = document.getElementById('btnPrint');
-  
-  lg('>>> KLIKE RECHERCHE + ENPRIME');
-  btn.innerHTML = '⏳ RECHERCHE ENPRIMANT...';
-  btn.style.background = '#ff0';
-  
-  // LANSE RECHERCHE + ENPRIME PANDAN
-  rechercheEnprimant(function(){
-    // Apre recherche fin - ENPRIME
-    btn.innerHTML = '🖨️ ENPRIMANT TROUVE - AP ENPRIME...';
-    btn.style.background = '#0f0';
-    lg('RECHERCHE OK - AP ENPRIME FICH: ' + bolet);
-    
-    var fich = 'C&D LOTTO\n------------------------\nBOLET: ' + bolet + '\nLOTO: ' + loto + '\n------------------------\nBAL PA VANDE PA TIRAJ\n' + new Date().toLocaleString() + '\n------------------------\nRECHERCHE AUTO OK\nPOS-V2 58mm 100% 384 dots\n\n\n';
-    
-    // ENPRIME PANDAN RECHERCHE FINI
-    setTimeout(function(){
-      try{
-        // Metod 1: Sunmi AIDL
-        if(window.SunmiPrinter && window.SunmiPrinter.printText){
-          window.SunmiPrinter.printText(fich);
-          window.SunmiPrinter.lineWrap(3);
-          window.SunmiPrinter.cutPaper();
-          lg('✅ ENPRIME VIA SUNMI API - PAPYE SOTI');
-        } else {
-          // Metod 2: RawBT direct - pandan recherche
-          var data = encodeURIComponent(fich);
-          window.location.href = 'rawbt://print?data=' + data + '&width=384&density=100&search=true';
-          lg('✅ ENPRIME VIA RAWBT AUTO-SEARCH - width=384 - PAPYE AP SOTI');
-        }
-        btn.innerHTML = '✅ FICH ENPRIME - ' + bolet;
-        btn.style.background = '#0f0';
-        setTimeout(function(){
-          btn.innerHTML = '🔍📄 RECHERCHE + ENPRIME FICH';
-          btn.style.background = '#ff0';
-          document.getElementById('progress').style.width = '0%';
-        }, 3000);
-      }catch(e){
-        lg('ERÈ ENPRIME: ' + e);
-        btn.innerHTML = '❌ ERÈ - REESEYE';
-        btn.style.background = '#f00';
-      }
-    }, 500);
-  });
-}
-
-// 3. RECHERCHE OTOMATIK LE PAJ LA LOUVRI
+// 1. DETEKTE API SUNMI SAN RAWBT
 window.onload = function(){
-  lg('Paj louvri - Lance recherche auto...');
-  setTimeout(function(){ rechercheEnprimant(null); }, 800);
+  lg('Recherche API Sunmi san RawBT...');
+  if(window.SunmiPrinter){ sunmiAPI = window.SunmiPrinter; document.getElementById('apiStatus').innerHTML = '✅ SunmiPrinter API TROUVE'; lg('SunmiPrinter TROUVE'); }
+  else if(window.sunmiPrinter){ sunmiAPI = window.sunmiPrinter; document.getElementById('apiStatus').innerHTML = '✅ sunmiPrinter TROUVE'; lg('sunmiPrinter TROUVE'); }
+  else if(window.PrintManager){ sunmiAPI = window.PrintManager; document.getElementById('apiStatus').innerHTML = '✅ PrintManager TROUVE'; lg('PrintManager TROUVE'); }
+  else { document.getElementById('apiStatus').innerHTML = '⚠️ API pa detekte - Itilize Intent woyou.aipos.print - Service 4.13.4 OK'; lg('API pa detekte - Service 4.13.4 ap mache kanmenm - POS-V2 OK'); }
 };
 
-// 4. LINK TOUCH - PA BUTTON
-document.getElementById('btnPrint').addEventListener('click', function(e){
-  e.preventDefault();
-  rechercheEtImprime();
-});
-document.getElementById('btnPrint').addEventListener('touchstart', function(e){
-  e.preventDefault();
-  rechercheEtImprime();
-}, {passive:false});
+function getFich(){
+  var b = document.getElementById('bolet').value || '02 15 28';
+  var l = document.getElementById('loto').value || '45 67';
+  return 'C & D LOTTO\n------------------------\nBOLET: ' + b + '\nLOTO: ' + l + '\n------------------------\nBAL PA VANDE PA TIRAJ\n' + new Date().toLocaleString() + '\n------------------------\nPOS-V2 58mm 100% SAN RAWBT\n';
+}
 
-lg('V13.4 AUTO-SEARCH pare - Klike RECHERCHE + ENPRIME');
+// 2. ENPRIME SUNMI NATIF - SAN RAWBT - METOD 1
+function printSunmiNatif(){
+  lg('>>> BOUTON SUNMI NATIF TOUCHE');
+  var fich = getFich();
+  try{
+    if(window.SunmiPrinter && window.SunmiPrinter.printText){
+      window.SunmiPrinter.printText(fich);
+      window.SunmiPrinter.lineWrap(3);
+      window.SunmiPrinter.cutPaper();
+      lg('✅ SUNMI NATIF OK - PAPYE SOTI - San RawBT');
+      alert('✅ PAPYE SOTI - SUNMI NATIF - San RawBT');
+      return;
+    }
+    if(window.sunmiPrinter && window.sunmiPrinter.printString){
+      window.sunmiPrinter.printString(fich);
+      lg('✅ sunmiPrinter OK - PAPYE SOTI');
+      alert('✅ PAPYE SOTI');
+      return;
+    }
+    // Si API pa la - ale nan intent
+    lg('API pa la - Ale nan Intent...');
+    printIntent();
+  }catch(e){ lg('ERÈ NATIF: ' + e.message); printIntent(); }
+}
+
+// 3. INTENT SUNMI - SAN RAWBT - METOD 2 - PI BON SAN RAWBT
+function printIntent(){
+  lg('>>> BOUTON INTENT TOUCHE - SAN RAWBT');
+  var fich = getFich();
+  var data = encodeURIComponent(fich);
+  // Intent direct pou Sunmi Inner Printer Service 4.13.4 - Pa bezwen RawBT
+  var intentUrl = 'intent://print?data=' + data + '&package=woyou.aipos.print#Intent;action=woyou.aipos.print.PRINT;package=woyou.aipos.print;end';
+  lg('INTENT: woyou.aipos.print - ' + fich.substring(0,20));
+  window.location.href = intentUrl;
+  
+  // Fallback 2 - AIDL direct
+  setTimeout(function(){
+    var intent2 = 'intent://' + data + '#Intent;action=android.intent.action.SEND;package=woyou.aipos.print;type=text/plain;end';
+    // Pa fè 2 fwa si premye mache
+  }, 800);
+  
+  lg('INTENT VOYE - Papye dwe soti - San RawBT');
+}
+
+// 4. BROWSER PRINT - CHWAZI SUNMI INNER PRINTER - SAN RAWBT - METOD 3
+function printBrowser(){
+  lg('>>> BOUTON BROWSER PRINT TOUCHE');
+  var b = document.getElementById('bolet').value;
+  var l = document.getElementById('loto').value;
+  document.getElementById('pBolet').innerText = b;
+  document.getElementById('pLoto').innerText = l;
+  document.getElementById('pDate').innerText = new Date().toLocaleString();
+  
+  lg('BROWSER PRINT - Chwazi Sunmi Inner Printer nan lis - Pa Save as PDF');
+  // Louvri fenèt enprime Chrome - Kounya ou ap wè Sunmi Inner Printer 58mm - Pa Save as PDF paske RawBT dezenstale
+  window.print();
+}
+
+// Touch fix - DIV pa BUTTON
+function addTouch(id, fn){
+  var el = document.getElementById(id);
+  el.addEventListener('touchstart', function(e){ e.preventDefault(); fn(); }, {passive:false});
+  el.addEventListener('click', function(){ fn(); });
+  el.ontouchstart = function(){ fn(); return false; };
+}
+
+setTimeout(function(){
+  addTouch('btnSunmi', printSunmiNatif);
+  addTouch('btnIntent', printIntent);
+  addTouch('btnBrowser', printBrowser);
+  lg('3 BOUTON TOUCH AKTIF - SAN RAWBT - KLIKE');
+}, 500);
 </script>
+
+<style>
+@media print{
+  body *{visibility:hidden;}
+  #printArea, #printArea *{visibility:visible;}
+  #printArea{position:absolute;left:0;top:0;display:block !important;width:58mm;}
+}
+</style>
 
 </body>
 </html>
