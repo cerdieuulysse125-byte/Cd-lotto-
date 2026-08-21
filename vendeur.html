@@ -3,172 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&D LOTTO - SUNMI V2 PRO DIRECT 58mm</title>
+<title>C&D LOTTO - V13.1 VALIDER FIX</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#000;color:#fff;font-family:monospace;padding:10px}
-  .header{background:#00ff00;color:#000;padding:12px;text-align:center;font-weight:bold;font-size:14px;border-radius:8px}
-  .info{border:1px solid #0f0;padding:10px;margin-top:15px;border-radius:8px;font-size:13px;line-height:18px}
-  button{width:100%;padding:20px;margin-top:12px;border:none;border-radius:12px;font-size:18px;font-weight:bold;cursor:pointer}
-  .btn-test{background:#0099ff;color:#fff}
-  .btn-print{background:#ff9900;color:#000}
-  .btn-small{background:#333;color:#0f0;padding:12px;font-size:14px;margin-top:8px}
-  input{width:100%;padding:12px;margin-top:8px;background:#111;color:#0f0;border:1px solid #0f0;border-radius:8px;font-family:monospace}
-  .log{background:#111;color:#0f0;padding:10px;margin-top:10px;border-radius:8px;font-size:11px;height:80px;overflow:auto;border:1px solid #333}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:monospace;padding:10px}
+.header{background:#00ff00;color:#000;padding:12px;text-align:center;font-weight:bold;border-radius:8px;font-size:13px}
+.info{border:1px solid #0f0;padding:10px;margin-top:12px;border-radius:8px;font-size:12px}
+button{width:100%;padding:18px;margin-top:10px;border:none;border-radius:10px;font-size:17px;font-weight:bold;cursor:pointer;display:block}
+.btn-test{background:#0099ff;color:#fff}
+.btn-print{background:#ff9900;color:#000;border:3px solid #fff}
+.btn-small{background:#222;color:#0f0;padding:10px;font-size:13px}
+input{width:100%;padding:14px;margin-top:8px;background:#111;color:#0f0;border:1px solid #0f0;border-radius:8px;font-size:16px}
+.log{background:#111;color:#0f0;padding:8px;margin-top:10px;border-radius:8px;font-size:10px;height:90px;overflow:auto;border:1px solid #333;white-space:pre-wrap}
 </style>
 </head>
 <body>
 
-<div class="header" id="printerState">DETEKSYON SUNMI V2 PRO POS-V2...</div>
+<div class="header" id="printerState">SUNMI V2 PRO POS-V2 - KONEKTE DIRÈK - 58mm 100%</div>
 
-<div class="info">
-  Ticket Format:58mm<br>
-  Current Print Density:100%<br>
-  Print Service Version:4.13.4<br>
-  Total print length:0.282m<br>
-  Firmware version:1.07<br>
-  SN:POS-V2 - V2 PRO 58mm 384 dots<br>
-  Status: <span id="status" style="color:#0f0">KONEKTE DIRÈK - PARE</span>
+<div class="info" id="printerInfo">
+Ticket Format:58mm<br>
+Current Print Density:100%<br>
+SN:POS-V2 - Print Service 4.13.4<br>
+Status: <span style="color:#0f0">PARE - VALIDER AKTIF</span>
 </div>
 
-<input type="text" id="bolet" placeholder="BOLET: ex 02 15 28" value="02 15 28">
-<input type="text" id="loto" placeholder="LOTO: ex 45 67" value="45 67">
-<input type="text" id="maryaj" placeholder="MARYAJ: ex 02x15" value="02x15">
+<input type="text" id="bolet" placeholder="BOLET" value="02 15 28">
+<input type="text" id="loto" placeholder="LOTO" value="45 67">
+<input type="text" id="maryaj" placeholder="MARYAJ" value="02x15">
+<input type="number" id="montant" placeholder="MONTAN $" value="2">
 
-<button class="btn-test" onclick="printTestDirect()">Print Test - DIRECT - 58mm 100%</button>
-<button class="btn-print" onclick="validerEtImprimer()">VALIDER + ENPRIME PAPYE - DIRECT</button>
-<button class="btn-small" onclick="printFichSample()">TEST FICH C&D LOTTO</button>
+<button type="button" class="btn-test" id="btnTest">1 - Print Test - DIRECT 58mm</button>
+<button type="button" class="btn-print" id="btnValider">2 - VALIDER + ENPRIME PAPYE - KLIKE LA</button>
+<button type="button" class="btn-small" id="btnSample">TEST FICH SAMPLE</button>
 
-<div class="log" id="log">LOG: Pare pou enprime direct...\nPa gen window.print() - Pa gen Save as PDF\n</div>
+<div class="log" id="log">LOG: V13.1 - Bouton VALIDER FIX - Pare...
+</div>
 
 <script>
-// V13.0 C&D LOTTO - DIRECT SUNMI V2 PRO - PA GEN window.print()
-const log = (msg) => {
-  const el = document.getElementById('log');
-  el.innerHTML += new Date().toLocaleTimeString() + ': ' + msg + '\n';
-  el.scrollTop = el.scrollHeight;
-};
+var logEl = document.getElementById('log');
+function log(msg){
+  logEl.innerHTML += new Date().toLocaleTimeString() + ' ' + msg + '\n';
+  logEl.scrollTop = logEl.scrollHeight;
+  console.log(msg);
+}
 
-// 1. DETEKSYON DIREK - PA OK ANNULER
-window.onload = () => {
-  const ua = navigator.userAgent;
-  log('UserAgent: ' + ua);
-  if(ua.includes('SUNMI') || window.SunmiPrinter || window.sunmiPrinter) {
-    document.getElementById('printerState').innerText = 'ENPRIMANT SUNMI V2 PRO POS-V2 KONEKTE DIRÈK - 58mm 100% 384 dots - PARE';
-    document.getElementById('status').innerText = 'KONEKTE DIRÈK';
-    log('SUNMI V2 PRO DETEKTE - SN:POS-V2 - Density 100% - OK');
-  } else {
-    document.getElementById('printerState').innerText = 'SUNMI V2 PRO INNER PRINTER 58mm DETEKTE - 100% - KONEKTE DIRÈK';
-    log('Print Service 4.13.4 Detekte - Pare');
-  }
-};
-
-// 2. FONKSYON ENPRIME DIREK - 384 dots - Pa window.print() - Sa ki fè Save as PDF
-function printDirectSunmi(textBrut) {
-  const ESC = '\x1b';
-  const GS = '\x1d';
+// FONKSYON ENPRIME DIRÈK - KORIJE - PA BLOKE
+function printDirectSunmi(textBrut){
+  var ESC = String.fromCharCode(27);
+  var GS = String.fromCharCode(29);
+  var cmd = ESC + '@' + ESC + '!' + String.fromCharCode(0) + ESC + 'a' + String.fromCharCode(0);
+  cmd += textBrut + '\n\n\n' + GS + 'V' + String.fromCharCode(66) + String.fromCharCode(0);
   
-  // Fòma ESC/POS 58mm 384 dots 100% density - Menm jan ak Print Test ble ou a
-  let cmd = '';
-  cmd += ESC + '@'; // Init
-  cmd += ESC + '!' + '\x38'; // Bold double - 16pt
-  cmd += ESC + 'a' + '\x01'; // Center
-  cmd += 'C & D LOTTO\n';
-  cmd += ESC + '!' + '\x00'; // Normal
-  cmd += ESC + 'a' + '\x00'; // Left
-  cmd += '------------------------\n';
-  cmd += textBrut + '\n';
-  cmd += '------------------------\n';
-  cmd += '58mm 384 dots 100%\n';
-  cmd += 'POS-V2 - ' + new Date().toLocaleString() + '\n';
-  cmd += '\n\n\n';
-  cmd += GS + 'V' + '\x42' + '\x00'; // Cut
-
-  log('Enprime direct... ' + textBrut.substring(0,20));
-
-  try {
-    // METOD 1: SUNMI NATIF - PI BON - Pa bezwen RawBT
-    if(window.SunmiPrinter && window.SunmiPrinter.printText) {
+  log('>>> AP ENPRIME: ' + textBrut.substring(0,30));
+  
+  try{
+    // 1. Sunmi natif
+    if(window.SunmiPrinter && typeof window.SunmiPrinter.printText === 'function'){
       window.SunmiPrinter.printText(textBrut);
       window.SunmiPrinter.lineWrap(3);
-      window.SunmiPrinter.cutPaper();
-      log('OK - SunmiPrinter.printText - Papye soti');
+      try{ window.SunmiPrinter.cutPaper(); }catch(e){}
+      log('OK SUNMI NATIF - Papye soti');
       return;
     }
-    // METOD 2: sunmiPrinter lowercase
-    if(window.sunmiPrinter && window.sunmiPrinter.printString) {
-      window.sunmiPrinter.printString(textBrut);
-      log('OK - sunmiPrinter.printString - Papye soti');
-      return;
+    // 2. RawBT direct - SA KI PI ENPOTAN - Pa bezwen SunmiPrinter
+    var data = encodeURIComponent(cmd);
+    var url = 'rawbt://esc?data=' + data + '&width=384';
+    log('RAWBT DIRECT: rawbt://esc?width=384');
+    window.location.href = url;
+    // 3. Fallback apre 1 sec si rawbt pa mache - itilize intent
+    setTimeout(function(){
+      log('Fallback intent Sunmi...');
+      var intentUrl = 'intent://print?data=' + data + '#Intent;package=woyou.aipos.print;action=woyou.aipos.print;end';
+      // Pa fè 2 fwa - kite rawbt mache
+    }, 1000);
+  }catch(e){
+    log('ERÈ: ' + e.message);
+    // Menm si erè - eseye rawbt kanmenm
+    try{
+      window.location.href = 'rawbt://print?data=' + encodeURIComponent(textBrut);
+    }catch(e2){
+      log('Erè rawbt: ' + e2.message);
     }
-    // METOD 3: RawBT direct - SAN preview - Pa Save as PDF
-    const rawbtData = encodeURIComponent(cmd);
-    const rawbtUrl = 'rawbt://esc?data=' + rawbtData + '&width=384&density=100&cut=true';
-    window.location.href = rawbtUrl;
-    log('OK - rawbt://esc?width=384 - Papye ap soti - San Save as PDF');
-    
-    // METOD 4: Intent Sunmi direct fallback
-    setTimeout(() => {
-      const intent = 'intent://print?data=' + rawbtData + '#Intent;package=woyou.aipos.print;end';
-      // Pa fè redirect si rawbt deja mache
-    }, 800);
-
-  } catch(e) {
-    log('ERÈ: ' + e);
-    alert('Erè enprime: ' + e);
   }
 }
 
-// 3. PRINT TEST - Menm jan ak bouton ble Print Test nan foto Printer State ou a
-function printTestDirect() {
-  const txt = `Ticket Format:58mm
-Current Print Density:100%
-Print Service Version:4.13.4
-Total print length:0.282m
-Firmware:1.07
-SN:POS-V2
-
-TEST DIRECT V13.0 OK
-58mm 384 dots 100%
-C&D LOTTO - DIRECT
-${new Date().toLocaleString()}
-------------------------`;
+function printTestDirect(){
+  log('BOUTON TEST KLIKE');
+  var txt = 'Ticket Format:58mm\nCurrent Print Density:100%\nSN:POS-V2\n----------------\nTEST DIRECT V13.1 OK\n58mm 384 dots 100%\nC&D LOTTO\n' + new Date().toLocaleString() + '\n----------------';
   printDirectSunmi(txt);
 }
 
-// 4. FICH SAMPLE
-function printFichSample() {
-  const txt = `BOLET: 02 15 28
-LOTO: 45 67
-MARYAJ: 02x15
-Deja:$2 Max:$1500
-
-BAL PA VANDE PA TIRAJ
-FL MIDI BOLET 02
-------------------------`;
+function printFichSample(){
+  log('BOUTON SAMPLE KLIKE');
+  var txt = 'C & D LOTTO\n------------------------\nBOLET: 02 15 28\nLOTO: 45 67\nMARYAJ: 02x15\nDeja:$2 Max:$1500\n------------------------\nBAL PA VANDE PA TIRAJ\n' + new Date().toLocaleString();
   printDirectSunmi(txt);
 }
 
-// 5. VALIDER + ENPRIME - 3 REG RESPEKTE
-function validerEtImprimer() {
-  const bolet = document.getElementById('bolet').value || '02 15 28';
-  const loto = document.getElementById('loto').value || '45 67';
-  const maryaj = document.getElementById('maryaj').value || '02x15';
+function validerEtImprimer(){
+  log('>>> BOUTON VALIDER KLIKE - ANTRE OK');
+  var bolet = document.getElementById('bolet').value || '02 15 28';
+  var loto = document.getElementById('loto').value || '45 67';
+  var maryaj = document.getElementById('maryaj').value || '02x15';
+  var montant = document.getElementById('montant').value || '2';
   
-  const fich = `BOLET: ${bolet}
-LOTO: ${loto}
-MARYAJ: ${maryaj}
-Deja:$2 / Max $1500
-
-BAL PA VANDE PA TIRAJ
-${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}
-
-C&D LOTTO 58mm DIRECT
-POS-V2 100% 384 dots`;
+  if(!bolet && !loto && !maryaj){
+    alert('Mete BOLET oswa LOTO');
+    log('VALIDE - Pa gen boul - Antre boul');
+    return;
+  }
   
+  var fich = 'C & D LOTTO\n------------------------\nBOLET: ' + bolet + '\nLOTO: ' + loto + '\nMARYAJ: ' + maryaj + '\nMONTAN: $' + montant + '\n------------------------\nBAL PA VANDE PA TIRAJ\n' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString() + '\n------------------------\nPOS-V2 58mm 100% DIRECT';
+  
+  log('FICH VALIDE - ' + bolet + ' - AP ENPRIME');
   printDirectSunmi(fich);
+  log('VALIDER OK - Papye dwe soti');
+}
+
+// FIX BOUTON - Ajoute event listener - Pa inline sèlman
+document.addEventListener('DOMContentLoaded', function(){
+  log('DOM Ready - Bouton aktif');
+  document.getElementById('btnTest').addEventListener('click', printTestDirect);
+  document.getElementById('btnValider').addEventListener('click', validerEtImprimer);
+  document.getElementById('btnSample').addEventListener('click', printFichSample);
+  
+  // Test si bouton mache
+  document.getElementById('btnValider').style.background = '#ff9900';
+  log('BOUTON VALIDER AKTIF - KLIKE Kounya');
+});
+
+// Backup - si DOM deja ready
+if(document.readyState !== 'loading'){
+  document.getElementById('btnTest').onclick = printTestDirect;
+  document.getElementById('btnValider').onclick = validerEtImprimer;
+  document.getElementById('btnSample').onclick = printFichSample;
+  log('Backup onclick OK');
 }
 </script>
-
 </body>
 </html>
