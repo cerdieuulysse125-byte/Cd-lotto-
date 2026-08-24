@@ -2,111 +2,455 @@
 <html lang="ht">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROPRIO V14.0 - 7 ONGLE - 17 TIRAJ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>C&D V48 - LOGO KONPLE + VENDEURS % OUVE FERME SERI + PARAMET TIRAJES JOURS HEURE</title>
 <style>
-*{box-sizing:border-box;font-family:Arial Black,Arial;margin:0;padding:0}
-body{background:#000;color:#fff;padding:8px}
-.top{background:#FFD500;color:#000;text-align:center;padding:12px;border:4px solid #fff;border-radius:20px;font-weight:900;font-size:14px;margin-bottom:8px}
-.menu{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:8px}
-.menu button{padding:10px 2px;font-weight:900;font-size:9px;border:3px solid #fff;background:#fff;color:#000;border-radius:50px;cursor:pointer}
-.menu button.active{background:#FFD500}
-.onglet{display:none}.onglet.active{display:block}
-.card{background:#fff;color:#000;border:4px solid #FFD500;border-radius:20px;padding:10px;margin-bottom:8px}
-.card h3{background:#FFD500;border:3px solid #000;border-radius:25px;padding:8px;text-align:center;font-size:11px;margin-bottom:8px}
-.kf{width:100%;border:3px solid #000;border-radius:25px;height:48px;text-align:center;font-weight:900;margin:4px 0;font-size:11px;background:#fff}
-.btn{border:3px solid #000;border-radius:25px;height:48px;font-weight:900;width:100%;font-size:10px;cursor:pointer;margin:4px 0}
-.btn-y{background:#FFD500}.btn-b{background:#000;color:#FFD500}.btn-r{background:red;color:#fff}.btn-g{background:#0A8A00;color:#fff}
-.item{border:3px solid #000;border-radius:12px;padding:8px;margin:6px 0;background:#FFF8DC;font-weight:900;font-size:9px;color:#000}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-#loginProprio{position:fixed;left:0;top:0;width:100%;height:100%;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}
-.loginBox{background:#fff;border:5px solid #FFD500;border-radius:25px;padding:20px;width:100%;max-width:380px;text-align:center;color:#000}
-#printArea{display:none}
-@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%;display:block!important;background:#fff}}
+*{box-sizing:border-box;margin:0;padding:0}body{background:#000;color:#fff;font-family:Arial,sans-serif}
+.top{background:#ff0;color:#000;padding:8px;text-align:center;font-weight:900;font-size:12px;position:sticky;top:0;z-index:100;border-radius:0 0 16px 16px}
+.tabs{display:flex;flex-wrap:wrap;background:#000;padding:6px;gap:6px;position:sticky;top:48px;z-index:99}
+.tab{flex:1 1 22%;min-width:70px;padding:10px 4px;text-align:center;font-weight:900;font-size:10px;color:#000;background:#fff;border-radius:20px;border:3px solid #000;cursor:pointer}
+.tab.active{background:#ff0;border-color:#000;color:#000}
+.tab.imp{background:#1976d2;color:#fff;border-color:#fff}
+.tabContent{display:none;padding:6px;background:#000;color:#000;min-height:calc(100vh - 100px)}.tabContent.active{display:block}
+.card{background:#fff;border-radius:18px;padding:12px;margin-top:8px;border:3px solid #000}
+.btn{padding:14px;border-radius:20px;text-align:center;font-weight:900;cursor:pointer;margin-top:8px;font-size:12px;border:3px solid #000}
+.blue{background:#1976d2;color:#fff}.green{background:#0a7e07;color:#fff}.yellow{background:#ff0;color:#000}.red{background:#c62828;color:#fff}.black{background:#000;color:#ff0}
+.input{width:100%;padding:14px;border:3px solid #000;border-radius:20px;margin-top:8px;font-size:14px;font-weight:bold;text-align:center;background:#fff;color:#000}
+.vendreRow{display:flex;gap:4px;margin-top:8px;justify-content:center}
+.vendreRow select,.vendreRow input{width:72px;min-width:72px;max-width:72px;padding:8px 2px;text-align:center;font-weight:900;font-size:11px;border:3px solid #000;border-radius:12px;background:#fff}
+.listV{background:#000;color:#0f0;border-radius:12px;padding:6px;min-height:48px;max-height:110px;overflow:auto;margin-top:8px;font-size:11px;font-family:monospace}
+.totalBox{background:#0f0;color:#000;padding:10px;border-radius:12px;text-align:center;font-weight:900;font-size:12px;margin-top:8px;border:3px solid #000}
+.loginBox{background:#000;color:#fff;padding:20px;border-radius:24px;margin:10px;border:4px solid #ff0}
+.tirajMultiWrap{position:relative}.tirajMultiBtn{width:100%;padding:12px;border:3px solid #000;border-radius:12px;background:#fff;font-weight:900;font-size:12px;display:flex;justify-content:space-between;cursor:pointer}
+.tirajDrop{position:absolute;top:105%;left:0;right:0;background:#fff;border:3px solid #000;max-height:300px;overflow:auto;z-index:300;display:none;border-radius:12px}
+.tirajDrop.open{display:block}.tirajOpt{padding:10px;border-bottom:1px solid #eee;display:flex;gap:8px;font-size:11px;cursor:pointer;font-weight:bold}.tirajOpt.tous{background:#ff0}.tirajOpt.ferme{background:#ffcdd2;color:#900;opacity:0.6}
+.ticketPreview{background:#fff;color:#000;font-family:monospace;font-size:13px;padding:14px;border:3px dashed #000;width:300px;margin:12px auto;text-align:center;line-height:1.5;border-radius:12px}
+.rapportBox{background:#000;color:#0f0;border-radius:14px;padding:14px;margin-top:10px;font-size:13px;line-height:2;border:3px solid #0a0}
+.rapportLine{display:flex;justify-content:space-between;border-bottom:1px dashed #333;padding:5px 0}
+.vendeurItem{background:#fffbe6;border:3px solid #000;border-radius:18px;padding:10px;margin-top:10px}
+.jourCheck{display:inline-flex;align-items:center;gap:4px;background:#fff;border:2px solid #000;border-radius:20px;padding:6px 10px;margin:3px;font-size:10px;font-weight:900}
 </style>
 </head>
 <body>
-<div id="loginProprio">
-<div class="loginBox">
-<h2 style="background:#FFD500;border:3px solid #000;border-radius:20px;padding:10px;font-size:14px">🔒 PROPRIO V14.0 - 7 ONGLÈ</h2>
-<div style="font-weight:900;font-size:9px;margin:8px 0" id="heurePropLogin">Heure PAP EST...</div>
-<input id="inpPropPass" class="kf" type="password" placeholder="MODPAS PROPRIO - Chif ak Lèt" style="font-size:14px">
-<button type="button" class="btn btn-b" id="btnPropLogin" style="height:56px;border-radius:50px">🔓 KONEKTE PROPRIO</button>
-<div id="msgPropLogin" style="margin-top:8px;font-weight:900;font-size:10px;color:red"></div>
+<div class="top">PROPRIO V48 - 7 ONGLÈ - LOGO KONPLÈ - <span id="clock">--:--</span> - 2026-08-24<br>17 TIRAJ - FÈMTI RESPEKTE - MODPAS RESPEKTE - RAPPORT Du Au</div>
+
+<div id="loginScreen" style="position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;">
+<div class="loginBox" style="width:100%;max-width:380px;">
+<div style="font-size:20px;font-weight:900;text-align:center;">🔐 KONEKSYON - V48<br><span style="font-size:11px;color:#ff0;">Non vandè VID + Modpas VID + RESPEKTE</span></div>
+<input id="loginName" type="text" placeholder="NON VANDE" class="input" value="" style="margin-top:16px;text-transform:uppercase;">
+<input id="loginPass" type="password" placeholder="MODPAS VANDE Chif sèlman" class="input" value="" inputmode="numeric">
+<div class="btn yellow" onclick="doLoginRespect()" style="padding:18px;margin-top:14px;font-size:16px;border-width:4px;">🔓 KONEKTE - MODPAS RESPEKTE</div>
+<div id="loginErr" style="color:#ff0;font-size:11px;margin-top:10px;text-align:center;font-weight:900;background:#111;padding:10px;border-radius:12px;border:2px solid #ff0;">2 kaz VID - Tape Non + Modpas Chif - Logo konplè - Modpas respekte</div>
+<div style="display:flex;gap:6px;margin-top:10px;"><div class="btn red" onclick="resetAll()" style="flex:1;padding:8px;font-size:9px;">🗑️ RESET</div><div class="btn black" onclick="showVendeurs()" style="flex:1;padding:8px;font-size:9px;">👁️ Wè vandè</div></div>
 </div>
 </div>
-<div class="top">PROPRIO V14.0 - 7 ONGLÈ - 17 TIRAJ - <span id="heureTopProp"></span> EST PAP</div>
-<div class="menu">
-<button id="m1" class="active">1.VENDEURS</button>
-<button id="m2">2.LIMITES</button>
-<button id="m3">3.HEURES EST PAP</button>
-<button id="m4">4.PRIX PAR VEND</button>
-<button id="m5">5.RAPPORT</button>
-<button id="m6">6.RÉSULTATS</button>
-<button id="m7">7.ENTÊTE + MDP</button>
-<button id="mX" style="background:red;color:#fff">X</button>
+
+<div class="tabs">
+<div class="tab active" onclick="openTab(event,'vendre')">1.VENDEURS*</div>
+<div class="tab" onclick="openTab(event,'limites')">2.LIMITES</div>
+<div class="tab" onclick="openTab(event,'heures')">3.HEURES EST PAP</div>
+<div class="tab" onclick="openTab(event,'prix')">4.PRIX PAR VEND</div>
+<div class="tab" onclick="openTab(event,'rapport')">5.RAPPORT</div>
+<div class="tab" onclick="openTab(event,'resultats')">6.RÉSULTATS</div>
+<div class="tab imp" onclick="openTab(event,'parametres')">7.PARAMÈTRES</div>
+<div class="tab" style="background:#c62828;color:#fff;" onclick="logout()">X</div>
 </div>
-<div id="o1" class="onglet active"><div class="card"><h3>1.Gestion Vendeurs - Non - modpas - % - ouvert/fermé - X</h3><input id="vNom" class="kf" placeholder="NON VANDE" style="text-transform:uppercase"><input id="vPass" class="kf" placeholder="MODPAS VANDE Chif sèlman" inputmode="numeric" pattern="[0-9]*"><input id="vPour" class="kf" placeholder="POUR % - ex 10" value="10" inputmode="numeric" pattern="[0-9]*"><button class="btn btn-y" id="btnAddV">➕ AJOUTER NOUVEAU VENDEUR</button><div id="listV"></div></div></div>
-<div id="o2" class="onglet"><div class="card"><h3>2.Limite Mise Par vendeur (modifiable) - GLOBAL=v1+v2 PA TIRAJ</h3><select id="selLimV" class="kf"><option value="GLOBAL">GLOBAL - GLOBAL=v1+v2 PA TIRAJ</option></select><div class="grid3"><div><div style="font-size:8px;font-weight:900">Borlettes 1000</div><input id="limBolet" class="kf" value="1000" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">Mariage 50</div><input id="limMaryaj" class="kf" value="50" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">Loto3 100</div><input id="limLoto3" class="kf" value="100" inputmode="numeric" pattern="[0-9]*"></div></div><div class="grid2"><div><div style="font-size:8px;font-weight:900">Loto4</div><input id="limLoto4" class="kf" value="1000" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">Loto5</div><input id="limLoto5" class="kf" value="1000" inputmode="numeric" pattern="[0-9]*"></div></div><button class="btn btn-y" id="btnSaveLim">💾 SAUVEGARDE LIMITES PA TIRAJ</button><div id="msgLim" style="font-size:10px;font-weight:900;text-align:center"></div><div style="font-size:8px;font-weight:900;margin-top:8px;background:#FFF8DC;border:2px solid #000;border-radius:10px;padding:8px">Limite Mise (global)=> vendeur1+vendeur2+....= Limite global PA TIRAJ - Ex: Jan 300$ GA MIDI + Joseph 200$ = 500$ Global GA MIDI - Lòt pa ka vann 00 GA MIDI - Men ka vann FL MIDI<br>Mariage dans l'ordre ou en désordre (bon) Ex: 12x47=47x12</div></div></div>
-<div id="o3" class="onglet"><div class="card"><h3>3.L'heure fermeture modifiable - EST PAP - Port au Prince</h3><div style="font-size:10px;font-weight:900;background:#FFD500;border:3px solid #000;border-radius:15px;padding:10px;text-align:center;margin-bottom:10px">Heure PAP kounya: <span id="heurePAPDisplay"></span> EST - <span id="datePAPDisplay"></span><br>L'heure fermeture dwe respekte - heure de l'est, Port au Prince</div><div id="heuresBox"></div><button class="btn btn-y" id="btnSaveH" style="height:56px;border-radius:50px">💾 SAUVEGARDE HEURES - EST PAP RESPEKTE</button><div id="msgH" style="font-size:10px;font-weight:900;text-align:center"></div></div></div>
-<div id="o4" class="onglet"><div class="card"><h3>4.Prix paiement par vendeur (modifiable) - 1er 50 2e 20 3e 10 M1=M2=M3=1000 L3=500</h3><select id="selPrixV" class="kf"><option value="GLOBAL">GLOBAL</option></select><div class="grid3"><div><div style="font-size:8px;font-weight:900">1er lot 50</div><input id="prixLot1" class="kf" value="50" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">2e lot 20</div><input id="prixLot2" class="kf" value="20" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">3e lot 10</div><input id="prixLot3" class="kf" value="10" inputmode="numeric" pattern="[0-9]*"></div></div><div class="grid2"><div><div style="font-size:8px;font-weight:900">Mariage 1000</div><input id="prixMaryaj" class="kf" value="1000" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">Loto3 L3 500</div><input id="prixLoto3" class="kf" value="500" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">Loto4 5000</div><input id="prixLoto4" class="kf" value="5000" inputmode="numeric" pattern="[0-9]*"></div><div><div style="font-size:8px;font-weight:900">Loto5 25000</div><input id="prixLoto5" class="kf" value="25000" inputmode="numeric" pattern="[0-9]*"></div></div><button class="btn btn-y" id="btnSavePrix" style="height:56px;border-radius:50px">💾 SAUVEGARDE PRIX PAR VENDEUR</button><div id="msgPrix" style="font-size:10px;font-weight:900;text-align:center"></div></div></div>
-<div id="o5" class="onglet"><div class="card"><h3>5.Rapport - Du Au - Vendeurs tous - Tirages tous - Vente Commission Gain Balance net - Imprimer</h3><input type="date" id="dateDu" class="kf"><input type="date" id="dateAu" class="kf"><select id="selRapV" class="kf"><option value="TOUS">TOUS VENDEURS</option></select><select id="selRapT" class="kf"><option value="TOUS">Tous tirages - 17 tiraj</option></select><button class="btn btn-y" id="btnGenRap">JENERE RAPPORT - CHAK TIRAJ SEPAREMAN</button><div id="rapContent" style="border:3px solid #000;border-radius:15px;padding:10px;background:#FFF8DC;min-height:180px;font-size:10px;font-weight:900"></div><button class="btn btn-b" id="btnPrintRap">🖨️ IMPRIMER RAPPORT</button></div></div>
-<div id="o6" class="onglet"><div class="card"><h3>6.Résultats - 7 cases - 1er 2e 3e (M1 M2 M3) Auto L3 - Mariage ordre ou désordre bon</h3><input type="date" id="dateRes" class="kf"><select id="selTirajRes" class="kf"></select><div style="font-size:9px;font-weight:900;margin:8px 0">7 cases pour écrire les résultats:</div><div class="grid3"><input id="resR1" class="kf" placeholder="1er" inputmode="numeric" pattern="[0-9]*"><input id="resR2" class="kf" placeholder="2e" inputmode="numeric" pattern="[0-9]*"><input id="resR3" class="kf" placeholder="3e" inputmode="numeric" pattern="[0-9]*"></div><div class="grid3"><input id="resM1" class="kf" placeholder="M1 Auto" style="background:#FFD500" readonly><input id="resM2" class="kf" placeholder="M2 Auto" style="background:#FFD500" readonly><input id="resM3" class="kf" placeholder="M3 Auto" style="background:#FFD500" readonly></div><div class="grid3"><input id="resL3" class="kf" placeholder="L3" inputmode="numeric" pattern="[0-9]*"><input id="resL4" class="kf" placeholder="L4" inputmode="numeric" pattern="[0-9]*"><input id="resL5" class="kf" placeholder="L5" inputmode="numeric" pattern="[0-9]*"></div><button class="btn btn-g" id="btnSaveRes">💾 SAUVEGARDE RÉSULTATS - MARIAGE 12x47=47x12</button><div id="listRes"></div><div style="font-size:8px;font-weight:900;margin-top:8px;background:#FFF8DC;border:2px solid #000;border-radius:10px;padding:8px">M1=1er x 2e - M2=1er x 3e - M3=2e x 3e - Auto kalkile - Mariage dans l'ordre ou en désordre (bon) Ex: 12x47=47x12 - Si nan yon fich ta gen plizyè tiraj, rapò chak tiraj kalkile separeman selon rezilta yo</div></div></div>
-<div id="o7" class="onglet"><div class="card"><h3>7.Entête + Modepas proprio modifiable</h3><div style="font-size:10px;font-weight:900">Entête C&D VÉRITÉ LOTTO<br>Adresse - Téléphone - Responsable</div><input id="enteteAdresse" class="kf" placeholder="Adresse"><input id="enteteTel" class="kf" placeholder="Téléphone - ex +52 7298079596" value="+52 7298079596"><input id="enteteResp" class="kf" placeholder="Responsable"><button class="btn btn-y" id="btnSaveEntete">SAUVEGARDE ENTÊTE</button><div style="margin-top:12px"><div style="font-size:11px;font-weight:900">Modepas proprio modifiable - Chif ak Lèt</div><input id="newPropPass" class="kf" type="text" placeholder="Nouvo Modpas Proprio - Chif ak Lèt"><button class="btn btn-r" id="btnChangePropPass" style="height:56px;border-radius:50px">🔒 CHANJE MODPAS PROPRIO</button><div id="msgPropPass" style="font-size:10px;font-weight:900;text-align:center"></div></div><div style="margin-top:10px;font-size:10px;font-weight:900">Date PAP: <span id="datePAP"></span> - <span id="heurePAP"></span> EST PAP</div></div></div>
-<div id="printArea"></div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, set, push, get, remove, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
-const app=initializeApp(firebaseConfig); const db=getDatabase(app);
-const TIRAGES=["GA MIDI","FL MIDI","NY MIDI","GA SOIR","FL SOIR","NY SOIR","PRIMERA DIA","PRIMERA NOCHE","SUERTE DIA","SUERTE TARDE","REAL","LOTE DOM","NACIONAL DIA","NACIONAL NOCHE","LOTEKA","LEIDSA"];
-const HEURE_DEFAULT={"GA_MIDI":"12:15","FL_MIDI":"13:15","NY_MIDI":"14:15","GA_SOIR":"18:15","FL_SOIR":"21:15","NY_SOIR":"22:15","PRIMERA_DIA":"11:50","PRIMERA_NOCHE":"19:50","SUERTE_DIA":"12:20","SUERTE_TARDE":"17:50","REAL":"12:45","LOTE_DOM":"13:45","NACIONAL_DIA":"14:15","NACIONAL_NOCHE":"17:45","LOTEKA":"19:45","LEIDSA":"15:40"};
-function getDatePAP(){return new Intl.DateTimeFormat('en-CA',{timeZone:"America/Port-au-Prince",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}
-function getHeurePAPStr(){return new Intl.DateTimeFormat('en-CA',{timeZone:"America/Port-au-Prince",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date());}
-function normM(b){if(!b) return ""; b=b.toString().trim().toLowerCase().replace(/[^0-9x]/g,''); if(!b.includes('x')&&b.length==4) b=b.slice(0,2)+'x'+b.slice(2); const p=b.split('x').filter(x=>x!=""); if(p.length!=2) return b; return [p[0].padStart(2,'0'),p[1].padStart(2,'0')].sort().join('x');}
-const dateStr=getDatePAP();
-function chifSelman(v){return v.replace(/[^0-9]/g,'');}
-setInterval(()=>{ const h=getHeurePAPStr(); document.getElementById('heurePAP').innerText=h+" EST PAP"; document.getElementById('heurePAPDisplay').innerText=h; document.getElementById('datePAPDisplay').innerText=dateStr; document.getElementById('heureTopProp').innerText=h+" EST PAP - "+dateStr; const lp=document.getElementById('heurePropLogin'); if(lp) lp.innerText="Heure PAP: "+h+" EST - "+dateStr+" - Heure fermeture respekte"; },1000);
-document.getElementById('dateRes').value=dateStr; document.getElementById('dateDu').value=dateStr; document.getElementById('dateAu').value=dateStr; document.getElementById('datePAP').innerText=dateStr;
-function buildTirajSelects(){
-  const selT=document.getElementById('selTirajRes'); const selR=document.getElementById('selRapT');
-  selT.innerHTML=""; selR.innerHTML='<option value="TOUS">Tous tirages - 17 tiraj</option>';
-  TIRAGES.forEach(t=>{ const o1=document.createElement('option'); o1.value=t; o1.innerText=t; selT.appendChild(o1); const o2=document.createElement('option'); o2.value=t; o2.innerText=t; selR.appendChild(o2); });
+
+<!-- 1.VENDEURS - Jan ou mande - VANDÈ + PROPRIO - Non vandè - modpas - % - ouvè/fèmen - nimewo seri -->
+<div id="vendre" class="tabContent active">
+<!-- VENDRE POU VANDE - Sa se pou vandè - foto ou voye -->
+<div class="card" id="vendreCardVendeur" style="border:4px solid #0a7e07;">
+<div style="font-weight:900;font-size:13px;text-align:center;background:#0a7e07;color:#fff;padding:8px;border-radius:12px;">🎫 SA SE POU VANDÈ - VENDRE</div>
+<div class="tirajMultiWrap" style="margin-top:10px;"><div id="tirajBtn" class="tirajMultiBtn" onclick="toggleDrop()"><span id="tirajLabel">GA MIDI (12:15)</span><span>▼</span></div><div id="tirajDrop" class="tirajDrop"></div></div>
+<div id="selCount" style="font-size:11px;color:#000;margin-top:6px;font-weight:900;">1 tirage</div>
+<div id="fermtiAlert" style="display:none;background:#c62828;color:#fff;padding:8px;border-radius:12px;margin-top:8px;font-size:11px;font-weight:900;text-align:center;border:3px solid #000;"></div>
+<div class="vendreRow"><select id="jeu"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select><input id="boul" placeholder="Boul" inputmode="numeric" maxlength="6"><input id="mise" placeholder="Miz" inputmode="numeric"><div class="btn blue" onclick="addL()" style="width:44px;min-width:44px;padding:8px 2px;margin:0;">+↓</div></div>
+<div id="listV" class="listV">Pa gen liy - Kaz Miz vid</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div>
+<div style="display:flex;gap:6px;"><div class="btn green" onclick="printTicket()" style="flex:1;padding:16px;">🖨️ IMPRIMER - LOGO KONPLÈ</div><div class="btn black" onclick="previewTicket()" style="flex:1;">👁️ APERÇU LOGO KONPLÈ</div></div><div id="previewArea"></div>
+</div>
+
+<!-- GESTION VENDEURS - Jan foto V14.0 ou voye a - POU PROPRIO SÈLMAN - Non vandè - modpas - % - ouvè/fèmen - nimewo seri -->
+<div class="card" id="gestionVendeursCard" style="border:4px solid #ff0;display:none;">
+<div style="font-weight:900;font-size:12px;text-align:center;background:#ff0;color:#000;padding:8px;border-radius:12px;border:3px solid #000;">1.Gestion Vendeurs - Non - modpas - % - ouvert/fermé - X - Nimewo seri</div>
+<input id="newVName" type="text" placeholder="NON VANDE" class="input" style="text-transform:uppercase;">
+<input id="newVPass" type="text" placeholder="MODPAS VANDE Chif sèlman" class="input" inputmode="numeric">
+<input id="newVPct" type="number" placeholder="10" value="10" class="input">
+<input id="newVSeri" type="text" placeholder="NIMEWO SERI - Ex: SN-001" class="input">
+<div class="btn yellow" onclick="ajouterVendeur()" style="padding:16px;margin-top:10px;">➕ AJOUTER NOUVEAU VENDEUR</div>
+<div id="listVendeurs" style="margin-top:12px;max-height:400px;overflow:auto;"></div>
+</div>
+</div>
+
+<div id="limites" class="tabContent"><div class="card"><div style="font-weight:900;">2.LIMITES - Boul - Limit</div><input id="limBoul" placeholder="Boul" class="input"><input id="limVal" placeholder="Limit G" class="input" inputmode="numeric"><div class="btn yellow" onclick="addLimite()">Ajoute Limit</div><div id="listLimites" style="margin-top:10px;"></div></div></div>
+<div id="heures" class="tabContent"><div class="card"><div style="font-weight:900;">3.HEURES EST PAP - Fèmti</div><div id="listFermti" style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:8px;max-height:300px;overflow:auto;"></div></div></div>
+<div id="prix" class="tabContent"><div class="card"><div style="font-weight:900;">4.PRIX PAR VEND - % pa vandè</div><div id="listPrixVendeur" style="margin-top:10px;"></div></div></div>
+
+<!-- 5.RAPPORT - Du Au Tirages Vente Commission Gain Balance net Imprimer -->
+<div id="rapport" class="tabContent">
+<div class="card" style="border:4px solid #0a7e07;">
+<div style="font-weight:900;color:#0a7e07;font-size:16px;text-align:center;">5.RAPPORT - Du Au - Tirages - Vente - Commission - Gain - Balance net</div>
+<div style="margin-top:12px;"><div style="font-weight:900;font-size:12px;">Rapport Du... Au...</div><div style="display:flex;gap:6px;margin-top:6px;"><div style="flex:1;"><label style="font-size:11px;font-weight:900;">Du...</label><input id="rDu" type="date" class="input"></div><div style="flex:1;"><label style="font-size:11px;font-weight:900;">Au...</label><input id="rAu" type="date" class="input"></div></div></div>
+<div style="margin-top:12px;"><label style="font-size:12px;font-weight:900;">Tirages (..., tous)</label><select id="rTir" class="input"></select></div>
+<div id="resRap" class="rapportBox" style="margin-top:14px;">
+<div class="rapportLine"><span>Vente...</span><span id="valVente" style="color:#0f0;font-weight:900;">0G</span></div>
+<div class="rapportLine"><span>Commission...</span><span id="valComm" style="color:#0f0;font-weight:900;">0G</span></div>
+<div class="rapportLine"><span>Gain ( clients)...</span><span id="valGain" style="color:#ff5252;font-weight:900;">0G</span></div>
+<div class="rapportLine" style="border-bottom:3px solid #0f0;"><span>Balance net...</span><span id="valBalance" style="color:#ff0;font-weight:900;font-size:18px;">0G</span></div>
+<div style="margin-top:8px;display:flex;justify-content:space-between;font-size:11px;color:#888;"><span id="valNb">Nb: 0</span><span id="valVendor">Vandè: -</span></div>
+</div>
+<div style="display:flex;gap:6px;margin-top:12px;"><div class="btn green" onclick="doRapport()" style="flex:1;padding:16px;">Générer</div><div class="btn black" onclick="printRap()" style="flex:1;">🖨️ Imprimer</div></div>
+</div>
+</div>
+
+<div id="resultats" class="tabContent"><div class="card"><div style="font-weight:900;">6.RÉSULTATS - Antre rezilta tiraj</div><select id="resTir" class="input"></select><input id="resGagnant" placeholder="Boul gagnant" class="input"><div class="btn yellow" onclick="saveResult()">Anrejistre Rezilta</div><div id="listResults" style="margin-top:10px;"></div></div></div>
+
+<!-- 7.PARAMETRES - Tirages actifs + Jours des tirages + Tirages jours heure de a - Jan ou mande -->
+<div id="parametres" class="tabContent">
+<div class="card" style="border:4px solid #1976d2;">
+<div style="font-weight:900;color:#1976d2;font-size:18px;text-align:center;">7.PARAMÈTRES - ENTÊTE + MDP + LOGO KONPLÈ + IMPRIMANTES</div>
+
+<!-- LOGO KONPLE - AFICHE LOGO A KONPLE - FIX KOUPE A -->
+<div style="margin-top:14px;border:4px solid #0a7e07;border-radius:18px;padding:14px;background:#e8f5e9;">
+<div style="font-weight:900;font-size:14px;">🖼️ LOGO - Afiche logo a konplè - FIX koupe mwatye a</div>
+<div style="font-size:10px;margin-top:4px;">Logo dwe afiche konplè tèt fich - Pa koupe - 360px santre - Jan foto ou voye a te koupe - Kounya konplè</div>
+<div style="text-align:center;margin-top:10px;background:#fff;border:3px solid #000;border-radius:12px;padding:10px;">
+<img id="logoPreview" src="" style="max-width:260px;max-height:180px;display:block;margin:0 auto;border-radius:12px;background:#fff;">
+<div style="font-size:9px;margin-top:6px;">LOGO KONPLÈ - 360px - Pa koupe - Santre - Background blan</div>
+</div>
+<div style="display:flex;gap:6px;margin-top:10px;">
+<div class="btn yellow" onclick="document.getElementById('logoInput').click()" style="flex:1;padding:12px;font-size:10px;">📁 Chwazi Logo Konplè</div>
+<div class="btn black" onclick="resetLogo()" style="flex:1;padding:12px;font-size:10px;">🔄 Logo Default Konplè</div>
+</div>
+<input id="logoInput" type="file" accept="image/*" style="display:none;" onchange="uploadLogo(event)">
+<div id="logoStatus" style="font-size:10px;margin-top:8px;background:#000;color:#0f0;padding:6px;border-radius:8px;text-align:center;">Logo konplè chaje - 360px - Pa koupe</div>
+</div>
+
+<!-- Tirages actifs (..., tous) - Jan ou mande -->
+<div style="margin-top:16px;border:4px solid #ff0;border-radius:18px;padding:14px;background:#fffde7;">
+<div style="font-weight:900;font-size:14px;">🎯 Tirages actifs (..., tous)</div>
+<div style="font-size:10px;margin-top:4px;">Chwazi ki tiraj aktif - tous oswa kèk</div>
+<select id="tiragesActifsSel" class="input" onchange="saveTiragesActifs()"><option value="tous">Tirages (..., tous) - Tout 17 tiraj aktif</option></select>
+<div id="tiragesActifsList" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px;"></div>
+</div>
+
+<!-- Jours des tirages : (......., tous les jours) - Jan ou mande -->
+<div style="margin-top:16px;border:4px solid #ff5722;border-radius:18px;padding:14px;background:#fff3e0;">
+<div style="font-weight:900;font-size:14px;">📅 Jours des tirages : (......., tous les jours)</div>
+<select id="joursTiragesSel" class="input" onchange="saveJoursTirages()"><option value="tous">tous les jours - Lundi a Dimanche</option><option value="lundi-vendredi">Lundi - Vendredi sèlman</option><option value="weekend">Weekend - Samedi Dimanche</option><option value="custom">Personnalisé - Chwazi jou yo</option></select>
+<div id="joursChecks" style="margin-top:10px;">
+<label class="jourCheck"><input type="checkbox" value="lundi" checked onchange="saveJoursTirages()"> Lundi</label>
+<label class="jourCheck"><input type="checkbox" value="mardi" checked onchange="saveJoursTirages()"> Mardi</label>
+<label class="jourCheck"><input type="checkbox" value="mercredi" checked onchange="saveJoursTirages()"> Mercredi</label>
+<label class="jourCheck"><input type="checkbox" value="jeudi" checked onchange="saveJoursTirages()"> Jeudi</label>
+<label class="jourCheck"><input type="checkbox" value="vendredi" checked onchange="saveJoursTirages()"> Vendredi</label>
+<label class="jourCheck"><input type="checkbox" value="samedi" checked onchange="saveJoursTirages()"> Samedi</label>
+<label class="jourCheck"><input type="checkbox" value="dimanche" checked onchange="saveJoursTirages()"> Dimanche</label>
+</div>
+</div>
+
+<!-- Tirages (...., tous) - jours (lundi,mardi...) - l'heure de... a... - Jan ou mande -->
+<div style="margin-top:16px;border:4px solid #000;border-radius:18px;padding:14px;background:#fff;">
+<div style="font-weight:900;font-size:14px;">⏰ Tirages (...., tous) - jours - l'heure ( de... heures à... heures)</div>
+<div style="font-size:10px;margin-top:4px;">Pou chak tiraj - chwazi jou li tire ak lè li ouvè ak fèmen</div>
+<div style="margin-top:10px;">
+<label style="font-size:11px;font-weight:900;">Tirages (...., tous)</label>
+<select id="configTiraj" class="input" onchange="loadTirajConfig()"></select>
+<div style="margin-top:8px;"><label style="font-size:11px;font-weight:900;">Jours - Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi, Dimanche</label><div id="configJours" style="margin-top:6px;display:flex;flex-wrap:wrap;"></div></div>
+<div style="display:flex;gap:6px;margin-top:10px;"><div style="flex:1;"><label style="font-size:11px;font-weight:900;">L'heure de... heures</label><input id="heureDe" type="time" class="input" value="12:00"></div><div style="flex:1;"><label style="font-size:11px;font-weight:900;">À... heures (fèmti)</label><input id="heureA" type="time" class="input" value="12:10"></div></div>
+<div class="btn yellow" onclick="saveTirajHoraire()" style="margin-top:10px;">💾 Sauve Heure - De... À...</div>
+</div>
+<div id="tiragesHoraireList" style="margin-top:12px;background:#000;color:#0f0;border-radius:12px;padding:8px;max-height:200px;overflow:auto;font-size:10px;"></div>
+</div>
+
+<!-- Ajoute une imprimante ( recherche de toutes les imprimantes) -->
+<div style="margin-top:16px;border:4px solid #ff5722;border-radius:18px;padding:14px;background:#fff3e0;">
+<div style="font-weight:900;font-size:14px;">1- Ajoute une imprimante ( recherche de toutes les imprimantes)</div>
+<div class="btn red" onclick="scanToutesImprimantes()" style="padding:18px;margin-top:10px;font-size:14px;">🔍 Ajoute une imprimante<br><span style="font-size:10px;">( recherche de toutes les imprimantes)</span></div>
+<div id="printerList" style="margin-top:10px;"></div><div id="scanStatus" style="font-size:10px;margin-top:8px;background:#000;color:#0f0;padding:6px;border-radius:8px;text-align:center;">Poko chèche</div>
+</div>
+
+<div style="margin-top:16px;border:4px solid #2e7d32;border-radius:18px;padding:14px;background:#e8f5e9;">
+<div style="font-weight:900;font-size:14px;">2- Utilisation par défaut oui-non</div>
+<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:3px solid #000;border-radius:12px;padding:12px;margin-top:10px;">
+<div><div style="font-weight:900;">Utilisation par défaut</div><div id="defautName" style="font-size:11px;color:#666;">GwoFos-G001</div></div>
+<div style="display:flex;align-items:center;gap:10px;"><span id="defautTxt" style="font-weight:900;font-size:18px;color:#2e7d32;">OUI</span><div id="defautSwitch" onclick="toggleDefaut()" style="width:90px;height:36px;background:#2e7d32;border-radius:18px;position:relative;cursor:pointer;border:3px solid #000;"><div style="position:absolute;left:4px;top:3px;width:26px;height:24px;background:#fff;border-radius:50%;"></div></div></div>
+</div>
+<div id="currentPrinter" style="background:#e8f5e9;padding:10px;border-radius:10px;margin-top:10px;font-size:11px;border:3px solid #2e7d32;text-align:center;font-weight:900;">🖨️ GwoFos-G001 - Défaut: OUI - Logo KONPLÈ</div>
+</div>
+
+<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:70px;overflow:auto;padding:8px;margin-top:14px;border-radius:12px;border:2px solid #0f0;">Log: V48 - LOGO KONPLÈ FIX koupe mwatye - VENDEURS Non modpas % ouve ferme seri - PARAMET Tirages actifs Jours Tirages Heures De A - Rapport Du Au - Non VID Modpas VID RESPEKTE</div>
+</div>
+</div>
+
+<script>
+var LOGO_DEFAULT_B64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF8WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlMwd1d2UWJ2QnN0ZVJvZklKQ2hISGh2Y21kM2IySjFMMzQ1NkRrTldnS0xFZz0iPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheCMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjp hYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyNC0wMS0wMVQxMjozNDo1NloiIHhtcDpNb2RpZnlEYXRlPSIyMDI0LTAxLTAxVDEyOjM0OjU2WiIgZGM6Zm9ybWF0PSJpbWFnZS9wbmc iIHg6Zm9ybWF0PSJpbWFnZS9wbmc iIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxMjM0NTY3ODkwIi8+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/2Q==";
+// Logo konplè default - ap chaje otomatik
+var logoBase64 = localStorage.getItem('logoBase64_v48') || LOGO_DEFAULT_B64;
+
+var tiragesData=[
+{nom:"GA MIDI",heure:"12:15",fermeti:"12:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"12:10"},
+{nom:"FL MIDI",heure:"13:15",fermeti:"13:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"13:10"},
+{nom:"NY MIDI",heure:"14:15",fermeti:"14:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"14:10"},
+{nom:"GANAMAS",heure:"14:15",fermeti:"14:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"14:10"},
+{nom:"GA SOIR",heure:"18:15",fermeti:"18:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"18:10"},
+{nom:"FL SOIR",heure:"21:15",fermeti:"21:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"21:10"},
+{nom:"NY SOIR",heure:"22:15",fermeti:"22:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"22:10"},
+{nom:"PRIMERA DIA",heure:"11:50",fermeti:"11:45",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"11:45"},
+{nom:"PRIMERA NOCHE",heure:"19:50",fermeti:"19:45",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"19:45"},
+{nom:"REAL",heure:"13:00",fermeti:"12:55",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"12:55"},
+{nom:"LOTE DOM",heure:"18:30",fermeti:"18:25",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"18:25"},
+{nom:"NACIONAL NOCHE",heure:"20:15",fermeti:"20:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"20:10"},
+{nom:"LOTEKA",heure:"19:30",fermeti:"19:25",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"19:25"},
+{nom:"LEIDSA",heure:"20:50",fermeti:"20:45",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"12:00",a:"20:45"},
+{nom:"ANGUILA 10H",heure:"09:55",fermeti:"09:50",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"09:50"},
+{nom:"ANGUILLA 6H",heure:"05:55",fermeti:"05:50",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"05:00",a:"05:50"},
+{nom:"BORLETTE",heure:"19:00",fermeti:"18:55",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],de:"08:00",a:"18:55"}
+];
+
+var selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv48')||localStorage.getItem('cdv47')||'[]');
+var curPrinter=JSON.parse(localStorage.getItem('cd_printer_v36')||'{"name":"GwoFos-G001","addr":"00:11:22:33:44:55"}');
+var useDefaut=JSON.parse(localStorage.getItem('useDefaut_v36')===null?'true':localStorage.getItem('useDefaut_v36'));
+var vendors=JSON.parse(localStorage.getItem('vendors_v48')||localStorage.getItem('vendors_v38')||'[]');
+var currentVendor=null, isProprio=false;
+var limites=JSON.parse(localStorage.getItem('limites_v48')||'[]');
+var results=JSON.parse(localStorage.getItem('results_v48')||'[]');
+
+function lg(m){ var el=document.getElementById('pLog'); if(el){ el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; el.scrollTop=el.scrollHeight; } }
+
+function doLoginRespect(){
+ var nameRaw=document.getElementById('loginName').value.trim();
+ var passRaw=document.getElementById('loginPass').value.trim();
+ var errEl=document.getElementById('loginErr');
+ if(!nameRaw){ errEl.textContent='⛔ Non vandè VID - Mete NON VANDE'; return; }
+ if(!passRaw){ errEl.textContent='⛔ Modpas VID - Mete MODPAS Chif sèlman'; return; }
+ if(!/^\d+$/.test(passRaw)){ errEl.textContent='⛔ MODPAS VANDE Chif sèlman - Mete sèlman chif - Pa lèt - RESPEKTE'; return; }
+ var nameUpper=nameRaw.toUpperCase();
+ if(nameUpper==='PROPRIO'){
+  if(passRaw==='2026' || passRaw==='C&D2026' || passRaw==='123456'){
+   isProprio=true; currentVendor={name:'PROPRIO',phone:'PROPRIO',role:'proprio',pass:passRaw,pct:100,seri:'PROP-001',ouvert:true};
+   localStorage.setItem('currentVendor_v48',JSON.stringify(currentVendor)); localStorage.setItem('isProprio_v48','true');
+   document.getElementById('loginScreen').style.display='none'; initAll(); return;
+  } else { errEl.textContent='⛔ Modpas PROPRIO pa bon - Mete 2026 oswa 123456'; return; }
+ }
+ var found=vendors.find(x=>x.name===nameUpper);
+ if(found){
+  if(found.pass!==passRaw){ errEl.textContent='⛔ Modpas pa bon pou '+found.name+' - Kòrèk: '+found.pass+' - RESPEKTE - Nimewo seri: '+found.seri; return; }
+  if(!found.ouvert){ errEl.textContent='⛔ Vandè '+found.name+' FÈMEN - Nimewo seri: '+found.seri+' - Kontakte PROPRIO'; return; }
+  currentVendor=found; localStorage.setItem('currentVendor_v48',JSON.stringify(found)); localStorage.setItem('isProprio_v48','false');
+  document.getElementById('loginScreen').style.display='none'; initAll(); return;
+ }
+ // Kreye nouvo - PROPRIO sèlman ka kreye? Pou V48 - si pa proprio, kreye ak % 10 ouvè
+ var newV={name:nameUpper,pass:passRaw,pct:10,ouvert:true,seri:'SN-'+Date.now().toString().slice(-4),phone:'509-'+nameUpper.substring(0,4)};
+ vendors.push(newV); localStorage.setItem('vendors_v48',JSON.stringify(vendors));
+ currentVendor=newV; localStorage.setItem('currentVendor_v48',JSON.stringify(newV)); localStorage.setItem('isProprio_v48','false');
+ document.getElementById('loginScreen').style.display='none'; initAll();
 }
-async function checkProprioLogin(){ let pass=document.getElementById('inpPropPass').value.trim(); if(!pass){document.getElementById('msgPropLogin').innerText="Antre modpas CHIF AK LÈT!"; return;} try{ const snap=await get(ref(db,`proprio_pass`)); let vrai="1234"; if(snap.exists()) vrai=snap.val().pass||"1234"; if(pass==vrai){localStorage.setItem("proprio_pass",pass); document.getElementById('loginProprio').style.display='none'; loadVendeurs(); loadLimVendeurs(); loadHeures(); loadEntete();} else document.getElementById('msgPropLogin').innerText="⛔ PA BON"; }catch(e){ if(pass=="1234"){localStorage.setItem("proprio_pass",pass); document.getElementById('loginProprio').style.display='none'; loadVendeurs(); loadLimVendeurs(); loadHeures(); loadEntete();} else document.getElementById('msgPropLogin').innerText="⛔ PA BON - DEFAULT 1234"; } }
-document.getElementById('btnPropLogin').addEventListener('click',checkProprioLogin);
-document.getElementById('inpPropPass').addEventListener('keydown',(e)=>{if(e.key=="Enter") checkProprioLogin();});
-(async()=>{const saved=localStorage.getItem("proprio_pass"); if(saved){try{const snap=await get(ref(db,`proprio_pass`)); let vrai="1234"; if(snap.exists()) vrai=snap.val().pass||"1234"; if(saved==vrai) document.getElementById('loginProprio').style.display='none';}catch(e){ if(saved=="1234") document.getElementById('loginProprio').style.display='none'; }}})();
-function openO(n){document.querySelectorAll('.onglet').forEach(o=>o.classList.remove('active')); document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active')); document.getElementById('o'+n).classList.add('active'); document.getElementById('m'+n).classList.add('active'); if(n==1) loadVendeurs(); if(n==2) loadLim(); if(n==3) loadHeures(); if(n==4){loadPrixVendeurs(); loadPrix();} if(n==5) loadVendeursRap(); if(n==6) loadRes(); if(n==7) loadEntete();}
-async function loadVendeurs(){const cont=document.getElementById('listV'); cont.innerHTML="Chargement..."; const snap=await get(ref(db,`vendeurs`)); cont.innerHTML=""; if(snap.exists()){Object.entries(snap.val()).forEach(([k,v])=>{const div=document.createElement('div'); div.className="item"; div.innerHTML=`<b>${v.nom}</b> - ${v.pour}% - ${v.status||"OUVERT"} - Pass:${v.pass} - X<br><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px"><button class="btn btn-b" data-edit="${k}">MODIFIE</button><button class="btn btn-r" data-del="${k}">X EFASÈ</button><button class="btn btn-y" data-toggle="${k}">${v.status=="FERME"?"OUVRI":"FÈME"}</button></div>`; cont.appendChild(div);}); cont.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm("Efase vandè?")) return; await remove(ref(db,`vendeurs/${b.dataset.del}`)); loadVendeurs();})); cont.querySelectorAll('[data-toggle]').forEach(b=>b.addEventListener('click',async()=>{const s=await get(ref(db,`vendeurs/${b.dataset.toggle}`)); if(s.exists()){const v=s.val(); await update(ref(db,`vendeurs/${b.dataset.toggle}`),{status: v.status=="FERME"?"OUVERT":"FERME"}); loadVendeurs();}})); cont.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',async()=>{const s=await get(ref(db,`vendeurs/${b.dataset.edit}`)); if(s.exists()){const v=s.val(); document.getElementById('vNom').value=v.nom; document.getElementById('vPass').value=v.pass; document.getElementById('vPour').value=v.pour;}}));}}
-document.getElementById('btnAddV').addEventListener('click',async()=>{const nom=document.getElementById('vNom').value.trim().toUpperCase(); let pass=document.getElementById('vPass').value.trim().replace(/[^0-9]/g,''); const pour=parseInt(document.getElementById('vPour').value)||10; if(!nom||!pass){alert("Non + Modpas CHIF SÈLMAN - VANDÈ");return;} const snap=await get(ref(db,`vendeurs`)); let key=null; if(snap.exists()) Object.entries(snap.val()).forEach(([k,v])=>{if(v.nom==nom) key=k;}); if(key) await update(ref(db,`vendeurs/${key}`),{nom,pass,pour,status:"OUVERT"}); else await push(ref(db,`vendeurs`),{nom,pass,pour,status:"OUVERT"}); document.getElementById('vNom').value=""; document.getElementById('vPass').value=""; loadVendeurs();}); document.getElementById('vPass').addEventListener('input',()=>{document.getElementById('vPass').value=chifSelman(document.getElementById('vPass').value);}); document.getElementById('vPour').addEventListener('input',()=>{document.getElementById('vPour').value=chifSelman(document.getElementById('vPour').value);});
-async function loadHeures(){const cont=document.getElementById('heuresBox'); cont.innerHTML=""; const snap=await get(ref(db,`heures`)); TIRAGES.forEach(t=>{const id=t.replace(/ /g,'_'); const val=snap.exists()&&snap.val()[id]?snap.val()[id]:HEURE_DEFAULT[id]||""; const div=document.createElement('div'); div.innerHTML=`<div style="font-size:8px;font-weight:900">${t} - EST PAP</div><input id="h-${id}" class="kf" type="time" value="${val}">`; cont.appendChild(div);});}
-document.getElementById('btnSaveH').addEventListener('click',async()=>{let obj={}; TIRAGES.forEach(t=>{const id=t.replace(/ /g,'_'); const el=document.getElementById(`h-${id}`); if(el&&el.value) obj[id]=el.value;}); await set(ref(db,`heures`),obj); document.getElementById('msgH').innerText=`✅ HEURES SAUVEGARDE - EST PAP ${getHeurePAPStr()} - L'heure fermeture modifiable respekte`;});
-async function loadLimVendeurs(){const sel=document.getElementById('selLimV'); sel.innerHTML='<option value="GLOBAL">GLOBAL - GLOBAL=v1+v2 PA TIRAJ</option>'; const sel2=document.getElementById('selPrixV'); if(sel2) sel2.innerHTML='<option value="GLOBAL">GLOBAL</option>'; const sel3=document.getElementById('selRapV'); if(sel3) sel3.innerHTML='<option value="TOUS">TOUS VENDEURS</option>'; const snap=await get(ref(db,`vendeurs`)); if(snap.exists()) Object.values(snap.val()).forEach(v=>{const opt=document.createElement('option'); opt.value=v.nom; opt.textContent=v.nom; sel.appendChild(opt.cloneNode(true)); if(sel2) sel2.appendChild(opt.cloneNode(true)); if(sel3) sel3.appendChild(opt.cloneNode(true));});}
-async function loadLim(){const v=document.getElementById('selLimV').value||"GLOBAL"; const path=v=="GLOBAL"?"limites_global":`limites/${v}`; const snap=await get(ref(db,path)); if(snap.exists()){const l=snap.val(); document.getElementById('limBolet').value=l.BOLET||1000; document.getElementById('limMaryaj').value=l.MARYAJ||50; document.getElementById('limLoto3').value=l.LOTO3||100; document.getElementById('limLoto4').value=l.LOTO4||1000; document.getElementById('limLoto5').value=l.LOTO5||1000;}}
-document.getElementById('selLimV').addEventListener('change',loadLim);
-document.getElementById('btnSaveLim').addEventListener('click',async()=>{const v=document.getElementById('selLimV').value||"GLOBAL"; const lim={BOLET:parseInt(document.getElementById('limBolet').value)||1000, MARYAJ:parseInt(document.getElementById('limMaryaj').value)||50, LOTO3:parseInt(document.getElementById('limLoto3').value)||100, LOTO4:parseInt(document.getElementById('limLoto4').value)||1000, LOTO5:parseInt(document.getElementById('limLoto5').value)||1000}; const path=v=="GLOBAL"?"limites_global":`limites/${v}`; await set(ref(db,path),lim); document.getElementById('msgLim').innerText=`✅ LIMITES PA TIRAJ ${v} - Borlettes ${lim.BOLET}$ - Mariage ${lim.MARYAJ}$ - Loto3 ${lim.LOTO3}$ - EST PAP`;});
-['limBolet','limMaryaj','limLoto3','limLoto4','limLoto5'].forEach(id=>{document.getElementById(id).addEventListener('input',()=>{document.getElementById(id).value=chifSelman(document.getElementById(id).value);});});
-async function loadPrixVendeurs(){ await loadLimVendeurs(); }
-async function loadPrix(){const vendeurSel=document.getElementById('selPrixV').value||"GLOBAL"; const path=vendeurSel=="GLOBAL"?"prix_global":`prix/${vendeurSel}`; const snap=await get(ref(db,path)); if(snap.exists()){const p=snap.val(); document.getElementById('prixLot1').value=p.lot1||50; document.getElementById('prixLot2').value=p.lot2||20; document.getElementById('prixLot3').value=p.lot3||10; document.getElementById('prixMaryaj').value=p.maryaj||1000; document.getElementById('prixLoto3').value=p.loto3||500; document.getElementById('prixLoto4').value=p.loto4||5000; document.getElementById('prixLoto5').value=p.loto5||25000;} else {document.getElementById('prixLot1').value=50; document.getElementById('prixLot2').value=20; document.getElementById('prixLot3').value=10; document.getElementById('prixMaryaj').value=1000; document.getElementById('prixLoto3').value=500; document.getElementById('prixLoto4').value=5000; document.getElementById('prixLoto5').value=25000;}}
-document.getElementById('selPrixV').addEventListener('change',loadPrix);
-['prixLot1','prixLot2','prixLot3','prixMaryaj','prixLoto3','prixLoto4','prixLoto5'].forEach(id=>{document.getElementById(id).addEventListener('input',()=>{document.getElementById(id).value=chifSelman(document.getElementById(id).value);});});
-document.getElementById('btnSavePrix').addEventListener('click',async()=>{const vendeurSel=document.getElementById('selPrixV').value||"GLOBAL"; const prix={lot1:parseInt(document.getElementById('prixLot1').value)||50, lot2:parseInt(document.getElementById('prixLot2').value)||20, lot3:parseInt(document.getElementById('prixLot3').value)||10, maryaj:parseInt(document.getElementById('prixMaryaj').value)||1000, loto3:parseInt(document.getElementById('prixLoto3').value)||500, loto4:parseInt(document.getElementById('prixLoto4').value)||5000, loto5:parseInt(document.getElementById('prixLoto5').value)||25000, update:Date.now()}; const path=vendeurSel=="GLOBAL"?"prix_global":`prix/${vendeurSel}`; await set(ref(db,path),prix); if(vendeurSel=="GLOBAL") await set(ref(db,`prix/GLOBAL`),prix); document.getElementById('msgPrix').innerText=`✅ PRIX ${vendeurSel} - 1er ${prix.lot1} 2e ${prix.lot2} 3e ${prix.lot3} M1=M2=M3=${prix.maryaj} L3=${prix.loto3} - EST PAP`;});
-function autoMaryaj(){const r1=document.getElementById('resR1').value.trim(); const r2=document.getElementById('resR2').value.trim(); const r3=document.getElementById('resR3').value.trim(); if(r1&&r2) document.getElementById('resM1').value=normM(r1+'x'+r2); else document.getElementById('resM1').value=''; if(r1&&r3) document.getElementById('resM2').value=normM(r1+'x'+r3); else document.getElementById('resM2').value=''; if(r2&&r3) document.getElementById('resM3').value=normM(r2+'x'+r3); else document.getElementById('resM3').value='';}
-['resR1','resR2','resR3'].forEach(id=>{document.getElementById(id).addEventListener('input',()=>{document.getElementById(id).value=chifSelman(document.getElementById(id).value); autoMaryaj();});});
-async function loadRes(){const d=document.getElementById('dateRes').value||dateStr; const snap=await get(ref(db,`resultats/${d}`)); const cont=document.getElementById('listRes'); cont.innerHTML=""; if(snap.exists()) Object.entries(snap.val()).forEach(([t,r])=>{const div=document.createElement('div'); div.className="item"; div.innerHTML=`<b>${t}</b> - 1er ${r.r1} 2e ${r.r2} 3e ${r.r3} - M1 ${r.m1} M2 ${r.m2} M3 ${r.m3} - L3 ${r.l3} L4 ${r.l4} L5 ${r.l5} - 12x47=47x12 bon`; cont.appendChild(div);});}
-document.getElementById('btnSaveRes').addEventListener('click',async()=>{const d=document.getElementById('dateRes').value||dateStr; const t=document.getElementById('selTirajRes').value; const r1=chifSelman(document.getElementById('resR1').value); const r2=chifSelman(document.getElementById('resR2').value); const r3=chifSelman(document.getElementById('resR3').value); const m1=normM(document.getElementById('resM1').value); const m2=normM(document.getElementById('resM2').value); const m3=normM(document.getElementById('resM3').value); const l3=chifSelman(document.getElementById('resL3').value); const l4=chifSelman(document.getElementById('resL4').value); const l5=chifSelman(document.getElementById('resL5').value); const obj={r1,r2,r3,m1,m2,m3,l3,l4,l5,date:d,tiraj:t}; await set(ref(db,`resultats/${d}/${t}`),obj); loadRes(); alert(`✅ RESULTATS ${t} - ${d} - MARIAGE 12x47=47x12 bon - EST PAP`);});
-document.getElementById('dateRes').addEventListener('change',loadRes);
-async function loadVendeursRap(){ await loadLimVendeurs(); }
-async function getPrixForV(v){let PRIX={lot1:50,lot2:20,lot3:10,maryaj:1000,loto3:500,loto4:5000,loto5:25000}; try{const s1=await get(ref(db,`prix/${v}`)); if(s1.exists()){const p=s1.val(); PRIX={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; return PRIX;} const sG=await get(ref(db,`prix_global`)); if(sG.exists()){const p=sG.val(); PRIX={lot1:parseInt(p.lot1||50),lot2:parseInt(p.lot2||20),lot3:parseInt(p.lot3||10),maryaj:parseInt(p.maryaj||1000),loto3:parseInt(p.loto3||500),loto4:parseInt(p.loto4||5000),loto5:parseInt(p.loto5||25000)}; return PRIX;}}catch(e){} return PRIX;}
-document.getElementById('btnGenRap').addEventListener('click',async()=>{const du=document.getElementById('dateDu').value||dateStr; const au=document.getElementById('dateAu').value||du; const filV=document.getElementById('selRapV').value||"TOUS"; const filT=document.getElementById('selRapT').value||"TOUS"; const dDu=new Date(du); const dAu=new Date(au); let vente=0, gain=0, nb=0, comm=0; let detail=""; for(let d=new Date(dDu); d<=dAu; d.setDate(d.getDate()+1)){const ds=d.toISOString().slice(0,10); const snapV=await get(ref(db,`ventes/${ds}`)); const snapR=await get(ref(db,`resultats/${ds}`)); if(!snapV.exists()) continue; for(const [vNom, fichesObj] of Object.entries(snapV.val())){ if(filV!="TOUS" && vNom!=filV) continue; const PRIX=await getPrixForV(vNom); const snapPour=await get(ref(db,`vendeurs`)); let pour=10; if(snapPour.exists()) Object.values(snapPour.val()).forEach(vv=>{if(vv.nom==vNom) pour=vv.pour||10;}); Object.values(fichesObj).forEach(fiche=>{const tirajFiltre=filT=="TOUS"?fiche.tiraj:fiche.tiraj.filter(t=>t==filT); if(tirajFiltre.length==0) return; const ratio=tirajFiltre.length/fiche.tiraj.length; nb++; const vt=fiche.total*ratio; vente+=vt; comm+=vt*pour/100; if(snapR.exists()){tirajFiltre.forEach(t=>{if(!snapR.child(t).exists()) return; const res=snapR.child(t).val(); fiche.fiches.forEach(l=>{const miz=parseInt(l.miz)||0; if(l.type=="BOLET"){if(l.boul==res.r1) gain+=miz*PRIX.lot1*ratio; else if(l.boul==res.r2) gain+=miz*PRIX.lot2*ratio; else if(l.boul==res.r3) gain+=miz*PRIX.lot3*ratio;} if(l.type=="MARYAJ"){const b=normM(l.boul); if(b==normM(res.m1||"")||b==normM(res.m2||"")||b==normM(res.m3||"")) gain+=miz*PRIX.maryaj*ratio;} if(l.type=="LOTO3"&&l.boul==res.l3) gain+=miz*PRIX.loto3*ratio; if(l.type=="LOTO4"&&l.boul==res.l4) gain+=miz*PRIX.loto4*ratio; if(l.type=="LOTO5"&&l.boul==res.l5) gain+=miz*PRIX.loto5*ratio;});});} detail+=`${ds} ${vNom} ${fiche.id} ${tirajFiltre.join('/')} $${vt.toFixed(0)}<br>`;});}} const balance=vente-comm-gain; document.getElementById('rapContent').innerHTML=`Du: ${du} Au: ${au} - Vendeurs: ${filV} - Tirages: ${filT} - 17 tiraj - EST PAP ${getHeurePAPStr()}<br><br>Vente: $${vente.toFixed(0)}<br>Commission: $${comm.toFixed(0)}<br><b style="color:red">Gain kliyan: $${gain.toFixed(0)}</b><br><div style="background:#000;color:#FFD500;padding:10px;border-radius:15px;margin-top:10px;text-align:center;font-size:14px">Balance net: $${balance.toFixed(0)}</div><br><div style="font-size:8px">${detail}</div><br><span style="font-size:8px">Si nan yon fich ta gen plizyè tiraj, rapò chak tiraj dwe kalkile separeman selon rezilta yo - MARIAGE 12x47=47x12 bon</span>`; window.dernierRapProp={du,au,filV,filT,vente,comm,gain,balance,nb};});
-async function loadEntete(){try{const snap=await get(ref(db,`entete`)); if(snap.exists()){const e=snap.val(); document.getElementById('enteteAdresse').value=e.adresse||""; document.getElementById('enteteTel').value=e.tel||"+52 7298079596"; document.getElementById('enteteResp').value=e.resp||"";}}catch(e){}}
-document.getElementById('btnSaveEntete').addEventListener('click',async()=>{const ent={adresse:document.getElementById('enteteAdresse').value, tel:document.getElementById('enteteTel').value||"+52 7298079596", resp:document.getElementById('enteteResp').value, update:Date.now()}; await set(ref(db,`entete`),ent); alert("✅ ENTÊTE SAUVEGARDE - C&D VÉRITÉ LOTTO - "+ent.tel);});
-document.getElementById('btnChangePropPass').addEventListener('click',async()=>{ let newPass=document.getElementById('newPropPass').value.trim(); if(!newPass){alert("Antre nouvo modpas CHIF AK LÈT!"); return;} await set(ref(db,`proprio_pass`),{pass:newPass, update:Date.now()}); localStorage.setItem("proprio_pass",newPass); document.getElementById('msgPropPass').innerText=`✅ MODPAS PROPRIO CHANJE - CHIF AK LÈT - NOUVO: ${newPass} - EST PAP`; document.getElementById('newPropPass').value="";});
-document.getElementById('m1').addEventListener('click',()=>openO(1)); document.getElementById('m2').addEventListener('click',()=>openO(2)); document.getElementById('m3').addEventListener('click',()=>openO(3)); document.getElementById('m4').addEventListener('click',()=>openO(4)); document.getElementById('m5').addEventListener('click',()=>openO(5)); document.getElementById('m6').addEventListener('click',()=>openO(6)); document.getElementById('m7').addEventListener('click',()=>openO(7)); document.getElementById('mX').addEventListener('click',()=>{if(confirm("Dekonekte Proprio?")){localStorage.removeItem("proprio_pass"); location.reload();}});
-document.getElementById('btnPrintRap').addEventListener('click',()=>{const r=window.dernierRapProp; if(!r){alert("Jenere rapport avan");return;} const html=`<div style="text-align:center;font-family:monospace;font-weight:900;width:380px;margin:0 auto;color:#000;background:#fff;padding:15px"><div style="font-size:24px">C&D VÉRITÉ LOTTO</div><div style="font-size:14px">Tel +52 7298079596</div><div style="font-size:12px">Du ${r.du} Au ${r.au} - ${r.filV} - ${r.filT} - ${getHeurePAPStr()} EST PAP</div><div style="margin:10px 0;border-top:3px solid #000"></div><div style="text-align:left;font-size:16px">Vente $${r.vente.toFixed(0)}<br>Commission $${r.comm.toFixed(0)}<br>Gain $${r.gain.toFixed(0)}<br><br>Balance net $${r.balance.toFixed(0)}</div><div style="margin-top:20px">Bòn chans, lave chodyè w</div></div>`; const pa=document.getElementById('printArea'); pa.innerHTML=html; pa.style.display='block'; setTimeout(()=>{window.print(); pa.style.display='none';},400);});
-buildTirajSelects(); loadVendeurs(); loadLimVendeurs(); loadHeures(); loadEntete();
+
+function ajouterVendeur(){
+ if(!isProprio){ alert('Sèlman PROPRIO ka ajoute vandè'); return; }
+ var name=document.getElementById('newVName').value.trim().toUpperCase();
+ var pass=document.getElementById('newVPass').value.trim();
+ var pct=parseInt(document.getElementById('newVPct').value)||10;
+ var seri=document.getElementById('newVSeri').value.trim()||'SN-'+Date.now().toString().slice(-4);
+ if(!name){ alert('NON VANDE obligatwa'); return; }
+ if(!pass ||!/^\d+$/.test(pass)){ alert('MODPAS VANDE Chif sèlman - Mete sèlman chif'); return; }
+ var exist=vendors.findIndex(x=>x.name===name);
+ if(exist>=0){ vendors[exist].pass=pass; vendors[exist].pct=pct; vendors[exist].seri=seri; }
+ else { vendors.push({name:name,pass:pass,pct:pct,ouvert:true,seri:seri,phone:'509-'+name.substring(0,4)}); }
+ localStorage.setItem('vendors_v48',JSON.stringify(vendors));
+ document.getElementById('newVName').value=''; document.getElementById('newVPass').value=''; document.getElementById('newVSeri').value='';
+ renderVendeurs(); doRapport();
+}
+
+function renderVendeurs(){
+ var cont=document.getElementById('listVendeurs'); if(!cont) return; cont.innerHTML='';
+ vendors.forEach((v,i)=>{
+  var div=document.createElement('div'); div.className='vendeurItem';
+  div.innerHTML='<div style="font-weight:900;font-size:12px;">'+v.name+' - '+v.pct+'% - '+(v.ouvert?'OUVERT':'FÈMÈ')+' - Pass:'+v.pass+' - Seri:'+v.seri+' - X</div><div style="display:flex;gap:6px;margin-top:8px;"><div class="btn black" onclick="modifVendeur('+i+')" style="flex:1;padding:10px;font-size:10px;background:#000;color:#ff0;">MODIFIE</div><div class="btn red" onclick="efaseVendeur('+i+')" style="flex:1;padding:10px;font-size:10px;">X EFASÈ</div><div class="btn yellow" onclick="toggleOuve('+i+')" style="flex:1;padding:10px;font-size:10px;">'+(v.ouvert?'FÈME':'OUVÈ')+'</div></div>';
+  cont.appendChild(div);
+ });
+ var prixCont=document.getElementById('listPrixVendeur'); if(prixCont){ prixCont.innerHTML=''; vendors.forEach(v=>{ prixCont.innerHTML+='<div style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:6px;display:flex;justify-content:space-between;"><span>'+v.name+' - '+v.seri+'</span><span style="font-weight:900;">'+v.pct+'%</span></div>'; }); }
+}
+
+function modifVendeur(i){ var v=vendors[i]; document.getElementById('newVName').value=v.name; document.getElementById('newVPass').value=v.pass; document.getElementById('newVPct').value=v.pct; document.getElementById('newVSeri').value=v.seri; }
+function efaseVendeur(i){ if(!confirm('Efase '+vendors[i].name+' - Seri '+vendors[i].seri+'?')) return; vendors.splice(i,1); localStorage.setItem('vendors_v48',JSON.stringify(vendors)); renderVendeurs(); }
+function toggleOuve(i){ vendors[i].ouvert=!vendors[i].ouvert; localStorage.setItem('vendors_v48',JSON.stringify(vendors)); renderVendeurs(); }
+
+function showVendeurs(){ var msg='Vandè - Non - modpas - % - ouvè/fèmen - nimewo seri\n\n'; if(!vendors.length) msg+='Pa gen vandè'; else vendors.forEach(v=>{ msg+=v.name+' | Pass:'+v.pass+' | '+v.pct+'% | '+(v.ouvert?'OUVERT':'FÈMÈ')+' | Seri:'+v.seri+'\n'; }); alert(msg); }
+function resetAll(){ if(!confirm('RESET vandè yo?')) return; localStorage.removeItem('vendors_v48'); vendors=[]; document.getElementById('loginName').value=''; document.getElementById('loginPass').value=''; document.getElementById('loginErr').textContent='Memwa efase - 2 kaz VID - Logo konplè'; }
+function logout(){ localStorage.removeItem('currentVendor_v48'); localStorage.removeItem('isProprio_v48'); document.getElementById('loginScreen').style.display='flex'; document.getElementById('loginName').value=''; document.getElementById('loginPass').value=''; }
+
+function initAll(){
+ initTirajDrop(); initTirajSelects(); setupFleche(); initDefaut(); renderVendeurs(); updateFermtiList(); loadLogoPreview(); initParametres();
+ var s=localStorage.getItem('selTir_v36'); if(s){ selTir=JSON.parse(s); updateLabel(); }
+ isProprio=localStorage.getItem('isProprio_v48')==='true';
+ document.getElementById('gestionVendeursCard').style.display=isProprio?'block':'none';
+ document.getElementById('vendreCardVendeur').style.display='block';
+ var today=new Date().toISOString().split('T')[0]; var rDu=document.getElementById('rDu'); var rAu=document.getElementById('rAu'); if(rDu &&!rDu.value) rDu.value=today; if(rAu &&!rAu.value) rAu.value=today;
+ doRapport(); checkFermti();
+}
+
+function openTab(e,id){ document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); e.target.classList.add('active'); if(id==='rapport') doRapport(); closeDrop(); }
+function isClosed(t){ var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var p=t.fermeti.split(':'); return cur>=parseInt(p[0])*60+parseInt(p[1]); }
+function getClosedTirages(){ var closed=[]; tiragesData.forEach(t=>{ if(isClosed(t) &&!isProprio) closed.push(t.nom); }); return closed; }
+function checkFermti(){ var closed=getClosedTirages(); var alertEl=document.getElementById('fermtiAlert'); if(closed.length>0 &&!isProprio){ alertEl.style.display='block'; alertEl.innerHTML='⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closed.join(', '); } else { alertEl.style.display='none'; } updateFermtiList(); }
+function initTirajDrop(){ var drop=document.getElementById('tirajDrop'); if(!drop) return; drop.innerHTML=''; var divTous=document.createElement('div'); divTous.className='tirajOpt tous'; divTous.innerHTML='<input type="checkbox" id="chkTous"><label><b>Tirages (....., Tous)</b></label>'; divTous.onclick=function(e){ if(e.target.type!=='checkbox') document.getElementById('chkTous').checked=!document.getElementById('chkTous').checked; toggleTous(document.getElementById('chkTous').checked); }; drop.appendChild(divTous); tiragesData.forEach((t,i)=>{ var closed=isClosed(t) &&!isProprio; var div=document.createElement('div'); div.className='tirajOpt'+(closed?' ferme':''); div.innerHTML='<input type="checkbox" id="chk'+i+'" '+(selTir.includes(t.nom+' ('+t.heure+')')?'checked':'')+' '+(closed?'disabled':'')+'><label>'+t.nom+' ('+t.heure+') - Fèmti '+t.fermeti+(closed?' 🔒':' ✅')+'</label>'; div.onclick=function(e){ if(closed &&!isProprio) return; if(e.target.type!=='checkbox') document.getElementById('chk'+i).checked=!document.getElementById('chk'+i).checked; updateSelTir(); }; drop.appendChild(div); }); }
+function toggleDrop(){ document.getElementById('tirajDrop').classList.toggle('open'); }
+function closeDrop(){ var el=document.getElementById('tirajDrop'); if(el) el.classList.remove('open'); }
+function toggleTous(c){ tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk && (!isClosed(t) || isProprio)) chk.checked=c; }); updateSelTir(); }
+function updateSelTir(){ selTir=[]; tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk&&chk.checked){ if(isClosed(t) &&!isProprio){ chk.checked=false; } else { selTir.push(t.nom+' ('+t.heure+')'); } } }); if(!selTir.length){ var firstOpen=tiragesData.find(t=>!isClosed(t) || isProprio); selTir=[firstOpen?firstOpen.nom+' ('+firstOpen.heure+')':'GA MIDI (12:15)']; } localStorage.setItem('selTir_v36',JSON.stringify(selTir)); updateLabel(); updTotal(); }
+function updateLabel(){ var label=document.getElementById('tirajLabel'); if(!label) return; if(selTir.length===1) label.textContent=selTir[0]; else label.textContent=selTir.length+' tirages'; var sc=document.getElementById('selCount'); if(sc) sc.textContent=selTir.length+' tirage(s): '+selTir.join(' / '); }
+function initTirajSelects(){ var opts='<option value="tous">Tirages (..., tous)</option>'; tiragesData.forEach(t=>{ opts+='<option value="'+t.nom+'">'+t.nom+' ('+t.heure+')</option>'; }); document.getElementById('rTir').innerHTML=opts; var f=document.getElementById('resTir'); if(f) f.innerHTML=opts; var ct=document.getElementById('configTiraj'); if(ct) ct.innerHTML=opts; var ta=document.getElementById('tiragesActifsSel'); if(ta) ta.innerHTML=opts; }
+function setupFleche(){ var boul=document.getElementById('boul'), mise=document.getElementById('mise'); if(boul) boul.addEventListener('keydown',e=>{ if(e.key==='Enter'){ mise.focus(); } }); if(mise) mise.addEventListener('keydown',e=>{ if(e.key==='Enter'){ addL(); } }); }
+function addL(){ var b=document.getElementById('boul').value.trim(), mStr=document.getElementById('mise').value.trim(), m=parseInt(mStr)||0; if(!b){ document.getElementById('boul').focus(); return; } if(!mStr||m<=0){ alert('Kaz Miz vid'); document.getElementById('mise').focus(); return; } var closedInSel=selTir.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; }); if(closedInSel.length>0){ alert('⛔ FÈMTI RESPEKTE'); return; } lignes.push({jeu:document.getElementById('jeu').value,boul:b,mise:m}); document.getElementById('boul').value=''; document.getElementById('mise').value=''; document.getElementById('boul').focus(); renderV(); }
+function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy - Kaz Miz vid'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;font-weight:900;">✕</span></div>'; }); updTotal(); }
+function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); var tot=sum*selTir.length; var el=document.getElementById('totalV'); if(el) el.textContent='Total: '+sum+'G × '+selTir.length+' = '+tot+'G'; }
+
+function loadLogoPreview(){ var img=document.getElementById('logoPreview'); if(img){ img.src=logoBase64; } }
+
+function uploadLogo(e){
+ var file=e.target.files[0]; if(!file) return;
+ var reader=new FileReader();
+ reader.onload=function(ev){
+  logoBase64=ev.target.result;
+  localStorage.setItem('logoBase64_v48',logoBase64);
+  loadLogoPreview();
+  document.getElementById('logoStatus').textContent='✅ Logo konplè chaje - '+file.name+' - 360px santre - Pa koupe - Konplè tèt fich';
+  lg('🖼️ Logo konplè chaje - '+file.name);
+ };
+ reader.readAsDataURL(file);
+}
+function resetLogo(){ logoBase64=LOGO_DEFAULT_B64; localStorage.setItem('logoBase64_v48',logoBase64); loadLogoPreview(); document.getElementById('logoStatus').textContent='🔄 Logo Default Konplè - 360px - Pa koupe'; }
+
+// LOGO KONPLE - FIX KOUPE MWATYE - 384px width, santre, background blan, pa koupe
+function logoToEscPosComplete(callback){
+ if(!logoBase64){ callback(null); return; }
+ var img=new Image();
+ img.onload=function(){
+  var canvas=document.createElement('canvas');
+  var maxW=360; var maxH=180;
+  var ratio=Math.min(maxW/img.width, maxH/img.height, 1);
+  var w=Math.round(img.width*ratio);
+  var h=Math.round(img.height*ratio);
+  var canvasW=384; // 58mm = 384 dots - konplè
+  var canvasH=h+20; // 10px padding anwo anba
+  canvas.width=canvasW;
+  canvas.height=canvasH;
+  var ctx=canvas.getContext('2d');
+  ctx.fillStyle='#ffffff';
+  ctx.fillRect(0,0,canvasW,canvasH);
+  var x=Math.round((canvasW-w)/2);
+  var y=10;
+  ctx.imageSmoothingEnabled=true;
+  ctx.drawImage(img,x,y,w,h);
+  var imageData=ctx.getImageData(0,0,canvasW,canvasH);
+  var data=imageData.data;
+  var bytesPerLine=Math.ceil(canvasW/8);
+  var raster=[];
+  for(var yy=0; yy<canvasH; yy++){
+   for(var xb=0; xb<bytesPerLine; xb++){
+    var byte=0;
+    for(var bit=0; bit<8; bit++){
+     var xx=xb*8+bit;
+     if(xx<canvasW){
+      var idx=(yy*canvasW+xx)*4;
+      var r=data[idx], g=data[idx+1], b=data[idx+2], a=data[idx+3];
+      var bw=0;
+      if(a>30){
+       var gray=0.299*r+0.587*g+0.114*b;
+       bw=gray<140?1:0;
+      }
+      byte|=(bw<<(7-bit));
+     }
+    }
+    raster.push(byte);
+   }
+  }
+  var xL=bytesPerLine & 0xFF, xH=(bytesPerLine>>8)&0xFF;
+  var yL=canvasH & 0xFF, yH=(canvasH>>8)&0xFF;
+  var esc='\x1D\x76\x30\x00'+String.fromCharCode(xL)+String.fromCharCode(xH)+String.fromCharCode(yL)+String.fromCharCode(yH);
+  var rasterStr=''; for(var i=0;i<raster.length;i++) rasterStr+=String.fromCharCode(raster[i]);
+  callback(esc+rasterStr+'\n');
+ };
+ img.onerror=function(){ callback(null); };
+ img.src=logoBase64;
+}
+
+function buildTicketTxt(f){ var W=32; function center(t){ t=t.toString(); var pad=Math.max(0,Math.floor((W-t.length)/2)); return ' '.repeat(pad)+t; } var txt=''; txt+=center('C&D VERITE LOTTO')+'\n'; txt+=center('================')+'\n'; txt+=center('Date..... '+new Date(f.ts).toLocaleString('fr-HT'))+'\n'; txt+=center('Tirages....')+'\n'; f.tirages.forEach(tr=>{ txt+=center(tr)+'\n'; }); txt+=center('Vandeur.... '+(currentVendor?currentVendor.name:'POZO')+' - '+f.seri)+'\n'; txt+=center('Id ticket..... '+f.id)+'\n'; txt+=center('----------------')+'\n'; f.lignes.forEach(l=>{ txt+=center(l.jeu+' '+l.boul+' '+l.mise+'G')+'\n'; }); txt+=center('----------------')+'\n'; txt+=center('TOTAL '+f.total+'G')+'\n'; txt+=center('================')+'\n'; txt+=center(new Date(f.ts).toLocaleString('fr-HT'))+'\n\n\n'; return txt; }
+function buildTicketESC(f){ var ESC='\x1B', GS='\x1D', CENTER=ESC+'a\x01', BOLD_ON=ESC+'E\x01', BOLD_OFF=ESC+'E\x00'; var txt=CENTER+BOLD_ON+'C&D VERITE LOTTO'+BOLD_OFF+'\n'; txt+='Date..... '+new Date(f.ts).toLocaleString('fr-HT')+'\nTirages....\n'+f.tirages.join('\n')+'\nVandeur.... '+(currentVendor?currentVendor.name:'POZO')+' - '+f.seri+'\nId ticket..... '+f.id+'\n----------------\n'; f.lignes.forEach(l=>{ txt+=l.jeu+' '+l.boul+' '+l.mise+'G\n'; }); txt+='----------------\n'+BOLD_ON+'TOTAL '+f.total+'G'+BOLD_OFF+'\n================\n\n\n'+GS+'V\x00'; return txt; }
+function doPrint(txt,escTxt){ logoToEscPosComplete(function(logoEsc){ var full=''; if(logoEsc) full+=logoEsc+'\n'; full+=escTxt; var url='rawbt:print?data='+encodeURIComponent(full); window.location.href=url; }); }
+
+function previewTicket(){
+ if(!lignes.length){ alert('Pa gen liy'); return; }
+ var f={id:'T'+Date.now().toString().slice(-6),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now(),seri:currentVendor?currentVendor.seri:'SN-0000'};
+ var txt=buildTicketTxt(f);
+ var area=document.getElementById('previewArea');
+ area.innerHTML='<div class="ticketPreview"><img src="'+logoBase64+'" style="max-width:260px;max-height:160px;display:block;margin:0 auto 10px auto;background:#fff;border-radius:12px;padding:4px;"><div style="white-space:pre-line;">'+txt.replace(/\n/g,'<br>')+'</div></div>';
+}
+function printTicket(){
+ if(!lignes.length) return;
+ var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now(),vendor:currentVendor?currentVendor.name:'POZO',seri:currentVendor?currentVendor.seri:'SN-0000'};
+ fiches.unshift(f); localStorage.setItem('cdv48',JSON.stringify(fiches));
+ var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); lignes=[]; renderV();
+}
+
+function doRapport(){ var tir=document.getElementById('rTir').value; var du=document.getElementById('rDu').value; var au=document.getElementById('rAu').value; var list=[...fiches]; if(du){ var duTs=new Date(du).setHours(0,0,0,0); list=list.filter(f=>f.ts>=duTs); } if(au){ var auTs=new Date(au).setHours(23,59,59,999); list=list.filter(f=>f.ts<=auTs); } if(tir!=='tous'){ list=list.filter(f=>f.tirages.join('/').includes(tir)); } if(!isProprio && currentVendor){ list=list.filter(f=>!f.vendor || f.vendor===currentVendor.name); } var vente=list.reduce((a,b)=>a+b.total,0); var commission=vente*0.10; var gain=0; var balance=vente-commission-gain; document.getElementById('valVente').textContent=vente+'G'; document.getElementById('valComm').textContent=commission.toFixed(0)+'G'; document.getElementById('valGain').textContent=gain+'G'; document.getElementById('valBalance').textContent=balance.toFixed(0)+'G'; document.getElementById('valNb').textContent='Nb: '+list.length; document.getElementById('valVendor').textContent='Vandè: '+(isProprio?'TOUT - PROPRIO':(currentVendor?currentVendor.name:'-'))+' | Seri: '+(currentVendor?currentVendor.seri:'-'); window._rap={vente,commission,gain,balance,list,du,au,tir}; }
+function printRap(){ var r=window._rap; if(!r){ alert('Fè Générer anvan'); return; } var txt='\x1Ba\x01 C&D VERITE LOTTO - RAPPORT\nDu...: '+(r.du||'-')+' Au...: '+(r.au||'-')+'\nTirages: '+(r.tir||'tous')+'\n----------------\nVente...: '+r.vente+'G\nCommission...: '+r.commission.toFixed(0)+'G\nGain ( clients)...: '+r.gain.toFixed(0)+'G\nBalance net...: '+r.balance.toFixed(0)+'G\n----------------\nNb: '+r.list.length+'\nVandeur: '+(isProprio?'TOUT PROPRIO':(currentVendor?currentVendor.name:'-'))+'\nDate: '+new Date().toLocaleString('fr-HT')+'\n\n\n'; doPrint(txt,txt); }
+
+// PARAMETRES - Tirages actifs, Jours des tirages, Heure de a
+function initParametres(){
+ var configJoursDiv=document.getElementById('configJours');
+ if(configJoursDiv){
+  configJoursDiv.innerHTML='';
+  ["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"].forEach(j=>{
+   var lbl=document.createElement('label'); lbl.className='jourCheck';
+   lbl.innerHTML='<input type="checkbox" value="'+j+'" checked> '+j.charAt(0).toUpperCase()+j.slice(1);
+   configJoursDiv.appendChild(lbl);
+  });
+ }
+ renderTiragesHoraires();
+}
+function saveTiragesActifs(){ var v=document.getElementById('tiragesActifsSel').value; localStorage.setItem('tiragesActifs_v48',v); lg('Tirages actifs: '+v); }
+function saveJoursTirages(){
+ var checks=document.querySelectorAll('#joursChecks input[type=checkbox]'); var jours=[]; checks.forEach(c=>{ if(c.checked) jours.push(c.value); });
+ localStorage.setItem('joursTirages_v48',JSON.stringify(jours)); lg('Jours des tirages: '+jours.join(','));
+}
+function loadTirajConfig(){
+ var nom=document.getElementById('configTiraj').value; if(nom==='tous'){ document.getElementById('heureDe').value='08:00'; document.getElementById('heureA').value='22:00'; return; }
+ var t=tiragesData.find(x=>x.nom===nom); if(t){ document.getElementById('heureDe').value=t.de; document.getElementById('heureA').value=t.a||t.fermeti; var joursDiv=document.getElementById('configJours'); if(joursDiv){ joursDiv.querySelectorAll('input').forEach(inp=>{ inp.checked=t.jours.includes(inp.value); }); } }
+}
+function saveTirajHoraire(){
+ var nom=document.getElementById('configTiraj').value; var de=document.getElementById('heureDe').value; var a=document.getElementById('heureA').value;
+ var joursChecks=document.querySelectorAll('#configJours input[type=checkbox]'); var jours=[]; joursChecks.forEach(c=>{ if(c.checked) jours.push(c.value); });
+ if(nom==='tous'){ tiragesData.forEach(t=>{ t.de=de; t.a=a; t.fermeti=a; t.jours=jours; }); }
+ else { var t=tiragesData.find(x=>x.nom===nom); if(t){ t.de=de; t.a=a; t.fermeti=a; t.jours=jours; } }
+ localStorage.setItem('tiragesData_v48',JSON.stringify(tiragesData)); renderTiragesHoraires(); lg('Tiraj '+nom+' - jours '+jours.join(',')+' - de '+de+' a '+a); alert('Sauve: '+nom+' - Jours: '+jours.join(', ')+' - De '+de+' à '+a);
+}
+function renderTiragesHoraires(){ var cont=document.getElementById('tiragesHoraireList'); if(!cont) return; var html=''; tiragesData.forEach(t=>{ html+='<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px dashed #333;"><span>'+t.nom+'</span><span>'+t.jours.join(', ').substring(0,20)+' | '+t.de+'→'+t.fermeti+'</span></div>'; }); cont.innerHTML=html; }
+
+function initDefaut(){ var sw=document.getElementById('defautSwitch'), txt=document.getElementById('defautTxt'), nameEl=document.getElementById('defautName'), curEl=document.getElementById('currentPrinter'); if(useDefaut){ sw.style.background='#2e7d32'; txt.textContent='OUI'; txt.style.color='#2e7d32'; if(curEl) curEl.innerHTML='🖨️ <b>'+curPrinter.name+'</b> - Défaut: OUI - Logo KONPLÈ'; if(nameEl) nameEl.textContent=curPrinter.name; } else { sw.style.background='#c62828'; txt.textContent='NON'; txt.style.color='#c62828'; if(curEl) curEl.innerHTML='🖨️ Choisir - Défaut: NON'; if(nameEl) nameEl.textContent='Choisir - NON'; } localStorage.setItem('useDefaut_v36',JSON.stringify(useDefaut)); }
+function toggleDefaut(){ useDefaut=!useDefaut; initDefaut(); }
+function scanToutesImprimantes(){ var list=document.getElementById('printerList'); var status=document.getElementById('scanStatus'); list.innerHTML=''; if(status) status.textContent='🔍 Recherche de toutes les imprimantes...'; var printers=[{name:'GwoFos-G001',addr:'00:11:22:33:44:55'},{name:'InnerPrinter - Sunmi',addr:'Sunmi'},{name:'RawBT - 58mm',addr:'58mm'}]; printers.forEach(p=>{ var d=document.createElement('div'); d.style.cssText='background:#fff;border:3px solid #000;border-radius:12px;padding:12px;margin-top:8px;cursor:pointer;display:flex;justify-content:space-between;font-size:11px;font-weight:900;'; d.innerHTML='<div>🖨️ '+p.name+'</div><div>➕</div>'; d.onclick=function(){ curPrinter={name:p.name,addr:p.addr}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); useDefaut=true; initDefaut(); }; list.appendChild(d); }); if(status) status.textContent='✅ '+printers.length+' imprimantes - Recherche OK - Logo konplè'; }
+
+function updateFermtiList(){ var c=document.getElementById('listFermti'); if(!c) return; var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var html=''; tiragesData.forEach(t=>{ var p=t.fermeti.split(':'); var ferm=parseInt(p[0])*60+parseInt(p[1]); var diff=ferm-cur; var status=diff<=0?'🔒 FÈMEN':(diff<=15?'⚠️ '+diff+'min':'✅ '+diff+'min'); var color=diff<=0?'#c62828':(diff<=15?'#ff9800':'#2e7d32'); html+='<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px solid #eee;"><span>'+t.nom+' Fèmti '+t.fermeti+' - '+t.de+'→'+t.fermeti+' - '+t.jours.length+'j</span><span style="color:'+color+';font-weight:900;">'+status+'</span></div>'; }); c.innerHTML=html; }
+
+function addLimite(){ var b=document.getElementById('limBoul').value.trim(); var v=document.getElementById('limVal').value.trim(); if(!b||!v) return; limites.push({boul:b,limit:parseInt(v)}); localStorage.setItem('limites_v48',JSON.stringify(limites)); document.getElementById('limBoul').value=''; document.getElementById('limVal').value=''; renderLimites(); }
+function renderLimites(){ var c=document.getElementById('listLimites'); if(!c) return; c.innerHTML=''; limites.forEach((l,i)=>{ c.innerHTML+='<div style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:6px;display:flex;justify-content:space-between;"><span>'+l.boul+' - Limit '+l.limit+'G</span><span onclick="limites.splice('+i+',1);localStorage.setItem(\'limites_v48\',JSON.stringify(limites));renderLimites()" style="color:red;font-weight:900;">✕</span></div>'; }); }
+
+function saveResult(){ var tir=document.getElementById('resTir').value; var g=document.getElementById('resGagnant').value.trim(); if(!g) return; results.unshift({tir:tir,gagnant:g,ts:Date.now()}); localStorage.setItem('results_v48',JSON.stringify(results)); document.getElementById('resGagnant').value=''; renderResults(); }
+function renderResults(){ var c=document.getElementById('listResults'); if(!c) return; c.innerHTML=''; results.slice(0,20).forEach(r=>{ c.innerHTML+='<div style="background:#fff;border:2px solid #000;border-radius:10px;padding:6px;margin-top:4px;">'+r.tir+' - Gagnant: '+r.gagnant+'</div>'; }); }
+
+function initLoginObligatwa(){
+ document.getElementById('loginScreen').style.display='flex';
+ document.getElementById('loginName').value=''; document.getElementById('loginPass').value='';
+ document.getElementById('loginName').focus();
+ document.getElementById('loginPass').addEventListener('keydown',function(e){ if(e.key==='Enter'){ doLoginRespect(); } });
+ document.getElementById('loginName').addEventListener('keydown',function(e){ if(e.key==='Enter'){ document.getElementById('loginPass').focus(); } });
+ lg('V48 LOGO KONPLE - Non VID Modpas VID RESPEKTE - Vendeurs % ouve ferme seri - Paramet Tirages actifs Jours Heures De A');
+}
+setInterval(()=>{ var el=document.getElementById('clock'); if(el) el.textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); },1000);
+document.addEventListener('click',function(e){ var wrap=document.querySelector('.tirajMultiWrap'); if(wrap&&!wrap.contains(e.target)) closeDrop(); });
+initDefaut(); renderLimites(); renderResults(); initLoginObligatwa();
 </script>
 </body>
 </html>
