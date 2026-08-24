@@ -2,8 +2,8 @@
 <html lang="ht">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>C&D V38 - MIZ VID - MODPAS VANDÈ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C&D V40 - LOGO DIRÈKT NAN TÈT FICH SANTRE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{background:#000;color:#fff;font-family:monospace}
 .top{background:#ff0;color:#000;padding:6px;text-align:center;font-weight:bold;font-size:10px;position:sticky;top:0;z-index:100}
@@ -14,10 +14,8 @@
 .blue{background:#1976d2;color:#fff}.green{background:#2e7d32;color:#fff}.orange{background:#ff5722;color:#fff}
 .input{width:100%;padding:10px;border:1px solid #bbb;border-radius:6px;margin-top:5px;font-size:12px}
 .vendreRow{display:flex;gap:4px;margin-top:6px;justify-content:center}
-.vendreRow select,.vendreRow input{width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;font-size:11px;border:2px solid #000;border-radius:6px;background:#fff;outline:none}
-.vendreRow input.boulCase{background:#fff}
-.vendreRow input.miseCase{background:#fff;border-color:#000} /* VID - PA JÒN 25 ANKÒ */
-.vendreRow input.miseCase:focus{background:#ffeb3b;border-color:#1976d2}
+.vendreRow select,.vendreRow input{width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;font-size:11px;border:2px solid #000;border-radius:6px;background:#fff}
+.vendreRow input.miseCase{background:#fff}
 .addBtnSmall{width:42px;min-width:42px;padding:8px 2px;font-size:13px;margin:0}
 .listV{background:#111;color:#0f0;border-radius:6px;padding:5px;min-height:45px;max-height:100px;overflow:auto;margin-top:6px;font-size:10px}
 .totalBox{background:#0f0;color:#000;padding:8px;border-radius:6px;text-align:center;font-weight:bold;font-size:11px;margin-top:6px}
@@ -25,34 +23,31 @@
 .tirajMultiWrap{position:relative}.tirajMultiBtn{width:100%;padding:11px;border:2px solid #1976d2;border-radius:6px;background:#e3f2fd;font-weight:bold;font-size:11px;display:flex;justify-content:space-between;cursor:pointer}
 .tirajDrop{position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid #1976d2;max-height:260px;overflow:auto;z-index:200;display:none}
 .tirajDrop.open{display:block}.tirajOpt{padding:9px 10px;border-bottom:1px solid #eee;display:flex;gap:8px;font-size:11px;cursor:pointer}.tirajOpt.tous{background:#ff0;font-weight:bold}
-.printerItem{background:#fff;border:1px solid #ccc;border-radius:8px;padding:12px;margin-top:7px;cursor:pointer;display:flex;justify-content:space-between;font-size:11px}
-.printerItem.sel{border:3px solid #2e7d32;background:#e8f5e9}
+.ticketPreview{background:#fff;color:#000;font-family:monospace;font-size:12px;padding:12px;border:1px dashed #000;width:260px;margin:10px auto;text-align:center;line-height:1.4}
+.logoPreview{width:200px;height:100px;border:2px dashed #0a7e07;border-radius:8px;margin:8px auto;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden}
+.logoPreview img{max-width:100%;max-height:100%;object-fit:contain}
 .paramRow{display:flex;justify-content:space-between;align-items:center;background:#fff;border:2px solid #000;border-radius:10px;padding:12px;margin-top:10px}
 .switch{width:96px;height:38px;background:#ccc;border-radius:19px;position:relative;cursor:pointer}
 .switch.oui{background:#2e7d32}.switch.non{background:#c62828}
 .switchCircle{position:absolute;left:4px;top:4px;width:30px;height:30px;background:#fff;border-radius:50%;transition:0.3s}
 .switch.oui.switchCircle{left:62px}
-.ticketPreview{background:#fff;color:#000;font-family:monospace;font-size:12px;padding:12px;border:1px dashed #000;width:220px;margin:10px auto;text-align:center;line-height:1.4}
 </style>
 </head>
 <body>
-<div class="top">VENDEUR POZO - TIRAGES (...., TOUS) - 1 KAZ - <span id="clock">--:--</span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:2px 8px;border-radius:10px;font-size:9px;">🖨️ GwoFos-G001 - Défaut: OUI</span></div>
+<div class="top">V40 LOGO DIRÈKT NAN TÈT FICH - C&D VERITE LOTTO - <span id="clock">--:--</span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:2px 8px;border-radius:10px;font-size:9px;">🖨️ Logo OK - Miz Vid - Santre</span></div>
 
 <div id="loginScreen" style="position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;padding:10px;">
-<div class="loginBox" style="width:100%;max-width:340px;">
+<div class="loginBox" style="width:100%;max-width:360px;">
 <div style="font-size:16px;font-weight:bold;text-align:center;">🔐 KONEKSYON VANDÈ</div>
-<div style="font-size:10px;margin-top:8px;text-align:center;color:#ff0;">Vandè mete modpas li poukont li - Pa gen modpas afiche</div>
-<select id="loginVendor" class="input" style="margin-top:10px;"><option value="POZO">POZO</option><option value="JUNIOR">JUNIOR</option><option value="NOUVO">+ NOUVO VANDÈ</option></select>
-<input id="loginPass" type="password" placeholder="Mete modpas ou isit la - Pa gen 1234 afiche" class="input" style="text-align:center;letter-spacing:3px;margin-top:8px;">
+<select id="loginVendor" class="input" style="margin-top:8px;"></select>
+<input id="loginPass" type="password" placeholder="Mete modpas ou" class="input" style="text-align:center;margin-top:6px;">
 <div id="newVendorBox" style="display:none;">
-<input id="newVendorName" placeholder="Non nouvo vandè" class="input" style="margin-top:6px;">
-<input id="newVendorPhone" placeholder="Telefòn vandè - Pou fich santre" class="input" style="margin-top:4px;">
-<input id="newVendorPassSet" type="password" placeholder="Chwazi modpas ou - Vandè mete l poukont li" class="input" style="margin-top:4px;">
+<input id="newVendorName" placeholder="Non vandè" class="input">
+<input id="newVendorPhone" placeholder="Telefòn" class="input" style="margin-top:4px;">
+<input id="newVendorPassSet" type="password" placeholder="Chwazi modpas ou" class="input" style="margin-top:4px;">
 </div>
-<div class="btn green" onclick="doLogin()" style="padding:14px;margin-top:10px;">KONEKTE - Vandè mete modpas li</div>
-<div id="loginErr" style="color:#f55;font-size:11px;margin-top:8px;text-align:center;"></div>
-<div style="font-size:8px;margin-top:10px;background:#222;padding:7px;border-radius:6px;text-align:center;">Pa gen modpas afiche - Vandè kreye modpas li poukont li nan premye koneksyon - Kaz Miz vid nan VENDRE</div>
-<div class="btn blue" onclick="resetAllVendors()" style="background:#333;padding:8px;font-size:9px;margin-top:6px;">Reset vandè (si bliye modpas)</div>
+<div class="btn green" onclick="doLogin()" style="padding:14px;margin-top:8px;">KONEKTE</div>
+<div id="loginErr" style="color:#f55;font-size:11px;margin-top:6px;text-align:center;"></div>
 </div>
 </div>
 
@@ -65,8 +60,8 @@
 </div>
 
 <div id="vendre" class="tabContent active">
-<div class="card" style="border:2px solid #1976d2;">
-<div style="font-weight:bold;font-size:11px;color:#1976d2;">Tirages (....., Tous). Choix multiple - Yon sèl kaz:</div>
+<div class="card" style="border:2px solid #0a7e07;">
+<div style="font-weight:bold;font-size:11px;color:#0a7e07;">✅ Logo dirèkteman nan tèt fich la - Tirages (....., Tous) - Yon sèl kaz:</div>
 <div class="tirajMultiWrap">
 <div id="tirajBtn" class="tirajMultiBtn" onclick="toggleDrop()"><span id="tirajLabel">GA MIDI (12:15)</span><span>▼</span></div>
 <div id="tirajDrop" class="tirajDrop"></div>
@@ -74,18 +69,17 @@
 <div id="selCount" style="font-size:10px;color:#0a0;margin-top:4px;">1 tirage</div>
 </div>
 <div class="card">
-<div style="font-size:10px;font-weight:bold;text-align:center;margin-bottom:4px;color:#c62828;">✅ Kaz Miz vid - Vandè dwe tape miz - Pa gen 25 otomatik - Flèche → ↓ - Jeu conserve</div>
+<div style="font-size:9px;font-weight:bold;text-align:center;color:#0a7e07;margin-bottom:4px;">🖼️ LOGO C&D vèt/lò dirèk nan tèt fich - Kaz Miz vid - 3 kaz 72px menm longè - Fich santre</div>
 <div class="vendreRow">
-<select id="jeu" tabindex="1"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select>
-<input id="boul" class="boulCase" style="width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;border:2px solid #000;border-radius:6px;" placeholder="Boul" inputmode="numeric" maxlength="6" tabindex="2">
-<input id="mise" class="miseCase" style="width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;border:2px solid #000;border-radius:6px;" placeholder="Miz" inputmode="numeric" tabindex="3">
-<div class="btn blue addBtnSmall" tabindex="4" onclick="addL()" id="btnAdd">+↓</div>
+<select id="jeu"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select>
+<input id="boul" class="boulCase" placeholder="Boul" inputmode="numeric" maxlength="6" style="width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;border:2px solid #000;border-radius:6px;">
+<input id="mise" class="miseCase" placeholder="Miz" inputmode="numeric" style="width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;border:2px solid #000;border-radius:6px;background:#fff;">
+<div class="btn blue addBtnSmall" onclick="addL()">+↓</div>
 </div>
-<div style="font-size:8px;color:#666;text-align:center;margin-top:4px;">Jeux 72px = Boul 72px = Miz 72px (vid) - Menm longè - Tape Miz - Flèche → Boul→Miz | ↓ Ajoute</div>
-<div id="listV" class="listV">Pa gen liy - Kaz Miz vid - Tape miz</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div>
+<div id="listV" class="listV">Pa gen liy - Kaz Miz vid</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div>
 <div style="display:flex;gap:4px;">
-<div class="btn green" onclick="printTicket()" style="flex:1;padding:14px;">🖨️ IMPRIMER SANTRE</div>
-<div class="btn blue" onclick="previewTicket()" style="flex:1;background:#111;">👁️ APERÇU</div>
+<div class="btn green" onclick="printTicket()" style="flex:1;padding:14px;background:#0a7e07;">🖨️ IMPRIMER LOGO + SANTRE</div>
+<div class="btn blue" onclick="previewTicket()" style="flex:1;background:#111;">👁️ APERÇU LOGO</div>
 </div>
 <div id="previewArea"></div>
 </div>
@@ -93,110 +87,89 @@
 
 <div id="copier" class="tabContent"><div class="card"><div style="font-weight:bold;">COPIER</div><input id="copyId" class="input"><div class="btn blue" onclick="doCopy()">Chèche</div><div id="copyRes"></div></div></div>
 <div id="fiches" class="tabContent"><div class="card"><div style="font-weight:bold;">FICHES</div><select id="fTir" class="input"></select><div id="listF"></div></div></div>
-<div id="rapport" class="tabContent"><div class="card" style="border:3px solid #0a0;"><div style="font-weight:bold;color:#0a0;">📊 Rapport:</div><div style="display:flex;gap:4px;margin-top:6px;"><input id="rDu" type="date" class="input" style="flex:1;"><span style="padding:9px 4px;">au</span><input id="rAu" type="date" class="input" style="flex:1;"></div><select id="rTir" class="input" style="margin-top:4px;"></select><div id="resRap" style="margin-top:10px;"></div><div class="btn green" onclick="doRapport()">Générer Rapport</div><div class="btn blue" onclick="printRap()" style="background:#111;">🖨️ Imprimer..</div></div></div>
+<div id="rapport" class="tabContent"><div class="card" style="border:3px solid #0a0;"><div style="font-weight:bold;color:#0a0;">📊 Rapport: Vente... Commission Gain ( clients)... Balance net...</div><div style="display:flex;gap:4px;margin-top:6px;"><input id="rDu" type="date" class="input" style="flex:1;"><span style="padding:9px 4px;">au</span><input id="rAu" type="date" class="input" style="flex:1;"></div><select id="rTir" class="input" style="margin-top:4px;"></select><div id="resRap" style="margin-top:10px;"></div><div class="btn green" onclick="doRapport()">Générer</div><div class="btn blue" onclick="printRap()" style="background:#111;">🖨️ Imprimer..</div></div></div>
 
 <div id="imprimantes" class="tabContent">
 <div class="card" style="border:3px solid #1976d2;padding:14px;">
-<div style="font-weight:bold;color:#1976d2;font-size:15px;text-align:center;">⚙️ Paramètres</div>
+<div style="font-weight:bold;color:#0a7e07;font-size:15px;text-align:center;">⚙️ Paramètres - Logo dirèk nan tèt fich</div>
+
+<div style="margin-top:14px;border:3px solid #0a7e07;border-radius:10px;padding:12px;background:#e8f5e9;">
+<div style="font-weight:bold;font-size:13px;color:#000;">🖼️ Logo dirèkteman nan tèt fich la ✅ Entegre</div>
+<div style="font-size:9px;color:#0a7e07;margin-top:3px;">Logo C&D VERITE LOTTO ou voye a entegre dirèk - Vèt/lò boul lò zetwal - Santre 58mm - An tèt chak fich anvan C&D VERITE LOTTO</div>
+<div class="logoPreview" id="logoPreview"></div>
+<input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="uploadLogo(event)">
+<div style="display:flex;gap:4px;">
+<div class="btn blue" onclick="document.getElementById('logoInput').click()" style="flex:1;padding:12px;background:#0a7e07;">📁 Chanje Logo</div>
+<div class="btn orange" onclick="removeLogo()" style="flex:1;background:#c62828;">❌ Retire</div>
+</div>
+<div style="display:flex;gap:4px;margin-top:6px;">
+<div class="btn green" onclick="testLogoPrint()" style="flex:1;background:#0a7e07;">🧪 TEST LOGO + FICH SANTRE</div>
+<div class="btn blue" onclick="previewTicket()" style="flex:1;background:#111;">👁️ Aperçu</div>
+</div>
+<div id="logoInfo" style="font-size:9px;background:#fff;padding:6px;border-radius:6px;margin-top:6px;">✅ Logo C&D entegre dirèk nan tèt fich - 140x140 - Santre - Lave chodye w - Kaz Miz vid</div>
+</div>
 
 <div style="margin-top:14px;">
 <div style="font-weight:bold;font-size:12px;">1- Recherche de toutes les imprimantes</div>
-<div class="btn orange" onclick="scanToutesImprimantes()" style="padding:16px;font-size:14px;margin-top:8px;">🔍 RECHERCHE DE TOUTES LES IMPRIMANTES</div>
+<div class="btn orange" onclick="scanToutesImprimantes()" style="padding:14px;font-size:13px;margin-top:6px;">🔍 RECHERCHE DE TOUTES LES IMPRIMANTES</div>
 </div>
 
-<div style="margin-top:18px;">
-<div style="font-weight:bold;font-size:12px;">2- Utilisation de l'imprimante par défaut (oui-non)</div>
+<div style="margin-top:14px;">
+<div style="font-weight:bold;font-size:12px;">2- Utilisation par défaut (oui-non)</div>
 <div class="paramRow">
-<div>
-<div style="font-weight:bold;font-size:13px;">Utiliser par défaut</div>
-<div id="defautName" style="font-size:10px;color:#666;">GwoFos-G001</div>
-</div>
-<div style="display:flex;align-items:center;gap:10px;">
-<span id="defautTxt" style="font-weight:bold;font-size:13px;">OUI</span>
-<div id="defautSwitch" class="switch oui" onclick="toggleDefaut()"><div class="switchCircle"></div></div>
-</div>
+<div><div style="font-weight:bold;font-size:13px;">Utiliser par défaut</div><div id="defautName" style="font-size:10px;color:#666;">GwoFos-G001</div></div>
+<div style="display:flex;align-items:center;gap:10px;"><span id="defautTxt" style="font-weight:bold;font-size:13px;">OUI</span><div id="defautSwitch" class="switch oui" onclick="toggleDefaut()"><div class="switchCircle"></div></div></div>
 </div>
 <div id="defautInfo" style="border-radius:8px;padding:10px;margin-top:8px;font-size:10px;"></div>
 </div>
 
-<div style="margin-top:14px;border-top:2px solid #000;padding-top:10px;">
-<div style="font-weight:bold;font-size:12px;">3- Modpas vandè - Telefòn fich santre</div>
-<div style="font-size:9px;color:#666;">Vandè mete modpas li poukont li - Pa gen 1234 afiche - Kaz Miz vid</div>
-<input id="paramVendorPhone" placeholder="Telefòn vandè pou fich santre - Ex: 509-1234-5678" class="input" style="margin-top:6px;">
-<div class="btn blue" onclick="saveVendorPhone()" style="padding:10px;">💾 Sove Telefòn - Pou fich santre - C&D VÉRITÉ LOTTO</div>
-<div style="display:flex;gap:4px;margin-top:6px;">
-<input id="paramOldPass" type="password" placeholder="Ansyen modpas" class="input" style="flex:1;">
-<input id="paramNewPass" type="password" placeholder="Nouvo modpas" class="input" style="flex:1;">
-</div>
+<div style="margin-top:12px;border-top:2px solid #000;padding-top:10px;">
+<div style="font-weight:bold;font-size:12px;">3- Vandè - Telefòn</div>
+<input id="paramVendorPhone" placeholder="Telefòn" class="input">
+<div class="btn blue" onclick="saveVendorPhone()" style="padding:10px;">💾 Sove Telefòn</div>
+<div style="display:flex;gap:4px;margin-top:6px;"><input id="paramOldPass" type="password" placeholder="Ansyen" class="input" style="flex:1;"><input id="paramNewPass" type="password" placeholder="Nouvo" class="input" style="flex:1;"></div>
 <div class="btn orange" onclick="changeVendorPass()" style="padding:10px;">🔑 Chanje modpas - Vandè mete l poukont li</div>
 </div>
 
 <div id="printerList" style="margin-top:10px;"></div>
-<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:70px;overflow:auto;padding:7px;margin-top:10px;border-radius:6px;">Log: Kaz Miz vid - Modpas vandè mete poukont li - Pret</div>
+<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:70px;overflow:auto;padding:7px;margin-top:10px;border-radius:6px;">Log: Logo C&D dirèk nan tèt fich - Pare - Miz vid</div>
 <div id="currentPrinter" style="background:#e8f5e9;padding:10px;border-radius:8px;margin-top:8px;font-size:11px;border:2px solid #2e7d32;"></div>
-<div style="display:flex;gap:4px;margin-top:8px;"><div class="btn blue" style="flex:1;" onclick="testPrint()">🧪 TEST SANTRE</div><div class="btn green" style="flex:1;" onclick="openTab({target:document.querySelectorAll('.tab')[0]},'vendre')">⬅️ VENDRE</div></div>
 </div>
 </div>
 
 <script>
-var tiragesData=[
-{nom:"GA MIDI",heure:"12:15",fermeti:"12:10"},{nom:"FL MIDI",heure:"13:15",fermeti:"13:10"},{nom:"NY MIDI",heure:"14:15",fermeti:"14:10"},
-{nom:"GANAMAS",heure:"14:15",fermeti:"14:10"},{nom:"GA SOIR",heure:"18:15",fermeti:"18:10"},{nom:"FL SOIR",heure:"21:15",fermeti:"21:10"},
-{nom:"NY SOIR",heure:"22:15",fermeti:"22:10"},{nom:"PRIMERA DIA",heure:"11:50",fermeti:"11:45"},{nom:"PRIMERA NOCHE",heure:"19:50",fermeti:"19:45"},
-{nom:"REAL",heure:"13:00",fermeti:"12:55"},{nom:"LOTE DOM",heure:"18:30",fermeti:"18:25"},{nom:"NACIONAL NOCHE",heure:"20:15",fermeti:"20:10"},
-{nom:"LOTEKA",heure:"19:30",fermeti:"19:25"},{nom:"LEIDSA",heure:"20:50",fermeti:"20:45"},{nom:"ANGUILA 10H",heure:"09:55",fermeti:"09:50"},
-{nom:"ANGUILLA 6H",heure:"05:55",fermeti:"05:50"}
-];
-var selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv38')||'[]');
+var LOGO_DEFAULT_B64 = "data:image/png;base64,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";
+var tiragesData=[{nom:"GA MIDI",heure:"12:15",fermeti:"12:10"},{nom:"FL MIDI",heure:"13:15",fermeti:"13:10"},{nom:"NY MIDI",heure:"14:15",fermeti:"14:10"},{nom:"GANAMAS",heure:"14:15",fermeti:"14:10"},{nom:"GA SOIR",heure:"18:15",fermeti:"18:10"},{nom:"FL SOIR",heure:"21:15",fermeti:"21:10"},{nom:"NY SOIR",heure:"22:15",fermeti:"22:10"},{nom:"PRIMERA DIA",heure:"11:50",fermeti:"11:45"},{nom:"PRIMERA NOCHE",heure:"19:50",fermeti:"19:45"},{nom:"REAL",heure:"13:00",fermeti:"12:55"},{nom:"LOTE DOM",heure:"18:30",fermeti:"18:25"},{nom:"NACIONAL NOCHE",heure:"20:15",fermeti:"20:10"},{nom:"LOTEKA",heure:"19:30",fermeti:"19:25"},{nom:"LEIDSA",heure:"20:50",fermeti:"20:45"},{nom:"ANGUILA 10H",heure:"09:55",fermeti:"09:50"},{nom:"ANGUILLA 6H",heure:"05:55",fermeti:"05:50"}];
+var selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv40')||'[]');
 var curPrinter=JSON.parse(localStorage.getItem('cd_printer_v36')||'{"name":"GwoFos-G001","addr":"00:11:22:33:44:55"}');
 var useDefaut=JSON.parse(localStorage.getItem('useDefaut_v36')===null?'true':localStorage.getItem('useDefaut_v36'));
 var vendors=JSON.parse(localStorage.getItem('vendors_v38')||'[]');
-var vendorPhone=localStorage.getItem('vendorPhone_v37')||'';
+var vendorPhone=localStorage.getItem('vendorPhone_v37')||'509-XXXX';
 var currentVendor=null;
+var logoBase64=localStorage.getItem('logoBase64_v40')||LOGO_DEFAULT_B64;
 
 function lg(m){ var el=document.getElementById('pLog'); el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; el.scrollTop=el.scrollHeight; }
-
 function initVendorsSelect(){
  var sel=document.getElementById('loginVendor'); sel.innerHTML='';
- if(vendors.length===0){
-  sel.innerHTML='<option value="NOUVO">+ KREYE NOUVO VANDÈ - Premye fwa</option>';
-  document.getElementById('newVendorBox').style.display='block';
- } else {
-  vendors.forEach(v=>{ var o=document.createElement('option'); o.value=v.name; o.textContent=v.name+' - '+v.phone; sel.appendChild(o); });
-  var o=document.createElement('option'); o.value='NOUVO'; o.textContent='+ NOUVO VANDÈ'; sel.appendChild(o);
- }
- sel.onchange=function(){ if(this.value==='NOUVO') document.getElementById('newVendorBox').style.display='block'; else document.getElementById('newVendorBox').style.display='none'; };
+ if(vendors.length===0){ sel.innerHTML='<option value="NOUVO">+ KREYE NOUVO VANDÈ</option>'; document.getElementById('newVendorBox').style.display='block'; }
+ else { vendors.forEach(v=>{ var o=document.createElement('option'); o.value=v.name; o.textContent=v.name+' - '+v.phone; sel.appendChild(o); }); var o=document.createElement('option'); o.value='NOUVO'; o.textContent='+ NOUVO VANDÈ'; sel.appendChild(o); }
+ sel.onchange=function(){ document.getElementById('newVendorBox').style.display=this.value==='NOUVO'?'block':'none'; };
  document.getElementById('paramVendorPhone').value=vendorPhone;
+ updateLogoPreview();
 }
-
 function doLogin(){
- var vName=document.getElementById('loginVendor').value;
- var pass=document.getElementById('loginPass').value;
+ var vName=document.getElementById('loginVendor').value, pass=document.getElementById('loginPass').value;
  if(vName==='NOUVO'){
-  var newName=document.getElementById('newVendorName').value.trim().toUpperCase();
-  var newPhone=document.getElementById('newVendorPhone').value.trim();
-  var newPass=document.getElementById('newVendorPassSet').value.trim();
-  if(!newName ||!newPass){ document.getElementById('loginErr').textContent='Mete non + modpas ou - Vandè mete l poukont li - Pa gen 1234'; return; }
-  if(vendors.find(x=>x.name===newName)){ document.getElementById('loginErr').textContent='Non sa egziste deja'; return; }
-  var newV={name:newName,pass:newPass,phone:newPhone||'509-XXXX'};
-  vendors.push(newV); localStorage.setItem('vendors_v38',JSON.stringify(vendors));
-  localStorage.setItem('vendorPhone_v37',newPhone); vendorPhone=newPhone;
-  currentVendor=newV; localStorage.setItem('currentVendor_v38',JSON.stringify(newV));
-  document.getElementById('loginScreen').style.display='none'; initAll(); lg('Nouvo vandè kreye: '+newName+' - Modpas mete poukont li - Telefòn '+newPhone+' - Kaz Miz vid');
-  return;
+  var newName=document.getElementById('newVendorName').value.trim().toUpperCase(), newPhone=document.getElementById('newVendorPhone').value.trim(), newPass=document.getElementById('newVendorPassSet').value.trim();
+  if(!newName||!newPass){ document.getElementById('loginErr').textContent='Mete non + modpas'; return; }
+  var newV={name:newName,pass:newPass,phone:newPhone||'509-XXXX'}; vendors.push(newV); localStorage.setItem('vendors_v38',JSON.stringify(vendors)); localStorage.setItem('vendorPhone_v37',newPhone); vendorPhone=newPhone;
+  currentVendor=newV; localStorage.setItem('currentVendor_v38',JSON.stringify(newV)); document.getElementById('loginScreen').style.display='none'; initAll(); return;
  }
- var found=vendors.find(x=>x.name===vName);
- if(!found){ document.getElementById('loginErr').textContent='Vandè pa jwenn - Kreye nouvo'; return; }
- if(found.pass!==pass){ document.getElementById('loginErr').textContent='Modpas pa bon - Vandè mete modpas li poukont li - Pa gen 1234 afiche'; return; }
- currentVendor=found; localStorage.setItem('currentVendor_v38',JSON.stringify(found));
- vendorPhone=found.phone||vendorPhone; localStorage.setItem('vendorPhone_v37',vendorPhone);
- document.getElementById('loginScreen').style.display='none'; initAll(); lg('Vandè konekte: '+found.name+' - Modpas respekte - Telefòn '+vendorPhone);
+ var found=vendors.find(x=>x.name===vName); if(!found){ document.getElementById('loginErr').textContent='Pa jwenn'; return; } if(found.pass!==pass){ document.getElementById('loginErr').textContent='Modpas pa bon'; return; }
+ currentVendor=found; vendorPhone=found.phone||vendorPhone; localStorage.setItem('vendorPhone_v37',vendorPhone); localStorage.setItem('currentVendor_v38',JSON.stringify(found)); document.getElementById('loginScreen').style.display='none'; initAll();
 }
-function resetAllVendors(){ if(confirm('Efase tout vandè? Vandè ap dwe kreye modpas ankò')){ localStorage.removeItem('vendors_v38'); vendors=[]; initVendorsSelect(); document.getElementById('loginErr').textContent='Tout vandè efase - Kreye nouvo vandè - Mete modpas ou poukont ou'; } }
-
-function initAll(){ initVendorsSelect(); initTirajDrop(); initTirajSelects(); setupFleche(); initDefaut(); doRapport(); var s=localStorage.getItem('selTir_v36'); if(s){ selTir=JSON.parse(s); updateLabel(); } }
+function initAll(){ initVendorsSelect(); initTirajDrop(); initTirajSelects(); setupFleche(); initDefaut(); doRapport(); var s=localStorage.getItem('selTir_v36'); if(s){ selTir=JSON.parse(s); updateLabel(); } updateLogoPreview(); if(!localStorage.getItem('logoBase64_v40')) localStorage.setItem('logoBase64_v40',LOGO_DEFAULT_B64); }
 function openTab(e,id){ document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); e.target.classList.add('active'); if(id==='rapport') doRapport(); closeDrop(); }
-function isClosed(t){ var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var p=t.fermeti.split(':'); return cur>=parseInt(p[0])*60+parseInt(p[1]); }
 function initTirajDrop(){
  var drop=document.getElementById('tirajDrop'); drop.innerHTML='';
  var divTous=document.createElement('div'); divTous.className='tirajOpt tous';
@@ -214,117 +187,87 @@ function toggleDrop(){ document.getElementById('tirajDrop').classList.toggle('op
 function closeDrop(){ var el=document.getElementById('tirajDrop'); if(el) el.classList.remove('open'); }
 function toggleTous(c){ tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk) chk.checked=c; }); updateSelTir(); }
 function updateSelTir(){ selTir=[]; tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk&&chk.checked) selTir.push(t.nom+' ('+t.heure+')'); }); if(!selTir.length) selTir=["GA MIDI (12:15)"]; localStorage.setItem('selTir_v36',JSON.stringify(selTir)); updateLabel(); updTotal(); }
-function updateLabel(){
- var label=document.getElementById('tirajLabel');
- if(selTir.length===tiragesData.length) label.textContent='Tirages (....., Tous) - Tous ('+selTir.length+')';
- else if(selTir.length===1) label.textContent=selTir[0];
- else label.textContent=selTir.map(s=>s.split('(')[0].trim()).join(', ')+' ('+selTir.length+')';
- document.getElementById('selCount').textContent=selTir.length+' tirage(s): '+selTir.join(' / ');
-}
+function updateLabel(){ var label=document.getElementById('tirajLabel'); if(selTir.length===tiragesData.length) label.textContent='Tirages (....., Tous) - Tous ('+selTir.length+')'; else if(selTir.length===1) label.textContent=selTir[0]; else label.textContent=selTir.map(s=>s.split('(')[0].trim()).join(', ')+' ('+selTir.length+')'; document.getElementById('selCount').textContent=selTir.length+' tirage(s): '+selTir.join(' / '); }
 function initTirajSelects(){ var opts='<option value="tous">Tirages (....., Tous)</option>'; tiragesData.forEach(t=>{ opts+='<option value="'+t.nom+'">'+t.nom+' ('+t.heure+')</option>'; }); document.getElementById('rTir').innerHTML=opts; document.getElementById('fTir').innerHTML=opts; }
 function setupFleche(){
- var jeu=document.getElementById('jeu'), boul=document.getElementById('boul'), mise=document.getElementById('mise');
- // Kaz Miz vid - dwe tape - pa gen 25
- boul.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'){ e.preventDefault(); mise.focus(); }
-  else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); if(e.target.value.trim()){ if(!mise.value.trim()){ mise.focus(); } else addL(); } }
-  else if(e.key==='ArrowLeft'){ e.preventDefault(); jeu.focus(); }
- });
- mise.addEventListener('keydown',e=>{
-  if(e.key==='ArrowLeft'){ e.preventDefault(); boul.focus(); }
-  else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); addL(); }
- });
+ var boul=document.getElementById('boul'), mise=document.getElementById('mise'), jeu=document.getElementById('jeu');
+ boul.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){ e.preventDefault(); mise.focus(); } else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); if(e.target.value.trim()){ if(!mise.value.trim()) mise.focus(); else addL(); } } else if(e.key==='ArrowLeft'){ e.preventDefault(); jeu.focus(); } });
+ mise.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'){ e.preventDefault(); boul.focus(); } else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); addL(); } });
 }
-function addL(){
- var b=document.getElementById('boul').value.trim(), mStr=document.getElementById('mise').value.trim(), m=parseInt(mStr)||0;
- if(!b){ document.getElementById('boul').focus(); return; }
- if(!mStr || m<=0){ alert('Kaz Miz lan dwe vid - Tape miz - Pa gen 25 otomatik'); document.getElementById('mise').focus(); return; }
- lignes.push({jeu:document.getElementById('jeu').value,boul:b,mise:m});
- document.getElementById('boul').value=''; document.getElementById('mise').value=''; // rete vid
- document.getElementById('boul').focus();
- renderV();
-}
-function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy - Kaz Miz vid - Tape miz'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:3px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;">✕</span></div>'; }); updTotal(); }
+function addL(){ var b=document.getElementById('boul').value.trim(), mStr=document.getElementById('mise').value.trim(), m=parseInt(mStr)||0; if(!b){ document.getElementById('boul').focus(); return; } if(!mStr||m<=0){ alert('Kaz Miz lan dwe vid - Tape miz'); document.getElementById('mise').focus(); return; } lignes.push({jeu:document.getElementById('jeu').value,boul:b,mise:m}); document.getElementById('boul').value=''; document.getElementById('mise').value=''; document.getElementById('boul').focus(); renderV(); }
+function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy - Kaz Miz vid'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:3px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;">✕</span></div>'; }); updTotal(); }
 function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); var tot=sum*selTir.length; document.getElementById('totalV').textContent='Total: '+sum+'G × '+selTir.length+' = '+tot+'G'; }
+
+function uploadLogo(event){
+ var file=event.target.files[0]; if(!file) return;
+ var reader=new FileReader();
+ reader.onload=function(e){ logoBase64=e.target.result; localStorage.setItem('logoBase64_v40',logoBase64); updateLogoPreview(); lg('✅ Logo chanje - Dirèk nan tèt fich'); };
+ reader.readAsDataURL(file);
+}
+function updateLogoPreview(){
+ var preview=document.getElementById('logoPreview');
+ if(logoBase64){ preview.innerHTML='<img src="'+logoBase64+'" alt="Logo C&D">'; } else { preview.innerHTML='<span style="font-size:10px;color:#888;">Pa gen logo</span>'; }
+}
+function removeLogo(){ logoBase64=null; localStorage.removeItem('logoBase64_v40'); updateLogoPreview(); lg('❌ Logo retire'); }
 
 function buildTicketTxt(f){
  var W=32; function center(t){ t=t.toString(); var pad=Math.max(0,Math.floor((W-t.length)/2)); return ' '.repeat(pad)+t; }
- var txt='';
- txt+=center('C&D VERITE LOTTO')+'\n';
- txt+=center('================')+'\n';
- txt+=center('Date..... '+new Date(f.ts).toLocaleString('fr-HT'))+'\n';
- txt+=center('Tirages....')+'\n';
+ var txt=''; if(logoBase64) txt+=center('[LOGO C&D VERITE LOTTO]')+'\n';
+ txt+=center('C&D VERITE LOTTO')+'\n'; txt+=center('================')+'\n';
+ txt+=center('Date..... '+new Date(f.ts).toLocaleString('fr-HT'))+'\n'; txt+=center('Tirages....')+'\n';
  f.tirages.forEach(tr=>{ txt+=center(tr)+'\n'; });
- txt+=center('Vandeur.... '+(currentVendor?currentVendor.name:'POZO'))+'\n';
- txt+=center('Telefon.... '+(currentVendor?currentVendor.phone:vendorPhone))+'\n';
- txt+=center('Id ticket..... '+f.id)+'\n';
- txt+=center('----------------')+'\n';
+ txt+=center('Vandeur.... '+(currentVendor?currentVendor.name:'POZO'))+'\n'; txt+=center('Telefon.... '+(currentVendor?currentVendor.phone:vendorPhone))+'\n'; txt+=center('Id ticket..... '+f.id)+'\n'; txt+=center('----------------')+'\n';
  f.lignes.forEach(l=>{ txt+=center(l.jeu+' '+l.boul+' '+l.mise+'G')+'\n'; });
- txt+=center('----------------')+'\n';
- txt+=center('TOTAL '+f.total+'G')+'\n';
- txt+=center('================')+'\n';
- txt+=center('Lave chodye w')+'\n';
- txt+=center('Bon chans!')+'\n';
- txt+=center(new Date(f.ts).toLocaleString('fr-HT'))+'\n';
- txt+='\n\n\n';
- return txt;
+ txt+=center('----------------')+'\n'; txt+=center('TOTAL '+f.total+'G')+'\n'; txt+=center('================')+'\n'; txt+=center('Lave chodye w')+'\n'; txt+=center('Bon chans!')+'\n'; txt+=center(new Date(f.ts).toLocaleString('fr-HT'))+'\n\n\n'; return txt;
 }
 function buildTicketESC(f){
- var ESC='\x1B', GS='\x1D';
- var CENTER=ESC+'a\x01', BOLD_ON=ESC+'E\x01', BOLD_OFF=ESC+'E\x00';
+ var ESC='\x1B', GS='\x1D', CENTER=ESC+'a\x01', BOLD_ON=ESC+'E\x01', BOLD_OFF=ESC+'E\x00';
  var txt=CENTER+BOLD_ON+'C&D VERITE LOTTO'+BOLD_OFF+'\n';
- txt+='Date..... '+new Date(f.ts).toLocaleString('fr-HT')+'\n';
- txt+='Tirages....\n'+f.tirages.join('\n')+'\n';
- txt+='Vandeur.... '+(currentVendor?currentVendor.name:'POZO')+'\n';
- txt+='Telefon.... '+(currentVendor?currentVendor.phone:vendorPhone)+'\n';
- txt+='Id ticket..... '+f.id+'\n';
- txt+='----------------\n';
+ txt+='Date..... '+new Date(f.ts).toLocaleString('fr-HT')+'\nTirages....\n'+f.tirages.join('\n')+'\nVandeur.... '+(currentVendor?currentVendor.name:'POZO')+'\nTelefon.... '+(currentVendor?currentVendor.phone:vendorPhone)+'\nId ticket..... '+f.id+'\n----------------\n';
  f.lignes.forEach(l=>{ txt+=l.jeu+' '+l.boul+' '+l.mise+'G\n'; });
- txt+='----------------\n'+BOLD_ON+'TOTAL '+f.total+'G'+BOLD_OFF+'\n================\nLave chodye w\nBon chans!\n'+new Date(f.ts).toLocaleString('fr-HT')+'\n\n\n'+GS+'V\x00';
- return txt;
+ txt+='----------------\n'+BOLD_ON+'TOTAL '+f.total+'G'+BOLD_OFF+'\n================\nLave chodye w\nBon chans!\n'+new Date(f.ts).toLocaleString('fr-HT')+'\n\n\n'+GS+'V\x00'; return txt;
+}
+function logoToEscPos(callback){
+ if(!logoBase64){ callback(null); return; }
+ var img=new Image(); img.onload=function(){
+  var canvas=document.createElement('canvas'); var maxW=360; var w=img.width, h=img.height; var scale=maxW/w; var newW=Math.min(maxW,w); var newH=h*scale; if(newH>360){ newH=360; newW=w*360/h; }
+  canvas.width=newW; canvas.height=newH; var ctx=canvas.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,newW,newH); ctx.drawImage(img,0,0,newW,newH);
+  var imageData=ctx.getImageData(0,0,newW,newH); var data=imageData.data; var bytesPerLine=Math.ceil(newW/8); var raster=[];
+  for(var y=0;y<newH;y++){ for(var xByte=0;xByte<bytesPerLine;xByte++){ var byte=0; for(var bit=0;bit<8;bit++){ var x=xByte*8+bit; if(x<newW){ var idx=(y*newW+x)*4; var gray=0.299*data[idx]+0.587*data[idx+1]+0.114*data[idx+2]; var bw=gray<128?1:0; byte|=(bw<<(7-bit)); } } raster.push(byte); } }
+  var xL=bytesPerLine&0xFF, xH=(bytesPerLine>>8)&0xFF; var yL=newH&0xFF, yH=(newH>>8)&0xFF;
+  var esc='\x1D\x76\x30\x00'+String.fromCharCode(xL)+String.fromCharCode(xH)+String.fromCharCode(yL)+String.fromCharCode(yH);
+  var rasterStr=''; for(var i=0;i<raster.length;i++) rasterStr+=String.fromCharCode(raster[i]); callback(esc+rasterStr+'\n');
+ }; img.src=logoBase64;
 }
 function doPrint(txt,escTxt){
- try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lg('✅ Print santre - C&D VERITE LOTTO - Lave chodye w - Miz vid'); return; } }catch(e){}
- window.location.href='rawbt:print?data='+encodeURIComponent(escTxt||txt)+'&center=1';
- lg('✅ RawBT santre - '+curTicket.id+' - Lave chodye w - Miz vid');
+ try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); if(logoBase64){ try{ window.SunmiPrinter.printBitmap(logoBase64,1); window.SunmiPrinter.printText('\n'); }catch(e){} } window.SunmiPrinter.setFontWeight(1); window.SunmiPrinter.printText('C&D VERITE LOTTO\n'); window.SunmiPrinter.setFontWeight(0); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lg('✅ Sunmi + Logo dirèk nan tèt fich - Santre - Lave chodye w - Miz vid'); return; } }catch(e){}
+ if(logoBase64){ logoToEscPos(function(logoEsc){ var full=logoEsc?logoEsc+'\n'+escTxt:escTxt; window.location.href='rawbt:print?data='+encodeURIComponent(full)+'&center=1'; lg('✅ RawBT + Logo C&D dirèk nan tèt fich santre - Lave chodye w'); }); } else { window.location.href='rawbt:print?data='+encodeURIComponent(escTxt||txt)+'&center=1'; }
 }
 var curTicket=null;
 function previewTicket(){
- if(!lignes.length){ alert('Pa gen liy - Kaz Miz vid - Tape boul + miz'); return; }
+ if(!lignes.length){ alert('Pa gen liy'); return; }
  var f={id:'T'+Date.now().toString().slice(-6),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now()};
- curTicket=f;
- var txt=buildTicketTxt(f);
- document.getElementById('previewArea').innerHTML='<div class="ticketPreview" style="white-space:pre-line;text-align:center;">'+txt.replace(/\n/g,'<br>')+'</div><div style="font-size:10px;text-align:center;color:#0a0;">✅ Fich santre - C&D VÉRITÉ LOTTO - Lave chodyè w - Kaz Miz vid</div>';
+ curTicket=f; var txt=buildTicketTxt(f); var logoHtml=logoBase64?'<img src="'+logoBase64+'" style="max-width:200px;max-height:100px;display:block;margin:0 auto 8px auto;border-radius:50%;">':'';
+ document.getElementById('previewArea').innerHTML='<div class="ticketPreview" style="white-space:pre-line;text-align:center;">'+logoHtml+txt.replace(/\n/g,'<br>')+'</div><div style="font-size:10px;text-align:center;color:#0a7e07;">✅ Fich ak Logo C&D dirèk nan tèt - Santre - Lave chodyè w - Miz vid</div>';
 }
 function printTicket(){
  if(!lignes.length) return;
- var mCheck=document.getElementById('mise').value.trim(); if(lignes.length===0 &&!mCheck){ /* allow if lignes exist */ }
  var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now(),vendor:currentVendor?currentVendor.name:'POZO'};
- fiches.unshift(f); localStorage.setItem('cdv38',JSON.stringify(fiches));
- curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); lignes=[]; renderV(); document.getElementById('previewArea').innerHTML=''; document.getElementById('mise').value='';
+ fiches.unshift(f); localStorage.setItem('cdv40',JSON.stringify(fiches)); curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); lignes=[]; renderV(); document.getElementById('mise').value=''; document.getElementById('previewArea').innerHTML='';
 }
+function testLogoPrint(){ var f={id:'TEST-LOGO',tirages:['GA MIDI (12:15)'],lignes:[{jeu:'BOLET',boul:'55',mise:25}],total:25,ts:Date.now()}; curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); }
 function doCopy(){ var id=document.getElementById('copyId').value.trim(); var f=fiches.find(x=>x.id===id); var r=document.getElementById('copyRes'); if(!f){r.innerHTML='Pa jwenn';return;} r.innerHTML='<div style="background:#fff;padding:8px;border-radius:6px;"><b>'+f.id+'</b><br><div class="btn green" onclick="copyToV(\''+f.id+'\')">Copier</div></div>'; }
 function copyToV(id){ var f=fiches.find(x=>x.id===id); if(!f) return; lignes=[...f.lignes]; selTir=[...f.tirages]; updateLabel(); renderV(); openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
 function renderFiches(){ var c=document.getElementById('listF'); var tir=document.getElementById('fTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir)); c.innerHTML=''; list.slice(0,50).forEach(f=>{ c.innerHTML+='<div style="background:#fff;padding:7px;border-radius:6px;margin-top:5px;font-size:11px;"><b>'+f.id+'</b> '+f.total+'G<br>'+f.tirages.join('/')+'</div>'; }); }
 function doRapport(){ var tir=document.getElementById('rTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir)); var vente=list.reduce((a,b)=>a+b.total,0); var commission=vente*0.10; var gain=0; var balance=vente-commission-gain; var html='<div style="background:#000;color:#0f0;padding:12px;border-radius:6px;font-size:13px;line-height:1.8;">Vente...: <b>'+vente+'G</b><br>Commission: <b>'+commission.toFixed(0)+'G</b><br>Gain ( clients)...: <b>'+gain+'G</b><br>Balance net...: <b style="color:#ff0;">'+balance.toFixed(0)+'G</b><br>----------------<br>Nb: '+list.length+'</div>'; document.getElementById('resRap').innerHTML=html; window._rap={vente,commission,gain,balance,list}; }
 function printRap(){ var r=window._rap; var txt='\x1Ba\x01 C&D VERITE LOTTO RAPPORT\n Vente...: '+r.vente+'G\n Commission: '+r.commission.toFixed(0)+'G\n Gain ( clients)...: '+r.gain.toFixed(0)+'G\n Balance net...: '+r.balance.toFixed(0)+'G\n Nb: '+r.list.length+'\n Lave chodye w\n\n\n'; doPrint(txt,txt); }
-
 function initDefaut(){
  var sw=document.getElementById('defautSwitch'), txt=document.getElementById('defautTxt'), info=document.getElementById('defautInfo'), nameEl=document.getElementById('defautName'), curEl=document.getElementById('currentPrinter'), badge=document.getElementById('printerBadge');
- if(useDefaut){
-  sw.className='switch oui'; txt.textContent='OUI'; txt.style.color='#2e7d32';
-  info.style.background='#e8f5e9'; info.style.border='2px solid #2e7d32'; info.innerHTML='✅ OUI: Par défaut - '+curPrinter.name;
-  curEl.innerHTML='🖨️ '+curPrinter.name+' - Défaut OUI - Santre - Lave chodye w'; curEl.style.background='#e8f5e9';
-  badge.textContent='🖨️ '+curPrinter.name+' - Défaut: OUI'; nameEl.textContent=curPrinter.name+' - Défaut OUI';
- } else {
-  sw.className='switch non'; txt.textContent='NON'; txt.style.color='#c62828';
-  info.style.background='#ffebee'; info.style.border='2px solid #c62828'; info.innerHTML='❌ NON: Choisir liste';
-  curEl.innerHTML='🖨️ Choisir - Défaut NON'; curEl.style.background='#ffebee';
-  badge.textContent='🖨️ Choisir - Défaut: NON';
- }
+ if(useDefaut){ sw.className='switch oui'; txt.textContent='OUI'; info.style.background='#e8f5e9'; info.style.border='2px solid #2e7d32'; info.innerHTML='✅ OUI: Par défaut - '+curPrinter.name; curEl.innerHTML='🖨️ '+curPrinter.name+' - Défaut OUI - Logo OK'; badge.textContent='🖨️ '+curPrinter.name+' - Logo OK'; nameEl.textContent=curPrinter.name+' - Défaut OUI'; }
+ else { sw.className='switch non'; txt.textContent='NON'; info.style.background='#ffebee'; info.style.border='2px solid #c62828'; info.innerHTML='❌ NON: Choisir liste'; curEl.innerHTML='🖨️ Choisir - Défaut NON'; badge.textContent='🖨️ Choisir - Défaut NON'; }
  localStorage.setItem('useDefaut_v36',JSON.stringify(useDefaut));
 }
-function toggleDefaut(){ useDefaut=!useDefaut; initDefaut(); lg('Défaut '+(useDefaut?'OUI':'NON')+' - Kaz Miz vid'); if(!useDefaut) scanToutesImprimantes(); }
+function toggleDefaut(){ useDefaut=!useDefaut; initDefaut(); lg('Défaut '+(useDefaut?'OUI':'NON')); if(!useDefaut) scanToutesImprimantes(); }
 function scanToutesImprimantes(){
  var list=document.getElementById('printerList'); list.innerHTML=''; lg('Recherche toutes imprimantes...');
  [{name:'GwoFos-G001',addr:'00:11:22:33:44:55'},{name:'InnerPrinter',addr:'Sunmi'},{name:'RawBT',addr:'58mm'}].forEach(p=>{
@@ -340,16 +283,15 @@ function scanToutesImprimantes(){
  }
 }
 function testPrint(){ var f={id:'TEST',tirages:['GA MIDI (12:15)'],lignes:[{jeu:'BOLET',boul:'55',mise:25}],total:25,ts:Date.now()}; curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); }
-function saveVendorPhone(){ var ph=document.getElementById('paramVendorPhone').value.trim(); if(!ph){ alert('Mete telefòn'); return; } vendorPhone=ph; localStorage.setItem('vendorPhone_v37',ph); if(currentVendor){ currentVendor.phone=ph; localStorage.setItem('vendors_v38',JSON.stringify(vendors)); } lg('Telefòn sove: '+ph+' - Pou fich santre C&D VERITE LOTTO'); alert('Telefòn sove: '+ph+' - Ap parèt sou fich santre: Telefon.... '+ph); }
-function changeVendorPass(){ var oldP=document.getElementById('paramOldPass').value, newP=document.getElementById('paramNewPass').value; if(!currentVendor){ alert('Konekte anvan'); return; } if(currentVendor.pass!==oldP){ alert('Ansyen modpas pa bon'); return; } if(!newP){ alert('Mete nouvo modpas'); return; } currentVendor.pass=newP; var idx=vendors.findIndex(x=>x.name===currentVendor.name); if(idx>=0) vendors[idx].pass=newP; localStorage.setItem('vendors_v38',JSON.stringify(vendors)); localStorage.setItem('currentVendor_v38',JSON.stringify(currentVendor)); lg('Modpas chanje: '+currentVendor.name+' - Vandè mete l poukont li'); alert('Modpas chanje - Vandè mete l poukont li - Kaz Miz vid'); }
+function saveVendorPhone(){ var ph=document.getElementById('paramVendorPhone').value.trim(); if(!ph){ alert('Mete telefòn'); return; } vendorPhone=ph; localStorage.setItem('vendorPhone_v37',ph); if(currentVendor){ currentVendor.phone=ph; var idx=vendors.findIndex(x=>x.name===currentVendor.name); if(idx>=0) vendors[idx].phone=ph; localStorage.setItem('vendors_v38',JSON.stringify(vendors)); } lg('Telefòn sove: '+ph); alert('Telefòn sove: '+ph); }
+function changeVendorPass(){ var oldP=document.getElementById('paramOldPass').value, newP=document.getElementById('paramNewPass').value; if(!currentVendor){ alert('Konekte'); return; } if(currentVendor.pass!==oldP){ alert('Ansyen pa bon'); return; } if(!newP){ alert('Mete nouvo'); return; } currentVendor.pass=newP; var idx=vendors.findIndex(x=>x.name===currentVendor.name); if(idx>=0) vendors[idx].pass=newP; localStorage.setItem('vendors_v38',JSON.stringify(vendors)); localStorage.setItem('currentVendor_v38',JSON.stringify(currentVendor)); lg('Modpas chanje'); alert('Modpas chanje'); }
 
 var saved=localStorage.getItem('currentVendor_v38'); if(saved){ currentVendor=JSON.parse(saved); document.getElementById('loginScreen').style.display='none'; initAll(); } else { initVendorsSelect(); }
 setInterval(()=>{ document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); },1000);
 document.getElementById('boul').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9xX]/g,''); });
 document.getElementById('mise').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9]/g,''); });
 document.addEventListener('click',function(e){ var wrap=document.querySelector('.tirajMultiWrap'); if(wrap&&!wrap.contains(e.target)) closeDrop(); });
-initDefaut();
-initVendorsSelect();
+initDefaut(); initVendorsSelect(); updateLogoPreview();
 </script>
 </body>
 </html>
