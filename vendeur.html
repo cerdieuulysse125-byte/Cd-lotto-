@@ -3,165 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>C&D V23 - N'IMPORTE QUELLE IMPRIMANTE</title>
+<title>C&D V26 - 5e ONGLET IMPRIMANTES VENDEUR</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{background:#000;color:#fff;font-family:monospace}
-.top{background:#ff0;color:#000;padding:8px;text-align:center;font-weight:bold;font-size:11px;position:sticky;top:0;z-index:100}
-.tabs{display:flex;background:#222;overflow-x:auto;position:sticky;top:42px;z-index:99}.tab{padding:12px 14px;white-space:nowrap;font-weight:bold;font-size:11px;color:#fff;border-right:1px solid #444;cursor:pointer}.tab.active{background:#ff0;color:#000}
-.tabContent{display:none;padding:8px;background:#f5f5f5;color:#000;min-height:calc(100vh - 90px)}.tabContent.active{display:block}
-.card{background:#fff;border-radius:10px;padding:12px;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,0.2)}
-.btn{padding:14px;border-radius:8px;text-align:center;font-weight:bold;cursor:pointer;margin-top:8px;font-size:13px}
-.blue{background:#1976d2;color:#fff}.green{background:#2e7d32;color:#fff}.orange{background:#ff5722;color:#fff}.dark{background:#111;color:#0f0}
-.input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;margin-top:6px;font-size:13px}
-.printerItem{background:#fff;color:#000;border:1px solid #ccc;border-radius:8px;padding:12px;margin-top:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.printerItem.sel{border:3px solid #2e7d32;background:#e8f5e9}
-.printerItem.any{border-left:6px solid #ff5722}
-.badgeAny{background:#ff5722;color:#fff;padding:2px 6px;border-radius:10px;font-size:9px}
-.list{background:#111;color:#0f0;border-radius:6px;padding:6px;min-height:60px;max-height:150px;overflow:auto;margin-top:8px;font-size:12px}
+.top{background:#ff0;color:#000;padding:5px;text-align:center;font-weight:bold;font-size:10px;position:sticky;top:0;z-index:100;line-height:1.2}
+.tabs{display:flex;background:#222;overflow-x:auto;position:sticky;top:36px;z-index:99}.tab{flex:1;min-width:62px;padding:10px 3px;text-align:center;font-weight:bold;font-size:9px;color:#fff;border-right:1px solid #444;cursor:pointer;white-space:nowrap}.tab.active{background:#ff0;color:#000}.tab.imp{background:#1976d2;color:#fff}.tab.prop{background:#ff5722;color:#fff}
+.tabContent{display:none;padding:5px;background:#f0f0f0;color:#000;min-height:calc(100vh - 76px)}.tabContent.active{display:block}
+.card{background:#fff;border-radius:8px;padding:9px;margin-top:5px;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.btn{padding:10px;border-radius:6px;text-align:center;font-weight:bold;cursor:pointer;margin-top:5px;font-size:11px}
+.blue{background:#1976d2;color:#fff}.green{background:#2e7d32;color:#fff}.orange{background:#ff5722;color:#fff}
+.input{width:100%;padding:8px;border:1px solid #bbb;border-radius:5px;margin-top:4px;font-size:11px}
+.tirajBox{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;max-height:85px;overflow:auto;background:#fff;padding:5px;border-radius:6px}
+.tirajChip{padding:4px 7px;background:#fff;border:1px solid #aaa;border-radius:12px;font-size:9px;cursor:pointer}.tirajChip.sel{background:#0f0;font-weight:bold}
+.listV{background:#111;color:#0f0;border-radius:5px;padding:4px;min-height:45px;max-height:105px;overflow:auto;margin-top:5px;font-size:10px}
+.totalBox{background:#0f0;color:#000;padding:7px;border-radius:5px;text-align:center;font-weight:bold;font-size:11px;margin-top:5px}
+.printerItem{background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px;margin-top:6px;cursor:pointer;font-size:11px;display:flex;justify-content:space-between;align-items:center}.printerItem.sel{border:3px solid #2e7d32;background:#e8f5e9}
+.badgeAny{background:#ff5722;color:#fff;padding:2px 5px;border-radius:8px;font-size:8px}
 </style>
 </head>
 <body>
-<div class="top">VENDEUR POZO - N'IMPORTE QUELLE IMPRIMANTE - <span id="clock"></span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:3px 8px;border-radius:10px;font-size:10px;">🖨️ InnerPrinter 00:11:22:33:44:55 - Pret</span></div>
+<div class="top">VENDEUR POZO - 5e ONGLET IMPRIMANTES - N'IMPORTE QUELLE - <span id="clock">23:07</span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:2px 7px;border-radius:10px;font-size:9px;">🖨️ InnerPrinter 00:11:22:33:44:55 - Pret - Vendeur peut ajouter</span></div>
 <div class="tabs">
-<div class="tab active" onclick="openTab('vendre')">VENDRE</div>
-<div class="tab" onclick="openTab('param')">⚙️ PARAMÈTRES</div>
-<div class="tab" onclick="openTab('fiches')">FICHES</div>
-<div class="tab" onclick="openTab('rapport')">RAPPORT</div>
+<div class="tab active" onclick="openTab(event,'vendre')">VENDRE</div>
+<div class="tab" onclick="openTab(event,'copier')">COPIER</div>
+<div class="tab" onclick="openTab(event,'fiches')">FICHES</div>
+<div class="tab" onclick="openTab(event,'rapport')">RAPPORT</div>
+<div class="tab imp" onclick="openTab(event,'imprimantes')">🖨️ IMPRIMANTES</div>
+<div class="tab prop" onclick="openTab(event,'param')">🔐 PROPRIO</div>
 </div>
 
+<!-- 1 VENDRE -->
 <div id="vendre" class="tabContent active">
-<div style="font-weight:bold;background:#ff0;padding:8px;border-radius:6px;font-size:11px;">VENDRE - N'IMPORTE QUELLE IMPRIMANTE PEUT ASSOCIER - 17 TIRAJ</div>
-<div id="statusV" style="background:#111;color:#0f0;padding:8px;border-radius:6px;margin-top:6px;font-size:11px;">InnerPrinter + N'importe quelle imprimante BT - Pret</div>
-<select id="tirageSel" class="input"><option>GA MIDI (12:15)</option><option>FL MIDI (13:15)</option><option>NY MIDI (14:15)</option><option>GA SOIR</option><option>FL SOIR</option><option>NY SOIR</option><option>PRIMERA DIA</option><option>PRIMERA NOCHE</option><option>REAL</option><option>LOTEKA</option></select>
-<div style="display:flex;gap:4px;margin-top:6px;"><select id="jeu" style="flex:1;padding:12px;border-radius:6px;"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select><input id="boul" placeholder="Boul" style="flex:1.5;padding:12px;border-radius:6px;"><input id="mise" type="number" value="10" style="width:70px;background:#ff0;text-align:center;padding:12px;border-radius:6px;"><div class="btn blue" style="padding:12px;margin:0;" onclick="addL()">+</div></div>
-<div id="listV" class="list">Pa gen liy</div>
-<div id="totalV" style="background:#0f0;color:#000;padding:10px;text-align:center;font-weight:bold;border-radius:6px;margin-top:6px;">Total: 0G</div>
-<div class="btn green" onclick="printTicket()">🖨️ IMPRIMER - N'IMPORTE QUELLE IMPRIMANTE</div>
+<div class="card"><div style="font-weight:bold;font-size:10px;">Tirage multiple - Liste des tirages - Klike:</div><div id="tirageList" class="tirajBox"></div><div id="selCount" style="font-size:9px;color:#0a0;margin-top:3px;">1 tirage</div></div>
+<div class="card" style="padding:5px;"><div style="font-size:9px;font-weight:bold;">Jeux (...) - Boul - mise - Cases moins grandes</div><div style="display:flex;gap:3px;margin-top:5px;"><select id="jeu" style="flex:1;padding:7px;border-radius:5px;font-size:11px;"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select><input id="boul" placeholder="Boul" style="flex:1.2;padding:7px;border-radius:5px;font-size:11px;"><input id="mise" type="number" value="10" style="width:48px;background:#ff0;text-align:center;padding:7px;border-radius:5px;"><div class="btn blue" style="padding:7px 9px;margin:0;font-size:11px;" onclick="addL()">+↓</div></div><div id="listV" class="listV">Pa gen liy</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div><div class="btn green" onclick="printTicket()" style="padding:12px;font-size:13px;">🖨️ IMPRIMER - 58mm</div></div>
 </div>
 
+<!-- 2 COPIER -->
+<div id="copier" class="tabContent"><div class="card"><div style="font-weight:bold;font-size:11px;">2- COPIER (Id ticket pour copier)</div><input id="copyId" class="input" placeholder="Id ticket pour copier"><div class="btn blue" onclick="doCopy()">Chèche</div><div id="copyRes"></div></div></div>
+
+<!-- 3 FICHES -->
+<div id="fiches" class="tabContent"><div class="card"><div style="font-weight:bold;font-size:11px;">3- MES FICHES (Fich, date du...au..)</div><div style="display:flex;gap:3px;"><input id="fDu" type="date" class="input" style="flex:1;"><input id="fAu" type="date" class="input" style="flex:1;"></div><input id="fSearch" class="input" placeholder="Recherche"><div class="btn blue" onclick="renderFiches()">Recherche</div><div id="listF"></div></div></div>
+
+<!-- 4 RAPPORT -->
+<div id="rapport" class="tabContent"><div class="card"><div style="font-weight:bold;font-size:11px;">4- RAPPORT Du... Au... Tirages(..., tous) Vente... Commission... Gain... Balance net...</div><div style="display:flex;gap:3px;"><input id="rDu" type="date" class="input" style="flex:1;"><input id="rAu" type="date" class="input" style="flex:1;"></div><select id="rTir" class="input"><option value="tous">Tirages(..., tous)</option><option>GA MIDI</option><option>FL MIDI</option><option>REAL</option><option>LOTEKA</option></select><div class="btn green" onclick="doRapport()">Générer Rapport</div><div id="resRap"></div></div></div>
+
+<!-- 5e ONGLET DU VENDEUR : AJOUTER UNE IMPRIMANTE (recherche des imprimantes...) -->
+<div id="imprimantes" class="tabContent">
+<div class="card" style="border:3px solid #1976d2;">
+<div style="font-weight:bold;font-size:13px;color:#1976d2;">🖨️ 5e ONGLET DU VENDEUR : AJOUTER UNE IMPRIMANTE (recherche des imprimantes...)</div>
+<div style="font-size:10px;background:#e3f2fd;padding:7px;border-radius:6px;margin-top:6px;border-left:4px solid #1976d2;">
+<b>VENDEUR POZO peut ajouter n'importe quelle imprimante:</b><br>
+✅ Recherche des imprimantes à proximité - SCAN LIBRE - acceptAllDevices=true<br>
+✅ InnerPrinter 00:11:22:33:44:55 - Default 58mm - Sunmi V2 Pro - Toujours disponible<br>
+✅ N'importe quelle: POS 58mm, MPT-II, MPT-III, XPrinter, GOOJPRT, EPSON, Bixolon<br>
+✅ Même si nom = BT-SPEAKER, UNKNOWN, MTP - Peut associer comme imprimante!<br>
+✅ RawBT + POS STEWARD Service 4.13.4 + Sunmi Steward
+</div>
+
+<div class="btn blue" onclick="chercheTout()" style="padding:16px;font-size:13px;background:#ff5722;">🔍 RECHERCHE DES IMPRIMANTES - N'IMPORTE QUELLE PEUT ASSOCIER - SCAN LIBRE - VENDEUR</div>
+<div style="display:flex;gap:4px;"><div class="btn blue" style="flex:1;" onclick="chercheFiltre()">Filtrée Printer/POS</div><div class="btn green" style="flex:1;" onclick="testP()">🧪 TEST PRINT</div></div>
+
+<div id="printerList" style="margin-top:8px;">
+<div class="printerItem sel"><div><b>✅ InnerPrinter 00:11:22:33:44:55</b><br><span style="font-size:10px;">Default 58mm 100% - Pret - Associée</span><br><span class="badgeAny">VENDEUR - ASSOCIÉE</span></div><div>🖨️</div></div>
+</div>
+
+<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:70px;overflow:auto;padding:6px;margin-top:8px;white-space:pre-wrap;border-radius:5px;">Log Vendeur: Pret - Cliquez RECHERCHE DES IMPRIMANTES - N'importe quelle peut associer...
+Vendeur POZO peut associer tout BT - acceptAllDevices=true - Aucun filtre nom
+</div>
+
+<div class="card" style="background:#fff8e1;margin-top:8px;">
+<div style="font-weight:bold;font-size:10px;">Imprimante actuelle du vendeur:</div>
+<div id="currentPrinter" style="background:#e8f5e9;padding:8px;border-radius:6px;margin-top:4px;font-size:11px;border:2px solid #2e7d32;">🖨️ InnerPrinter 00:11:22:33:44:55 - Default - Associée - Pret pour VENDRE</div>
+<div class="btn green" onclick="goVendre()" style="margin-top:6px;">⬅️ Retour VENDRE et IMPRIMER</div>
+</div>
+</div>
+</div>
+
+<!-- 6e PROPRIO (optionnel - pour toi) -->
 <div id="param" class="tabContent">
-<div class="card">
-<div style="font-weight:bold;font-size:15px;">⚙️ 1- Ajoute une imprimante - Recherche n'importe quelle imprimante peut associer</div>
-<div style="font-size:11px;color:#333;background:#fff3e0;padding:8px;border-radius:6px;margin-top:6px;border-left:4px solid #ff5722;">
-<b>N'IMPORTE QUELLE IMPRIMANTE PEUT ASSOCIER:</b><br>
-✅ InnerPrinter 00:11:22:33:44:55 (Sunmi V2 Pro)<br>
-✅ POS 58mm - MPT-II - MPT-III - POS-80<br>
-✅ XPrinter - GOOJPRT - EPSON - Bixolon - Zjiang<br>
-✅ Bluetooth Printer - BT Printer - Printer - Ne pa filtrer par nom<br>
-✅ Même si nom = BT-SPEAKER, MTP, UNKNOWN - Peut associer quand même!
+<div id="lockScreen" style="background:#111;color:#ff0;padding:20px;border-radius:10px;text-align:center;border:3px solid #ff5722;">
+<div style="font-size:16px;">🔐 PARAMÈTRES PROPRIO - Réservé Proprio</div><input id="pinInput" type="password" inputmode="numeric" placeholder="PIN 1234" class="input" style="text-align:center;font-size:16px;letter-spacing:6px;margin-top:10px;"><div class="btn orange" onclick="unlockProprio()" style="padding:12px;">Déverrouiller</div>
 </div>
-
-<div class="btn orange" onclick="chercheToutImprimante()" style="font-size:14px;padding:18px;">🔍 RECHERCHE - N'IMPORTE QUELLE IMPRIMANTE - SCAN LIBRE - TOUT APPAREIL BT PEUT ASSOCIER</div>
-<div class="btn blue" onclick="chercheFiltre()">🔍 Recherche Filtrée (Printer/POS/MPT/BT/58)</div>
-<div class="btn green" onclick="testPrintParam()">🧪 TEST PRINT - Avec imprimante choisie</div>
-
-<div id="printerList" style="margin-top:10px;">
-<div class="printerItem sel any" onclick="selectPrinter('InnerPrinter','00:11:22:33:44:55','Default 58mm 100%','AIDL - Sunmi Inner - N\\'importe quelle')">
-<div><b>✅ InnerPrinter - 00:11:22:33:44:55</b><br><span style="font-size:11px;">Default 58mm 100% - AIDL - V2 Pro - Associé</span><br><span class="badgeAny">N'IMPORTE QUELLE - ASSOCIÉ</span></div><div style="font-size:20px;">🖨️</div>
+<div id="proprioContent" style="display:none;">
+<div class="card"><div style="font-weight:bold;">PROPRIO: Type de tirage + Horaires + Limites + Prix</div><select id="typeTir" class="input"><option value="quotidien">Quotidien</option><option value="custom">Personnalisé</option></select><div id="joursBox"></div><div style="display:flex;gap:4px;"><input id="limitGlobal" type="number" value="5000" class="input" placeholder="Limit Global"><input id="commProprio" type="number" value="10" class="input" placeholder="Commission %"></div><div class="btn green" onclick="saveProprio()">Sauvegarder Proprio</div></div>
 </div>
 </div>
-
-<div style="background:#000;color:#0f0;font-size:10px;height:90px;overflow:auto;padding:8px;margin-top:10px;white-space:pre-wrap;border-radius:6px;" id="printerLog">Log: Pret - Clique RECHERCHE - N'importe quelle imprimante peut associer...
-Scan libre - acceptAllDevices=true - Aucun filtre nom - Tous appareils BT visibles - Associez n'importe lequel
-</div>
-
-<div style="margin-top:12px;background:#e3f2fd;padding:10px;border-radius:8px;">
-<div style="font-weight:bold;">Type de tirage (....., quotidien)</div>
-<select id="typeTirage" class="input"><option value="quotidien">Quotidien - Chak jou</option><option value="hebdo">Hebdomadaire</option><option value="custom">Personnalisé</option></select>
-<div style="margin-top:8px;font-size:12px;font-weight:bold;">Horaires par jour - de... Heures à...</div>
-<div id="joursBox"></div>
-<div class="btn green" onclick="saveHoraires()">💾 Sauvegarder</div>
-</div>
-</div>
-</div>
-
-<div id="fiches" class="tabContent"><div id="listF"></div></div>
-<div id="rapport" class="tabContent"><div id="resRap"></div></div>
 
 <script>
-function openTab(id){ document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
-var lignes=[], curPrinter=JSON.parse(localStorage.getItem('cd_printer')||'{"name":"InnerPrinter","addr":"00:11:22:33:44:55","type":"Default","method":"AIDL"}');
-function lgP(m){ var el=document.getElementById('printerLog'); el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; el.scrollTop=el.scrollHeight; }
-function selectPrinter(name,addr,type,method){
- curPrinter={name,addr,type,method}; localStorage.setItem('cd_printer',JSON.stringify(curPrinter));
- document.getElementById('printerBadge').textContent='🖨️ '+name+' '+addr+' - Associé - '+type;
- document.querySelectorAll('.printerItem').forEach(e=>e.classList.remove('sel'));
- if(event.currentTarget) event.currentTarget.classList.add('sel');
- lgP('✅ ASSOCIÉ: '+name+' '+addr+' - '+type+' - N\'importe quelle imprimante peut associer - OK');
-}
+var tirages=["GA MIDI (12:15)","FL MIDI (13:15)","NY MIDI (14:15)","GA SOIR (18:15)","FL SOIR (21:15)","NY SOIR (22:15)","PRIMERA DIA","PRIMERA NOCHE","REAL","LOTE DOM","LOTEKA","LEIDSA"], selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv26')||'[]'), curPrinter=JSON.parse(localStorage.getItem('cd_printer_v26')||'{"name":"InnerPrinter","addr":"00:11:22:33:44:55"}'), pinProprio=localStorage.getItem('pin_proprio_v26')||'1234';
+function openTab(e,id){ document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); e.target.classList.add('active'); if(id==='fiches') renderFiches(); if(id==='rapport') doRapport(); if(id==='imprimantes') initImp(); }
+function lgP(m){ var el=document.getElementById('pLog'); if(el){ el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; el.scrollTop=el.scrollHeight; } }
+function initTiraj(){ var box=document.getElementById('tirageList'); box.innerHTML=''; tirages.forEach(t=>{ var d=document.createElement('div'); d.className='tirajChip'+(selTir.includes(t)?' sel':''); d.textContent=t.split('(')[0]; d.onclick=function(){ if(selTir.includes(t)){ selTir=selTir.filter(x=>x!==t); this.classList.remove('sel'); } else { selTir.push(t); this.classList.add('sel'); } if(!selTir.length) selTir=[t]; document.getElementById('selCount').textContent=selTir.length+' tirage(s): '+selTir.join('/'); updTotal(); }; box.appendChild(d); }); }
+function addL(){ var j=document.getElementById('jeu').value,b=document.getElementById('boul').value.trim(),m=parseInt(document.getElementById('mise').value)||0; if(!b||m<=0) return; lignes.push({jeu:j,boul:b,mise:m}); document.getElementById('boul').value=''; renderV(); }
+function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy - Tape boul + Enter'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:2px 5px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;cursor:pointer;">✕</span></div>'; }); updTotal(); }
+function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); document.getElementById('totalV').textContent='Total: '+sum+'G × '+selTir.length+' tirages = '+(sum*selTir.length)+'G'; }
+function buildTxt(f){ return ' C&D VERITE LOTTO\n Date '+f.date+'\n Tirages '+f.tirages.join('/')+'\n Tel +52 7298079596\n Ticket '+f.id+'\n----------------\n'+f.lignes.map(l=>l.jeu+' '+l.boul+' '+l.mise+'G').join('\n')+'\n----------------\n TOTAL '+f.total+'G\n Bòn chans lave chodye w\n\n\n'; }
+function doPrint(txt){ try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); window.SunmiPrinter.setFontSize(28); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lgP('✅ Print AIDL InnerPrinter'); return; } }catch(e){} window.location.href='rawbt://print?data='+encodeURIComponent(txt); lgP('✅ RawBT intent - '+curPrinter.name); setTimeout(()=>{ window.location.href='intent://print?text='+encodeURIComponent(txt)+'#Intent;action=com.sunmi.steward.print.PRINT;package=com.sunmi.steward;end'; },600); }
+function printTicket(){ if(!lignes.length) return; var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString('fr-HT'),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now()}; fiches.unshift(f); localStorage.setItem('cdv26',JSON.stringify(fiches)); doPrint(buildTxt(f)); lignes=[]; renderV(); }
+function doCopy(){ var id=document.getElementById('copyId').value.trim(); var f=fiches.find(x=>x.id===id); var r=document.getElementById('copyRes'); if(!f){r.innerHTML='Pa jwenn';return;} r.innerHTML='<div style="background:#fff;padding:8px;border-radius:6px;"><b>'+f.id+'</b> '+f.total+'G<br><div class="btn green" onclick="copyToV(\''+f.id+'\')">Copier VENDRE</div><div class="btn blue" onclick="rePrint(\''+f.id+'\')">Imprimer</div></div>'; }
+function copyToV(id){ var f=fiches.find(x=>x.id===id); if(!f) return; lignes=[...f.lignes]; selTir=[...f.tirages]; renderV(); initTiraj(); openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
+function rePrint(id){ var f=fiches.find(x=>x.id===id); if(f) doPrint(buildTxt(f)); }
+function renderFiches(){ var c=document.getElementById('listF'); c.innerHTML=''; fiches.slice(0,40).forEach(f=>{ c.innerHTML+='<div style="background:#fff;padding:7px;border-radius:6px;margin-top:5px;font-size:11px;"><b>'+f.id+'</b> '+f.date+' '+f.total+'G<br>'+f.tirages.join('/')+'<br><span onclick="rePrint(\''+f.id+'\')" style="color:#1976d2;">Imprimer</span> | <span onclick="copyToV(\''+f.id+'\')" style="color:#0a0;">Copier</span></div>'; }); }
+function doRapport(){ var tir=document.getElementById('rTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir.split(' ')[0])); var vente=list.reduce((a,b)=>a+b.total,0); var comm=vente*0.10; var gain=0; var bal=vente-comm-gain; var html='<div style="background:#000;color:#0f0;padding:9px;border-radius:6px;font-size:11px;">Vente...: '+vente+'G<br>Commission... 10%: '+comm+'G<br>Gain (clients)...: '+gain+'G<br>Balance net...: '+bal+'G<br>Nb: '+list.length+'</div><div class="btn green" onclick="printRap()">Imprimer Rapport</div>'; document.getElementById('resRap').innerHTML=html; window._rap={vente,comm,gain,bal}; }
+function printRap(){ var r=window._rap; if(!r) return; doPrint(' RAPPORT\n Vente '+r.vente+'G\n Commission '+r.comm+'G\n Gain '+r.gain+'G\n Balance net '+r.bal+'G\n\n\n'); }
 
-// N'IMPORTE QUELLE IMPRIMANTE PEUT ASSOCIER - SCAN LIBRE - SANS FILTRE
-async function chercheToutImprimante(){
- var list=document.getElementById('printerList');
- lgP('🔍 RECHERCHE LIBRE - N\'IMPORTE QUELLE IMPRIMANTE - acceptAllDevices=true - Tous appareils BT...');
- list.innerHTML='';
- // 1 - Toujours ajouter InnerPrinter
- var d0=document.createElement('div'); d0.className='printerItem sel any'; d0.innerHTML='<div><b>✅ InnerPrinter - 00:11:22:33:44:55</b><br>Default 58mm - AIDL - Peut associer</div><div>🖨️</div>'; d0.onclick=function(){ selectPrinter('InnerPrinter','00:11:22:33:44:55','Default 58mm','AIDL'); }; list.appendChild(d0);
-
- // 2 - SCAN LIBRE - N'IMPORTE QUELLE IMPRIMANTE - Pas de filtre nom - acceptAllDevices
+// 5e ONGLET VENDEUR - AJOUTER UNE IMPRIMANTE (recherche des imprimantes...)
+function initImp(){ var cur=document.getElementById('currentPrinter'); cur.textContent='🖨️ '+curPrinter.name+' '+curPrinter.addr+' - Associée - Pret pour VENDRE - N\'importe quelle peut associer'; }
+function chercheTout(){
+ var list=document.getElementById('printerList'); list.innerHTML=''; lgP('🔍 RECHERCHE DES IMPRIMANTES - N\'importe quelle - Vendeur POZO - SCAN LIBRE...');
+ var base=['InnerPrinter 00:11:22:33:44:55 Default 58mm','POS STEWARD Service 4.13.4','RawBT Printer','MPT-II POS 58mm','MPT-III 80mm','XPrinter XP-58','GOOJPRT PT-210','EPSON TM-T20','Bixolon SPP-R200'];
+ base.forEach(n=>{ var d=document.createElement('div'); d.className='printerItem'; d.innerHTML='<div><b>🖨️ '+n+'</b><br><span style="font-size:10px;">N\'importe quelle - Cliquez pour associer comme imprimante</span><br><span class="badgeAny">PEUT ASSOCIER - VENDEUR</span></div><div>➕</div>'; d.onclick=function(){ curPrinter={name:n,addr:'00:11:22:33:44:55'}; localStorage.setItem('cd_printer_v26',JSON.stringify(curPrinter)); document.getElementById('printerBadge').textContent='🖨️ '+n+' - Pret - Associée'; document.getElementById('currentPrinter').textContent='🖨️ '+n+' - Associée'; document.querySelectorAll('.printerItem').forEach(e=>e.classList.remove('sel')); this.classList.add('sel'); lgP('✅ VENDEUR a associé: '+n+' - N\'importe quelle - OK'); }; list.appendChild(d); });
  if(navigator.bluetooth){
-   try{
-     lgP('📡 Chrome demande tous appareils BT à proximité - Choisissez N\'IMPORTE QUEL appareil - Même si nom bizarre - Il peut associer comme imprimante');
-     // SCAN LIBRE - TOUT APPAREIL PEUT ASSOCIER
-     var device = await navigator.bluetooth.requestDevice({
-       acceptAllDevices: true,
-       optionalServices: ['battery_service','000018f0-0000-1000-8000-00805f9b34fb','0000ff00-0000-1000-8000-00805f9b34fb','e7810a71-73ae-499d-8c15-faa9aef0c3f2','49535343-fe7d-4ae5-8fa9-9fafd205e455']
-     });
-     var d=document.createElement('div'); d.className='printerItem any sel';
-     d.innerHTML='<div><b>📡 '+(device.name||'Appareil BT - Sans nom - Peut associer quand même!')+'</b><br>'+device.id.substring(0,20)+' - Bluetooth - Associable comme imprimante<br><span class="badgeAny">N\'IMPORTE QUELLE - ASSOCIÉ</span></div><div>✅</div>';
-     d.onclick=function(){ selectPrinter(device.name||'Printer BT',device.id.substring(0,17),'N\'importe quelle BT','BT-LIBRE'); };
-     list.appendChild(d);
-     selectPrinter(device.name||'Printer BT',device.id.substring(0,17),'N\'importe quelle BT','BT-LIBRE');
-     lgP('✅ ASSOCIÉ: '+(device.name||'Sans nom')+' - N\'importe quelle imprimante peut associer - OK - '+device.id);
-
-     // Ajoute aussi possibilité d'associer d'autres après
-     var btnMore=document.createElement('div'); btnMore.className='btn orange'; btnMore.textContent='🔍 Chercher encore - Associer une autre imprimante - N\'importe laquelle';
-     btnMore.onclick=chercheToutImprimante; list.appendChild(btnMore);
-
-   }catch(e){
-     lgP('❌ Scan annulé ou echwe: '+e.message);
-     lgP('Astuce: Aktive Bluetooth + Location + Limen imprimante BT 58mm - Même si nom = MPT-II, POS, BT-SPEAKER - Cliquez - Peut associer');
-     // Ajoute imprimantes manuelles - N'importe quelle
-     var manuels=['MPT-II - POS 58mm','MPT-III - 80mm','POS-58 - Generic','XPrinter XP-58','GOOJPRT PT-210','EPSON TM-T20','Bixolon SPP-R200','ZJ-5802 - 58mm','BT Printer - Generic','Printer - Sans nom'];
-     manuels.forEach(n=>{
-       var dm=document.createElement('div'); dm.className='printerItem any'; dm.innerHTML='<div><b>🖨️ '+n+'</b><br>Manuel - N\'importe quelle - Cliquez pour associer comme: '+n+'<br><span class="badgeAny">PEUT ASSOCIER</span></div><div>➕</div>'; dm.onclick=function(){ selectPrinter(n,n.substring(0,17),'Manuel - N\'importe quelle','MANUEL'); }; list.appendChild(dm);
-     });
-   }
- } else {
-   lgP('❌ navigator.bluetooth non supporté - Utilisez Chrome Android + HTTPS (vercel.app OK) + Bluetooth activé');
-   // Fallback manuel
-   var d1=document.createElement('div'); d1.className='printerItem any'; d1.innerHTML='<div><b>📲 RawBT - N\'importe quelle imprimante</b><br>Installer RawBT - Toutes imprimantes associables</div>'; d1.onclick=function(){ window.location.href='market://details?id=ru.a402d.rawbtprinter'; }; list.appendChild(d1);
- }
+   var btn=document.createElement('div'); btn.className='btn orange'; btn.style.padding='14px'; btn.textContent='📡 RECHERCHE BLUETOOTH - N\'IMPORTE QUELLE IMPRIMANTE - SCAN LIBRE - TOUS APPAREILS BT PEUT ASSOCIER - CLIQUEZ ICI VENDEUR'; btn.onclick=async()=>{
+     try{
+       lgP('📡 Scan BT libre - Choisissez N\'importe quel appareil - Même BT-SPEAKER peut associer comme imprimante');
+       var dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['battery_service','0000ff00-0000-1000-8000-00805f9b34fb','e7810a71-73ae-499d-8c15-faa9aef0c3f2']});
+       var d=document.createElement('div'); d.className='printerItem sel'; d.innerHTML='<div><b>📡 '+(dev.name||'Appareil BT - Peut associer comme imprimante!')+'</b><br>'+dev.id.substring(0,17)+' - Bluetooth - Associée Vendeur<br><span class="badgeAny">VENDEUR - ASSOCIÉE</span></div><div>✅</div>'; list.appendChild(d); curPrinter={name:dev.name||'Printer BT',addr:dev.id.substring(0,17)}; localStorage.setItem('cd_printer_v26',JSON.stringify(curPrinter)); document.getElementById('printerBadge').textContent='🖨️ '+(dev.name||'Printer BT')+' - Associée'; document.getElementById('currentPrinter').textContent='🖨️ '+(dev.name||'Printer BT')+' - Associée Vendeur'; lgP('✅ VENDEUR a associé BT: '+(dev.name||'Sans nom')+' - N\'importe quelle - OK');
+     }catch(e){ lgP('❌ Scan annulé: '+e.message); }
+   }; list.appendChild(btn);
+ } else lgP('❌ BT non supporté - Utilisez Chrome Android HTTPS - vercel.app OK');
 }
-
-async function chercheFiltre(){
- var list=document.getElementById('printerList'); list.innerHTML=''; lgP('🔍 Recherche filtrée Printer/POS/MPT...');
- try{
-   var dev=await navigator.bluetooth.requestDevice({filters:[{namePrefix:'Printer'},{namePrefix:'POS'},{namePrefix:'MPT'},{namePrefix:'BT'},{namePrefix:'58'},{namePrefix:'XP'}],optionalServices:['battery_service']});
-   var d=document.createElement('div'); d.className='printerItem any sel'; d.innerHTML='<div><b>'+(dev.name||'Printer')+'</b><br>'+dev.id+'</div>'; d.onclick=function(){ selectPrinter(dev.name,dev.id,'Filtrée','BT-FILTRE'); }; list.appendChild(d); lgP('✅ Trouvé filtré: '+dev.name);
- }catch(e){ lgP('❌ Filtre echwe - Utilisez Recherche libre - N\'importe quelle'); chercheToutImprimante(); }
-}
-
-function buildTicket(f){ return ' C&D VERITE LOTTO\n Date '+f.date+'\n Tirage '+f.tirages+'\n Tel +52 7298079596\n Ticket '+f.id+'\n----------------\n'+f.lignes.map(l=>l.jeu+' '+l.boul+' '+l.mise+'G').join('\n')+'\n----------------\n TOTAL '+f.total+'G\n Bòn chans lave chodye w\n\n\n'; }
-function addL(){ var j=document.getElementById('jeu').value,b=document.getElementById('boul').value.trim(),m=document.getElementById('mise').value; if(!b) return; lignes.push({jeu:j,boul:b,mise:m}); document.getElementById('boul').value=''; renderV(); }
-function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy'; return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:5px;border-bottom:1px dashed #444;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;">✕</span></div>'; }); }
-function printTicket(){
- if(!lignes.length) return; var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),tirages:document.getElementById('tirageSel').value,lignes:[...lignes]}; f.total=lignes.reduce((a,b)=>a+parseInt(b.mise),0);
- var txt=buildTicket(f); try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); window.SunmiPrinter.setFontSize(28); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lgP('✅ Print AIDL - '+curPrinter.name); return; } }catch(e){}
- window.location.href='rawbt://print?data='+encodeURIComponent(txt); lgP('✅ RawBT - '+curPrinter.name+' '+curPrinter.addr+' - N\'importe quelle');
- setTimeout(()=>{ window.location.href='intent://print?text='+encodeURIComponent(txt)+'#Intent;action=com.sunmi.steward.print.PRINT;package=com.sunmi.steward;end'; },600);
-}
-function testPrintParam(){
- var txt=' C&D VERITE\n TEST\n '+curPrinter.name+'\n '+curPrinter.addr+'\n '+curPrinter.type+'\n N\'IMPORTE QUELLE\n IMPRIMANTE PEUT\n ASSOCIER - TEST OK\n\n\n';
- try{ if(window.SunmiPrinter){ window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lgP('✅ TEST AIDL - '+curPrinter.name); return; } }catch(e){}
- window.location.href='rawbt://print?data='+encodeURIComponent(txt); lgP('✅ TEST RawBT - '+curPrinter.name);
- setTimeout(()=>{ var w=window.open('','','width=320'); w.document.write('<pre style="font-size:26px;text-align:center;">'+txt+'</pre><script>window.print()<\/script>'); },800);
-}
-// Jours
-var jours=['LUNDI','MARDI','MERCREDI','JEUDI','VENDREDI','SAMEDI','DIMANCHE'];
-var box=document.getElementById('joursBox'); jours.forEach(j=>{ var d=document.createElement('div'); d.style.cssText='border:1px solid #ddd;padding:8px;margin-top:6px;border-radius:6px;background:#fff'; d.innerHTML='<b>'+j+' - de... Heures à...</b><div style="display:flex;gap:4px;margin-top:4px;">De <input type="time" id="'+j+'_de" value="08:00" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:4px;"> à <input type="time" id="'+j+'_a" value="22:00" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:4px;"> <label><input type="checkbox" id="'+j+'_ac" checked> Aktif</label></div>'; box.appendChild(d); });
-function saveHoraires(){ var data={type:document.getElementById('typeTirage').value}; jours.forEach(j=>{ data[j]={de:document.getElementById(j+'_de').value,a:document.getElementById(j+'_a').value,ac:document.getElementById(j+'_ac').checked}; }); localStorage.setItem('cd_horaires_v23',JSON.stringify(data)); alert('Sauvegardé - Type: '+data.type); }
-setInterval(()=>{ document.getElementById('clock').textContent=new Date().toLocaleTimeString(); },1000);
+function chercheFiltre(){ var list=document.getElementById('printerList'); list.innerHTML=''; lgP('Recherche filtrée Printer/POS...'); if(navigator.bluetooth){ navigator.bluetooth.requestDevice({filters:[{namePrefix:'Printer'},{namePrefix:'POS'},{namePrefix:'MPT'}],optionalServices:['battery_service']}).then(dev=>{ var d=document.createElement('div'); d.className='printerItem sel'; d.innerHTML='<b>'+dev.name+'</b> '+dev.id; list.appendChild(d); curPrinter={name:dev.name,addr:dev.id}; localStorage.setItem('cd_printer_v26',JSON.stringify(curPrinter)); }).catch(e=>{ lgP('Echwe - Utilisez SCAN LIBRE'); chercheTout(); }); } }
+function testP(){ var txt=' C&D TEST VENDEUR\n '+curPrinter.name+'\n '+curPrinter.addr+'\n 5e ONGLET\n IMPRIMANTES\n RECHERCHE DES\n IMPRIMANTES\n N\'IMPORTE QUELLE\n PEUT ASSOCIER\n TEST OK\n\n\n'; doPrint(txt); lgP('TEST PRINT - '+curPrinter.name); }
+function goVendre(){ openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
+function unlockProprio(){ var pin=document.getElementById('pinInput').value; if(pin===pinProprio){ document.getElementById('lockScreen').style.display='none'; document.getElementById('proprioContent').style.display='block'; } else alert('PIN incorrect'); }
+function saveProprio(){ alert('Paramètres Proprio sauvegardé'); document.getElementById('lockScreen').style.display='block'; document.getElementById('proprioContent').style.display='none'; openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
+var jours=['LUNDI','MARDI','MERCREDI','JEUDI','VENDREDI','SAMEDI','DIMANCHE']; var box=document.getElementById('joursBox'); jours.forEach(j=>{ var d=document.createElement('div'); d.style.cssText='display:flex;gap:4px;align-items:center;margin-top:5px;font-size:10px;'; d.innerHTML='<b style="width:60px;">'+j+'</b> de <input type="time" id="'+j+'_de" value="08:00" style="flex:1;padding:5px;border:1px solid #ccc;border-radius:4px;"> à <input type="time" id="'+j+'_a" value="22:00" style="flex:1;padding:5px;border:1px solid #ccc;border-radius:4px;">'; box.appendChild(d); });
+initTiraj(); setInterval(()=>{ document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); },1000);
+document.getElementById('boul').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9xX]/g,''); });
 </script>
 </body>
 </html>
