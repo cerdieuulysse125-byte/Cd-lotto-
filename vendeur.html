@@ -3,132 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>C&D V26 - 5e ONGLET IMPRIMANTES VENDEUR</title>
+<title>C&D V28 - 5 ONGLET - PROPRIO RETIRE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{background:#000;color:#fff;font-family:monospace}
-.top{background:#ff0;color:#000;padding:5px;text-align:center;font-weight:bold;font-size:10px;position:sticky;top:0;z-index:100;line-height:1.2}
-.tabs{display:flex;background:#222;overflow-x:auto;position:sticky;top:36px;z-index:99}.tab{flex:1;min-width:62px;padding:10px 3px;text-align:center;font-weight:bold;font-size:9px;color:#fff;border-right:1px solid #444;cursor:pointer;white-space:nowrap}.tab.active{background:#ff0;color:#000}.tab.imp{background:#1976d2;color:#fff}.tab.prop{background:#ff5722;color:#fff}
-.tabContent{display:none;padding:5px;background:#f0f0f0;color:#000;min-height:calc(100vh - 76px)}.tabContent.active{display:block}
+.top{background:#ff0;color:#000;padding:6px;text-align:center;font-weight:bold;font-size:10px;position:sticky;top:0;z-index:100}
+.tabs{display:flex;background:#222;overflow-x:auto;position:sticky;top:38px;z-index:99}.tab{flex:1;min-width:70px;padding:11px 4px;text-align:center;font-weight:bold;font-size:10px;color:#fff;border-right:1px solid #444;cursor:pointer;white-space:nowrap}.tab.active{background:#ff0;color:#000}.tab.imp{background:#1976d2;color:#fff}
+.tabContent{display:none;padding:5px;background:#f0f0f0;color:#000;min-height:calc(100vh - 80px)}.tabContent.active{display:block}
 .card{background:#fff;border-radius:8px;padding:9px;margin-top:5px;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
-.btn{padding:10px;border-radius:6px;text-align:center;font-weight:bold;cursor:pointer;margin-top:5px;font-size:11px}
+.btn{padding:11px;border-radius:6px;text-align:center;font-weight:bold;cursor:pointer;margin-top:5px;font-size:11px}
 .blue{background:#1976d2;color:#fff}.green{background:#2e7d32;color:#fff}.orange{background:#ff5722;color:#fff}
 .input{width:100%;padding:8px;border:1px solid #bbb;border-radius:5px;margin-top:4px;font-size:11px}
-.tirajBox{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;max-height:85px;overflow:auto;background:#fff;padding:5px;border-radius:6px}
-.tirajChip{padding:4px 7px;background:#fff;border:1px solid #aaa;border-radius:12px;font-size:9px;cursor:pointer}.tirajChip.sel{background:#0f0;font-weight:bold}
+.tirajBox{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;max-height:115px;overflow:auto;background:#fff;padding:6px;border-radius:6px;border:1px solid #ddd}
+.tirajChip{padding:5px 8px;background:#fff;border:1px solid #aaa;border-radius:12px;font-size:10px;cursor:pointer}.tirajChip.sel{background:#0f0;font-weight:bold;border-color:#0f0}.tirajChip.nouvo{border:2px solid #1976d2;background:#e3f2fd}
 .listV{background:#111;color:#0f0;border-radius:5px;padding:4px;min-height:45px;max-height:105px;overflow:auto;margin-top:5px;font-size:10px}
 .totalBox{background:#0f0;color:#000;padding:7px;border-radius:5px;text-align:center;font-weight:bold;font-size:11px;margin-top:5px}
 .printerItem{background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px;margin-top:6px;cursor:pointer;font-size:11px;display:flex;justify-content:space-between;align-items:center}.printerItem.sel{border:3px solid #2e7d32;background:#e8f5e9}
-.badgeAny{background:#ff5722;color:#fff;padding:2px 5px;border-radius:8px;font-size:8px}
 </style>
 </head>
 <body>
-<div class="top">VENDEUR POZO - 5e ONGLET IMPRIMANTES - N'IMPORTE QUELLE - <span id="clock">23:07</span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:2px 7px;border-radius:10px;font-size:9px;">🖨️ InnerPrinter 00:11:22:33:44:55 - Pret - Vendeur peut ajouter</span></div>
+<div class="top">VENDEUR POZO - 5 ONGLET - PROPRIO RETIRE - <span id="clock">23:24</span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:2px 8px;border-radius:10px;font-size:9px;">🖨️ InnerPrinter 00:11:22:33:44:55 - Pret</span></div>
 <div class="tabs">
 <div class="tab active" onclick="openTab(event,'vendre')">VENDRE</div>
 <div class="tab" onclick="openTab(event,'copier')">COPIER</div>
 <div class="tab" onclick="openTab(event,'fiches')">FICHES</div>
 <div class="tab" onclick="openTab(event,'rapport')">RAPPORT</div>
 <div class="tab imp" onclick="openTab(event,'imprimantes')">🖨️ IMPRIMANTES</div>
-<div class="tab prop" onclick="openTab(event,'param')">🔐 PROPRIO</div>
 </div>
 
-<!-- 1 VENDRE -->
 <div id="vendre" class="tabContent active">
-<div class="card"><div style="font-weight:bold;font-size:10px;">Tirage multiple - Liste des tirages - Klike:</div><div id="tirageList" class="tirajBox"></div><div id="selCount" style="font-size:9px;color:#0a0;margin-top:3px;">1 tirage</div></div>
-<div class="card" style="padding:5px;"><div style="font-size:9px;font-weight:bold;">Jeux (...) - Boul - mise - Cases moins grandes</div><div style="display:flex;gap:3px;margin-top:5px;"><select id="jeu" style="flex:1;padding:7px;border-radius:5px;font-size:11px;"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select><input id="boul" placeholder="Boul" style="flex:1.2;padding:7px;border-radius:5px;font-size:11px;"><input id="mise" type="number" value="10" style="width:48px;background:#ff0;text-align:center;padding:7px;border-radius:5px;"><div class="btn blue" style="padding:7px 9px;margin:0;font-size:11px;" onclick="addL()">+↓</div></div><div id="listV" class="listV">Pa gen liy</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div><div class="btn green" onclick="printTicket()" style="padding:12px;font-size:13px;">🖨️ IMPRIMER - 58mm</div></div>
+<div class="card"><div style="font-weight:bold;font-size:11px;">Tirage multiple - Liste des tirages - Klike:</div><div id="tirageList" class="tirajBox"></div><div id="selCount" style="font-size:10px;color:#0a0;margin-top:4px;">1 tirage chwazi</div></div>
+<div class="card" style="padding:6px;"><div style="font-size:10px;font-weight:bold;">Jeux (...) - Boul - mise - Cases moins grandes</div><div style="display:flex;gap:3px;margin-top:5px;"><select id="jeu" style="flex:1;padding:7px;border-radius:5px;"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select><input id="boul" placeholder="Boul" style="flex:1.2;padding:7px;border-radius:5px;"><input id="mise" type="number" value="25" style="width:52px;background:#ff0;text-align:center;padding:7px;border-radius:5px;"><div class="btn blue" style="padding:7px 10px;margin:0;" onclick="addL()">+↓</div></div><div id="listV" class="listV">Pa gen liy - Tape boul + Enter</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div><div class="btn green" onclick="printTicket()" style="padding:13px;font-size:13px;">🖨️ IMPRIMER - 58mm</div></div>
 </div>
 
-<!-- 2 COPIER -->
-<div id="copier" class="tabContent"><div class="card"><div style="font-weight:bold;font-size:11px;">2- COPIER (Id ticket pour copier)</div><input id="copyId" class="input" placeholder="Id ticket pour copier"><div class="btn blue" onclick="doCopy()">Chèche</div><div id="copyRes"></div></div></div>
+<div id="copier" class="tabContent"><div class="card"><div style="font-weight:bold;">COPIER (Id ticket pour copier)</div><input id="copyId" class="input" placeholder="Id ticket"><div class="btn blue" onclick="doCopy()">Chèche</div><div id="copyRes"></div></div></div>
+<div id="fiches" class="tabContent"><div class="card"><div style="font-weight:bold;">MES FICHES (Fich, date du...au..)</div><div style="display:flex;gap:3px;"><input id="fDu" type="date" class="input" style="flex:1;"><input id="fAu" type="date" class="input" style="flex:1;"></div><input id="fSearch" class="input" placeholder="Recherche"><div class="btn blue" onclick="renderFiches()">Recherche</div><div id="listF"></div></div></div>
+<div id="rapport" class="tabContent"><div class="card"><div style="font-weight:bold;">RAPPORT Du... Au... Tirages(..., tous) Vente... Commission... Gain... Balance net...</div><div style="display:flex;gap:3px;"><input id="rDu" type="date" class="input" style="flex:1;"><input id="rAu" type="date" class="input" style="flex:1;"></div><select id="rTir" class="input"><option value="tous">Tirages(..., tous)</option><option>GA MIDI</option><option>FL MIDI</option><option>GANAMAS</option><option>NACIONAL NOCHE</option><option>ANGUILA 10H</option><option>ANGUILLA 6H</option></select><div class="btn green" onclick="doRapport()">Générer Rapport</div><div id="resRap"></div></div></div>
 
-<!-- 3 FICHES -->
-<div id="fiches" class="tabContent"><div class="card"><div style="font-weight:bold;font-size:11px;">3- MES FICHES (Fich, date du...au..)</div><div style="display:flex;gap:3px;"><input id="fDu" type="date" class="input" style="flex:1;"><input id="fAu" type="date" class="input" style="flex:1;"></div><input id="fSearch" class="input" placeholder="Recherche"><div class="btn blue" onclick="renderFiches()">Recherche</div><div id="listF"></div></div></div>
-
-<!-- 4 RAPPORT -->
-<div id="rapport" class="tabContent"><div class="card"><div style="font-weight:bold;font-size:11px;">4- RAPPORT Du... Au... Tirages(..., tous) Vente... Commission... Gain... Balance net...</div><div style="display:flex;gap:3px;"><input id="rDu" type="date" class="input" style="flex:1;"><input id="rAu" type="date" class="input" style="flex:1;"></div><select id="rTir" class="input"><option value="tous">Tirages(..., tous)</option><option>GA MIDI</option><option>FL MIDI</option><option>REAL</option><option>LOTEKA</option></select><div class="btn green" onclick="doRapport()">Générer Rapport</div><div id="resRap"></div></div></div>
-
-<!-- 5e ONGLET DU VENDEUR : AJOUTER UNE IMPRIMANTE (recherche des imprimantes...) -->
+<!-- 5e ONGLET DU VENDEUR : AJOUTER UNE IMPRIMANTE -->
 <div id="imprimantes" class="tabContent">
 <div class="card" style="border:3px solid #1976d2;">
-<div style="font-weight:bold;font-size:13px;color:#1976d2;">🖨️ 5e ONGLET DU VENDEUR : AJOUTER UNE IMPRIMANTE (recherche des imprimantes...)</div>
-<div style="font-size:10px;background:#e3f2fd;padding:7px;border-radius:6px;margin-top:6px;border-left:4px solid #1976d2;">
-<b>VENDEUR POZO peut ajouter n'importe quelle imprimante:</b><br>
-✅ Recherche des imprimantes à proximité - SCAN LIBRE - acceptAllDevices=true<br>
-✅ InnerPrinter 00:11:22:33:44:55 - Default 58mm - Sunmi V2 Pro - Toujours disponible<br>
-✅ N'importe quelle: POS 58mm, MPT-II, MPT-III, XPrinter, GOOJPRT, EPSON, Bixolon<br>
-✅ Même si nom = BT-SPEAKER, UNKNOWN, MTP - Peut associer comme imprimante!<br>
-✅ RawBT + POS STEWARD Service 4.13.4 + Sunmi Steward
-</div>
-
-<div class="btn blue" onclick="chercheTout()" style="padding:16px;font-size:13px;background:#ff5722;">🔍 RECHERCHE DES IMPRIMANTES - N'IMPORTE QUELLE PEUT ASSOCIER - SCAN LIBRE - VENDEUR</div>
-<div style="display:flex;gap:4px;"><div class="btn blue" style="flex:1;" onclick="chercheFiltre()">Filtrée Printer/POS</div><div class="btn green" style="flex:1;" onclick="testP()">🧪 TEST PRINT</div></div>
-
-<div id="printerList" style="margin-top:8px;">
-<div class="printerItem sel"><div><b>✅ InnerPrinter 00:11:22:33:44:55</b><br><span style="font-size:10px;">Default 58mm 100% - Pret - Associée</span><br><span class="badgeAny">VENDEUR - ASSOCIÉE</span></div><div>🖨️</div></div>
-</div>
-
-<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:70px;overflow:auto;padding:6px;margin-top:8px;white-space:pre-wrap;border-radius:5px;">Log Vendeur: Pret - Cliquez RECHERCHE DES IMPRIMANTES - N'importe quelle peut associer...
-Vendeur POZO peut associer tout BT - acceptAllDevices=true - Aucun filtre nom
-</div>
-
-<div class="card" style="background:#fff8e1;margin-top:8px;">
-<div style="font-weight:bold;font-size:10px;">Imprimante actuelle du vendeur:</div>
-<div id="currentPrinter" style="background:#e8f5e9;padding:8px;border-radius:6px;margin-top:4px;font-size:11px;border:2px solid #2e7d32;">🖨️ InnerPrinter 00:11:22:33:44:55 - Default - Associée - Pret pour VENDRE</div>
-<div class="btn green" onclick="goVendre()" style="margin-top:6px;">⬅️ Retour VENDRE et IMPRIMER</div>
-</div>
-</div>
-</div>
-
-<!-- 6e PROPRIO (optionnel - pour toi) -->
-<div id="param" class="tabContent">
-<div id="lockScreen" style="background:#111;color:#ff0;padding:20px;border-radius:10px;text-align:center;border:3px solid #ff5722;">
-<div style="font-size:16px;">🔐 PARAMÈTRES PROPRIO - Réservé Proprio</div><input id="pinInput" type="password" inputmode="numeric" placeholder="PIN 1234" class="input" style="text-align:center;font-size:16px;letter-spacing:6px;margin-top:10px;"><div class="btn orange" onclick="unlockProprio()" style="padding:12px;">Déverrouiller</div>
-</div>
-<div id="proprioContent" style="display:none;">
-<div class="card"><div style="font-weight:bold;">PROPRIO: Type de tirage + Horaires + Limites + Prix</div><select id="typeTir" class="input"><option value="quotidien">Quotidien</option><option value="custom">Personnalisé</option></select><div id="joursBox"></div><div style="display:flex;gap:4px;"><input id="limitGlobal" type="number" value="5000" class="input" placeholder="Limit Global"><input id="commProprio" type="number" value="10" class="input" placeholder="Commission %"></div><div class="btn green" onclick="saveProprio()">Sauvegarder Proprio</div></div>
+<div style="font-weight:bold;color:#1976d2;font-size:13px;">🖨️ 5e ONGLET DU VENDEUR: AJOUTER UNE IMPRIMANTE (recherche des imprimantes...)</div>
+<div style="font-size:10px;background:#e3f2fd;padding:7px;border-radius:6px;margin-top:6px;">Recherche des imprimantes à proximité - N'importe quelle imprimante peut associer - InnerPrinter 00:11:22:33:44:55 + BT libre + RawBT</div>
+<div class="btn orange" onclick="chercheTout()" style="padding:15px;font-size:13px;">🔍 RECHERCHE DES IMPRIMANTES - N'IMPORTE QUELLE - SCAN LIBRE - VENDEUR</div>
+<div style="display:flex;gap:4px;"><div class="btn blue" style="flex:1;" onclick="chercheFiltre()">Filtrée</div><div class="btn green" style="flex:1;" onclick="testP()">🧪 TEST PRINT</div></div>
+<div id="printerList" style="margin-top:8px;"></div>
+<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:70px;overflow:auto;padding:6px;margin-top:8px;border-radius:5px;">Log: Pret - Cliquez RECHERCHE DES IMPRIMANTES...</div>
+<div id="currentPrinter" style="background:#e8f5e9;padding:8px;border-radius:6px;margin-top:8px;font-size:11px;border:2px solid #2e7d32;">🖨️ InnerPrinter - Pret</div>
+<div class="btn green" onclick="openTab({target:document.querySelectorAll('.tab')[0]},'vendre')">⬅️ Retour VENDRE</div>
 </div>
 </div>
 
 <script>
-var tirages=["GA MIDI (12:15)","FL MIDI (13:15)","NY MIDI (14:15)","GA SOIR (18:15)","FL SOIR (21:15)","NY SOIR (22:15)","PRIMERA DIA","PRIMERA NOCHE","REAL","LOTE DOM","LOTEKA","LEIDSA"], selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv26')||'[]'), curPrinter=JSON.parse(localStorage.getItem('cd_printer_v26')||'{"name":"InnerPrinter","addr":"00:11:22:33:44:55"}'), pinProprio=localStorage.getItem('pin_proprio_v26')||'1234';
+var tirages=[
+"GA MIDI (12:15)","FL MIDI (13:15)","NY MIDI (14:15)","GA SOIR (18:15)","FL SOIR (21:15)","NY SOIR (22:15)",
+"PRIMERA DIA (11:50)","PRIMERA NOCHE (19:50)","REAL (13:00)","LOTE DOM (18:30)","LOTEKA (19:30)","LEIDSA (20:50)",
+"GANAMAS (14:15)","NACIONAL NOCHE (20:15)","ANGUILA 10H (09:55)","ANGUILLA 6H (05:55)"
+];
+var selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv28')||'[]'), curPrinter=JSON.parse(localStorage.getItem('cd_printer_v28')||'{"name":"InnerPrinter","addr":"00:11:22:33:44:55"}');
 function openTab(e,id){ document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); e.target.classList.add('active'); if(id==='fiches') renderFiches(); if(id==='rapport') doRapport(); if(id==='imprimantes') initImp(); }
-function lgP(m){ var el=document.getElementById('pLog'); if(el){ el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; el.scrollTop=el.scrollHeight; } }
-function initTiraj(){ var box=document.getElementById('tirageList'); box.innerHTML=''; tirages.forEach(t=>{ var d=document.createElement('div'); d.className='tirajChip'+(selTir.includes(t)?' sel':''); d.textContent=t.split('(')[0]; d.onclick=function(){ if(selTir.includes(t)){ selTir=selTir.filter(x=>x!==t); this.classList.remove('sel'); } else { selTir.push(t); this.classList.add('sel'); } if(!selTir.length) selTir=[t]; document.getElementById('selCount').textContent=selTir.length+' tirage(s): '+selTir.join('/'); updTotal(); }; box.appendChild(d); }); }
+function lgP(m){ var el=document.getElementById('pLog'); el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; el.scrollTop=el.scrollHeight; }
+function initTiraj(){ var box=document.getElementById('tirageList'); box.innerHTML=''; tirages.forEach(t=>{ var isNouvo=t.includes('GANAMAS')||t.includes('NACIONAL NOCHE')||t.includes('ANGUILA'); var d=document.createElement('div'); d.className='tirajChip'+(selTir.includes(t)?' sel':'')+(isNouvo?' nouvo':''); d.textContent=t; d.onclick=function(){ if(selTir.includes(t)){ selTir=selTir.filter(x=>x!==t); this.classList.remove('sel'); } else { selTir.push(t); this.classList.add('sel'); } if(!selTir.length) selTir=[t]; document.getElementById('selCount').textContent=selTir.length+' tirage(s): '+selTir.join(' / '); updTotal(); }; box.appendChild(d); }); }
 function addL(){ var j=document.getElementById('jeu').value,b=document.getElementById('boul').value.trim(),m=parseInt(document.getElementById('mise').value)||0; if(!b||m<=0) return; lignes.push({jeu:j,boul:b,mise:m}); document.getElementById('boul').value=''; renderV(); }
-function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy - Tape boul + Enter'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:2px 5px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;cursor:pointer;">✕</span></div>'; }); updTotal(); }
-function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); document.getElementById('totalV').textContent='Total: '+sum+'G × '+selTir.length+' tirages = '+(sum*selTir.length)+'G'; }
-function buildTxt(f){ return ' C&D VERITE LOTTO\n Date '+f.date+'\n Tirages '+f.tirages.join('/')+'\n Tel +52 7298079596\n Ticket '+f.id+'\n----------------\n'+f.lignes.map(l=>l.jeu+' '+l.boul+' '+l.mise+'G').join('\n')+'\n----------------\n TOTAL '+f.total+'G\n Bòn chans lave chodye w\n\n\n'; }
-function doPrint(txt){ try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); window.SunmiPrinter.setFontSize(28); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lgP('✅ Print AIDL InnerPrinter'); return; } }catch(e){} window.location.href='rawbt://print?data='+encodeURIComponent(txt); lgP('✅ RawBT intent - '+curPrinter.name); setTimeout(()=>{ window.location.href='intent://print?text='+encodeURIComponent(txt)+'#Intent;action=com.sunmi.steward.print.PRINT;package=com.sunmi.steward;end'; },600); }
-function printTicket(){ if(!lignes.length) return; var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString('fr-HT'),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now()}; fiches.unshift(f); localStorage.setItem('cdv26',JSON.stringify(fiches)); doPrint(buildTxt(f)); lignes=[]; renderV(); }
-function doCopy(){ var id=document.getElementById('copyId').value.trim(); var f=fiches.find(x=>x.id===id); var r=document.getElementById('copyRes'); if(!f){r.innerHTML='Pa jwenn';return;} r.innerHTML='<div style="background:#fff;padding:8px;border-radius:6px;"><b>'+f.id+'</b> '+f.total+'G<br><div class="btn green" onclick="copyToV(\''+f.id+'\')">Copier VENDRE</div><div class="btn blue" onclick="rePrint(\''+f.id+'\')">Imprimer</div></div>'; }
+function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:3px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;cursor:pointer;">✕</span></div>'; }); updTotal(); }
+function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); document.getElementById('totalV').textContent='Total: '+sum+'G × '+selTir.length+' = '+(sum*selTir.length)+'G'; }
+function buildTxt(f){ return ' C&D VERITE LOTTO\n Date '+f.date+'\n Tirages '+f.tirages.join('/')+'\n Tel +52 7298079596\n Ticket '+f.id+'\n----------------\n'+f.lignes.map(l=>l.jeu+' '+l.boul+' '+l.mise+'G').join('\n')+'\n----------------\n TOTAL '+f.total+'G\n Bon chans lave chodye w\n\n\n'; }
+function doPrint(txt){ try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); window.SunmiPrinter.setFontSize(28); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lgP('✅ Print InnerPrinter'); return; } }catch(e){} window.location.href='rawbt://print?data='+encodeURIComponent(txt); lgP('✅ RawBT '+curPrinter.name); }
+function printTicket(){ if(!lignes.length) return; var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now()}; fiches.unshift(f); localStorage.setItem('cdv28',JSON.stringify(fiches)); doPrint(buildTxt(f)); lignes=[]; renderV(); }
+function doCopy(){ var id=document.getElementById('copyId').value.trim(); var f=fiches.find(x=>x.id===id); var r=document.getElementById('copyRes'); if(!f){r.innerHTML='Pa jwenn';return;} r.innerHTML='<div style="background:#fff;padding:8px;border-radius:6px;"><b>'+f.id+'</b> '+f.total+'G<br><div class="btn green" onclick="copyToV(\''+f.id+'\')">Copier</div><div class="btn blue" onclick="rePrint(\''+f.id+'\')">Imprimer</div></div>'; }
 function copyToV(id){ var f=fiches.find(x=>x.id===id); if(!f) return; lignes=[...f.lignes]; selTir=[...f.tirages]; renderV(); initTiraj(); openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
 function rePrint(id){ var f=fiches.find(x=>x.id===id); if(f) doPrint(buildTxt(f)); }
 function renderFiches(){ var c=document.getElementById('listF'); c.innerHTML=''; fiches.slice(0,40).forEach(f=>{ c.innerHTML+='<div style="background:#fff;padding:7px;border-radius:6px;margin-top:5px;font-size:11px;"><b>'+f.id+'</b> '+f.date+' '+f.total+'G<br>'+f.tirages.join('/')+'<br><span onclick="rePrint(\''+f.id+'\')" style="color:#1976d2;">Imprimer</span> | <span onclick="copyToV(\''+f.id+'\')" style="color:#0a0;">Copier</span></div>'; }); }
-function doRapport(){ var tir=document.getElementById('rTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir.split(' ')[0])); var vente=list.reduce((a,b)=>a+b.total,0); var comm=vente*0.10; var gain=0; var bal=vente-comm-gain; var html='<div style="background:#000;color:#0f0;padding:9px;border-radius:6px;font-size:11px;">Vente...: '+vente+'G<br>Commission... 10%: '+comm+'G<br>Gain (clients)...: '+gain+'G<br>Balance net...: '+bal+'G<br>Nb: '+list.length+'</div><div class="btn green" onclick="printRap()">Imprimer Rapport</div>'; document.getElementById('resRap').innerHTML=html; window._rap={vente,comm,gain,bal}; }
-function printRap(){ var r=window._rap; if(!r) return; doPrint(' RAPPORT\n Vente '+r.vente+'G\n Commission '+r.comm+'G\n Gain '+r.gain+'G\n Balance net '+r.bal+'G\n\n\n'); }
-
-// 5e ONGLET VENDEUR - AJOUTER UNE IMPRIMANTE (recherche des imprimantes...)
-function initImp(){ var cur=document.getElementById('currentPrinter'); cur.textContent='🖨️ '+curPrinter.name+' '+curPrinter.addr+' - Associée - Pret pour VENDRE - N\'importe quelle peut associer'; }
+function doRapport(){ var tir=document.getElementById('rTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir.split(' ')[0])); var vente=list.reduce((a,b)=>a+b.total,0); var comm=vente*0.10; var gain=0; var bal=vente-comm-gain; document.getElementById('resRap').innerHTML='<div style="background:#000;color:#0f0;padding:9px;border-radius:6px;font-size:11px;">Vente...: '+vente+'G<br>Commission...: '+comm+'G<br>Gain (clients)...: '+gain+'G<br>Balance net...: '+bal+'G<br>Nb: '+list.length+'</div><div class="btn green" onclick="printRap()">Imprimer Rapport</div>'; window._rap={vente,comm,gain,bal}; }
+function printRap(){ var r=window._rap; if(!r) return; doPrint(' RAPPORT\n Vente '+r.vente+'G\n Commission '+r.comm+'G\n Balance '+r.bal+'G\n\n\n'); }
+function initImp(){ var list=document.getElementById('printerList'); if(list.innerHTML) return; list.innerHTML='<div class="printerItem sel"><div><b>✅ InnerPrinter 00:11:22:33:44:55</b><br>Default - Associée</div><div>🖨️</div></div>'; document.getElementById('currentPrinter').textContent='🖨️ '+curPrinter.name+' '+curPrinter.addr+' - Associée - Pret pour VENDRE'; }
 function chercheTout(){
- var list=document.getElementById('printerList'); list.innerHTML=''; lgP('🔍 RECHERCHE DES IMPRIMANTES - N\'importe quelle - Vendeur POZO - SCAN LIBRE...');
- var base=['InnerPrinter 00:11:22:33:44:55 Default 58mm','POS STEWARD Service 4.13.4','RawBT Printer','MPT-II POS 58mm','MPT-III 80mm','XPrinter XP-58','GOOJPRT PT-210','EPSON TM-T20','Bixolon SPP-R200'];
- base.forEach(n=>{ var d=document.createElement('div'); d.className='printerItem'; d.innerHTML='<div><b>🖨️ '+n+'</b><br><span style="font-size:10px;">N\'importe quelle - Cliquez pour associer comme imprimante</span><br><span class="badgeAny">PEUT ASSOCIER - VENDEUR</span></div><div>➕</div>'; d.onclick=function(){ curPrinter={name:n,addr:'00:11:22:33:44:55'}; localStorage.setItem('cd_printer_v26',JSON.stringify(curPrinter)); document.getElementById('printerBadge').textContent='🖨️ '+n+' - Pret - Associée'; document.getElementById('currentPrinter').textContent='🖨️ '+n+' - Associée'; document.querySelectorAll('.printerItem').forEach(e=>e.classList.remove('sel')); this.classList.add('sel'); lgP('✅ VENDEUR a associé: '+n+' - N\'importe quelle - OK'); }; list.appendChild(d); });
+ var list=document.getElementById('printerList'); list.innerHTML=''; lgP('🔍 RECHERCHE DES IMPRIMANTES - VENDEUR - N\'importe quelle...');
+ ["InnerPrinter 00:11:22:33:44:55 Default","POS STEWARD Service 4.13.4","RawBT Printer","MPT-II POS 58mm","XPrinter XP-58","GOOJPRT PT-210","EPSON TM-T20"].forEach(n=>{
+  var d=document.createElement('div'); d.className='printerItem'; d.innerHTML='<div><b>🖨️ '+n+'</b><br>N\'importe quelle - Peut associer</div><div>➕</div>';
+  d.onclick=function(){ curPrinter={name:n,addr:'00:11:22:33:44:55'}; localStorage.setItem('cd_printer_v28',JSON.stringify(curPrinter)); document.getElementById('printerBadge').textContent='🖨️ '+n+' - Pret'; document.getElementById('currentPrinter').textContent='🖨️ '+n+' - Associée'; document.querySelectorAll('.printerItem').forEach(e=>e.classList.remove('sel')); this.classList.add('sel'); lgP('✅ VENDEUR associé: '+n); };
+  list.appendChild(d);
+ });
  if(navigator.bluetooth){
-   var btn=document.createElement('div'); btn.className='btn orange'; btn.style.padding='14px'; btn.textContent='📡 RECHERCHE BLUETOOTH - N\'IMPORTE QUELLE IMPRIMANTE - SCAN LIBRE - TOUS APPAREILS BT PEUT ASSOCIER - CLIQUEZ ICI VENDEUR'; btn.onclick=async()=>{
-     try{
-       lgP('📡 Scan BT libre - Choisissez N\'importe quel appareil - Même BT-SPEAKER peut associer comme imprimante');
-       var dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['battery_service','0000ff00-0000-1000-8000-00805f9b34fb','e7810a71-73ae-499d-8c15-faa9aef0c3f2']});
-       var d=document.createElement('div'); d.className='printerItem sel'; d.innerHTML='<div><b>📡 '+(dev.name||'Appareil BT - Peut associer comme imprimante!')+'</b><br>'+dev.id.substring(0,17)+' - Bluetooth - Associée Vendeur<br><span class="badgeAny">VENDEUR - ASSOCIÉE</span></div><div>✅</div>'; list.appendChild(d); curPrinter={name:dev.name||'Printer BT',addr:dev.id.substring(0,17)}; localStorage.setItem('cd_printer_v26',JSON.stringify(curPrinter)); document.getElementById('printerBadge').textContent='🖨️ '+(dev.name||'Printer BT')+' - Associée'; document.getElementById('currentPrinter').textContent='🖨️ '+(dev.name||'Printer BT')+' - Associée Vendeur'; lgP('✅ VENDEUR a associé BT: '+(dev.name||'Sans nom')+' - N\'importe quelle - OK');
-     }catch(e){ lgP('❌ Scan annulé: '+e.message); }
-   }; list.appendChild(btn);
- } else lgP('❌ BT non supporté - Utilisez Chrome Android HTTPS - vercel.app OK');
+  var btn=document.createElement('div'); btn.className='btn orange'; btn.style.padding='14px'; btn.textContent='📡 SCAN LIBRE - N\'IMPORTE QUELLE IMPRIMANTE PEUT ASSOCIER - CLIQUEZ VENDEUR';
+  btn.onclick=async()=>{ try{ var dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['battery_service']}); var d=document.createElement('div'); d.className='printerItem sel'; d.innerHTML='<div><b>📡 '+(dev.name||'Printer BT')+'</b><br>'+dev.id.substring(0,17)+' - Associée</div><div>✅</div>'; list.appendChild(d); curPrinter={name:dev.name||'Printer BT',addr:dev.id.substring(0,17)}; localStorage.setItem('cd_printer_v28',JSON.stringify(curPrinter)); document.getElementById('printerBadge').textContent='🖨️ '+(dev.name||'Printer')+' - Associé'; lgP('✅ BT Associé: '+(dev.name||'Sans nom')); }catch(e){ lgP('❌ Annulé'); } };
+  list.appendChild(btn);
+ }
 }
-function chercheFiltre(){ var list=document.getElementById('printerList'); list.innerHTML=''; lgP('Recherche filtrée Printer/POS...'); if(navigator.bluetooth){ navigator.bluetooth.requestDevice({filters:[{namePrefix:'Printer'},{namePrefix:'POS'},{namePrefix:'MPT'}],optionalServices:['battery_service']}).then(dev=>{ var d=document.createElement('div'); d.className='printerItem sel'; d.innerHTML='<b>'+dev.name+'</b> '+dev.id; list.appendChild(d); curPrinter={name:dev.name,addr:dev.id}; localStorage.setItem('cd_printer_v26',JSON.stringify(curPrinter)); }).catch(e=>{ lgP('Echwe - Utilisez SCAN LIBRE'); chercheTout(); }); } }
-function testP(){ var txt=' C&D TEST VENDEUR\n '+curPrinter.name+'\n '+curPrinter.addr+'\n 5e ONGLET\n IMPRIMANTES\n RECHERCHE DES\n IMPRIMANTES\n N\'IMPORTE QUELLE\n PEUT ASSOCIER\n TEST OK\n\n\n'; doPrint(txt); lgP('TEST PRINT - '+curPrinter.name); }
-function goVendre(){ openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
-function unlockProprio(){ var pin=document.getElementById('pinInput').value; if(pin===pinProprio){ document.getElementById('lockScreen').style.display='none'; document.getElementById('proprioContent').style.display='block'; } else alert('PIN incorrect'); }
-function saveProprio(){ alert('Paramètres Proprio sauvegardé'); document.getElementById('lockScreen').style.display='block'; document.getElementById('proprioContent').style.display='none'; openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
-var jours=['LUNDI','MARDI','MERCREDI','JEUDI','VENDREDI','SAMEDI','DIMANCHE']; var box=document.getElementById('joursBox'); jours.forEach(j=>{ var d=document.createElement('div'); d.style.cssText='display:flex;gap:4px;align-items:center;margin-top:5px;font-size:10px;'; d.innerHTML='<b style="width:60px;">'+j+'</b> de <input type="time" id="'+j+'_de" value="08:00" style="flex:1;padding:5px;border:1px solid #ccc;border-radius:4px;"> à <input type="time" id="'+j+'_a" value="22:00" style="flex:1;padding:5px;border:1px solid #ccc;border-radius:4px;">'; box.appendChild(d); });
+function chercheFiltre(){ chercheTout(); }
+function testP(){ var txt=' C&D TEST VENDEUR\n '+curPrinter.name+'\n '+curPrinter.addr+'\n TEST IMPRIMANTE\n 5e ONGLET\n N\'IMPORTE QUELLE\n TEST OK\n\n\n'; doPrint(txt); }
 initTiraj(); setInterval(()=>{ document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); },1000);
 document.getElementById('boul').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9xX]/g,''); });
 </script>
