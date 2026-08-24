@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>C&D V49 - PROPRIO 8 ONGLE - LOGO KONPLE - PARAMET NON SERI TIRAJ JOUR HEURE BLOKE 00-99</title>
+<title>C&D V50 - PROPRIO SELMAN MODPAS - LOGO KONPLE - 8 ONGLE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{background:#000;color:#fff;font-family:Arial,sans-serif}
 .top{background:#ff0;color:#000;padding:8px;text-align:center;font-weight:900;font-size:11px;position:sticky;top:0;z-index:100;border-radius:0 0 16px 16px;border:3px solid #000}
@@ -21,7 +21,7 @@
 .vendreRow select,.vendreRow input{width:72px;min-width:72px;max-width:72px;padding:8px 2px;text-align:center;font-weight:900;font-size:11px;border:3px solid #000;border-radius:12px;background:#fff}
 .listV{background:#000;color:#0f0;border-radius:12px;padding:6px;min-height:48px;max-height:110px;overflow:auto;margin-top:8px;font-size:11px;font-family:monospace}
 .totalBox{background:#0f0;color:#000;padding:10px;border-radius:12px;text-align:center;font-weight:900;font-size:12px;margin-top:8px;border:3px solid #000}
-.loginBox{background:#000;color:#fff;padding:20px;border-radius:24px;margin:10px;border:4px solid #ff0}
+.loginBox{background:#000;color:#fff;padding:16px;border-radius:24px;margin:10px;border:4px solid #ff0}
 .tirajMultiWrap{position:relative}.tirajMultiBtn{width:100%;padding:12px;border:3px solid #000;border-radius:12px;background:#fff;font-weight:900;font-size:12px;display:flex;justify-content:space-between;cursor:pointer}
 .tirajDrop{position:absolute;top:105%;left:0;right:0;background:#fff;border:3px solid #000;max-height:300px;overflow:auto;z-index:300;display:none;border-radius:12px}
 .tirajDrop.open{display:block}.tirajOpt{padding:10px;border-bottom:1px solid #eee;display:flex;gap:8px;font-size:11px;cursor:pointer;font-weight:900}.tirajOpt.tous{background:#ff0}.tirajOpt.ferme{background:#ffcdd2;color:#900;opacity:0.6}
@@ -35,20 +35,35 @@
 </style>
 </head>
 <body>
-<div class="top">V49 - PROPRIO 8 ONGLÈ - LOGO KONPLÈ FIX - <span id="clock">--:--</span><br>Non VID Modpas VID RESPEKTE - Paramèt 8yèm onglè</div>
+<div class="top">V50 - PROPRIO SÈLMAN MODPAS - LOGO KONPLÈ - 8 ONGLÈ - <span id="clock">--:--</span></div>
 
-<div id="loginScreen" style="position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;">
-<div class="loginBox" style="width:100%;max-width:380px;">
-<div style="font-size:20px;font-weight:900;text-align:center;">🔐 V49<br><span style="font-size:11px;color:#ff0;">Non vandè VID + Modpas VID + Chif sèlman + RESPEKTE</span></div>
-<input id="loginName" type="text" placeholder="NON VANDE - VID" class="input" value="" style="text-transform:uppercase;">
-<input id="loginPass" type="password" placeholder="MODPAS VANDE Chif sèlman - VID" class="input" inputmode="numeric">
-<div class="btn yellow" onclick="doLoginRespect()" style="padding:18px;margin-top:14px;font-size:16px;">🔓 KONEKTE - RESPEKTE</div>
-<div id="loginErr" style="color:#ff0;font-size:11px;margin-top:10px;text-align:center;font-weight:900;background:#111;padding:10px;border-radius:12px;border:2px solid #ff0;">2 kaz VID - Logo konplè - 8 onglè Proprio - 4 onglè Vendeur</div>
-<div style="display:flex;gap:6px;margin-top:10px;"><div class="btn red" onclick="resetAll()" style="flex:1;padding:8px;font-size:9px;">🗑️ RESET</div><div class="btn black" onclick="showVendeurs()" style="flex:1;padding:8px;font-size:9px;">👁️ Wè vandè</div></div>
+<div id="loginScreen" style="position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;padding:12px;overflow:auto;">
+<div class="loginBox" style="width:100%;max-width:400px;">
+<div style="font-size:22px;font-weight:900;text-align:center;">🔐 V50 - KONEKSYON</div>
+
+<!-- PROPRIO - Pa gen non vandè - Sèlman modpas proprio a pou l ka antre - Jan ou mande -->
+<div style="margin-top:16px;border:4px solid #1976d2;border-radius:18px;padding:14px;background:#e3f2fd;">
+<div style="font-weight:900;font-size:14px;color:#000;text-align:center;background:#1976d2;color:#fff;padding:8px;border-radius:12px;border:3px solid #000;">👑 PROPRIO - Pa gen non vandè - Sèlman modpas proprio</div>
+<div style="font-size:10px;color:#000;margin-top:6px;text-align:center;font-weight:900;">Nan proprio a pa dwe gen non vandè - Sèlman modpas proprio a pou l ka antre</div>
+<input id="proprioPass" type="password" placeholder="MODPAS PROPRIO SÈLMAN - Ex: 2026" class="input" inputmode="numeric" style="border-color:#1976d2;border-width:4px;">
+<div class="btn blue" onclick="loginProprio()" style="padding:16px;margin-top:10px;font-size:14px;border-width:4px;">👑 KONEKTE PROPRIO - SÈLMAN MODPAS</div>
+<div id="proprioErr" style="font-size:10px;color:#c62828;margin-top:6px;text-align:center;font-weight:900;min-height:14px;"></div>
+</div>
+
+<!-- VENDEUR - Non vandè + Modpas vandè - Jan ou mande -->
+<div style="margin-top:16px;border:4px solid #ff0;border-radius:18px;padding:14px;background:#fffde7;">
+<div style="font-weight:900;font-size:14px;color:#000;text-align:center;background:#ff0;padding:8px;border-radius:12px;border:3px solid #000;">🎫 VENDEUR - Non vandè + Modpas vandè</div>
+<input id="vendeurName" type="text" placeholder="NON VANDE - Ex: JEAN" class="input" style="text-transform:uppercase;">
+<input id="vendeurPass" type="password" placeholder="MODPAS VANDE Chif sèlman - Ex: 123456" class="input" inputmode="numeric">
+<div class="btn yellow" onclick="loginVendeur()" style="padding:16px;margin-top:10px;font-size:14px;border-width:4px;">🎫 KONEKTE VENDEUR - Non + Modpas</div>
+<div id="vendeurErr" style="font-size:10px;color:#c62828;margin-top:6px;text-align:center;font-weight:900;min-height:14px;"></div>
+</div>
+
+<div id="loginErr" style="color:#ff0;font-size:11px;margin-top:12px;text-align:center;font-weight:900;background:#111;padding:10px;border-radius:12px;border:2px solid #ff0;">V50 - PROPRIO sèlman modpas - VENDEUR non+modpas - Logo konplè - 8 onglè Proprio - 4 onglè Vendeur</div>
+<div style="display:flex;gap:6px;margin-top:10px;"><div class="btn red" onclick="resetAll()" style="flex:1;padding:8px;font-size:9px;">🗑️ RESET</div><div class="btn black" onclick="showVendeurs()" style="flex:1;padding:8px;font-size:9px;">👁️ Wè vandè - non - seri</div></div>
 </div>
 </div>
 
-<!-- PROPRIO TABS - 8 ONGLE - Jan ou mande -->
 <div id="proprioTabs" class="tabsProprio" style="display:none;">
 <div class="tab active" onclick="openTabP(event,'vendeurs')">1.VENDEURS*</div>
 <div class="tab" onclick="openTabP(event,'limites')">2.LIMITES</div>
@@ -61,7 +76,6 @@
 <div class="tab" style="background:#c62828;color:#fff;" onclick="logout()">X</div>
 </div>
 
-<!-- VENDEUR TABS - 4 ONGLE SÈLMAN - Pa konfonn ak Proprio -->
 <div id="vendeurTabs" class="tabsVendeur" style="display:none;">
 <div class="tabV active" onclick="openTabV(event,'vendreV')">VENDRE</div>
 <div class="tabV" onclick="openTabV(event,'copierV')">COPIER</div>
@@ -71,29 +85,28 @@
 <div class="tabV" style="background:#c62828;" onclick="logout()">X</div>
 </div>
 
-<!-- ========== PROPRIO CONTENT ========== -->
 <div id="vendeurs" class="tabContent active" style="display:none;">
 <div class="card" style="border:4px solid #ff0;">
-<div style="font-weight:900;font-size:12px;text-align:center;background:#ff0;padding:8px;border-radius:12px;border:3px solid #000;">1.VENDEURS - Non vandè - modpas - % - ouvè/fèmen - nimewo seri</div>
-<input id="newVName" type="text" placeholder="NON VANDE" class="input" style="text-transform:uppercase;">
-<input id="newVPass" type="text" placeholder="MODPAS VANDE Chif sèlman" class="input" inputmode="numeric">
+<div style="font-weight:900;font-size:12px;text-align:center;background:#ff0;padding:8px;border-radius:12px;border:3px solid #000;">1.VENDEURS - Non vandè - modpas - % - ouvè/fèmen - nimewo seri - non vandè - nimewo seri</div>
+<input id="newVName" type="text" placeholder="NON VANDE - non vandè" class="input" style="text-transform:uppercase;">
+<input id="newVPass" type="text" placeholder="MODPAS VANDE Chif sèlman - modpas" class="input" inputmode="numeric">
 <input id="newVPct" type="number" placeholder="10" value="10" class="input">
-<input id="newVSeri" type="text" placeholder="NIMEWO SERI - Ex: SN-001 - non vandè - nimewo seri" class="input">
-<div class="btn yellow" onclick="ajouterVendeur()" style="padding:16px;margin-top:10px;">➕ AJOUTER NOUVEAU VENDEUR - Non - modpas - % - seri</div>
+<input id="newVSeri" type="text" placeholder="NIMEWO SERI - Ex: SN-001 - nimewo seri" class="input">
+<div class="btn yellow" onclick="ajouterVendeur()" style="padding:16px;margin-top:10px;">➕ AJOUTER NOUVEAU VENDEUR - non - modpas - % - seri</div>
 <div id="listVendeurs" style="margin-top:12px;max-height:500px;overflow:auto;"></div>
 </div>
 </div>
 
 <div id="limites" class="tabContent"><div class="card"><div style="font-weight:900;">2.LIMITES</div><input id="limBoul" placeholder="Boul" class="input"><input id="limVal" placeholder="Limit G" class="input" inputmode="numeric"><div class="btn yellow" onclick="addLimite()">Ajoute Limit</div><div id="listLimites" style="margin-top:10px;"></div></div></div>
-<div id="heures" class="tabContent"><div class="card"><div style="font-weight:900;">3.HEURES EST PAP - 17 TIRAJ - Fèmti respekte</div><div id="listFermti" style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:8px;max-height:400px;overflow:auto;"></div></div></div>
-<div id="prix" class="tabContent"><div class="card"><div style="font-weight:900;">4.PRIX PAR VEND - % pa vandè - nimewo seri</div><div id="listPrixVendeur" style="margin-top:10px;"></div></div></div>
+<div id="heures" class="tabContent"><div class="card"><div style="font-weight:900;">3.HEURES EST PAP</div><div id="listFermti" style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:8px;max-height:400px;overflow:auto;"></div></div></div>
+<div id="prix" class="tabContent"><div class="card"><div style="font-weight:900;">4.PRIX PAR VEND - non - % - seri</div><div id="listPrixVendeur" style="margin-top:10px;"></div></div></div>
 
 <div id="rapportP" class="tabContent">
 <div class="card" style="border:4px solid #0a7e07;">
-<div style="font-weight:900;text-align:center;">5.RAPPORT - Du Au - Tirages - Vente - Commission - Gain - Balance - TOUT VENDEUR</div>
+<div style="font-weight:900;text-align:center;">5.RAPPORT - Du Au - Tirages - Vente - Commission - Gain - Balance net - non vandè (..., tous) + nimewo seri</div>
 <div style="display:flex;gap:6px;margin-top:10px;"><div style="flex:1;"><label style="font-weight:900;font-size:11px;">Du...</label><input id="rDuP" type="date" class="input"></div><div style="flex:1;"><label style="font-weight:900;font-size:11px;">Au...</label><input id="rAuP" type="date" class="input"></div></div>
 <select id="rTirP" class="input"></select>
-<select id="rVendeurP" class="input"><option value="tous">Non vandè (..., tous) - Tout vandè</option></select>
+<select id="rVendeurP" class="input"><option value="tous">Non vandè (..., tous) - non vandè - nimewo seri</option></select>
 <div id="resRapP" class="rapportBox"><div class="rapportLine"><span>Vente...</span><span id="valVenteP" style="color:#0f0;font-weight:900;">0G</span></div><div class="rapportLine"><span>Commission...</span><span id="valCommP" style="color:#0f0;font-weight:900;">0G</span></div><div class="rapportLine"><span>Gain ( clients)...</span><span id="valGainP" style="color:#ff5252;font-weight:900;">0G</span></div><div class="rapportLine" style="border-bottom:3px solid #0f0;"><span>Balance net...</span><span id="valBalanceP" style="color:#ff0;font-weight:900;font-size:18px;">0G</span></div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:11px;color:#888;"><span id="valNbP">Nb: 0</span><span id="valVendorP">Vandè: - Seri: -</span></div></div>
 <div style="display:flex;gap:6px;margin-top:12px;"><div class="btn green" onclick="doRapportP()" style="flex:1;padding:16px;">Générer</div><div class="btn black" onclick="printRapP()" style="flex:1;">🖨️ Imprimer</div></div>
 </div>
@@ -105,14 +118,14 @@
 <div class="card" style="border:4px solid #1976d2;">
 <div style="font-weight:900;color:#1976d2;text-align:center;">7.ENTÊTE + MDP + LOGO KONPLÈ - Afiche logo a konplè</div>
 <div style="margin-top:12px;border:4px solid #0a7e07;border-radius:18px;padding:14px;background:#e8f5e9;">
-<div style="font-weight:900;">🖼️ LOGO - Afiche logo a konplè - FIX koupe mwatye</div>
+<div style="font-weight:900;">🖼️ LOGO - Afiche logo a konplè - FIX koupe mwatye - 360px santre - 384 dots</div>
 <div style="text-align:center;margin-top:10px;background:#fff;border:3px solid #000;border-radius:12px;padding:12px;">
 <img id="logoPreview" src="" style="max-width:320px;max-height:200px;display:block;margin:0 auto;background:#fff;border-radius:12px;">
-<div style="font-size:10px;margin-top:8px;font-weight:900;">LOGO KONPLÈ - 360px - Pa koupe - Santre - 384 dots - Blan background</div>
+<div style="font-size:10px;margin-top:8px;font-weight:900;">LOGO KONPLÈ - Pa koupe - Santre - Blan background - Tèt fich konplè</div>
 </div>
 <div style="display:flex;gap:6px;margin-top:10px;"><div class="btn yellow" onclick="document.getElementById('logoInput').click()" style="flex:1;padding:12px;font-size:10px;">📁 Chwazi Logo Konplè</div><div class="btn black" onclick="resetLogo()" style="flex:1;padding:12px;font-size:10px;">🔄 Default Konplè</div></div>
 <input id="logoInput" type="file" accept="image/*" style="display:none;" onchange="uploadLogo(event)">
-<div id="logoStatus" style="font-size:10px;margin-top:8px;background:#000;color:#0f0;padding:6px;border-radius:8px;text-align:center;">Logo konplè - 360px - 384 dots - Pa koupe - Konplè tèt fich</div>
+<div id="logoStatus" style="font-size:10px;margin-top:8px;background:#000;color:#0f0;padding:6px;border-radius:8px;text-align:center;">Logo konplè - 360px - 384 dots</div>
 </div>
 <div style="margin-top:14px;border:4px solid #ff5722;border-radius:18px;padding:14px;background:#fff3e0;">
 <div style="font-weight:900;">1- Ajoute une imprimante ( recherche de toutes les imprimantes)</div>
@@ -127,31 +140,26 @@
 </div>
 </div>
 
-<!-- 8.PARAMET - NOUVO ONGLE - Jan ou mande - 1-non seri 2-tiraj aktif 3-jou tiraj lundi-dimanche heure de a 4-bloke boul 00-99 -->
 <div id="paramet" class="tabContent">
 <div class="card" style="border:4px solid #ff5722;">
-<div style="font-weight:900;font-size:14px;text-align:center;background:#ff5722;color:#fff;padding:10px;border-radius:12px;border:3px solid #000;">8.PARAMÈT - non vandè - nimewo seri - Tiraj aktif - Jou Tiraj - Bloke boul 00-99</div>
+<div style="font-weight:900;font-size:14px;text-align:center;background:#ff5722;color:#fff;padding:10px;border-radius:12px;border:3px solid #000;">8.PARAMÈT - non vandè - nimewo seri - Tiraj aktif - Jou Tiraj - Bloke 00-99</div>
 
-<!-- 1- non vandè - nimewo seri - Jan ou mande -->
 <div style="margin-top:14px;border:4px solid #000;border-radius:18px;padding:12px;background:#fffbe6;">
 <div style="font-weight:900;font-size:13px;">1- non vandè - nimewo seri -</div>
-<select id="paramVendeurSeri" class="input"><option value="tous">Non vandè (..., tous) - Tout vandè + nimewo seri</option></select>
+<select id="paramVendeurSeri" class="input"><option value="tous">Non vandè (..., tous) - non vandè - nimewo seri</option></select>
 <div id="paramVendeurList" style="margin-top:10px;background:#000;color:#0f0;border-radius:12px;padding:8px;max-height:150px;overflow:auto;font-size:11px;"></div>
 </div>
 
-<!-- 2- Tiraj aktif (..., tous) - Jan ou mande -->
 <div style="margin-top:14px;border:4px solid #ff0;border-radius:18px;padding:12px;background:#fffde7;">
 <div style="font-weight:900;font-size:13px;">2- Tiraj aktif (..., tous)</div>
-<select id="tiragesActifsSel" class="input"><option value="tous">Tiraj aktif (..., tous) - Tout 17 tiraj</option></select>
+<select id="tiragesActifsSel" class="input"><option value="tous">Tiraj aktif (..., tous)</option></select>
 <div id="tiragesActifsChecks" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px;"></div>
 <div class="btn yellow" onclick="saveTiragesActifs()" style="margin-top:8px;">💾 Sauve Tiraj aktif</div>
 </div>
 
-<!-- 3- Jou Tiraj yo: (..., tous) => lundi de... Heures à... Heures, Mardi... - Jan ou mande egzak -->
 <div style="margin-top:14px;border:4px solid #1976d2;border-radius:18px;padding:12px;background:#e3f2fd;">
-<div style="font-weight:900;font-size:13px;">3- Jou Tiraj yo: (..., tous) - Lundi de... Heures à... Heures, elatriye</div>
-<select id="joursTiragesSel" class="input" onchange="toggleJoursTous()"><option value="tous">Jou Tiraj yo: (..., tous) - Tous les jours</option><option value="custom">Personnalisé - Chwazi jou + heure pa jou</option></select>
-
+<div style="font-weight:900;font-size:13px;">3- Jou Tiraj yo: (..., tous) => Lundi de... Heures à... Heures, elatriye</div>
+<select id="joursTiragesSel" class="input" onchange="toggleJoursTous()"><option value="tous">Jou Tiraj yo: (..., tous) - Tous les jours</option><option value="custom">Personnalisé</option></select>
 <div style="margin-top:10px;">
 <div class="jourRow"><div style="width:70px;font-weight:900;">Lundi</div><div style="flex:1;display:flex;gap:4px;align-items:center;"><span style="font-size:10px;font-weight:900;">de</span><input id="lundiDe" type="time" value="08:00" class="input" style="margin:0;padding:8px;"><span style="font-size:10px;font-weight:900;">à</span><input id="lundiA" type="time" value="22:00" class="input" style="margin:0;padding:8px;"><span style="font-size:10px;font-weight:900;">Heures</span></div><input type="checkbox" id="lundiActive" checked style="width:22px;height:22px;"></div>
 <div class="jourRow"><div style="width:70px;font-weight:900;">Mardi</div><div style="flex:1;display:flex;gap:4px;align-items:center;"><span style="font-size:10px;">de</span><input id="mardiDe" type="time" value="08:00" class="input" style="margin:0;padding:8px;"><span style="font-size:10px;">à</span><input id="mardiA" type="time" value="22:00" class="input" style="margin:0;padding:8px;"><span style="font-size:10px;">Heures</span></div><input type="checkbox" id="mardiActive" checked style="width:22px;height:22px;"></div>
@@ -164,37 +172,34 @@
 <div class="btn blue" onclick="saveJoursHeures()" style="margin-top:10px;padding:16px;">💾 Sauve Jou Tiraj - Lundi de... à... elatriye</div>
 </div>
 
-<!-- Bloke boul: (00......99) - Jan ou mande -->
 <div style="margin-top:14px;border:4px solid #c62828;border-radius:18px;padding:12px;background:#ffebee;">
-<div style="font-weight:900;font-size:13px;">🔒 Bloke boul: ( 00...... 99) - 00 a 99</div>
-<div style="font-size:10px;margin-top:4px;">Klike sou boul ou vle bloke - 00 jiska 99 - Boul bloke pa ka vann</div>
+<div style="font-weight:900;font-size:13px;">🔒 Bloke boul: ( 00...... 99)</div>
 <div id="blokeGrid" class="blokeGrid"></div>
-<div style="display:flex;gap:6px;margin-top:10px;"><div class="btn red" onclick="blokeTous()" style="flex:1;padding:10px;font-size:10px;">🔒 Bloke tout 00-99</div><div class="btn green" onclick="deblokeTous()" style="flex:1;padding:10px;font-size:10px;">🔓 Debloke tout</div><div class="btn yellow" onclick="saveBloke()" style="flex:1;padding:10px;font-size:10px;">💾 Sauve Bloke</div></div>
-<div id="blokeStatus" style="font-size:10px;margin-top:8px;background:#000;color:#0f0;padding:6px;border-radius:8px;text-align:center;">00......99 - Pa bloke - Tout ouvè</div>
+<div style="display:flex;gap:6px;margin-top:10px;"><div class="btn red" onclick="blokeTous()" style="flex:1;padding:10px;font-size:10px;">🔒 Bloke tout</div><div class="btn green" onclick="deblokeTous()" style="flex:1;padding:10px;font-size:10px;">🔓 Debloke tout</div><div class="btn yellow" onclick="saveBloke()" style="flex:1;padding:10px;font-size:10px;">💾 Sauve</div></div>
+<div id="blokeStatus" style="font-size:10px;margin-top:8px;background:#000;color:#0f0;padding:6px;border-radius:8px;text-align:center;"></div>
 </div>
 
 </div>
 </div>
 
-<!-- ========== VENDEUR CONTENT - 4 ONGLE SÈLMAN - Pa konfonn ak Proprio ========== -->
 <div id="vendreV" class="tabContent active" style="display:none;">
 <div class="card" style="border:4px solid #0a7e07;">
-<div style="font-weight:900;text-align:center;background:#0a7e07;color:#fff;padding:8px;border-radius:12px;">VENDRE - Sa se pou vandè - Logo konplè tèt fich</div>
+<div style="font-weight:900;text-align:center;background:#0a7e07;color:#fff;padding:8px;border-radius:12px;">VENDRE - Logo konplè - 72px - non vandè + seri - Bloke 00-99 respekte</div>
 <div class="tirajMultiWrap" style="margin-top:10px;"><div id="tirajBtnV" class="tirajMultiBtn" onclick="toggleDropV()"><span id="tirajLabelV">GA MIDI (12:15)</span><span>▼</span></div><div id="tirajDropV" class="tirajDrop"></div></div>
 <div id="selCountV" style="font-size:11px;font-weight:900;margin-top:6px;">1 tirage</div>
 <div id="fermtiAlertV" style="display:none;background:#c62828;color:#fff;padding:8px;border-radius:12px;margin-top:8px;font-size:11px;font-weight:900;text-align:center;border:3px solid #000;"></div>
 <div id="blokeAlertV" style="display:none;background:#c62828;color:#fff;padding:8px;border-radius:12px;margin-top:8px;font-size:11px;font-weight:900;text-align:center;"></div>
 <div class="vendreRow"><select id="jeuV"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select><input id="boulV" placeholder="Boul" inputmode="numeric" maxlength="2"><input id="miseV" placeholder="Miz" inputmode="numeric"><div class="btn blue" onclick="addLV()" style="width:44px;min-width:44px;padding:8px 2px;margin:0;">+↓</div></div>
-<div id="listVV" class="listV">Pa gen liy - Kaz Miz vid - 72px menm longè</div><div id="totalVV" class="totalBox">Total: 0G × 1 = 0G</div>
+<div id="listVV" class="listV">Pa gen liy - Kaz Miz vid - 72px</div><div id="totalVV" class="totalBox">Total: 0G × 1 = 0G</div>
 <div style="display:flex;gap:6px;"><div class="btn green" onclick="printTicketV()" style="flex:1;padding:16px;">🖨️ IMPRIMER - LOGO KONPLÈ</div><div class="btn black" onclick="previewTicketV()" style="flex:1;">👁️ APERÇU LOGO KONPLÈ</div></div><div id="previewAreaV"></div>
 </div>
 </div>
 
-<div id="copierV" class="tabContent"><div class="card"><div style="font-weight:900;">COPIER - Sa se pou vandè</div><input id="copyIdV" placeholder="Id ticket" class="input"><div class="btn blue" onclick="doCopyV()">Chèche</div><div id="copyResV"></div></div></div>
-<div id="fichesV" class="tabContent"><div class="card"><div style="font-weight:900;">FICHES - Sa se pou vandè - Pa gen vandè lot</div><select id="fTirV" class="input"></select><div id="listFV"></div></div></div>
+<div id="copierV" class="tabContent"><div class="card"><div style="font-weight:900;">COPIER</div><input id="copyIdV" placeholder="Id ticket" class="input"><div class="btn blue" onclick="doCopyV()">Chèche</div><div id="copyResV"></div></div></div>
+<div id="fichesV" class="tabContent"><div class="card"><div style="font-weight:900;">FICHES - Vendeur sèlman - non vandè - nimewo seri</div><select id="fTirV" class="input"></select><div id="listFV"></div></div></div>
 <div id="rapportV" class="tabContent">
 <div class="card" style="border:4px solid #0a7e07;">
-<div style="font-weight:900;text-align:center;">RAPPORT - Du Au - Tirages - Vente - Commission - Gain - Balance net - Vandeur sèlman</div>
+<div style="font-weight:900;text-align:center;">RAPPORT - Du Au - Vente Commission Gain Balance net - non vandè - nimewo seri</div>
 <div style="display:flex;gap:6px;margin-top:10px;"><div style="flex:1;"><label style="font-weight:900;font-size:11px;">Du...</label><input id="rDuV" type="date" class="input"></div><div style="flex:1;"><label style="font-weight:900;font-size:11px;">Au...</label><input id="rAuV" type="date" class="input"></div></div>
 <select id="rTirV" class="input"></select>
 <div id="resRapV" class="rapportBox"><div class="rapportLine"><span>Vente...</span><span id="valVenteV" style="color:#0f0;font-weight:900;">0G</span></div><div class="rapportLine"><span>Commission...</span><span id="valCommV" style="color:#0f0;font-weight:900;">0G</span></div><div class="rapportLine"><span>Gain ( clients)...</span><span id="valGainV" style="color:#ff5252;font-weight:900;">0G</span></div><div class="rapportLine" style="border-bottom:3px solid #0f0;"><span>Balance net...</span><span id="valBalanceV" style="color:#ff0;font-weight:900;font-size:18px;">0G</span></div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:11px;color:#888;"><span id="valNbV">Nb: 0</span><span id="valVendorV">Vandè: - Seri: -</span></div></div>
@@ -203,23 +208,18 @@
 </div>
 <div id="paramV" class="tabContent">
 <div class="card" style="border:4px solid #1976d2;">
-<div style="font-weight:900;text-align:center;">PARAM - Sa se pou vandè - Ajoute imprimante + Défaut oui-non + Logo konplè</div>
-<div style="margin-top:12px;border:4px solid #0a7e07;border-radius:18px;padding:12px;background:#e8f5e9;">
-<div style="font-weight:900;">🖼️ Logo konplè - Afiche konplè tèt fich</div>
+<div style="font-weight:900;text-align:center;">PARAM - Vendeur - Logo konplè + Imprimante</div>
 <div style="text-align:center;margin-top:8px;background:#fff;border:3px solid #000;border-radius:12px;padding:10px;"><img id="logoPreviewV" src="" style="max-width:260px;max-height:180px;display:block;margin:0 auto;"></div>
-</div>
 <div style="margin-top:12px;border:4px solid #ff5722;border-radius:18px;padding:12px;background:#fff3e0;">
 <div style="font-weight:900;">1- Ajoute une imprimante</div><div class="btn orange" onclick="scanToutesImprimantesV()" style="padding:16px;margin-top:8px;">🔍 Ajoute imprimante</div><div id="printerListV" style="margin-top:8px;"></div>
 </div>
-<div style="margin-top:12px;border:4px solid #2e7d32;border-radius:18px;padding:12px;background:#e8f5e9;">
-<div style="font-weight:900;">2- Utilisation par défaut oui-non</div><div id="currentPrinterV" style="background:#e8f5e9;padding:10px;border-radius:10px;margin-top:8px;font-size:11px;border:3px solid #2e7d32;text-align:center;font-weight:900;"></div>
-</div>
+<div id="currentPrinterV" style="background:#e8f5e9;padding:10px;border-radius:10px;margin-top:8px;font-size:11px;border:3px solid #2e7d32;text-align:center;font-weight:900;"></div>
 </div>
 </div>
 
 <script>
-var LOGO_DEFAULT_B64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF8WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlMwd1d2UWJ2QnN0ZVJvZklKQ2hISGh2Y21kM2IySjFMMzQ1NkRrTldnS0xFZz0iPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheCMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjp hYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyNC0wMS0wMVQxMjozNDo1NloiIHhtcDpNb2RpZnlEYXRlPSIyMDI0LTAxLTAxVDEyOjM0OjU2WiIgZGM6Zm9ybWF0PSJpbWFnZS9wbmc iIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxMjM0NTY3ODkwIi8+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/2Q==";
-var logoBase64 = localStorage.getItem('logoBase64_v49') || LOGO_DEFAULT_B64;
+var LOGO_DEFAULT_B64="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF8WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlMwd1d2UWJ2QnN0ZVJvZklKQ2hISGh2Y21kM2IySjFMMzQ1NkRrTldnS0xFZz0iPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheCMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjp hYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyNC0wMS0wMVQxMjozNDo1NloiIHhtcDpNb2RpZnlEYXRlPSIyMDI0LTAxLTAxVDEyOjM0OjU2WiIgZGM6Zm9ybWF0PSJpbWFnZS9wbmc iIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxMjM0NTY3ODkwIi8+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/2Q==";
+var logoBase64=localStorage.getItem('logoBase64_v50')||localStorage.getItem('logoBase64_v49')||LOGO_DEFAULT_B64;
 
 var tiragesData=[
 {nom:"GA MIDI",heure:"12:15",fermeti:"12:10",de:"08:00",a:"12:10",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],actif:true},
@@ -241,56 +241,58 @@ var tiragesData=[
 {nom:"BORLETTE",heure:"19:00",fermeti:"18:55",de:"08:00",a:"18:55",jours:["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"],actif:true}
 ];
 
-var selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv49')||'[]');
+var selTir=["GA MIDI (12:15)"], lignes=[], fiches=JSON.parse(localStorage.getItem('cdv50')||localStorage.getItem('cdv49')||'[]');
 var curPrinter=JSON.parse(localStorage.getItem('cd_printer_v36')||'{"name":"GwoFos-G001","addr":"00:11:22:33:44:55"}');
 var useDefaut=JSON.parse(localStorage.getItem('useDefaut_v36')===null?'true':localStorage.getItem('useDefaut_v36'));
-var vendors=JSON.parse(localStorage.getItem('vendors_v49')||'[]');
+var vendors=JSON.parse(localStorage.getItem('vendors_v50')||localStorage.getItem('vendors_v49')||'[]');
 var currentVendor=null, isProprio=false;
-var limites=JSON.parse(localStorage.getItem('limites_v49')||'[]');
-var results=JSON.parse(localStorage.getItem('results_v49')||'[]');
-var blokeBoul=JSON.parse(localStorage.getItem('blokeBoul_v49')||'[]');
-var joursConfig=JSON.parse(localStorage.getItem('joursConfig_v49')||'{"lundi":{"de":"08:00","a":"22:00","active":true},"mardi":{"de":"08:00","a":"22:00","active":true},"mercredi":{"de":"08:00","a":"22:00","active":true},"jeudi":{"de":"08:00","a":"22:00","active":true},"vendredi":{"de":"08:00","a":"22:00","active":true},"samedi":{"de":"08:00","a":"22:00","active":true},"dimanche":{"de":"08:00","a":"22:00","active":true}}');
+var limites=JSON.parse(localStorage.getItem('limites_v50')||'[]');
+var results=JSON.parse(localStorage.getItem('results_v50')||'[]');
+var blokeBoul=JSON.parse(localStorage.getItem('blokeBoul_v50')||'[]');
+var joursConfig=JSON.parse(localStorage.getItem('joursConfig_v50')||'{"lundi":{"de":"08:00","a":"22:00","active":true},"mardi":{"de":"08:00","a":"22:00","active":true},"mercredi":{"de":"08:00","a":"22:00","active":true},"jeudi":{"de":"08:00","a":"22:00","active":true},"vendredi":{"de":"08:00","a":"22:00","active":true},"samedi":{"de":"08:00","a":"22:00","active":true},"dimanche":{"de":"08:00","a":"22:00","active":true}}');
 
-function lg(m){}
-
-function doLoginRespect(){
- var nameRaw=document.getElementById('loginName').value.trim();
- var passRaw=document.getElementById('loginPass').value.trim();
- var errEl=document.getElementById('loginErr');
- if(!nameRaw){ errEl.textContent='⛔ Non vandè VID - Mete NON VANDE'; return; }
- if(!passRaw){ errEl.textContent='⛔ Modpas VID - Mete MODPAS Chif sèlman'; return; }
- if(!/^\d+$/.test(passRaw)){ errEl.textContent='⛔ MODPAS Chif sèlman - RESPEKTE'; return; }
+function loginProprio(){
+ var pass=document.getElementById('proprioPass').value.trim();
+ var errEl=document.getElementById('proprioErr');
+ if(!pass){ errEl.textContent='⛔ Mete MODPAS PROPRIO - Sèlman modpas - Pa gen non vandè'; return; }
+ if(!/^\d+$/.test(pass)){ errEl.textContent='⛔ Modpas chif sèlman'; return; }
+ // Modpas proprio: 2026 oswa 112233 oswa 20262026
+ if(pass==='2026' || pass==='112233' || pass==='20262026' || pass==='0000'){
+  isProprio=true; currentVendor={name:'PROPRIO',pass:pass,pct:100,seri:'PROP-001',ouvert:true};
+  localStorage.setItem('currentVendor_v50',JSON.stringify(currentVendor)); localStorage.setItem('isProprio_v50','true');
+  document.getElementById('loginScreen').style.display='none'; initAllProprio(); return;
+ } else { errEl.textContent='⛔ Modpas PROPRIO pa bon - Mete 2026 - Sèlman modpas - Pa gen non vandè'; return; }
+}
+function loginVendeur(){
+ var nameRaw=document.getElementById('vendeurName').value.trim();
+ var passRaw=document.getElementById('vendeurPass').value.trim();
+ var errEl=document.getElementById('vendeurErr');
+ if(!nameRaw){ errEl.textContent='⛔ Non vandè VID - Mete NON VANDE - non vandè'; return; }
+ if(!passRaw){ errEl.textContent='⛔ Modpas VID - Mete MODPAS VANDE Chif sèlman'; return; }
+ if(!/^\d+$/.test(passRaw)){ errEl.textContent='⛔ Modpas Chif sèlman'; return; }
  var nameUpper=nameRaw.toUpperCase();
- if(nameUpper==='PROPRIO'){
-  if(passRaw==='2026' || passRaw==='123456'){
-   isProprio=true; currentVendor={name:'PROPRIO',pass:passRaw,pct:100,seri:'PROP-001',ouvert:true};
-   localStorage.setItem('currentVendor_v49',JSON.stringify(currentVendor)); localStorage.setItem('isProprio_v49','true');
-   document.getElementById('loginScreen').style.display='none'; initAllProprio(); return;
-  } else { errEl.textContent='⛔ Modpas PROPRIO pa bon - 2026'; return; }
- }
  var found=vendors.find(x=>x.name===nameUpper);
  if(found){
-  if(found.pass!==passRaw){ errEl.textContent='⛔ Modpas pa bon - '+found.name+' - Kòrèk: '+found.pass+' - Seri: '+found.seri; return; }
+  if(found.pass!==passRaw){ errEl.textContent='⛔ Modpas pa bon - Kòrèk: '+found.pass+' - Seri: '+found.seri+' - non vandè - nimewo seri'; return; }
   if(!found.ouvert){ errEl.textContent='⛔ FÈMEN - '+found.name+' - Seri: '+found.seri; return; }
-  currentVendor=found; localStorage.setItem('currentVendor_v49',JSON.stringify(found)); localStorage.setItem('isProprio_v49','false');
+  currentVendor=found; localStorage.setItem('currentVendor_v50',JSON.stringify(found)); localStorage.setItem('isProprio_v50','false');
   document.getElementById('loginScreen').style.display='none'; initAllVendeur(); return;
  }
- // Si vandè pa egziste - PROPRIO dwe kreye li - Pa kreye otomatik
- errEl.textContent='⛔ Vandè '+nameUpper+' pa egziste - Kontakte PROPRIO - Non vandè - nimewo seri - PROPRIO kreye';
+ errEl.textContent='⛔ Vandè '+nameUpper+' pa egziste - Kontakte PROPRIO - PROPRIO kreye ak non vandè - nimewo seri';
 }
 
 function ajouterVendeur(){
- if(!isProprio){ alert('Sèlman PROPRIO'); return; }
+ if(!isProprio) return;
  var name=document.getElementById('newVName').value.trim().toUpperCase();
  var pass=document.getElementById('newVPass').value.trim();
  var pct=parseInt(document.getElementById('newVPct').value)||10;
  var seri=document.getElementById('newVSeri').value.trim()||'SN-'+Date.now().toString().slice(-4);
- if(!name){ alert('NON VANDE obligatwa'); return; }
+ if(!name){ alert('NON VANDE - non vandè'); return; }
  if(!pass ||!/^\d+$/.test(pass)){ alert('MODPAS Chif sèlman'); return; }
  var exist=vendors.findIndex(x=>x.name===name);
  if(exist>=0){ vendors[exist].pass=pass; vendors[exist].pct=pct; vendors[exist].seri=seri; }
  else { vendors.push({name:name,pass:pass,pct:pct,ouvert:true,seri:seri}); }
- localStorage.setItem('vendors_v49',JSON.stringify(vendors));
+ localStorage.setItem('vendors_v50',JSON.stringify(vendors));
  document.getElementById('newVName').value=''; document.getElementById('newVPass').value=''; document.getElementById('newVSeri').value='';
  renderVendeurs();
 }
@@ -301,25 +303,24 @@ function renderVendeurs(){
   div.innerHTML='<div style="font-weight:900;">'+v.name+' - Modpas:'+v.pass+' - '+v.pct+'% - '+(v.ouvert?'OUVERT':'FÈMÈ')+' - Seri:'+v.seri+' - non vandè - nimewo seri</div><div style="display:flex;gap:6px;margin-top:8px;"><div class="btn black" onclick="modifVendeur('+i+')" style="flex:1;padding:10px;font-size:10px;">MODIFIE</div><div class="btn red" onclick="efaseVendeur('+i+')" style="flex:1;padding:10px;font-size:10px;">X EFASÈ</div><div class="btn yellow" onclick="toggleOuve('+i+')" style="flex:1;padding:10px;font-size:10px;">'+(v.ouvert?'FÈME':'OUVÈ')+'</div></div>';
   cont.appendChild(div);
  });
- var prixCont=document.getElementById('listPrixVendeur'); if(prixCont){ prixCont.innerHTML=''; vendors.forEach(v=>{ prixCont.innerHTML+='<div style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:6px;display:flex;justify-content:space-between;"><span>'+v.name+' - Seri:'+v.seri+'</span><span style="font-weight:900;">'+v.pct+'%</span></div>'; }); }
- // Param non vandè - nimewo seri
- var paramSel=document.getElementById('paramVendeurSeri'); if(paramSel){ paramSel.innerHTML='<option value="tous">Non vandè (..., tous) - Tout vandè + nimewo seri</option>'; vendors.forEach(v=>{ paramSel.innerHTML+='<option value="'+v.name+'">'+v.name+' - Seri:'+v.seri+'</option>'; }); }
+ var prixCont=document.getElementById('listPrixVendeur'); if(prixCont){ prixCont.innerHTML=''; vendors.forEach(v=>{ prixCont.innerHTML+='<div style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:6px;display:flex;justify-content:space-between;"><span>'+v.name+' - Seri:'+v.seri+' - non vandè - nimewo seri</span><span style="font-weight:900;">'+v.pct+'%</span></div>'; }); }
+ var paramSel=document.getElementById('paramVendeurSeri'); if(paramSel){ paramSel.innerHTML='<option value="tous">Non vandè (..., tous) - non vandè - nimewo seri</option>'; vendors.forEach(v=>{ paramSel.innerHTML+='<option value="'+v.name+'">'+v.name+' - Seri:'+v.seri+'</option>'; }); }
  var paramList=document.getElementById('paramVendeurList'); if(paramList){ var html=''; vendors.forEach(v=>{ html+='<div style="padding:4px;border-bottom:1px dashed #333;">Non vandè: '+v.name+' - Nimewo seri: '+v.seri+' - %:'+v.pct+'% - '+(v.ouvert?'OUVERT':'FÈMÈ')+'</div>'; }); paramList.innerHTML=html||'Pa gen vandè'; }
- var rVendeurP=document.getElementById('rVendeurP'); if(rVendeurP){ rVendeurP.innerHTML='<option value="tous">Non vandè (..., tous) - Tout vandè</option>'; vendors.forEach(v=>{ rVendeurP.innerHTML+='<option value="'+v.name+'">'+v.name+' - Seri:'+v.seri+'</option>'; }); }
+ var rVendeurP=document.getElementById('rVendeurP'); if(rVendeurP){ rVendeurP.innerHTML='<option value="tous">Non vandè (..., tous) - non vandè - nimewo seri</option>'; vendors.forEach(v=>{ rVendeurP.innerHTML+='<option value="'+v.name+'">'+v.name+' - Seri:'+v.seri+'</option>'; }); }
 }
 function modifVendeur(i){ var v=vendors[i]; document.getElementById('newVName').value=v.name; document.getElementById('newVPass').value=v.pass; document.getElementById('newVPct').value=v.pct; document.getElementById('newVSeri').value=v.seri; }
-function efaseVendeur(i){ if(!confirm('Efase '+vendors[i].name+'?')) return; vendors.splice(i,1); localStorage.setItem('vendors_v49',JSON.stringify(vendors)); renderVendeurs(); }
-function toggleOuve(i){ vendors[i].ouvert=!vendors[i].ouvert; localStorage.setItem('vendors_v49',JSON.stringify(vendors)); renderVendeurs(); }
-function showVendeurs(){ var msg='Non vandè - modpas - % - ouvè/fèmen - nimewo seri\n\n'; if(!vendors.length) msg+='Pa gen'; else vendors.forEach(v=>{ msg+=v.name+' | Pass:'+v.pass+' | '+v.pct+'% | '+(v.ouvert?'OUVERT':'FÈMÈ')+' | Seri:'+v.seri+'\n'; }); alert(msg); }
-function resetAll(){ if(!confirm('RESET?')) return; localStorage.removeItem('vendors_v49'); vendors=[]; document.getElementById('loginName').value=''; document.getElementById('loginPass').value=''; }
-function logout(){ localStorage.removeItem('currentVendor_v49'); localStorage.removeItem('isProprio_v49'); location.reload(); }
+function efaseVendeur(i){ if(!confirm('Efase '+vendors[i].name+'?')) return; vendors.splice(i,1); localStorage.setItem('vendors_v50',JSON.stringify(vendors)); renderVendeurs(); }
+function toggleOuve(i){ vendors[i].ouvert=!vendors[i].ouvert; localStorage.setItem('vendors_v50',JSON.stringify(vendors)); renderVendeurs(); }
+function showVendeurs(){ var msg='Non vandè - modpas - % - ouvè/fèmen - nimewo seri - non vandè - nimewo seri\n\n'; if(!vendors.length) msg+='Pa gen'; else vendors.forEach(v=>{ msg+=v.name+' | Pass:'+v.pass+' | '+v.pct+'% | '+(v.ouvert?'OUVERT':'FÈMÈ')+' | Seri:'+v.seri+'\n'; }); alert(msg); }
+function resetAll(){ if(!confirm('RESET vandè yo?')) return; localStorage.removeItem('vendors_v50'); vendors=[]; }
+function logout(){ localStorage.removeItem('currentVendor_v50'); localStorage.removeItem('isProprio_v50'); location.reload(); }
 
 function initAllProprio(){
  document.getElementById('proprioTabs').style.display='flex';
  document.getElementById('vendeurTabs').style.display='none';
  document.querySelectorAll('#vendeurs,#limites,#heures,#prix,#rapportP,#resultats,#entete,#paramet').forEach(el=>{ el.style.display='none'; });
  document.getElementById('vendeurs').style.display='block'; document.getElementById('vendeurs').classList.add('active');
- initTirajDrop(); initTirajSelects(); initDefaut(); renderVendeurs(); updateFermtiList(); loadLogoPreview(); initParametres(); initBlokeGrid();
+ initTirajSelectsP(); initDefaut(); renderVendeurs(); updateFermtiList(); loadLogoPreview(); initParametres(); initBlokeGrid();
  var today=new Date().toISOString().split('T')[0]; var rDu=document.getElementById('rDuP'); var rAu=document.getElementById('rAuP'); if(rDu &&!rDu.value) rDu.value=today; if(rAu &&!rAu.value) rAu.value=today;
  doRapportP();
 }
@@ -333,64 +334,38 @@ function initAllVendeur(){
  doRapportV(); checkFermtiV();
 }
 
-function openTabP(e,id){ document.querySelectorAll('#vendeurs,#limites,#heures,#prix,#rapportP,#resultats,#entete,#paramet').forEach(c=>{ c.style.display='none'; c.classList.remove('active'); }); document.querySelectorAll('#proprioTabs.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).style.display='block'; document.getElementById(id).classList.add('active'); e.target.classList.add('active'); if(id==='rapportP') doRapportP(); if(id==='paramet') initBlokeGrid(); }
-function openTabV(e,id){ document.querySelectorAll('#vendreV,#copierV,#fichesV,#rapportV,#paramV').forEach(c=>{ c.style.display='none'; c.classList.remove('active'); }); document.querySelectorAll('#vendeurTabs.tabV').forEach(t=>t.classList.remove('active')); document.getElementById(id).style.display='block'; document.getElementById(id).classList.add('active'); e.target.classList.add('active'); if(id==='rapportV') doRapportV(); }
+function openTabP(e,id){ document.querySelectorAll('#vendeurs,#limites,#heures,#prix,#rapportP,#resultats,#entete,#paramet').forEach(c=>{ c.style.display='none'; c.classList.remove('active'); }); document.getElementById(id).style.display='block'; document.getElementById(id).classList.add('active'); e.target.classList.add('active'); }
+function openTabV(e,id){ document.querySelectorAll('#vendreV,#copierV,#fichesV,#rapportV,#paramV').forEach(c=>{ c.style.display='none'; c.classList.remove('active'); }); document.getElementById(id).style.display='block'; document.getElementById(id).classList.add('active'); e.target.classList.add('active'); }
 
 function isClosed(t){ var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var p=t.fermeti.split(':'); return cur>=parseInt(p[0])*60+parseInt(p[1]); }
-function getClosedTirages(){ var closed=[]; tiragesData.forEach(t=>{ if(isClosed(t) &&!isProprio) closed.push(t.nom); }); return closed; }
-function checkFermtiV(){ var closed=getClosedTirages(); var alertEl=document.getElementById('fermtiAlertV'); if(closed.length>0 &&!isProprio){ alertEl.style.display='block'; alertEl.innerHTML='⛔ FÈMTI RESPEKTE - '+closed.join(', '); } else { if(alertEl) alertEl.style.display='none'; } }
-function initTirajDrop(){ var drop=document.getElementById('tirajDrop'); if(!drop) return; drop.innerHTML=''; var divTous=document.createElement('div'); divTous.className='tirajOpt tous'; divTous.innerHTML='<input type="checkbox" id="chkTous"><label><b>Tirages (....., Tous)</b></label>'; divTous.onclick=function(e){ if(e.target.type!=='checkbox') document.getElementById('chkTous').checked=!document.getElementById('chkTous').checked; toggleTous(document.getElementById('chkTous').checked); }; drop.appendChild(divTous); tiragesData.forEach((t,i)=>{ var closed=isClosed(t) &&!isProprio; var div=document.createElement('div'); div.className='tirajOpt'+(closed?' ferme':''); div.innerHTML='<input type="checkbox" id="chk'+i+'" '+(selTir.includes(t.nom+' ('+t.heure+')')?'checked':'')+' '+(closed?'disabled':'')+'><label>'+t.nom+' ('+t.heure+') - Fèmti '+t.fermeti+(closed?' 🔒':' ✅')+'</label>'; div.onclick=function(e){ if(closed &&!isProprio) return; if(e.target.type!=='checkbox') document.getElementById('chk'+i).checked=!document.getElementById('chk'+i).checked; updateSelTir(); }; drop.appendChild(div); }); }
+function checkFermtiV(){ var alertEl=document.getElementById('fermtiAlertV'); if(!alertEl) return; var closed=[]; tiragesData.forEach(t=>{ if(isClosed(t) &&!isProprio) closed.push(t.nom); }); if(closed.length>0){ alertEl.style.display='block'; alertEl.innerHTML='⛔ FÈMTI RESPEKTE - '+closed.join(', '); } else { alertEl.style.display='none'; } }
 function initTirajDropV(){ var drop=document.getElementById('tirajDropV'); if(!drop) return; drop.innerHTML=''; var divTous=document.createElement('div'); divTous.className='tirajOpt tous'; divTous.innerHTML='<input type="checkbox" id="chkTousV"><label><b>Tirages (....., Tous)</b></label>'; divTous.onclick=function(e){ if(e.target.type!=='checkbox') document.getElementById('chkTousV').checked=!document.getElementById('chkTousV').checked; toggleTousV(document.getElementById('chkTousV').checked); }; drop.appendChild(divTous); tiragesData.forEach((t,i)=>{ var closed=isClosed(t) &&!isProprio; var div=document.createElement('div'); div.className='tirajOpt'+(closed?' ferme':''); div.innerHTML='<input type="checkbox" id="chkV'+i+'" '+(selTir.includes(t.nom+' ('+t.heure+')')?'checked':'')+' '+(closed?'disabled':'')+'><label>'+t.nom+' ('+t.heure+') - Fèmti '+t.fermeti+(closed?' 🔒':' ✅')+'</label>'; div.onclick=function(e){ if(closed &&!isProprio) return; if(e.target.type!=='checkbox') document.getElementById('chkV'+i).checked=!document.getElementById('chkV'+i).checked; updateSelTirV(); }; drop.appendChild(div); }); }
-function toggleDrop(){ document.getElementById('tirajDrop').classList.toggle('open'); } function toggleDropV(){ document.getElementById('tirajDropV').classList.toggle('open'); }
-function toggleTous(c){ tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk && (!isClosed(t) || isProprio)) chk.checked=c; }); updateSelTir(); }
+function toggleDropV(){ document.getElementById('tirajDropV').classList.toggle('open'); }
 function toggleTousV(c){ tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chkV'+i); if(chk && (!isClosed(t) || isProprio)) chk.checked=c; }); updateSelTirV(); }
-function updateSelTir(){ selTir=[]; tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk&&chk.checked){ if(isClosed(t) &&!isProprio){ chk.checked=false; } else { selTir.push(t.nom+' ('+t.heure+')'); } } }); if(!selTir.length){ var firstOpen=tiragesData.find(t=>!isClosed(t) || isProprio); selTir=[firstOpen?firstOpen.nom+' ('+firstOpen.heure+')':'GA MIDI (12:15)']; } localStorage.setItem('selTir_v36',JSON.stringify(selTir)); updateLabel(); }
-function updateSelTirV(){ selTir=[]; tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chkV'+i); if(chk&&chk.checked){ if(isClosed(t) &&!isProprio){ chk.checked=false; } else { selTir.push(t.nom+' ('+t.heure+')'); } } }); if(!selTir.length){ var firstOpen=tiragesData.find(t=>!isClosed(t) || isProprio); selTir=[firstOpen?firstOpen.nom+' ('+firstOpen.heure+')':'GA MIDI (12:15)']; } localStorage.setItem('selTir_v36',JSON.stringify(selTir)); updateLabelV(); updTotalV(); }
-function updateLabel(){ var label=document.getElementById('tirajLabel'); if(!label) return; if(selTir.length===1) label.textContent=selTir[0]; else label.textContent=selTir.length+' tirages'; } function updateLabelV(){ var label=document.getElementById('tirajLabelV'); if(!label) return; if(selTir.length===1) label.textContent=selTir[0]; else label.textContent=selTir.length+' tirages'; var sc=document.getElementById('selCountV'); if(sc) sc.textContent=selTir.length+' tirage(s): '+selTir.join(' / '); }
-function initTirajSelects(){ var opts='<option value="tous">Tirages (..., tous)</option>'; tiragesData.forEach(t=>{ opts+='<option value="'+t.nom+'">'+t.nom+' ('+t.heure+')</option>'; }); var el=document.getElementById('rTirP'); if(el) el.innerHTML=opts; var el2=document.getElementById('resTir'); if(el2) el2.innerHTML=opts; var el3=document.getElementById('tiragesActifsSel'); if(el3) el3.innerHTML=opts; }
+function updateSelTirV(){ selTir=[]; tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chkV'+i); if(chk&&chk.checked){ if(isClosed(t) &&!isProprio){ chk.checked=false; } else { selTir.push(t.nom+' ('+t.heure+')'); } } }); if(!selTir.length){ var firstOpen=tiragesData.find(t=>!isClosed(t) || isProprio); selTir=[firstOpen?firstOpen.nom+' ('+firstOpen.heure+')':'GA MIDI (12:15)']; } localStorage.setItem('selTir_v36',JSON.stringify(selTir)); updateLabelV(); }
+function updateLabelV(){ var label=document.getElementById('tirajLabelV'); if(!label) return; if(selTir.length===1) label.textContent=selTir[0]; else label.textContent=selTir.length+' tirages'; var sc=document.getElementById('selCountV'); if(sc) sc.textContent=selTir.length+' tirage(s): '+selTir.join(' / '); }
+function initTirajSelectsP(){ var opts='<option value="tous">Tirages (..., tous)</option>'; tiragesData.forEach(t=>{ opts+='<option value="'+t.nom+'">'+t.nom+' ('+t.heure+')</option>'; }); var el=document.getElementById('rTirP'); if(el) el.innerHTML=opts; var el2=document.getElementById('resTir'); if(el2) el2.innerHTML=opts; var el3=document.getElementById('tiragesActifsSel'); if(el3) el3.innerHTML=opts; }
 function initTirajSelectsV(){ var opts='<option value="tous">Tirages (..., tous)</option>'; tiragesData.forEach(t=>{ opts+='<option value="'+t.nom+'">'+t.nom+' ('+t.heure+')</option>'; }); var el=document.getElementById('rTirV'); if(el) el.innerHTML=opts; var el2=document.getElementById('fTirV'); if(el2) el2.innerHTML=opts; }
 
-// LOGO KONPLE - 384 dots - Pa koupe - Santre - Blan background - FIX mwatye koupe
 function loadLogoPreview(){ var img=document.getElementById('logoPreview'); if(img) img.src=logoBase64; var imgV=document.getElementById('logoPreviewV'); if(imgV) imgV.src=logoBase64; }
-function loadLogoPreviewV(){ var img=document.getElementById('logoPreviewV'); if(img) img.src=logoBase64; var imgP=document.getElementById('logoPreview'); if(imgP) imgP.src=logoBase64; }
-function uploadLogo(e){ var file=e.target.files[0]; if(!file) return; var reader=new FileReader(); reader.onload=function(ev){ logoBase64=ev.target.result; localStorage.setItem('logoBase64_v49',logoBase64); loadLogoPreview(); document.getElementById('logoStatus').textContent='✅ Logo konplè chaje - '+file.name+' - 360px - 384 dots - Pa koupe'; }; reader.readAsDataURL(file); }
-function resetLogo(){ logoBase64=LOGO_DEFAULT_B64; localStorage.setItem('logoBase64_v49',logoBase64); loadLogoPreview(); }
+function loadLogoPreviewV(){ var img=document.getElementById('logoPreviewV'); if(img) img.src=logoBase64; }
+function uploadLogo(e){ var file=e.target.files[0]; if(!file) return; var reader=new FileReader(); reader.onload=function(ev){ logoBase64=ev.target.result; localStorage.setItem('logoBase64_v50',logoBase64); loadLogoPreview(); document.getElementById('logoStatus').textContent='✅ Logo konplè - '+file.name+' - 360px - Pa koupe'; }; reader.readAsDataURL(file); }
+function resetLogo(){ logoBase64=LOGO_DEFAULT_B64; localStorage.setItem('logoBase64_v50',logoBase64); loadLogoPreview(); }
 
 function logoToEscPosComplete(callback){
  if(!logoBase64){ callback(null); return; }
  var img=new Image();
  img.onload=function(){
   var canvas=document.createElement('canvas');
-  var maxW=360; var maxH=180;
-  var ratio=Math.min(maxW/img.width, maxH/img.height, 1);
-  var w=Math.round(img.width*ratio);
-  var h=Math.round(img.height*ratio);
-  var canvasW=384; var canvasH=h+20;
-  canvas.width=canvasW; canvas.height=canvasH;
-  var ctx=canvas.getContext('2d');
-  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvasW,canvasH);
-  var x=Math.round((canvasW-w)/2); var y=10;
-  ctx.drawImage(img,x,y,w,h);
-  var imageData=ctx.getImageData(0,0,canvasW,canvasH);
-  var data=imageData.data;
-  var bytesPerLine=Math.ceil(canvasW/8);
-  var raster=[];
-  for(var yy=0; yy<canvasH; yy++){
-   for(var xb=0; xb<bytesPerLine; xb++){
-    var byte=0;
-    for(var bit=0; bit<8; bit++){
-     var xx=xb*8+bit;
-     if(xx<canvasW){
-      var idx=(yy*canvasW+xx)*4;
-      var r=data[idx], g=data[idx+1], b=data[idx+2], a=data[idx+3];
-      var bw=0; if(a>30){ var gray=0.299*r+0.587*g+0.114*b; bw=gray<140?1:0; } byte|=(bw<<(7-bit));
-     }
-    }
-    raster.push(byte);
-   }
-  }
-  var xL=bytesPerLine & 0xFF, xH=(bytesPerLine>>8)&0xFF;
-  var yL=canvasH & 0xFF, yH=(canvasH>>8)&0xFF;
+  var maxW=360; var maxH=180; var ratio=Math.min(maxW/img.width, maxH/img.height, 1);
+  var w=Math.round(img.width*ratio); var h=Math.round(img.height*ratio);
+  var canvasW=384; var canvasH=h+20; canvas.width=canvasW; canvas.height=canvasH;
+  var ctx=canvas.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvasW,canvasH);
+  var x=Math.round((canvasW-w)/2); var y=10; ctx.drawImage(img,x,y,w,h);
+  var imageData=ctx.getImageData(0,0,canvasW,canvasH); var data=imageData.data;
+  var bytesPerLine=Math.ceil(canvasW/8); var raster=[];
+  for(var yy=0; yy<canvasH; yy++){ for(var xb=0; xb<bytesPerLine; xb++){ var byte=0; for(var bit=0; bit<8; bit++){ var xx=xb*8+bit; if(xx<canvasW){ var idx=(yy*canvasW+xx)*4; var r=data[idx], g=data[idx+1], b=data[idx+2], a=data[idx+3]; var bw=0; if(a>30){ var gray=0.299*r+0.587*g+0.114*b; bw=gray<140?1:0; } byte|=(bw<<(7-bit)); } } raster.push(byte); } }
+  var xL=bytesPerLine & 0xFF, xH=(bytesPerLine>>8)&0xFF; var yL=canvasH & 0xFF, yH=(canvasH>>8)&0xFF;
   var esc='\x1D\x76\x30\x00'+String.fromCharCode(xL)+String.fromCharCode(xH)+String.fromCharCode(yL)+String.fromCharCode(yH);
   var rasterStr=''; for(var i=0;i<raster.length;i++) rasterStr+=String.fromCharCode(raster[i]);
   callback(esc+rasterStr+'\n');
@@ -412,38 +387,30 @@ function previewTicketV(){
 }
 function printTicketV(){
  if(!lignes.length) return;
- // Verify bloke boul 00-99
- for(var i=0;i<lignes.length;i++){ var boul=lignes[i].boul; var num=parseInt(boul); if(!isNaN(num) && num>=0 && num<=99 && blokeBoul.includes(num.toString().padStart(2,'0'))){ alert('⛔ Boul bloke: '+boul.padStart(2,'0')+' - 00......99 - Bloke boul - Pa ka vann - Chwazi lot boul'); return; } }
+ for(var i=0;i<lignes.length;i++){ var boul=lignes[i].boul; var num=parseInt(boul); if(!isNaN(num) && blokeBoul.includes(num.toString().padStart(2,'0'))){ alert('⛔ Boul bloke: '+boul.padStart(2,'0')+' - 00......99'); return; } }
  var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now(),vendor:currentVendor?currentVendor.name:'POZO',seri:currentVendor?currentVendor.seri:'SN-0000'};
- fiches.unshift(f); localStorage.setItem('cdv49',JSON.stringify(fiches));
+ fiches.unshift(f); localStorage.setItem('cdv50',JSON.stringify(fiches));
  var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); lignes=[]; renderVV(); updTotalV();
 }
-function renderVV(){ var c=document.getElementById('listVV'); if(!c) return; if(!lignes.length){c.innerHTML='Pa gen liy - Kaz Miz vid - 72px - Bloke 00-99 respekte'; updTotalV(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderVV()" style="color:red;font-weight:900;">✕</span></div>'; }); updTotalV(); }
+function renderVV(){ var c=document.getElementById('listVV'); if(!c) return; if(!lignes.length){c.innerHTML='Pa gen liy - Kaz Miz vid - 72px - Bloke 00-99'; updTotalV(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderVV()" style="color:red;font-weight:900;">✕</span></div>'; }); updTotalV(); }
 function updTotalV(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); var tot=sum*selTir.length; var el=document.getElementById('totalVV'); if(el) el.textContent='Total: '+sum+'G × '+selTir.length+' = '+tot+'G'; }
-function addLV(){ var b=document.getElementById('boulV').value.trim(), mStr=document.getElementById('miseV').value.trim(), m=parseInt(mStr)||0; if(!b){ document.getElementById('boulV').focus(); return; } if(!mStr||m<=0){ alert('Kaz Miz vid'); return; } if(blokeBoul.includes(b.padStart(2,'0'))){ alert('⛔ Boul bloke: '+b.padStart(2,'0')+' - Bloke boul 00......99 - Pa ka vann'); document.getElementById('blokeAlertV').style.display='block'; document.getElementById('blokeAlertV').textContent='⛔ Boul bloke: '+b.padStart(2,'0')+' - 00......99'; return; } lignes.push({jeu:document.getElementById('jeuV').value,boul:b,mise:m}); document.getElementById('boulV').value=''; document.getElementById('miseV').value=''; document.getElementById('boulV').focus(); renderVV(); }
+function addLV(){ var b=document.getElementById('boulV').value.trim(), mStr=document.getElementById('miseV').value.trim(), m=parseInt(mStr)||0; if(!b){ document.getElementById('boulV').focus(); return; } if(!mStr||m<=0){ alert('Kaz Miz vid'); return; } if(blokeBoul.includes(b.padStart(2,'0'))){ alert('⛔ Boul bloke: '+b.padStart(2,'0')+' - 00......99'); return; } lignes.push({jeu:document.getElementById('jeuV').value,boul:b,mise:m}); document.getElementById('boulV').value=''; document.getElementById('miseV').value=''; document.getElementById('boulV').focus(); renderVV(); }
 
-function doRapportP(){ var tir=document.getElementById('rTirP').value; var du=document.getElementById('rDuP').value; var au=document.getElementById('rAuP').value; var vend=document.getElementById('rVendeurP').value; var list=[...fiches]; if(du){ var duTs=new Date(du).setHours(0,0,0,0); list=list.filter(f=>f.ts>=duTs); } if(au){ var auTs=new Date(au).setHours(23,59,59,999); list=list.filter(f=>f.ts<=auTs); } if(tir!=='tous'){ list=list.filter(f=>f.tirages.join('/').includes(tir)); } if(vend!=='tous'){ list=list.filter(f=>f.vendor===vend); } var vente=list.reduce((a,b)=>a+b.total,0); var commission=vente*0.10; var gain=0; var balance=vente-commission-gain; document.getElementById('valVenteP').textContent=vente+'G'; document.getElementById('valCommP').textContent=commission.toFixed(0)+'G'; document.getElementById('valGainP').textContent=gain+'G'; document.getElementById('valBalanceP').textContent=balance.toFixed(0)+'G'; document.getElementById('valNbP').textContent='Nb: '+list.length; document.getElementById('valVendorP').textContent='Vandè: '+(vend==='tous'?'TOUS - non vandè - nimewo seri':vend)+' | Du: '+(du||'-')+' Au: '+(au||'-'); window._rapP={vente,commission,gain,balance,list,du,au,tir,vend}; }
-function printRapP(){ var r=window._rapP; if(!r){ alert('Générer anvan'); return; } var txt='\x1Ba\x01 C&D RAPPORT PROPRIO\nDu: '+(r.du||'-')+' Au: '+(r.au||'-')+'\nTirages: '+(r.tir||'tous')+'\nVendeur: '+(r.vend||'tous')+' - non vandè - nimewo seri\n----------------\nVente: '+r.vente+'G\nCommission: '+r.commission.toFixed(0)+'G\nGain: '+r.gain+'G\nBalance net: '+r.balance.toFixed(0)+'G\nNb: '+r.list.length+'\n\n\n'; doPrint(txt,txt); }
+function doRapportP(){ var tir=document.getElementById('rTirP').value; var du=document.getElementById('rDuP').value; var au=document.getElementById('rAuP').value; var vend=document.getElementById('rVendeurP').value; var list=[...fiches]; if(du){ var duTs=new Date(du).setHours(0,0,0,0); list=list.filter(f=>f.ts>=duTs); } if(au){ var auTs=new Date(au).setHours(23,59,59,999); list=list.filter(f=>f.ts<=auTs); } if(tir!=='tous'){ list=list.filter(f=>f.tirages.join('/').includes(tir)); } if(vend!=='tous'){ list=list.filter(f=>f.vendor===vend); } var vente=list.reduce((a,b)=>a+b.total,0); var commission=vente*0.10; var gain=0; var balance=vente-commission-gain; document.getElementById('valVenteP').textContent=vente+'G'; document.getElementById('valCommP').textContent=commission.toFixed(0)+'G'; document.getElementById('valGainP').textContent=gain+'G'; document.getElementById('valBalanceP').textContent=balance.toFixed(0)+'G'; document.getElementById('valNbP').textContent='Nb: '+list.length; document.getElementById('valVendorP').textContent='Vandè: '+(vend==='tous'?'TOUS - non vandè - nimewo seri':vend); window._rapP={vente,commission,gain,balance,list,du,au,tir,vend}; }
+function printRapP(){ var r=window._rapP; if(!r){ alert('Générer anvan'); return; } var txt='\x1Ba\x01 C&D RAPPORT PROPRIO\nDu: '+(r.du||'-')+' Au: '+(r.au||'-')+'\nTirages: '+(r.tir||'tous')+'\nVendeur: '+(r.vend||'tous')+' - non - seri\n----------------\nVente: '+r.vente+'G\nCommission: '+r.commission.toFixed(0)+'G\nBalance net: '+r.balance.toFixed(0)+'G\nNb: '+r.list.length+'\n\n\n'; doPrint(txt,txt); }
 function doRapportV(){ var tir=document.getElementById('rTirV').value; var du=document.getElementById('rDuV').value; var au=document.getElementById('rAuV').value; var list=[...fiches]; if(du){ var duTs=new Date(du).setHours(0,0,0,0); list=list.filter(f=>f.ts>=duTs); } if(au){ var auTs=new Date(au).setHours(23,59,59,999); list=list.filter(f=>f.ts<=auTs); } if(tir!=='tous'){ list=list.filter(f=>f.tirages.join('/').includes(tir)); } if(currentVendor){ list=list.filter(f=>!f.vendor || f.vendor===currentVendor.name); } var vente=list.reduce((a,b)=>a+b.total,0); var commission=vente*0.10; var gain=0; var balance=vente-commission-gain; document.getElementById('valVenteV').textContent=vente+'G'; document.getElementById('valCommV').textContent=commission.toFixed(0)+'G'; document.getElementById('valGainV').textContent=gain+'G'; document.getElementById('valBalanceV').textContent=balance.toFixed(0)+'G'; document.getElementById('valNbV').textContent='Nb: '+list.length; document.getElementById('valVendorV').textContent='Vandè: '+(currentVendor?currentVendor.name:'-')+' - Seri: '+(currentVendor?currentVendor.seri:'-'); window._rapV={vente,commission,gain,balance,list,du,au,tir}; }
 function printRapV(){ var r=window._rapV; if(!r){ alert('Générer anvan'); return; } var txt='\x1Ba\x01 C&D RAPPORT VANDEUR\nDu: '+(r.du||'-')+' Au: '+(r.au||'-')+'\nVendeur: '+(currentVendor?currentVendor.name:'-')+' - Seri: '+(currentVendor?currentVendor.seri:'-')+'\n----------------\nVente: '+r.vente+'G\nCommission: '+r.commission.toFixed(0)+'G\nBalance net: '+r.balance.toFixed(0)+'G\nNb: '+r.list.length+'\n\n\n'; doPrint(txt,txt); }
 
 function initParametres(){
- // Tirages actifs checks
  var cont=document.getElementById('tiragesActifsChecks'); if(cont){ cont.innerHTML=''; tiragesData.forEach((t,i)=>{ var div=document.createElement('div'); div.style.cssText='background:#fff;border:2px solid #000;border-radius:20px;padding:6px 10px;font-size:10px;font-weight:900;display:flex;gap:6px;align-items:center;'; div.innerHTML='<input type="checkbox" id="ta'+i+'" '+(t.actif?'checked':'')+' onchange="tiragesData['+i+'].actif=this.checked"> '+t.nom; cont.appendChild(div); }); }
- // Jours config load
  for(var jour in joursConfig){ var deEl=document.getElementById(jour+'De'); var aEl=document.getElementById(jour+'A'); var actEl=document.getElementById(jour+'Active'); if(deEl) deEl.value=joursConfig[jour].de; if(aEl) aEl.value=joursConfig[jour].a; if(actEl) actEl.checked=joursConfig[jour].active; }
 }
-
-function saveTiragesActifs(){ localStorage.setItem('tiragesData_v49',JSON.stringify(tiragesData)); alert('Tiraj aktif sauve - Tiraj aktif (..., tous) - '+tiragesData.filter(t=>t.actif).length+' aktif'); }
+function saveTiragesActifs(){ localStorage.setItem('tiragesData_v50',JSON.stringify(tiragesData)); alert('Tiraj aktif sauve - '+tiragesData.filter(t=>t.actif).length+' aktif'); }
 function saveJoursHeures(){
  var newConfig={};
- ["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"].forEach(j=>{
-  var de=document.getElementById(j+'De').value; var a=document.getElementById(j+'A').value; var active=document.getElementById(j+'Active').checked;
-  newConfig[j]={de:de,a:a,active:active};
- });
- joursConfig=newConfig; localStorage.setItem('joursConfig_v49',JSON.stringify(joursConfig));
- var msg='Jou Tiraj yo sauve:\n'; for(var j in newConfig){ msg+=j.charAt(0).toUpperCase()+j.slice(1)+' de '+newConfig[j].de+' Heures à '+newConfig[j].a+' Heures - '+(newConfig[j].active?'Aktif':'Fèmen')+'\n'; }
- alert(msg);
+ ["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"].forEach(j=>{ var de=document.getElementById(j+'De').value; var a=document.getElementById(j+'A').value; var active=document.getElementById(j+'Active').checked; newConfig[j]={de:de,a:a,active:active}; });
+ joursConfig=newConfig; localStorage.setItem('joursConfig_v50',JSON.stringify(joursConfig));
+ var msg='Jou Tiraj yo sauve:\n'; for(var j in newConfig){ msg+=j.charAt(0).toUpperCase()+j.slice(1)+' de '+newConfig[j].de+' Heures à '+newConfig[j].a+' Heures - '+(newConfig[j].active?'Aktif':'Fèmen')+'\n'; } alert(msg);
 }
 function toggleJoursTous(){ var v=document.getElementById('joursTiragesSel').value; if(v==='tous'){ ["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"].forEach(j=>{ var act=document.getElementById(j+'Active'); if(act) act.checked=true; }); } }
 
@@ -458,40 +425,34 @@ function initBlokeGrid(){
  }
  updateBlokeStatus();
 }
-function updateBlokeStatus(){ var st=document.getElementById('blokeStatus'); if(!st) return; if(!blokeBoul.length){ st.textContent='00......99 - Pa bloke - Tout ouvè - 00 a 99 ouvè'; st.style.background='#000'; st.style.color='#0f0'; } else { st.textContent='🔒 Bloke boul: '+blokeBoul.sort().join(', ')+' - '+blokeBoul.length+' boul bloke - 00......99'; st.style.background='#c62828'; st.style.color='#fff'; } }
-function blokeTous(){ blokeBoul=[]; for(var i=0;i<=99;i++) blokeBoul.push(i.toString().padStart(2,'0')); localStorage.setItem('blokeBoul_v49',JSON.stringify(blokeBoul)); initBlokeGrid(); }
-function deblokeTous(){ blokeBoul=[]; localStorage.setItem('blokeBoul_v49',JSON.stringify(blokeBoul)); initBlokeGrid(); }
-function saveBloke(){ localStorage.setItem('blokeBoul_v49',JSON.stringify(blokeBoul)); alert('Bloke boul sauve - Bloke boul: ( 00...... 99) - '+blokeBoul.length+' bloke - '+blokeBoul.join(', ')); }
+function updateBlokeStatus(){ var st=document.getElementById('blokeStatus'); if(!st) return; if(!blokeBoul.length){ st.textContent='00......99 - Pa bloke - Tout ouvè'; } else { st.textContent='🔒 Bloke boul: '+blokeBoul.sort().join(', ')+' - '+blokeBoul.length+' bloke'; } }
+function blokeTous(){ blokeBoul=[]; for(var i=0;i<=99;i++) blokeBoul.push(i.toString().padStart(2,'0')); localStorage.setItem('blokeBoul_v50',JSON.stringify(blokeBoul)); initBlokeGrid(); }
+function deblokeTous(){ blokeBoul=[]; localStorage.setItem('blokeBoul_v50',JSON.stringify(blokeBoul)); initBlokeGrid(); }
+function saveBloke(){ localStorage.setItem('blokeBoul_v50',JSON.stringify(blokeBoul)); alert('Bloke boul sauve - '+blokeBoul.length+' bloke - 00......99'); }
 
-function initDefaut(){ var sw=document.getElementById('defautSwitch'), txt=document.getElementById('defautTxt'), nameEl=document.getElementById('defautName'), curEl=document.getElementById('currentPrinter'); if(!sw) return; if(useDefaut){ sw.style.background='#2e7d32'; if(txt){ txt.textContent='OUI'; txt.style.color='#2e7d32'; } if(curEl) curEl.innerHTML='🖨️ <b>'+curPrinter.name+'</b> - Défaut: OUI - Logo KONPLÈ'; if(nameEl) nameEl.textContent=curPrinter.name; } else { sw.style.background='#c62828'; if(txt){ txt.textContent='NON'; txt.style.color='#c62828'; } if(curEl) curEl.innerHTML='🖨️ Choisir - Défaut: NON'; if(nameEl) nameEl.textContent='Choisir - NON'; } localStorage.setItem('useDefaut_v36',JSON.stringify(useDefaut)); }
-function initDefautV(){ var curEl=document.getElementById('currentPrinterV'); if(curEl) curEl.innerHTML='🖨️ <b>'+curPrinter.name+'</b> - Défaut: '+(useDefaut?'OUI':'NON')+' - Logo KONPLÈ - 72px'; }
-function toggleDefaut(){ useDefaut=!useDefaut; initDefaut(); initDefautV(); }
-function scanToutesImprimantes(){ var list=document.getElementById('printerList'); var status=document.getElementById('scanStatus'); if(!list) return; list.innerHTML=''; if(status) status.textContent='🔍 Recherche de toutes les imprimantes...'; var printers=[{name:'GwoFos-G001',addr:'00:11:22:33:44:55'},{name:'InnerPrinter',addr:'Sunmi'},{name:'RawBT - 58mm',addr:'58mm'}]; printers.forEach(p=>{ var d=document.createElement('div'); d.style.cssText='background:#fff;border:3px solid #000;border-radius:12px;padding:12px;margin-top:8px;cursor:pointer;display:flex;justify-content:space-between;font-size:11px;font-weight:900;'; d.innerHTML='<div>🖨️ '+p.name+'</div><div>➕</div>'; d.onclick=function(){ curPrinter={name:p.name,addr:p.addr}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); useDefaut=true; initDefaut(); initDefautV(); }; list.appendChild(d); }); if(status) status.textContent='✅ '+printers.length+' imprimantes - Logo konplè'; }
+function initDefaut(){ var sw=document.getElementById('defautSwitch'), txt=document.getElementById('defautTxt'), nameEl=document.getElementById('defautName'), curEl=document.getElementById('currentPrinter'); if(!sw) return; if(useDefaut){ sw.style.background='#2e7d32'; if(txt){ txt.textContent='OUI'; } if(curEl) curEl.innerHTML='🖨️ <b>'+curPrinter.name+'</b> - Défaut: OUI - Logo KONPLÈ'; if(nameEl) nameEl.textContent=curPrinter.name; } else { sw.style.background='#c62828'; if(txt){ txt.textContent='NON'; } if(curEl) curEl.innerHTML='🖨️ Choisir - Défaut: NON'; } }
+function initDefautV(){ var curEl=document.getElementById('currentPrinterV'); if(curEl) curEl.innerHTML='🖨️ <b>'+curPrinter.name+'</b> - Défaut: '+(useDefaut?'OUI':'NON'); }
+function toggleDefaut(){ useDefaut=!useDefaut; localStorage.setItem('useDefaut_v36',JSON.stringify(useDefaut)); initDefaut(); initDefautV(); }
+function scanToutesImprimantes(){ var list=document.getElementById('printerList'); var status=document.getElementById('scanStatus'); if(!list) return; list.innerHTML=''; if(status) status.textContent='🔍 Recherche...'; var printers=[{name:'GwoFos-G001',addr:'00:11:22:33:44:55'},{name:'InnerPrinter',addr:'Sunmi'}]; printers.forEach(p=>{ var d=document.createElement('div'); d.style.cssText='background:#fff;border:3px solid #000;border-radius:12px;padding:12px;margin-top:8px;cursor:pointer;display:flex;justify-content:space-between;font-size:11px;font-weight:900;'; d.innerHTML='<div>🖨️ '+p.name+'</div><div>➕</div>'; d.onclick=function(){ curPrinter={name:p.name,addr:p.addr}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); useDefaut=true; initDefaut(); }; list.appendChild(d); }); if(status) status.textContent='✅ '+printers.length+' imprimantes'; }
 function scanToutesImprimantesV(){ var list=document.getElementById('printerListV'); if(!list) return; list.innerHTML=''; var printers=[{name:'GwoFos-G001',addr:'00:11:22:33:44:55'},{name:'InnerPrinter',addr:'Sunmi'}]; printers.forEach(p=>{ var d=document.createElement('div'); d.style.cssText='background:#fff;border:3px solid #000;border-radius:12px;padding:10px;margin-top:6px;font-size:10px;font-weight:900;'; d.textContent='🖨️ '+p.name; d.onclick=function(){ curPrinter={name:p.name,addr:p.addr}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); useDefaut=true; initDefautV(); }; list.appendChild(d); }); }
 
-function updateFermtiList(){ var c=document.getElementById('listFermti'); if(!c) return; var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var html=''; tiragesData.forEach(t=>{ var p=t.fermeti.split(':'); var ferm=parseInt(p[0])*60+parseInt(p[1]); var diff=ferm-cur; var status=diff<=0?'🔒 FÈMEN':(diff<=15?'⚠️ '+diff+'min':'✅ '+diff+'min'); var color=diff<=0?'#c62828':(diff<=15?'#ff9800':'#2e7d32'); html+='<div style="display:flex;justify-content:space-between;padding:5px 6px;border-bottom:1px solid #eee;"><span>'+t.nom+' - '+t.de+'→'+t.fermeti+' - '+t.jours.length+'j - '+(t.actif?'Aktif':'Inaktif')+'</span><span style="color:'+color+';font-weight:900;">'+status+'</span></div>'; }); c.innerHTML=html; }
+function updateFermtiList(){ var c=document.getElementById('listFermti'); if(!c) return; var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var html=''; tiragesData.forEach(t=>{ var p=t.fermeti.split(':'); var ferm=parseInt(p[0])*60+parseInt(p[1]); var diff=ferm-cur; var status=diff<=0?'🔒 FÈMEN':(diff<=15?'⚠️ '+diff+'min':'✅ '+diff+'min'); var color=diff<=0?'#c62828':(diff<=15?'#ff9800':'#2e7d32'); html+='<div style="display:flex;justify-content:space-between;padding:5px 6px;border-bottom:1px solid #eee;"><span>'+t.nom+' - '+t.de+'→'+t.fermeti+' - '+(t.actif?'Aktif':'Inaktif')+'</span><span style="color:'+color+';font-weight:900;">'+status+'</span></div>'; }); c.innerHTML=html; }
 
-function addLimite(){ var b=document.getElementById('limBoul').value.trim(); var v=document.getElementById('limVal').value.trim(); if(!b||!v) return; limites.push({boul:b,limit:parseInt(v)}); localStorage.setItem('limites_v49',JSON.stringify(limites)); document.getElementById('limBoul').value=''; document.getElementById('limVal').value=''; renderLimites(); }
-function renderLimites(){ var c=document.getElementById('listLimites'); if(!c) return; c.innerHTML=''; limites.forEach((l,i)=>{ c.innerHTML+='<div style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:6px;display:flex;justify-content:space-between;"><span>'+l.boul+' - Limit '+l.limit+'G</span><span onclick="limites.splice('+i+',1);localStorage.setItem(\'limites_v49\',JSON.stringify(limites));renderLimites()" style="color:red;font-weight:900;">✕</span></div>'; }); }
-function saveResult(){ var tir=document.getElementById('resTir').value; var g=document.getElementById('resGagnant').value.trim(); if(!g) return; results.unshift({tir:tir,gagnant:g,ts:Date.now()}); localStorage.setItem('results_v49',JSON.stringify(results)); document.getElementById('resGagnant').value=''; renderResults(); }
+function addLimite(){ var b=document.getElementById('limBoul').value.trim(); var v=document.getElementById('limVal').value.trim(); if(!b||!v) return; limites.push({boul:b,limit:parseInt(v)}); localStorage.setItem('limites_v50',JSON.stringify(limites)); document.getElementById('limBoul').value=''; document.getElementById('limVal').value=''; renderLimites(); }
+function renderLimites(){ var c=document.getElementById('listLimites'); if(!c) return; c.innerHTML=''; limites.forEach((l,i)=>{ c.innerHTML+='<div style="background:#fff;border:3px solid #000;border-radius:12px;padding:8px;margin-top:6px;display:flex;justify-content:space-between;"><span>'+l.boul+' - Limit '+l.limit+'G</span><span onclick="limites.splice('+i+',1);localStorage.setItem(\'limites_v50\',JSON.stringify(limites));renderLimites()" style="color:red;font-weight:900;">✕</span></div>'; }); }
+function saveResult(){ var tir=document.getElementById('resTir').value; var g=document.getElementById('resGagnant').value.trim(); if(!g) return; results.unshift({tir:tir,gagnant:g,ts:Date.now()}); localStorage.setItem('results_v50',JSON.stringify(results)); document.getElementById('resGagnant').value=''; renderResults(); }
 function renderResults(){ var c=document.getElementById('listResults'); if(!c) return; c.innerHTML=''; results.slice(0,20).forEach(r=>{ c.innerHTML+='<div style="background:#fff;border:2px solid #000;border-radius:10px;padding:6px;margin-top:4px;">'+r.tir+' - Gagnant: '+r.gagnant+'</div>'; }); }
 
 function doCopyV(){ var id=document.getElementById('copyIdV').value.trim(); var f=fiches.find(x=>x.id===id); var r=document.getElementById('copyResV'); if(!f){r.innerHTML='Pa jwenn';return;} r.innerHTML='<div style="background:#fff;padding:8px;border-radius:12px;border:3px solid #000;"><b>'+f.id+'</b> '+f.total+'G<br><div class="btn green" onclick="copyToVV(\''+f.id+'\')">Copier</div></div>'; }
 function copyToVV(id){ var f=fiches.find(x=>x.id===id); if(!f) return; lignes=[...f.lignes]; selTir=[...f.tirages]; updateLabelV(); renderVV(); }
-function initTirajDrop(){}
-setInterval(()=>{ var el=document.getElementById('clock'); if(el) el.textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); },1000);
-document.addEventListener('click',function(e){ var w1=document.getElementById('tirajDrop'); var wrap1=document.querySelector('#vendreV.tirajMultiWrap'); if(w1&&wrap1&&!wrap1.contains(e.target)) w1.classList.remove('open'); var w2=document.getElementById('tirajDropV'); var wrap2=document.querySelector('#vendreV.tirajMultiWrap'); if(w2&&wrap2&&!wrap2.contains(e.target)) w2.classList.remove('open'); });
 
-// INIT
-var savedVendor=localStorage.getItem('currentVendor_v49'); var savedIsProprio=localStorage.getItem('isProprio_v49');
-if(savedVendor){
- currentVendor=JSON.parse(savedVendor); isProprio=savedIsProprio==='true';
- document.getElementById('loginScreen').style.display='none';
- if(isProprio) initAllProprio(); else initAllVendeur();
-} else {
- document.getElementById('loginScreen').style.display='flex';
- document.getElementById('loginName').value=''; document.getElementById('loginPass').value='';
-}
+setInterval(()=>{ var el=document.getElementById('clock'); if(el) el.textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); },1000);
+
+var savedVendor=localStorage.getItem('currentVendor_v50'); var savedIsProprio=localStorage.getItem('isProprio_v50');
+if(savedVendor){ currentVendor=JSON.parse(savedVendor); isProprio=savedIsProprio==='true'; document.getElementById('loginScreen').style.display='none'; if(isProprio) initAllProprio(); else initAllVendeur(); } else { document.getElementById('loginScreen').style.display='flex'; }
+document.getElementById('proprioPass').addEventListener('keydown',function(e){ if(e.key==='Enter') loginProprio(); });
+document.getElementById('vendeurPass').addEventListener('keydown',function(e){ if(e.key==='Enter') loginVendeur(); });
+document.getElementById('vendeurName').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('vendeurPass').focus(); });
 </script>
 </body>
 </html>
