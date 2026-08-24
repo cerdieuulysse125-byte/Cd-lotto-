@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>C&D V43 - MODPAS OBLIGATWA - FEMTI RESPEKTE - PROPRIO - LOGO TET</title>
+<title>C&D V43.1 HOTFIX - PROPRIO REPARE - MODPAS OBLIGATWA - FEMTI RESPEKTE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{background:#000;color:#fff;font-family:monospace}
 .top{background:#ff0;color:#000;padding:6px;text-align:center;font-weight:bold;font-size:10px;position:sticky;top:0;z-index:100}
@@ -34,41 +34,50 @@
 </style>
 </head>
 <body>
-<div class="top">V43 MODPAS OBLIGATWA - FÈMTI RESPEKTE - PROPRIO - <span id="clock">--:--</span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:2px 8px;border-radius:10px;font-size:9px;">🖨️ GwoFos-G001 - Défaut: OUI - Logo 200px OK - Fermti: RESPEKTE</span></div>
+<div class="top">V43.1 HOTFIX PROPRIO REPARE - <span id="clock">--:--</span><br><span id="printerBadge" style="background:#0f0;color:#000;padding:2px 8px;border-radius:10px;font-size:9px;">🖨️ GwoFos-G001 - Logo 200px - Fèmti RESPEKTE - Modpas OBLIGATWA</span></div>
 
 <div id="loginScreen" style="position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;padding:10px;">
-<div class="loginBox" style="width:100%;max-width:360px;">
-<div style="font-size:16px;font-weight:bold;text-align:center;">🔐 KONEKSYON OBLIGATWA</div>
-<div style="font-size:9px;margin-top:6px;text-align:center;color:#ff0;">Modpas obligatwa pou antre - Lè fèmti dwe respekte - Konekte ak proprio</div>
+<div class="loginBox" style="width:100%;max-width:380px;">
+<div style="font-size:16px;font-weight:bold;text-align:center;">🔐 KONEKSYON OBLIGATWA - HOTFIX</div>
+<div style="font-size:9px;margin-top:6px;text-align:center;color:#ff0;">BUG REPARE - Proprio separe - Modpas vandè pa respekte nan proprio ankò - Modpas proprio sèlman C&D2026</div>
 
-<div style="margin-top:10px;display:flex;gap:4px;">
-<div class="btn blue" id="btnModeVendeur" onclick="setMode('vendeur')" style="flex:1;padding:10px;background:#1976d2;">👤 VANDÈ</div>
-<div class="btn orange" id="btnModeProprio" onclick="setMode('proprio')" style="flex:1;padding:10px;background:#333;">👑 PROPRIO</div>
+<!-- 2 BOUTON SEPARE - PA MELANJE -->
+<div style="margin-top:12px;display:flex;gap:6px;">
+<div class="btn blue" id="btnModeVendeur" onclick="setMode('vendeur')" style="flex:1;padding:14px;background:#1976d2;border:3px solid #ff0;">👤 VANDÈ<br><span style="font-size:8px;">Modpas vandè mete poukont li</span></div>
+<div class="btn orange" id="btnModeProprio" onclick="setMode('proprio')" style="flex:1;padding:14px;background:#333;">👑 PROPRIO<br><span style="font-size:8px;">Modpas C&D2026 sèlman</span></div>
 </div>
 
-<select id="loginVendor" class="input" style="margin-top:8px;"></select>
-<input id="loginPass" type="password" placeholder="Modpas obligatwa - Pa ka antre san modpas" class="input" style="text-align:center;margin-top:6px;letter-spacing:2px;border:2px solid #ff0;">
-
-<div id="newVendorBox" style="display:none;">
+<!-- ZONE VANDÈ - SEPARE -->
+<div id="zoneVendeur">
+<select id="loginVendor" class="input" style="margin-top:10px;"></select>
+<input id="loginPass" type="password" placeholder="Modpas vandè - Obligatwa - Pa ka antre san modpas" class="input" style="text-align:center;margin-top:8px;letter-spacing:2px;border:2px solid #1976d2;">
+<div id="newVendorBox" style="display:none;background:#e3f2fd;border-radius:8px;padding:8px;margin-top:6px;">
 <input id="newVendorName" placeholder="Non nouvo vandè" class="input">
-<input id="newVendorPhone" placeholder="Telefòn - Fich santre" class="input" style="margin-top:4px;">
+<input id="newVendorPhone" placeholder="Telefòn" class="input" style="margin-top:4px;">
 <input id="newVendorPassSet" type="password" placeholder="Chwazi modpas ou - Obligatwa" class="input" style="margin-top:4px;">
 </div>
-
-<div id="proprioBox" style="display:none;background:#fff3e0;border:2px solid #ff5722;border-radius:8px;padding:10px;margin-top:8px;">
-<div style="font-weight:bold;font-size:11px;color:#000;">👑 Konekte ak proprio - Aksè total</div>
-<div style="font-size:9px;color:#666;">Modpas proprio: C&D2026 - Ka wè tout vandè - Ka chanje fèmti - Ka bypass fèmti pou test</div>
-<input id="proprioPass" type="password" placeholder="Modpas proprio: C&D2026" class="input" style="margin-top:6px;border:2px solid #ff5722;">
+<div class="btn green" onclick="doLoginVendeur()" style="padding:14px;margin-top:8px;">👤 KONEKTE KÒM VANDÈ - Modpas obligatwa</div>
 </div>
 
-<div class="btn green" onclick="doLogin()" style="padding:14px;margin-top:10px;">🔐 KONEKTE - Modpas obligatwa</div>
-<div id="loginErr" style="color:#ff5252;font-size:11px;margin-top:8px;text-align:center;font-weight:bold;background:#fff;padding:6px;border-radius:6px;"></div>
+<!-- ZONE PROPRIO - SEPARE - PA MELANJE AK VANDÈ -->
+<div id="zoneProprio" style="display:none;background:#fff3e0;border:3px solid #ff5722;border-radius:10px;padding:12px;margin-top:10px;">
+<div style="font-weight:bold;font-size:13px;color:#000;text-align:center;">👑 KONEKTE AK PROPRIO - SEPARE</div>
+<div style="font-size:10px;color:#c62828;margin-top:4px;text-align:center;font-weight:bold;">BUG REPARE - Modpas vandè pa respekte isit la - Sèlman modpas proprio C&D2026</div>
+<div style="font-size:9px;color:#666;margin-top:4px;text-align:center;">Proprio pa bezwen chwazi vandè - Antre modpas C&D2026 dirèk - Aksè total - Bypass fèmti</div>
+<input id="proprioPass" type="password" placeholder="Modpas proprio obligatwa: C&D2026 - Tape C&D2026" class="input" style="margin-top:8px;border:3px solid #ff5722;text-align:center;letter-spacing:2px;font-weight:bold;">
+<div class="btn orange" onclick="doLoginProprio()" style="padding:16px;margin-top:8px;background:#ff5722;font-size:14px;">👑 KONEKTE KÒM PROPRIO - C&D2026 - LI ANTRE KOUNYA</div>
+<div style="font-size:8px;margin-top:6px;background:#000;color:#0f0;padding:6px;border-radius:6px;text-align:center;">Modpas proprio: C&D2026 - Pa modpas vandè - Se C&D2026 sèlman - Tape egzak C&D2026</div>
+</div>
+
+<div id="loginErr" style="color:#ff5252;font-size:11px;margin-top:8px;text-align:center;font-weight:bold;background:#fff;padding:8px;border-radius:6px;min-height:20px;"></div>
 
 <div style="font-size:8px;margin-top:10px;background:#222;padding:7px;border-radius:6px;text-align:center;">
-✅ Modpas obligatwa - Pa ka antre san modpas<br>
-✅ Lè fèmti respekte - Tiraj fèmen pa ka vann<br>
-✅ Konekte ak proprio - Modpas C&D2026 - Aksè total<br>
-✅ Kaz Miz vid - Logo dirèk nan tèt fich
+✅ V43.1 HOTFIX - BUG REPARE<br>
+✅ Modpas vandè pa respekte nan proprio ankò<br>
+✅ Proprio: Modpas sèlman C&D2026 - Pa modpas vandè<br>
+✅ Vandè: Modpas obligatwa poukont li - Pa 1234<br>
+✅ Fèmti respekte - Logo dirèk tèt fich 200px<br>
+✅ Kaz Miz vid - 2 opsyon paramèt
 </div>
 </div>
 </div>
@@ -83,53 +92,45 @@
 
 <div id="vendre" class="tabContent active">
 <div class="card" style="border:2px solid #c62828;">
-<div style="font-weight:bold;font-size:11px;color:#c62828;">⛔ Lè fèmti dwe respekte - Tiraj fèmen pa ka chwazi - Modpas obligatwa:</div>
+<div style="font-weight:bold;font-size:11px;color:#c62828;">⛔ Lè fèmti dwe respekte - Modpas obligatwa - Proprio C&D2026 separe:</div>
 <div class="tirajMultiWrap">
 <div id="tirajBtn" class="tirajMultiBtn" onclick="toggleDrop()" style="border-color:#c62828;background:#ffebee;"><span id="tirajLabel">GA MIDI (12:15)</span><span>▼</span></div>
 <div id="tirajDrop" class="tirajDrop"></div>
 </div>
-<div id="selCount" style="font-size:10px;color:#c62828;margin-top:4px;font-weight:bold;">1 tirage - Fèmti respekte - Modpas obligatwa</div>
+<div id="selCount" style="font-size:10px;color:#c62828;margin-top:4px;font-weight:bold;">1 tirage - Fèmti respekte</div>
 <div id="fermtiAlert" style="display:none;background:#c62828;color:#fff;padding:8px;border-radius:6px;margin-top:6px;font-size:10px;font-weight:bold;text-align:center;"></div>
 </div>
 <div class="card">
-<div style="font-size:9px;font-weight:bold;text-align:center;color:#0a7e07;margin-bottom:4px;">🖼️ LOGO dirèk nan tèt fich - Kaz Miz vid - Fèmti respekte - Modpas obligatwa - Proprio C&D2026</div>
+<div style="font-size:9px;font-weight:bold;text-align:center;color:#0a7e07;margin-bottom:4px;">🖼️ LOGO dirèk tèt fich 200px - Kaz Miz vid - Fèmti respekte - Modpas obligatwa - V43.1 HOTFIX</div>
 <div class="vendreRow">
 <select id="jeu"><option>BOLET</option><option>LOTO3</option><option>LOTO4</option><option>LOTO5</option><option>MARYAJ</option></select>
 <input id="boul" class="boulCase" placeholder="Boul" inputmode="numeric" maxlength="6" style="width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;border:2px solid #000;border-radius:6px;">
 <input id="mise" class="miseCase" placeholder="Miz" inputmode="numeric" style="width:72px;min-width:72px;max-width:72px;padding:8px 3px;text-align:center;font-weight:bold;border:2px solid #000;border-radius:6px;background:#fff;">
 <div class="btn blue addBtnSmall" onclick="addL()">+↓</div>
 </div>
-<div id="listV" class="listV">Pa gen liy - Kaz Miz vid - Fèmti respekte</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div>
+<div id="listV" class="listV">Pa gen liy - Kaz Miz vid - Fèmti respekte - Modpas obligatwa</div><div id="totalV" class="totalBox">Total: 0G × 1 = 0G</div>
 <div style="display:flex;gap:4px;">
-<div class="btn green" onclick="printTicket()" style="flex:1;padding:14px;background:#0a7e07;">🖨️ IMPRIMER - Fèmti respekte</div>
+<div class="btn green" onclick="printTicket()" style="flex:1;padding:14px;background:#0a7e07;">🖨️ IMPRIMER</div>
 <div class="btn blue" onclick="previewTicket()" style="flex:1;background:#111;">👁️ APERÇU LOGO</div>
 </div>
 <div id="previewArea"></div>
 <div style="display:flex;gap:4px;margin-top:6px;">
-<div class="btn red" onclick="logout()" style="flex:1;padding:8px;font-size:10px;">🔒 Dekonekte - Modpas obligatwa ankò</div>
+<div class="btn red" onclick="logout()" style="flex:1;padding:8px;font-size:10px;">🔒 Dekonekte</div>
 <div class="btn blue" id="btnProprioPanel" onclick="openTab(event,'rapport')" style="flex:1;padding:8px;font-size:10px;display:none;background:#ff5722;">👑 Panel Proprio</div>
 </div>
 </div>
 </div>
 
 <div id="copier" class="tabContent"><div class="card"><div style="font-weight:bold;">COPIER</div><input id="copyId" class="input"><div class="btn blue" onclick="doCopy()">Chèche</div><div id="copyRes"></div></div></div>
-<div id="fiches" class="tabContent"><div class="card"><div style="font-weight:bold;">FICHES - Fèmti respekte - Modpas obligatwa</div><select id="fTir" class="input"></select><div id="listF"></div></div></div>
+<div id="fiches" class="tabContent"><div class="card"><div style="font-weight:bold;">FICHES</div><select id="fTir" class="input"></select><div id="listF"></div></div></div>
 <div id="rapport" class="tabContent">
-<div class="card" style="border:3px solid #0a0;"><div style="font-weight:bold;color:#0a0;">📊 Rapport: Vente... Commission Gain Balance net... - Fèmti respekte</div><div style="display:flex;gap:4px;margin-top:6px;"><input id="rDu" type="date" class="input" style="flex:1;"><span style="padding:9px 4px;">au</span><input id="rAu" type="date" class="input" style="flex:1;"></div><select id="rTir" class="input" style="margin-top:4px;"></select><div id="resRap" style="margin-top:10px;"></div><div class="btn green" onclick="doRapport()">Générer</div><div class="btn blue" onclick="printRap()" style="background:#111;">🖨️ Imprimer..</div></div>
-
+<div class="card" style="border:3px solid #0a0;"><div style="font-weight:bold;color:#0a0;">📊 Rapport - Fèmti respekte - Modpas obligatwa</div><div style="display:flex;gap:4px;margin-top:6px;"><input id="rDu" type="date" class="input" style="flex:1;"><span style="padding:9px 4px;">au</span><input id="rAu" type="date" class="input" style="flex:1;"></div><select id="rTir" class="input" style="margin-top:4px;"></select><div id="resRap" style="margin-top:10px;"></div><div class="btn green" onclick="doRapport()">Générer</div><div class="btn blue" onclick="printRap()" style="background:#111;">🖨️ Imprimer..</div></div>
 <div id="proprioPanel" style="display:none;" class="card" style="border:3px solid #ff5722;margin-top:10px;">
-<div style="font-weight:bold;color:#ff5722;font-size:14px;text-align:center;">👑 PANEL PROPRIO - Konekte ak proprio - Aksè total</div>
-<div style="font-size:10px;margin-top:8px;">Proprio ka wè tout vandè - Chanje modpas - Bypass fèmti - Logo tèt fich</div>
-<div style="margin-top:10px;">
-<div style="font-weight:bold;font-size:11px;">Vandè yo:</div>
-<div id="listVendeursProprio" style="background:#000;color:#0f0;padding:8px;border-radius:6px;max-height:120px;overflow:auto;font-size:10px;margin-top:4px;"></div>
-</div>
-<div style="margin-top:10px;">
-<div style="font-weight:bold;font-size:11px;">Fèmti vandè yo - Lè fèmti dwe respekte:</div>
-<div id="listFermti" style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:6px;max-height:180px;overflow:auto;margin-top:4px;font-size:10px;"></div>
-</div>
+<div style="font-weight:bold;color:#ff5722;font-size:14px;text-align:center;">👑 PANEL PROPRIO - HOTFIX REPARE</div>
+<div id="listVendeursProprio" style="background:#000;color:#0f0;padding:8px;border-radius:6px;max-height:120px;overflow:auto;font-size:10px;margin-top:8px;"></div>
+<div id="listFermti" style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:6px;max-height:180px;overflow:auto;margin-top:8px;font-size:10px;"></div>
 <div style="display:flex;gap:4px;margin-top:8px;">
-<div class="btn orange" onclick="resetFermti()" style="flex:1;">🔄 Reset fèmti - Tout ouvè</div>
+<div class="btn orange" onclick="resetFermti()" style="flex:1;">🔄 Reset fèmti</div>
 <div class="btn red" onclick="clearAllFiches()" style="flex:1;">🗑️ Efase tout fich</div>
 </div>
 </div>
@@ -137,47 +138,30 @@
 
 <div id="imprimantes" class="tabContent">
 <div class="card" style="border:3px solid #1976d2;padding:14px;">
-<div style="font-weight:bold;color:#1976d2;font-size:15px;text-align:center;">⚙️ Paramètres - 2 opsyon + Modpas obligatwa + Fèmti respekte</div>
-<div style="font-size:9px;text-align:center;color:#666;margin-top:2px;">2 opsyon sèlman + Logo dirèk nan tèt fich - Modpas obligatwa - Fèmti respekte - Proprio C&D2026</div>
-
+<div style="font-weight:bold;color:#1976d2;font-size:15px;text-align:center;">⚙️ Paramètres - 2 opsyon - HOTFIX</div>
 <div style="margin-top:16px;border:2px solid #ff5722;border-radius:10px;padding:12px;background:#fff3e0;">
 <div style="font-weight:bold;font-size:13px;color:#000;">1- Ajoute une imprimante ( recherche de toutes les imprimantes)</div>
 <div class="btn orange" onclick="scanToutesImprimantes()" style="padding:18px;font-size:15px;margin-top:8px;background:#ff5722;">🔍 Ajoute une imprimante<br><span style="font-size:10px;">Recherche de toutes les imprimantes</span></div>
 <div id="printerList" style="margin-top:10px;"></div>
 </div>
-
 <div style="margin-top:18px;border:2px solid #2e7d32;border-radius:10px;padding:12px;background:#e8f5e9;">
 <div style="font-weight:bold;font-size:13px;color:#000;">2- Utilisation de l'imprimante par défaut ( oui - non)</div>
 <div class="paramRow">
-<div>
-<div style="font-weight:bold;font-size:14px;color:#000;">Utilisation par défaut</div>
-<div id="defautName" style="font-size:11px;color:#666;margin-top:2px;">GwoFos-G001 - 00:11:22:33:44:55</div>
+<div><div style="font-weight:bold;font-size:14px;color:#000;">Utilisation par défaut</div><div id="defautName" style="font-size:11px;color:#666;margin-top:2px;">GwoFos-G001</div></div>
+<div style="display:flex;align-items:center;gap:12px;"><span id="defautTxt" style="font-weight:bold;font-size:16px;color:#2e7d32;">OUI</span><div id="defautSwitch" class="switch oui" onclick="toggleDefaut()"><div class="switchCircle"></div></div></div>
 </div>
-<div style="display:flex;align-items:center;gap:12px;">
-<span id="defautTxt" style="font-weight:bold;font-size:16px;color:#2e7d32;">OUI</span>
-<div id="defautSwitch" class="switch oui" onclick="toggleDefaut()"><div class="switchCircle"></div></div>
+<div id="defautInfo" style="border-radius:8px;padding:12px;margin-top:10px;font-size:11px;background:#e8f5e9;border:2px solid #2e7d32;">✅ OUI Défaut GwoFos-G001 - Logo 200px - Fèmti respekte - Modpas obligatwa</div>
+<div id="currentPrinter" style="background:#e8f5e9;padding:12px;border-radius:8px;margin-top:10px;font-size:11px;border:2px solid #2e7d32;text-align:center;font-weight:bold;">🖨️ GwoFos-G001 - Défaut: OUI</div>
 </div>
-</div>
-<div id="defautInfo" style="border-radius:8px;padding:12px;margin-top:10px;font-size:11px;background:#e8f5e9;border:2px solid #2e7d32;">✅ <b>OUI:</b> Défaut GwoFos-G001 - Logo 200px réparé - Fèmti respekte - Modpas obligatwa - Proprio C&D2026</div>
-<div id="currentPrinter" style="background:#e8f5e9;padding:12px;border-radius:8px;margin-top:10px;font-size:11px;border:2px solid #2e7d32;text-align:center;font-weight:bold;">🖨️ GwoFos-G001 - Défaut: OUI - Logo 200px - Fèmti respekte - Modpas obligatwa</div>
-</div>
-
 <div style="margin-top:12px;border:2px solid #c62828;border-radius:10px;padding:12px;background:#ffebee;">
-<div style="font-weight:bold;font-size:12px;color:#c62828;">🔐 Modpas obligatwa pou antre - Lè fèmti dwe respekte - Konekte ak proprio</div>
-<div style="font-size:9px;color:#666;margin-top:4px;">Vandè dwe mete modpas pou antre - Pa ka antre san modpas - Tiraj fèmen pa ka vann - Proprio modpas C&D2026 - Aksè total - Bypass fèmti</div>
+<div style="font-weight:bold;font-size:12px;color:#c62828;">🔐 Modpas obligatwa - Fèmti respekte - Proprio C&D2026 separe</div>
 <div id="currentUserInfo" style="background:#000;color:#0f0;padding:8px;border-radius:6px;margin-top:8px;font-size:10px;"></div>
 <div style="display:flex;gap:4px;margin-top:8px;">
-<div class="btn red" onclick="logout()" style="flex:1;padding:10px;">🔒 Dekonekte - Modpas obligatwa ankò</div>
+<div class="btn red" onclick="logout()" style="flex:1;padding:10px;">🔒 Dekonekte</div>
 <div class="btn blue" onclick="changeOwnPass()" style="flex:1;background:#333;padding:10px;">🔑 Chanje modpas pa m</div>
 </div>
 </div>
-
-<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:80px;overflow:auto;padding:8px;margin-top:14px;border-radius:6px;">Log: V43 Modpas obligatwa - Fèmti respekte - Konekte ak proprio C&D2026 - Logo dirèk tèt fich - 2 opsyon sèlman - Kaz Miz vid</div>
-
-<div style="display:flex;gap:4px;margin-top:10px;">
-<div class="btn blue" style="flex:1;" onclick="testPrint()">🧪 TEST LOGO 200px</div>
-<div class="btn green" style="flex:1;" onclick="openTab({target:document.querySelectorAll('.tab')[0]},'vendre')">⬅️ VENDRE</div>
-</div>
+<div id="pLog" style="background:#000;color:#0f0;font-size:9px;height:80px;overflow:auto;padding:8px;margin-top:14px;border-radius:6px;">Log: V43.1 HOTFIX - Proprio repare - Modpas vandè pa respekte nan proprio - C&D2026 sèlman - Modpas obligatwa - Fèmti respekte - Logo dirèk tèt fich</div>
 </div>
 </div>
 
@@ -197,63 +181,38 @@ var useDefaut=JSON.parse(localStorage.getItem('useDefaut_v36')===null?'true':loc
 var vendors=JSON.parse(localStorage.getItem('vendors_v38')||'[]');
 var vendorPhone=localStorage.getItem('vendorPhone_v37')||'509-XXXX';
 var currentVendor=null, isProprio=false, loginMode='vendeur';
+var logoBase64=localStorage.getItem('logoBase64_v42')||LOGO_DEFAULT_B64;
 
 function lg(m){ var el=document.getElementById('pLog'); el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; el.scrollTop=el.scrollHeight; }
 function setMode(m){
  loginMode=m;
  document.getElementById('btnModeVendeur').style.background=m==='vendeur'?'#1976d2':'#333';
+ document.getElementById('btnModeVendeur').style.border=m==='vendeur'?'3px solid #ff0':'none';
  document.getElementById('btnModeProprio').style.background=m==='proprio'?'#ff5722':'#333';
- document.getElementById('loginVendor').style.display=m==='vendeur'?'block':'none';
- document.getElementById('loginPass').style.display=m==='vendeur'?'block':'none';
- document.getElementById('newVendorBox').style.display='none';
- document.getElementById('proprioBox').style.display=m==='proprio'?'block':'none';
+ document.getElementById('btnModeProprio').style.border=m==='proprio'?'3px solid #ff0':'none';
+ document.getElementById('zoneVendeur').style.display=m==='vendeur'?'block':'none';
+ document.getElementById('zoneProprio').style.display=m==='proprio'?'block':'none';
  document.getElementById('loginErr').textContent='';
  if(m==='vendeur') initVendorsSelect();
+ if(m==='proprio') document.getElementById('proprioPass').focus();
 }
 function initVendorsSelect(){
- var sel=document.getElementById('loginVendor'); sel.innerHTML='';
- // Toujou ajoute PROPRIO nan lis vandè tou pou aksè fasil
+ var sel=document.getElementById('loginVendor'); if(!sel) return; sel.innerHTML='';
  if(vendors.length===0){
-  sel.innerHTML='<option value="NOUVO">+ KREYE NOUVO VANDÈ - Premye fwa</option><option value="PROPRIO">👑 PROPRIO - C&D2026</option>';
+  sel.innerHTML='<option value="NOUVO">+ KREYE NOUVO VANDÈ - Premye fwa - Modpas obligatwa</option>';
   document.getElementById('newVendorBox').style.display='block';
  } else {
-  vendors.forEach(v=>{ var o=document.createElement('option'); o.value=v.name; o.textContent=v.name+' - '+v.phone; sel.appendChild(o); });
-  var o=document.createElement('option'); o.value='NOUVO'; o.textContent='+ NOUVO VANDÈ'; sel.appendChild(o);
-  var o2=document.createElement('option'); o2.value='PROPRIO'; o2.textContent='👑 PROPRIO - C&D2026 - Konekte ak proprio'; sel.appendChild(o2);
+  vendors.forEach(v=>{ var o=document.createElement('option'); o.value=v.name; o.textContent=v.name+' - '+v.phone+' - Modpas obligatwa'; sel.appendChild(o); });
+  var o=document.createElement('option'); o.value='NOUVO'; o.textContent='+ NOUVO VANDÈ - Kreye nouvo - Modpas obligatwa'; sel.appendChild(o);
  }
- sel.onchange=function(){
-  if(this.value==='NOUVO') document.getElementById('newVendorBox').style.display='block';
-  else if(this.value==='PROPRIO'){ setMode('proprio'); }
-  else document.getElementById('newVendorBox').style.display='none';
- };
- updateLogoPreview();
+ sel.onchange=function(){ document.getElementById('newVendorBox').style.display=this.value==='NOUVO'?'block':'none'; };
 }
-function doLogin(){
- if(loginMode==='proprio'){
-  var pPass=document.getElementById('proprioPass').value.trim();
-  if(pPass!=='C&D2026' && pPass!=='cd2026' && pPass!=='2026'){
-   document.getElementById('loginErr').textContent='⛔ Modpas proprio pa bon - Modpas: C&D2026 - Modpas obligatwa';
-   return;
-  }
-  isProprio=true;
-  currentVendor={name:'PROPRIO',phone:'509-PROPRIO',role:'proprio'};
-  localStorage.setItem('currentVendor_v43',JSON.stringify(currentVendor));
-  localStorage.setItem('isProprio_v43','true');
-  document.getElementById('loginScreen').style.display='none';
-  initAll();
-  lg('👑 PROPRIO konekte - Modpas C&D2026 OK - Aksè total - Modpas obligatwa respekte - Fèmti ka bypass');
-  return;
- }
-
+// VANDÈ - MODPAS VANDÈ SÈLMAN
+function doLoginVendeur(){
  var vName=document.getElementById('loginVendor').value;
  var pass=document.getElementById('loginPass').value.trim();
  if(!pass){
-  document.getElementById('loginErr').textContent='⛔ Modpas obligatwa pou antre - Pa ka antre san modpas - Mete modpas ou';
-  return;
- }
- if(vName==='PROPRIO'){
-  setMode('proprio');
-  document.getElementById('loginErr').textContent='Chwazi PROPRIO - Mete modpas C&D2026';
+  document.getElementById('loginErr').textContent='⛔ Modpas vandè obligatwa - Pa ka antre san modpas - Mete modpas vandè a';
   return;
  }
  if(vName==='NOUVO'){
@@ -261,7 +220,7 @@ function doLogin(){
   var newPhone=document.getElementById('newVendorPhone').value.trim();
   var newPass=document.getElementById('newVendorPassSet').value.trim();
   if(!newName ||!newPass){
-   document.getElementById('loginErr').textContent='⛔ Modpas obligatwa - Mete non + modpas ou - Pa ka kreye san modpas';
+   document.getElementById('loginErr').textContent='⛔ Modpas obligatwa - Mete non + modpas nouvo vandè a - Pa ka kreye san modpas';
    return;
   }
   if(vendors.find(x=>x.name===newName)){ document.getElementById('loginErr').textContent='Non sa egziste deja'; return; }
@@ -269,326 +228,132 @@ function doLogin(){
   vendors.push(newV); localStorage.setItem('vendors_v38',JSON.stringify(vendors));
   localStorage.setItem('vendorPhone_v37',newPhone); vendorPhone=newPhone;
   currentVendor=newV; isProprio=false;
-  localStorage.setItem('currentVendor_v43',JSON.stringify(newV));
-  localStorage.setItem('isProprio_v43','false');
+  localStorage.setItem('currentVendor_v43',JSON.stringify(newV)); localStorage.setItem('isProprio_v43','false');
   document.getElementById('loginScreen').style.display='none'; initAll();
-  lg('Nouvo vandè kreye: '+newName+' - Modpas obligatwa mete - Fèmti respekte - Logo tèt fich');
+  lg('👤 Vandè kreye: '+newName+' - Modpas obligatwa - Fèmti respekte - Logo tèt fich - 2 opsyon paramèt');
   return;
  }
  var found=vendors.find(x=>x.name===vName);
- if(!found){ document.getElementById('loginErr').textContent='⛔ Vandè pa jwenn - Modpas obligatwa'; return; }
+ if(!found){ document.getElementById('loginErr').textContent='⛔ Vandè pa jwenn - Chwazi vandè nan lis - Modpas obligatwa'; return; }
  if(found.pass!==pass){
-  document.getElementById('loginErr').textContent='⛔ Modpas pa bon - Modpas obligatwa pou antre - Vandè mete modpas li poukont li';
+  document.getElementById('loginErr').textContent='⛔ Modpas vandè pa bon - Vandè: '+found.name+' - Modpas obligatwa - Mete modpas vandè a poukont li - Pa modpas proprio';
   return;
  }
  currentVendor=found; isProprio=false;
  vendorPhone=found.phone||vendorPhone; localStorage.setItem('vendorPhone_v37',vendorPhone);
- localStorage.setItem('currentVendor_v43',JSON.stringify(found));
- localStorage.setItem('isProprio_v43','false');
+ localStorage.setItem('currentVendor_v43',JSON.stringify(found)); localStorage.setItem('isProprio_v43','false');
  document.getElementById('loginScreen').style.display='none'; initAll();
- lg('Vandè konekte: '+found.name+' - Modpas obligatwa OK - Fèmti respekte - Kaz Miz vid - Logo tèt fich');
+ lg('👤 Vandè konekte: '+found.name+' - Modpas vandè OK - Pa modpas proprio - Fèmti respekte - Logo tèt fich - Kaz Miz vid');
 }
+// PROPRIO - MODPAS PROPRIO SÈLMAN C&D2026 - PA MODPAS VANDÈ - HOTFIX REPARE
+function doLoginProprio(){
+ var pPass=document.getElementById('proprioPass').value.trim();
+ if(!pPass){
+  document.getElementById('loginErr').textContent='⛔ Modpas proprio obligatwa - Tape C&D2026 - Pa ka antre san modpas - Modpas proprio sèlman C&D2026 - Pa modpas vandè';
+  return;
+ }
+ // MODPAS PROPRIO SÈLMAN C&D2026 - PA MODPAS VANDÈ - HOTFIX
+ if(pPass!=='C&D2026' && pPass!=='cd2026' && pPass!=='C&D2026 ' && pPass.toUpperCase()!=='C&D2026'){
+  // aksepte tou 2026 pou fasilite
+  if(pPass!=='2026'){
+   document.getElementById('loginErr').textContent='⛔ Modpas proprio pa bon - Ou tape: '+pPass+' - Modpas proprio se C&D2026 - Tape egzak C&D2026 - Pa modpas vandè - BUG REPARE - Li antre kounya ak C&D2026';
+   return;
+  }
+ }
+ isProprio=true;
+ currentVendor={name:'PROPRIO',phone:'509-PROPRIO',role:'proprio'};
+ localStorage.setItem('currentVendor_v43',JSON.stringify(currentVendor));
+ localStorage.setItem('isProprio_v43','true');
+ document.getElementById('loginScreen').style.display='none';
+ initAll();
+ document.getElementById('loginErr').textContent='';
+ lg('👑 PROPRIO konekte - Modpas C&D2026 OK - BUG REPARE - Pa modpas vandè - Aksè total - Bypass fèmti - Logo dirèk tèt fich - 2 opsyon paramèt - Modpas obligatwa - Fèmti respekte');
+}
+
 function logout(){
- if(!confirm('Dekonekte? Modpas obligatwa ankò pou antre')) return;
+ if(!confirm('Dekonekte? Modpas obligatwa ankò pou antre - Vandè ak proprio separe')) return;
  currentVendor=null; isProprio=false;
  localStorage.removeItem('currentVendor_v43'); localStorage.removeItem('isProprio_v43');
  document.getElementById('loginScreen').style.display='flex';
- document.getElementById('loginPass').value='';
- document.getElementById('proprioPass').value='';
- document.getElementById('loginErr').textContent='Dekonekte - Modpas obligatwa pou antre ankò';
- setMode('vendeur');
- initVendorsSelect();
- lg('🔒 Dekonekte - Modpas obligatwa ankò - Fèmti respekte');
+ document.getElementById('loginPass').value=''; document.getElementById('proprioPass').value='';
+ document.getElementById('loginErr').textContent='Dekonekte - Modpas obligatwa pou antre ankò - Vandè ak proprio separe - BUG REPARE';
+ setMode('vendeur'); initVendorsSelect();
 }
 
 function initAll(){
  initVendorsSelect(); initTirajDrop(); initTirajSelects(); setupFleche(); initDefaut(); doRapport(); updateFermtiList(); updateVendeursProprio();
  var s=localStorage.getItem('selTir_v36'); if(s){ selTir=JSON.parse(s); updateLabel(); }
- var isProp=localStorage.getItem('isProprio_v43')==='true';
- isProprio=isProp;
- document.getElementById('btnProprioPanel').style.display=isProp?'block':'none';
- document.getElementById('proprioPanel').style.display=isProp?'block':'none';
- document.getElementById('currentUserInfo').innerHTML=isProp?'👑 <b>PROPRIO konekte</b> - Modpas C&D2026 - Aksè total - Ka bypass fèmti - Logo dirèk tèt fich':'👤 <b>Vandè: '+(currentVendor?currentVendor.name:'-')+'</b> - Modpas obligatwa OK - Fèmti respekte - Logo tèt fich - Telefòn '+(currentVendor?currentVendor.phone:vendorPhone);
+ isProprio=localStorage.getItem('isProprio_v43')==='true';
+ document.getElementById('btnProprioPanel').style.display=isProprio?'block':'none';
+ document.getElementById('proprioPanel').style.display=isProprio?'block':'none';
+ document.getElementById('currentUserInfo').innerHTML=isProprio?'👑 <b>PROPRIO konekte</b> - Modpas C&D2026 - BUG REPARE - Pa modpas vandè - Aksè total - Bypass fèmti':'👤 <b>Vandè: '+(currentVendor?currentVendor.name:'-')+'</b> - Modpas obligatwa OK - Pa modpas proprio - Fèmti respekte';
  checkFermti();
 }
 function openTab(e,id){ document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); e.target.classList.add('active'); if(id==='rapport') doRapport(); closeDrop(); checkFermti(); }
-
-// FÈMTI RESPEKTE - Lè fèmti vandè yo dwe respekte
-function isClosed(t){
- var now=new Date(); var cur=now.getHours()*60+now.getMinutes();
- var p=t.fermeti.split(':'); return cur>=parseInt(p[0])*60+parseInt(p[1]);
-}
-function getClosedTirages(){
- var closed=[];
- tiragesData.forEach(t=>{ if(isClosed(t) &&!isProprio) closed.push(t.nom); });
- return closed;
-}
+function isClosed(t){ var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var p=t.fermeti.split(':'); return cur>=parseInt(p[0])*60+parseInt(p[1]); }
+function getClosedTirages(){ var closed=[]; tiragesData.forEach(t=>{ if(isClosed(t) &&!isProprio) closed.push(t.nom); }); return closed; }
 function checkFermti(){
  var closed=getClosedTirages();
- var alertEl=document.getElementById('fermtiAlert');
- var badge=document.getElementById('printerBadge');
- if(closed.length>0 &&!isProprio){
-  alertEl.style.display='block';
-  alertEl.innerHTML='⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closed.join(', ')+' - Pa ka vann - Lè fèmti dwe respekte - Konekte ak proprio pou bypass (C&D2026)';
-  if(badge) badge.textContent='🖨️ '+curPrinter.name+' - ⛔ FÈMTI: '+closed.length+' fèmen - Modpas OK';
-  badge.style.background='#c62828'; badge.style.color='#fff';
- } else {
-  alertEl.style.display='none';
-  if(badge){ badge.textContent='🖨️ '+curPrinter.name+' - Défaut: '+(useDefaut?'OUI':'NON')+' - Logo 200px OK - Fèmti: RESPEKTE - '+(isProprio?'PROPRIO':'VANDÈ'); badge.style.background='#0f0'; badge.style.color='#000'; }
- }
- updateFermtiList();
+ var alertEl=document.getElementById('fermtiAlert'); var badge=document.getElementById('printerBadge');
+ if(closed.length>0 &&!isProprio){ alertEl.style.display='block'; alertEl.innerHTML='⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closed.join(', ')+' - Pa ka vann - Konekte ak proprio C&D2026 pou bypass'; if(badge){ badge.textContent='🖨️ '+curPrinter.name+' - ⛔ FÈMTI: '+closed.length+' fèmen'; badge.style.background='#c62828'; badge.style.color='#fff'; } } else { alertEl.style.display='none'; if(badge){ badge.textContent='🖨️ '+curPrinter.name+' - Défaut: '+(useDefaut?'OUI':'NON')+' - Logo OK - Fèmti: RESPEKTE - '+(isProprio?'PROPRIO C&D2026 - BUG REPARE':'VANDÈ'); badge.style.background='#0f0'; badge.style.color='#000'; } } updateFermtiList();
 }
-
 function initTirajDrop(){
  var drop=document.getElementById('tirajDrop'); drop.innerHTML='';
  var divTous=document.createElement('div'); divTous.className='tirajOpt tous';
- divTous.innerHTML='<input type="checkbox" id="chkTous"><label for="chkTous"><b>Tirages (....., Tous) - Tout 15 - Fèmti respekte</b></label>';
+ divTous.innerHTML='<input type="checkbox" id="chkTous"><label for="chkTous"><b>Tirages (....., Tous) - Fèmti respekte</b></label>';
  divTous.onclick=function(e){ if(e.target.type!=='checkbox') document.getElementById('chkTous').checked=!document.getElementById('chkTous').checked; toggleTous(document.getElementById('chkTous').checked); };
  drop.appendChild(divTous);
  tiragesData.forEach((t,i)=>{
   var closed=isClosed(t) &&!isProprio;
   var div=document.createElement('div'); div.className='tirajOpt'+(closed?' ferme':'');
-  var labelText=t.nom+' ('+t.heure+') - Fèmti '+t.fermeti+(closed?' 🔒 FÈMEN - Fèmti respekte':' ✅ Ouvè');
+  var labelText=t.nom+' ('+t.heure+') - Fèmti '+t.fermeti+(closed?' 🔒 FÈMEN':' ✅ Ouvè');
   div.innerHTML='<input type="checkbox" id="chk'+i+'" '+(selTir.includes(t.nom+' ('+t.heure+')')?'checked':'')+' '+(closed?'disabled':'')+'><label for="chk'+i+'">'+labelText+'</label>';
-  div.onclick=function(e){
-   if(closed &&!isProprio){
-    alert('⛔ FÈMTI RESPEKTE - '+t.nom+' fèmen depi '+t.fermeti+' - Pa ka vann tiraj sa a - Lè fèmti dwe respekte - Konekte ak proprio (C&D2026) pou bypass');
-    return;
-   }
-   if(e.target.type!=='checkbox') document.getElementById('chk'+i).checked=!document.getElementById('chk'+i).checked;
-   updateSelTir();
-  };
+  div.onclick=function(e){ if(closed &&!isProprio){ alert('⛔ FÈMTI RESPEKTE - '+t.nom+' fèmen - Pa ka vann - Proprio C&D2026 ka bypass'); return; } if(e.target.type!=='checkbox') document.getElementById('chk'+i).checked=!document.getElementById('chk'+i).checked; updateSelTir(); };
   drop.appendChild(div);
  });
 }
 function toggleDrop(){ document.getElementById('tirajDrop').classList.toggle('open'); checkFermti(); }
 function closeDrop(){ var el=document.getElementById('tirajDrop'); if(el) el.classList.remove('open'); }
 function toggleTous(c){
- if(!isProprio){
-  var hasClosed=false;
-  tiragesData.forEach((t,i)=>{ if(isClosed(t)) hasClosed=true; });
-  if(hasClosed && c){
-   if(!confirm('⛔ Gen tiraj ki fèmen - Lè fèmti dwe respekte - Vle chwazi sèlman sa ki ouvè? - PROPRIO ka chwazi tout ak C&D2026')){
-    return;
-   }
-   // chwazi sèlman ouvè
-   tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk){ chk.checked=!isClosed(t); } });
-   updateSelTir(); return;
-  }
- }
- tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk && (!isClosed(t) || isProprio)) chk.checked=c; });
- updateSelTir();
+ if(!isProprio){ var hasClosed=false; tiragesData.forEach((t,i)=>{ if(isClosed(t)) hasClosed=true; }); if(hasClosed && c){ if(!confirm('Gen tiraj fèmen - Vle chwazi sèlman ouvè?')) return; tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk){ chk.checked=!isClosed(t); } }); updateSelTir(); return; } }
+ tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk && (!isClosed(t) || isProprio)) chk.checked=c; }); updateSelTir();
 }
-function updateSelTir(){
- selTir=[];
- tiragesData.forEach((t,i)=>{
-  var chk=document.getElementById('chk'+i);
-  if(chk&&chk.checked){
-   if(isClosed(t) &&!isProprio){
-    chk.checked=false;
-    lg('⛔ Fèmti respekte - '+t.nom+' fèmen - Pa ajoute');
-   } else {
-    selTir.push(t.nom+' ('+t.heure+')');
-   }
-  }
- });
- if(!selTir.length){
-  // chwazi premye ouvè
-  var firstOpen=tiragesData.find(t=>!isClosed(t) || isProprio);
-  selTir=[firstOpen?firstOpen.nom+' ('+firstOpen.heure+')':'GA MIDI (12:15)'];
- }
- localStorage.setItem('selTir_v36',JSON.stringify(selTir)); updateLabel(); updTotal(); checkFermti();
-}
-function updateLabel(){
- var label=document.getElementById('tirajLabel');
- var closed=getClosedTirages();
- if(selTir.length===tiragesData.length) label.textContent='Tirages (....., Tous) - Tous ('+selTir.length+')'+(closed.length?' - '+closed.length+' fèmen':'');
- else if(selTir.length===1) label.textContent=selTir[0]+(closed.length?' - '+closed.length+' fèmen':'');
- else label.textContent=selTir.map(s=>s.split('(')[0].trim()).join(', ')+' ('+selTir.length+')'+(closed.length?' - '+closed.length+' fèmen':'');
- document.getElementById('selCount').textContent=selTir.length+' tirage(s): '+selTir.join(' / ')+(closed.length?' | ⛔ Fèmen: '+closed.join(', ')+' - Fèmti respekte':' - Fèmti respekte - Ouvè')+(isProprio?' | 👑 PROPRIO - Bypass fèmti':'');
-
- // verifye si gen fèmen nan selTir
- var hasClosedInSel=false;
- selTir.forEach(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); if(t && isClosed(t) &&!isProprio) hasClosedInSel=true; });
- if(hasClosedInSel){
-  document.getElementById('selCount').style.background='#c62828'; document.getElementById('selCount').style.color='#fff';
- } else {
-  document.getElementById('selCount').style.background=''; document.getElementById('selCount').style.color='#0a0';
- }
-}
-function initTirajSelects(){ var opts='<option value="tous">Tirages (....., Tous) - Fèmti respekte</option>'; tiragesData.forEach(t=>{ var closed=isClosed(t); opts+='<option value="'+t.nom+'" '+(closed &&!isProprio?'disabled':'')+'>'+t.nom+' ('+t.heure+') Fèmti '+t.fermeti+(closed?' 🔒 FÈMEN':' ✅')+'</option>'; }); document.getElementById('rTir').innerHTML=opts; document.getElementById('fTir').innerHTML=opts; }
-function setupFleche(){
- var boul=document.getElementById('boul'), mise=document.getElementById('mise'), jeu=document.getElementById('jeu');
- boul.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){ e.preventDefault(); mise.focus(); } else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); if(e.target.value.trim()){ if(!mise.value.trim()) mise.focus(); else addL(); } } else if(e.key==='ArrowLeft'){ e.preventDefault(); jeu.focus(); } });
- mise.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'){ e.preventDefault(); boul.focus(); } else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); addL(); } });
-}
-function addL(){
- var b=document.getElementById('boul').value.trim(), mStr=document.getElementById('mise').value.trim(), m=parseInt(mStr)||0;
- if(!b){ document.getElementById('boul').focus(); return; }
- if(!mStr||m<=0){ alert('⛔ Kaz Miz lan dwe vid - Tape miz - Pa gen 25 otomatik - Modpas obligatwa - Fèmti respekte'); document.getElementById('mise').focus(); return; }
- // FÈMTI RESPEKTE - verifye anvan ajoute
- var closedInSel=selTir.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; });
- if(closedInSel.length>0){
-  alert('⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closedInSel.join(', ')+' - Pa ka ajoute liy pou tiraj fèmen - Lè fèmti dwe respekte - Chwazi tiraj ouvè oswa konekte ak proprio C&D2026');
-  return;
- }
- lignes.push({jeu:document.getElementById('jeu').value,boul:b,mise:m});
- document.getElementById('boul').value=''; document.getElementById('mise').value='';
- document.getElementById('boul').focus(); renderV();
-}
-function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy - Kaz Miz vid - Fèmti respekte - Modpas obligatwa'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:3px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;">✕</span></div>'; }); updTotal(); }
-function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); var tot=sum*selTir.length; document.getElementById('totalV').textContent='Total: '+sum+'G × '+selTir.length+' = '+tot+'G - Fèmti respekte - '+(isProprio?'PROPRIO':'VANDÈ')+' - Modpas obligatwa'; }
-
-function buildTicketTxt(f){
- var W=32; function center(t){ t=t.toString(); var pad=Math.max(0,Math.floor((W-t.length)/2)); return ' '.repeat(pad)+t; }
- var txt=''; if(logoBase64) txt+=center('[LOGO C&D]')+'\n';
- txt+=center('C&D VERITE LOTTO')+'\n'; txt+=center('================')+'\n';
- txt+=center('Date..... '+new Date(f.ts).toLocaleString('fr-HT'))+'\n'; txt+=center('Tirages....')+'\n';
- f.tirages.forEach(tr=>{ txt+=center(tr)+'\n'; });
- txt+=center('Vandeur.... '+(currentVendor?currentVendor.name:'POZO'))+'\n'; txt+=center('Telefon.... '+(currentVendor?currentVendor.phone:vendorPhone))+'\n'; txt+=center('Id ticket..... '+f.id)+'\n'; txt+=center('----------------')+'\n';
- f.lignes.forEach(l=>{ txt+=center(l.jeu+' '+l.boul+' '+l.mise+'G')+'\n'; });
- txt+=center('----------------')+'\n'; txt+=center('TOTAL '+f.total+'G')+'\n'; txt+=center('================')+'\n'; txt+=center('Lave chodye w')+'\n'; txt+=center('Bon chans!')+'\n'; txt+=center((isProprio?'PROPRIO':'VANDÈ')+' - Fèmti respekte - Modpas obligatwa')+'\n'; txt+=center(new Date(f.ts).toLocaleString('fr-HT'))+'\n\n\n'; return txt;
-}
-function buildTicketESC(f){
- var ESC='\x1B', GS='\x1D', CENTER=ESC+'a\x01', BOLD_ON=ESC+'E\x01', BOLD_OFF=ESC+'E\x00';
- var txt=CENTER+BOLD_ON+'C&D VERITE LOTTO'+BOLD_OFF+'\n';
- txt+='Date..... '+new Date(f.ts).toLocaleString('fr-HT')+'\nTirages....\n'+f.tirages.join('\n')+'\nVandeur.... '+(currentVendor?currentVendor.name:'POZO')+'\nTelefon.... '+(currentVendor?currentVendor.phone:vendorPhone)+'\nId ticket..... '+f.id+'\n----------------\n';
- f.lignes.forEach(l=>{ txt+=l.jeu+' '+l.boul+' '+l.mise+'G\n'; });
- txt+='----------------\n'+BOLD_ON+'TOTAL '+f.total+'G'+BOLD_OFF+'\n================\nLave chodye w\nBon chans!\n'+(isProprio?'PROPRIO':'VANDÈ')+' - Fèmti respekte\n'+new Date(f.ts).toLocaleString('fr-HT')+'\n\n\n'+GS+'V\x00'; return txt;
-}
-function logoToEscPos(callback){
- if(!logoBase64){ callback(null); return; }
- var img=new Image();
- img.onload=function(){
-  var canvas=document.createElement('canvas'); var maxW=200; var w=img.width, h=img.height; var scale=maxW/w; var newW=Math.min(maxW,w); var newH=Math.round(h*scale); if(newH>200){ newH=200; newW=Math.round(w*200/h); } newW=Math.ceil(newW/8)*8; canvas.width=newW; canvas.height=newH;
-  var ctx=canvas.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,newW,newH); ctx.drawImage(img,0,0,newW,newH);
-  var imageData=ctx.getImageData(0,0,newW,newH); var data=imageData.data; var bytesPerLine=Math.ceil(newW/8); var raster=[]; var seuil=160;
-  for(var y=0;y<newH;y++){ for(var xByte=0;xByte<bytesPerLine;xByte++){ var byte=0; for(var bit=0;bit<8;bit++){ var x=xByte*8+bit; if(x<newW){ var idx=(y*newW+x)*4; var r=data[idx], g=data[idx+1], b=data[idx+2], a=data[idx+3]; if(a<50){ var bw=0; } else { var gray=0.299*r+0.587*g+0.114*b; var bw=gray<seuil?1:0; } byte|=(bw<<(7-bit)); } } raster.push(byte); } }
-  var xL=bytesPerLine&0xFF, xH=(bytesPerLine>>8)&0xFF; var yL=newH&0xFF, yH=(newH>>8)&0xFF;
-  var esc='\x1D\x76\x30\x00'+String.fromCharCode(xL)+String.fromCharCode(xH)+String.fromCharCode(yL)+String.fromCharCode(yH);
-  var rasterStr=''; for(var i=0;i<raster.length;i++) rasterStr+=String.fromCharCode(raster[i]); callback(esc+rasterStr+'\n');
- }; img.src=logoBase64;
-}
-function doPrint(txt,escTxt){
- try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); if(logoBase64){ try{ window.SunmiPrinter.printBitmap(logoBase64,1); window.SunmiPrinter.printText('\n'); }catch(e){} } window.SunmiPrinter.setFontWeight(1); window.SunmiPrinter.printText('C&D VERITE LOTTO\n'); window.SunmiPrinter.setFontWeight(0); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lg('✅ Sunmi + Logo + Fèmti respekte + Modpas obligatwa + '+(isProprio?'PROPRIO':'VANDÈ')); return; } }catch(e){}
- if(logoBase64){ logoToEscPos(function(logoEsc){ var full=''; if(logoEsc) full+=logoEsc+'\n'; full+=escTxt; var url='rawbt:print?data='+encodeURIComponent(full); window.location.href=url; lg('✅ RawBT + Logo + Fèmti respekte + Modpas obligatwa + '+(isProprio?'PROPRIO':'VANDÈ')); }); } else { var url='rawbt:print?data='+encodeURIComponent(escTxt||txt); window.location.href=url; }
-}
+function updateSelTir(){ selTir=[]; tiragesData.forEach((t,i)=>{ var chk=document.getElementById('chk'+i); if(chk&&chk.checked){ if(isClosed(t) &&!isProprio){ chk.checked=false; } else { selTir.push(t.nom+' ('+t.heure+')'); } } }); if(!selTir.length){ var firstOpen=tiragesData.find(t=>!isClosed(t) || isProprio); selTir=[firstOpen?firstOpen.nom+' ('+firstOpen.heure+')':'GA MIDI (12:15)']; } localStorage.setItem('selTir_v36',JSON.stringify(selTir)); updateLabel(); updTotal(); checkFermti(); }
+function updateLabel(){ var label=document.getElementById('tirajLabel'); var closed=getClosedTirages(); if(selTir.length===tiragesData.length) label.textContent='Tirages (....., Tous) - Tous ('+selTir.length+')'+(closed.length?' - '+closed.length+' fèmen':''); else if(selTir.length===1) label.textContent=selTir[0]+(closed.length?' - '+closed.length+' fèmen':''); else label.textContent=selTir.map(s=>s.split('(')[0].trim()).join(', ')+' ('+selTir.length+')'+(closed.length?' - '+closed.length+' fèmen':''); document.getElementById('selCount').textContent=selTir.length+' tirage(s): '+selTir.join(' / ')+(closed.length?' | ⛔ Fèmen: '+closed.join(', '):' - Fèmti respekte')+(isProprio?' | 👑 PROPRIO':''); }
+function initTirajSelects(){ var opts='<option value="tous">Tirages (....., Tous)</option>'; tiragesData.forEach(t=>{ var closed=isClosed(t); opts+='<option value="'+t.nom+'" '+(closed &&!isProprio?'disabled':'')+'>'+t.nom+' ('+t.heure+') Fèmti '+t.fermeti+(closed?' 🔒 FÈMEN':' ✅')+'</option>'; }); document.getElementById('rTir').innerHTML=opts; document.getElementById('fTir').innerHTML=opts; }
+function setupFleche(){ var boul=document.getElementById('boul'), mise=document.getElementById('mise'), jeu=document.getElementById('jeu'); boul.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){ e.preventDefault(); mise.focus(); } else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); if(e.target.value.trim()){ if(!mise.value.trim()) mise.focus(); else addL(); } } else if(e.key==='ArrowLeft'){ e.preventDefault(); jeu.focus(); } }); mise.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'){ e.preventDefault(); boul.focus(); } else if(e.key==='ArrowDown'||e.key==='Enter'){ e.preventDefault(); addL(); } }); }
+function addL(){ var b=document.getElementById('boul').value.trim(), mStr=document.getElementById('mise').value.trim(), m=parseInt(mStr)||0; if(!b){ document.getElementById('boul').focus(); return; } if(!mStr||m<=0){ alert('Kaz Miz vid - Tape miz'); document.getElementById('mise').focus(); return; } var closedInSel=selTir.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; }); if(closedInSel.length>0){ alert('⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closedInSel.join(', ')); return; } lignes.push({jeu:document.getElementById('jeu').value,boul:b,mise:m}); document.getElementById('boul').value=''; document.getElementById('mise').value=''; document.getElementById('boul').focus(); renderV(); }
+function renderV(){ var c=document.getElementById('listV'); if(!lignes.length){c.innerHTML='Pa gen liy - Kaz Miz vid'; updTotal(); return;} c.innerHTML=''; lignes.forEach((l,i)=>{ c.innerHTML+='<div style="display:flex;justify-content:space-between;padding:3px 6px;border-bottom:1px dashed #333;">'+l.jeu+' '+l.boul+' '+l.mise+'G <span onclick="lignes.splice('+i+',1);renderV()" style="color:red;">✕</span></div>'; }); updTotal(); }
+function updTotal(){ var sum=lignes.reduce((a,b)=>a+b.mise,0); var tot=sum*selTir.length; document.getElementById('totalV').textContent='Total: '+sum+'G × '+selTir.length+' = '+tot+'G - '+(isProprio?'PROPRIO C&D2026 - BUG REPARE':'VANDÈ - Modpas obligatwa'); }
+function buildTicketTxt(f){ var W=32; function center(t){ t=t.toString(); var pad=Math.max(0,Math.floor((W-t.length)/2)); return ' '.repeat(pad)+t; } var txt=''; if(logoBase64) txt+=center('[LOGO C&D]')+'\n'; txt+=center('C&D VERITE LOTTO')+'\n'; txt+=center('================')+'\n'; txt+=center('Date..... '+new Date(f.ts).toLocaleString('fr-HT'))+'\n'; txt+=center('Tirages....')+'\n'; f.tirages.forEach(tr=>{ txt+=center(tr)+'\n'; }); txt+=center('Vandeur.... '+(currentVendor?currentVendor.name:'POZO'))+'\n'; txt+=center('Telefon.... '+(currentVendor?currentVendor.phone:vendorPhone))+'\n'; txt+=center('Id ticket..... '+f.id)+'\n'; txt+=center('----------------')+'\n'; f.lignes.forEach(l=>{ txt+=center(l.jeu+' '+l.boul+' '+l.mise+'G')+'\n'; }); txt+=center('----------------')+'\n'; txt+=center('TOTAL '+f.total+'G')+'\n'; txt+=center('================')+'\n'; txt+=center('Lave chodye w')+'\n'; txt+=center('Bon chans!')+'\n'; txt+=center((isProprio?'PROPRIO C&D2026 - BUG REPARE':'VANDÈ - Modpas obligatwa - Fèmti respekte'))+'\n'; txt+=center(new Date(f.ts).toLocaleString('fr-HT'))+'\n\n\n'; return txt; }
+function buildTicketESC(f){ var ESC='\x1B', GS='\x1D', CENTER=ESC+'a\x01', BOLD_ON=ESC+'E\x01', BOLD_OFF=ESC+'E\x00'; var txt=CENTER+BOLD_ON+'C&D VERITE LOTTO'+BOLD_OFF+'\n'; txt+='Date..... '+new Date(f.ts).toLocaleString('fr-HT')+'\nTirages....\n'+f.tirages.join('\n')+'\nVandeur.... '+(currentVendor?currentVendor.name:'POZO')+'\nTelefon.... '+(currentVendor?currentVendor.phone:vendorPhone)+'\nId ticket..... '+f.id+'\n----------------\n'; f.lignes.forEach(l=>{ txt+=l.jeu+' '+l.boul+' '+l.mise+'G\n'; }); txt+='----------------\n'+BOLD_ON+'TOTAL '+f.total+'G'+BOLD_OFF+'\n================\nLave chodye w\nBon chans!\n'+(isProprio?'PROPRIO':'VANDÈ')+' - Fèmti respekte\n'+new Date(f.ts).toLocaleString('fr-HT')+'\n\n\n'+GS+'V\x00'; return txt; }
+function logoToEscPos(callback){ if(!logoBase64){ callback(null); return; } var img=new Image(); img.onload=function(){ var canvas=document.createElement('canvas'); var maxW=200; var w=img.width, h=img.height; var scale=maxW/w; var newW=Math.min(maxW,w); var newH=Math.round(h*scale); if(newH>200){ newH=200; newW=Math.round(w*200/h); } newW=Math.ceil(newW/8)*8; canvas.width=newW; canvas.height=newH; var ctx=canvas.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,newW,newH); ctx.drawImage(img,0,0,newW,newH); var imageData=ctx.getImageData(0,0,newW,newH); var data=imageData.data; var bytesPerLine=Math.ceil(newW/8); var raster=[]; var seuil=160; for(var y=0;y<newH;y++){ for(var xByte=0;xByte<bytesPerLine;xByte++){ var byte=0; for(var bit=0;bit<8;bit++){ var x=xByte*8+bit; if(x<newW){ var idx=(y*newW+x)*4; var r=data[idx], g=data[idx+1], b=data[idx+2], a=data[idx+3]; if(a<50){ var bw=0; } else { var gray=0.299*r+0.587*g+0.114*b; var bw=gray<seuil?1:0; } byte|=(bw<<(7-bit)); } } raster.push(byte); } } var xL=bytesPerLine&0xFF, xH=(bytesPerLine>>8)&0xFF; var yL=newH&0xFF, yH=(newH>>8)&0xFF; var esc='\x1D\x76\x30\x00'+String.fromCharCode(xL)+String.fromCharCode(xH)+String.fromCharCode(yL)+String.fromCharCode(yH); var rasterStr=''; for(var i=0;i<raster.length;i++) rasterStr+=String.fromCharCode(raster[i]); callback(esc+rasterStr+'\n'); }; img.src=logoBase64; }
+function doPrint(txt,escTxt){ try{ if(window.SunmiPrinter){ window.SunmiPrinter.setAlignment(1); if(logoBase64){ try{ window.SunmiPrinter.printBitmap(logoBase64,1); window.SunmiPrinter.printText('\n'); }catch(e){} } window.SunmiPrinter.setFontWeight(1); window.SunmiPrinter.printText('C&D VERITE LOTTO\n'); window.SunmiPrinter.setFontWeight(0); window.SunmiPrinter.printText(txt); window.SunmiPrinter.lineWrap(4); window.SunmiPrinter.cutPaper(); lg('✅ Sunmi + Logo + '+(isProprio?'PROPRIO C&D2026 BUG REPARE':'VANDÈ')); return; } }catch(e){} if(logoBase64){ logoToEscPos(function(logoEsc){ var full=''; if(logoEsc) full+=logoEsc+'\n'; full+=escTxt; var url='rawbt:print?data='+encodeURIComponent(full); window.location.href=url; lg('✅ RawBT + Logo + '+(isProprio?'PROPRIO C&D2026 BUG REPARE':'VANDÈ - Modpas obligatwa - Fèmti respekte')); }); } else { var url='rawbt:print?data='+encodeURIComponent(escTxt||txt); window.location.href=url; } }
 var curTicket=null;
-function previewTicket(){
- if(!lignes.length){ alert('⛔ Pa gen liy - Kaz Miz vid - Fèmti respekte - Modpas obligatwa'); return; }
- var closedInSel=selTir.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; });
- if(closedInSel.length>0){ alert('⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closedInSel.join(', ')+' - Pa ka preview - Lè fèmti dwe respekte - Konekte ak proprio C&D2026 pou bypass'); return; }
- var f={id:'T'+Date.now().toString().slice(-6),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now()};
- curTicket=f; var txt=buildTicketTxt(f); var logoHtml=logoBase64?'<img src="'+logoBase64+'" style="max-width:180px;max-height:90px;display:block;margin:0 auto 8px auto;border-radius:50%;background:#fff;">':'';
- document.getElementById('previewArea').innerHTML='<div class="ticketPreview" style="white-space:pre-line;text-align:center;">'+logoHtml+txt.replace(/\n/g,'<br>')+'</div><div style="font-size:10px;text-align:center;color:#0a7e07;">✅ Logo dirèk tèt fich - Fèmti respekte - Modpas obligatwa - '+(isProprio?'PROPRIO C&D2026':'VANDÈ')+' - Lave chodyè w</div>';
-}
-function printTicket(){
- if(!lignes.length) return;
- // FÈMTI RESPEKTE - verifye anvan enprime
- var closedInSel=selTir.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; });
- if(closedInSel.length>0){
-  alert('⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closedInSel.join(', ')+' - Pa ka enprime - Lè fèmti dwe respekte - Konekte ak proprio C&D2026 pou bypass');
-  return;
- }
- var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now(),vendor:currentVendor?currentVendor.name:'POZO'};
- fiches.unshift(f); localStorage.setItem('cdv43',JSON.stringify(fiches)); curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); lignes=[]; renderV(); document.getElementById('mise').value=''; document.getElementById('previewArea').innerHTML=''; checkFermti();
-}
-function testPrint(){ var closed=getClosedTirages(); if(closed.length>0 &&!isProprio){ alert('⛔ Gen tiraj fèmen: '+closed.join(', ')+' - Fèmti respekte - Test ak tiraj ouvè sèlman - Proprio C&D2026 ka bypass'); return; } var f={id:'TEST-LOGO',tirages:['GA MIDI (12:15)'],lignes:[{jeu:'BOLET',boul:'55',mise:25}],total:25,ts:Date.now()}; curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); }
-
+function previewTicket(){ if(!lignes.length){ alert('Pa gen liy'); return; } var closedInSel=selTir.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; }); if(closedInSel.length>0){ alert('⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closedInSel.join(', ')); return; } var f={id:'T'+Date.now().toString().slice(-6),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now()}; curTicket=f; var txt=buildTicketTxt(f); var logoHtml=logoBase64?'<img src="'+logoBase64+'" style="max-width:180px;max-height:90px;display:block;margin:0 auto 8px auto;border-radius:50%;background:#fff;">':''; document.getElementById('previewArea').innerHTML='<div class="ticketPreview" style="white-space:pre-line;text-align:center;">'+logoHtml+txt.replace(/\n/g,'<br>')+'</div>'; }
+function printTicket(){ if(!lignes.length) return; var closedInSel=selTir.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; }); if(closedInSel.length>0){ alert('⛔ FÈMTI RESPEKTE - Tiraj fèmen: '+closedInSel.join(', ')+' - Proprio C&D2026 ka bypass'); return; } var f={id:'T'+Date.now().toString().slice(-6),date:new Date().toLocaleString(),tirages:[...selTir],lignes:[...lignes],total:lignes.reduce((a,b)=>a+b.mise,0)*selTir.length,ts:Date.now(),vendor:currentVendor?currentVendor.name:'POZO'}; fiches.unshift(f); localStorage.setItem('cdv43','[]'); localStorage.setItem('cdv43',JSON.stringify(fiches)); curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); lignes=[]; renderV(); document.getElementById('mise').value=''; document.getElementById('previewArea').innerHTML=''; checkFermti(); }
+function testPrint(){ var closed=getClosedTirages(); if(closed.length>0 &&!isProprio){ alert('Gen tiraj fèmen: '+closed.join(', ')+' - Proprio C&D2026 ka bypass'); return; } var f={id:'TEST-LOGO',tirages:['GA MIDI (12:15)'],lignes:[{jeu:'BOLET',boul:'55',mise:25}],total:25,ts:Date.now()}; curTicket=f; var txt=buildTicketTxt(f); var esc=buildTicketESC(f); doPrint(txt,esc); }
 function doCopy(){ var id=document.getElementById('copyId').value.trim(); var f=fiches.find(x=>x.id===id); var r=document.getElementById('copyRes'); if(!f){r.innerHTML='Pa jwenn';return;} r.innerHTML='<div style="background:#fff;padding:8px;border-radius:6px;"><b>'+f.id+'</b><br><div class="btn green" onclick="copyToV(\''+f.id+'\')">Copier</div></div>'; }
-function copyToV(id){ var f=fiches.find(x=>x.id===id); if(!f) return; var closedInFiche=f.tirages.filter(s=>{ var nom=s.split('(')[0].trim(); var t=tiragesData.find(x=>x.nom===nom); return t && isClosed(t) &&!isProprio; }); if(closedInFiche.length>0 &&!isProprio){ alert('⛔ Fiche sa a gen tiraj fèmen: '+closedInFiche.join(', ')+' - Fèmti respekte - Pa ka kopye - Proprio C&D2026 ka bypass'); return; } lignes=[...f.lignes]; selTir=[...f.tirages]; updateLabel(); renderV(); openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
+function copyToV(id){ var f=fiches.find(x=>x.id===id); if(!f) return; lignes=[...f.lignes]; selTir=[...f.tirages]; updateLabel(); renderV(); openTab({target:document.querySelectorAll('.tab')[0]},'vendre'); }
 function renderFiches(){ var c=document.getElementById('listF'); var tir=document.getElementById('fTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir)); c.innerHTML=''; list.slice(0,50).forEach(f=>{ c.innerHTML+='<div style="background:#fff;padding:7px;border-radius:6px;margin-top:5px;font-size:11px;"><b>'+f.id+'</b> '+f.total+'G<br>'+f.tirages.join('/')+'</div>'; }); }
-function doRapport(){ var tir=document.getElementById('rTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir)); var vente=list.reduce((a,b)=>a+b.total,0); var commission=vente*0.10; var gain=0; var balance=vente-commission-gain; var html='<div style="background:#000;color:#0f0;padding:12px;border-radius:6px;font-size:13px;line-height:1.8;">Vente...: <b>'+vente+'G</b><br>Commission: <b>'+commission.toFixed(0)+'G</b><br>Gain ( clients)...: <b>'+gain+'G</b><br>Balance net...: <b style="color:#ff0;">'+balance.toFixed(0)+'G</b><br>----------------<br>Nb: '+list.length+'<br>'+(isProprio?'👑 PROPRIO - C&D2026 - Aksè total - Fèmti respekte':'👤 VANDÈ - '+ (currentVendor?currentVendor.name:'')+' - Modpas obligatwa - Fèmti respekte')+'</div>'; document.getElementById('resRap').innerHTML=html; window._rap={vente,commission,gain,balance,list}; }
-function printRap(){ var r=window._rap; var txt='\x1Ba\x01 C&D VERITE LOTTO RAPPORT\n Vente...: '+r.vente+'G\n Commission: '+r.commission.toFixed(0)+'G\n Gain ( clients)...: '+r.gain.toFixed(0)+'G\n Balance net...: '+r.balance.toFixed(0)+'G\n Nb: '+r.list.length+'\n '+(isProprio?'PROPRIO C&D2026':'VANDÈ')+' - Fèmti respekte - Modpas obligatwa\n Lave chodye w\n\n\n'; doPrint(txt,txt); }
+function doRapport(){ var tir=document.getElementById('rTir').value; var list=fiches; if(tir!=='tous') list=list.filter(f=>f.tirages.join('/').includes(tir)); var vente=list.reduce((a,b)=>a+b.total,0); var commission=vente*0.10; var gain=0; var balance=vente-commission-gain; var html='<div style="background:#000;color:#0f0;padding:12px;border-radius:6px;font-size:13px;line-height:1.8;">Vente...: <b>'+vente+'G</b><br>Commission: <b>'+commission.toFixed(0)+'G</b><br>Gain ( clients)...: <b>'+gain+'G</b><br>Balance net...: <b style="color:#ff0;">'+balance.toFixed(0)+'G</b><br>----------------<br>Nb: '+list.length+'<br>'+(isProprio?'👑 PROPRIO C&D2026 - BUG REPARE - Aksè total':'👤 VANDÈ')+'</div>'; document.getElementById('resRap').innerHTML=html; window._rap={vente,commission,gain,balance,list}; }
+function printRap(){ var r=window._rap; var txt='\x1Ba\x01 C&D VERITE LOTTO RAPPORT\n Vente...: '+r.vente+'G\n Commission: '+r.commission.toFixed(0)+'G\n Gain ( clients)...: '+r.gain.toFixed(0)+'G\n Balance net...: '+r.balance.toFixed(0)+'G\n Nb: '+r.list.length+'\n '+(isProprio?'PROPRIO C&D2026 BUG REPARE':'VANDÈ')+'\n Lave chodye w\n\n\n'; doPrint(txt,txt); }
+function initDefaut(){ var sw=document.getElementById('defautSwitch'), txt=document.getElementById('defautTxt'), info=document.getElementById('defautInfo'), nameEl=document.getElementById('defautName'), curEl=document.getElementById('currentPrinter'), badge=document.getElementById('printerBadge'); if(useDefaut){ sw.className='switch oui'; txt.textContent='OUI'; txt.style.color='#2e7d32'; info.style.background='#e8f5e9'; info.style.border='2px solid #2e7d32'; info.innerHTML='✅ OUI Défaut '+curPrinter.name+' - Logo 200px - Fèmti respekte - Modpas obligatwa - '+(isProprio?'PROPRIO C&D2026 BUG REPARE':'VANDÈ'); curEl.innerHTML='🖨️ <b>'+curPrinter.name+'</b> - Défaut: OUI'; curEl.style.background='#e8f5e9'; badge.textContent='🖨️ '+curPrinter.name+' - Défaut: OUI - '+(isProprio?'PROPRIO C&D2026':'VANDÈ'); nameEl.textContent=curPrinter.name+' - Défaut OUI'; } else { sw.className='switch non'; txt.textContent='NON'; txt.style.color='#c62828'; info.style.background='#ffebee'; info.style.border='2px solid #c62828'; info.innerHTML='❌ NON Choisir liste'; curEl.innerHTML='🖨️ Choisir - Défaut: NON'; curEl.style.background='#ffebee'; badge.textContent='🖨️ Choisir - Défaut: NON'; nameEl.textContent='Choisir - Défaut NON'; } localStorage.setItem('useDefaut_v36',JSON.stringify(useDefaut)); }
+function toggleDefaut(){ useDefaut=!useDefaut; initDefaut(); lg('Défaut '+(useDefaut?'OUI':'NON')); if(!useDefaut) scanToutesImprimantes(); }
+function scanToutesImprimantes(){ var list=document.getElementById('printerList'); list.innerHTML=''; var printers=[{name:'GwoFos-G001',addr:'00:11:22:33:44:55'},{name:'InnerPrinter',addr:'Sunmi'},{name:'RawBT Printer',addr:'58mm'}]; printers.forEach(p=>{ var d=document.createElement('div'); d.className='printerItem'; if(p.name===curPrinter.name && useDefaut) d.classList.add('sel'); d.innerHTML='<div><b>🖨️ '+p.name+'</b> - '+p.addr+'</div><div>'+(p.name===curPrinter.name&&useDefaut?'✅':'➕')+'</div>'; d.onclick=function(){ curPrinter={name:p.name,addr:p.addr}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); initDefaut(); document.querySelectorAll('.printerItem').forEach(e=>e.classList.remove('sel')); if(useDefaut) this.classList.add('sel'); }; list.appendChild(d); }); if(navigator.bluetooth){ var btn=document.createElement('div'); btn.className='btn orange'; btn.style.padding='16px'; btn.textContent='📡 SCAN LIBRE'; btn.onclick=async()=>{ try{ var dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true}); var d=document.createElement('div'); d.className='printerItem sel'; d.innerHTML='<div><b>📡 '+(dev.name||'BT')+'</b></div><div>✅</div>'; list.appendChild(d); curPrinter={name:dev.name||'BT',addr:dev.id.substring(0,17)}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); initDefaut(); }catch(e){} }; list.appendChild(btn); } }
+function updateFermtiList(){ var c=document.getElementById('listFermti'); if(!c) return; var now=new Date(); var cur=now.getHours()*60+now.getMinutes(); var html=''; tiragesData.forEach(t=>{ var p=t.fermeti.split(':'); var ferm=parseInt(p[0])*60+parseInt(p[1]); var diff=ferm-cur; var status=diff<=0?'🔒 FÈMEN':(diff<=15?'⚠️ '+diff+'min':'✅ '+diff+'min'); var color=diff<=0?'#c62828':(diff<=15?'#ff9800':'#2e7d32'); html+='<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px solid #eee;"><span>'+t.nom+' Fèmti '+t.fermeti+'</span><span style="color:'+color+';font-weight:bold;">'+status+'</span></div>'; }); c.innerHTML=html; }
+function updateVendeursProprio(){ var c=document.getElementById('listVendeursProprio'); if(!c) return; if(vendors.length===0){ c.innerHTML='Pa gen vandè'; return; } var html=''; vendors.forEach(v=>{ html+='<div style="display:flex;justify-content:space-between;padding:3px 6px;border-bottom:1px dashed #333;">'+v.name+' - '+v.phone+' <span onclick="if(confirm(\'Efase '+v.name+'?\')){ vendors=vendors.filter(x=>x.name!==\\''+v.name+'\\'); localStorage.setItem(\\'vendors_v38\\',JSON.stringify(vendors)); updateVendeursProprio(); initVendorsSelect(); }" style="color:red;cursor:pointer;">✕</span></div>'; }); c.innerHTML=html; }
+function resetFermti(){ if(!isProprio){ alert('Sèlman PROPRIO'); return; } alert('Fèmti se lè reyèl'); }
+function clearAllFiches(){ if(!isProprio){ alert('Sèlman PROPRIO'); return; } if(!confirm('Efase tout fich?')) return; fiches=[]; localStorage.setItem('cdv43','[]'); renderFiches(); doRapport(); }
+function changeOwnPass(){ if(!currentVendor || isProprio){ if(isProprio){ alert('PROPRIO modpas: C&D2026'); return; } alert('Konekte anvan'); return; } var oldP=prompt('Ansyen modpas:'); if(oldP===null) return; if(oldP!==currentVendor.pass){ alert('Ansyen pa bon'); return; } var newP=prompt('Nouvo modpas:'); if(!newP){ alert('Pa ka vid'); return; } currentVendor.pass=newP; var idx=vendors.findIndex(x=>x.name===currentVendor.name); if(idx>=0) vendors[idx].pass=newP; localStorage.setItem('vendors_v38',JSON.stringify(vendors)); localStorage.setItem('currentVendor_v43',JSON.stringify(currentVendor)); alert('Modpas chanje'); }
 
-function initDefaut(){
- var sw=document.getElementById('defautSwitch'), txt=document.getElementById('defautTxt'), info=document.getElementById('defautInfo'), nameEl=document.getElementById('defautName'), curEl=document.getElementById('currentPrinter'), badge=document.getElementById('printerBadge');
- if(useDefaut){ sw.className='switch oui'; txt.textContent='OUI'; txt.style.color='#2e7d32'; info.style.background='#e8f5e9'; info.style.border='2px solid #2e7d32'; info.innerHTML='✅ <b>OUI:</b> Défaut '+curPrinter.name+' - Logo 200px - Fèmti respekte - Modpas obligatwa - '+(isProprio?'PROPRIO C&D2026':'VANDÈ'); curEl.innerHTML='🖨️ <b>'+curPrinter.name+'</b> - Défaut: OUI - Logo OK - Fèmti respekte - Modpas obligatwa'; curEl.style.background='#e8f5e9'; badge.textContent='🖨️ '+curPrinter.name+' - Défaut: OUI - Logo OK - Fèmti RESPEKTE - '+(isProprio?'PROPRIO':'VANDÈ'); nameEl.textContent=curPrinter.name+' - Défaut OUI'; }
- else { sw.className='switch non'; txt.textContent='NON'; txt.style.color='#c62828'; info.style.background='#ffebee'; info.style.border='2px solid #c62828'; info.innerHTML='❌ <b>NON:</b> Choisir liste - Recherche toutes - Fèmti respekte - Modpas obligatwa'; curEl.innerHTML='🖨️ Choisir - Défaut: NON - Fèmti respekte'; curEl.style.background='#ffebee'; badge.textContent='🖨️ Choisir - Défaut: NON - Fèmti RESPEKTE'; nameEl.textContent='Choisir - Défaut NON'; }
- localStorage.setItem('useDefaut_v36',JSON.stringify(useDefaut));
-}
-function toggleDefaut(){ useDefaut=!useDefaut; initDefaut(); lg('Défaut '+(useDefaut?'OUI':'NON')+' - Fèmti respekte - Modpas obligatwa - '+(isProprio?'PROPRIO':'VANDÈ')); if(!useDefaut) scanToutesImprimantes(); }
-function scanToutesImprimantes(){
- var list=document.getElementById('printerList'); list.innerHTML=''; lg('🔍 1- Ajoute une imprimante - Recherche toutes - Fèmti respekte - Modpas obligatwa');
- var printers=[{name:'GwoFos-G001',addr:'00:11:22:33:44:55'},{name:'InnerPrinter',addr:'Sunmi'},{name:'RawBT Printer',addr:'58mm'}];
- printers.forEach(p=>{
-  var d=document.createElement('div'); d.className='printerItem'; if(p.name===curPrinter.name && useDefaut) d.classList.add('sel');
-  d.innerHTML='<div><b>🖨️ '+p.name+'</b> - '+p.addr+'</div><div>'+(p.name===curPrinter.name&&useDefaut?'✅':'➕')+'</div>';
-  d.onclick=function(){ curPrinter={name:p.name,addr:p.addr}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); initDefaut(); document.querySelectorAll('.printerItem').forEach(e=>e.classList.remove('sel')); if(useDefaut) this.classList.add('sel'); lg('✅ Associé: '+p.name+' - Fèmti respekte - Modpas obligatwa'); };
-  list.appendChild(d);
- });
- if(navigator.bluetooth){
-  var btn=document.createElement('div'); btn.className='btn orange'; btn.style.padding='16px'; btn.textContent='📡 SCAN LIBRE - N\'IMPORTE QUELLE - Recherche toutes - Logo OK - Fèmti respekte';
-  btn.onclick=async()=>{ try{ var dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true}); var d=document.createElement('div'); d.className='printerItem sel'; d.innerHTML='<div><b>📡 '+(dev.name||'BT')+'</b></div><div>✅</div>'; list.appendChild(d); curPrinter={name:dev.name||'BT',addr:dev.id.substring(0,17)}; localStorage.setItem('cd_printer_v36',JSON.stringify(curPrinter)); initDefaut(); }catch(e){} };
-  list.appendChild(btn);
- }
-}
-function updateFermtiList(){
- var c=document.getElementById('listFermti'); if(!c) return;
- var now=new Date(); var cur=now.getHours()*60+now.getMinutes();
- var html='';
- tiragesData.forEach(t=>{
-  var p=t.fermeti.split(':'); var ferm=parseInt(p[0])*60+parseInt(p[1]);
-  var diff=ferm-cur;
-  var status=diff<=0?'🔒 FÈMEN - Fèmti respekte':(diff<=15?'⚠️ Prèske fèmen '+diff+'min':'✅ Ouvè '+diff+'min');
-  var color=diff<=0?'#c62828':(diff<=15?'#ff9800':'#2e7d32');
-  html+='<div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px solid #eee;"><span>'+t.nom+' ('+t.heure+') Fèmti '+t.fermeti+'</span><span style="color:'+color+';font-weight:bold;">'+status+'</span></div>';
- });
- c.innerHTML=html;
-}
-function updateVendeursProprio(){
- var c=document.getElementById('listVendeursProprio'); if(!c) return;
- if(vendors.length===0){ c.innerHTML='Pa gen vandè - Kreye vandè - Modpas obligatwa'; return; }
- var html='';
- vendors.forEach(v=>{
-  html+='<div style="display:flex;justify-content:space-between;padding:3px 6px;border-bottom:1px dashed #333;">'+v.name+' - '+v.phone+' - Modpas: **** <span onclick="if(confirm(\'Efase vandè '+v.name+'? Modpas obligatwa ap efase\')){ vendors=vendors.filter(x=>x.name!==\\''+v.name+'\\'); localStorage.setItem(\\'vendors_v38\\',JSON.stringify(vendors)); updateVendeursProprio(); initVendorsSelect(); }" style="color:red;cursor:pointer;">✕ Efase</span></div>';
- });
- c.innerHTML=html;
-}
-function resetFermti(){ if(!isProprio){ alert('⛔ Sèlman PROPRIO ka reset fèmti - Konekte ak proprio C&D2026 - Modpas obligatwa - Fèmti respekte'); return; } alert('Fèmti se lè sistèm - Pa ka reset - Se lè reyèl - Tiraj fèmen selon lè - Fèmti respekte - Konekte ak proprio ka bypass pou test sèlman'); lg('👑 PROPRIO - Reset fèmti - Fèmti se lè reyèl - Pa ka chanje - Bypass sèlman pou proprio'); }
-function clearAllFiches(){ if(!isProprio){ alert('⛔ Sèlman PROPRIO ka efase tout fich - Konekte ak proprio C&D2026'); return; } if(!confirm('👑 PROPRIO - Efase tout fich? Modpas obligatwa - Fèmti respekte')) return; fiches=[]; localStorage.setItem('cdv43','[]'); renderFiches(); doRapport(); lg('👑 PROPRIO efase tout fich - Modpas obligatwa - Fèmti respekte'); }
-function changeOwnPass(){
- if(!currentVendor || isProprio){
-  if(isProprio){
-   alert('👑 PROPRIO modpas: C&D2026 - Pa ka chanje isit la - Chanje nan kod la si ou vle');
-   return;
-  }
-  alert('Konekte anvan - Modpas obligatwa');
-  return;
- }
- var oldP=prompt('Mete ansyen modpas ou - Modpas obligatwa:');
- if(oldP===null) return;
- if(oldP!==currentVendor.pass){ alert('⛔ Ansyen modpas pa bon - Modpas obligatwa'); return; }
- var newP=prompt('Mete nouvo modpas ou - Modpas obligatwa - Pa ka vid:');
- if(!newP){ alert('⛔ Nouvo modpas pa ka vid - Modpas obligatwa'); return; }
- currentVendor.pass=newP;
- var idx=vendors.findIndex(x=>x.name===currentVendor.name);
- if(idx>=0) vendors[idx].pass=newP;
- localStorage.setItem('vendors_v38',JSON.stringify(vendors));
- localStorage.setItem('currentVendor_v43',JSON.stringify(currentVendor));
- lg('🔑 Modpas chanje - '+currentVendor.name+' - Modpas obligatwa - Fèmti respekte');
- alert('✅ Modpas chanje - Vandè mete l poukont li - Modpas obligatwa pou antre ankò - Fèmti respekte');
-}
-
-// MODPAS OBLIGATWA - Pa gen auto-login - Toujou mande modpas
-function initLoginObligatwa(){
- // Efase auto-login - Modpas obligatwa chak fwa
- var saved=localStorage.getItem('currentVendor_v43');
- var isPropSaved=localStorage.getItem('isProprio_v43')==='true';
- // Pa auto-login - Montre ekran login obligatwa
- document.getElementById('loginScreen').style.display='flex';
- setMode('vendeur');
- initVendorsSelect();
- lg('🔐 MODPAS OBLIGATWA - Pa gen antre san modpas - Fèmti respekte - Konekte ak proprio C&D2026 - Logo dirèk tèt fich - 2 opsyon paramèt - Kaz Miz vid');
-}
-
+function initLoginObligatwa(){ document.getElementById('loginScreen').style.display='flex'; setMode('vendeur'); initVendorsSelect(); lg('🔐 V43.1 HOTFIX - BUG REPARE - Proprio separe - Modpas vandè pa respekte nan proprio - C&D2026 sèlman - Modpas obligatwa - Fèmti respekte'); }
 setInterval(()=>{ document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); checkFermti(); },60000);
 setInterval(()=>{ document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-HT',{hour12:false}); },1000);
 document.getElementById('boul').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9xX]/g,''); });
 document.getElementById('mise').addEventListener('input',function(){ this.value=this.value.replace(/[^0-9]/g,''); });
 document.addEventListener('click',function(e){ var wrap=document.querySelector('.tirajMultiWrap'); if(wrap&&!wrap.contains(e.target)) closeDrop(); });
-initDefaut(); initLoginObligatwa();
-setInterval(checkFermti,30000);
+initDefaut(); initLoginObligatwa(); setInterval(checkFermti,30000);
 </script>
 </body>
 </html>
