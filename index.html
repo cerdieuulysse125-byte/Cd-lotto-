@@ -1,117 +1,175 @@
-<!-- V61 MULTI-PROPRETAIRE - Super Admin vann sistèm ak X, Y - sys-CdU.com -->
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SYS-CDU.COM - SUPER ADMIN SAAS</title>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<style>
+*{box-sizing:border-box;font-family:Arial;font-weight:900}
+body{background:#eee;margin:0;padding:10px}
+.card{background:#fff;border:4px solid #000;border-radius:16px;padding:12px;margin-bottom:12px}
+.input{width:100%;padding:14px;border:3px solid #000;border-radius:12px;margin:6px 0;text-transform:uppercase}
+.btn{padding:14px;border:3px solid #000;border-radius:12px;text-align:center;cursor:pointer;margin:6px 0}
+.yellow{background:#ff0}.green{background:#0f0}.red{background:#f00;color:#fff}.black{background:#000;color:#ff0}
+.tab{display:flex;gap:6px;margin-bottom:10px;overflow:auto}
+.tab div{padding:10px;border:3px solid #000;border-radius:12px;background:#fff;white-space:nowrap;cursor:pointer}
+.tab.active{background:#000;color:#ff0}
+.tabContent{display:none}.tabContent.active{display:block}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="card" style="max-width:400px;margin:50px auto;border:6px solid #000;background:#ff0;">
+<div style="text-align:center;font-size:20px;">👑 SYS-CDU.COM<br>SUPER ADMIN LOGIN</div>
+<input id="lName" placeholder="NON - SUPER oswa X, Y" class="input">
+<input id="lPass" placeholder="MODPAS - 000000" class="input" type="password" inputmode="numeric">
+<div class="btn black" onclick="login()">🔑 KONEKTE</div>
+<div style="font-size:10px;text-align:center;margin-top:8px;">SUPER / 000000 = Super Admin<br>X / 1234 = Proprio X - SAAS</div>
+</div>
+
+<div id="mainApp" style="display:none;">
+<div class="card" style="background:#000;color:#ff0;text-align:center;">
+<span id="whoIs">SUPER ADMIN</span> | <span id="proprioLogo">C&D CdU LOTTO</span> | <span onclick="logout()" style="background:#f00;padding:4px 8px;border-radius:8px;color:#fff;cursor:pointer;">DEKONEKTE</span>
+</div>
+
+<div class="tab">
+<div id="tabSuper" class="active" onclick="showTab('superAdmin')">👑 SUPER ADMIN</div>
+<div id="tabVendeurs" onclick="showTab('vendeurs')">👥 VANDEURS</div>
+</div>
+
 <div id="superAdmin" class="tabContent active">
 <div class="card" style="border:4px solid #000;background:#ff0;">
-<div style="font-weight:900;text-align:center;background:#000;color:#ff0;padding:12px;border-radius:12px;">👑 SUPER ADMIN CdU - Vann sistèm bòlèt ak lòt propriétaire - X, Y, Z - SAAS - sys-CdU.com - Ranplase DGL pa CdU</div>
+<div style="background:#000;color:#ff0;padding:12px;border-radius:12px;text-align:center;">👑 SUPER ADMIN CdU - Vann sistèm ak X, Y, Z - $/mwa - cd-lotto</div>
 <div style="margin-top:10px;background:#fff;border:3px solid #000;border-radius:12px;padding:10px;">
-<div style="font-weight:900;">Kreye nouvo propriétaire bòlèt - Vann li sistèm nan - X, Y, Z - SAAS</div>
-<input id="newProprioXName" placeholder="Non proprio X - Ex: X - LOTTO X" class="input" style="text-transform:uppercase;">
-<input id="newProprioXPass" placeholder="Modpas proprio X - Chif sèlman - 1234" class="input" inputmode="numeric">
-<input id="newProprioXLogo" placeholder="Logo X - Ex: C&D X LOTTO - X VERITE LOTTO" class="input">
-<input id="newProprioXPrix" type="number" value="60" placeholder="Prix 1er lot X - 60 vs 50 - Yon vandè 60 lòt 50" class="input">
-<input id="newProprioXPriceSell" type="number" value="100" placeholder="Pri vann sistèm ak X - $/mwa - 100$ - SAAS" class="input">
-<div class="btn yellow" onclick="ajouterProprioMulti()" style="padding:16px;border:4px solid #000;">👑 ➕ VANN SISTÈM AK PROPRIO X - Kreye proprio bòlèt X - SAAS - sys-CdU.com</div>
+<input id="newProprioXName" placeholder="NON PROPRIO - Ex: X" class="input">
+<input id="newProprioXPass" placeholder="MODPAS - Ex: 1234" class="input" inputmode="numeric">
+<input id="newProprioXLogo" placeholder="LOGO - Ex: C&D X LOTTO" class="input">
+<input id="newProprioXPrix" type="number" value="60" placeholder="PRIX 1er LOT" class="input">
+<input id="newProprioXPriceSell" type="number" value="100" placeholder="PRI VANN $/MWA" class="input">
+<div class="btn yellow" onclick="ajouterProprioMulti()" style="border:4px solid #000;">👑 VANN SISTEM AK PROPRIO SA</div>
 </div>
-<div id="listPropriosMulti" style="margin-top:10px;max-height:600px;overflow:auto;"></div>
-<div id="superStats" style="margin-top:10px;background:#000;color:#0f0;padding:12px;border-radius:12px;border:3px solid #0f0;text-align:center;font-weight:900;">Super Admin CdU - 0 proprio - 0$ /mwa - SAAS - sys-CdU.com - Klòn DGL</div>
+<div id="listPropriosMulti" style="margin-top:10px;"></div>
+<div id="superStats" style="margin-top:10px;background:#000;color:#0f0;padding:12px;border-radius:12px;text-align:center;">0 proprio</div>
+</div>
+</div>
+
+<div id="vendeurs" class="tabContent">
+<div class="card">
+<div id="titleVendeurs">👥 VANDEURS</div>
+<input id="newVendName" placeholder="NON VANDEUR - Ex: X1" class="input">
+<input id="newVendPass" placeholder="MODPAS - 1111" class="input" inputmode="numeric">
+<div class="btn green" onclick="ajouterVendeur()">➕ KREYE VANDEUR</div>
+<div id="listVendeurs" style="margin-top:10px;"></div>
+</div>
 </div>
 </div>
 
 <script>
-// V61 MULTI - Super Admin vann sistèm ak X, Y - SAAS - Firebase multi-tenant
-var proprioActif = localStorage.getItem('proprioActif') || null; // X oswa Y
+const firebaseConfig = {
+  apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
+  authDomain: "cd-lotto.firebaseapp.com",
+  databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",
+  projectId: "cd-lotto",
+  storageBucket: "cd-lotto.firebasestorage.app",
+  messagingSenderId: "671091732195",
+  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6",
+  measurementId: "G-TWK9N38BS0"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var currentUser=null; var proprioActif=null;
 
-function ajouterProprioMulti(){
-  var name = document.getElementById('newProprioXName').value.trim().toUpperCase();
-  var pass = document.getElementById('newProprioXPass').value.trim();
-  var logo = document.getElementById('newProprioXLogo').value.trim() || 'C&D '+name+' LOTTO';
-  var prix1 = parseInt(document.getElementById('newProprioXPrix').value)||60;
-  var priceSell = parseInt(document.getElementById('newProprioXPriceSell').value)||100;
-  if(!name||!pass) return alert('Non proprio X + modpas X obligatwa - SAAS - sys-CdU.com');
-  if(!/^\d+$/.test(pass)) return alert('Modpas proprio X chif sèlman');
-
-  var proprioData = {
-    name:name, pass:pass, logo:logo, prix1:prix1, priceSell:priceSell,
-    ouvert:true, ts:Date.now(), vendeurs:0, fiches:0, vente:0,
-    createdBy:'SUPER', type:'proprio_bolèt', system:'sys-cdu.com'
-  };
-
-  // Kreye proprio nan Firebase - config/proprietaires/X - Multi-tenant
-  db.ref('config/proprietaires/'+name).set(proprioData).then(()=>{
-    // Kreye espas pou li - vendors/X/ - fiches/X/ - prix/X/
-    db.ref('vendors_'+name).set({info:'Vendeurs pou proprio '+name+' - '+logo});
-    db.ref('fiches_'+name).set({info:'Fiches pou proprio '+name});
-    db.ref('config/prix_'+name).set({lot1:prix1,lot2:20,lot3:10,m1:1000,l3:500,l4:5000,l5:25000});
-    alert('✅ Proprio bòlèt '+name+' kreye - Sistèm vann ak li - '+logo+' - Prix 1er lot '+prix1+' - Pri vann $'+priceSell+'/mwa - SAAS - sys-cdu.com - Ranplase DGL pa CdU - Kounya X ka konekte ak '+name+' / '+pass);
-    document.getElementById('newProprioXName').value='';
-    document.getElementById('newProprioXPass').value='';
-    document.getElementById('newProprioXLogo').value='';
+function showTab(id){
+  document.querySelectorAll('.tabContent').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab div').forEach(e=>e.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='superAdmin') document.getElementById('tabSuper').classList.add('active');
+  if(id==='vendeurs') document.getElementById('tabVendeurs').classList.add('active');
+}
+function login(){
+  var n=document.getElementById('lName').value.trim().toUpperCase();
+  var p=document.getElementById('lPass').value.trim();
+  if(n==='SUPER' && p==='000000'){
+    currentUser={type:'SUPER',name:'SUPER'}; afterLogin(); return;
+  }
+  db.ref('config/proprietaires/'+n).once('value').then(s=>{
+    var data=s.val();
+    if(data && String(data.pass)===String(p)){
+      currentUser={type:'PROPRIO',name:n,data:data}; afterLogin();
+    }else alert('Non oswa modpas pa bon - Eseye SUPER / 000000');
   });
 }
-
+function afterLogin(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  if(currentUser.type==='SUPER'){
+    document.getElementById('whoIs').textContent='👑 SUPER ADMIN CdU';
+    renderPropriosMulti();
+  }else{
+    document.getElementById('whoIs').textContent='PROPRIO '+currentUser.name;
+    document.getElementById('proprioLogo').textContent=currentUser.data.logo;
+    document.getElementById('tabSuper').style.display='none';
+    showTab('vendeurs');
+    document.getElementById('titleVendeurs').textContent='👥 VANDEURS POU '+currentUser.name;
+    renderVendeurs(currentUser.name);
+  }
+}
+function ajouterProprioMulti(){
+  var name=document.getElementById('newProprioXName').value.trim().toUpperCase();
+  var pass=document.getElementById('newProprioXPass').value.trim();
+  var logo=document.getElementById('newProprioXLogo').value.trim() || 'C&D '+name+' LOTTO';
+  var prix1=parseInt(document.getElementById('newProprioXPrix').value)||60;
+  var priceSell=parseInt(document.getElementById('newProprioXPriceSell').value)||100;
+  if(!name||!pass) return alert('Non + modpas obligatwa');
+  var data={name:name,pass:pass,logo:logo,prix1:prix1,priceSell:priceSell,ouvert:true,ts:Date.now(),createdBy:'SUPER'};
+  db.ref('config/proprietaires/'+name).set(data).then(()=>{
+    db.ref('vendors_'+name).set({init:true});
+    alert('✅ Proprio '+name+' kreye - Login: '+name+' / '+pass+' - $'+priceSell+'/mwa - syscdu.com');
+  });
+}
 function renderPropriosMulti(){
   db.ref('config/proprietaires').on('value',snap=>{
-    var data=snap.val();
-    var cont=document.getElementById('listPropriosMulti');
-    var stats=document.getElementById('superStats');
-    cont.innerHTML='';
-    var totalProprio=0, totalMoney=0;
-    if(data){
-      for(var k in data){
-        var p=data[k];
-        totalProprio++;
-        totalMoney+=p.priceSell||100;
-        var div=document.createElement('div');
-        div.style.cssText='background:#fff;border:3px solid #000;border-radius:12px;padding:10px;margin-top:8px;';
-        div.innerHTML='<div style="font-weight:900;font-size:12px;">👑 PROPRIO '+p.name+' - '+p.logo+' - Modpas: '+p.pass+' - Prix 1er: '+p.prix1+' - Vann: $'+p.priceSell+'/mwa - '+(p.ouvert?'OUVERT':'FERME')+' - sys-cdu.com - SAAS - Ranplase DGL pa CdU</div><div style="font-size:10px;margin-top:4px;">Vendeurs: '+(p.vendeurs||0)+' - Fiches: '+(p.fiches||0)+' - Vente: '+(p.vente||0)+'G - Kreye pa: '+(p.createdBy||'SUPER')+'</div><div style="display:flex;gap:4px;margin-top:6px;"><div class="btn green" onclick="loginAsProprio(\''+p.name+'\')" style="flex:1;padding:8px;font-size:9px;">🔑 Login kòm '+p.name+' - Wè vandè '+p.name+'</div><div class="btn red" onclick="efaseProprioMulti(\''+p.name+'\')" style="flex:1;padding:8px;font-size:9px;">X Efase '+p.name+'</div><div class="btn yellow" onclick="toggleProprioMulti(\''+p.name+'\')" style="flex:1;padding:8px;font-size:9px;">'+(p.ouvert?'Fèmen':'Ouvri')+'</div></div>';
-        cont.appendChild(div);
-      }
+    var data=snap.val(); var cont=document.getElementById('listPropriosMulti'); cont.innerHTML='';
+    var total=0,money=0;
+    if(!data) return;
+    for(var k in data){
+      var p=data[k]; total++; money+=p.priceSell||0;
+      var div=document.createElement('div'); div.className='card'; div.style.border='3px solid #000';
+      div.innerHTML='<div>👑 '+p.name+' - '+p.logo+' - Pass: '+p.pass+' - $'+p.priceSell+'/mwa</div><div style="display:flex;gap:4px;"><div class="btn green" style="flex:1;" onclick="loginAsProprio(\''+p.name+'\')">🔑 Login '+p.name+'</div><div class="btn red" style="flex:1;" onclick="if(confirm(\'Efase '+p.name+'?\')) db.ref(\'config/proprietaires/'+p.name+'\').remove()">❌ Efase</div></div>';
+      cont.appendChild(div);
     }
-    if(stats) stats.textContent='👑 Super Admin CdU - '+totalProprio+' proprio bòlèt (X, Y, Z...) - $'+totalMoney+' /mwa - SAAS - sys-cdu.com - Klòn DGL - Ranplase DGL pa CdU - Ou vann sistèm nan';
+    document.getElementById('superStats').textContent='👑 '+total+' proprio - $'+money+' /mwa - SAAS sys-cdu.com - cd-lotto';
   });
 }
-
 function loginAsProprio(name){
-  localStorage.setItem('proprioActif',name);
-  proprioActif=name;
-  alert('Kounya ou konekte kòm proprio '+name+' - Ou wè sèlman vandè '+name+' yo, fich '+name+' yo, rapport '+name+' yo - sys-cdu.com - Multi-tenant - SAAS - Klòn DGL');
-  location.reload();
-}
-
-function efaseProprioMulti(name){
-  if(!confirm('Efase proprio bòlèt '+name+'? Tout vandè '+name+' yo ap efase tou - SAAS - sys-cdu.com')) return;
-  db.ref('config/proprietaires/'+name).remove();
-  db.ref('vendors_'+name).remove();
-  db.ref('fiches_'+name).remove();
-}
-
-function toggleProprioMulti(name){
-  db.ref('config/proprietaires/'+name+'/ouvert').once('value').then(s=>{
-    var ouvert=s.val();
-    db.ref('config/proprietaires/'+name+'/ouvert').set(!ouvert);
+  db.ref('config/proprietaires/'+name).once('value').then(s=>{
+    currentUser={type:'PROPRIO',name:name,data:s.val()}; afterLogin();
   });
 }
-
-// Nan vendeur.html - V61 MULTI - Chak vendeur anba proprio
-function loginVendeurMulti(){
-  var name=document.getElementById('vName').value.trim().toUpperCase();
-  var pass=document.getElementById('vPass').value.trim();
-  // Tcheke nan tout proprio - vendors_X/name, vendors_Y/name
-  db.ref('config/proprietaires').once('value').then(snap=>{
-    var proprios=snap.val();
-    var found=false;
-    for(var prop in proprios){
-      db.ref('vendors_'+prop+'/'+name).once('value').then(s2=>{
-        var v=s2.val();
-        if(v && String(v.pass)===String(pass)){
-          found=true;
-          localStorage.setItem('proprioActif',prop);
-          localStorage.setItem('currentVendor',JSON.stringify(v));
-          document.getElementById('loginScreen').style.display='none';
-          initMulti(prop);
-        }
-      });
+function ajouterVendeur(){
+  var prop=currentUser.type==='SUPER'? prompt('Pou ki proprio? X oswa Y') : currentUser.name;
+  if(!prop) return;
+  var name=document.getElementById('newVendName').value.trim().toUpperCase();
+  var pass=document.getElementById('newVendPass').value.trim();
+  if(!name||!pass) return alert('Non + modpas');
+  db.ref('vendors_'+prop+'/'+name).set({name:name,pass:pass,proprio:prop,ts:Date.now()}).then(()=>{
+    alert('Vendeur '+name+' kreye pou '+prop); renderVendeurs(prop);
+  });
+}
+function renderVendeurs(prop){
+  db.ref('vendors_'+prop).on('value',snap=>{
+    var data=snap.val(); var cont=document.getElementById('listVendeurs'); cont.innerHTML='';
+    if(!data) return;
+    for(var k in data){ if(k==='init') continue;
+      var v=data[k]; var div=document.createElement('div'); div.className='card';
+      div.innerHTML='👤 '+v.name+' - Pass: '+v.pass+' - Proprio: '+v.proprio+' - Login: syscdu.com/vendeur.html';
+      cont.appendChild(div);
     }
-    setTimeout(()=>{ if(!found) alert('Non oswa modpas pa kòrèk - Pa wè nan X, Y - SAAS - sys-cdu.com'); },1000);
   });
 }
+function logout(){ localStorage.clear(); location.reload(); }
 </script>
+</body>
+</html>
