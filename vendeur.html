@@ -1,15 +1,71 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vendeur - SYS-CDU.COM</title>
+<html lang="ht">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SYS-CDU - VENDEUR TOTO - V62 FULL</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<style>*{box-sizing:border-box;font-family:Arial;font-weight:900}body{background:#ff0;margin:0;padding:10px}.card{background:#fff;border:4px solid #000;border-radius:16px;padding:12px;margin-bottom:10px}.input{width:100%;padding:14px;border:3px solid #000;border-radius:12px;margin:6px 0;text-transform:uppercase}.btn{padding:14px;border:3px solid #000;border-radius:12px;text-align:center;cursor:pointer}</style>
-</head><body>
-<div id="login" class="card" style="max-width:400px;margin:40px auto;"><div style="text-align:center;">🎫 LOGIN VENDEUR<br>syscdu.com/vendeur.html</div>
-<input id="vName" placeholder="NON - X1" class="input"><input id="vPass" placeholder="MODPAS" class="input" type="password" inputmode="numeric"><div class="btn" style="background:#000;color:#ff0;" onclick="loginV()">KONEKTE - Vendeur X1, Y1</div>
-<div style="font-size:10px;text-align:center;margin-top:6px;">Vendeur anba Proprio X oswa Y - Multi-tenant - cd-lotto</div></div>
-<div id="app" style="display:none;"><div class="card" style="background:#000;color:#ff0;text-align:center;">Vendeur: <span id="vWho"></span> | Proprio: <span id="vProp"></span> | <span onclick="logout()" style="background:#f00;padding:4px 8px;border-radius:8px;">DEKONEKTE</span></div>
-<div class="card">🎫 Espas vant - Fich ou yo ap ale nan <b>fiches_X</b> oswa <b>fiches_Y</b> - Se sèlman proprio ou ka wè yo - SAAS - sys-cdu.com</div></div>
+<style>
+*{box-sizing:border-box;font-family:Arial;font-weight:900}
+body{background:#ff0;margin:0;padding:8px}
+.card{background:#fff;border:4px solid #000;border-radius:16px;padding:10px;margin-bottom:8px}
+.input{width:100%;padding:14px;border:3px solid #000;border-radius:12px;margin:4px 0;text-transform:uppercase;font-size:16px}
+.btn{padding:14px;border:3px solid #000;border-radius:12px;text-align:center;cursor:pointer;margin:4px 0}
+.yellow{background:#ff0}.green{background:#0f0}.red{background:#f00;color:#fff}.black{background:#000;color:#ff0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fichLine{border-bottom:2px solid #000;padding:6px;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<div id="login" class="card" style="max-width:400px;margin:40px auto;">
+<div style="text-align:center;font-size:18px;">🎫 LOGIN VENDEUR<br>SYS-CDU.COM</div>
+<input id="vName" placeholder="NON - TOTO, JEAN, X1" class="input">
+<input id="vPass" placeholder="MODPAS" class="input" type="password" inputmode="numeric">
+<div class="btn black" onclick="loginV()">🔑 KONEKTE</div>
+</div>
+
+<div id="app" style="display:none;">
+<div class="card" style="background:#000;color:#ff0;text-align:center;display:flex;justify-content:space-between;align-items:center;">
+<div>Vendeur: <span id="vWho"></span><br><small>Proprio: <span id="vProp"></span> | Prix 1er: <span id="vPrix">60</span></small></div>
+<div style="background:#f00;color:#fff;padding:6px 10px;border-radius:10px;" onclick="logout()">DEKONEKTE</div>
+</div>
+
+<div class="card">
+<div style="text-align:center;background:#000;color:#ff0;padding:8px;border-radius:10px;">🎫 FÈ FICH - Boulèt - <span id="dateNow"></span></div>
+<div class="grid2" style="margin-top:8px;">
+<input id="boul" placeholder="BOUL - 25 - 125" class="input" inputmode="numeric">
+<input id="mise" placeholder="MIZ - 10G" type="number" class="input">
+</div>
+<div class="grid2">
+<select id="typeBoul" class="input">
+<option value="BOLET">BOLET 2CHIF - 60</option>
+<option value="LOTO3">LOTO3 - 300</option>
+<option value="LOTO4">LOTO4 - 2000</option>
+<option value="LOTO5">LOTO5 - 10000</option>
+<option value="MARYAJ">MARYAJ - 1000</option>
+</select>
+<input id="tiraj" class="input" value="NEW YORK - FLORIDA - SOIR">
+</div>
+<div class="btn yellow" style="border:4px solid #000;font-size:18px;" onclick="ajouteBoul()">➕ AJOUTE BOUL - 25 x 10G</div>
+
+<div id="listBoul" style="margin-top:8px;max-height:250px;overflow:auto;border:3px solid #000;border-radius:12px;padding:6px;background:#fff;">
+<div style="text-align:center;color:#999;">Okenn boul - Ajoute boul</div>
+</div>
+
+<div style="display:flex;gap:6px;margin-top:8px;">
+<div style="flex:1;background:#000;color:#0f0;padding:12px;border-radius:12px;text-align:center;">Total: <span id="totalMise">0</span>G<br><small id="countBoul">0 boul</small></div>
+<div style="flex:1;" class="btn green" onclick="saveFich()">💾 ANREJISTRE FICH - <span id="totalMise2">0</span>G</div>
+</div>
+<div class="btn red" onclick="effaseTout()">❌ EFase tout boul</div>
+</div>
+
+<div class="card">
+<div style="font-size:12px;">📋 DÈNYE FICH OU YO - Pou proprio <span id="vProp2"></span> sèlman - Pa wè X si ou se TOTO</div>
+<div id="listFiches" style="max-height:400px;overflow:auto;margin-top:6px;"></div>
+</div>
+</div>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
@@ -18,28 +74,120 @@ const firebaseConfig = {
   projectId: "cd-lotto",
   storageBucket: "cd-lotto.firebasestorage.app",
   messagingSenderId: "671091732195",
-  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6",
-  measurementId: "G-TWK9N38BS0"
+  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6"
 };
-firebase.initializeApp(firebaseConfig); var db=firebase.database();
+firebase.initializeApp(firebaseConfig);
+var db=firebase.database();
+
+var currentVendeur=null;
+var currentProprio=null;
+var prix1er=60;
+var boulTemp=[];
+
+document.getElementById('dateNow').textContent=new Date().toLocaleDateString('fr-HT');
+
 function loginV(){
   var n=document.getElementById('vName').value.trim().toUpperCase();
   var p=document.getElementById('vPass').value.trim();
+  if(!n||!p) return alert('Non + modpas');
   db.ref('config/proprietaires').once('value').then(snap=>{
     var props=snap.val(); var found=false;
+    if(!props) return alert('Pa gen proprio - Kreye TOTO anvan sou index.html');
+    var promises=[];
     for(var prop in props){
-      (function(pr){
-        db.ref('vendors_'+pr+'/'+n).once('value').then(s2=>{
-          var v=s2.val(); if(v && String(v.pass)===String(p)){
-            found=true; localStorage.setItem('currentVendor',JSON.stringify(v));
-            document.getElementById('login').style.display='none'; document.getElementById('app').style.display='block';
-            document.getElementById('vWho').textContent=v.name; document.getElementById('vProp').textContent=v.proprio;
-          }
-        });
-      })(prop);
+      let pr=prop;
+      promises.push(db.ref('vendors_'+pr+'/'+n).once('value').then(s2=>{
+        var v=s2.val();
+        if(v && String(v.pass)===String(p)){
+          found=true;
+          currentVendeur=v; currentProprio=pr;
+          db.ref('config/proprietaires/'+pr).once('value').then(sp=>{
+            var pd=sp.val(); prix1er=pd.prix1||60;
+            document.getElementById('vPrix').textContent=prix1er;
+            afterLoginV();
+          });
+        }
+      }));
     }
-    setTimeout(()=>{if(!found) alert('Non oswa modpas pa bon - Pa jwenn nan X, Y');},1500);
+    Promise.all(promises).then(()=>{ setTimeout(()=>{ if(!found) alert('Non oswa modpas pa bon - Pa jwenn '+n+' nan TOTO, X, Y'); },500); });
   });
 }
+
+function afterLoginV(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('vWho').textContent=currentVendeur.name;
+  document.getElementById('vProp').textContent=currentProprio;
+  document.getElementById('vProp2').textContent=currentProprio;
+  renderFiches();
+}
+
+function ajouteBoul(){
+  var b=document.getElementById('boul').value.trim();
+  var m=parseInt(document.getElementById('mise').value)||0;
+  var t=document.getElementById('typeBoul').value;
+  var tir=document.getElementById('tiraj').value.trim();
+  if(!b||!m) return alert('Boul + miz obligatwa - Ex: 25 + 10G');
+  if(b.length>5) return alert('Boul twò long');
+  boulTemp.push({boul:b,mise:m,type:t,tiraj:tir,ts:Date.now()});
+  document.getElementById('boul').value=''; document.getElementById('mise').value='';
+  renderTemp();
+}
+
+function renderTemp(){
+  var cont=document.getElementById('listBoul'); cont.innerHTML='';
+  var total=0;
+  boulTemp.forEach((item,i)=>{
+    total+=item.mise;
+    var div=document.createElement('div'); div.className='fichLine';
+    div.innerHTML='<div>'+item.boul+' - '+item.type+' - '+item.tiraj+'</div><div>'+item.mise+'G <span style="color:#f00;" onclick="boulTemp.splice('+i+',1);renderTemp()">❌</span></div>';
+    cont.appendChild(div);
+  });
+  document.getElementById('totalMise').textContent=total;
+  document.getElementById('totalMise2').textContent=total;
+  document.getElementById('countBoul').textContent=boulTemp.length+' boul';
+  if(boulTemp.length===0) cont.innerHTML='<div style="text-align:center;color:#999;">Okenn boul</div>';
+}
+
+function effaseTout(){ boulTemp=[]; renderTemp(); }
+
+function saveFich(){
+  if(boulTemp.length===0) return alert('Ajoute boul anvan');
+  var total=0; boulTemp.forEach(b=>total+=b.mise);
+  var fichId='FICH_'+Date.now();
+  var fichData={
+    id:fichId,
+    vendeur:currentVendeur.name,
+    proprio:currentProprio,
+    bouls:boulTemp,
+    total:total,
+    date:new Date().toLocaleString('fr-HT'),
+    ts:Date.now(),
+    tiraj:document.getElementById('tiraj').value
+  };
+  // SAUVE NAN fiches_TOTO / fiches_X / fiches_Y - Se sèlman proprio a ka wè li!
+  db.ref('fiches_'+currentProprio+'/'+currentVendeur.name+'/'+fichId).set(fichData).then(()=>{
+    alert('✅ FICH ANREJISTRE - '+fichId+' - '+total+'G - Pou Proprio '+currentProprio+' sèlman - Pa wè pa X si ou se TOTO');
+    boulTemp=[]; renderTemp(); renderFiches();
+  });
+}
+
+function renderFiches(){
+  db.ref('fiches_'+currentProprio+'/'+currentVendeur.name).on('value',snap=>{
+    var data=snap.val(); var cont=document.getElementById('listFiches'); cont.innerHTML='';
+    if(!data){ cont.innerHTML='<div style="text-align:center;color:#999;">Okenn fich</div>'; return; }
+    var arr=[]; for(var k in data) arr.push(data[k]);
+    arr.sort((a,b)=>b.ts-a.ts);
+    arr.slice(0,20).forEach(f=>{
+      var div=document.createElement('div'); div.className='card'; div.style.border='2px solid #000';
+      var boulStr=f.bouls.map(b=>b.boul+'('+b.mise+'G)').join(', ');
+      div.innerHTML='<div style="font-size:11px;">'+f.id+' - '+f.date+' - '+f.total+'G - '+f.vendeur+' / '+f.proprio+'</div><div style="font-size:10px;margin-top:4px;">'+boulStr+'</div><div style="display:flex;gap:4px;margin-top:6px;"><div class="btn yellow" style="flex:1;padding:6px;font-size:10px;" onclick="window.print()">🖨️ Enprime</div><div class="btn red" style="flex:1;padding:6px;font-size:10px;" onclick="if(confirm(\'Efase fich?\')) db.ref(\'fiches_'+currentProprio+'/'+f.vendeur+'/'+f.id+'\').remove()">❌ Efase</div></div>';
+      cont.appendChild(div);
+    });
+  });
+}
+
 function logout(){ localStorage.clear(); location.reload(); }
-</script></body></html>
+</script>
+</body>
+</html>
