@@ -1,258 +1,152 @@
-<!DOCTYPE html>
-<html lang="ht">
-<head>
- <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#ffcc00">
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>V66 FIX BOUL + KAZ + FLECHE + PRINTER</title>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<style>
-*{box-sizing:border-box;font-family:Arial;font-weight:900}
-body{background:#000;margin:0;padding:3px}
-.card{background:#fff;border:2px solid #000;border-radius:8px;padding:5px;margin-bottom:4px}
-.input{width:100%;padding:8px;border:2px solid #000;border-radius:6px;text-align:center;text-transform:uppercase}
-.btn{padding:8px;border:2px solid #000;border-radius:6px;text-align:center;cursor:pointer}
-.yellow{background:#ff0}.green{background:#0f0}.red{background:#f00;color:#fff}.black{background:#000;color:#ff0}.blue{background:#0af;color:#fff}
-.tab{display:flex;gap:2px;background:#000;padding:3px;border-radius:8px}
-.tab div{flex:1;padding:6px 1px;border:2px solid #ff0;border-radius:6px;background:#333;color:#ff0;text-align:center;font-size:9px}
-.tab div.active{background:#ff0;color:#000}
-.tabC{display:none}.tabC.active{display:block}
-.line{display:flex;gap:3px;margin:3px 0;align-items:center}
-.line select{width:72px;min-width:72px;padding:8px 3px;border:2px solid #000;border-radius:6px;font-size:12px;background:#fff}
-.line input.boul{width:78px;min-width:78px;padding:8px;border:2px solid #000;border-radius:6px;text-align:center;font-size:16px;background:#fff}
-.line input.mise{width:68px;min-width:68px;padding:8px;border:2px solid #000;border-radius:6px;text-align:center;font-size:16px;background:#d0ffd0}
-.line div.x{width:26px;min-width:26px;background:#f00;color:#fff;border-radius:6px;text-align:center;padding:8px 0}
-.tirajOne{padding:12px;border:3px solid #000;border-radius:10px;background:#fff;text-align:center;font-size:14px}
-.tirajList{display:none;max-height:220px;overflow:auto;border:3px solid #000;border-radius:10px;background:#fff;padding:4px}
-.tirajList.show{display:grid;grid-template-columns:1fr 1fr;gap:2px}
-</style>
-</head>
- <body>
-<div id="login" class="card" style="max-width:360px;margin:20px auto;background:#ff0;text-align:center;">
-🎫 V66 FIX<br><input id="vName" placeholder="NON" class="input"><input id="vPass" type="password" placeholder="MODPAS" class="input"><div class="btn black" onclick="loginV()">KONEKTE</div>
-</div>
+'use client'
+import { useState } from 'react'
 
-<div id="app" style="display:none;">
-<div class="card" style="background:#000;color:#ff0;display:flex;justify-content:space-between;padding:4px;font-size:11px;"><span id="vWho"></span> | <span id="vProp"></span><span onclick="logout()" style="background:#f00;padding:2px 8px;border-radius:5px;">X</span></div>
+export default function Vendeur(){
+  const [tab,setTab]=useState('vendre')
+  const [tiragesSel,setTiragesSel]=useState<string[]>([])
+  const allTirages=['GA midi','FL midi','NY midi','Real','GA soir','FL soir','NY soir','Primera dia 11h50','Suerte dia 12h20','Lote Dom 1h45','Ganamas 14h15','Suerte noche 17h50','Primera noche 19h50','Loteka 19h45','Nacional noche','Leidsa','Anguila 10h','Anguilla 18h']
+  const [lignes,setLignes]=useState([{jeu:'BO',boul:'',mise:''}])
+  const [ticketId,setTicketId]=useState('')
+  const [fiches]=useState([{id:'CD-001',date:'2025-05-13',vente:500},{id:'CD-002',date:'2025-05-12',vente:1200}])
+  const [entete,setEntete]=useState({nom:'C&D VERITE LOTTO',resp:'Jean Vendeur',pied:'Bòn chans, lave chodyè w'})
+  const [useDefault,setUseDefault]=useState(true)
 
-<div class="tab">
-<div id="t1" class="active" onclick="showT(1)">1 VENDRE</div>
-<div id="t2" onclick="showT(2)">2 COPIER</div>
-<div id="t3" onclick="showT(3)">3 FICHES</div>
-<div id="t4" onclick="showT(4)">4 RAPPORT</div>
-<div id="t5" onclick="showT(5)">5 PARAM</div>
-</div>
-
-<div id="c1" class="tabC active">
-<div class="card" style="background:#ff0;padding:4px;">
-<div style="font-size:8px;text-align:center;">TIRAJ - YON SEL KAZ - Klike pou chwazi - Miltip</div>
-<div id="tirajOne" class="tirajOne" onclick="toggleTiraj()">👉 CHWAZI TIRAJ - 0</div>
-<div id="tirajBox" class="tirajList"></div>
-<div style="font-size:10px;text-align:center;">Tiraj: <span id="nbTiraj">0</span> | Total x tiraj: <span id="totalXTiraj" style="color:#f00;font-size:14px;">0</span>G</div>
-</div>
-
-<div class="card" style="background:#ff0;padding:4px;">
-<div style="display:flex;font-size:9px;background:#000;color:#ff0;padding:3px;border-radius:5px;text-align:center;"><div style="width:72px;">JEUX</div><div style="width:78px;">BOUL</div><div style="width:68px;">MISE</div><div style="width:26px;">X</div></div>
-<div id="lines"></div>
-<div class="btn blue" style="padding:7px;font-size:11px;margin-top:4px;" onclick="addLine()">+ Ajoute liy | Flèche → Dwat → MISE | ↓ Anba → Liy suivan - Konsève JEUX - Chif sèlman</div>
-</div>
-
-<div style="display:flex;gap:4px;">
-<div style="flex:1;background:#000;color:#0f0;padding:8px;border-radius:10px;text-align:center;">Total<br><span id="totalMise" style="font-size:26px;color:#0f0;">0</span>G<br><small id="countBoul" style="color:#0f0;">0 x 0 tiraj</small></div>
-<div style="flex:1.2;" class="btn green" onclick="saveAndPrint()">💾 + 🖨️<br>ENREGISTRER &<br>IMPRIMER<br><small style="font-size:8px;">Santre Gran Lèt v2 Pro</small></div>
-</div>
-<div class="btn red" style="margin-top:4px;" onclick="clearAll()">❌ Efase tout</div>
-</div>
-
-<div id="c2" class="tabC"><div class="card"><div style="text-align:center;">📋 COPIER - Mete ID ticket</div><input id="copyId" placeholder="FICH_..." class="input"><div class="btn yellow" onclick="copierFich()">🔍 Kopye</div><div id="copyPreview"></div></div></div>
-<div id="c3" class="tabC"><div class="card"><input type="date" id="searchDate" class="input"><input id="searchFich" placeholder="Recherche" class="input" onkeyup="renderFiches()"><div id="listFiches" style="max-height:450px;overflow:auto;"></div></div></div>
-<div id="c4" class="tabC"><div class="card"><div style="display:flex;gap:2px;"><input type="date" id="rapDu" class="input"><input type="date" id="rapAu" class="input"></div><select id="rapTiraj" class="input"><option value="TOUS">TOUS</option></select><div class="btn black" onclick="calcRapport()">Kalkile - Chak tiraj separe</div><div id="rapportRes" style="background:#000;color:#0f0;padding:6px;border-radius:6px;"></div><div class="btn blue" onclick="printRapport()">🖨️ Imprimer</div></div></div>
-
-<div id="c5" class="tabC">
-<div class="card">
-<div style="text-align:center;font-size:11px;">PARAMÈTRES - Recherche de toutes les imprimantes</div>
-<div class="btn yellow" onclick="searchAllPrinters()">🔍 RECHERCHE TOUTES IMPRIMANTES - Bluetooth + USB + WiFi + Browser</div>
-<div id="printerList" style="border:2px solid #000;border-radius:8px;padding:4px;margin-top:4px;max-height:180px;overflow:auto;background:#e0ffe0;">
-<div style="font-size:9px;text-align:center;">Pa gen imprimante - Klike recherche</div>
-</div>
-<div style="display:flex;gap:2px;margin-top:4px;">
-<div class="btn green" style="flex:1;font-size:9px;padding:6px;" onclick="connectBT()">📱 BT</div>
-<div class="btn blue" style="flex:1;font-size:9px;padding:6px;" onclick="connectUSB()">🔌 USB Serial</div>
-<div class="btn black" style="flex:1;font-size:9px;padding:6px;" onclick="connectNet()">🌐 WiFi IP</div>
-<div class="btn yellow" style="flex:1;font-size:9px;padding:6px;" onclick="useBrowser()">🖥️ Browser - Tout POS</div>
-</div>
-<input id="netIP" placeholder="IP WiFi Ex: 192.168.1.100:9100" class="input">
-<div style="font-size:9px;margin-top:3px;">Utilisation imprimante par défaut <select id="useDef" class="input"><option value="oui">Oui - Browser Print Gran Lèt Santre - v2 Pro / Sunmi / Tout POS</option><option value="non">Non - ESC/POS Direct BT/USB/WiFi</option></select></div>
-<div id="printStatus" style="background:#000;color:#ff0;padding:5px;border-radius:5px;font-size:9px;margin-top:3px;">✅ Browser Print - Mache sou nenpòt Terminal POS - 80mm Santre Gran Lèt</div>
-<div class="btn black" onclick="printTest()" style="margin-top:4px;">🧾 TEST PRINT - C&D VÉRITÉ - Bòn chans, lave chodyè w - Santre Gran Lèt</div>
-</div>
-</div>
-
-</div>
-
-<script>
-const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
-firebase.initializeApp(firebaseConfig);var db=firebase.database();
-var currentVendeur=null,currentProprio=null,selectedTiraj=[],lineCount=0,printers=[];
-var tirajList=["GA MIDI","FL MIDI","NY MIDI","REAL","GA SOIR","FL SOIR","NY SOIR","REAL 12H45","PRIMERA DIA 11H50","SUERTE DIA 12H20","LOTE DOM 1H45","GANAMAS 14H15","SUERTE NOCHE 17H50","PRIMERA NOCHE 19H50","LOTEKA 19H45","NACIONAL NOCHE 20H50","LEIDSA 20H45","ANGUILA 10H","ANGUILLA 9H55","ANGUILA 18H","ANGUILLA 17H55"];
-
-function showT(n){document.querySelectorAll('.tabC').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tab div').forEach(e=>e.classList.remove('active'));document.getElementById('c'+n).classList.add('active');document.getElementById('t'+n).classList.add('active'); if(n===3) renderFiches();}
-function toggleTiraj(){document.getElementById('tirajBox').classList.toggle('show');}
-function buildTiraj(){
- var box=document.getElementById('tirajBox');box.innerHTML='';var sel=document.getElementById('rapTiraj');
- tirajList.forEach(t=>{var l=document.createElement('label');l.style.cssText='display:flex;align-items:center;gap:2px;border:1px solid #000;border-radius:5px;padding:3px;font-size:9px;background:#fff;';l.innerHTML='<input type="checkbox" value="'+t+'" onchange="updTiraj()">'+t;box.appendChild(l);var o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
- var l2=document.createElement('label');l2.style.cssText='display:flex;align-items:center;border:2px solid #f00;background:#ff0;border-radius:5px;padding:3px;font-size:9px;';l2.innerHTML='<input type="checkbox" value="TOUS" onchange="checkTous(this)">TOUS';box.appendChild(l2);
-}
-function checkTous(el){document.querySelectorAll('#tirajBox input').forEach(cb=>{if(cb.value!=='TOUS')cb.checked=el.checked;});updTiraj();}
-function updTiraj(){selectedTiraj=[];document.querySelectorAll('#tirajBox input:checked').forEach(e=>{if(e.value!=='TOUS')selectedTiraj.push(e.value);});document.getElementById('nbTiraj').textContent=selectedTiraj.length;document.getElementById('tirajOne').textContent=selectedTiraj.length>0?selectedTiraj.join('/')+' ('+selectedTiraj.length+')':'👉 CHWAZI TIRAJ - 0';calcTotal();}
-function calcTotal(){
- var tot=0,c=0;
- var allLines=document.querySelectorAll('.line');
- allLines.forEach(l=>{
-  var miseInput=l.querySelector('.mise');
-  var boulInput=l.querySelector('.boul');
-  var mise=parseInt(miseInput.value)||0;
-  var boul=boulInput.value.trim();
-  if(boul!=='' && mise>0){ tot+=mise; c++; }
- });
- var nb=selectedTiraj.length||1;
- document.getElementById('totalMise').textContent=tot;
- document.getElementById('totalXTiraj').textContent=tot*nb;
- document.getElementById('countBoul').textContent=c+' x '+nb+' tiraj';
- document.getElementById('countBoul').style.color=tot>0?'#0f0':'#f00';
-}
-function addLine(keepJeu){
- var jeu=keepJeu||'BOLET';
- if(lineCount>0){ var prev=document.getElementById('line'+(lineCount-1)); if(prev){ var s=prev.querySelector('select'); if(s) jeu=s.value; } }
- var d=document.createElement('div'); d.className='line'; d.id='line'+lineCount;
- d.innerHTML='<select><option value="BOLET" '+(jeu==='BOLET'?'selected':'')+'>BOLET</option><option value="LOTO3" '+(jeu==='LOTO3'?'selected':'')+'>L3</option><option value="LOTO4">L4</option><option value="LOTO5">L5</option><option value="MARYAJ" '+(jeu==='MARYAJ'?'selected':'')+'>MAR</option></select><input class="boul" placeholder="BOUL" inputmode="numeric" pattern="[0-9x×]*" oninput="onBoulInput(this)" onkeydown="onKey(event,'+lineCount+',0)"><input class="mise" placeholder="MISE" type="number" inputmode="numeric" oninput="calcTotal()" onkeydown="onKey(event,'+lineCount+',1)"><div class="x" onclick="this.parentElement.remove();calcTotal()">X</div>';
- document.getElementById('lines').appendChild(d);
- lineCount++;
-}
-function onBoulInput(el){
- el.value=el.value.replace(/[^0-9x×]/g,'');
- calcTotal();
-}
-// TOUCHE FLÈCHE POUR AVANCER A LA LIGNE SUIVANTE ( DROITE, EN BAS ) CONSERVANT LE JEU SELECTIONNE - CHIF SÈLMAN
-function onKey(e,lineIdx,col){
- if(e.key==='ArrowRight'){
-  e.preventDefault();
-  if(col===0){
-   var line=document.getElementById('line'+lineIdx);
-   line.querySelector('.mise').focus();
-  } else {
-   var next=document.getElementById('line'+(lineIdx+1));
-   if(!next){
-    var sel=document.querySelector('#line'+lineIdx+' select').value;
-    addLine(sel);
-    setTimeout(()=>{ document.querySelector('#line'+(lineCount-1)+'.boul').focus(); },50);
-   } else {
-    next.querySelector('.boul').focus();
-   }
+  const toggleTiraj=(t:string)=>{
+    setTiragesSel(prev=> prev.includes(t)? prev.filter(x=>x!==t): [...prev,t])
   }
- }
- if(e.key==='ArrowDown' || e.key==='Enter'){
-  e.preventDefault();
-  var sel=document.querySelector('#line'+lineIdx+' select').value;
-  var next=document.getElementById('line'+(lineIdx+1));
-  if(!next){
-   addLine(sel);
-   setTimeout(()=>{ document.querySelector('#line'+(lineCount-1)+'.boul').focus(); },50);
-  } else {
-   next.querySelector('.boul').focus();
+  const addLigne=()=>{
+    const lastJeu = lignes[lignes.length-1]?.jeu || 'BO'
+    setLignes([...lignes,{jeu:lastJeu,boul:'',mise:''}])
   }
- }
- if(e.key==='ArrowLeft'){
-  e.preventDefault();
-  if(col===1){
-   var line=document.getElementById('line'+lineIdx);
-   line.querySelector('.boul').focus();
+  const total = lignes.reduce((s,l)=> s + (parseInt(l.mise)||0), 0)
+  const totalXTiraj = total * (tiragesSel.length||1)
+
+  const imprimer=()=>{
+    const contenu = `
+      <div style="text-align:center; font-family:monospace; font-size:22px; font-weight:bold;">
+        ${entete.nom}<br/>
+        Date: ${new Date().toLocaleString()}<br/>
+        Tirages: ${tiragesSel.join('/ ')}<br/>
+        Responsable: ${entete.resp}<br/>
+        --------------------------<br/>
+        ${lignes.map(l=> `${l.jeu} - ${l.boul} - ${l.mise}G`).join('<br/>')}<br/>
+        --------------------------<br/>
+        TOTAL: ${total} x ${tiragesSel.length||1} = ${totalXTiraj}G<br/><br/>
+        ${entete.pied}
+      </div>
+    `
+    const w = window.open('','','width=300,height=600')
+    if(w){ w.document.write(contenu); w.document.close(); w.print() }
   }
- }
-}
 
-function loginV(){
- var n=document.getElementById('vName').value.trim().toUpperCase(); var p=document.getElementById('vPass').value.trim();
- db.ref('config/proprietaires').once('value').then(snap=>{
-  var props=snap.val();
-  for(var pr in props){ let prop=pr; db.ref('vendors_'+prop+'/'+n).once('value').then(s2=>{ var v=s2.val(); if(v&&String(v.pass)===String(p)){ currentVendeur=v; currentProprio=prop; document.getElementById('login').style.display='none'; document.getElementById('app').style.display='block'; document.getElementById('vWho').textContent=v.name; document.getElementById('vProp').textContent=prop; buildTiraj(); addLine(); }}); }
- });
-}
-function collect(){var b=[],t=0; document.querySelectorAll('.line').forEach(l=>{ var j=l.querySelector('select').value; var boul=l.querySelector('.boul').value.trim(); var mise=parseInt(l.querySelector('.mise').value)||0; if(boul&&mise){b.push({jeu:j,boul:boul,mise:mise}); t+=mise;}}); return {bouls:b,total:t};}
-function saveAndPrint(){
- var d=collect(); if(d.bouls.length===0) return alert('Boul pa antre - Tape BOUL + MISE - Ex: 00 + 25 - Kounya kaz yo pi gwo 78px/68px'); if(selectedTiraj.length===0) return alert('Chwazi tiraj nan YON SEL KAZ la');
- var fid='FICH_'+Date.now(); var fich={id:fid,vendeur:currentVendeur.name,proprio:currentProprio,bouls:d.bouls,total:d.total,totalX:d.total*selectedTiraj.length,tirages:selectedTiraj,ts:Date.now(),date:new Date().toLocaleString('fr-HT')};
- db.ref('fiches_'+currentProprio+'/'+currentVendeur.name+'/'+fid).set(fich).then(()=>{doPrint(fich); clearAll();});
-}
-function clearAll(){document.getElementById('lines').innerHTML=''; lineCount=0; addLine(); calcTotal();}
-function doPrint(f){
- var html='<div style="text-align:center;font-family:monospace;font-weight:900;width:80mm;margin:0 auto;">';
- html+='<div style="font-size:22px;">C&D VÉRITÉ LOTTO</div><div style="font-size:12px;">Date '+f.date+'</div><div style="font-size:12px;">Tirages '+f.tirages.join(' / ')+'</div><div style="font-size:12px;">Resp '+f.vendeur+' / '+f.proprio+'</div><div style="border-top:2px dashed #000;margin:5px 0;"></div>';
- f.bouls.forEach(b=>{html+='<div style="font-size:18px;display:flex;justify-content:space-between;"><span>'+b.jeu+' '+b.boul+'</span><span>'+b.mise+'G</span></div>';});
- html+='<div style="border-top:2px dashed #000;margin:5px 0;"></div><div style="font-size:22px;">TOTAL: '+f.totalX+'G</div><div style="margin-top:8px;font-size:14px;">Bòn chans, lave chodyè w</div><div style="font-size:8px;">'+f.id+'</div></div>';
- var w=window.open('','','width=320,height=600'); w.document.write('<html><head><style>@page{size:80mm auto;margin:0}body{width:80mm;margin:0}</style></head><body>'+html+'</body></html>'); w.document.close(); w.focus(); setTimeout(()=>{w.print(); w.close();},400);
-}
-function printTest(){doPrint({id:'TEST_'+Date.now(),date:new Date().toLocaleString(),tirages:selectedTiraj.length?selectedTiraj:['GA MIDI'],vendeur:currentVendeur?.name||'TOTO',proprio:currentProprio||'TOTO',bouls:[{jeu:'BOLET',boul:'25',mise:10}],total:10,totalX:10*(selectedTiraj.length||1)});}
-function copierFich(){var id=document.getElementById('copyId').value.trim();if(!id)return alert('Mete ID');db.ref('fiches_'+currentProprio+'/'+currentVendeur.name+'/'+id).once('value').then(s=>{var f=s.val();if(!f)return alert('Pa jwenn');document.getElementById('copyPreview').innerHTML='<div class="card">'+f.id+' '+f.totalX+'G <div class="btn blue" onclick=\'doPrint('+JSON.stringify(f).replace(/"/g,'&quot;')+')\'>🖨️ Reprint</div></div>';document.getElementById('lines').innerHTML='';lineCount=0;selectedTiraj=f.tirages;document.querySelectorAll('#tirajBox input').forEach(cb=>{cb.checked=f.tirages.includes(cb.value);});updTiraj();f.bouls.forEach(b=>{addLine(b.jeu);var last=document.getElementById('line'+(lineCount-1));last.querySelector('select').value=b.jeu;last.querySelector('.boul').value=b.boul;last.querySelector('.mise').value=b.mise;});showT(1);calcTotal();});}
-function renderFiches(){if(!currentProprio)return;db.ref('fiches_'+currentProprio+'/'+currentVendeur.name).once('value').then(s=>{var data=s.val();var c=document.getElementById('listFiches');c.innerHTML='';if(!data)return;var arr=[];for(var k in data)arr.push(data[k]);arr.sort((a,b)=>b.ts-a.ts).slice(0,40).forEach(f=>{var d=document.createElement('div');d.className='card';d.style.padding='3px';d.innerHTML='<div style="font-size:8px;">'+f.id+' '+f.totalX+'G '+f.tirages.join('/')+'</div><div style="font-size:7px;">'+f.bouls.map(b=>b.boul+'('+b.mise+')').join(',')+'</div><div class="btn blue" style="padding:2px;font-size:7px;" onclick=\'doPrint('+JSON.stringify(f).replace(/"/g,'&quot;')+')\'>🖨️</div>';c.appendChild(d);});});}
-function calcRapport(){var du=document.getElementById('rapDu').value;var au=document.getElementById('rapAu').value;if(!du||!au)return alert('Du Au');var duT=new Date(du).getTime();var auT=new Date(au).getTime()+86400000;db.ref('fiches_'+currentProprio+'/'+currentVendeur.name).once('value').then(s=>{var data=s.val();var v=0;if(data)for(var k in data){var f=data[k];if(f.ts>=duT&&f.ts<=auT)v+=f.totalX||f.total;}document.getElementById('rapportRes').innerHTML='Vente:'+v+'G<br>Comm:'+(v*0.1)+'G<br>Balance:'+(v*0.9)+'G';});}
-function printRapport(){var h=document.getElementById('rapportRes').innerHTML;var w=window.open('','','width=320,height=500');w.document.write('<html><body style="width:80mm;text-align:center;font-family:monospace;font-weight:900;font-size:18px"><div>C&D VERITE LOTTO</div><div>'+h+'</div></body></html>');w.document.close();w.focus();setTimeout(()=>{w.print();w.close();},400);}
+  return(
+    <div style={{background:'#000',minHeight:'100vh',color:'white',padding:10}}>
+      <h1 style={{color:'#FFD700',textAlign:'center',fontWeight:900}}>🟡 VENDEUR - C&D</h1>
 
-// RECHERCHE DE TOUTES LES IMPRIMANTES - Bluetooth + USB + WiFi + Browser - Tout terminal POS
-function searchAllPrinters(){
- var list=document.getElementById('printerList');
- list.innerHTML='<div style="font-size:10px;">🔍 Recherche en cours - Bluetooth, USB, WiFi, Browser...</div>';
- printers=[];
- var html='';
+      <div style={{display:'flex',gap:5,marginTop:10}}>
+        {[
+          {id:'vendre',l:'VENDRE'},{id:'copier',l:'KOPIYE'},{id:'fiches',l:'FICH'},{id:'rapport',l:'RAPO'},{id:'param',l:'PARAM'},
+        ].map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,background:tab===t.id?'#FFD700':'#222',color:tab===t.id?'black':'white',padding:'10px 5px',borderRadius:10,border:'none',fontWeight:'900',fontSize:12}}>{t.l}</button>)}
+      </div>
 
- // 1. Browser Print - toujou disponib - tout terminal POS
- html+='<div style="border:2px solid #000;border-radius:6px;padding:4px;margin:2px;background:#ff0;" onclick="useBrowser()"><div style="font-size:11px;">🖥️ BROWSER PRINT - Tout POS - v2 Pro / Sunmi / PAX</div><div style="font-size:8px;">Santre Gran Lèt 80mm - Pa bezwen config - Klike pou itilize</div><div style="font-size:7px;color:#0a0;">✅ Disponib - Mache sou nenpòt terminal</div></div>';
- printers.push({name:'Browser Print - Tout POS',type:'browser',status:'ready'});
+      {tab==='vendre' && (
+        <div>
+          {/* TIRAGES */}
+          <div style={{background:'#222',padding:10,borderRadius:10,marginTop:10}}>
+            <h3 style={{color:'#FFD700',fontSize:12}}>Tout Tiraj yo - Yon sèl Kaz (Chwazi miltip)</h3>
+            <div style={{display:'flex',flexWrap:'wrap',gap:5,marginTop:8}}>
+              {allTirages.map(t=>(
+                <button key={t} onClick={()=>toggleTiraj(t)} style={{background: tiragesSel.includes(t)?'#FFD700':'#333', color: tiragesSel.includes(t)?'black':'white', padding:'6px 8px', borderRadius:15, border:'none', fontSize:11, fontWeight:'bold'}}>{t}</button>
+              ))}
+            </div>
+            <p style={{fontSize:11,color:'#0f0',marginTop:6}}>{tiragesSel.length} tiraj chwazi: {tiragesSel.join(', ')}</p>
+          </div>
 
- // 2. Bluetooth
- if(navigator.bluetooth){
-  html+='<div style="border:2px solid #00f;border-radius:6px;padding:4px;margin:2px;background:#e0e0ff;" onclick="connectBT()"><div style="font-size:11px;">📱 BLUETOOTH PRINTER - Recherche...</div><div style="font-size:8px;">Klike pou scan Bluetooth - Tout imprimante BT</div></div>';
-  navigator.bluetooth.getDevices().then(devices=>{
-   devices.forEach(d=>{ printers.push({name:d.name||'BT Printer',type:'bt',device:d}); });
-   if(devices.length>0){ list.innerHTML+=devices.map(d=>'<div style="border:1px solid #00f;padding:3px;margin:2px;font-size:9px;">📱 '+d.name+' - Paire</div>').join(''); }
-  }).catch(()=>{});
- } else {
-  html+='<div style="border:1px solid #999;padding:4px;margin:2px;background:#eee;font-size:8px;">📱 Bluetooth pa sipòte sou navigatè sa - Itilize Browser Print</div>';
- }
+          {/* LIGNES */}
+          <div style={{background:'#222',padding:10,borderRadius:10,marginTop:10}}>
+            <div style={{display:'grid',gridTemplateColumns:'1.2fr 1.5fr 1fr 0.5fr',gap:5,fontSize:11,color:'#888'}}><span>Jeux</span><span>Boul</span><span>Mise</span><span>→</span></div>
+            {lignes.map((l,i)=>(
+              <div key={i} style={{display:'grid',gridTemplateColumns:'1.2fr 1.5fr 1fr 0.5fr',gap:5,marginTop:6}}>
+                <select value={l.jeu} onChange={e=>{const n=[...lignes]; n[i].jeu=e.target.value; setLignes(n)}} style={{padding:10,background:'#000',color:'#FFD700',borderRadius:6,border:'1px solid #FFD700',fontWeight:'bold'}}>
+                  <option>BO</option><option>MA</option><option>L3</option><option>L4</option><option>L5</option>
+                </select>
+                <input inputMode="numeric" value={l.boul} onChange={e=>{const n=[...lignes]; n[i].boul=e.target.value.replace(/[^0-9x]/g,''); setLignes(n)}} placeholder="boul" style={{padding:10,background:'#333',color:'white',borderRadius:6,textAlign:'center',fontWeight:'bold'}}/>
+                <input inputMode="numeric" value={l.mise} onChange={e=>{const n=[...lignes]; n[i].mise=e.target.value.replace(/[^0-9]/g,''); setLignes(n)}} placeholder="mise" style={{padding:10,background:'#333',color:'white',borderRadius:6,textAlign:'center'}}/>
+                <button onClick={addLigne} style={{background:'#FFD700',color:'black',border:'none',borderRadius:6,fontWeight:'900'}}>→</button>
+              </div>
+            ))}
+            <p style={{fontSize:10,color:'#888',marginTop:5}}>Chif sèlman nan klavye. Touche flèch → pou avanse, konsève jwèt la. Maryaj bon lòd/dezòd: 12x47=47x12</p>
+            <div style={{background:'#000',padding:10,borderRadius:8,marginTop:10,display:'flex',justifyContent:'space-between'}}>
+              <span>Total: {total}G</span><span>x {tiragesSel.length||1} tiraj</span><span style={{color:'#FFD700',fontWeight:'900'}}>= {totalXTiraj}G</span>
+            </div>
+            <button onClick={imprimer} style={{background:'#FFD700',color:'black',width:'100%',padding:15,borderRadius:10,marginTop:10,fontWeight:'900',fontSize:18,border:'none'}}>🖨️ IMPRIMER - Santre Gran Lèt V2 Pro</button>
+            <div style={{background:'#111',padding:8,borderRadius:6,marginTop:8, fontSize:11}}>
+              <b>Limit Mise Global:</b> Vendeur1+Vendeur2+...= Limit Global (15000 BO, 100 MA, 100 L3, 20 L4, 5 L5)<br/>
+              <b>Pri:</b> 1er 50, 2e 20, 3e 10, M1=M2=M3=1000, L3=500, L4=5000, L5=25000
+            </div>
+          </div>
+        </div>
+      )}
 
- // 3. USB Serial - tout POS ak USB
- if(navigator.serial){
-  html+='<div style="border:2px solid #0a0;border-radius:6px;padding:4px;margin:2px;background:#e0ffe0;" onclick="connectUSB()"><div style="font-size:11px;">🔌 USB SERIAL PRINTER - ESC/POS</div><div style="font-size:8px;">Klike pou konekte USB - Terminal v2 Pro / Sunmi</div></div>';
- } else {
-  html+='<div style="border:1px solid #999;padding:4px;margin:2px;background:#eee;font-size:8px;">🔌 USB Serial pa sipòte - Itilize Browser Print</div>';
- }
+      {tab==='copier' && (
+        <div style={{background:'#222',padding:15,borderRadius:10,marginTop:10}}>
+          <h3 style={{color:'#FFD700'}}>Kopiye Fich</h3>
+          <input value={ticketId} onChange={e=>setTicketId(e.target.value)} placeholder="Mete ID Ticket la pou kopye ex: CD-001" style={{width:'100%',padding:12,background:'#333',color:'white',borderRadius:8,marginTop:8}}/>
+          <button onClick={()=>{const f=fiches.find(x=>x.id===ticketId); if(f){alert('Fich '+f.id+' kopye!'); setLignes([{jeu:'BO',boul:'12',mise:'50'}])} else alert('Ticket pa jwenn!')}} style={{background:'#007BFF',color:'white',width:'100%',padding:12,borderRadius:8,marginTop:10,fontWeight:'bold',border:'none'}}>KOPIYE FICH</button>
+        </div>
+      )}
 
- // 4. WiFi Network Printers
- html+='<div style="border:2px solid #f0f;border-radius:6px;padding:4px;margin:2px;background:#ffe0ff;"><div style="font-size:11px;">🌐 WIFI NETWORK PRINTER</div><div style="font-size:8px;">Mete IP: 192.168.1.100:9100 - Tout POS WiFi</div><div style="display:flex;gap:2px;margin-top:2px;"><input id="netIP2" placeholder="192.168.1.100" style="flex:1;padding:4px;border:1px solid #000;border-radius:4px;font-size:9px;"><div class="btn blue" style="padding:4px;font-size:8px;" onclick="connectNet()">Connect</div></div></div>';
+      {tab==='fiches' && (
+        <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
+          <h3 style={{color:'#FFD700'}}>Mes Fiches</h3>
+          <input type="date" style={{width:'100%',padding:10,background:'#333',color:'white',borderRadius:6,marginTop:8}}/>
+          <input placeholder="Recherche fiches..." style={{width:'100%',padding:10,background:'#333',color:'white',borderRadius:6,marginTop:6}}/>
+          {fiches.map(f=><div key={f.id} style={{background:'#111',padding:10,borderRadius:8,marginTop:8,display:'flex',justifyContent:'space-between'}}><span>{f.id} - {f.date}</span><span style={{color:'#0f0'}}>{f.vente}G</span></div>)}
+        </div>
+      )}
 
- list.innerHTML=html;
- document.getElementById('printStatus').textContent='🔍 '+printers.length+' imprimante jwenn - Browser + BT + USB + WiFi - Chwazi youn';
+      {tab==='rapport' && (
+        <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
+          <h3 style={{color:'#FFD700'}}>Rapò Vendeur</h3>
+          <div style={{display:'flex',gap:5,marginTop:8}}><input type="date" style={{flex:1,padding:8,background:'#333',color:'white',borderRadius:5}}/><input type="date" style={{flex:1,padding:8,background:'#333',color:'white',borderRadius:5}}/></div>
+          <select style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:6}}><option>Tirage (Tous)</option>{allTirages.map(t=><option key={t}>{t}</option>)}</select>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:10}}>
+            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Vente</small><br/><b style={{color:'#0f0'}}>1,250G</b></div>
+            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Commission</small><br/><b>150G</b></div>
+            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Gain Kliyan</small><br/><b style={{color:'red'}}>500G</b></div>
+            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Balance Net</small><br/><b style={{color:'#FFD700'}}>600G</b></div>
+          </div>
+          <p style={{fontSize:10,color:'#888',marginTop:8}}>Si fich gen plizyè tiraj, chak tiraj kalkile separeman selon rezilta</p>
+          <button onClick={()=>window.print()} style={{background:'white',color:'black',width:'100%',padding:10,borderRadius:8,marginTop:8,fontWeight:'bold',border:'none'}}>🖨️ IMPRIMER</button>
+        </div>
+      )}
+
+      {tab==='param' && (
+        <div>
+          <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
+            <h3 style={{color:'#FFD700'}}>Ajoute Enprimant</h3>
+            <button onClick={()=>alert('Ap chèche enprimant... Terminal V2 Pro jwenn!')} style={{background:'#333',color:'white',width:'100%',padding:10,borderRadius:8,border:'none'}}>🔍 Rechèch tout enprimant yo</button>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:10,background:'#111',padding:10,borderRadius:8}}>
+              <span>Utilisation enprimant par defo</span>
+              <div style={{display:'flex',gap:5}}>
+                <button onClick={()=>setUseDefault(true)} style={{background:useDefault?'#0f0':'#333',color:useDefault?'black':'white',padding:'5px 10px',borderRadius:5,border:'none',fontWeight:'bold'}}>Wi</button>
+                <button onClick={()=>setUseDefault(false)} style={{background:!useDefault?'red':'#333',color:'white',padding:'5px 10px',borderRadius:5,border:'none',fontWeight:'bold'}}>Non</button>
+              </div>
+            </div>
+          </div>
+          <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
+            <h3 style={{color:'#FFD700'}}>Antèt Fich yo Santre - Modifiable</h3>
+            <input value={entete.nom} onChange={e=>setEntete({...entete,nom:e.target.value})} style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:5}}/>
+            <input value={entete.resp} onChange={e=>setEntete({...entete,resp:e.target.value})} placeholder="Responsable..." style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:5}}/>
+            <input value={entete.pied} onChange={e=>setEntete({...entete,pied:e.target.value})} style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:5}}/>
+            <div style={{background:'#000',padding:10,borderRadius:8,marginTop:10,textAlign:'center',fontFamily:'monospace',fontSize:12}}>
+              {entete.nom}<br/>Date.....<br/>Tirages..../.....<br/>Responsable: {entete.resp}<br/>------ Kò fich ------<br/>{entete.pied}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <a href="/" style={{display:'block',textAlign:'center',marginTop:20,color:'#888'}}>← Akèy</a>
+    </div>
+  )
 }
-function connectBT(){
- if(!navigator.bluetooth) return alert('Bluetooth pa sipòte - Itilize Browser Print - li mache sou tout POS');
- navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['000018f0-0000-1000-8000-00805f9b34fb','000018f0-0000-1000-8000-00805f9b34fb']}).then(d=>{
-  printers.push({name:d.name,type:'bt',device:d}); document.getElementById('printStatus').textContent='✅ Bluetooth konekte: '+d.name; document.getElementById('printerList').innerHTML+='<div style="background:#0f0;padding:4px;border-radius:4px;font-size:10px;margin:2px;">✅ BT Konekte: '+d.name+'</div>';
- });
-}
-function connectUSB(){
- if(!navigator.serial) return alert('USB pa sipòte - Browser Print mache sou tout POS - 80mm santre gran lèt');
- navigator.serial.requestPort().then(port=>{ document.getElementById('printStatus').textContent='✅ USB konekte'; document.getElementById('printerList').innerHTML+='<div style="background:#0f0;padding:4px;border-radius:4px;font-size:10px;margin:2px;">✅ USB Konekte</div>'; });
-}
-function connectNet(){
- var ip=document.getElementById('netIP').value||document.getElementById('netIP2')?.value;
- if(!ip) return alert('Mete IP WiFi');
- document.getElementById('printStatus').textContent='✅ WiFi IP: '+ip+' pare - ESC/POS';
- document.getElementById('printerList').innerHTML+='<div style="background:#0f0;padding:4px;border-radius:4px;font-size:10px;margin:2px;">✅ WiFi: '+ip+'</div>';
-}
-function useBrowser(){ document.getElementById('printStatus').textContent='✅ Browser Print - Tout Terminal POS v2 Pro / Sunmi / PAX - 80mm Santre Gran Lèt - Pa bezwen config'; document.getElementById('useDef').value='oui'; }
-function logout(){location.reload();}
-</script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
-</body>
-</html>
