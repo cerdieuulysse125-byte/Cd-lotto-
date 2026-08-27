@@ -1,16 +1,29 @@
 "use client";
-import Link from "next/link";
-export default function Home(){
- return(
-  <div style={{background:"#000",color:"#fff",minHeight:"100vh",padding:20,textAlign:"center",maxWidth:400,margin:"0 auto"}}>
-   <h1 style={{color:"#FFD700",fontSize:32}}>CD-LOTTO</h1>
-   <p style={{opacity:0.7}}>Bolet • Loto3 • Loto4 • Mariage</p>
-   
-   <Link href="/vendeur" style={{display:"block",background:"#FFD700",color:"#000",padding:16,borderRadius:12,marginTop:20,fontWeight:"bold",textDecoration:"none"}}>🎰 ANTRE VANDEUR</Link>
-   <Link href="/proprio" style={{display:"block",background:"#222",color:"#fff",padding:16,borderRadius:12,marginTop:12,textDecoration:"none",border:"1px solid #333"}}>🔵 PROPRIO</Link>
-   <Link href="/super-admin" style={{display:"block",background:"#D50000",color:"#fff",padding:16,borderRadius:12,marginTop:12,textDecoration:"none",fontWeight:"bold"}}>👑 SUPER ADMIN</Link>
-   
-   <p style={{marginTop:40,fontSize:11,opacity:0.4}}>cd-lotto.vercel.app - v1.0</p>
-  </div>
- )
+import { useState, useRef, useEffect } from "react";
+import { loadDB, saveDB } from "./lib/db";
+const TIRAGES = ["GA midi","FL midi","NY midi","Real","GA soir","FL soir","NY soir","Real 12h45","Primera dia","Suerte dia","Lote Dom","Ganamas","Suerte noche","Primera noche","Loteka","Nacional noche","Leidsa","Anguila 10h","Anguila 18h"];
+const JEUX = ["Bolet","Maryaj","Loto3","Loto4","Loto5"];
+export default function Page(){
+  const [tab,setTab]=useState("VENDRE"); const [selected,setSelected]=useState<string[]>([]); const [openT,setOpenT]=useState(false);
+  const [jeu,setJeu]=useState("Loto3"); const [boul,setBoul]=useState(""); const [miz,setMiz]=useState(""); const [fiches,setFiches]=useState<any[]>([]);
+  const boulRef=useRef<HTMLInputElement>(null); const mizRef=useRef<HTMLInputElement>(null);
+  useEffect(()=>{ const db=loadDB(); setFiches(db.tickets||[]); },[]);
+  const toggle=(t:string)=>setSelected(s=>s.includes(t)?s.filter(x=>x!==t):[...s,t]);
+  const ajouter=()=>{
+    const db=loadDB(); if(!boul||!miz) return alert("Mete Boul ak Miz"); if(selected.length===0) return alert("Chwazi tiraj");
+    if(db.boulBloke.includes(boul)) return alert("⛔ Boul bloke pa SUP");
+    const limite = db.limits.vendeur[db.antet.vendeur] || db.limits.global;
+    if(parseInt(miz)>limite) return alert(`Limit ${limite} HTG depase`);
+    let nb=boul; if(jeu==="Maryaj") nb=boul.split(/x|X|×/).map((s:string)=>s.trim().padStart(2,'0')).sort().join('×');
+    const newTicket={id:Date.now(), jeu, boul:nb, miz:parseInt(miz), tirages:selected, date:new Date().toISOString()};
+    const newList=[...fiches,newTicket]; setFiches(newList); db.tickets=newList; saveDB(db); setBoul(""); setMiz("");
+  };
+  const printTicket=()=>{
+    const db=loadDB(); const antet=db.antet; const total=fiches.reduce((s,f)=>s+f.miz,0)*(selected.length||1);
+    const lignes=fiches.map(f=>`<div style="display:flex;justify-content:space-between;font-size:28px;line-height:34px;font-weight:900;"><span>${f.jeu} ${f.boul}</span><span>${f.miz}</span></div>`).join('');
+    const w=window.open('','','width=900,height=1200');
+    w!.document.write(`<html><head><style>@page{size:A4;margin:0;} html,body{width:210mm;height:297mm;margin:0;padding:0;display:flex;justify-content:center;align-items:flex-start;background:#fff;}.ticket{width:88mm;margin-top:10mm;text-align:center;font-family:monospace;font-weight:900;color:#000;border:none;padding:0 4mm;}.title{font-size:38px;}.info{font-size:20px;} hr{border:none;border-top:3px dashed #000;margin:10px 0;}.total{font-size:36px;}</style></head><body><div class="ticket"><div class="title">${antet.nom}</div><div class="info">Dat: ${new Date().toLocaleString()}</div><div class="info">Tiraj: ${selected.join(', ')}</div><div class="info">Vandè: ${antet.vendeur}</div><div class="info">Id: CD${Date.now().toString().slice(-6)}</div><hr/>${lignes}<hr/><div class="total">TOTAL: ${total} HTG</div><hr/>BON CHANS!</div><script>setTimeout(()=>{window.print();window.close()},400);<\/script></body></html>`);
+  };
+  const total=fiches.reduce((s,f)=>s+f.miz,0); const grand=total*(selected.length||1);
+  return (<div style={{maxWidth:'500px',margin:'0 auto',background:'#fff',minHeight:'100vh',color:'#000'}}><div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'8px',padding:'10px'}}>{["VENDRE","COPIER","MES FICHES","RAPPORT","PARAMÈT","X FÈMEN"].map(t=><button key={t} onClick={()=>setTab(t)} style={{padding:'14px 2px',borderRadius:'12px',border:'2px solid #000',fontWeight:'900',fontSize:'11px',background:tab===t?"#4fb3ff":"#eee"}}>{t}</button>)}</div><div style={{padding:'10px'}}>{tab==="VENDRE" && (<><div style={{position:'relative'}}><button onClick={()=>setOpenT(!openT)} style={{width:'100%',padding:'12px',border:'2px solid #000',borderRadius:'8px',fontWeight:'900',textAlign:'left',background:'#fff'}}>{selected.length===0?"▼ CHWAZI TIRAJ":`▼ ${selected.length}: ${selected.join(", ")}`}</button>{openT && <div style={{position:'absolute',top:'48px',left:0,right:0,background:'#fff',border:'2px solid #000',borderRadius:'12px',zIndex:20,maxHeight:'320px',overflow:'auto',padding:'6px',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'6px'}}>{TIRAGES.map(t=><label key={t} style={{border:'1px solid #000',padding:'10px 4px',borderRadius:'8px',background:selected.includes(t)?"#b3e5fc":"#fff",fontSize:'11px',fontWeight:'900'}}><input type="checkbox" checked={selected.includes(t)} onChange={()=>toggle(t)}/> {t}</label>)}<button onClick={()=>setOpenT(false)} style={{gridColumn:'1 / span 2',background:'#000',color:'#fff',padding:'12px',borderRadius:'8px'}}>OK</button></div>}</div><div style={{display:'flex',gap:'6px',marginTop:'12px'}}><select value={jeu} onChange={e=>setJeu(e.target.value)} style={{width:'26%',padding:'14px 4px',border:'2px solid #000',borderRadius:'12px',fontWeight:'900'}}>{JEUX.map(j=><option key={j}>{j}</option>)}</select><input ref={boulRef} value={boul} onChange={e=>setBoul(e.target.value)} placeholder="Boul" style={{width:'32%',padding:'14px',border:'2px solid #000',borderRadius:'12px',fontWeight:'900'}}/><input ref={mizRef} value={miz} onChange={e=>setMiz(e.target.value.replace(/\D/g,''))} placeholder="Miz" style={{width:'24%',padding:'14px',border:'2px solid #000',borderRadius:'12px',fontWeight:'900'}}/><button onClick={ajouter} style={{width:'18%',background:'#0d7a3e',color:'#fff',border:'2px solid #000',borderRadius:'12px',fontWeight:'900'}}>OK</button></div><div style={{border:'2px solid #000',borderRadius:'12px',minHeight:'140px',marginTop:'10px',padding:'6px'}}>{fiches.map((f,i)=><div key={f.id} style={{display:'flex',justifyContent:'center',gap:'20px',padding:'10px 4px',borderBottom:'1px solid #000',fontWeight:'900'}}><span style={{width:'140px',textAlign:'left'}}>{f.jeu} {f.boul}</span><span style={{width:'50px',textAlign:'right'}}>{f.miz}</span><span onClick={()=>{const nl=fiches.filter((_,idx)=>idx!==i); setFiches(nl); const db=loadDB(); db.tickets=nl; saveDB(db);}} style={{color:'red'}}>X</span></div>)}</div><div style={{background:'#0d7a3e',color:'#fff',textAlign:'center',padding:'14px',borderRadius:'12px',marginTop:'8px',fontWeight:'900',border:'2px solid #000'}}>Total {total} × {selected.length||1} = {grand} HTG</div><button onClick={printTicket} style={{width:'100%',background:'#000',color:'#fff',padding:'18px',borderRadius:'12px',marginTop:'10px',fontWeight:'900',fontSize:'18px'}}>🖨️ IMPRIMER - SAN BÒDI</button></>)}</div></div>);
 }
