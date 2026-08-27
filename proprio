@@ -1,0 +1,25 @@
+"use client";
+import { useState, useEffect } from "react";
+export default function Proprio(){
+const [auth,setAuth]=useState(false);const [pass,setPass]=useState("");const [fiches,setFiches]=useState<any[]>([]);
+const [vendeurs,setVendeurs]=useState<any[]>([]);
+useEffect(()=>{setFiches(JSON.parse(localStorage.getItem("cd_fiches")||"[]"));setVendeurs(JSON.parse(localStorage.getItem("cd_vendeurs")||"[]"));const c=localStorage.getItem("cd_proprio_auth");if(c)setAuth(true);},[]);
+const login=()=>{if(pass==="proprio123"){localStorage.setItem("cd_proprio_auth","ok");setAuth(true);}else alert("Modpas proprio pa bon - eseye proprio123");};
+if(!auth)return(<div style={{minHeight:"100vh",background:"white",display:"flex",alignItems:"center",justifyContent:"center"}}><div style={{background:"#f5f5f5",padding:24,borderRadius:16,border:"2px solid black",width:350}}><h1 style={{color:"#dc2626",fontWeight:900,textAlign:"center",fontSize:22}}>PROPRIO - C&D VERITE</h1><input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="Modpas Proprio" style={{width:"100%",height:50,border:"2px solid black",borderRadius:10,textAlign:"center",marginTop:12}}/><button onClick={login} style={{width:"100%",background:"black",color:"white",fontWeight:900,padding:14,borderRadius:10,marginTop:10}}>ANTRE</button></div></div>);
+const totalVente=fiches.reduce((s,f)=>s+f.total,0);
+return(<div style={{minHeight:"100vh",background:"white",padding:12,fontFamily:"sans-serif"}}>
+<h1 style={{fontWeight:900,textAlign:"center",fontSize:22}}><span style={{color:"#dc2626"}}>PROPRIO</span> <span style={{color:"#1d4ed8"}}>C&D VERITE</span></h1>
+<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:15}}>
+<div style={{background:"#fef9c3",border:"2px solid black",borderRadius:12,padding:12,textAlign:"center"}}><div style={{color:"#1d4ed8",fontWeight:700}}>Vente Total</div><div style={{fontWeight:900,fontSize:22,color:"black"}}>{totalVente}G</div></div>
+<div style={{background:"#dcfce7",border:"2px solid black",borderRadius:12,padding:12,textAlign:"center"}}><div style={{color:"#15803d",fontWeight:700}}>Fiches</div><div style={{fontWeight:900,fontSize:22}}>{fiches.length}</div></div>
+</div>
+<div style={{marginTop:20,background:"white",border:"2px solid black",borderRadius:12,padding:10}}>
+<h3 style={{fontWeight:900,color:"#7c3aed"}}>Vandè yo</h3>
+{vendeurs.map((v,i)=><div key={i} style={{borderBottom:"1px solid #ddd",padding:"8px 0",display:"flex",justifyContent:"space-between"}}><span>{v.nom}</span><span style={{color:"#15803d",fontWeight:700}}>Aktif</span></div>)}
+</div>
+<div style={{marginTop:20}}>
+<h3 style={{fontWeight:900,color:"#dc2626"}}>Dènye Fich yo</h3>
+{fiches.slice(0,10).map((f:any)=><div key={f.id} style={{border:"1px solid black",borderRadius:8,padding:8,marginTop:6,fontSize:12}}><b style={{color:"#1d4ed8"}}>{f.id}</b> - {f.vendeur} - <b style={{color:"#15803d"}}>{f.total}G</b> - {new Date(f.date).toLocaleString()}</div>)}
+</div>
+</div>);
+}
