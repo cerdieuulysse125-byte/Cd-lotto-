@@ -1,152 +1,180 @@
-'use client'
-import { useState } from 'react'
+"use client";
+import { useState, useEffect, useRef } from "react";
 
-export default function Vendeur(){
-  const [tab,setTab]=useState('vendre')
-  const [tiragesSel,setTiragesSel]=useState<string[]>([])
-  const allTirages=['GA midi','FL midi','NY midi','Real','GA soir','FL soir','NY soir','Primera dia 11h50','Suerte dia 12h20','Lote Dom 1h45','Ganamas 14h15','Suerte noche 17h50','Primera noche 19h50','Loteka 19h45','Nacional noche','Leidsa','Anguila 10h','Anguilla 18h']
-  const [lignes,setLignes]=useState([{jeu:'BO',boul:'',mise:''}])
-  const [ticketId,setTicketId]=useState('')
-  const [fiches]=useState([{id:'CD-001',date:'2025-05-13',vente:500},{id:'CD-002',date:'2025-05-12',vente:1200}])
-  const [entete,setEntete]=useState({nom:'C&D VERITE LOTTO',resp:'Jean Vendeur',pied:'Bòn chans, lave chodyè w'})
-  const [useDefault,setUseDefault]=useState(true)
+const TIRAGES = [
+  { id: "ga-midi", nom: "GA midi", heure: "11:30" },
+  { id: "fl-midi", nom: "FL midi", heure: "12:30" },
+  { id: "ny-midi", nom: "NY midi", heure: "13:20" },
+  { id: "real", nom: "Real", heure: "13:00" },
+  { id: "ga-soir", nom: "GA soir", heure: "18:30" },
+  { id: "fl-soir", nom: "FL soir", heure: "18:00" },
+  { id: "ny-soir", nom: "NY soir", heure: "20:20" },
+  { id: "primera-11h50", nom: "Primera dia 11h50", heure: "11:50" },
+  { id: "suerte-12h20", nom: "Suerte dia 12h20", heure: "12:20" },
+  { id: "lote-dom-1h45", nom: "Lote Dom 1h45", heure: "13:45" },
+  { id: "ganamas-14h15", nom: "Ganamas 14h15", heure: "14:15" },
+  { id: "suerte-noche-17h50", nom: "Suerte noche 17h50", heure: "17:50" },
+  { id: "primera-noche-19h50", nom: "Primera noche 19h50", heure: "19:50" },
+  { id: "loteka-19h45", nom: "Loteka 19h45", heure: "19:45" },
+  { id: "nacional", nom: "Nacional noche", heure: "20:30" },
+  { id: "leidsa", nom: "Leidsa", heure: "20:50" },
+  { id: "anguila-10h", nom: "Anguila 10h", heure: "10:00" },
+  { id: "anguila-18h", nom: "Anguilla 18h", heure: "18:00" },
+];
 
-  const toggleTiraj=(t:string)=>{
-    setTiragesSel(prev=> prev.includes(t)? prev.filter(x=>x!==t): [...prev,t])
-  }
-  const addLigne=()=>{
-    const lastJeu = lignes[lignes.length-1]?.jeu || 'BO'
-    setLignes([...lignes,{jeu:lastJeu,boul:'',mise:''}])
-  }
-  const total = lignes.reduce((s,l)=> s + (parseInt(l.mise)||0), 0)
-  const totalXTiraj = total * (tiragesSel.length||1)
+export default function VendeurPage() {
+  const [isAuth, setIsAuth] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [vendeurNom, setVendeurNom] = useState("");
+  const [error, setError] = useState("");
+  const [tiragesChwazi, setTiragesChwazi] = useState<string[]>([]);
+  const [jeux, setJeux] = useState("BO");
+  const [boul, setBoul] = useState("");
+  const [mise, setMise] = useState("");
 
-  const imprimer=()=>{
-    const contenu = `
-      <div style="text-align:center; font-family:monospace; font-size:22px; font-weight:bold;">
-        ${entete.nom}<br/>
-        Date: ${new Date().toLocaleString()}<br/>
-        Tirages: ${tiragesSel.join('/ ')}<br/>
-        Responsable: ${entete.resp}<br/>
-        --------------------------<br/>
-        ${lignes.map(l=> `${l.jeu} - ${l.boul} - ${l.mise}G`).join('<br/>')}<br/>
-        --------------------------<br/>
-        TOTAL: ${total} x ${tiragesSel.length||1} = ${totalXTiraj}G<br/><br/>
-        ${entete.pied}
+  const boulRef = useRef<HTMLInputElement>(null);
+  const miseRef = useRef<HTMLInputElement>(null);
+
+  // VERIFIKASYON MODPAS VANDE - LI RESPEKTE MODPAS PROPRIO METE A
+  const handleLogin = () => {
+    const vendeurs = JSON.parse(localStorage.getItem("cd_vendeurs") || "[]");
+    // Chèche vandè ak modpas la
+    const found = vendeurs.find((v:any) => v.password === passwordInput || v.code === passwordInput);
+
+    // Si pa gen lis vandè ankò, kreye yon default pou test
+    if(vendeurs.length === 0 && passwordInput.length >= 3){
+      // Premye fwa - aksepte nenpot modpas epi anrejistre l
+      localStorage.setItem("cd_current_vendeur", JSON.stringify({nom: "Vendeur1", password: passwordInput}));
+      setIsAuth(true);
+      setVendeurNom("Vendeur1");
+      return;
+    }
+
+    if(found){
+      localStorage.setItem("cd_current_vendeur", JSON.stringify(found));
+      setIsAuth(true);
+      setVendeurNom(found.nom || found.code);
+      setError("");
+    } else {
+      setError("❌ Modpas la pa bon! Mande Proprio a nouvo modpas la.");
+    }
+  };
+
+  useEffect(() => {
+    const current = localStorage.getItem("cd_current_vendeur");
+    if(current){
+      // Verifye si modpas la toujou bon (si proprio te chanje l)
+      const vendeurs = JSON.parse(localStorage.getItem("cd_vendeurs") || "[]");
+      const parsed = JSON.parse(current);
+      const toujouValab = vendeurs.find((v:any) => v.password === parsed.password);
+      if(vendeurs.length === 0 || toujouValab || vendeurs.length===0){
+        setIsAuth(true);
+        setVendeurNom(parsed.nom);
+      } else {
+        // Modpas chanje pa Proprio -> deconnecte vandè a
+        localStorage.removeItem("cd_current_vendeur");
+        setIsAuth(false);
+        setError("🔒 Proprio a chanje modpas ou! Antre nouvo modpas la.");
+      }
+    }
+  }, []);
+
+  const isFerme = (heureFermeture: string) => {
+    const now = new Date();
+    const [h, m] = heureFermeture.split(":").map(Number);
+    const fermeture = new Date();
+    fermeture.setHours(h, m, 0);
+    return now > fermeture;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, next: string) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "Enter") {
+      e.preventDefault();
+      if (next === "mise") miseRef.current?.focus();
+      if (next === "new" && boul && mise) {
+        setBoul(""); setMise(""); boulRef.current?.focus();
+      }
+    }
+  };
+
+  // SI PA AUTH - MONTRE LOGIN AK MODPAS
+  if(!isAuth){
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="bg-zinc-900 rounded-2xl p-6 w-full max-w-sm border border-zinc-800">
+          <h1 className="text-yellow-400 text-2xl font-black text-center mb-2">🔒 VANDEUR - C&D</h1>
+          <p className="text-zinc-400 text-center text-sm mb-6">Antre modpas ou - Modpas dwe respekte</p>
+
+          <input
+            type="password"
+            value={passwordInput}
+            onChange={e=>setPasswordInput(e.target.value)}
+            onKeyDown={e=> e.key === 'Enter' && handleLogin()}
+            placeholder="Modpas Vandeur"
+            className="w-full h-14 bg-black border-2 border-yellow-400 rounded-xl text-white text-center text-xl tracking-widest outline-none mb-3"
+            autoFocus
+          />
+          {error && <p className="text-red-400 text-sm text-center mb-3">{error}</p>}
+
+          <button onClick={handleLogin} className="w-full bg-yellow-400 text-black font-black py-4 rounded-xl text-lg">
+            ANTRE
+          </button>
+          <p className="text-zinc-600 text-xs text-center mt-4">Si modpas pa mache, kontakte Proprio ou</p>
+        </div>
       </div>
-    `
-    const w = window.open('','','width=300,height=600')
-    if(w){ w.document.write(contenu); w.document.close(); w.print() }
+    );
   }
 
-  return(
-    <div style={{background:'#000',minHeight:'100vh',color:'white',padding:10}}>
-      <h1 style={{color:'#FFD700',textAlign:'center',fontWeight:900}}>🟡 VENDEUR - C&D</h1>
-
-      <div style={{display:'flex',gap:5,marginTop:10}}>
-        {[
-          {id:'vendre',l:'VENDRE'},{id:'copier',l:'KOPIYE'},{id:'fiches',l:'FICH'},{id:'rapport',l:'RAPO'},{id:'param',l:'PARAM'},
-        ].map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,background:tab===t.id?'#FFD700':'#222',color:tab===t.id?'black':'white',padding:'10px 5px',borderRadius:10,border:'none',fontWeight:'900',fontSize:12}}>{t.l}</button>)}
+  return (
+    <div className="min-h-screen bg-black text-white p-3">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-yellow-400 text-2xl font-black">🟡 VENDEUR - {vendeurNom}</h1>
+        <button onClick={()=>{localStorage.removeItem("cd_current_vendeur"); setIsAuth(false);}} className="text-xs bg-zinc-800 px-3 py-1 rounded-full">Dekonekte</button>
       </div>
 
-      {tab==='vendre' && (
-        <div>
-          {/* TIRAGES */}
-          <div style={{background:'#222',padding:10,borderRadius:10,marginTop:10}}>
-            <h3 style={{color:'#FFD700',fontSize:12}}>Tout Tiraj yo - Yon sèl Kaz (Chwazi miltip)</h3>
-            <div style={{display:'flex',flexWrap:'wrap',gap:5,marginTop:8}}>
-              {allTirages.map(t=>(
-                <button key={t} onClick={()=>toggleTiraj(t)} style={{background: tiragesSel.includes(t)?'#FFD700':'#333', color: tiragesSel.includes(t)?'black':'white', padding:'6px 8px', borderRadius:15, border:'none', fontSize:11, fontWeight:'bold'}}>{t}</button>
-              ))}
-            </div>
-            <p style={{fontSize:11,color:'#0f0',marginTop:6}}>{tiragesSel.length} tiraj chwazi: {tiragesSel.join(', ')}</p>
-          </div>
+      <div className="bg-zinc-900 rounded-2xl p-4 border border-zinc-800 mb-4">
+        <h2 className="text-yellow-300 font-bold mb-3">Tout Tiraj yo - Yon sèl Kaz (Chwazi miltip)</h2>
+        <div className="flex flex-wrap gap-2">
+          {TIRAGES.map(t => {
+            const ferme = isFerme(t.heure);
+            const selected = tiragesChwazi.includes(t.id);
+            return (
+              <button key={t.id} disabled={ferme} onClick={()=>!ferme && setTiragesChwazi(p=> p.includes(t.id)? p.filter(x=>x!==t.id): [...p,t.id])}
+                className={`px-3 py-2 rounded-full text-sm font-bold ${ferme? 'bg-zinc-800 text-zinc-500 line-through': selected? 'bg-yellow-400 text-black': 'bg-zinc-800 text-white'}`}>
+                {t.nom} {ferme && "🔒"}
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-green-400 mt-3 text-sm">{tiragesChwazi.length} tiraj chwazi:</p>
+      </div>
 
-          {/* LIGNES */}
-          <div style={{background:'#222',padding:10,borderRadius:10,marginTop:10}}>
-            <div style={{display:'grid',gridTemplateColumns:'1.2fr 1.5fr 1fr 0.5fr',gap:5,fontSize:11,color:'#888'}}><span>Jeux</span><span>Boul</span><span>Mise</span><span>→</span></div>
-            {lignes.map((l,i)=>(
-              <div key={i} style={{display:'grid',gridTemplateColumns:'1.2fr 1.5fr 1fr 0.5fr',gap:5,marginTop:6}}>
-                <select value={l.jeu} onChange={e=>{const n=[...lignes]; n[i].jeu=e.target.value; setLignes(n)}} style={{padding:10,background:'#000',color:'#FFD700',borderRadius:6,border:'1px solid #FFD700',fontWeight:'bold'}}>
-                  <option>BO</option><option>MA</option><option>L3</option><option>L4</option><option>L5</option>
-                </select>
-                <input inputMode="numeric" value={l.boul} onChange={e=>{const n=[...lignes]; n[i].boul=e.target.value.replace(/[^0-9x]/g,''); setLignes(n)}} placeholder="boul" style={{padding:10,background:'#333',color:'white',borderRadius:6,textAlign:'center',fontWeight:'bold'}}/>
-                <input inputMode="numeric" value={l.mise} onChange={e=>{const n=[...lignes]; n[i].mise=e.target.value.replace(/[^0-9]/g,''); setLignes(n)}} placeholder="mise" style={{padding:10,background:'#333',color:'white',borderRadius:6,textAlign:'center'}}/>
-                <button onClick={addLigne} style={{background:'#FFD700',color:'black',border:'none',borderRadius:6,fontWeight:'900'}}>→</button>
-              </div>
-            ))}
-            <p style={{fontSize:10,color:'#888',marginTop:5}}>Chif sèlman nan klavye. Touche flèch → pou avanse, konsève jwèt la. Maryaj bon lòd/dezòd: 12x47=47x12</p>
-            <div style={{background:'#000',padding:10,borderRadius:8,marginTop:10,display:'flex',justifyContent:'space-between'}}>
-              <span>Total: {total}G</span><span>x {tiragesSel.length||1} tiraj</span><span style={{color:'#FFD700',fontWeight:'900'}}>= {totalXTiraj}G</span>
-            </div>
-            <button onClick={imprimer} style={{background:'#FFD700',color:'black',width:'100%',padding:15,borderRadius:10,marginTop:10,fontWeight:'900',fontSize:18,border:'none'}}>🖨️ IMPRIMER - Santre Gran Lèt V2 Pro</button>
-            <div style={{background:'#111',padding:8,borderRadius:6,marginTop:8, fontSize:11}}>
-              <b>Limit Mise Global:</b> Vendeur1+Vendeur2+...= Limit Global (15000 BO, 100 MA, 100 L3, 20 L4, 5 L5)<br/>
-              <b>Pri:</b> 1er 50, 2e 20, 3e 10, M1=M2=M3=1000, L3=500, L4=5000, L5=25000
-            </div>
+      <div className="bg-zinc-900 rounded-2xl p-4 border border-zinc-800 mb-4">
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className="text-zinc-500 text-xs">Jeux</label>
+            <select value={jeux} onChange={e=>setJeux(e.target.value)} className="w-full h-14 bg-black border-2 border-yellow-400 rounded-xl text-yellow-400 font-black text-center text-lg">
+              <option>BO</option><option>MA</option><option>L3</option><option>L4</option><option>L5</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-zinc-500 text-xs">Boul</label>
+            <input ref={boulRef} value={boul} onChange={e=>setBoul(e.target.value.replace(/\D/g,''))} onKeyDown={e=>handleKeyDown(e,"mise")} className="w-full h-14 bg-zinc-800 border border-zinc-700 rounded-xl text-white font-bold text-center text-xl focus:border-yellow-400 outline-none"/>
+          </div>
+          <div>
+            <label className="text-zinc-500 text-xs">Mise</label>
+            <input ref={miseRef} value={mise} onChange={e=>setMise(e.target.value.replace(/\D/g,''))} onKeyDown={e=>handleKeyDown(e,"new")} className="w-full h-14 bg-zinc-800 border border-zinc-700 rounded-xl text-white font-bold text-center text-xl focus:border-yellow-400 outline-none"/>
           </div>
         </div>
-      )}
+      </div>
 
-      {tab==='copier' && (
-        <div style={{background:'#222',padding:15,borderRadius:10,marginTop:10}}>
-          <h3 style={{color:'#FFD700'}}>Kopiye Fich</h3>
-          <input value={ticketId} onChange={e=>setTicketId(e.target.value)} placeholder="Mete ID Ticket la pou kopye ex: CD-001" style={{width:'100%',padding:12,background:'#333',color:'white',borderRadius:8,marginTop:8}}/>
-          <button onClick={()=>{const f=fiches.find(x=>x.id===ticketId); if(f){alert('Fich '+f.id+' kopye!'); setLignes([{jeu:'BO',boul:'12',mise:'50'}])} else alert('Ticket pa jwenn!')}} style={{background:'#007BFF',color:'white',width:'100%',padding:12,borderRadius:8,marginTop:10,fontWeight:'bold',border:'none'}}>KOPIYE FICH</button>
-        </div>
-      )}
+      <button className="w-full bg-yellow-400 text-black font-black py-4 rounded-2xl text-xl">🖨️ IMPRIMER - Ticket Santre</button>
 
-      {tab==='fiches' && (
-        <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
-          <h3 style={{color:'#FFD700'}}>Mes Fiches</h3>
-          <input type="date" style={{width:'100%',padding:10,background:'#333',color:'white',borderRadius:6,marginTop:8}}/>
-          <input placeholder="Recherche fiches..." style={{width:'100%',padding:10,background:'#333',color:'white',borderRadius:6,marginTop:6}}/>
-          {fiches.map(f=><div key={f.id} style={{background:'#111',padding:10,borderRadius:8,marginTop:8,display:'flex',justifyContent:'space-between'}}><span>{f.id} - {f.date}</span><span style={{color:'#0f0'}}>{f.vente}G</span></div>)}
-        </div>
-      )}
-
-      {tab==='rapport' && (
-        <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
-          <h3 style={{color:'#FFD700'}}>Rapò Vendeur</h3>
-          <div style={{display:'flex',gap:5,marginTop:8}}><input type="date" style={{flex:1,padding:8,background:'#333',color:'white',borderRadius:5}}/><input type="date" style={{flex:1,padding:8,background:'#333',color:'white',borderRadius:5}}/></div>
-          <select style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:6}}><option>Tirage (Tous)</option>{allTirages.map(t=><option key={t}>{t}</option>)}</select>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:10}}>
-            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Vente</small><br/><b style={{color:'#0f0'}}>1,250G</b></div>
-            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Commission</small><br/><b>150G</b></div>
-            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Gain Kliyan</small><br/><b style={{color:'red'}}>500G</b></div>
-            <div style={{background:'#000',padding:10,borderRadius:8,textAlign:'center'}}><small>Balance Net</small><br/><b style={{color:'#FFD700'}}>600G</b></div>
-          </div>
-          <p style={{fontSize:10,color:'#888',marginTop:8}}>Si fich gen plizyè tiraj, chak tiraj kalkile separeman selon rezilta</p>
-          <button onClick={()=>window.print()} style={{background:'white',color:'black',width:'100%',padding:10,borderRadius:8,marginTop:8,fontWeight:'bold',border:'none'}}>🖨️ IMPRIMER</button>
-        </div>
-      )}
-
-      {tab==='param' && (
-        <div>
-          <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
-            <h3 style={{color:'#FFD700'}}>Ajoute Enprimant</h3>
-            <button onClick={()=>alert('Ap chèche enprimant... Terminal V2 Pro jwenn!')} style={{background:'#333',color:'white',width:'100%',padding:10,borderRadius:8,border:'none'}}>🔍 Rechèch tout enprimant yo</button>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:10,background:'#111',padding:10,borderRadius:8}}>
-              <span>Utilisation enprimant par defo</span>
-              <div style={{display:'flex',gap:5}}>
-                <button onClick={()=>setUseDefault(true)} style={{background:useDefault?'#0f0':'#333',color:useDefault?'black':'white',padding:'5px 10px',borderRadius:5,border:'none',fontWeight:'bold'}}>Wi</button>
-                <button onClick={()=>setUseDefault(false)} style={{background:!useDefault?'red':'#333',color:'white',padding:'5px 10px',borderRadius:5,border:'none',fontWeight:'bold'}}>Non</button>
-              </div>
-            </div>
-          </div>
-          <div style={{background:'#222',padding:12,borderRadius:10,marginTop:10}}>
-            <h3 style={{color:'#FFD700'}}>Antèt Fich yo Santre - Modifiable</h3>
-            <input value={entete.nom} onChange={e=>setEntete({...entete,nom:e.target.value})} style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:5}}/>
-            <input value={entete.resp} onChange={e=>setEntete({...entete,resp:e.target.value})} placeholder="Responsable..." style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:5}}/>
-            <input value={entete.pied} onChange={e=>setEntete({...entete,pied:e.target.value})} style={{width:'100%',padding:8,background:'#333',color:'white',borderRadius:5,marginTop:5}}/>
-            <div style={{background:'#000',padding:10,borderRadius:8,marginTop:10,textAlign:'center',fontFamily:'monospace',fontSize:12}}>
-              {entete.nom}<br/>Date.....<br/>Tirages..../.....<br/>Responsable: {entete.resp}<br/>------ Kò fich ------<br/>{entete.pied}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <a href="/" style={{display:'block',textAlign:'center',marginTop:20,color:'#888'}}>← Akèy</a>
+      <div className="bg-white text-black w-full max-w-[320px] mx-auto mt-4 p-4 rounded text-center font-mono text-sm">
+        <div className="font-black text-center">CD-LOTTO</div>
+        <div className="text-center">Vandè: {vendeurNom}</div>
+        <div className="text-center">{new Date().toLocaleString()}</div>
+      </div>
     </div>
-  )
+  );
 }
