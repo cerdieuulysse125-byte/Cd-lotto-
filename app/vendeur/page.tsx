@@ -1,65 +1,146 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
-const TIRAGES=[{id:"ga-midi",nom:"GA midi",h:"11:30"},{id:"fl-midi",nom:"FL midi",h:"12:30"},{id:"ny-midi",nom:"NY midi",h:"13:20"},{id:"real",nom:"Real",h:"13:00"},{id:"real-1245",nom:"Real 12h45",h:"12:45"},{id:"ga-soir",nom:"GA soir",h:"18:30"},{id:"fl-soir",nom:"FL soir",h:"18:00"},{id:"ny-soir",nom:"NY soir",h:"20:20"},{id:"primera-dia",nom:"Primera dia 11h50",h:"11:50"},{id:"suerte-dia",nom:"Suerte dia 12h20",h:"12:20"},{id:"lote-dom",nom:"Lote Dom 1h45",h:"13:45"},{id:"ganamas",nom:"Ganamas 14h15",h:"14:15"},{id:"suerte-noche",nom:"Suerte noche 17h50",h:"17:50"},{id:"primera-noche",nom:"Primera noche 19h50",h:"19:50"},{id:"loteka",nom:"Loteka 19h45",h:"19:45"},{id:"nacional",nom:"Nacional noche",h:"20:50"},{id:"leidsa",nom:"Leidsa",h:"20:45"},{id:"anguila-10h",nom:"Anguila 10h",h:"10:00"},{id:"anguila-18h",nom:"Anguilla 18h",h:"18:00"}];
+import { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, get, set, onValue } from 'firebase/database';
 
-export default function Vendeur(){
-const [auth,setAuth]=useState(false);const [pass,setPass]=useState("");const [nom,setNom]=useState("Vendeur1");const [tab,setTab]=useState("vendre");const [tiragesSel,setTiragesSel]=useState<string[]>([]);const [showT,setShowT]=useState(false);const [jeux,setJeux]=useState("BO");const [boul,setBoul]=useState("");const [mise,setMise]=useState("");const [lignes,setLignes]=useState<any[]>([]);const [fiches,setFiches]=useState<any[]>([]);const [searchId,setSearchId]=useState("");
-const bRef=useRef<HTMLInputElement>(null);const mRef=useRef<HTMLInputElement>(null);
-useEffect(()=>{const c=localStorage.getItem("cd_current_vendeur");if(c){setAuth(true);setNom(JSON.parse(c).nom);}setFiches(JSON.parse(localStorage.getItem("cd_fiches")||"[]"));},[]);
-const login=()=>{const vs=JSON.parse(localStorage.getItem("cd_vendeurs")||"[]");const f=vs.find((v:any)=>v.password===pass);if(vs.length===0&&pass.length>=3){localStorage.setItem("cd_current_vendeur",JSON.stringify({nom:"Vendeur1",password:pass}));setAuth(true);return;}if(f){localStorage.setItem("cd_current_vendeur",JSON.stringify(f));setAuth(true);setNom(f.nom);}else alert("Modpas pa bon");};
-const isF=(t:any)=>{const now=new Date();const [hh,mm]=t.h.split(":").map(Number);const f=new Date();f.setHours(hh,mm,0);return now>f;};
-const add=()=>{if(!boul||!mise)return;setLignes([...lignes,{jeux,boul,mise:parseInt(mise)}]);setBoul("");setMise("");bRef.current?.focus();};
-const key=(e:any,n:string)=>{if(e.key==="ArrowRight"||e.key==="ArrowDown"||e.key==="Enter"){e.preventDefault();if(n==="mise")mRef.current?.focus();if(n==="add")add();}};
-const total=lignes.reduce((s,l)=>s+l.mise,0)*(tiragesSel.length||1);
-if(!auth)return(<div style={{minHeight:"100vh",background:"white",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}><div style={{background:"#f5f5f5",borderRadius:20,padding:24,width:"100%",maxWidth:350,border:"2px solid #ccc"}}><h1 style={{color:"#d97706",fontSize:24,fontWeight:900,textAlign:"center",marginBottom:20}}>VENDEUR</h1><input type="password" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&login()} placeholder="Modpas" style={{width:"100%",height:56,background:"white",border:"3px solid #facc15",borderRadius:12,textAlign:"center",fontSize:20,outline:"none"}} autoFocus/><button onClick={login} style={{width:"100%",background:"#facc15",color:"black",fontWeight:900,padding:16,borderRadius:12,marginTop:12,fontSize:18,border:"none"}}>ANTRE</button></div></div>);
+const firebaseConfig = {
+  apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
+  authDomain: "cd-lotto.firebaseapp.com",
+  databaseURL: "https://cd-lotto-default-rtdb.firebaseio.com",
+  projectId: "cd-lotto",
+  appId: "1:671091732195:web:51bcfe8df83bc58fc75fd6"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-return(
-<div style={{minHeight:"100vh",background:"white",paddingBottom:30, fontFamily:"sans-serif"}}>
-<div style={{display:"flex",flexWrap:"wrap",gap:6,padding:10}}>
-<button onClick={()=>setTab("vendre")} style={{background:tab==="vendre"?"#facc15":"#e5e7eb",color:tab==="vendre"?"black":"black",fontWeight:900,padding:"10px 14px",borderRadius:8,border:"1px solid black",fontSize:13}}>VENDRE</button>
-<button onClick={()=>setTab("copier")} style={{background:tab==="copier"?"#60a5fa":"#e5e7eb",color:"black",fontWeight:700,padding:"10px 14px",borderRadius:8,border:"1px solid black",fontSize:13}}>COPIER</button>
-<button onClick={()=>setTab("fiches")} style={{background:tab==="fiches"?"#4ade80":"#e5e7eb",color:"black",fontWeight:700,padding:"10px 14px",borderRadius:8,border:"1px solid black",fontSize:13}}>MES FICHES</button>
-<button onClick={()=>setTab("rapport")} style={{background:tab==="rapport"?"#c084fc":"#e5e7eb",color:"black",fontWeight:700,padding:"10px 14px",borderRadius:8,border:"1px solid black",fontSize:13}}>RAPPORT</button>
-<button onClick={()=>setTab("paramet")} style={{background:"#fb923c",color:"black",fontWeight:700,padding:"10px 14px",borderRadius:8,border:"1px solid black",fontSize:13}}>PARAMÈT</button>
-<button onClick={()=>{localStorage.removeItem("cd_current_vendeur");setAuth(false);}} style={{background:"#ef4444",color:"white",fontWeight:900,padding:"10px 14px",borderRadius:8,border:"1px solid black",fontSize:13}}>X FÈMEN</button>
-</div>
+const TIRAGES = [
+  {n:"GA midi", f:"12:00"}, {n:"FL midi", f:"12:30"}, {n:"NY midi", f:"13:15"},
+  {n:"Real", f:"12:30"}, {n:"GA soir", f:"19:30"}, {n:"FL soir", f:"20:30"},
+  {n:"NY soir", f:"21:30"}, {n:"Real 12h45", f:"12:35"},
+  {n:"Primera dia 11h50", f:"11:40"}, {n:"Suerte dia 12h20", f:"12:10"},
+  {n:"Lote Dom 1h45", f:"13:35"}, {n:"Ganamas 14h15", f:"14:05"},
+  {n:"Suerte noche 17h50", f:"17:40"}, {n:"Primera noche 19h50", f:"19:40"},
+  {n:"Loteka 19h45", f:"19:35"}, {n:"Nacional noche 20h50", f:"20:40"},
+  {n:"Leidsa 20h45", f:"20:35"}, {n:"Anguila 10h", f:"09:55"}, {n:"Anguilla 18h", f:"17:55"}
+];
 
-{tab==="vendre"&&(
-<div style={{margin:10,background:"white",border:"2px solid black",borderRadius:16,padding:12}}>
-<div style={{position:"relative"}}>
-<button onClick={()=>setShowT(!showT)} style={{width:"100%",background:"white",border:"2px solid black",borderRadius:10,padding:12,fontWeight:700,display:"flex",justifyContent:"space-between"}}><span style={{color:"#1d4ed8"}}>Tout tiraj yo nan yon sèl Kaz</span><span style={{color:"#dc2626"}}>({tiragesSel.length}) ▼</span></button>
-{showT&&(<div style={{position:"absolute",zIndex:20,width:"100%",background:"black",borderRadius:12,marginTop:6,padding:10,maxHeight:250,overflow:"auto"}}><div style={{display:"flex",flexWrap:"wrap",gap:6}}>{TIRAGES.map(t=>{const f=isF(t);const sel=tiragesSel.includes(t.id);return <button key={t.id} disabled={f} onClick={()=>setTiragesSel(p=>p.includes(t.id)?p.filter(x=>x!==t.id):[...p,t.id])} style={{padding:"6px 10px",borderRadius:20,fontSize:12,fontWeight:700,background:f?"#333":sel?"#facc15":"white",color:f?"#777":sel?"black":"black",textDecoration:f?"line-through":"none",border:"1px solid black"}}>{t.nom} {f?'🔒':''}</button>})}</div></div>)}
-</div>
+export default function VendeurV11(){
+  const [tab, setTab] = useState('vendre');
+  const [selectedT, setSelectedT] = useState([]);
+  const [jeu, setJeu] = useState('Loto3');
+  const [boul, setBoul] = useState('');
+  const [mise, setMise] = useState('');
+  const [fiches, setFiches] = useState([]);
+  const [limites, setLimites] = useState({});
 
-<div style={{display:"grid",gridTemplateColumns:"80px 1fr",gap:8,marginTop:12}}>
-<select value={jeux} onChange={e=>setJeux(e.target.value)} style={{height:50,background:"#fef08a",border:"2px solid black",borderRadius:10,fontWeight:900,textAlign:"center",color:"#1d4ed8"}}><option>BO</option><option>MA</option><option>L3</option><option>L4</option><option>L5</option></select>
-<input ref={bRef} value={boul} onChange={e=>setBoul(e.target.value.replace(/\D/g,''))} onKeyDown={e=>key(e,"mise")} placeholder="Boul" inputMode="numeric" style={{height:50,border:"2px solid black",borderRadius:10,textAlign:"center",fontWeight:700,fontSize:20,color:"#7c3aed",outline:"none"}}/>
-</div>
-<div style={{marginTop:8}}>
-<input ref={mRef} value={mise} onChange={e=>setMise(e.target.value.replace(/\D/g,''))} onKeyDown={e=>key(e,"add")} placeholder="Mise" inputMode="numeric" style={{width:"100%",height:50,border:"2px solid black",borderRadius:10,textAlign:"center",fontWeight:700,fontSize:20,color:"#15803d",outline:"none"}}/>
-</div>
+  useEffect(()=>{
+    onValue(ref(db,'limitesGlobales'), s=> setLimites(s.val()||{}));
+  },[]);
 
-<div style={{background:"black",borderRadius:12,marginTop:12,padding:10,minHeight:70,textAlign:"center"}}>
-{lignes.length===0?<div style={{color:"#4ade80"}}>Pa gen liy - <span style={{color:"#facc15"}}>Tape Boul + Mise</span></div>:lignes.map((l,i)=><div key={i}><span style={{color:"#facc15"}}>{l.jeux}</span> <span style={{color:"#22d3ee"}}>{l.boul}</span> <span style={{color:"#4ade80"}}>- {l.mise}G</span></div>)}
-</div>
+  const toggleT = (nom) => {
+    const now = new Date();
+    const t = TIRAGES.find(x=>x.n===nom);
+    const [h,m] = t.f.split(':').map(Number);
+    const ferm = new Date(); ferm.setHours(h,m,0);
+    if(now > ferm) return alert(`⛔ ${nom} FÈMEN depi ${t.f}`);
+    setSelectedT(prev=> prev.includes(nom)? prev.filter(x=>x!==nom) : [...prev, nom]);
+  };
 
-<div style={{background:"#fef9c3",border:"2px solid black",borderRadius:12,marginTop:12,padding:12,textAlign:"center",fontWeight:900}}>
-<span style={{color:"#1d4ed8"}}>Total:</span> <span style={{color:"#7c3aed"}}>{lignes.reduce((s,l)=>s+l.mise,0)}G</span> <span style={{color:"#dc2626"}}>x {tiragesSel.length||1} tiraj</span> <span style={{color:"#15803d"}}>= {total}G</span>
-</div>
+  const normalizeMariage = (b) => {
+    if(b.includes('x')||b.includes('×')){
+      return b.split(/x|×/).map(s=>s.trim().padStart(2,'0')).sort().join('×');
+    }
+    return b;
+  };
 
-<button onClick={()=>{const id="CD"+Date.now().toString().slice(-6);const fich={id,date:new Date().toISOString(),vendeur:nom,tirages:tiragesSel,lignes,total};const all=[fich,...fiches];setFiches(all);localStorage.setItem("cd_fiches",JSON.stringify(all));setLignes([]);setTiragesSel([]);}} style={{width:"100%",background:"#15803d",color:"white",fontWeight:900,padding:16,borderRadius:12,marginTop:12,fontSize:16,border:"2px solid black"}}>IMPRIMER - <span style={{color:"#facc15"}}>Santre Gran Lèt V2 Pro</span></button>
+  const ajouter = async () => {
+    if(!boul||!mise) return alert('Mete boul/mise');
+    if(selectedT.length===0) return alert('Chwazi tiraj');
 
-<div style={{background:"white",color:"black",width:280,margin:"16px auto",padding:16,border:"2px dashed black",fontFamily:"monospace",fontSize:13,textAlign:"center"}}>
-<div style={{fontWeight:900,fontSize:18,color:"#dc2626"}}>C&D VÉRITÉ LOTTO</div>
-<div style={{color:"#1d4ed8"}}>Date {new Date().toLocaleString()}</div>
-<div style={{color:"#7c3aed"}}>Tirages {tiragesSel.length}</div>
-<div style={{color:"#15803d"}}>Responsabla {nom}</div>
-<div style={{marginTop:8,borderTop:"1px solid black",paddingTop:8}}>{lignes.map((l,i)=><div key={i}><span style={{color:"#1d4ed8"}}>{l.jeux}</span> {l.boul} - {l.mise}G</div>)}</div>
-<div style={{fontWeight:900,marginTop:8,borderTop:"1px solid black",paddingTop:8,color:"#dc2626"}}>TOTAL {total}G</div>
-<div style={{marginTop:16,color:"#15803d",fontWeight:700}}>Bòn chans, lave chodyè w</div>
-</div>
-</div>
-)}
-</div>
-);
+    const finalBoul = jeu==='Mariage'? normalizeMariage(boul) : boul.padStart(2,'0');
+    const LIMITE = jeu==='Loto3'?5000: jeu==='Mariage'?10000:2000;
+    const totalGlobal = limites[finalBoul]||0;
+
+    if(totalGlobal + parseInt(mise) > LIMITE){
+      return alert(`⛔ LIMITE GLOBAL\n${finalBoul}: ${totalGlobal}/${LIMITE} HTG\nTout vendeur yo konbine`);
+    }
+
+    setFiches([...fiches, {jeu, boul: finalBoul, mise: parseInt(mise), id: Date.now()}]);
+    setBoul(''); setMise('');
+    setTimeout(()=>document.getElementById('boul')?.focus(),50);
+  };
+
+  const total = fiches.reduce((s,f)=>s+f.mise,0);
+  const grand = total * selectedT.length;
+
+  const imprimer = async () => {
+    if(fiches.length===0) return;
+    const id = 'T'+Date.now();
+    // Update limite global pou tout vendeur
+    for(let f of fiches){
+      const snap = await get(ref(db,`limitesGlobales/${f.boul}`));
+      await set(ref(db,`limitesGlobales/${f.boul}`), (snap.val()||0)+f.mise);
+    }
+    const ticket = {id, tirages:selectedT, fiches, total:grand, date:new Date().toISOString()};
+    await set(ref(db,`fiches/${id}`), ticket);
+
+    const win = window.open('','','width=300,height=600');
+    win.document.write(`
+      <html><head><style>
+        @media print{body{width:58mm; margin:0}}
+       .ticket{width:58mm; text-align:center; font-family:monospace; font-weight:bold; font-size:18px; text-transform:uppercase}
+       .ligne{display:flex; justify-content:space-between; font-size:20px; border-bottom:1px dashed #000; padding:4px 0}
+      </style></head>
+      <body><div class=ticket>
+        <div>C&D VERITE LOTTO<br>${new Date().toLocaleString()}<br>${selectedT.join(', ')}</div><hr>
+        ${fiches.map(f=>`<div class=ligne><span>${f.jeu} ${f.boul}</span><span>${f.mise}</span></div>`).join('')}
+        <hr><div style=font-size:24px>TOTAL: ${grand} HTG</div>
+        <div>ID: ${id}</div><br><div>BON CHANS!</div>
+      </div><script>window.print();window.close()<\/script></body></html>
+    `);
+    setFiches([]);
+  };
+
+  return (
+    <div style={{fontFamily:'Arial', background:'#f2f2f2', minHeight:'100vh'}}>
+      <div style={{display:'flex', background:'#0b5d2e', position:'sticky', top:0}}>
+        {['vendre','copier','fiches','rapport','param'].map(t=>
+          <button key={t} onClick={()=>setTab(t)} style={{flex:1, padding:'14px 4px', background:tab===t?'#ffcc00':'transparent', color:tab===t?'#000':'#fff', border:'none', fontWeight:'bold'}}>{t.toUpperCase()}</button>
+        )}
+      </div>
+
+      {tab==='vendre' && <>
+        <div style={{padding:'8px'}}>
+          <div>Chwazi Tiraj yo ({selectedT.length}) - youn sel kaz pou tout tiraj:</div>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'4px', maxHeight:'200px', overflow:'auto', background:'#fff', padding:'6px', borderRadius:'8px'}}>
+            {TIRAGES.map(t=>(
+              <label key={t.n} style={{border:'1px solid #ddd', padding:'6px', borderRadius:'4px', background:selectedT.includes(t.n)?'#d4edda':'#fff', fontSize:'12px'}}>
+                <input type="checkbox" checked={selectedT.includes(t.n)} onChange={()=>toggleT(t.n)}/> {t.n} ({t.f})
+              </label>
+            ))}
+          </div>
+
+          <div style={{display:'flex', gap:'5px', marginTop:'10px'}}>
+            <select value={jeu} onChange={e=>setJeu(e.target.value)} style={{flex:1, padding:'14px'}}><option>Loto3</option><option>Mariage</option><option>Loto4</option><option>Gratis</option></select>
+            <input id="boul" value={boul} onChange={e=>setBoul(e.target.value)} onKeyDown={e=>e.key==='Enter'&&document.getElementById('mise').focus()} inputMode="numeric" placeholder="Boul" style={{flex:1, padding:'14px'}}/>
+            <input id="mise" value={mise} onChange={e=>setMise(e.target.value.replace(/\D/g,''))} onKeyDown={e=>{if(e.key==='Enter'||e.key==='ArrowDown'){e.preventDefault(); ajouter()}}} inputMode="numeric" placeholder="Mise" style={{flex:1, padding:'14px'}}/>
+          </div>
+
+          <div style={{background:'#fff', minHeight:'150px', marginTop:'8px', borderRadius:'8px'}}>
+            {fiches.map((f,i)=><div key={f.id} style={{display:'flex', justifyContent:'space-between', padding:'8px', borderBottom:'1px solid #eee'}}><span>{f.jeu}</span><b>{f.boul}</b><span>{f.mise} HTG</span><span onClick={()=>setFiches(fiches.filter((_,idx)=>idx!==i))} style={{color:'red'}}>X</span></div>)}
+          </div>
+
+          <div style={{background:'#0b5d2e', color:'#fff', padding:'12px', textAlign:'center', fontSize:'20px', fontWeight:'bold', borderRadius:'8px', marginTop:'8px'}}>
+            Total {total} × {selectedT.length} = {grand} HTG
+          </div>
+          <button onClick={ajouter} style={{width:'100%', padding:'14px', background:'#0b5d2e', color:'#fff', fontSize:'18px', fontWeight:'bold', border:'none', borderRadius:'8px', marginTop:'6px'}}>↓ AJOUTE (Flèche ↓→ conserve jeu)</button>
+          <button onClick={imprimer} style={{width:'100%', padding:'16px', background:'#000', color:'#fff', fontSize:'20px', fontWeight:'bold', border:'none', borderRadius:'8px', marginTop:'6px'}}>IMPRIMER 58mm SANTRE</button>
+        </div>
+      </>}
+
+      {tab==='copier' && <div style={{padding:'20px'}}><input placeholder="ID Ticket" style={{width:'100%', padding:'14px'}}/><button style={{width:'100%', padding:'14px', marginTop:'10px'}}>Rechèch & Kopi</button></div>}
+      {tab==='fiches' && <div style={{padding:'20px'}}>Lis Fiches yo (date)</div>}
+      {tab==='rapport' && <div style={{padding:'20px'}}>Rapport - Separe pa tiraj (si 1 fich 3 tiraj = 3 liy nan rapò)</div>}
+      {tab==='param' && <div style={{padding:'20px'}}>Antet, Pye Ticket, Imprimante</div>}
+    </div>
+  );
 }
