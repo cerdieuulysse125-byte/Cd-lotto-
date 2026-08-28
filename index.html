@@ -1,110 +1,30 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>CD-LOTTO - SUPER ADMIN</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#f2f4f7}.h{background:#1a237e;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center}.h b{font-size:18px;line-height:22px}.tabs{display:flex;background:#fff;border-bottom:2px solid #ddd;overflow-x:auto;position:sticky;top:0;z-index:10}.tab{padding:14px 18px;font-weight:700;color:#555;border-bottom:3px solid transparent;white-space:nowrap;cursor:pointer;font-size:14px}.tab.active{color:#1a237e;border-bottom-color:#1a237e;background:#e8eaf6}.panel{display:none;padding:12px;max-width:700px;margin:auto}.panel.active{display:block}.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:12px}.btn{padding:12px;border:0;border-radius:10px;color:#fff;font-weight:700;width:100%;margin-top:10px;cursor:pointer}.btn-green{background:#2e7d32}.btn-red{background:#c62828}.btn-purple{background:#4a148c}input{padding:12px;border:2px solid #ddd;border-radius:10px;width:100%;margin:6px 0;font-size:16px;font-weight:700}.gbox{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ibox{background:#e8eaf6;border:2px solid #c5cae9;border-radius:12px;padding:12px}.ibox label{font-size:11px;font-weight:700;color:#1a237e}.pbox{background:#fff8e1;border:2px solid #ffe082;border-radius:12px;padding:12px}.pbox label{font-size:11px;font-weight:700;color:#e65100}.heure-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;background:#fff;padding:12px;border-radius:12px;border:2px solid #e0e0e0}.heure-row b{flex:1;font-size:13px}.heure-row input{flex:0 0 140px;margin:0}
-</style></head><body>
-<div class='h'><div><b>👑 CD-LOTTO -<br>SUPER ADMIN</b><br><small id='dateShow'>28/08/2026</small></div><button onclick='resetBaz()' style='padding:10px 16px;background:#c62828;color:#fff;border:0;border-radius:10px;font-weight:700;line-height:14px'>RESET<br>BAZ</button></div>
-
-<div class='tabs'>
-<div class='tab' onclick="openTab(event,'mise')">Mise</div>
-<div class='tab' onclick="openTab(event,'prix')">Prix Paiement</div>
-<div class='tab active' onclick="openTab(event,'heure')">L'heure Fermeture</div>
-</div>
-
-<div id='mise' class='panel'>
-<div class='card' style='border:2px solid #1a237e'>
-<h3>💰 Limit Mise GLOBAL (Modifyab) - Bank</h3>
-<div class='gbox' style='margin-top:12px'>
-<div class='ibox'><label>Boul 1000 - Max pa boul</label><input id='gLimBoul' type='number' value='1000'></div>
-<div class='ibox'><label>Maryaj 100 - Max pa maryaj</label><input id='gLimMaryaj' type='number' value='100'></div>
-<div class='ibox'><label>Loto3 100</label><input id='gLimL3' type='number' value='100'></div>
-<div class='ibox'><label>Loto4 50</label><input id='gLimL4' type='number' value='50'></div>
-<div class='ibox'><label>Loto5 50</label><input id='gLimL5' type='number' value='50'></div>
-</div>
-<button class='btn btn-green' onclick='saveGlobalLimit()'>💾 Save Tout</button>
-</div>
-</div>
-
-<div id='prix' class='panel'>
-<div class='card' style='border:2px solid #e65100'>
-<h3>💵 Prix Paiement GLOBAL (Modifyab)</h3><p style='font-size:11px'>Maryaj: 12x34=34x12 dezòd bon</p>
-<div class='gbox' style='margin-top:12px'>
-<div class='pbox'><label>Komisyon 10 %</label><input id='gPriKom' type='number' value='10'></div>
-<div class='pbox'><label>1er lot 50</label><input id='gPri1er' type='number' value='50'></div>
-<div class='pbox'><label>2e lot 20</label><input id='gPri2e' type='number' value='20'></div>
-<div class='pbox'><label>3e lot 10</label><input id='gPri3e' type='number' value='10'></div>
-<div class='pbox'><label>M1 1000</label><input id='gPriM1' type='number' value='1000'></div>
-<div class='pbox'><label>M2 1000</label><input id='gPriM2' type='number' value='1000'></div>
-<div class='pbox'><label>M3 1000</label><input id='gPriM3' type='number' value='1000'></div>
-<div class='pbox'><label>L3 500</label><input id='gPriL3' type='number' value='500'></div>
-<div class='pbox'><label>L4 5000</label><input id='gPriL4' type='number' value='5000'></div>
-<div class='pbox'><label>L5 25000</label><input id='gPriL5' type='number' value='25000'></div>
-</div>
-<button class='btn btn-green' onclick='saveGlobalPri()'>💾 Save Tout</button>
-</div>
-</div>
-
-<div id='heure' class='panel active'>
-<div class='card'>
-<h3>⏰ L'heure Fermeture - Bank (Modifyab)</h3>
-<p style='font-size:11px;color:#666;margin-top:4px'>Mete lè fèmti pou chak bank / tiraj - Vandè pap ka vann apre lè sa a</p>
-<div id='heuresList' style='margin-top:14px'></div>
-<button class='btn btn-green' onclick='saveHeures()'>💾 Save Tout</button>
-</div>
-</div>
-
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>SUPER ADMIN</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#f2f4f7}.h{background:#1a237e;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center}.tabs{display:flex;background:#fff;border-bottom:2px solid #ddd;overflow-x:auto;position:sticky;top:0;z-index:10}.tab{padding:14px 18px;font-weight:700;color:#555;border-bottom:3px solid transparent;white-space:nowrap;cursor:pointer}.tab.active{color:#1a237e;border-bottom-color:#1a237e;background:#e8eaf6}.panel{display:none;padding:12px;max-width:700px;margin:auto}.panel.active{display:block}.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:12px}.btn{padding:14px;border:0;border-radius:12px;color:#fff;font-weight:700;width:100%;margin-top:10px;cursor:pointer}.btn-green{background:#2e7d32}.btn-red{background:#c62828}input{padding:12px;border:2px solid #ddd;border-radius:10px;width:100%;margin:6px 0;font-size:16px;font-weight:700}.gbox{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ibox{background:#e8eaf6;border:2px solid #c5cae9;border-radius:12px;padding:12px}.ibox label{font-size:11px;font-weight:700;color:#1a237e}.pbox{background:#fff8e1;border:2px solid #ffe082;border-radius:12px;padding:12px}.pbox label{font-size:11px;font-weight:700;color:#e65100}.heure-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;background:#fff;padding:12px;border-radius:12px;border:2px solid #e0e0e0}.heure-row b{flex:1;font-size:13px}.heure-row input{flex:0 0 140px;margin:0}</style></head><body>
+<div class='h'><div><b>👑 CD-LOTTO -<br>SUPER ADMIN</b><br><small id='dateShow'></small></div><button onclick='resetBaz()' style='padding:10px 16px;background:#c62828;color:#fff;border:0;border-radius:10px;font-weight:700'>RESET<br>BAZ</button></div>
+<div class='tabs'><div class='tab' onclick="openTab(event,'mise')">Mise</div><div class='tab' onclick="openTab(event,'prix')">Prix Paiement</div><div class='tab active' onclick="openTab(event,'heure')">L'heure Fermeture</div></div>
+<div id='mise' class='panel'><div class='card'><h3>💰 Limit Miz GLOBAL</h3><div class='gbox' style='margin-top:12px'><div class='ibox'><label>Boul 1000</label><input id='gLimBoul' type='number' value='1000'></div><div class='ibox'><label>Maryaj 100</label><input id='gLimMaryaj' type='number' value='100'></div><div class='ibox'><label>Loto3 100</label><input id='gLimL3' type='number' value='100'></div><div class='ibox'><label>Loto4 50</label><input id='gLimL4' type='number' value='50'></div><div class='ibox'><label>Loto5 50</label><input id='gLimL5' type='number' value='50'></div></div><button class='btn btn-green' onclick='saveGlobalLimit()'>💾 Save Tout</button></div></div>
+<div id='prix' class='panel'><div class='card'><h3>💵 Prix Paiement GLOBAL</h3><p style='font-size:11px'>Maryaj 12x34=34x12 dezòd bon</p><div class='gbox' style='margin-top:12px'><div class='pbox'><label>Komisyon 10</label><input id='gPriKom' type='number' value='10'></div><div class='pbox'><label>1er lot 50</label><input id='gPri1er' type='number' value='50'></div><div class='pbox'><label>2e lot 20</label><input id='gPri2e' type='number' value='20'></div><div class='pbox'><label>3e lot 10</label><input id='gPri3e' type='number' value='10'></div><div class='pbox'><label>M1 1000</label><input id='gPriM1' type='number' value='1000'></div><div class='pbox'><label>M2 1000</label><input id='gPriM2' type='number' value='1000'></div><div class='pbox'><label>M3 1000</label><input id='gPriM3' type='number' value='1000'></div><div class='pbox'><label>L3 500</label><input id='gPriL3' type='number' value='500'></div><div class='pbox'><label>L4 5000</label><input id='gPriL4' type='number' value='5000'></div><div class='pbox'><label>L5 25000</label><input id='gPriL5' type='number' value='25000'></div></div><button class='btn btn-green' onclick='saveGlobalPri()'>💾 Save Tout</button></div></div>
+<div id='heure' class='panel active'><div class='card'><h3>⏰ L'heure Fermeture - Bank (Modifyab)</h3><p style='font-size:11px'>18 tiraj - modifyab - bloke vandè apre lè</p><div id='heuresList' style='margin-top:14px'></div><button class='btn btn-green' onclick='saveHeures()'>💾 Save Tout</button></div></div>
 <script>
 var DB=null;try{DB=JSON.parse(localStorage.getItem('cd-lotto-db')||'null')}catch(e){DB=null}
 if(!DB)DB={proprios:[],vendeurs:[],tickets:[],results:[],heures:{},limits:{},pri:{},globalLimit:{boul:1000,maryaj:100,l3:100,l4:50,l5:50},globalPri:{kom:10,p1er:50,p2e:20,p3e:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000}};
 if(!DB.globalLimit)DB.globalLimit={boul:1000,maryaj:100,l3:100,l4:50,l5:50};
 if(!DB.globalPri)DB.globalPri={kom:10,p1er:50,p2e:20,p3e:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000};
 if(!DB.heures)DB.heures={};
-var ALL=['NY midi - 13:30','NY soir - 20:30','FL midi - 13:00','FL soir - 21:00','GA midi - 12:00','GA soir - 19:00','Real - 12:30','Primera día - 12:00','Suerte día - 12:30','Lote Dom - 14:00','Ganamas - 14:30','Suerte noche - 18:00','Primera noche - 19:30','Loteka - 19:45','Nacional noche - 20:30','Leidsa - 21:00','Anguila 10h - 10:00','Anguila 18h - 18:00'];
-// Vre lis san lè default
-var TIRAJ_NOMS=['NY midi','NY soir','FL midi','FL soir','GA midi','GA soir','Real','Primera día','Suerte día','Lote Dom','Ganamas','Suerte noche','Primera noche','Loteka','Nacional noche','Leidsa','Anguila 10h','Anguila 18h'];
+var TIRAJ_NOMS=["NY midi","NY soir","FL midi","FL soir","GA midi","GA soir","Real","Primera día","Suerte día","Lote Dom","Ganamas","Suerte noche","Primera noche","Loteka","Nacional noche","Leidsa","Anguila 10h","Anguila 18h"];
+var DEFAULT_HEURES={"NY midi":"12:25","NY soir":"20:25","FL midi":"12:45","FL soir":"20:45","GA midi":"11:45","GA soir":"18:45","Real":"12:25","Primera día":"11:50","Suerte día":"12:20","Lote Dom":"13:50","Ganamas":"14:20","Suerte noche":"17:50","Primera noche":"19:20","Loteka":"19:40","Nacional noche":"20:20","Leidsa":"20:50","Anguila 10h":"09:50","Anguila 18h":"17:50"};
 function save(){localStorage.setItem('cd-lotto-db',JSON.stringify(DB))}
-function openTab(e,id){var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');var panels=document.querySelectorAll('.panel');for(var j=0;j<panels.length;j++){panels[j].classList.remove('active');panels[j].style.display='none';}e.target.classList.add('active');var el=document.getElementById(id);el.classList.add('active');el.style.display='block';}
-
+function openTab(e,id){var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');var panels=document.querySelectorAll('.panel');for(var j=0;j<panels.length;j++){panels[j].classList.remove('active');panels[j].style.display='none';}e.target.classList.add('active');document.getElementById(id).classList.add('active');document.getElementById(id).style.display='block';}
 function loadAll(){
   document.getElementById('dateShow').innerText=new Date().toLocaleDateString('fr-FR');
-  if(DB.globalLimit){
-    document.getElementById('gLimBoul').value=DB.globalLimit.boul;
-    document.getElementById('gLimMaryaj').value=DB.globalLimit.maryaj;
-    document.getElementById('gLimL3').value=DB.globalLimit.l3;
-    document.getElementById('gLimL4').value=DB.globalLimit.l4;
-    document.getElementById('gLimL5').value=DB.globalLimit.l5;
-  }
-  if(DB.globalPri){
-    document.getElementById('gPriKom').value=DB.globalPri.kom;
-    document.getElementById('gPri1er').value=DB.globalPri.p1er;
-    document.getElementById('gPri2e').value=DB.globalPri.p2e;
-    document.getElementById('gPri3e').value=DB.globalPri.p3e;
-    document.getElementById('gPriM1').value=DB.globalPri.m1;
-    document.getElementById('gPriM2').value=DB.globalPri.m2;
-    document.getElementById('gPriM3').value=DB.globalPri.m3;
-    document.getElementById('gPriL3').value=DB.globalPri.l3;
-    document.getElementById('gPriL4').value=DB.globalPri.l4;
-    document.getElementById('gPriL5').value=DB.globalPri.l5;
-  }
+  if(Object.keys(DB.heures).length==0){DB.heures=DEFAULT_HEURES;save();}
+  document.getElementById('gLimBoul').value=DB.globalLimit.boul;document.getElementById('gLimMaryaj').value=DB.globalLimit.maryaj;document.getElementById('gLimL3').value=DB.globalLimit.l3;document.getElementById('gLimL4').value=DB.globalLimit.l4;document.getElementById('gLimL5').value=DB.globalLimit.l5;
+  document.getElementById('gPriKom').value=DB.globalPri.kom;document.getElementById('gPri1er').value=DB.globalPri.p1er;document.getElementById('gPri2e').value=DB.globalPri.p2e;document.getElementById('gPri3e').value=DB.globalPri.p3e;document.getElementById('gPriM1').value=DB.globalPri.m1;document.getElementById('gPriM2').value=DB.globalPri.m2;document.getElementById('gPriM3').value=DB.globalPri.m3;document.getElementById('gPriL3').value=DB.globalPri.l3;document.getElementById('gPriL4').value=DB.globalPri.l4;document.getElementById('gPriL5').value=DB.globalPri.l5;
   loadHeures();
 }
-function saveGlobalLimit(){DB.globalLimit={boul:parseInt(document.getElementById('gLimBoul').value)||1000,maryaj:parseInt(document.getElementById('gLimMaryaj').value)||100,l3:parseInt(document.getElementById('gLimL3').value)||100,l4:parseInt(document.getElementById('gLimL4').value)||50,l5:parseInt(document.getElementById('gLimL5').value)||50};save();alert('✅ Limit Miz save - Boul 1000 Maryaj 100 L3 100 L4 50 L5 50');}
-function saveGlobalPri(){DB.globalPri={kom:parseInt(document.getElementById('gPriKom').value)||10,p1er:parseInt(document.getElementById('gPri1er').value)||50,p2e:parseInt(document.getElementById('gPri2e').value)||20,p3e:parseInt(document.getElementById('gPri3e').value)||10,m1:parseInt(document.getElementById('gPriM1').value)||1000,m2:parseInt(document.getElementById('gPriM2').value)||1000,m3:parseInt(document.getElementById('gPriM3').value)||1000,l3:parseInt(document.getElementById('gPriL3').value)||500,l4:parseInt(document.getElementById('gPriL4').value)||5000,l5:parseInt(document.getElementById('gPriL5').value)||25000};save();alert('✅ Prix Paiement save - 1er 50 2e 20 3e 10 M1/M2/M3 1000 L3 500 L4 5000 L5 25000 - Maryaj 12x34=34x12');}
-
-function loadHeures(){
-  var cont=document.getElementById('heuresList');var html='';
-  for(var i=0;i<TIRAJ_NOMS.length;i++){
-    var t=TIRAJ_NOMS[i];
-    var h=DB.heures[t]||'';
-    html+='<div class="heure-row"><b>🏦 '+t+'</b><input type="time" id="h_'+i+'" value="'+h+'"></div>';
-  }
-  cont.innerHTML=html;
-}
-function saveHeures(){
-  for(var i=0;i<TIRAJ_NOMS.length;i++){
-    var el=document.getElementById('h_'+i);
-    if(el) DB.heures[TIRAJ_NOMS[i]]=el.value;
-  }
-  save();
-  alert('✅ L\'heure Fermeture save! Tout bank yo gen lè fèmti kounya - Vandè yo pap ka vann apre lè sa yo');
-}
-function resetBaz(){if(!confirm('RESET BAZ? Sa ap efase tout tikè ak rezilta! Ou sèten?'))return;DB.tickets=[];DB.results=[];save();alert('✅ Baz reset!');}
+function saveGlobalLimit(){DB.globalLimit={boul:parseInt(document.getElementById('gLimBoul').value)||1000,maryaj:parseInt(document.getElementById('gLimMaryaj').value)||100,l3:parseInt(document.getElementById('gLimL3').value)||100,l4:parseInt(document.getElementById('gLimL4').value)||50,l5:parseInt(document.getElementById('gLimL5').value)||50};save();alert('✅ Limit save');}
+function saveGlobalPri(){DB.globalPri={kom:parseInt(document.getElementById('gPriKom').value)||10,p1er:parseInt(document.getElementById('gPri1er').value)||50,p2e:parseInt(document.getElementById('gPri2e').value)||20,p3e:parseInt(document.getElementById('gPri3e').value)||10,m1:parseInt(document.getElementById('gPriM1').value)||1000,m2:parseInt(document.getElementById('gPriM2').value)||1000,m3:parseInt(document.getElementById('gPriM3').value)||1000,l3:parseInt(document.getElementById('gPriL3').value)||500,l4:parseInt(document.getElementById('gPriL4').value)||5000,l5:parseInt(document.getElementById('gPriL5').value)||25000};save();alert('✅ Prix save - 12x34=34x12 bon');}
+function loadHeures(){var cont=document.getElementById('heuresList');var html='';for(var i=0;i<TIRAJ_NOMS.length;i++){var t=TIRAJ_NOMS[i];var h=DB.heures[t]||DEFAULT_HEURES[t]||'';html+='<div class="heure-row"><b>🏦 '+t+'</b><input type="time" id="h_'+i+'" value="'+h+'"></div>';}cont.innerHTML=html;}
+function saveHeures(){for(var i=0;i<TIRAJ_NOMS.length;i++){var el=document.getElementById('h_'+i);if(el)DB.heures[TIRAJ_NOMS[i]]=el.value;}save();alert('✅ Lè fèmti save - 18 bank');}
+function resetBaz(){if(!confirm('RESET BAZ?'))return;DB.tickets=[];DB.results=[];save();alert('Reset!');}
 loadAll();
 </script></body></html>
