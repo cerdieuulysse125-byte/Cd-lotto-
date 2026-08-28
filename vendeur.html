@@ -1,66 +1,236 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>V17.4 Ekran Sere Fich Laj</title>
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>C&D VERITE V17.8 FINAL SAN ESPAS</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef2f7}.h{background:#1e2a8a;color:#fff;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:10}.card{background:#fff;border-radius:12px;padding:10px;margin:8px}.row{display:flex;gap:8px;align-items:center;margin-bottom:10px;justify-content:center}.kz{width:72px;min-width:72px;height:46px;border:2.5px solid #1e2a8a;border-radius:10px;font-weight:800;display:flex;align-items:center;justify-content:center;background:#fff}.kzT{width:240px;min-width:240px;justify-content:space-between;padding:0 10px;cursor:pointer}.inp{width:72px;min-width:72px;height:48px;border:2.5px solid #1e2a8a;border-radius:10px;font-weight:800;font-size:18px;text-align:center;background:#fff}.inpL{width:100%;height:48px;border:2.5px solid #1e2a8a;border-radius:10px;padding:0 10px}.btn{padding:14px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%}.btnG{background:#16a34a}.btnB{background:#1e2a8a}.btnR{background:#e11d48;width:46px;height:46px;border-radius:8px;border:0;color:#fff}.total{background:#1e2a8a;color:#fff;border-radius:12px;padding:12px;display:flex;justify-content:space-between;font-weight:800;margin:8px}.tlist{display:none;position:fixed;left:8px;right:8px;top:90px;background:#fff;border:3px solid #1e2a8a;border-radius:12px;z-index:9999;padding:8px;grid-template-columns:72px 72px 72px;gap:8px;max-height:70vh;overflow:auto;justify-content:center}.tlist.open{display:grid}.topt{width:72px;min-height:68px;border:2px solid #ccc;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;text-align:center}.page{display:none;padding-bottom:90px}.page.on{display:block}.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #1e2a8a}.tab{flex:1;padding:11px 1px;text-align:center;font-size:9px;font-weight:800}.tab.on{background:#1e2a8a;color:#fff}</style></head><body>
-<div class='h'><div><b id='vName'>Vandè VID</b><br><small id='heureHaiti' style='background:#16a34a;padding:2px 6px;border-radius:4px'>SYNC FIX...</small></div><div><button onclick='localStorage.clear();location.reload()' style='background:#ff9800;color:#fff;border:0;padding:6px 8px;border-radius:6px;margin-right:4px'>Cache</button><button onclick='logout()' style='background:#e11d48;color:#fff;border:0;padding:6px 8px;border-radius:6px'>Soti</button></div></div>
-<div id='loginPage' class='page on'><div class='card' style='max-width:400px;margin:20px auto;text-align:center'><h3>🔐 Vandè - Modpas Respekte</h3><input id='inputSerial' class='inpL' placeholder='Serial Vandè' style='margin-top:8px'><input id='inputPass' type='password' class='inpL' placeholder='Modpas Obligatwa' style='margin-top:8px'><button class='btn btnG' style='margin-top:10px' onclick='doLogin()'>Konekte</button><div id='loginMsg' style='color:red;font-weight:700;margin-top:8px'></div><div id='debugInfo' style='font-size:10px;background:#eef2ff;padding:6px;border-radius:6px;margin-top:6px'></div></div></div>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef2f7}
+.h{background:#1e2a8a;color:#fff;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:10}
+.card{background:#fff;border-radius:12px;padding:10px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:10px;justify-content:center}
+.kz{width:72px;min-width:72px;height:46px;border:2.5px solid #1e2a8a;border-radius:10px;font-weight:800;display:flex;align-items:center;justify-content:center;background:#fff}
+.kzT{width:240px;min-width:240px;justify-content:space-between;padding:0 10px;cursor:pointer}
+.inp{width:72px;min-width:72px;height:48px;border:2.5px solid #1e2a8a;border-radius:10px;font-weight:800;font-size:18px;text-align:center;background:#fff}
+.inp:focus{border-color:#16a34a;outline:2px solid #bbf7d0}
+.inpL{width:100%;height:48px;border:2.5px solid #1e2a8a;border-radius:10px;padding:0 10px;font-size:16px}
+.btn{padding:14px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%;cursor:pointer}.btnG{background:#16a34a}.btnB{background:#1e2a8a}.btnR{background:#e11d48;width:46px;height:46px;border-radius:8px;border:0;color:#fff;font-weight:800}
+.total{background:#1e2a8a;color:#fff;border-radius:12px;padding:12px;display:flex;justify-content:space-between;font-weight:800;margin:8px}
+.tlist{display:none;position:fixed;left:8px;right:8px;top:90px;background:#fff;border:3px solid #1e2a8a;border-radius:12px;z-index:9999;padding:8px;grid-template-columns:72px 72px 72px;gap:8px;max-height:70vh;overflow:auto;justify-content:center}.tlist.open{display:grid}
+.topt{width:72px;min-height:68px;border:2px solid #ccc;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;text-align:center}
+.page{display:none;padding-bottom:90px}.page.on{display:block}
+.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #1e2a8a}.tab{flex:1;padding:11px 1px;text-align:center;font-size:9px;font-weight:800}.tab.on{background:#1e2a8a;color:#fff}
+</style></head><body>
+<div class='h'><div><b id='vName'>Vandè VID</b><br><small id='heureHaiti' style='background:#16a34a;padding:2px 6px;border-radius:4px'>SYNC V19...</small></div>
+<div><button onclick='localStorage.clear();location.reload()' style='background:#ff9800;color:#fff;border:0;padding:6px 8px;border-radius:6px;margin-right:4px'>Cache</button><button onclick='logout()' style='background:#e11d48;color:#fff;border:0;padding:6px 8px;border-radius:6px'>Soti</button></div></div>
+
+<div id='loginPage' class='page on'><div class='card' style='max-width:400px;margin:20px auto;text-align:center'>
+<h3>🔐 Vandè - Modpas Respekte 100%</h3>
+<p style='font-size:11px;background:#ffebee;padding:6px;border-radius:6px;margin:6px 0'>Proprio dwe antre ak modpas respekte - Vandè tou</p>
+<input id='inputSerial' class='inpL' placeholder='Serial Vandè (ex: 2222)' inputmode='numeric' style='margin-top:8px'>
+<input id='inputPass' type='password' class='inpL' placeholder='Modpas Respekte Obligatwa' style='margin-top:8px'>
+<button class='btn btnG' style='margin-top:10px' onclick='doLogin()'>Konekte - Firebase SYNC</button>
+<div id='loginMsg' style='color:red;font-weight:700;margin-top:8px'></div>
+<div style='font-size:10px;background:#eef2ff;padding:6px;border-radius:6px;margin-top:8px'>V17.8 - San espas [C] Santre - Limit Miz Respekte - Pri chak Vandè - Maryaj lòd/dezòd bon - Flèche → ↓</div>
+</div></div>
+
 <div id='mainPage' style='display:none'>
-<div id='pV' class='page on'><div class='card'><div style='display:flex;justify-content:space-between'><b>🎯 Tiraj</b><button onclick='selAll()' style='padding:4px 8px'>Tout ouvè</button></div><div class='row' style='margin-top:10px'><div class='kz'>Tiraj</div><div id='kazT' class='kz kzT' onclick='document.getElementById("tlist").classList.toggle("open")'><span id='txtT' style='color:#999'>Chwazi</span><span>▼</span></div></div><div id='tlist' class='tlist'></div></div>
-<div class='card'><div class='row' style='font-size:10px;font-weight:800'><div style='width:72px;text-align:center'>JEUX</div><div style='width:72px;text-align:center'>BOUL</div><div style='width:72px;text-align:center'>MIZ</div><div style='width:46px'></div></div><div id='bets'></div><button class='btn btnB' style='margin-top:10px' onclick='addR()'>+ Liy (→ ↓ konsève jwèt)</button></div>
-<div class='total'><span id='dt'>Total $0 x 0 = $0</span><span id='gt'>$0</span></div><div style='display:flex;gap:8px;margin:8px'><button class='btn btnG' style='flex:1;height:56px;font-size:20px' onclick='vann()'>VANN</button><button class='btn btnB' style='flex:1;height:56px' onclick='printBT()'>🖨️ RawBT</button></div><div id='prev' style='background:#fff;margin:8px;padding:12px;font-family:monospace;white-space:pre-line;text-align:center;display:none;border:2px dashed #000'></div></div>
-<div id='pC' class='page'><div class='card'><h3>2-Kopye</h3><input id='cid' class='inpL'><button class='btn btnB' style='margin-top:8px' onclick='doCopy()'>Kopye</button></div></div><div id='pF' class='page'><div class='card'><h3>3-Fiches</h3><div class='row'><input id='fd' type='date' class='inp' style='width:140px'><button class='btn btnB' style='width:72px;height:48px' onclick='loadF()'>Wè</button></div><div id='ftot' style='background:#1e2a8a;color:#fff;padding:8px;border-radius:8px;display:none'></div><div id='flist'></div></div></div><div id='pR' class='page'><div class='card'><h3>4-Rapport</h3><div class='row'><input id='rdu' type='date' class='inp' style='width:48%'><input id='rau' type='date' class='inp' style='width:48%'></div><select id='rt' class='inpL' style='margin-top:8px'><option value='tous'>Tous</option></select><button class='btn btnB' style='margin-top:8px' onclick='calcR()'>Kalkile Vant Komisyon A Peye Balans net</button><div id='rres' style='display:none'></div><div id='rprint' style='background:#fff;padding:8px;font-family:monospace;font-size:11px;border:1px dashed #000;display:none;white-space:pre-line;text-align:center'></div><button class='btn btnB' style='margin-top:8px' onclick='printRapport()'>🖨️ RawBT Rapport</button></div></div><div id='pP' class='page'><div class='card'><h3>5-Param</h3><div id='prixInfo'></div><div id='heureList'></div></div></div><div class='tabs'><div class='tab on' onclick="go('pV',this)">1-Vendre</div><div class='tab' onclick="go('pC',this)">2-Kopye</div><div class='tab' onclick="go('pF',this)">3-Fiches</div><div class='tab' onclick="go('pR',this)">4-Rapport</div><div class='tab' onclick="go('pP',this)">5-Param</div></div></div>
+<div id='pV' class='page on'>
+<div class='card'><div style='display:flex;justify-content:space-between'><b>🎯 Tiraj - Limit Miz Respekte</b><button onclick='selAll()' style='padding:4px 8px;border-radius:6px'>Tout ouvè</button></div>
+<div class='row' style='margin-top:10px'><div class='kz'>Tiraj</div><div id='kazT' class='kz kzT' onclick='document.getElementById("tlist").classList.toggle("open")'><span id='txtT' style='color:#999'>Chwazi</span><span>▼</span></div></div>
+<div id='tlist' class='tlist'></div>
+<div id='limitInfo' style='font-size:11px;background:#fff3e0;padding:6px;border-radius:6px;margin-top:6px;border:1px solid #ffb74d'></div>
+</div>
+
+<div class='card'>
+<div class='row' style='font-size:10px;font-weight:800'><div style='width:72px;text-align:center'>JEUX</div><div style='width:72px;text-align:center'>BOUL</div><div style='width:72px;text-align:center'>MIZ</div><div style='width:46px'></div></div>
+<div id='bets'></div>
+<button class='btn btnB' style='margin-top:10px' onclick='addR()'>+ Liy (→ ↓ konsève jwèt)</button>
+<div style='font-size:10px;background:#e0f2fe;padding:6px;border-radius:6px;margin-top:8px;text-align:center'>Flèche → : JEUX→BOUL→MIZ→Nouvo liy menm jwèt | ↓ Enter : Nouvo liy | ← : Retounen - Ekran sere 8px</div>
+</div>
+
+<div class='total'><span id='dt'>Total $0 x 0 = $0</span><span id='gt'>$0</span></div>
+<div style='display:flex;gap:8px;margin:8px'><button class='btn btnG' style='flex:1;height:56px;font-size:20px' onclick='vann()'>VANN</button><button class='btn btnB' style='flex:1;height:56px' onclick='printBT()'>🖨️ RawBT V2 Pro</button></div>
+<div id='prev' style='background:#fff;margin:8px;padding:12px;font-family:monospace;white-space:pre-line;text-align:center;display:none;border:2px dashed #000;font-size:12px'></div>
+</div>
+
+<div id='pC' class='page'><div class='card'><h3>2- Kopye</h3><input id='cid' class='inpL' placeholder='ID Ticket'><button class='btn btnB' style='margin-top:8px' onclick='doCopy()'>Kopye</button></div></div>
+<div id='pF' class='page'><div class='card'><h3>3- Mes Fiches - Pri chak Vandè</h3><div class='row'><input id='fd' type='date' class='inp' style='width:140px'><button class='btn btnB' style='width:72px;height:48px' onclick='loadF()'>Wè</button></div><div id='ftot' style='background:#1e2a8a;color:#fff;padding:8px;border-radius:8px;display:none'></div><div id='flist'></div></div></div>
+<div id='pR' class='page'><div class='card' style='border:2px solid #000'><h3>4- Rapport - Vant / Komisyon / A Peye / Balans net - Maryaj desordre bon</h3>
+<div class='row'><input id='rdu' type='date' class='inp' style='width:48%'><input id='rau' type='date' class='inp' style='width:48%'></div>
+<select id='rt' class='inpL' style='margin-top:8px'><option value='tous'>Tous tiraj</option></select>
+<button class='btn btnB' style='margin-top:8px' onclick='calcR()'>Kalkile - Pri chak Vandè + Maryaj desordre bon</button>
+<div id='rres' style='display:none;margin-top:8px'></div>
+<div id='rprint' style='background:#fff;padding:8px;font-family:monospace;font-size:11px;border:1px dashed #000;display:none;white-space:pre-line;text-align:center'></div>
+<button class='btn btnB' style='margin-top:8px' onclick='printRapport()'>🖨️ RawBT Rapport - Printer Direct v2 Pro</button>
+</div></div>
+<div id='pP' class='page'><div class='card'><h3>5- Param - Limit + Pri Peye + Komisyon 10% aktive/dezaktive</h3><div id='prixInfo' style='margin-bottom:8px'></div><div id='heureList'></div></div></div>
+<div class='tabs'><div class='tab on' onclick="go('pV',this)">1-Vendre</div><div class='tab' onclick="go('pC',this)">2-Kopye</div><div class='tab' onclick="go('pF',this)">3-Fiches</div><div class='tab' onclick="go('pR',this)">4-Rapport</div><div class='tab' onclick="go('pP',this)">5-Param</div></div>
+</div>
+
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
 firebase.initializeApp(firebaseConfig);const db=firebase.database();
 const TIRAJ_DEFAULT=[["GA midi","12:00"],["FL midi","13:00"],["NY midi","14:00"],["Real","12:30"],["GA soir","18:00"],["FL soir","21:00"],["NY soir","22:00"],["Primera día","11:30"],["Suerte día","12:00"],["Lote Dom","13:30"],["Ganamas","14:15"],["Suerte noche","17:50"],["Primera noche","19:50"],["Loteka","19:45"],["Nacional noche","20:50"],["Leidsa","20:45"],["Anguila 10h","09:40"],["Anguila 18h","17:40"]];
-let DB={vendeurs:{},tickets:{},heures:{},results:{},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true}}},CUR=null,selT=[],LAST_TXT='';
+let DB={vendeurs:{},tickets:{},heures:{},results:{},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true}},limites:{global:{bor:1500,mar:100,l3:100,l4:20,l5:5}}},CUR=null,selT=[],LAST_TXT='';
+
 function getHaitiTime(){return new Date(new Date().toLocaleString('en-US',{timeZone:'America/Port-au-Prince'}));}
 function formatHaiti(d){let h=d.getHours(),m=d.getMinutes().toString().padStart(2,'0'),ap=h>=12?'PM':'AM',h12=h%12||12;return h12+':'+m+' '+ap;}
 function getHeureProprio(n){return DB.heures&&DB.heures[n]?DB.heures[n]:(TIRAJ_DEFAULT.find(x=>x[0]==n)?.[1]||'');}
 function isOpen(n){let s=getHeureProprio(n);if(!s)return true;let p=s.split(':'),fh=parseInt(p[0]),fm=parseInt(p[1]||0),h=getHaitiTime();return h.getHours()*60+h.getMinutes() < fh*60+fm;}
-function listenDB(){db.ref().on('value',snap=>{let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.tickets=v.tickets||{};DB.heures=v.heures||{};DB.results=v.results||{};DB.prix=v.prix||DB.prix;renderT();document.getElementById('heureHaiti').innerText='SYNC: '+formatHaiti(getHaitiTime())+' - FIX OUVERT';});}
-async function doLogin(){let s=document.getElementById('inputSerial').value.trim(),p=document.getElementById('inputPass').value.trim(),msg=document.getElementById('loginMsg');if(!s){msg.innerText='Mete Serial';return}if(!p){msg.innerText='Modpas Obligatwa';return}let snap=await db.ref('vendeurs').once('value');let vendeurs=snap.val()||{};let key=Object.keys(vendeurs).find(k=>String(vendeurs[k].serial)===String(s));let f=key?vendeurs[key]:null;if(!f){msg.innerText='Vandè '+s+' pa egziste';return}if(!f.pass||String(f.pass)!==String(p)){msg.innerText='Modpas pa bon';return}CUR=f;CUR._key=key;localStorage.setItem('curV',JSON.stringify(CUR));openMain();}
-function openMain(){document.getElementById('loginPage').classList.remove('on');document.getElementById('loginPage').style.display='none';document.getElementById('mainPage').style.display='block';document.getElementById('pV').classList.add('on');document.getElementById('vName').innerText=CUR.nom||('Vandè '+CUR.serial);listenDB();addR();upd();}
+function getMyLimite(){return DB.limites[CUR?._key]||DB.limites[CUR?.serial]||DB.limites.global||{bor:1500,mar:100,l3:100,l4:20,l5:5};}
+function getMyPrix(k){let key=k||CUR?._key;return DB.prix[key]||DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true};}
+function getLimiteForJeu(j){let lim=getMyLimite();if(j==='boul')return lim.bor;if(j==='maryaj')return lim.mar;if(j==='loto3')return lim.l3;if(j==='loto4')return lim.l4;if(j==='loto5')return lim.l5;return 99999;}
+
+function listenDB(){db.ref().on('value',snap=>{let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.tickets=v.tickets||{};DB.heures=v.heures||{};DB.results=v.results||{};DB.prix=v.prix||DB.prix;DB.limites=v.limites||DB.limites;renderT();document.getElementById('heureHaiti').innerText='SYNC:'+formatHaiti(getHaitiTime())+'-'+Object.keys(DB.vendeurs).length+'V';});}
+
+async function doLogin(){
+ let s=document.getElementById('inputSerial').value.trim();
+ let p=document.getElementById('inputPass').value.trim();
+ let msg=document.getElementById('loginMsg');
+ if(!s){msg.innerText='❌ Mete Serial';return}
+ if(!p){msg.innerText='❌ Modpas Obligatwa - Respekte';return}
+ let snap=await db.ref('vendeurs').once('value');
+ let vendeurs=snap.val()||{};
+ let key=Object.keys(vendeurs).find(k=>String(vendeurs[k].serial)===String(s));
+ let f=key?vendeurs[key]:null;
+ if(!f){msg.innerText='❌ Vandè '+s+' pa egziste nan Firebase';return}
+ if(!f.pass||String(f.pass)!==String(p)){msg.innerText='❌ Modpas pa bon - Respekte modpas Proprio';return}
+ let bl=await db.ref('blokeVendeur/'+key).once('value');if(bl.val()===true){msg.innerText='⛔ Vandè sa bloke pa Proprio';return}
+ CUR=f;CUR._key=key;localStorage.setItem('curV',JSON.stringify(CUR));openMain();
+}
+function openMain(){
+ document.getElementById('loginPage').classList.remove('on');
+ document.getElementById('loginPage').style.display='none';
+ document.getElementById('mainPage').style.display='block';
+ document.getElementById('pV').classList.add('on');
+ document.getElementById('vName').innerText=CUR.nom||('Vandè '+CUR.serial);
+ listenDB();addR();upd();
+}
 function logout(){localStorage.clear();location.reload();}
-function renderT(){let tlist=document.getElementById('tlist');let html='<div style="grid-column:1/-1;display:flex;justify-content:space-between;background:#1e2a8a;color:#fff;padding:8px;border-radius:8px"><div><b>Tiraj</b><br><small>'+formatHaiti(getHaitiTime())+'</small></div><span onclick="tlist.classList.remove(\'open\')" style="background:#e11d48;padding:6px 12px;border-radius:6px">X</span></div>';TIRAJ_DEFAULT.forEach(t=>{let name=t[0],hp=getHeureProprio(name),open=isOpen(name),chk=selT.includes(name)?'checked':'',bg=open?'background:#dcfce7;border-color:#16a34a':'background:#fee2e2;border-color:#e11d48';html+='<label class="topt" style="'+bg+'"><input type="checkbox" value="'+name+'" '+chk+' '+(open?'':'disabled')+' onchange="chg(this)"><span>'+name+'</span><small>'+hp+' '+(open?'✅':'⛔')+'</small></label>';});tlist.innerHTML=html;document.getElementById('rt').innerHTML='<option value="tous">Tous</option>'+TIRAJ_DEFAULT.map(t=>'<option>'+t[0]+'</option>').join('');document.getElementById('heureList').innerHTML=TIRAJ_DEFAULT.map(t=>'<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee"><span>'+t[0]+'</span><span><b>'+getHeureProprio(t[0])+'</b> '+(isOpen(t[0])?'✅':'⛔')+'</span></div>').join('');let prix=DB.prix[CUR?._key]||DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true};document.getElementById('prixInfo').innerHTML='<div style="background:#e8f5e9;padding:8px;border-radius:8px"><b>Pri Peye + Komisyon</b><br>1er:'+prix.p1+' 2e:'+prix.p2+' 3e:'+prix.p3+' | Komisyon: '+(prix.komActive?'✅ '+prix.kom+'%':'⛔')+'</div>';}
-function chg(el){if(!isOpen(el.value)&&el.checked){alert('Fèmen');el.checked=false;return}if(el.checked)selT.push(el.value);else selT=selT.filter(x=>x!=el.value);document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';upd();if(selT.length)document.getElementById('tlist').classList.remove('open')}
+
+function renderT(){
+ let tlist=document.getElementById('tlist');
+ let html='<div style="grid-column:1/-1;display:flex;justify-content:space-between;background:#1e2a8a;color:#fff;padding:8px;border-radius:8px"><div><b>Tiraj - Limit Respekte</b><br><small>'+formatHaiti(getHaitiTime())+'</small></div><span onclick="tlist.classList.remove(\'open\')" style="background:#e11d48;padding:6px 12px;border-radius:6px">X</span></div>';
+ TIRAJ_DEFAULT.forEach(t=>{
+  let name=t[0],hp=getHeureProprio(name),open=isOpen(name),chk=selT.includes(name)?'checked':'',bg=open?'background:#dcfce7;border-color:#16a34a':'background:#fee2e2;border-color:#e11d48';
+  html+='<label class="topt" style="'+bg+'"><input type="checkbox" value="'+name+'" '+chk+' '+(open?'':'disabled')+' onchange="chg(this)"><span>'+name+'</span><small>'+hp+' '+(open?'✅':'⛔')+'</small></label>';
+ });
+ tlist.innerHTML=html;
+ document.getElementById('rt').innerHTML='<option value="tous">Tous</option>'+TIRAJ_DEFAULT.map(t=>'<option>'+t[0]+'</option>').join('');
+ let lim=getMyLimite();let prix=getMyPrix();
+ document.getElementById('limitInfo').innerHTML='⛔ Limit Miz Proprio: Boul $'+lim.bor+' | Mar $'+lim.mar+' | L3 $'+lim.l3+' | L4 $'+lim.l4+' | L5 $'+lim.l5+' - Respekte - Pri 1er:'+prix.p1;
+ document.getElementById('heureList').innerHTML=TIRAJ_DEFAULT.map(t=>'<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee"><span>'+t[0]+'</span><span><b>'+getHeureProprio(t[0])+'</b> '+(isOpen(t[0])?'✅':'⛔')+'</span></div>').join('');
+ document.getElementById('prixInfo').innerHTML='<div style="background:#e8f5e9;padding:8px;border-radius:8px;border:2px solid #16a34a"><b>Pri Pèyman chak vandè - Proprio defini</b><br>1er:'+prix.p1+' 2e:'+prix.p2+' 3e:'+prix.p3+' | M:'+prix.m1+' | L3:'+prix.l3+' L4:'+prix.l4+' L5:'+prix.l5+'<br>Komisyon: '+(prix.komActive?'✅ '+prix.kom+'% aktive':'⛔ dezaktive')+' - Modifiable Proprio<br><small>Maryaj lòd/dezòd bon - Limit respekte</small></div>';
+}
+function chg(el){if(!isOpen(el.value)&&el.checked){alert('Fèmen: '+el.value);el.checked=false;return}if(el.checked)selT.push(el.value);else selT=selT.filter(x=>x!=el.value);document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';upd();if(selT.length)document.getElementById('tlist').classList.remove('open')}
 function selAll(){selT=[];TIRAJ_DEFAULT.forEach(t=>{if(isOpen(t[0]))selT.push(t[0])});renderT();document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';upd()}
-function addR(keep='boul'){let c=document.getElementById('bets');let last=keep;if(c.lastElementChild)last=c.lastElementChild.querySelector('.jeu').value||keep;let d=document.createElement('div');d.className='row betRow';d.innerHTML='<select class="kz jeu"><option value="boul">Boul</option><option value="maryaj">Mar</option><option value="loto3">L3</option><option value="loto4">L4</option><option value="loto5">L5</option></select><input class="inp boul" placeholder="--" inputmode="numeric"><input class="inp mise" placeholder="$" type="number"><button class="btnR" onclick="this.parentElement.remove();upd()">X</button>';c.appendChild(d);let j=d.querySelector('.jeu'),b=d.querySelector('.boul'),m=d.querySelector('.mise');j.value=last;j.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();b.focus();}if(e.key==='ArrowDown'){e.preventDefault();addR(j.value);}});b.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'').slice(0,5);upd();});b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();m.focus();}if(e.key==='ArrowDown'){e.preventDefault();addR(j.value);}if(e.key==='ArrowLeft'){e.preventDefault();j.focus();}});m.addEventListener('input',upd);m.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='Enter'||e.key==='ArrowDown'){e.preventDefault();addR(j.value);}if(e.key==='ArrowLeft'){e.preventDefault();b.focus();}});b.focus();}
+
+function addR(keep='boul'){
+ let c=document.getElementById('bets');let last=keep;if(c.lastElementChild)last=c.lastElementChild.querySelector('.jeu').value||keep;
+ let d=document.createElement('div');d.className='row betRow';d.innerHTML='<select class="kz jeu"><option value="boul">Boul</option><option value="maryaj">Mar</option><option value="loto3">L3</option><option value="loto4">L4</option><option value="loto5">L5</option></select><input class="inp boul" placeholder="--" inputmode="numeric"><input class="inp mise" placeholder="$" type="number"><button class="btnR" onclick="this.parentElement.remove();upd()">X</button>';
+ c.appendChild(d);
+ let j=d.querySelector('.jeu'),b=d.querySelector('.boul'),m=d.querySelector('.mise');j.value=last;
+ j.addEventListener('change',()=>{upd();});
+ j.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();b.focus();}if(e.key==='ArrowDown'){e.preventDefault();addR(j.value);}});
+ b.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'').slice(0,5);upd();});
+ b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();m.focus();}if(e.key==='ArrowDown'){e.preventDefault();addR(j.value);}if(e.key==='ArrowLeft'){e.preventDefault();j.focus();}});
+ m.addEventListener('input',()=>{
+   let max=getLimiteForJeu(j.value);let val=parseInt(m.value)||0;
+   if(val>max){m.style.borderColor='red';m.style.background='#ffebee';document.getElementById('limitInfo').innerHTML='⛔ Limit depase! '+j.value.toUpperCase()+' max $'+max+' - Ou mete $'+val;}
+   else{m.style.borderColor='#1e2a8a';m.style.background='#fff';}
+   upd();
+ });
+ m.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='Enter'||e.key==='ArrowDown'){e.preventDefault();addR(j.value);}if(e.key==='ArrowLeft'){e.preventDefault();b.focus();}});
+ b.focus();
+}
+
 function upd(){let sum=0;document.querySelectorAll('.betRow').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length);document.getElementById('gt').innerText='$'+(sum*selT.length);}
 
-// FICH KAP ENPRIME A - ENTÈVAL LAJ ANT BOUL AK MIZ
+// FICH SAN ESPAS - SANTRE [C] - Pa gen espas devan - RawBT v2 Pro konprann [C]
 function build(tk){
- let line='------------------------------\n';
- let center=t=>{let w=30;let pad=Math.max(0,Math.floor((w-t.length)/2));return ' '.repeat(pad)+t;};
+ let line='--------------------------------\n';
  let txt='';
- txt+=center('C&D VERITE LOTTO')+'\n';
- txt+=center('Lè Ayiti: '+formatHaiti(getHaitiTime()))+'\n';
+ txt+='[C]C-D VERITE LOTTO\n';
+ txt+='[C]Le Ayiti:'+formatHaiti(getHaitiTime())+'\n';
  txt+=line;
- txt+='Tiraj: '+tk.tirages.join(', ')+'\n';
- txt+='Vandè: '+(CUR?.serial||'')+'\n';
- txt+='Id: '+tk.id+'\n';
+ txt+='[C]Tiraj:'+tk.tirages.join(',').substring(0,28)+'\n';
+ txt+='[C]Vande:'+(CUR?.serial||'')+'\n';
+ txt+='[C]Id:'+tk.id+'\n';
  txt+=line;
- txt+='JEU   BOUL       MIZ\n'; // header ak gwo entèval
+ txt+='JEU BOUL MIZ\n';
  txt+=line;
  tk.bets.forEach(b=>{
-   let jeu=b.type.toUpperCase().padEnd(5,' '); // BOUL  +1 espas
-   let boul=b.numero.toString().padEnd(10,' '); // 55 + 10 espas = entèval laj
-   let miz=('$'+b.mise).padStart(5,' ');
-   txt+=jeu+boul+miz+'\n';
+   txt+=b.type.toUpperCase()+' '+b.numero+' $'+b.mise+'\n';
  });
  txt+=line;
- txt+='TOTAL $'+tk.baseTotal+' x '+tk.tirages.length+' = $'+tk.total+'\n';
- txt+='\n\n';
- txt+=center(new Date().toLocaleDateString('fr-FR')+' '+formatHaiti(getHaitiTime()))+'\n\n\n';
+ txt+='[C]TOTAL $'+tk.baseTotal+' x '+tk.tirages.length+' = $'+tk.total+'\n';
+ txt+='[C]'+new Date().toLocaleDateString('fr-FR')+' '+formatHaiti(getHaitiTime())+'\n';
+ txt+='\n\n\n';
  return txt;
 }
 
-async function vann(){if(!selT.length){alert('Chwazi Tiraj - Total $5 x 0 = $0 paske ou pa chwazi tiraj');return}let bets=[];document.querySelectorAll('.betRow').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm)bets.push({type:j,numero:b,mise:mm})});if(!bets.length){alert('VID');return}let base=bets.reduce((a,b)=>a+b.mise,0);let tk={id:'T'+Date.now().toString().slice(-7),bets,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiTime().toISOString().slice(0,10),dateHaiti:getHaitiTime().toLocaleDateString('fr-CA',{timeZone:'America/Port-au-Prince'}),vendeurId:CUR?._key,serial:CUR?.serial};await db.ref('tickets/'+tk.id).set(tk);let txt=build(tk);document.getElementById('prev').style.display='block';document.getElementById('prev').innerText=txt;LAST_TXT=txt;printBT(txt);document.getElementById('bets').innerHTML='';addR(bets[bets.length-1]?.type||'boul');upd();}
-function printBT(t){let enc=encodeURIComponent(t||LAST_TXT||document.getElementById('prev').innerText);window.location.href='rawbt://print?text='+enc;setTimeout(()=>{window.location.href='intent://print?text='+enc+'#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;'},700)}
-async function calcR(){let du=rdu.value,au=rau.value,ti=rt.value;if(!du||!au){alert('Chwazi dat');return}let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let resSnap=await db.ref('results').once('value');let results=resSnap.val()||{};let prixSnap=await db.ref('prix').once('value');let prixDB=prixSnap.val()||{};let prix=prixDB[CUR?._key]||prixDB.global||{p1:50,p2:20,p3:10,m1:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true};let vente=0,count=0,gain=0;Object.values(all).forEach(t=>{let td=t.dateHaiti||t.date;if(td<du||td>au)return;if(t.serial!=CUR.serial&&t.vendeurId!=CUR._key)return;if(ti!='tous'&&t.tirages.indexOf(ti)==-1)return;count++;vente+=ti=='tous'?t.total:t.baseTotal;for(let tirage of t.tirages){if(ti!='tous'&&tirage!=ti)continue;let res=Object.values(results).find(r=>r.tirage==tirage);if(!res)continue;for(let bet of t.bets){if(bet.type=='boul'){if(bet.numero==res.r1)gain+=bet.mise*prix.p1;else if(bet.numero==res.r2)gain+=bet.mise*prix.p2;else if(bet.numero==res.r3)gain+=bet.mise*prix.p3;}} }});let kom=prix.komActive?vente*prix.kom/100:0;let bal=vente-kom-gain;rres.style.display='block';rres.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center"><div style="background:#e3f2fd;padding:8px;border-radius:8px"><small>Vant ('+count+')</small><div style="font-size:18px;font-weight:800">$'+vente.toFixed(2)+'</div></div><div style="background:#fff3e0;padding:8px;border-radius:8px"><small>Komisyon</small><div style="font-size:18px;font-weight:800">$'+kom.toFixed(2)+'</div></div><div style="background:#fce4ec;padding:8px;border-radius:8px"><small>A Peye</small><div style="font-size:18px;font-weight:800">$'+gain.toFixed(2)+'</div></div><div style="background:#e8f5e9;padding:8px;border-radius:8px"><small>Balans net</small><div style="font-size:18px;font-weight:800">$'+bal.toFixed(2)+'</div></div></div>';let txt='C&D VERITE LOTTO\nRAPPORT '+du+' AU '+au+'\nVande:'+CUR.serial+' Tiraj:'+ti+'\n------------------------------\nVant: $'+vente.toFixed(2)+' ('+count+' fich)\nKomisyon: $'+kom.toFixed(2)+'\nA Peye: $'+gain.toFixed(2)+'\nBalans net: $'+bal.toFixed(2)+'\n------------------------------\n';rprint.innerText=txt;rprint.style.display='block';LAST_TXT=txt;}
+async function vann(){
+ if(!selT.length){alert('Chwazi Tiraj - Total $5 x 0 = $0 paske tiraj pa chwazi');return}
+ let bets=[];let err='';
+ document.querySelectorAll('.betRow').forEach(r=>{
+   let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);
+   if(j&&b&&mm){
+     let max=getLimiteForJeu(j);
+     if(mm>max){err+='⛔ '+j.toUpperCase()+' '+b+' $'+mm+' depase limit $'+max+'\n';}
+     bets.push({type:j,numero:b,mise:mm})
+   }
+ });
+ if(err){alert(err+'\nLimit Miz dwe respekte selon Proprio');return}
+ if(!bets.length){alert('Boul/Miz VID');return}
+ let base=bets.reduce((a,b)=>a+b.mise,0);
+ let tk={id:'T'+Date.now().toString().slice(-7),bets,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiTime().toISOString().slice(0,10),dateHaiti:getHaitiTime().toLocaleDateString('fr-CA',{timeZone:'America/Port-au-Prince'}),vendeurId:CUR?._key,serial:CUR?.serial};
+ await db.ref('tickets/'+tk.id).set(tk);
+ let txt=build(tk);document.getElementById('prev').style.display='block';document.getElementById('prev').innerText=txt.replace(/\[C\]|\[L\]/g,'');LAST_TXT=txt;printBT(txt);
+ document.getElementById('bets').innerHTML='';addR(bets[bets.length-1]?.type||'boul');upd();
+}
+function printBT(t){
+ let txt=t||LAST_TXT||document.getElementById('prev').innerText;
+ let enc=encodeURIComponent(txt);
+ window.location.href='rawbt://print?text='+enc;
+}
+async function calcR(){
+ let du=document.getElementById('rdu').value,au=document.getElementById('rau').value,ti=document.getElementById('rt').value;
+ if(!du||!au){alert('Chwazi dat');return}
+ let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let resSnap=await db.ref('results').once('value');let results=resSnap.val()||{};
+ let vente=0,count=0,gain=0;
+ Object.values(all).forEach(t=>{
+   let td=t.dateHaiti||t.date;if(td<du||td>au)return;
+   if(t.serial!=CUR.serial&&t.vendeurId!=CUR._key)return;
+   if(ti!='tous'&&t.tirages.indexOf(ti)==-1)return;
+   count++;vente+=ti=='tous'?t.total:t.baseTotal;
+   let prix=getMyPrix(t.vendeurId); // Pri chak vandè ki defini nan proprio
+   for(let tirage of t.tirages){
+     if(ti!='tous'&&tirage!=ti)continue;
+     let res=Object.values(results).find(r=>r.tirage==tirage);if(!res)continue;
+     for(let bet of t.bets){
+       if(bet.type==='boul'){
+         if(bet.numero===res.r1)gain+=bet.mise*prix.p1;
+         else if(bet.numero===res.r2)gain+=bet.mise*prix.p2;
+         else if(bet.numero===res.r3)gain+=bet.mise*prix.p3;
+       }else if(bet.type==='maryaj'){
+         // MARYAJ LÒD/DEZÒD BON
+         let raw=bet.numero.replace(/[^0-9]/g,' ').trim().split(/\s+/).filter(Boolean);
+         let nums=raw.length>=2?[raw[0].slice(-2),raw[1].slice(-2)]:[bet.numero.substring(0,2),bet.numero.substring(2,4)];
+         let a=nums[0],b=nums[1];if(!a||!b)continue;
+         let r=[res.r1,res.r2,res.r3];
+         if(r.includes(a)&&r.includes(b))gain+=bet.mise*prix.m1;
+       }else if(bet.type==='loto3'&&bet.numero===res.l3)gain+=bet.mise*prix.l3;
+       else if(bet.type==='loto4'&&bet.numero===res.l4)gain+=bet.mise*prix.l4;
+       else if(bet.type==='loto5'&&bet.numero===res.l5)gain+=bet.mise*prix.l5;
+     }
+   }
+ });
+ let prixCur=getMyPrix();let kom=prixCur.komActive?vente*prixCur.kom/100:0;let bal=vente-kom-gain;
+ document.getElementById('rres').style.display='block';
+ document.getElementById('rres').innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center"><div style="background:#e3f2fd;padding:8px;border-radius:8px"><small>Vant ('+count+')</small><div style="font-size:18px;font-weight:800">$'+vente.toFixed(2)+'</div></div><div style="background:#fff3e0;padding:8px;border-radius:8px"><small>Komisyon</small><div style="font-size:18px;font-weight:800">$'+kom.toFixed(2)+'</div></div><div style="background:#fce4ec;padding:8px;border-radius:8px"><small>A Peye - desordre bon</small><div style="font-size:18px;font-weight:800">$'+gain.toFixed(2)+'</div></div><div style="background:#e8f5e9;padding:8px;border-radius:8px"><small>Balans net</small><div style="font-size:18px;font-weight:800;color:'+(bal>=0?'green':'red')+'">$'+bal.toFixed(2)+'</div></div></div>';
+ let txt='[C]C-D VERITE LOTTO\n[C]RAPPORT '+du+' AU '+au+'\n[C]Vande:'+CUR.serial+' Tiraj:'+ti+'\n--------------------------------\n[C]Vant:$'+vente.toFixed(2)+' ('+count+' fich)\n[C]Komisyon:$'+kom.toFixed(2)+'\n[C]A Peye:$'+gain.toFixed(2)+'\n[C]Balans net:$'+bal.toFixed(2)+'\n--------------------------------\n';document.getElementById('rprint').innerText=txt.replace(/\[C\]/g,'');document.getElementById('rprint').style.display='block';LAST_TXT=txt;
+}
 function printRapport(){let enc=encodeURIComponent(LAST_TXT);window.location.href='rawbt://print?text='+enc;}
-function go(id,el){document.querySelectorAll('#mainPage .page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));if(el)el.classList.add('on');if(id=='pF')loadF();}
-async function loadF(){let d=fd.value||getHaitiTime().toISOString().slice(0,10);let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let list=Object.values(all).filter(t=>(t.date==d||t.dateHaiti==d)&&(t.serial==CUR.serial||t.vendeurId==CUR._key));let total=list.reduce((a,b)=>a+b.total,0);ftot.style.display=list.length?'block':'none';ftot.innerHTML='Total $'+total+' - '+list.length+' fiches';flist.innerHTML=list.reverse().map(t=>'<div class="card"><b>'+t.id+'</b> '+t.tirages.join(',')+'<br>'+t.bets.map(b=>b.type+':'+b.numero+' $'+b.mise).join(' | ')+'<br><b>$'+t.total+'</b></div>').join('')||'Pa gen';}
-function doCopy(){let id=cid.value.trim();db.ref('tickets/'+id).once('value',snap=>{let tk=snap.val();if(!tk){alert('Pa jwenn');return}selT=tk.tirages.filter(x=>isOpen(x));document.getElementById('bets').innerHTML='';tk.bets.forEach(b=>{addR(b.type);let r=document.querySelectorAll('.betRow');let rr=r[r.length-1];rr.querySelector('.jeu').value=b.type;rr.querySelector('.boul').value=b.numero;rr.querySelector('.mise').value=b.mise});go('pV',document.querySelectorAll('.tab')[0]);upd();});}
+function go(id,el){document.querySelectorAll('#mainPage.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));if(el)el.classList.add('on');if(id=='pF')loadF();}
+async function loadF(){let d=document.getElementById('fd').value||getHaitiTime().toISOString().slice(0,10);let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let list=Object.values(all).filter(t=>(t.date==d||t.dateHaiti==d)&&(t.serial==CUR.serial||t.vendeurId==CUR._key));let total=list.reduce((a,b)=>a+b.total,0);document.getElementById('ftot').style.display=list.length?'block':'none';document.getElementById('ftot').innerHTML='Total $'+total+' - '+list.length+' fiches';document.getElementById('flist').innerHTML=list.reverse().map(t=>'<div class="card"><b>'+t.id+'</b> '+t.tirages.join(',')+'<br>'+t.bets.map(b=>b.type+':'+b.numero+' $'+b.mise).join(' | ')+'<br><b>$'+t.total+'</b></div>').join('')||'Pa gen';}
+function doCopy(){let id=document.getElementById('cid').value.trim();db.ref('tickets/'+id).once('value',snap=>{let tk=snap.val();if(!tk){alert('Pa jwenn');return}selT=tk.tirages.filter(x=>isOpen(x));document.getElementById('bets').innerHTML='';tk.bets.forEach(b=>{addR(b.type);let r=document.querySelectorAll('.betRow');let rr=r[r.length-1];rr.querySelector('.jeu').value=b.type;rr.querySelector('.boul').value=b.numero;rr.querySelector('.mise').value=b.mise});go('pV',document.querySelectorAll('.tab')[0]);upd();});}
 (function(){let cv=localStorage.getItem('curV');if(cv){try{CUR=JSON.parse(cv);openMain();}catch(e){localStorage.clear();}}listenDB();})();
 </script></body></html>
