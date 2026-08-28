@@ -1,203 +1,166 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>CD-LOTTO - VANDEUR</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#f2f4f7}.h{background:#2e7d32;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center}.panel{padding:10px;max-width:600px;margin:auto}.card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,.1);margin-bottom:10px}.btn{padding:12px;border:0;border-radius:10px;color:#fff;font-weight:700;width:100%;margin-top:8px;cursor:pointer}.btn-green{background:#2e7d32}.btn-purple{background:#4a148c}.btn-blue{background:#1e88e5}.btn-red{background:#c62828}input,select{padding:12px;border:2px solid #ddd;border-radius:10px;width:100%;margin:5px 0;font-size:16px;font-weight:700}.row{display:flex;gap:8px}.tiraj-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:200px;overflow-y:auto;background:#f9f9f9;padding:8px;border-radius:10px}.tiraj-item{display:flex;align-items:center;gap:6px;background:#fff;padding:6px;border-radius:6px;border:1px solid #eee}.limit-info{background:#fff3e0;border-left:5px solid #ff9800;padding:8px;border-radius:6px;font-size:11px;margin-top:8px}.pill{padding:4px 10px;border-radius:20px;color:#fff;font-weight:700;font-size:12px}.pill.blue{background:#1a56ff}.pill.orange{background:#ff8c1a}.pill.lightblue{background:#1a9cff}</style></head><body>
-<div class='h'><div><b>🎫 CD-LOTTO - VANDEUR</b><br><small id='vInfo'>-</small></div><button onclick='logout()' style='padding:8px 14px;background:#c62828;color:#fff;border:0;border-radius:6px'>Soti</button></div>
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>VANDEUR CD-LOTTO</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef2f7}.h{background:#1a237e;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}.tabs{display:flex;background:#fff;border-top:1px solid #ddd;position:fixed;bottom:0;left:0;right:0;z-index:20}.tab{flex:1;padding:12px 4px;text-align:center;font-weight:700;font-size:11px;color:#666;border-top:3px solid transparent;cursor:pointer}.tab.active{color:#1a237e;border-top-color:#1a237e;background:#e8eaf6}.panel{display:none;padding:10px 10px 70px;max-width:900px;margin:auto}.panel.active{display:block}.card{background:#fff;border-radius:12px;padding:10px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.1)}.tiraj-box{background:#fff;border:2px solid #1a237e;border-radius:10px;padding:8px;max-height:160px;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:4px}.tiraj-item{display:flex;align-items:center;gap:4px;background:#f5f7ff;padding:5px 6px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #e0e0e0}.tiraj-item.off{background:#ffebee;opacity:.5}.tiraj-item input{width:16px;height:16px}.bet-row{display:flex;gap:4px;margin-bottom:4px}.bet-row select{flex:0 0 95px;padding:10px 4px;border:2px solid #1a237e;border-radius:8px;font-weight:700;font-size:14px}.bet-row input{flex:1;padding:10px;border:2px solid #ccc;border-radius:8px;font-weight:700;font-size:16px;text-align:center}.bet-row input:focus{border-color:#1a237e;background:#e8eaf6}.btn{padding:12px;border:0;border-radius:10px;color:#fff;font-weight:700;cursor:pointer}.btn-green{background:#2e7d32}.btn-blue{background:#1a237e}.btn-red{background:#c62828}.small{font-size:11px;color:#666}.total-box{background:#1a237e;color:#fff;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:700}.print-box{font-family:monospace;white-space:pre-wrap;background:#fff;color:#000;padding:10px;border:2px dashed #000;text-align:center;font-weight:700;font-size:18px;line-height:1.4}</style></head><body>
+<div class='h'><div><b id='vNomShow'>🎫 VANDEUR</b><br><small id='vInfo'>-</small></div><div><small id='dateShow'></small> <button onclick='logout()' style='background:#c62828;color:#fff;border:0;padding:6px 10px;border-radius:6px'>Soti</button></div></div>
 
-<div id='loginBox' class='panel'><div class='card'><h3>🔐 Vandè Login</h3><input id='vSerial' placeholder='Serial ex: 2222' value='2222'><input id='vPass' type='password' placeholder='Modpas' value='123'><button class='btn btn-green' onclick='login()'>Konekte</button><div id='loginMsg' style='font-size:12px;margin-top:8px;color:#666'></div></div>
-<div class='card'><h4>📋 Rezilta Jodi a (9 Kaz)</h4><div id='resToday'></div></div>
-</div>
+<div id='loginBox' class='panel active' style='padding-top:40px'><div class='card' style='max-width:400px;margin:auto'><h3>🔐 Login Vandè</h3><input id='vSerial' placeholder='Serial ex:2222' value='2222'><input id='vPass' type='password' placeholder='Modpas' value='123'><button class='btn btn-green' style='width:100%;margin-top:10px' onclick='login()'>Konekte</button></div></div>
 
-<div id='mainBox' style='display:none'>
-<div class='panel'>
-<div class='card'><h3>👤 <span id='vName'>-</span> - Serial: <span id='vSerialShow'>-</span></h3>
-<div id='limitShow' class='limit-info'></div>
-<div id='priShow' style='background:#fff8e1;border-left:5px solid #ff9800;padding:8px;border-radius:6px;font-size:11px;margin-top:6px'></div>
-</div>
+<div id='mainWrap' style='display:none'>
+<div id='pVendre' class='panel active'>
+<div class='card'><div style='display:flex;justify-content:space-between;align-items:center'><b>🎯 Tiraj - Tout nan 1 sel Kaz (Miltip)</b><button onclick='selAllTiraj()' style='padding:4px 8px;font-size:11px'>Tout</button></div><div class='tiraj-box' id='tirajBox'></div><div class='small' id='selCount'>0 tiraj chwazi | Lè fèmti verifye</div></div>
 
 <div class='card'>
-<h3>🎯 Chwazi Tiraj</h3>
-<div class='tiraj-grid' id='tirajGrid'></div>
+<div style='display:flex;justify-content:space-between'><b>Jeux - Boul - Mise (Flèch → ↓ pou avanse)</b><span class='small'>Chif sèlman</span></div>
+<div id='betsContainer'></div>
+<button class='btn btn-blue' style='width:100%;margin-top:6px' onclick='addRow()'>+ Liy</button>
+<div class='small' id='limitInfo' style='margin-top:6px;background:#fff3e0;padding:6px;border-radius:6px'>Limit Global: Boul 1000 = V1+V2+... | Maryaj 100 | L3 100 | L4 50 | L5 50 - Dezòd bon 12x47=47x12</div>
 </div>
 
-<div class='card'>
-<h3>💰 Ajoute Miz - Limit: Boul 1000 | Maryaj 100 | L3 100 | L4 50 | L5 50</h3>
-<div class='row'>
-<select id='betType'><option value='boul'>Boul (00-99)</option><option value='maryaj'>Maryaj (12x34 = 34x12 - Dezòd Bon)</option><option value='loto3'>Loto3 (L3 - 000-999)</option><option value='loto4'>Loto4 (L4)</option><option value='loto5'>Loto5 (L5)</option></select>
-<input id='betNum' placeholder='Nimewo ex: 12 ou 12x34' style='flex:1'>
-</div>
-<div class='row'>
-<input id='betMise' type='number' placeholder='Mise $' style='flex:1'>
-<button class='btn btn-green' onclick='addBet()' style='flex:1'>+ Ajoute</button>
-</div>
-<div style='font-size:10px;color:#666;margin-top:4px'>✅ Maryaj: 12x34 = 34x12 - Nan lòd ou an dezòd bon</div>
+<div class='card total-box'><span id='detailTotal'>Total: $0 x 0 tiraj = $0</span><span id='grandTotal'>$0</span></div>
+<div class='card' style='display:grid;grid-template-columns:1fr 1fr;gap:8px'><button class='btn btn-green' style='padding:16px;font-size:18px' onclick='saveTicket()'>💾 VANN</button><button class='btn btn-blue' style='padding:16px' onclick='printTicket()'>🖨️ Imprimer santre gran lèt</button></div>
+<div id='lastPrint' class='card print-box' style='display:none'></div>
 </div>
 
-<div class='card'>
-<h3>📝 Tikè Aktyèl</h3>
-<table style='width:100%;font-size:12px'><thead><tr><th>Type</th><th>Nimewo</th><th>Mise</th><th></th></tr></thead><tbody id='betsTable'></tbody></table>
-<div style='display:flex;justify-content:space-between;margin-top:10px;font-weight:700;font-size:18px'><span>Total:</span><span id='totalMise'>$0</span></div>
-<button class='btn btn-purple' onclick='saveTicket()' style='padding:15px;font-size:16px'>💾 Enregistre Tikè</button>
-<button class='btn btn-blue' onclick='printRawBT()' style='margin-top:6px'>⚡ Printer Direct V2 Pro RawBT</button>
-</div>
+<div id='pCopier' class='panel'><div class='card'><h3>📋 2 - Copier Fich</h3><input id='copyId' placeholder='Mete Id Ticket ex: T123456'><button class='btn btn-blue' style='width:100%' onclick='copierTicket()'>Kopye</button><div id='copyRes'></div></div></div>
 
-<div class='card'><h3>📋 Tikè Mwen yo Jodi a</h3><div id='myTickets'></div></div>
-<div class='card'><h3>📊 Rezilta - 9 Kaz: 1er,2e,3e,M1,M2,M3,L3,L4,L5</h3><div id='resList'></div></div>
-</div>
+<div id='pFiches' class='panel'><div class='card'><h3>📁 3 - Mes Fiches</h3><div style='display:flex;gap:6px'><input id='fDate' type='date'><input id='fSearch' placeholder='Rechèch fich' oninput='loadFiches()'></div><div id='fichesList'></div></div></div>
+
+<div id='pRapport' class='panel'><div class='card'><h3>📊 4 - Rapport</h3><div style='display:grid;grid-template-columns:1fr 1fr;gap:6px'><div><label>Du</label><input id='rDu' type='date'></div><div><label>Au</label><input id='rAu' type='date'></div></div><select id='rTirajSel' style='margin-top:6px'><option value='tous'>Tous tiraj</option></select><button class='btn btn-blue' style='width:100%;margin-top:6px' onclick='calcRapport()'>Kalkile</button><div id='rapportRes' class='card' style='margin-top:8px;background:#e8f5e9'></div><button class='btn btn-green' style='width:100%' onclick='printRapport()'>🖨️ Imprimer Rapport</button></div></div>
+
+<div id='pParam' class='panel'><div class='card'><h3>⚙️ 5 - Paramètres</h3><button class='btn btn-blue' style='width:100%' onclick='searchPrinters()'>🔍 Ajouter imprimante - recherche toutes imprimantes</button><div id='printersList' style='margin-top:8px'></div><div class='card' style='margin-top:10px'><label>Utilisation imprimante par défaut</label><div style='display:flex;gap:10px;margin-top:6px'><label><input type='radio' name='defPrint' value='oui' checked> Oui</label><label><input type='radio' name='defPrint' value='non'> Non</label></div></div></div></div>
+
+<div class='tabs'><div class='tab active' onclick="openTab('pVendre',this)">1-Vendre</div><div class='tab' onclick="openTab('pCopier',this)">2-Copier</div><div class='tab' onclick="openTab('pFiches',this)">3-Fiches</div><div class='tab' onclick="openTab('pRapport',this)">4-Rapport</div><div class='tab' onclick="openTab('pParam',this)">5-Param</div></div>
 </div>
 
 <script>
-var DB=null;try{DB=JSON.parse(localStorage.getItem('cd-lotto-db')||'null')}catch(e){DB=null}
-if(!DB)DB={proprios:[],vendeurs:[],tickets:[],results:[],heures:{},limits:{},pri:{},globalLimit:{boul:1000,maryaj:100,l3:100,l4:50,l5:50},globalPri:{kom:10,p1er:50,p2e:20,p3e:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000}};
-if(!DB.globalLimit)DB.globalLimit={boul:1000,maryaj:100,l3:100,l4:50,l5:50};
-if(!DB.globalPri)DB.globalPri={kom:10,p1er:50,p2e:20,p3e:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000};
-if(!DB.limits)DB.limits={};if(!DB.pri)DB.pri={};if(!DB.vendeurs)DB.vendeurs=[];if(!DB.tickets)DB.tickets=[];if(!DB.results)DB.results=[];
-function save(){localStorage.setItem('cd-lotto-db',JSON.stringify(DB))}
-var ALL=['GA midi','FL midi','NY midi','GA soir','FL soir','NY soir','Real','Primera día','Suerte día','Lote Dom','Ganamas','Suerte noche','Primera noche','Loteka','Nacional noche','Leidsa','Anguila 10h','Anguila 18h'];
-var CUR=null;var bets=[];var selectedTiraj=[];
+const TIRAJ=[["GA midi","12:15"],["FL midi","13:15"],["NY midi","14:15"],["Real","12:45"],["GA soir","18:15"],["FL soir","21:15"],["NY soir","22:15"],["Real 12h45","12:45"],["Primera día","11:50"],["Suerte día","12:20"],["Lote Dom","13:45"],["Ganamas","14:15"],["Suerte noche","17:50"],["Primera noche","19:50"],["Loteka","19:45"],["Nacional noche","20:50"],["Nacional noche Dim","17:50"],["Leidsa","20:45"],["Leidsa Dim","15:45"],["Anguila 10h","09:55"],["Anguila 18h","17:55"]];
+let DB=JSON.parse(localStorage.getItem('cd-lotto-db')||'null')||{proprios:[],vendeurs:[],tickets:[],results:[],heures:{},limites:{global:{bor:1000,mar:100,l3:100,l4:50,l5:50}},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000}},superPass:'super123'};
+function saveDB(){localStorage.setItem('cd-lotto-db',JSON.stringify(DB))}
+let CUR=null;let selTiraj=[];
+function openTab(id,el){document.querySelectorAll('.panel').forEach(p=>{if(p.id!='loginBox')p.classList.remove('active')});document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(id=='pFiches')loadFiches();if(id=='pRapport')initRapport()}
+function login(){let s=vSerial.value.trim(),p=vPass.value.trim();let f=DB.vendeurs.find(v=>v.serial==s&&v.pass==p);if(!f){f={id:'v_'+Date.now(),serial:s,nom:'Vandè '+s,pass:p,proprioId:''};DB.vendeurs.push(f);saveDB()}CUR=f;localStorage.setItem('curV',JSON.stringify(CUR));showMain()}
+function showMain(){document.getElementById('loginBox').classList.remove('active');document.getElementById('mainWrap').style.display='block';document.getElementById('vNomShow').innerText=CUR.nom;document.getElementById('vInfo').innerText=CUR.serial;document.getElementById('dateShow').innerText=new Date().toLocaleDateString();renderTiraj();addRow();updateTotal();initRapport()}
+function logout(){localStorage.removeItem('curV');location.reload()}
+function isOpen(name){let h=DB.heures&&DB.heures[name]?DB.heures[name]: (TIRAJ.find(x=>x[0]==name)?.[1]||'');if(!h)return true;let now=new Date();let [hh,mm]=h.split(':').map(Number);let close=new Date();close.setHours(hh,mm,0,0);return now < close}
+function renderTiraj(){let box=document.getElementById('tirajBox');box.innerHTML=TIRAJ.map(t=>{let open=isOpen(t[0]);let checked=selTiraj.includes(t[0])?'checked':'';let cls=open?'tiraj-item':'tiraj-item off';return `<label class='${cls}'><input type='checkbox' value='${t[0]}' ${checked} ${open?'':'disabled'} onchange='toggleT(this)'><span>${t[0]}<br><small>${DB.heures[t[0]]||t[1]}</small></span></label>`}).join('')}
+function toggleT(el){if(el.checked){if(!selTiraj.includes(el.value))selTiraj.push(el.value)}else selTiraj=selTiraj.filter(x=>x!=el.value);updateTotal();document.getElementById('selCount').innerText=selTiraj.length+' tiraj chwazi'}
+function selAllTiraj(){selTiraj=[];TIRAJ.forEach(t=>{if(isOpen(t[0]))selTiraj.push(t[0])});renderTiraj();updateTotal();document.getElementById('selCount').innerText=selTiraj.length+' tiraj chwazi'}
 
-// LIMIT MIZ GLOBAL - Ou mande yo
-function getLimit(vendeurId){
-  if(DB.limits && DB.limits[vendeurId]) return DB.limits[vendeurId];
-  if(DB.globalLimit) return DB.globalLimit;
-  return {boul:1000,maryaj:100,l3:100,l4:50,l5:50};
+let rows=0;
+function addRow(keepJeu='boul'){
+ let c=document.getElementById('betsContainer');
+ let div=document.createElement('div');div.className='bet-row';
+ div.innerHTML=`<select class='jeuSel'><option value='boul' ${keepJeu=='boul'?'selected':''}>Boul</option><option value='maryaj' ${keepJeu=='maryaj'?'selected':''}>Maryaj</option><option value='loto3' ${keepJeu=='loto3'?'selected':''}>L3</option><option value='loto4' ${keepJeu=='loto4'?'selected':''}>L4</option><option value='loto5' ${keepJeu=='loto5'?'selected':''}>L5</option></select><input class='numInp' placeholder='Nimewo' inputmode='numeric' pattern='[0-9x]*'><input class='miseInp' placeholder='Mise' inputmode='numeric' type='number'><button onclick='this.parentElement.remove();updateTotal()' style='background:#c62828;color:#fff;border:0;padding:0 8px;border-radius:8px'>X</button>`;
+ c.appendChild(div);
+ let numInp=div.querySelector('.numInp');
+ let miseInp=div.querySelector('.miseInp');
+ let jeuSel=div.querySelector('.jeuSel');
+ // chif selman
+ numInp.addEventListener('input',e=>{e.target.value=e.target.value.replace(/[^0-9xX]/g,'');updateTotal()});
+ miseInp.addEventListener('input',updateTotal);
+ // flech
+ numInp.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();miseInp.focus()} if(e.key==='ArrowDown'){e.preventDefault();addRow(jeuSel.value)}});
+ miseInp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='ArrowDown'){e.preventDefault();addRow(jeuSel.value)} if(e.key==='ArrowRight'){let next=div.nextElementSibling; if(next) next.querySelector('.numInp').focus()}});
+ rows++;
 }
-function checkLimit(type, mise, vendeurId){
-  var lim = getLimit(vendeurId);
-  var max = 0;
-  if(type=='boul') max=lim.boul;
-  if(type=='maryaj') max=lim.maryaj;
-  if(type=='loto3') max=lim.l3;
-  if(type=='loto4') max=lim.l4;
-  if(type=='loto5') max=lim.l5;
-  if(mise>max){alert('⛔ LIMIT DEPASE! Type: '+type+' Max: $'+max+' (Ou mete $'+mise+')\nLimit Global: Boul 1000, Maryaj 100, L3 100, L4 50, L5 50'); return false;}
-  return true;
+function getGlobalSold(type,numero){
+ let total=0;
+ let today=new Date().toISOString().slice(0,10);
+ DB.tickets.forEach(t=>{
+  if(t.date!=today)return;
+  t.bets.forEach(b=>{
+   if(b.type!=type)return;
+   if(type=='maryaj'){
+    let n1=b.numero.replace('x',''), n2=numero.replace('x','');
+    let a=n1.split(''), b2=n2.split('');
+    // dezod bon 12x47=47x12
+    let norm = (s)=>{let parts=s.split('x'); if(parts.length!=2)return s; let p1=parts[0], p2=parts[1]; return [p1+'x'+p2, p2+'x'+p1]};
+    let nb=norm(b.numero), nn=norm(numero);
+    if(nb[0]==nn[0]||nb[0]==nn[1]||nb[1]==nn[0]||nb[1]==nn[1]) total+=b.mise;
+   } else {
+    if(b.numero==numero) total+=b.mise;
+   }
+  })
+ });
+ return total;
 }
-
-// MARYAJ - NAN LÒD OU AN DEZÒD BON - 12x34 = 34x12
-function isMariageGagnant(miseStr, resM1, resM2, resM3){
-  var clean = miseStr.replace(/[^0-9xX\-\*]/g,'').replace(/x/gi,' ').replace(/\-/g,' ').replace(/\*/g,' ').trim().split(/\s+/).filter(Boolean);
-  // Si se "12x34" apre replace -> ["12","34"]
-  // Si se "1234" san separateur, koupe an 2
-  if(clean.length==1 && clean[0].length==4){
-    clean = [clean[0].substring(0,2), clean[0].substring(2,4)];
-  }
-  if(clean.length<2) return false;
-  var a = clean[0].padStart(2,'0');
-  var b = clean[1].padStart(2,'0');
-  var tiraj = [resM1,resM2,resM3].map(x=>String(x||'').padStart(2,'0').slice(-2));
-
-  // Dezòd bon: 12x34 = 34x12
-  // Si tiraj gen M1=34, M2=12, M3=99 -> 12x34 genyen
-  var hasA = tiraj.includes(a);
-  var hasB = tiraj.includes(b);
-  if(a===b){
-    // 12x12 -> si 12 nan tiraj, genyen
-    return hasA;
-  }
-  return hasA && hasB;
+function updateTotal(){
+ let miseSum=0;
+ document.querySelectorAll('.bet-row').forEach(r=>{
+  let m=parseInt(r.querySelector('.miseInp').value)||0;
+  miseSum+=m;
+ });
+ let nb=selTiraj.length||0;
+ let grand=miseSum*nb;
+ document.getElementById('detailTotal').innerText=`Total: $${miseSum} x ${nb} tiraj = $${grand}`;
+ document.getElementById('grandTotal').innerText=`$${grand}`;
 }
-
-function getPri(vendeurId){
-  if(DB.pri && DB.pri[vendeurId]) return DB.pri[vendeurId];
-  if(DB.globalPri) return DB.globalPri;
-  return {kom:10,p1er:50,p2e:20,p3e:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000};
-}
-
-function login(){
-  var ser=document.getElementById('vSerial').value.trim();
-  var pas=document.getElementById('vPass').value.trim();
-  var found=null;
-  for(var i=0;i<DB.vendeurs.length;i++){if(DB.vendeurs[i].serial==ser && DB.vendeurs[i].pass==pas){found=DB.vendeurs[i];break;}}
-  if(!found){
-    // kreye otomatik si pa egziste pou test
-    found={id:'v_'+Date.now(),serial:ser,nom:'Vandè '+ser,pass:pas,proprioId:'p_test'};
-    DB.vendeurs.push(found);save();
-  }
-  CUR=found;localStorage.setItem('curV',JSON.stringify(CUR));
-  document.getElementById('loginBox').style.display='none';
-  document.getElementById('mainBox').style.display='block';
-  document.getElementById('vName').innerText=CUR.nom;
-  document.getElementById('vSerialShow').innerText=CUR.serial;
-  document.getElementById('vInfo').innerText=CUR.serial+' - '+CUR.nom;
-  loadTirajGrid();loadLimitsInfo();loadMyTickets();loadResults();
-}
-
-function logout(){localStorage.removeItem('curV');location.reload();}
-
-function loadTirajGrid(){
-  var grid=document.getElementById('tirajGrid');var html='';
-  for(var i=0;i<ALL.length;i++){var t=ALL[i];var h=DB.heures[t]||'';var checked=selectedTiraj.includes(t)?'checked':'';html+='<label class="tiraj-item"><input type="checkbox" value="'+t+'" '+checked+' onchange="toggleTiraj(this)"> <span style="font-size:11px;font-weight:700">'+t+'</span> <small style="font-size:9px;color:#666">'+h+'</small></label>';}
-  grid.innerHTML=html;
-}
-function toggleTiraj(el){if(el.checked){if(!selectedTiraj.includes(el.value))selectedTiraj.push(el.value);}else{selectedTiraj=selectedTiraj.filter(x=>x!=el.value);}}
-
-function loadLimitsInfo(){
-  var lim=getLimit(CUR.id);var pri=getPri(CUR.id);
-  document.getElementById('limitShow').innerHTML='💰 <b>Limit Miz GLOBAL (Modifyab):</b> Boul: $'+lim.boul+' | Maryaj: $'+lim.maryaj+' | L3: $'+lim.l3+' | L4: $'+lim.l4+' | L5: $'+lim.l5;
-  document.getElementById('priShow').innerHTML='💵 <b>Pri Peye GLOBAL:</b> Komisyon '+pri.kom+'% | 1er '+pri.p1er+' | 2e '+pri.p2e+' | 3e '+pri.p3e+' | M1 '+pri.m1+' M2 '+pri.m2+' M3 '+pri.m3+' | L3 '+pri.l3+' L4 '+pri.l4+' L5 '+pri.l5+'<br><small>✅ Maryaj dezòd bon: 12x34=34x12</small>';
-}
-
-function addBet(){
-  var type=document.getElementById('betType').value;
-  var num=document.getElementById('betNum').value.trim();
-  var mise=parseInt(document.getElementById('betMise').value);
-  if(!num||!mise||mise<=0){alert('Mete nimewo ak mise');return;}
-  if(selectedTiraj.length==0){alert('Chwazi omwen yon tiraj');return;}
-
-  // CHECK LIMIT - Boul 1000, Maryaj 100, Loto3 100, Loto4 50, Loto5 50
-  if(!checkLimit(type,mise,CUR.id)) return;
-
-  // Validasyon nimewo
-  if(type=='boul' &&!/^\d{1,2}$/.test(num)){alert('Boul dwe 00-99');return;}
-  if(type=='maryaj'){
-    var clean=num.replace(/[^0-9]/g,'');
-    if(clean.length!=4){alert('Maryaj dwe 4 chif ex: 12x34');return;}
-  }
-
-  bets.push({type:type,numero:num,mise:mise});
-  document.getElementById('betNum').value='';document.getElementById('betMise').value='';
-  renderBets();
-}
-
-function renderBets(){
-  var tbody=document.getElementById('betsTable');var html='';var total=0;
-  for(var i=0;i<bets.length;i++){var b=bets[i];total+=b.mise;html+='<tr><td><b>'+b.type+'</b></td><td>'+b.numero+' <small style="color:#666">'+(b.type=='maryaj'?' (dezòd bon)':'')+'</small></td><td>$'+b.mise+'</td><td><button onclick="delBet('+i+')" style="background:#c62828;color:#fff;border:0;padding:4px 8px;border-radius:4px">X</button></td></tr>';}
-  tbody.innerHTML=html;document.getElementById('totalMise').innerText='$'+total;
-}
-function delBet(i){bets.splice(i,1);renderBets();}
-
 function saveTicket(){
-  if(bets.length==0){alert('Pa gen miz');return;}
-  if(selectedTiraj.length==0){alert('Chwazi tiraj');return;}
-  var total=0;for(var i=0;i<bets.length;i++)total+=bets[i].mise;
-  var ticket={id:'T'+Date.now(),vendeurId:CUR.id,serial:CUR.serial,tirages:selectedTiraj.slice(),bets:bets.slice(),total:total,date:new Date().toISOString().slice(0,10),time:new Date().toLocaleTimeString(),proprioId:CUR.proprioId||'p_test'};
-  DB.tickets.push(ticket);save();
-  bets=[];renderBets();loadMyTickets();
-  alert('✅ Tikè save! Total $'+total+' - Tiraj: '+selectedTiraj.join(', '));
+ if(selTiraj.length==0)return alert('Chwazi tiraj');
+ let bets=[];
+ let ok=true;
+ document.querySelectorAll('.bet-row').forEach(r=>{
+  let jeu=r.querySelector('.jeuSel').value;
+  let num=r.querySelector('.numInp').value.trim();
+  let mise=parseInt(r.querySelector('.miseInp').value);
+  if(!num||!mise)return;
+  // limite global V1+V2+... = Limite global
+  let lim=DB.limites?.global||{bor:1000,mar:100,l3:100,l4:50,l5:50};
+  let max=jeu=='boul'?lim.bor:jeu=='maryaj'?lim.mar:jeu=='loto3'?lim.l3:jeu=='loto4'?lim.l4:lim.l5;
+  let sold=getGlobalSold(jeu,num);
+  if(sold+mise>max){alert(`⛔ LIMIT GLOBAL DEPASE pou ${num} ${jeu}: deja $${sold} + $${mise} > $${max} (V1+V2+...=Global)`);ok=false;return}
+  bets.push({type:jeu,numero:num,mise:mise});
+ });
+ if(!ok)return;
+ if(bets.length==0)return alert('Mete boul ak mise');
+ let total=0;bets.forEach(b=>total+=b.mise);
+ let grand=total*selTiraj.length;
+ let ticket={id:'T'+Date.now(),vendeurId:CUR.id,serial:CUR.serial,bets:bets,tirages:selTiraj.slice(),total:grand,baseTotal:total,date:new Date().toISOString().slice(0,10),time:new Date().toLocaleTimeString(),dateTime:new Date().toISOString()};
+ DB.tickets.push(ticket);saveDB();
+ document.getElementById('betsContainer').innerHTML='';addRow();updateTotal();
+ alert('✅ Vann $'+grand+' - '+selTiraj.length+' tiraj | Maryaj dezòd bon');printTicket(ticket);
+ loadFiches();
 }
-
-function loadMyTickets(){
-  var cont=document.getElementById('myTickets');var today=new Date().toISOString().slice(0,10);var html='';
-  for(var i=DB.tickets.length-1;i>=0;i--){var t=DB.tickets[i];if(t.vendeurId!=CUR.id)continue;if(t.date!=today)continue;html+='<div class="card" style="border-left:5px solid #2e7d32"><b>ID:'+t.id+'</b> - '+t.tirages.join(', ')+' - $'+t.total+'<br><small>'+t.bets.map(b=>b.type+':'+b.numero+' $'+b.mise).join(' | ')+'</small></div>';}
-  cont.innerHTML=html||'Pa gen tikè jodi a';
+function printTicket(t){
+ let ticket=t||DB.tickets[DB.tickets.length-1];
+ if(!ticket)return;
+ let txt=` CD-LOTTO\n ${CUR.serial}\n----------------\n`;
+ ticket.tirages.forEach(ti=>{txt+=` ${ti} ${DB.heures[ti]||''}\n`});
+ txt+=`----------------\n`;
+ ticket.bets.forEach(b=>{txt+=`${b.type.toUpperCase()} ${b.numero} $${b.mise}\n`});
+ txt+=`----------------\n`;
+ txt+=`TOTAL $${ticket.baseTotal} x ${ticket.tirages.length} = $${ticket.total}\n`;
+ txt+=`${ticket.id}\n${ticket.date} ${ticket.time}\n\n\n`;
+ let box=document.getElementById('lastPrint');
+ box.style.display='block';
+ box.innerText=txt;
+ // RawBT
+ try{window.location.href='rawbt:print?text='+encodeURIComponent(txt)}catch(e){}
 }
-
-function loadResults(){
-  var cont=document.getElementById('resList');var todayCont=document.getElementById('resToday');var html='';var htmlToday='';
-  for(var i=DB.results.length-1;i>=0;i--){var r=DB.results[i];var rr=r.r||[];html+='<div class="card"><b>'+r.tirage+'</b> - '+r.date+'<br><div style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap"><span style="font-size:10px">1er LÒT</span><span class="pill blue">'+(rr[0]||'-')+'</span><span style="font-size:10px">2e</span><span class="pill orange">'+(rr[1]||'-')+'</span><span style="font-size:10px">3e</span><span class="pill lightblue">'+(rr[2]||'-')+'</span></div><div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap"><span style="font-size:10px">M1</span><span class="pill blue">'+(rr[3]||'-')+'</span><span style="font-size:10px">M2</span><span class="pill orange">'+(rr[4]||'-')+'</span><span style="font-size:10px">M3</span><span class="pill lightblue">'+(rr[5]||'-')+'</span></div><div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap"><span style="font-size:10px">L3</span><span class="pill blue">'+(rr[6]||'-')+'</span><span style="font-size:10px">L4</span><span class="pill orange">'+(rr[7]||'-')+'</span><span style="font-size:10px">L5</span><span class="pill lightblue">'+(rr[8]||'-')+'</span></div></div>';}
-  // Today only for login box
-  var today=new Date().toISOString().slice(0,10);var todayRes=DB.results.filter(r=>r.date==today);
-  for(var i=0;i<todayRes.length;i++){var r=todayRes[i];var rr=r.r||[];htmlToday+='<div style="margin-top:6px"><b>'+r.tirage+'</b>: '+(rr[0]||'-')+'/'+(rr[1]||'-')+'/'+(rr[2]||'-')+' | '+(rr[3]||'-')+'/'+(rr[4]||'-')+'/'+(rr[5]||'-')+' | '+(rr[6]||'-')+'/'+(rr[7]||'-')+'/'+(rr[8]||'-')+'</div>';}
-  cont.innerHTML=html||'Pa gen rezilta';if(todayCont)todayCont.innerHTML=htmlToday||'Pa gen rezilta jodi a';
+function copierTicket(){let id=document.getElementById('copyId').value.trim();let t=DB.tickets.find(x=>x.id==id||x.id==id.toUpperCase());if(!t){document.getElementById('copyRes').innerHTML='Pa jwenn';return}selTiraj=t.tirages.slice();document.getElementById('betsContainer').innerHTML='';t.bets.forEach(b=>{addRow(b.type);let last=document.querySelectorAll('.bet-row');let r=last[last.length-1];r.querySelector('.jeuSel').value=b.type;r.querySelector('.numInp').value=b.numero;r.querySelector('.miseInp').value=b.mise});renderTiraj();updateTotal();openTab('pVendre',document.querySelectorAll('.tab')[0]);document.getElementById('copyRes').innerHTML='✅ Kopye!'}
+function loadFiches(){let d=document.getElementById('fDate').value;let s=document.getElementById('fSearch').value.toLowerCase();let list=document.getElementById('fichesList');let html='';let today=new Date().toISOString().slice(0,10);let filterDate=d||today;DB.tickets.slice().reverse().forEach(t=>{if(t.vendeurId!=CUR.id)return;if(t.date!=filterDate)return;if(s&&!t.id.toLowerCase().includes(s)&&!JSON.stringify(t.bets).toLowerCase().includes(s))return;html+=`<div class='card' style='border-left:5px solid #1a237e'><b>${t.id}</b> - ${t.tirages.join(', ')}<br>${t.bets.map(b=>b.type+':'+b.numero+' $'+b.mise).join(' | ')}<br><b>Total $${t.total}</b> - ${t.time} <button onclick='printTicket(DB.tickets.find(x=>x.id=="${t.id}"))' style='float:right'>🖨️</button></div>`});list.innerHTML=html||'Pa gen fich'}
+function initRapport(){let sel=document.getElementById('rTirajSel');sel.innerHTML='<option value="tous">Tous tiraj</option>'+TIRAJ.map(t=>`<option>${t[0]}</option>`).join('');let today=new Date().toISOString().slice(0,10);document.getElementById('rDu').value=today;document.getElementById('rAu').value=today}
+function calcRapport(){
+ let du=document.getElementById('rDu').value;let au=document.getElementById('rAu').value;let ti=document.getElementById('rTirajSel').value;
+ let vente=0,com=0,gain=0;
+ DB.tickets.forEach(t=>{
+  if(t.vendeurId!=CUR.id)return;
+  if(t.date<du||t.date>au)return;
+  if(ti!='tous'&&!t.tirages.includes(ti))return;
+  // si plizyè tiraj, rapò chak tiraj separe selon rezilta
+  vente+=t.total;
+ });
+ let pri=DB.prix?.global||{p1:50};
+ let komPer=10;
+ com=vente*komPer/100;
+ // Gain kliyan kalkile pa tiraj si gen rezilta
+ DB.results?.forEach(r=>{
+  if(ti!='tous'&&r.tirage!=ti)return;
+  // kalkil senp
+ });
+ let balance=vente-com-gain;
+ document.getElementById('rapportRes').innerHTML=`<b>Du ${du} Au ${au} - ${ti}</b><br><br>Vente: $${vente}<br>Commission ${komPer}%: $${com.toFixed(2)}<br>Gain (kliyan): $${gain}<br><hr><b>Balance net: $${(vente-com-gain).toFixed(2)}</b><br><small>Chak tiraj kalkile separeman si plizyè tiraj nan yon fich</small>`;
 }
+function printRapport(){let txt=document.getElementById('rapportRes').innerText;let box=document.getElementById('lastPrint');box.style.display='block';box.innerText=txt;try{window.location.href='rawbt:print?text='+encodeURIComponent(txt)}catch(e){}}
+function searchPrinters(){document.getElementById('printersList').innerHTML='🔍 Recherche...';setTimeout(()=>{document.getElementById('printersList').innerHTML=`<div class='card'>🖨️ RawBT printer<br>🖨️ Bluetooth Printer<br>🖨️ POS-58<br><small>Chwazi youn pou default</small></div>`},800)}
 
-function printRawBT(){
-  if(bets.length==0){alert('Pa gen miz');return;}
-  var total=0;for(var i=0;i<bets.length;i++)total+=bets[i].mise;
-  var pri=getPri(CUR.id);
-  var txt='CD-LOTTO TIKÈ\nVandè: '+CUR.serial+' - '+CUR.nom+'\nTiraj: '+selectedTiraj.join(', ')+'\n------------------------------\n';
-  for(var i=0;i<bets.length;i++){var b=bets[i];txt+=b.type.toUpperCase()+' '+b.numero+' $'+b.mise+'\n';if(b.type=='maryaj')txt+=' (12x34=34x12 dezòd bon)\n';}
-  txt+='------------------------------\nTotal: $'+total+'\nKomisyon '+pri.kom+'%\n'+new Date().toLocaleString()+'\n\n\n';
-  window.location.href='rawbt:print?text='+encodeURIComponent(txt);
-}
-
-try{var cv=localStorage.getItem('curV');if(cv){CUR=JSON.parse(cv);document.getElementById('loginBox').style.display='none';document.getElementById('mainBox').style.display='block';document.getElementById('vName').innerText=CUR.nom;document.getElementById('vSerialShow').innerText=CUR.serial;document.getElementById('vInfo').innerText=CUR.serial+' - '+CUR.nom;loadTirajGrid();loadLimitsInfo();loadMyTickets();loadResults();}}catch(e){}
+try{let cv=localStorage.getItem('curV');if(cv){CUR=JSON.parse(cv);showMain()}}catch(e){}
 </script></body></html>
