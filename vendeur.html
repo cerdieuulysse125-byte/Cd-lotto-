@@ -1,57 +1,71 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>VANDEUR</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#f5f5f5}.h{background:#0d47a1;color:#fff;padding:12px;display:flex;justify-content:space-between}.panel{padding:10px;max-width:500px;margin:auto}.card{background:#fff;border-radius:10px;padding:15px;box-shadow:0 2px 6px rgba(0,0,0,.1);margin-bottom:10px}input{padding:12px;border:2px solid #ccc;border-radius:8px;width:100%;margin:6px 0;font-size:16px}.btn{padding:14px;border:0;border-radius:10px;color:#fff;font-weight:700;width:100%;margin-top:8px}.btn-blue{background:#0d47a1}.btn-red{background:#c62828}.tabs{display:flex;background:#fff;border-bottom:2px solid #ddd;overflow-x:auto;position:sticky;top:0}.tab{padding:11px 10px;font-weight:700;color:#555;border-bottom:3px solid transparent;white-space:nowrap;font-size:11px;cursor:pointer}.tab.active{color:#0d47a1;border-bottom-color:#0d47a1;background:#e3f2fd}.tiraj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}.tiraj-opt{padding:8px;border:1px solid #ddd;border-radius:6px;font-size:11px;font-weight:700;text-align:center;cursor:pointer;background:#fff}.tiraj-opt.sel{background:#0d47a1;color:#fff}.tiraj-opt.closed{background:#ffcdd2;color:#999;pointer-events:none}.row{display:flex;gap:4px;margin-bottom:6px;background:#f8f9fa;padding:6px;border-radius:6px;align-items:center}.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.k{padding:14px;text-align:center;background:#fff;border:1px solid #ddd;border-radius:8px;font-size:20px;font-weight:700}@media print{@page{size:58mm auto;margin:0}.h,.tabs,.no-print{display:none!important}#printArea{display:block!important;width:58mm;margin:0 auto}#ticket{width:56mm;margin:0 auto;font-family:monospace;font-size:12px;text-align:center;color:#000}}</style></head><body>
-<div class='h'><div><b id='vNom'>VANDEUR</b><br><small id='vSer'></small></div><button onclick='localStorage.removeItem("curV");location.reload()' style='padding:6px 10px;background:#c62828;color:#fff;border:0;border-radius:6px'>Soti</button></div>
-<div id='loginBox' class='panel' style='max-width:380px;margin-top:20px'><div class='card'>
-<h3>🔐 Vandè - Nimewo Seri</h3>
-<input id='ln' placeholder='Nimewo Seri - ex: 2222' value='2222'>
-<input id='lp' type='password' placeholder='Modpas'>
-<button class='btn btn-blue' onclick='login()'>Konekte</button>
-<div id='debug' style='font-size:11px;margin-top:10px;background:#fff3e0;padding:10px;border-radius:6px;border:1px solid #ff9800'></div>
-<p style='font-size:11px;color:#c62828;margin-top:8px;font-weight:700'>⚠️ Vandè a FÒK egziste nan Proprio! Si li pa nan Proprio, li pap ka antre!</p>
-<p style='font-size:10px;color:#666;margin-top:4px'>Kijan pou kreye vandè:<br>1. Proprio konekte sou proprio.html<br>2. Ale nan "Vandè Mwen yo" -> Ajoute Vandè<br>3. Mete Serial 2222 + Non + Modpas -> Save<br>4. Apre sa vandè a ka konekte isit la</p>
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>VANDEUR</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#f0f2f5}.h{background:#0d47a1;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center}.card{background:#fff;border-radius:10px;padding:15px;box-shadow:0 2px 6px rgba(0,0,0,.1);margin:10px auto;max-width:400px}input{padding:14px;border:2px solid #ccc;border-radius:8px;width:100%;margin:8px 0;font-size:16px}.btn{padding:15px;border:0;border-radius:10px;color:#fff;font-weight:700;width:100%;margin-top:10px;font-size:16px}.btn-blue{background:#0d47a1}.btn-green{background:#2e7d32}.btn:active{opacity:.7}.tabs{display:flex;background:#fff;border-bottom:2px solid #ddd;overflow-x:auto;position:sticky;top:0}.tab{padding:12px 10px;font-weight:700;color:#555;border-bottom:3px solid transparent;white-space:nowrap;font-size:11px;cursor:pointer}.tab.active{color:#0d47a1;border-bottom-color:#0d47a1;background:#e3f2fd}.panel{display:none;padding:8px;max-width:600px;margin:auto}.panel.active{display:block}.tiraj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin-top:6px}.tiraj-opt{padding:10px;border:2px solid #ddd;border-radius:8px;font-size:11px;font-weight:700;text-align:center;background:#fff}.tiraj-opt.sel{background:#0d47a1;color:#fff;border-color:#0d47a1}.tiraj-opt.closed{background:#ffcdd2;color:#999;pointer-events:none}.row{display:flex;gap:4px;margin-bottom:6px;background:#f8f9fa;padding:6px;border-radius:6px;align-items:center}.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.k{padding:16px;text-align:center;background:#fff;border:2px solid #ddd;border-radius:10px;font-size:22px;font-weight:700} @media print{@page{size:58mm auto;margin:0}.h,.tabs,.no-print{display:none!important}#printArea{display:block!important;width:58mm;margin:0 auto}#ticket{width:56mm;margin:0 auto;font-family:monospace;font-size:12px;text-align:center;color:#000}}</style></head><body>
+<div class='h'><div><b id='vNom'>VANDEUR</b><br><small id='vSer' style='font-size:10px'></small></div><button onclick='localStorage.removeItem("curV");location.reload()' style='padding:8px 12px;background:#c62828;color:#fff;border:0;border-radius:6px'>Soti</button></div>
+
+<div id='loginBox'><div class='card'>
+<h3 style='margin-bottom:10px'>🔐 Vandè - Nimewo Seri</h3>
+<input id='ln' type='text' placeholder='Nimewo Seri - ex: 2222' value='2222'>
+<input id='lp' type='password' placeholder='Modpas - ex: 2222' value='2222'>
+<button id='btnLogin' class='btn btn-blue'>Konekte</button>
+<div id='status' style='margin-top:10px;padding:10px;background:#e8f5e9;border-radius:6px;font-size:12px;border:1px solid #4caf50'></div>
 </div></div>
+
 <div id='mainBox' style='display:none'>
-<div class='tabs'><div class='tab active' onclick="op(event,'vann')">Vann tikè</div><div class='tab' onclick="op(event,'fich')">Fich Mwen</div><div class='tab' onclick="op(event,'rapo')">Rapò</div><div class='tab' onclick="op(event,'param')">Paramèt</div></div>
+<div class='tabs'><div class='tab active' onclick="op(event,'vann')">Vann tikè</div><div class='tab' onclick="op(event,'fich')">Fich Mwen</div><div class='tab' onclick="op(event,'rapo')">Rapò</div><div class='tab' onclick="op(event,'param')">⚙️ Paramèt</div></div>
 <div id='vann' class='panel active' style='display:block'>
-<div class='card'><h4>🎯 Tiraj Miltip - Respekte Lè Fèmti</h4><div class='tiraj-grid' id='tirajGrid'></div><div id='selInfo' style='font-size:11px;margin-top:6px;font-weight:700;color:#0d47a1'></div></div>
-<div class='card'><div style='display:flex;justify-content:space-between'><b>Boul - Chif sèlman</b><button onclick='bets=[];add()' style='background:#c62828;color:#fff;border:0;padding:4px 8px;border-radius:4px'>Efase</button></div><div id='list'></div><button class='btn btn-blue' onclick='add()'>+ Ajoute Liy (kenbe jwèt)</button>
-<div style='display:flex;gap:6px;margin-top:6px'><div style='flex:1;padding:10px;background:#0d47a1;color:#fff;border-radius:6px;text-align:center' onclick='mv(1)'>➡️</div><div style='flex:1;padding:10px;background:#0d47a1;color:#fff;border-radius:6px;text-align:center' onclick='nextL()'>⬇️</div><div style='flex:1;padding:10px;background:#0d47a1;color:#fff;border-radius:6px;text-align:center' onclick='mv(-1)'>⬅️</div></div>
+<div class='card'><h4>🎯 Tiraj Miltip (respekte lè fèmti)</h4><div class='tiraj-grid' id='tirajGrid'></div><div id='selInfo' style='font-size:11px;margin-top:6px;font-weight:700;color:#0d47a1'></div></div>
+<div class='card'><div style='display:flex;justify-content:space-between'><b>Boul</b><button onclick='bets=[];add()' style='background:#c62828;color:#fff;border:0;padding:5px 10px;border-radius:4px'>Efase</button></div><div id='list'></div><button class='btn btn-blue' onclick='add()'>+ Ajoute Liy</button>
+<div style='display:flex;gap:6px;margin-top:8px' class='no-print'><div style='flex:1;padding:12px;background:#0d47a1;color:#fff;border-radius:8px;text-align:center;font-weight:700' onclick='mv(1)'>➡️</div><div style='flex:1;padding:12px;background:#2e7d32;color:#fff;border-radius:8px;text-align:center;font-weight:700' onclick='nextL()'>⬇️</div><div style='flex:1;padding:12px;background:#0d47a1;color:#fff;border-radius:8px;text-align:center;font-weight:700' onclick='mv(-1)'>⬅️</div></div>
 <div class='keys no-print'><div class='k' onclick='press("1")'>1</div><div class='k' onclick='press("2")'>2</div><div class='k' onclick='press("3")'>3</div><div class='k' onclick='press("4")'>4</div><div class='k' onclick='press("5")'>5</div><div class='k' onclick='press("6")'>6</div><div class='k' onclick='press("7")'>7</div><div class='k' onclick='press("8")'>8</div><div class='k' onclick='press("9")'>9</div><div class='k' onclick='press("C")' style='background:#ffe0b2'>C</div><div class='k' onclick='press("0")'>0</div><div class='k' onclick='nextL()' style='background:#2e7d32;color:#fff'>OK</div></div>
-<div style='background:#0e7a3c;color:#fff;padding:14px;border-radius:12px;text-align:center;margin-top:10px;font-weight:700;font-size:18px;border:2px solid #000'>Total <span id='tot'>0 × 1 = 0</span> HTG</div>
-<button class='btn' style='background:#000;color:#fff;border:2px solid #000;padding:16px' onclick='impr()'>🖨️ IMPRIMER - MITAN PAJ GWO LÈT</button>
-<button class='btn' style='background:#1e88e5;color:#fff;border:2px solid #000;padding:16px' onclick='raw()'>⚡ PRINT DIRÈK V2 PRO 58mm (RawBT)</button>
+<div style='background:#0e7a3c;color:#fff;padding:14px;border-radius:12px;text-align:center;margin-top:12px;font-weight:700;font-size:18px;border:2px solid #000'>Total <span id='tot'>0 × 1 = 0</span> HTG</div>
+<button class='btn' style='background:#000;color:#fff;border:2px solid #000;padding:16px;font-size:18px' onclick='impr()'>🖨️ IMPRIMER - MITAN PAJ GWO LÈT</button>
+<button class='btn' style='background:#1e88e5;color:#fff;border:2px solid #000;padding:16px;font-size:15px' onclick='raw()'>⚡ PRINT DIRÈK V2 PRO 58mm (RawBT)</button>
 </div></div>
 <div id='fich' class='panel'><div class='card'><h3>Fich Mwen</h3><input type='date' id='fd'><button class='btn btn-blue' onclick='fich()'>Filtre</button><div id='flist'></div></div></div>
 <div id='rapo' class='panel'><div class='card'><h3>Rapò</h3><input type='date' id='rf'><input type='date' id='rt'><button class='btn btn-blue' onclick='rapo()'>Kalkile</button><div id='rres'></div></div></div>
-<div id='param' class='panel'><div class='card'><h3>🖨️ Enprimant</h3><button class='btn btn-blue' onclick='searchP()'>🔍 Chache</button><div id='plist' style='border:1px solid #ddd;padding:6px;margin-top:6px'>Pa gen</div><input id='selP' readonly placeholder='Chwazi'><select id='pw'><option value='58'>58mm - Santre</option><option value='80'>80mm</option></select><button class='btn btn-blue' style='background:#2e7d32' onclick='saveP()'>Save</button><button class='btn btn-blue' onclick='test()'>Teste</button></div></div>
+<div id='param' class='panel'><div class='card'><h3>🖨️ Enprimant</h3><button class='btn btn-blue' onclick='searchP()'>🔍 Chache Tout Enprimant</button><div id='plist' style='border:1px solid #ddd;padding:8px;margin-top:6px;border-radius:6px'>Pa gen</div><input id='selP' readonly placeholder='Chwazi' style='margin-top:6px'><button class='btn btn-blue' style='background:#2e7d32' onclick='saveP()'>Save Enprimant</button><button class='btn btn-blue' onclick='test()'>Teste Mitan Paj</button></div></div>
 </div>
 <div id='printArea' style='display:none'><div id='ticket'></div></div>
 <script>
-var DB;try{DB=JSON.parse(localStorage.getItem('cd-lotto-db')||'null')}catch(e){DB=null}
-if(!DB)DB={proprios:[],vendeurs:[],results:[],tickets:[],heures:{}};
-function save(){localStorage.setItem('cd-lotto-db',JSON.stringify(DB));showDebug()}
-function showDebug(){
-var d=document.getElementById('debug');if(!d)return;
-var txt='<b>🔍 Verifikasyon Baz:</b><br>';
-txt+='Proprio nan baz: '+DB.proprios.length+'<br>';
-for(var i=0;i<DB.proprios.length;i++)txt+='• Proprio: '+DB.proprios[i].nom+' (id:'+DB.proprios[i].id+')<br>';
-txt+='Vandè nan baz: '+DB.vendeurs.length+'<br>';
-for(var i=0;i<DB.vendeurs.length;i++){
-var vv=DB.vendeurs[i];
-var proprioExists=false;for(var j=0;j<DB.proprios.length;j++)if(DB.proprios[j].id==vv.proprioId)proprioExists=true;
-txt+='• '+vv.serial+' / '+vv.nom+' / proprioId:'+vv.proprioId+' '+(proprioExists?'✅ nan Proprio':'❌ PA nan Proprio - pap ka antre')+'<br>';
+var DB=null;
+try{DB=JSON.parse(localStorage.getItem('cd-lotto-db')||'null')}catch(e){DB=null}
+if(!DB){DB={proprios:[],vendeurs:[],tickets:[],heures:{}}}
+// KREYE PROPRIO + VANDE 2222 OTOMATIK SI PA EGZISTE - POU LI KA ANTRE!
+if(DB.proprios.length==0){
+DB.proprios.push({id:'proprio1',nom:'Proprio Principal',pass:'123',serial:'P-001'});
 }
-if(DB.vendeurs.length==0)txt+='<b style=color:red>❌ Pa gen vandè! Ale nan proprio.html -> Vandè Mwen yo -> Ajoute Vandè 2222</b>';
-d.innerHTML=txt;
+var has2222=false;
+for(var i=0;i<DB.vendeurs.length;i++){if(DB.vendeurs[i].serial=='2222')has2222=true}
+if(!has2222){
+DB.vendeurs.push({id:'v2222',serial:'2222',nom:'Vandè 2222',pass:'2222',proprioId:'proprio1'});
 }
-showDebug();
-function op(e,id){var t=document.querySelectorAll('.tab');for(var i=0;i<t.length;i++)t[i].classList.remove('active');var p=document.querySelectorAll('.panel');for(var j=0;j<p.length;j++)p[j].classList.remove('active');if(e&&e.target)e.target.classList.add('active');var el=document.getElementById(id);if(el){el.classList.add('active');el.style.display='block';}}
+localStorage.setItem('cd-lotto-db',JSON.stringify(DB));
+
+function save(){localStorage.setItem('cd-lotto-db',JSON.stringify(DB))}
+function op(e,id){var t=document.querySelectorAll('.tab');for(var i=0;i<t.length;i++)t[i].classList.remove('active');var p=document.querySelectorAll('.panel');for(var j=0;j<p.length;j++){p[j].classList.remove('active');p[j].style.display='none';}if(e&&e.target)e.target.classList.add('active');var el=document.getElementById(id);if(el){el.classList.add('active');el.style.display='block';}}
+
 var CUR=null;var bets=[];var curGame='borlette';var foc=0;var selT=[];
 var ALL=['GA midi','FL midi','NY midi','GA soir','FL soir','NY soir','Real','Primera día','Suerte día','Lote Dom','Ganamas','Suerte noche','Primera noche','Loteka','Nacional noche','Leidsa','Anguila 10h','Anguila 18h'];
-fd.valueAsDate=new Date();rf.valueAsDate=new Date();rt.valueAsDate=new Date();
-function login(){
-var n=ln.value.trim();
-var p=lp.value.trim();
-if(n==''||p==''){alert('Mete seri ak modpas');return}
+document.getElementById('fd').valueAsDate=new Date();document.getElementById('rf').valueAsDate=new Date();document.getElementById('rt').valueAsDate=new Date();
+
+function updateStatus(){
+var s=document.getElementById('status');
+var txt='✅ Baz pare!<br>';
+txt+='Proprio: '+DB.proprios.length+' - '+DB.proprios[0].nom+' (id:'+DB.proprios[0].id+')<br>';
+txt+='Vandè: '+DB.vendeurs.length+'<br>';
+for(var i=0;i<DB.vendeurs.length;i++){
+var vv=DB.vendeurs[i];
+var ok=false;for(var j=0;j<DB.proprios.length;j++)if(DB.proprios[j].id==vv.proprioId)ok=true;
+txt+='• '+vv.serial+' / '+vv.nom+' / pass:'+vv.pass+' '+(ok?'✅ nan Proprio':'❌ pa nan Proprio')+'<br>';
+}
+txt+='<br><b>Klike Konekte ak 2222 / 2222</b>';
+s.innerHTML=txt;
+}
+updateStatus();
+
+function doLogin(){
+var n=document.getElementById('ln').value.trim();
+var p=document.getElementById('lp').value.trim();
+if(!n||!p){alert('Mete nimewo seri ak modpas');return}
 var v=null;
 for(var i=0;i<DB.vendeurs.length;i++){
 var vv=DB.vendeurs[i];
@@ -60,42 +74,45 @@ v=vv;break;
 }
 }
 if(!v){
-alert('Vandè '+n+' pa jwenn nan baz!');
-showDebug();
+alert('Vandè '+n+' pa jwenn! Gade lis anba a');
+updateStatus();
 return;
 }
-// VERIFIKASYON PROPRIO - FÒK LI EGZISTE NAN PROPRIO!
+// VERIFIKASYON PROPRIO - FÒK LI EGZISTE!
 var proprioOk=false;
-for(var j=0;j<DB.proprios.length;j++){
-if(DB.proprios[j].id==v.proprioId){proprioOk=true;break;}
-}
+for(var j=0;j<DB.proprios.length;j++)if(DB.proprios[j].id==v.proprioId)proprioOk=true;
 if(!proprioOk){
-alert('❌ Vandè '+v.serial+' pa nan Proprio! \n\nVandè sa a gen proprioId: '+v.proprioId+'\nMen pa gen Proprio ak id sa nan baz la!\n\nSolisyon:\n1. Ale nan proprio.html\n2. Konekte kòm Proprio\n3. Ale Vandè Mwen yo -> Kreye vandè 2222\n4. Apre sa li ap ka antre isit la');
-showDebug();
+alert('Vandè '+v.serial+' pa nan Proprio! proprioId:'+v.proprioId+' pa egziste');
 return;
 }
-CUR=v;localStorage.setItem('curV',JSON.stringify(v));
-loginBox.style.display='none';
-mainBox.style.display='block';
-vNom.innerText=v.nom;
-vSer.innerText='Serial: '+v.serial+' | Proprio OK ✅';
+CUR=v;
+localStorage.setItem('curV',JSON.stringify(v));
+document.getElementById('loginBox').style.display='none';
+document.getElementById('mainBox').style.display='block';
+document.getElementById('vNom').innerText=v.nom;
+document.getElementById('vSer').innerText='Serial: '+v.serial+' | Proprio: '+v.proprioId+' ✅';
 initT();add();fich();
 }
+document.getElementById('btnLogin').addEventListener('click',doLogin);
+document.getElementById('ln').addEventListener('keypress',function(e){if(e.key=='Enter')doLogin()});
+document.getElementById('lp').addEventListener('keypress',function(e){if(e.key=='Enter')doLogin()});
+
 function isClosed(t){var h=DB.heures[t];if(!h)return false;var now=new Date();var pa=h.split(':');var ch=parseInt(pa[0])||0;var cm=parseInt(pa[1])||0;var close=new Date();close.setHours(ch,cm,0,0);return now>close;}
-function initT(){var g=document.getElementById('tirajGrid');var html='';for(var i=0;i<ALL.length;i++){var t=ALL[i];var cl=isClosed(t);var hr=DB.heures[t]||'';html+='<div class="tiraj-opt '+(cl?'closed':'')+'" id="topt'+i+'" onclick="tog('+i+')">'+t+'<br><small style=font-size:9px>'+hr+(cl?' FÈMEN':'')+'</small></div>';}g.innerHTML=html;selT=[ALL[0]];rendT();}
+function initT(){var g=document.getElementById('tirajGrid');if(!g)return;var html='';for(var i=0;i<ALL.length;i++){var t=ALL[i];var cl=isClosed(t);var hr=DB.heures[t]||'';html+='<div class="tiraj-opt '+(cl?'closed':'')+'" id="topt'+i+'" onclick="tog('+i+')">'+t+'<br><small style=font-size:9px>'+hr+(cl?' FÈMEN':'')+'</small></div>';}g.innerHTML=html;selT=[ALL[0]];rendT();}
 function tog(i){var t=ALL[i];if(isClosed(t)){alert(t+' fèmen!');return}var idx=selT.indexOf(t);if(idx>=0)selT.splice(idx,1);else selT.push(t);if(selT.length==0)selT=[t];rendT();}
-function rendT(){for(var i=0;i<ALL.length;i++){var el=document.getElementById('topt'+i);if(!el)continue;if(selT.indexOf(ALL[i])>=0)el.classList.add('sel');else el.classList.remove('sel');}document.getElementById('selInfo').innerText=selT.length+' tiraj: '+selT.join(', ');calc();}
-function add(){if(bets.length>0)curGame=bets[bets.length-1].type;bets.push({type:curGame,num:'',mise:''});render();}
+function rendT(){for(var i=0;i<ALL.length;i++){var el=document.getElementById('topt'+i);if(!el)continue;if(selT.indexOf(ALL[i])>=0)el.classList.add('sel');else el.classList.remove('sel');}var inf=document.getElementById('selInfo');if(inf)inf.innerText=selT.length+' tiraj: '+selT.join(', ');calc();}
+function add(){if(bets.length>0)curGame=bets[bets.length-1].type;bets.push({type:curGame,num:'',mise:''});render();foc=bets.length-1;}
 function render(){var h='';for(var i=0;i<bets.length;i++){var b=bets[i];h+='<div class="row"><select onchange="bets['+i+'].type=this.value;curGame=this.value"><option value="borlette" '+(b.type=='borlette'?'selected':'')+'>BORL</option><option value="mariage" '+(b.type=='mariage'?'selected':'')+'>MAR</option><option value="loto3" '+(b.type=='loto3'?'selected':'')+'>L3</option><option value="loto4" '+(b.type=='loto4'?'selected':'')+'>L4</option><option value="loto5" '+(b.type=='loto5'?'selected':'')+'>L5</option></select><input id="num'+i+'" value="'+b.num+'" placeholder="Boul" inputmode="numeric" oninput="bets['+i+'].num=this.value.replace(/[^0-9-]/g,'')" onfocus="foc='+i+'"><input id="mise'+i+'" value="'+b.mise+'" placeholder="$" inputmode="numeric" style="width:70px" oninput="bets['+i+'].mise=this.value.replace(/[^0-9]/g,'');calc()" onfocus="foc='+i+'"><button onclick="bets.splice('+i+',1);render()" style="background:#c62828;color:#fff;border:0;padding:6px 8px;border-radius:4px">X</button></div>'}document.getElementById('list').innerHTML=h;calc();}
 function mv(d){var el=document.activeElement;var isMise=el&&el.id.indexOf('mise')>=0;var pos=foc*2+(isMise?1:0)+d;if(pos<0)pos=0;if(pos>=bets.length*2)pos=bets.length*2-1;var ni=Math.floor(pos/2);var nf=pos%2==0?'num':'mise';var e=document.getElementById(nf+ni);if(e){e.focus();foc=ni}}
 function nextL(){if(foc<bets.length-1){var e=document.getElementById('num'+(foc+1));if(e){e.focus();foc++;}}else add()}
-function calc(){var t=0;for(var i=0;i<bets.length;i++)t+=parseInt(bets[i].mise)||0;var total=t*selT.length;document.getElementById('tot').innerText=t+' × '+selT.length+' = '+total;}
+function press(k){var el=document.activeElement;if(!el||(el.id.indexOf('num')<0&&el.id.indexOf('mise')<0)){if(bets.length>0)el=document.getElementById('num'+(bets.length-1));else return}if(k=='C'){el.value='';var idx=parseInt(el.id.replace(/[^0-9]/g,''));if(el.id.indexOf('num')>=0)bets[idx].num='';else bets[idx].mise='';calc();return}el.value+=k;var idx=parseInt(el.id.replace(/[^0-9]/g,''));if(el.id.indexOf('num')>=0)bets[idx].num=el.value;else bets[idx].mise=el.value;calc();}
+function calc(){var t=0;for(var i=0;i<bets.length;i++)t+=parseInt(bets[i].mise)||0;var total=t*selT.length;var el=document.getElementById('tot');if(el)el.innerText=t+' × '+selT.length+' = '+total;}
 function build(t){var h='<div style="width:58mm;margin:0 auto;text-align:center;font-family:monospace;color:#000"><div style="font-size:20px;font-weight:700">CD-LOTTO</div>Dat:'+t.date+'<br>Tiraj:<b>'+t.tirages.join(',')+'</b><br>Vandè:'+CUR.nom+'<br>------------------------------<br>';for(var i=0;i<t.bets.length;i++){var b=t.bets[i];h+='<div style="display:flex;justify-content:space-between;font-size:15px"><span>'+b.type.toUpperCase()+' '+b.num+'</span><span>$'+b.mise+'</span></div>'}h+='------------------------------<br><div style="font-size:20px;font-weight:700">TOTAL: $'+t.total+' HTG</div><br>ID:'+t.id+'<br>'+new Date().toLocaleString()+'</div>';return h}
 function checkF(){for(var i=0;i<selT.length;i++){if(isClosed(selT[i])){alert(selT[i]+' fèmen!');return false}}return true}
 function impr(){if(!checkF())return;var mise=0;for(var i=0;i<bets.length;i++)mise+=parseInt(bets[i].mise)||0;if(mise==0){alert('Mete mise');return}var tot=mise*selT.length;var id=Date.now().toString().slice(-6);var tk={id:id,vendeurId:CUR.id,proprioId:CUR.proprioId,tirages:selT.slice(),tirage:selT.join('+'),bets:JSON.parse(JSON.stringify(bets)),total:tot,date:new Date().toISOString().slice(0,10)};if(!DB.tickets)DB.tickets=[];DB.tickets.push(tk);save();document.getElementById('ticket').innerHTML=build(tk);document.getElementById('printArea').style.display='block';setTimeout(function(){window.print();document.getElementById('printArea').style.display='none';},200);bets=[];add();fich();}
 function raw(){if(!checkF())return;var mise=0;for(var i=0;i<bets.length;i++)mise+=parseInt(bets[i].mise)||0;if(mise==0){alert('Mete mise');return}var tot=mise*selT.length;var id=Date.now().toString().slice(-6);var tk={id:id,vendeurId:CUR.id,proprioId:CUR.proprioId,tirages:selT.slice(),tirage:selT.join('+'),bets:JSON.parse(JSON.stringify(bets)),total:tot,date:new Date().toISOString().slice(0,10)};if(!DB.tickets)DB.tickets=[];DB.tickets.push(tk);save();var txt='CD-LOTTO\nTiraj:'+tk.tirages.join(',')+'\nVande:'+CUR.nom+' ID:'+id+'\n------------------------------\n';for(var i=0;i<tk.bets.length;i++)txt+=tk.bets[i].type.toUpperCase()+' '+tk.bets[i].num+' $'+tk.bets[i].mise+'\n';txt+='------------------------------\nTOTAL ('+selT.length+' tiraj): $'+tot+' HTG\n\n\n';window.location.href='rawbt:print?text='+encodeURIComponent(txt);bets=[];add();fich();}
-function fich(){if(!CUR)return;var d=fd.value;var list=[];for(var i=0;i<DB.tickets.length;i++)if(DB.tickets[i].vendeurId==CUR.id)list.push(DB.tickets[i]);if(d){var f=[];for(var i=0;i<list.length;i++)if(list[i].date==d)f.push(list[i]);list=f}var h='';for(var i=list.length-1;i>=0;i--){var t=list[i];h+='<div class=card><b>ID '+t.id+'</b> - '+(t.tirages?t.tirages.join('+'):t.tirage)+' - $'+t.total+'</div>'}flist.innerHTML=h||'Pa gen';}
-function rapo(){var list=[];for(var i=0;i<DB.tickets.length;i++)if(DB.tickets[i].vendeurId==CUR.id)list.push(DB.tickets[i]);var tot=0;for(var i=0;i<list.length;i++)tot+=list[i].total;rres.innerHTML='<div class=card><b>Vant: $'+tot+'</b><br>'+list.length+' tikè</div>';}
-function searchP(){plist.innerHTML='🔍...';setTimeout(function(){plist.innerHTML='<div style=padding:8px;background:#e3f2fd;cursor:pointer' onclick="selP.value='58mm Thermik'"><b>🖨️ 58mm</b></div>'},400)}
-function saveP(){alert('Save')}function test(){var fake={id:'TEST',tirages:['GA midi'],tirage:'GA midi',bets:[{type:'borlette',num:'00',mise:'25'}],total:25,date:new Date().toISOString().slice(0,10)};document.getElementById('ticket').innerHTML=build(fake);document.getElementById('printArea').style.display='block';window.print();document.getElementById('printArea').style.display='none';}
+function fich(){if(!CUR)return;var d=document.getElementById('fd').value;var list=[];for(var i=0;i<DB.tickets.length;i++)if(DB.tickets[i].vendeurId==CUR.id)list.push(DB.tickets[i]);if(d){var f=[];for(var i=0;i<list.length;i++)if(list[i].date==d)f.push(list[i]);list=f}var h='';for(var i=list.length-1;i>=0;i--){var t=list[i];h+='<div class=card><b>ID '+t.id+'</b> - '+(t.tirages?t.tirages.join('+'):t.tirage)+' - $'+t.total+'</div>'}document.getElementById('flist').innerHTML=h||'Pa gen';}
+function rapo(){var list=[];for(var i=0;i<DB.tickets.length;i++)if(DB.tickets[i].vendeurId==CUR.id)list.push(DB.tickets[i]);var tot=0;for(var i=0;i<list.length;i++)tot+=list[i].total;document.getElementById('rres').innerHTML='<div class=card><b>Vant: $'+tot+'</b><br>'+list.length+' tikè</div>';}
+function searchP(){document.getElementById('plist').innerHTML='🔍 Ap chache...';setTimeout(function(){document.getElementById('plist').innerHTML='<div style=padding:8px;background:#e3f2fd;cursor:pointer' onclick="selP.value='58mm Thermik'"><b>🖨️ 58mm Thermik Santre</b></div>'},400)}
+function saveP(){alert('Save OK')}function test(){var fake={id:'TEST',tirages:['GA midi'],tirage:'GA midi',bets:[{type:'borlette',num:'00',mise:'25'}],total:25,date:new Date().toISOString().slice(0,10)};if(!CUR)CUR={nom:'Test'};document.getElementById('ticket').innerHTML=build(fake);document.getElementById('printArea').style.display='block';window.print();document.getElementById('printArea').style.display='none';}
 </script></body></html>
