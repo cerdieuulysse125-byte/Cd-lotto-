@@ -1,19 +1,54 @@
 "use client";
-import {useState,useEffect} from "react";
-const TIRAGES=["GA midi","FL midi","NY midi","GA soir","FL soir","NY soir","Real","Real 12h45","Primera dia","Suerte dia","Lote Dom","Ganamas","Suerte noche","Primera noche","Loteka","Nacional noche","Leidsa","Anguila 10h","Anguila 18h"];
-export default function Vendeur(){
- const [tab,setTab]=useState("VENDRE"); const [sel,setSel]=useState<string[]>([]); const [jeu,setJeu]=useState("Bolet"); const [boul,setBoul]=useState(""); const [miz,setMiz]=useState(""); const [fiches,setFiches]=useState<any[]>([]); const [msg,setMsg]=useState(""); const [ferm,setFerm]=useState<any>({"GA midi":"12:15","FL midi":"13:15","NY midi":"14:15","GA soir":"18:15","FL soir":"21:15","NY soir":"22:15"});
- const [lim,setLim]=useState({bolet:1500,maryaj:100,loto3:100,loto4:20,loto5:5}); const [boulBloke,setBoulBloke]=useState<string[]>([]);
- useEffect(()=>{ const s=localStorage.getItem("CD_V12"); if(s){try{setFiches(JSON.parse(s))}catch{}} const p=localStorage.getItem("CD_PROPRIO_V7"); if(p){try{const d=JSON.parse(p); if(d.ferm)setFerm(d.ferm); if(d.lim)setLim(d.lim); if(d.boulBloke)setBoulBloke(d.boulBloke);}catch{}} },[]);
- useEffect(()=>{localStorage.setItem("CD_V12",JSON.stringify(fiches))},[fiches]);
- const nowHM=()=>{const d=new Date(); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}; const isOpen=(t:string)=>{const f=ferm[t]; if(!f)return true; return nowHM()<f;}; const getLimite=(j:string)=>j==="Bolet"?lim.bolet:j==="Maryaj"?lim.maryaj:j==="Loto3"?lim.loto3:j==="Loto4"?lim.loto4:lim.loto5;
- const ajouter=()=>{ if(!sel.length)return setMsg("❌ Chwazi tiraj"); if(!boul)return setMsg("❌ Mete boul"); if(!miz)return setMsg("❌ Mete miz"); if(boulBloke.includes(boul))return setMsg(`❌ Boul ${boul} bloke`); const fermes=sel.filter(t=>!isOpen(t)); if(fermes.length)return setMsg(`❌ FERME: ${fermes.join(',')}`); const limite=getLimite(jeu); for(const tiraj of sel){const tot=fiches.filter(f=>f.jeu===jeu&&f.boul===boul&&f.tirages.includes(tiraj)).reduce((s,f)=>s+f.miz,0); if(tot+parseInt(miz)>limite)return setMsg(`❌ LIMITE ${limite} depase`);} const f={id:Date.now(),jeu,boul,miz:parseInt(miz),tirages:sel,heure:new Date().toLocaleString(),ticket:"CD"+Date.now().toString().slice(-6)}; setFiches([...fiches,f]); setMsg("✅ Ajoute"); setBoul(""); setMiz(""); setTimeout(()=>setMsg(""),2000); };
- const total=fiches.reduce((s,f)=>s+f.miz,0);
- const doPrint=(id:string)=>{ const content=document.getElementById(id)?.innerHTML; if(!content)return alert("Pa gen fich"); const iframe=document.createElement("iframe"); iframe.style.width="0"; iframe.style.height="0"; iframe.style.border="0"; iframe.style.position="fixed"; document.body.appendChild(iframe); const doc=iframe.contentWindow?.document; if(!doc)return; doc.open(); doc.write(`<html><head><style>@page{size:58mm auto;margin:0} body{width:56mm;margin:0;padding:2mm;font-family:monospace;font-size:12px;font-weight:900}.c{text-align:center}.big{font-size:16px}.dash{border-top:1.5px dashed #000;border-bottom:1.5px dashed #000;margin:2mm 0;padding:2mm 0}.line{border-bottom:1px dashed #999;padding:1mm 0} table{width:100%}.r{text-align:right}</style></head><body>${content}</body></html>`); doc.close(); setTimeout(()=>{iframe.contentWindow?.focus(); iframe.contentWindow?.print(); setTimeout(()=>document.body.removeChild(iframe),1000);},300); };
- return (<div style={{maxWidth:480,margin:'0 auto',background:'#fff',color:'#000',minHeight:'100vh',padding:8}}><div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:6}}>{["VENDRE","COPIER","MES FICHES","RAPPORT"].map(t=><button key={t} onClick={()=>setTab(t)} style={{padding:13,border:'2px solid #000',borderRadius:10,fontWeight:900,fontSize:11,background:tab===t?"#4fb3ff":"#eee"}}>{t}</button>)}</div>{msg&&<div style={{background:msg.includes("❌")?"#d00":"#0a7a3e",color:'#fff',padding:10,borderRadius:8,marginTop:8,fontWeight:900,textAlign:'center'}}>{msg}</div>}
- {tab==="VENDRE"&&<><div style={{border:'2px solid #000',borderRadius:10,padding:8,marginTop:8}}><div style={{display:'flex',justifyContent:'space-between',fontWeight:900,fontSize:10}}><span>TIRAJ - {nowHM()}</span><span>LIM: B{lim.bolet} M{lim.maryaj}</span></div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:4,marginTop:6}}>{TIRAGES.map(t=>{const open=isOpen(t); return <label key={t} style={{border:'1px solid #000',padding:6,borderRadius:6,fontSize:10,fontWeight:900,background:!open?"#fcc":sel.includes(t)?"#b3e5fc":"#fff"}}><input type="checkbox" disabled={!open} checked={sel.includes(t)} onChange={()=>setSel(s=>s.includes(t)?s.filter(x=>x!==t):[...s,t])}/> {t} {!open?" 🔒":""}</label>})}</div></div><div style={{display:'flex',gap:6,marginTop:8}}><select value={jeu} onChange={e=>setJeu(e.target.value)} style={{width:'24%',padding:12,border:'2px solid #000',borderRadius:8,fontWeight:900}}><option>Bolet</option><option>Maryaj</option><option>Loto3</option><option>Loto4</option><option>Loto5</option></select><input value={boul} onChange={e=>setBoul(e.target.value)} placeholder="Boul" style={{width:'28%',padding:12,border:'2px solid #000',borderRadius:8,fontWeight:900}}/><input value={miz} onChange={e=>setMiz(e.target.value.replace(/\D/g,''))} placeholder="Miz" style={{width:'20%',padding:12,border:'2px solid #000',borderRadius:8,fontWeight:900}}/><button onClick={ajouter} style={{width:'28%',background:'#0d7a3e',color:'#fff',borderRadius:8,fontWeight:900}}>OK</button></div><div style={{background:'#000',color:'#fff',padding:10,borderRadius:8,marginTop:6,textAlign:'center',fontWeight:900}}>{fiches.length} fich - TOTAL {total*(sel.length||1)} HTG</div><button onClick={()=>doPrint("ticket-propre")} style={{width:'100%',padding:16,background:'#000',color:'#fff',borderRadius:10,marginTop:6,fontWeight:900}}>🖨️ IMPRIMER FICH PWÒP 58mm</button></>}
- {tab!=="VENDRE"&&<div style={{border:'2px solid #000',borderRadius:10,padding:10,marginTop:10,fontWeight:900}}>{tab} - {fiches.length} fich - Total {total} HTG<br/><button onClick={()=>doPrint(tab==="RAPPORT"?"rapport-propre":"ticket-propre")} style={{width:'100%',padding:12,background:'#000',color:'#fff',borderRadius:8,marginTop:8}}>IMPRIMER {tab}</button></div>}
- <div id="ticket-propre" style={{display:'none'}}><div className="c"><div className="big">C&D VERITE LOTTO</div><div>Petion-Ville</div><div className="dash"><div>TICKET: {fiches[fiches.length-1]?.ticket}</div><div>{new Date().toLocaleString()}</div></div><table>{fiches.slice(-8).map((f,i)=><tr key={i} className="line"><td style={{textAlign:'left'}}>{f.jeu} {f.boul} x {f.miz}<br/><span style={{fontSize:'9px'}}>{f.tirages.join(',')}</span></td><td className="r">{f.miz}</td></tr>)}</table><div style={{borderTop:'2px solid #000',marginTop:'2mm',paddingTop:'2mm'}} className="big">TOTAL: {total*(sel.length||1)} HTG</div><div style={{marginTop:'3mm'}}>BON CHANS!</div></div></div>
- <div id="rapport-propre" style={{display:'none'}}><div className="c"><div className="big">RAPPORT</div><div>{new Date().toLocaleString()}</div><div className="dash" style={{textAlign:'left'}}>Vente: {total} HTG<br/>Comm 20%: {Math.round(total*0.2)} HTG<br/><b>NET: {Math.round(total*0.8)} HTG</b></div></div></div>
- </div>);
+import { useState, useEffect } from "react";
+const TIRAGES=["GA midi","FL midi","NY midi","GA soir","FL soir","NY soir","Real","Loteka","Nacional noche"];
+
+export default function Page(){
+ const [tab,setTab]=useState("VENDRE");
+ const [sel,setSel]=useState<string[]>([]);
+ const [fiches,setFiches]=useState<any[]>([]);
+ const [boul,setBoul]=useState(""); const [miz,setMiz]=useState("");
+
+ useEffect(()=>{ const s=localStorage.getItem("FICH"); if(s) setFiches(JSON.parse(s)); },[]);
+ useEffect(()=>{ localStorage.setItem("FICH",JSON.stringify(fiches)); },[fiches]);
+
+ const add=()=>{
+  if(!sel.length) return alert("Chwazi tiraj");
+  if(!boul||!miz) return alert("Mete boul ak miz");
+  const f={boul,miz:parseInt(miz),tirages:sel,ticket:"CD"+Date.now().toString().slice(-6),heure:new Date().toLocaleTimeString()};
+  setFiches([...fiches,f]); setBoul(""); setMiz("");
+ };
+
+ const total=fiches.reduce((a,b)=>a+b.miz,0);
+
+ return (
+ <div style={{padding:10,maxWidth:450,margin:"0 auto",fontFamily:"sans-serif"}}>
+  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+   <button onClick={()=>setTab("VENDRE")} style={{padding:14,borderRadius:12,border:"2px solid #000",background:tab==="VENDRE"?"#4fb3ff":"#eee",fontWeight:900}}>VENDRE</button>
+   <button onClick={()=>setTab("COPIER")} style={{padding:14,borderRadius:12,border:"2px solid #000",background:tab==="COPIER"?"#4fb3ff":"#eee",fontWeight:900}}>COPIER</button>
+   <button onClick={()=>setTab("FICHES")} style={{padding:14,borderRadius:12,border:"2px solid #000",background:tab==="FICHES"?"#4fb3ff":"#eee",fontWeight:900}}>MES FICHES</button>
+  </div>
+  <button onClick={()=>setTab("RAPPORT")} style={{width:"100%",marginTop:8,padding:14,borderRadius:12,border:"2px solid #000",background:tab==="RAPPORT"?"#4fb3ff":"#eee",fontWeight:900}}>RAPPORT</button>
+
+  {tab==="VENDRE" && (
+   <div style={{marginTop:15}}>
+    <div style={{border:"2px solid #000",padding:8,borderRadius:10}}>
+     {TIRAGES.map(t=><label key={t} style={{border:"1px solid #000",display:"inline-block",margin:4,padding:6,borderRadius:6,fontSize:12}}><input type="checkbox" checked={sel.includes(t)} onChange={()=>setSel(sel.includes(t)?sel.filter(x=>x!==t):[...sel,t])}/> {t}</label>)}
+    </div>
+    <div style={{display:"flex",gap:6,marginTop:10}}>
+     <input value={boul} onChange={e=>setBoul(e.target.value)} placeholder="Boul 12" style={{flex:1,padding:12,border:"2px solid #000",borderRadius:8}}/>
+     <input value={miz} onChange={e=>setMiz(e.target.value)} placeholder="Miz" style={{flex:1,padding:12,border:"2px solid #000",borderRadius:8}}/>
+     <button onClick={add} style={{padding:12,background:"#0a0",color:"#fff",borderRadius:8,fontWeight:900}}>OK</button>
+    </div>
+    <div style={{background:"#000",color:"#fff",padding:12,marginTop:10,textAlign:"center",borderRadius:8}}>TOTAL {total*(sel.length||1)} HTG - {fiches.length} fich</div>
+    <div style={{border:"2px solid #000",marginTop:8,padding:6,minHeight:80}}>{fiches.map((f,i)=><div key={i} style={{fontSize:12,borderBottom:"1px solid #ccc"}}>{f.ticket} {f.boul} {f.miz}HTG x {f.tirages.length}</div>)}</div>
+    <div id="print" style={{display:"none"}}><div style={{textAlign:"center",width:"58mm",fontFamily:"monospace"}}><b>C&D VERITE LOTTO</b><br/>{new Date().toLocaleString()}<hr/>{fiches.map((f,i)=><div key={i}>{f.boul} {f.miz}HTG - {f.tirages.join(",")}</div>)}<hr/><b>TOTAL {total} HTG</b></div></div>
+    <button onClick={()=>{const c=document.getElementById("print")?.innerHTML; const w=window.open("","","width=300"); w?.document.write(c||""); w?.print();}} style={{width:"100%",padding:15,background:"#000",color:"#fff",marginTop:8,borderRadius:10}}>IMPRIMER FICH PWÒP</button>
+   </div>
+  )}
+
+  {tab==="COPIER" && <div style={{marginTop:20,border:"2px solid #000",padding:15,borderRadius:10}}><b>COPIER</b><p style={{fontSize:12,marginTop:10}}>Antre nimewo ticket pou kopye. Onglè sa ap ouvè kounya!</p><input placeholder="CD..." style={{width:"100%",padding:12,border:"2px solid #000",marginTop:10}}/><button style={{width:"100%",padding:12,background:"#000",color:"#fff",marginTop:8}}>KOPIYE</button></div>}
+  {tab==="FICHES" && <div style={{marginTop:20,border:"2px solid #000",padding:10,borderRadius:10}}><b>MES FICHES ({fiches.length})</b>{fiches.map((f,i)=><div key={i} style={{borderBottom:"1px solid #000",padding:5,fontSize:12}}>{f.ticket} | {f.boul} | {f.miz} HTG</div>)}</div>}
+  {tab==="RAPPORT" && <div style={{marginTop:20,border:"2px solid #000",padding:15,borderRadius:10}}><b>RAPPORT</b><div style={{marginTop:10}}>Vente: {total} HTG<br/>Comm 20%: {total*0.2} HTG<br/><b>NET: {total*0.8} HTG</b></div><div id="print2" style={{display:"none"}}><div style={{width:"58mm",textAlign:"center"}}><b>RAPPORT</b><br/>Vente {total} HTG<br/>NET {total*0.8} HTG</div></div><button onClick={()=>{const c=document.getElementById("print2")?.innerHTML; const w=window.open("","","width=300"); w?.document.write(c||""); w?.print();}} style={{width:"100%",padding:12,background:"#000",color:"#fff",marginTop:10}}>IMPRIMER RAPPORT PWÒP</button></div>}
+ </div>
+ );
 }
