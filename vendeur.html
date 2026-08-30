@@ -324,8 +324,42 @@ return txt;
 }
 function showPreview(txt){const p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let h=u?'<img src="'+u+'" style="width:20mm;height:20mm;border-radius:50%;display:block;margin:0 auto 3mm auto;border:1px solid #000;object-fit:cover">':'';p.innerHTML=h+'<div style="white-space:pre;font-family:monospace;font-size:12px;text-align:center">'+txt.replace(/\n/g,'<br>')+'</div>';}
 async function imageUrlToEscPos(d,w=200){return new Promise(r=>{let i=new Image();i.onload=()=>{let c=document.createElement('canvas');let ratio=i.height/i.width;let W=w,H=Math.floor(W*ratio);c.width=W;c.height=H;let ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.drawImage(i,0,0,W,H);let data=ctx.getImageData(0,0,W,H).data,bytes=[],xL=Math.floor((W+7)/8);for(let y=0;y<H;y++){for(let x=0;x<xL;x++){let b=0;for(let k=0;k<8;k++){let px=x*8+k;if(px<W){let idx=(y*W+px)*4;let lum=0.299*data[idx]+0.587*data[idx+1]+0.114*data[idx+2];if(lum<128)b|=(1<<(7-k));}}bytes.push(b);}}let cmd=[0x1D,0x76,0x30,0x00,xL%256,Math.floor(xL/256),H%256,Math.floor(H/256)];r({cmd:cmd,data:bytes});};i.src=d;});}
-async function printBT(t){let plain=(t||LAST_TXT||'').toString().replace(/<[^>]+>/g,'').trim();if(!plain)return;let logoUrl=getLogoUrl();try{if(!logoUrl){let all=[0x1B,0x40,0x1B,0x61,0x01];for(let i=0;i<plain.length;i++){let c=plain.charCodeAt(i);if(c<256)all.push(c);}all.push(10,10,10,10,0x1D,0x56,0x00);let bin='';all.forEach(b=>bin+=String.fromCharCode(b));window.location.href="rawbt:base64,"+btoa(bin);return;}let logo=await imageUrlToEscPos(logoUrl,200);let all=[0x1B,0x40,0x1B,0x61,0x01,...logo.cmd,...logo.data,10,10];for(let i=0;i<plain.length;i++){let c=plain.charCodeAt(i);if(c<256)all.push(c);}all.push(10,10,10,10,0x1D,0x56,0x00);let bin='';all.forEach(b=>bin+=String.fromCharCode(b));window.location.href="rawbt:base64,"+btoa(bin);}catch(e){let b64=btoa(unescape(encodeURIComponent(plain)));window.location.href="rawbt:base64,"+b64;}}
-function printLast(){if(!LAST_TXT){alert('Pa gen fich');return}printBT(LAST_TXT);}
+async function printBT(t){
+ let plain=(t||LAST_TXT||'').toString().replace(/<[^>]+>/g,'').trim();
+ if(!plain) return;
+ let logoUrl=getLogoUrl();
+
+ // ESSAYE SUNMI INNER DIRECT - V2 PRO
+ let isSunmi = /Sunmi|SM-T|V2 Pro/i.test(navigator.userAgent) || localStorage.getItem('verite_active_printer')==='sunmi_inner' || localStorage.getItem('printer_type')==='sunmi_inner';
+ 
+ try{
+   // Prepare ESC/POS
+   let all=[0x1B,0x40,0x1B,0x61,0x01];
+   if(logoUrl && logoUrl.length>100){
+     try{
+       let logo=await imageUrlToEscPos(logoUrl,200);
+       all = all.concat(logo.cmd, logo.data, [10,10]);
+     }catch(e){}
+   }
+   for(let i=0;i<plain.length;i++){let c=plain.charCodeAt(i);if(c<256)all.push(c);}
+   all.push(10,10,10,10,0x1D,0x56,0x00);
+   let bin='';all.forEach(b=>bin+=String.fromCharCode(b));
+   let b64=btoa(bin);
+
+   if(isSunmi){
+     // 3 fason pou Sunmi V2 Pro
+     window.location.href="rawbt:inner;base64,"+b64; // Fason 1 - Inner direct
+     setTimeout(()=>{window.location.href="rawbt:base64,"+b64;},800); // Fason 2 - RawBT normal
+     return;
+   }
+
+   // Si pa Sunmi - RawBT normal
+   window.location.href="rawbt:base64,"+b64;
+ }catch(e){
+   let b64=btoa(unescape(encodeURIComponent(plain)));
+   window.location.href="rawbt:base64,"+b64;
+ }
+}
 function testPrintLogo(){let tk={id:'TEST',bets:[{type:'boul',numero:'55',mise:5},{type:'boul',numero:'22',mise:5}],tirages:selT.length?selT:['GA soir'],baseTotal:10,total:10};if(!selT.length)selT=tk.tirages;let txt=build(tk);showPreview(txt);LAST_TXT=txt;setTimeout(()=>printBT(txt),600);}
 async function vann(){
  if(CUR && isVendeurBlocked(DB.vendeurs[CUR._key]||CUR, CUR._key||CUR.id)){alert("🔴 KONT OU BLOKE PÈMANAN!\nOu pa ka vann.");showBlockedScreen();return;}
