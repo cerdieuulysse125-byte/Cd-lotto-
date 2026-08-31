@@ -39,7 +39,7 @@
 <div id='pP' class='tabPage'><div class='card'><h3>5- Paramèt V22.30</h3>
 <div style='text-align:center;margin:10px'><img id='paramLogo' src='' style='width:90px;height:90px;border-radius:50%;border:3px solid #d4af37;display:none'><div id='paramCircle' style='width:90px;height:90px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto;font-weight:900;border:3px solid #d4af37'>C&D</div></div>
 <div style='background:#e8f5e9;padding:14px;border-radius:12px;border:3px solid #00c853;margin-top:12px'>
-<h4>🖨️ C&D VÉRITÉ LOTTO</h4>
+<h4>🖨️ V22.30 - GÒCH A DWAT</h4>
 <div style='background:#fff;padding:10px;border-radius:8px;margin-top:8px;border:2px solid #0a4a2e'>
 <b>Status:</b> <span id='activePrinter' style='color:#00c853;font-weight:900'>Gòch a Dwat - Ranpli</span><br>
 <small id='printer-status-detail'>SDK: <span id='sdkStatus'>Binding...</span></small>
@@ -121,7 +121,7 @@ function handleMizBlur(inp){let row=inp.closest('.betRow');let all=document.quer
 function nextLine(fromEl){let row=fromEl.closest('.betRow');let jeu=row.querySelector('.jeu').value;let boul=row.querySelector('.boul').value.trim();let mise=row.querySelector('.mise').value.trim();if(!boul&&!mise)return;if(boul&&!mise){row.querySelector('.mise').focus();return;}let req=getChifRequis(jeu);if(boul&&boul.length!==req)return;let all=document.querySelectorAll('.betRow');let isLast=row===all[all.length-1];if(!isLast){let next=row.nextElementSibling;if(next){next.querySelector('.boul').focus();next.querySelector('.boul').select();}return;}let newRow=addR(jeu);setTimeout(()=>{let b=newRow.querySelector('.boul');b.focus();b.select();newRow.scrollIntoView({behavior:'smooth',block:'center'});},80);}
 function upd(){let sum=0;document.querySelectorAll('.betRow').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length);document.getElementById('gt').innerText='$'+(sum*selT.length);}
 
-// ✅ C&D VÉRITÉ LOTTO 
+// ✅ V22.30 - DE GÒCH A DWAT - RANPLI 58mm
 function build(tk){
 let hd=getHaitiTime();
 let W=48;
@@ -153,7 +153,15 @@ tk.bets.forEach(b=>{
 txt+=sep()+'\n';
 txt+=leftRight('TOTAL =>',''+tk.total+' HTG')+'\n';
 txt+=line('PRIX: 1ER '+prix.p1+' 2E '+prix.p2+' 3E '+prix.p3)+' \n';
-txt+=line('MÈSI POU KONFYANS OU!')+'\n';
+txt+=line('M1='+prix.m1+' M2='+prix.m2+' M3='+prix.m3)+'\n';
+txt+=sep()+'\n';
+txt+=line('Mèsi pou konfyans ou !')+'\n';
+txt+=line('')+'\n';
+txt+=line(getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' PM')+'\n';
+txt+=sep()+'\n';
+txt+='\n\n\n\n';
+return txt;
+}
 function showPreview(txt){const p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let h=u?'<img src="'+u+'" style="width:20mm;height:20mm;border-radius:50%;display:block;margin:0 auto 3mm auto;border:1px solid #000;object-fit:cover">':'';p.innerHTML=h+'<div style="white-space:pre;font-family:monospace;font-size:11px;text-align:left">'+txt.replace(/\n/g,'<br>')+'</div>';}
 async function printBT(t){
   if(isPrinting) return;
