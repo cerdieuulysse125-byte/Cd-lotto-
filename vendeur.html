@@ -2,224 +2,260 @@
 <html lang="ht">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Vendeur V25.9 - Sunmi V2 Pro Inner</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Vendeur V26.1 - UNIVERSAL Tout Onglè</title>
 <style>
-body{font-family:system-ui;background:#f3f4f6;margin:0;padding:10px}
-.card{background:#fff;border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
-.inp{padding:10px;border-radius:10px;border:2px solid #ddd;font-size:16px}
+:root{--p:#6366f1;--s:#22c55e;--d:#ef4444;--b:#0ea5e9;--bg:#f3f4f6}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:var(--bg);padding:0 0 80px}
+.top{position:sticky;top:0;z-index:99;background:#111827;color:#fff;padding:10px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:18px}.badge{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:800}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #ddd;display:flex;z-index:99}
+.tab{flex:1;padding:10px 2px;text-align:center;font-size:11px;font-weight:800;border:0;background:transparent}
+.tab.active{background:#111827;color:#fff}
+.card{background:#fff;border-radius:16px;padding:12px;margin:10px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.row{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.inp{padding:11px;border-radius:12px;border:2px solid #e5e7eb;font-size:16px;width:100%}
 .inpN{flex:1;text-align:center;font-weight:800}
-.jeu{flex:1}
-.boul{flex:1}
-.mise{flex:1;background:#e8f5e9!important}
-.btnR{background:#ef4444;color:#fff;border:0;border-radius:10px;padding:10px 12px;font-weight:800}
-.btnF{background:#22c55e;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:900}
-.btn{padding:12px;border:0;border-radius:12px;font-weight:800;color:#fff;width:100%}
-.btnScan{background:#0ea5e9}
-.btnPrint{background:#111827}
-#scanResult{font-size:13px;background:#f8fafc;padding:8px;border-radius:10px;margin-top:6px;white-space:pre-wrap}
-#sdkStatus,#btStatus,#printer-status{font-size:12px;font-weight:700}
+.jeu{flex:1.2}.boul{flex:1}.mise{flex:1;background:#e8f5e9!important;border-color:#22c55e!important}
+.btnR{background:var(--d);color:#fff;border:0;border-radius:10px;padding:10px 12px;font-weight:900}
+.btnF{background:var(--s);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:900}
+.btn{padding:13px;border:0;border-radius:12px;font-weight:800;color:#fff;width:100%;margin-top:6px}
+.btnP{background:var(--p)}.btnB{background:var(--b)}.btnS{background:var(--s)}.btnD{background:var(--d)}.btnDark{background:#111827}
+.btnBT{background:#8b5cf6}.btnUSB{background:#f59e0b;color:#000}.btnNET{background:#10b981}
+#scanResult{font-size:12px;background:#f8fafc;padding:10px;border-radius:10px;margin-top:8px;white-space:pre-wrap;max-height:220px;overflow:auto;border:2px dashed #ddd}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.kbd{font-size:10px;color:#666}
+.hidden{display:none}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+.logoPrev{width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid #ddd}
 </style>
 </head>
 <body>
 
-<div class="card">
-  <div style="display:flex;justify-content:space-between"><span id="sdkStatus">⏳ Init Sunmi V2 Pro...</span><span id="btStatus">BT: --</span></div>
-  <div id="printer-status">Mòd: INNER PRINTER - Deteksyon...</div>
-  <div style="margin-top:8px;display:flex;gap:6px">
-    <button class="btn btnScan" onclick="initInnerPrinter()" style="flex:1">📟 SCAN Inner Printer</button>
-    <button class="btn" onclick="testPrint()" style="flex:1;background:#22c55e">🧪 TÈS</button>
+<div class="top"><b>🎰 V26.1 UNIVERSAL</b><div><span id="sdkStatus" class="badge" style="background:#f59e0b">INIT</span> <span id="btStatus" class="badge" style="background:#666">BT --</span></div></div>
+
+<!-- ONGLE 1 - VENTE -->
+<div id="ong1" class="ong">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;font-weight:800"><span id="printer-status">UNIVERSAL - Tout Printer</span><span id="tirageInfo">Tiraj: --</span></div>
+    <div id="bets"></div>
+    <div class="grid2">
+      <button class="btn btnP" onclick="addR()">+ Liy <span class="kbd">(ENTER ⏎)</span></button>
+      <button class="btn btnB" onclick="clearBets()">🗑️ Efase</button>
+    </div>
+    <div id="total" style="text-align:center;font-weight:900;font-size:22px;margin:10px 0">Total: $0</div>
+    <button class="btn btnDark" onclick="vann()">💰 VANN & ENPRIME - TOUT PRINTER</button>
+    <button class="btn btnS" onclick="testPrint()">🧪 TÈS ENPRIMANT</button>
   </div>
-  <div id="scanResult">Klike SCAN Inner Printer - Fòk Bluetooth ON (POS Steward bezwen li)</div>
-  <input id="selectedPrinter" type="hidden">
+
+  <div class="card">
+    <b>📜 Dènye Tikè (5)</b>
+    <div id="lastTickets" style="font-size:12px;margin-top:6px">Pa gen tikè</div>
+  </div>
 </div>
 
-<div class="card">
-  <div id="bets"></div>
-  <button class="btn" onclick="addR()" style="background:#6366f1;margin-top:6px">+ Liy (ENTER = Liy Suivant)</button>
+<!-- ONGLE 2 - TIRAJ -->
+<div id="ong2" class="ong hidden">
+  <div class="card">
+    <b>🎯 Antre Rezilta Tiraj</b>
+    <div class="row"><input id="tBoul" class="inp inpN" placeholder="BOUL 2 chif" inputmode="numeric" maxlength="2"><input id="tL3" class="inp inpN" placeholder="L3 3 chif" inputmode="numeric" maxlength="3"></div>
+    <div class="row"><input id="tL4" class="inp inpN" placeholder="L4 4 chif" inputmode="numeric" maxlength="4"><input id="tL5" class="inp inpN" placeholder="L5 5 chif" inputmode="numeric" maxlength="5"></div>
+    <div class="row"><input id="tMar1" class="inp inpN" placeholder="MAR 1" inputmode="numeric" maxlength="2"><span style="font-weight:900">x</span><input id="tMar2" class="inp inpN" placeholder="MAR 2" inputmode="numeric" maxlength="2"></div>
+    <button class="btn btnS" onclick="saveTiraj()">💾 Anrejistre Tiraj & Kalkile Gayan</button>
+    <div id="tirageResult" style="margin-top:8px;font-size:13px"></div>
+  </div>
+  <div class="card"><b>🏆 Gayan Jodia</b><div id="gayanList" style="font-size:13px;margin-top:6px">Pa gen tiraj</div></div>
 </div>
 
-<div class="card">
-  <button class="btn btnPrint" onclick="vann()">💰 VANN & ENPRIME INNER</button>
-  <div id="total" style="text-align:center;font-weight:900;font-size:20px;margin-top:8px">Total: $0</div>
+<!-- ONGLE 3 - RAPO -->
+<div id="ong3" class="ong hidden">
+  <div class="card">
+    <b>📊 Rapò Vant</b>
+    <div class="grid2" style="margin-top:8px">
+      <div style="background:#e0f2fe;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Vant Jodia</div><div id="rVant" style="font-weight:900;font-size:18px">$0</div></div>
+      <div style="background:#dcfce7;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Tikè</div><div id="rTik" style="font-weight:900;font-size:18px">0</div></div>
+      <div style="background:#fef9c3;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Komisyon 10%</div><div id="rKom" style="font-weight:900;font-size:18px">$0</div></div>
+      <div style="background:#fee2e2;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Gayan</div><div id="rGay" style="font-weight:900;font-size:18px">$0</div></div>
+    </div>
+    <button class="btn btnB" onclick="refreshRap()">🔄 Rafrechi Rapò</button>
+    <div id="rapTable" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- ONGLE 4 - KES -->
+<div id="ong4" class="ong hidden">
+  <div class="card">
+    <b>💵 Kes / Lajan</b>
+    <div class="row"><input id="kDep" class="inp" type="number" placeholder="Depans"><button class="btn btnD" onclick="addDep()" style="width:auto">- Depans</button></div>
+    <div class="row"><input id="kAv" class="inp" type="number" placeholder="Avans Gayan"><button class="btn btnB" onclick="addAv()" style="width:auto">- Avans</button></div>
+    <div id="kesList" style="font-size:13px;margin-top:8px"></div>
+    <div style="background:#111827;color:#fff;padding:12px;border-radius:12px;margin-top:8px;text-align:center"><div>Balans Kes</div><div id="kesBal" style="font-size:22px;font-weight:900">$0</div></div>
+  </div>
+</div>
+
+<!-- ONGLE 5 - PARAMET -->
+<div id="ong5" class="ong hidden">
+  <div class="card">
+    <b>🖨️ PARAMÈT ENPRIMANT - UNIVERSAL - TOUT MAK</b>
+    <div style="font-size:11px;color:#666;margin:6px 0">Mache sou: Sunmi V2 Pro Inner, Epson, Xprinter, Zjiang, Goojprt, 58mm/80mm, Bluetooth/USB/WiFi</div>
+    <div class="grid2">
+      <button class="btn btnB" onclick="scanInner()">📟 INNER Sunmi</button>
+      <button class="btn btnBT" onclick="scanBluetooth()">📱 BLUETOOTH Tout Mak</button>
+      <button class="btn btnUSB" onclick="scanUSB()">🔌 USB Printer</button>
+      <button class="btn btnNET" onclick="scanNetwork()">🌐 WiFi / IP</button>
+    </div>
+    <input id="selectedPrinter" class="inp" placeholder="Printer chwazi ap parèt la" style="margin-top:8px">
+    <div class="row" style="margin-top:6px"><input id="netIP" class="inp" placeholder="IP ex: 192.168.1.100" style="flex:1"><button class="btn btnNET" onclick="saveIP()" style="width:auto">Save IP</button></div>
+    <div id="scanResult">💡 Chwazi kalite printer ou genyen an:\n- SUNMI V2 PRO: Klike INNER + Bluetooth ON (POS Steward bezwen li)\n- PRINTER BLUETOOTH: Klike BLUETOOTH Tout Mak\n- PRINTER USB: Klike USB\n- PRINTER WIFI: Antre IP\n\nTès toujou mache.</div>
+    <div style="display:flex;gap:6px;margin-top:6px"><span id="usbStatus" class="badge" style="background:#666">USB --</span><span id="netStatus" class="badge" style="background:#666">NET --</span></div>
+  </div>
+
+  <div class="card">
+    <b>🏪 Enfò Proprio & Logo 20mm</b>
+    <div class="row"><img id="logoPrev" class="logoPrev" src="" style="display:none"><input id="logoInput" type="file" accept="image/*" class="inp" style="flex:1" onchange="uploadLogo(this)"></div>
+    <input id="pName" class="inp" placeholder="Non Biznis" style="margin-top:6px" onchange="saveProp()">
+    <input id="pAddr" class="inp" placeholder="Adrès" style="margin-top:6px" onchange="saveProp()">
+    <input id="pTel" class="inp" placeholder="Telefòn" style="margin-top:6px" onchange="saveProp()">
+    <div style="font-size:11px;color:#666;margin-top:6px">Logo ap soti 20mm won santre sou tout printer (Inner/Bluetooth/USB/WiFi)</div>
+  </div>
+
+  <div class="card">
+    <b>⚙️ Konfigirasyon Jwèt</b>
+    <table><tr><th>Jwèt</th><th>Peye</th><th>Kom%</th></tr>
+    <tr><td>BOUL 2</td><td><input id="payBoul" class="inp" type="number" value="50"></td><td>10%</td></tr>
+    <tr><td>LOTO 3</td><td><input id="payL3" class="inp" type="number" value="500"></td><td>10%</td></tr>
+    <tr><td>LOTO 4</td><td><input id="payL4" class="inp" type="number" value="5000"></td><td>10%</td></tr>
+    <tr><td>MARYAJ</td><td><input id="payMar" class="inp" type="number" value="1000"></td><td>10%</td></tr>
+    </table>
+    <button class="btn btnP" onclick="savePay()">💾 Save Peye</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showOng(1)">1-Vant</button>
+  <button class="tab" onclick="showOng(2)">2-Tiraj</button>
+  <button class="tab" onclick="showOng(3)">3-Rapò</button>
+  <button class="tab" onclick="showOng(4)">4-Kes</button>
+  <button class="tab" onclick="showOng(5)">5-Param</button>
 </div>
 
 <script>
-let LAST_TXT='';
-let currentPrinter=null;
-let sunmiInner=null;
-let btInner={device:null,char:null,server:null};
-let tickets=[];
+// === GLOBAL ===
+let LAST_TXT='', currentPrinter=null, sunmiInner=null, bt={device:null,char:null,server:null}, usb={device:null,iface:null,ep:null}, netIP=localStorage.getItem('netPrinterIP')||'', tickets=JSON.parse(localStorage.getItem('tickets')||'[]'), kes=JSON.parse(localStorage.getItem('kes')||'[]'), tiraj=JSON.parse(localStorage.getItem('tiraj')||'null');
+function getLogoUrl(){ try{ return localStorage.getItem('propLogo')||''; }catch(e){ return ''; } }
+function showOng(n){ document.querySelectorAll('.ong').forEach(o=>o.classList.add('hidden')); document.getElementById('ong'+n).classList.remove('hidden'); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab')[n-1].classList.add('active'); if(n==3) refreshRap(); if(n==4) refreshKes(); }
 
-function getLogoUrl(){
-  try{ return localStorage.getItem('propLogo')||localStorage.getItem('logoUrl')||''; }catch(e){ return ''; }
-}
-
-// ADD ROW - KLAVYE ENTER RANPLASE.
+// === ONGLE 1 - VENTE - ENTER RANPLASE. ===
 function addR(keep='boul'){
-  let c=document.getElementById('bets');
-  let d=document.createElement('div');
-  d.className='row betRow';
-  d.innerHTML=`
-    <select class="jeu inp" onchange="onJeuChange(this)">
-      <option value="boul">BOUL 2</option>
-      <option value="loto3">L3 3</option>
-      <option value="loto4">L4 4</option>
-      <option value="loto5">L5 5</option>
-      <option value="maryaj">MAR 4</option>
-    </select>
-    <input class="boul inpN inp" type="text" inputmode="numeric" enterkeyhint="next" placeholder="--" oninput="validateBoul(this)" onkeydown="handleBoulKey(event,this)">
-    <input class="mise inpN inp" type="text" inputmode="numeric" enterkeyhint="next" placeholder="$" oninput="upd()" onkeydown="handleMizKey(event,this)" onblur="handleMizBlur(this)">
-    <button class="btnR" onclick="this.parentElement.remove();upd()">X</button>
-    <button class="btnF" onclick="nextLine(this)">↵</button>`;
-  c.appendChild(d);
-  d.querySelector('.jeu').value=keep;
-  onJeuChange(d.querySelector('.jeu'));
-  upd();
-  setTimeout(()=>{ let b=d.querySelector('.boul'); b.focus(); b.select(); },50);
-  return d;
+  let c=document.getElementById('bets'), d=document.createElement('div'); d.className='row betRow';
+  d.innerHTML=`<select class="jeu inp" onchange="onJeuChange(this)"><option value="boul">BOUL 2</option><option value="loto3">L3 3</option><option value="loto4">L4 4</option><option value="loto5">L5 5</option><option value="maryaj">MAR 4</option></select>
+  <input class="boul inpN inp" type="text" inputmode="numeric" enterkeyhint="next" placeholder="--" oninput="validateBoul(this)" onkeydown="handleBoulKey(event,this)">
+  <input class="mise inpN inp" type="text" inputmode="numeric" enterkeyhint="next" placeholder="$" oninput="upd()" onkeydown="handleMizKey(event,this)">
+  <button class="btnR" onclick="this.parentElement.remove();upd()">X</button><button class="btnF" onclick="nextLine(this)">↵</button>`;
+  c.appendChild(d); d.querySelector('.jeu').value=keep; onJeuChange(d.querySelector('.jeu')); upd();
+  setTimeout(()=>{ let b=d.querySelector('.boul'); b.focus(); b.select(); },60); return d;
 }
-function onJeuChange(s){ let r=s.parentElement; let b=r.querySelector('.boul'); let t=s.value; b.placeholder=t==='boul'?'--':t==='loto3'?'---':t==='loto4'?'----':t==='loto5'?'-----':'-- --'; validateBoul(b); }
-function validateBoul(inp){ let v=inp.value.replace(/[^0-9 ]/g,''); let jeu=inp.parentElement.querySelector('.jeu').value; if(jeu==='maryaj'){ let p=v.replace(/ /g,'').substring(0,4); v=p.length>2?p.substring(0,2)+' '+p.substring(2):p; }else{ let len=jeu==='boul'?2:jeu==='loto3'?3:jeu==='loto4'?4:5; v=v.replace(/ /g,'').substring(0,len); } inp.value=v; upd(); }
+function onJeuChange(s){ let r=s.parentElement,b=r.querySelector('.boul'),t=s.value; b.placeholder=t==='boul'?'--':t==='loto3'?'---':t==='loto4'?'----':t==='loto5'?'-----':'-- --'; validateBoul(b); }
+function validateBoul(inp){ let v=inp.value.replace(/[^0-9 ]/g,''),jeu=inp.parentElement.querySelector('.jeu').value; if(jeu==='maryaj'){ let p=v.replace(/ /g,'').substring(0,4); v=p.length>2?p.substring(0,2)+' '+p.substring(2):p; }else{ let len=jeu==='boul'?2:jeu==='loto3'?3:jeu==='loto4'?4:5; v=v.replace(/ /g,'').substring(0,len); } inp.value=v; upd(); }
 function handleBoulKey(e,inp){ if(e.key==='Enter'||e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); let m=inp.parentElement.querySelector('.mise'); m.focus(); m.select(); } }
-function handleMizKey(e,inp){
-  if(e.key==='Enter'){ e.preventDefault(); nextLine(inp); return; } // ENTER = LIY SUIVANT - ranplase.
-  if(e.key==='ArrowDown'||e.key==='ArrowRight'){ e.preventDefault(); nextLine(inp); }
-  if(e.key==='ArrowUp'||e.key==='ArrowLeft'){ e.preventDefault(); let b=inp.parentElement.querySelector('.boul'); b.focus(); b.select(); }
-}
-function handleMizBlur(inp){ upd(); }
-function nextLine(el){
-  let rows=[...document.querySelectorAll('.betRow')];
-  let idx=rows.indexOf(el.closest('.betRow'));
-  let keep=rows[idx]?.querySelector('.jeu').value||'boul';
-  let nr=addR(keep);
-}
-function upd(){
-  let tot=0;
-  document.querySelectorAll('.betRow').forEach(r=>{
-    let m=parseFloat(r.querySelector('.mise').value)||0;
-    tot+=m;
-  });
-  document.getElementById('total').innerText='Total: $'+tot;
-}
+function handleMizKey(e,inp){ if(e.key==='Enter'){ e.preventDefault(); nextLine(inp); return; } if(e.key==='ArrowDown'||e.key==='ArrowRight'){ e.preventDefault(); nextLine(inp); } if(e.key==='ArrowUp'||e.key==='ArrowLeft'){ e.preventDefault(); let b=inp.parentElement.querySelector('.boul'); b.focus(); b.select(); } }
+function nextLine(el){ let rows=[...document.querySelectorAll('.betRow')],idx=rows.indexOf(el.closest('.betRow')),keep=rows[idx]?.querySelector('.jeu').value||'boul'; addR(keep); }
+function clearBets(){ document.getElementById('bets').innerHTML=''; addR(); upd(); }
+function upd(){ let tot=0; document.querySelectorAll('.betRow').forEach(r=>{ tot+=parseFloat(r.querySelector('.mise').value)||0; }); document.getElementById('total').innerText='Total: $'+tot; }
 function buildTicket(){
-  let lines=['*** BÒLÈT ***',''];
-  let tot=0;
-  document.querySelectorAll('.betRow').forEach(r=>{
-    let j=r.querySelector('.jeu').value;
-    let b=r.querySelector('.boul').value;
-    let m=r.querySelector('.mise').value;
-    if(b&&m){ lines.push(`${j.toUpperCase()} ${b} $${m}`); tot+=parseFloat(m)||0; }
-  });
-  lines.push(''); lines.push(`TOTAL: $${tot}`); lines.push(new Date().toLocaleString());
-  LAST_TXT=lines.join('\n');
-  return LAST_TXT;
+  let pName=localStorage.getItem('pName')||'BÒLÈT', pTel=localStorage.getItem('pTel')||'', lines=[pName, pTel, '----------------', ''], tot=0;
+  document.querySelectorAll('.betRow').forEach(r=>{ let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value,m=r.querySelector('.mise').value; if(b&&m){ lines.push(`${j.toUpperCase()} ${b} $${m}`); tot+=parseFloat(m)||0; } });
+  lines.push('----------------'); lines.push(`TOTAL: $${tot}`); lines.push(new Date().toLocaleString()); lines.push('Bòn chans!'); LAST_TXT=lines.join('\n'); return LAST_TXT;
 }
 
-// INNER PRINTER - DETEKSYON FINAL - BLUETOOTH ON = INNER ON
-async function initInnerPrinter(){
-  let status=document.getElementById('sdkStatus');
-  let pStatus=document.getElementById('printer-status');
-  let res=document.getElementById('scanResult');
-  res.innerHTML='🔍 Deteksyon INNER PRINTER - SUNMI V2 PRO...<br>📱 Bluetooth dwe ON - POS Steward 8Ko bezwen li<br>';
-
-  // 1- INNER SDK - SunmiLauncher 544Ko + POS Steward
+// === PRINTER UNIVERSAL - TOUT MAK ===
+async function scanInner(){
+  let res=document.getElementById('scanResult'); res.innerHTML='🔍 INNER - Sunmi V2 Pro...<br>';
   try{
-    if(window.InnerPrinterManager){
-      window.InnerPrinterManager.getInstance().bindService(this,{
-        onServiceConnected:function(s){
-          sunmiInner=s;
-          status.innerText='✅ INNER PRINTER - Bound - Prè';
-          pStatus.innerText='INNER 58mm - SUNMI V2 PRO - Prè';
-          res.innerHTML+='✅ SunmiLauncher - Inner Bound OK<br>✅ INNER PRINTER PRÈ POU ENPRIME<br><div style="background:#dcfce7;padding:10px;border-radius:10px;margin-top:6px"><b>✅ INNER DETEKTE - Pa bezwen lis Bluetooth</b><br>Klike TÈS kounya</div>';
-          currentPrinter={name:'Sunmi V2 Pro Inner 58mm',type:'inner'};
-          document.getElementById('selectedPrinter').value='Sunmi V2 Pro Inner 58mm (SDK)';
-          document.getElementById('btStatus').innerText='BT: ✅ ON - Inner Active';
-        },
-        onServiceDisconnected:function(){ sunmiInner=null; status.innerText='❌ Inner dekonekte'; }
-      });
-      await new Promise(r=>setTimeout(r,1500));
-      if(sunmiInner) return true;
-    }
-  }catch(e){ res.innerHTML+='Inner error: '+e.message+'<br>'; }
-
-  try{ if(window.woyou && window.woyou.printService){ sunmiInner=window.woyou.printService; status.innerText='✅ Woyou - Inner Prè'; pStatus.innerText='INNER - Woyou - Prè'; res.innerHTML+='✅ Woyou Inner - Prè<br>'; currentPrinter={name:'Inner Woyou',type:'inner'}; return true; } }catch(e){}
-
-  // 2- INNER via BLUETOOTH SPP - si SDK pa bound - menm jan ak lòt sistèm nan
-  res.innerHTML+='⏳ SDK pa bound - ap chèche Inner kòm Bluetooth (fòk BT ON tankou lòt sistèm)...<br>';
+    if(window.InnerPrinterManager){ window.InnerPrinterManager.getInstance().bindService(this,{onServiceConnected:function(s){ sunmiInner=s; document.getElementById('sdkStatus').innerText='✅ INNER Bound'; document.getElementById('printer-status').innerText='INNER 58mm - Prè'; res.innerHTML+='✅ INNER Bound - Prè<br>'; currentPrinter={name:'Sunmi Inner 58mm',type:'inner'}; document.getElementById('selectedPrinter').value='Sunmi Inner 58mm'; },onServiceDisconnected:function(){ sunmiInner=null; }}); await new Promise(r=>setTimeout(r,1200)); if(sunmiInner) return true; }
+    if(window.woyou&&window.woyou.printService){ sunmiInner=window.woyou.printService; document.getElementById('sdkStatus').innerText='✅ INNER Woyou'; res.innerHTML+='✅ Woyou Inner Prè<br>'; currentPrinter={name:'Inner Woyou',type:'inner'}; return true; }
+  }catch(e){ res.innerHTML+=e.message+'<br>'; } res.innerHTML+='❌ Inner pa jwenn - Bluetooth ON + POS Steward Enable'; return false;
+}
+async function scanBluetooth(){
+  let res=document.getElementById('scanResult'); res.innerHTML='🔍 BLUETOOTH - Tout Mak Epson/Xprinter/Zjiang/Sunmi...\n';
   try{
-    if(!navigator.bluetooth){ res.innerHTML+='❌ Via 8Ko pa sipòte BT - Louvri nan Chrome sou Sunmi an'; return false; }
+    if(!navigator.bluetooth){ res.innerHTML+='❌ Chrome sèlman'; return false; }
     let device=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['0000ff00-0000-1000-8000-00805f9b34fb','000018f0-0000-1000-8000-00805f9b34fb','00001101-0000-1000-8000-00805f9b34fb']});
-    btInner.device=device;
-    res.innerHTML+=`✅ Chwazi: ${device.name||'InnerPrinter'}<br>⏳ Koneksyon GATT...<br>`;
-    btInner.server=await device.gatt.connect();
-    let services=await btInner.server.getPrimaryServices();
-    for(let svc of services){ let chars=await svc.getCharacteristics(); for(let ch of chars){ if(ch.properties.write||ch.properties.writeWithoutResponse){ btInner.char=ch; break; } } if(btInner.char) break; }
-    if(btInner.char){
-      currentPrinter={name:device.name||'InnerPrinter BT',type:'bt'};
-      document.getElementById('selectedPrinter').value=currentPrinter.name+' (Inner via BT)';
-      document.getElementById('btStatus').innerText='BT: ✅ '+ (device.name||'Inner');
-      status.innerText='✅ INNER via Bluetooth - Prè - tankou lòt sistèm';
-      pStatus.innerText='INNER - Bluetooth SPP - Prè';
-      res.innerHTML+=`<div style="background:#dcfce7;padding:10px;border-radius:10px"><b>✅ INNER via BLUETOOTH KONEKTE</b><br>Tankou lòt sistèm nan - Bluetooth ON = Inner ON<br>Klike TÈS</div>`;
-      localStorage.setItem('printerMode','bt');
-      return true;
-    }
-  }catch(e){ res.innerHTML+=`❌ ${e.message}<br>➡️ Paramètres > Bluetooth > ON > POS Steward > Enable`; }
-  return false;
+    bt.device=device; res.innerHTML+=`✅ ${device.name||'BT Printer'}\nGATT...\n`;
+    bt.server=await device.gatt.connect(); let services=await bt.server.getPrimaryServices();
+    for(let svc of services){ let chars=await svc.getCharacteristics(); for(let ch of chars){ if(ch.properties.write||ch.properties.writeWithoutResponse){ bt.char=ch; break; } } if(bt.char) break; }
+    if(!bt.char){ for(let svc of services){ try{ let chars=await svc.getCharacteristics(); if(chars[0]){ bt.char=chars[0]; break; } }catch(e){} } }
+    if(bt.char){ currentPrinter={name:device.name||'BT Printer',type:'bt'}; document.getElementById('selectedPrinter').value=currentPrinter.name+' (BT)'; document.getElementById('btStatus').innerText='BT: ✅ '+currentPrinter.name; document.getElementById('printer-status').innerText='BT - '+currentPrinter.name+' - Prè'; res.innerHTML+=`✅ BT KONEKTE - TOUT MAK OK\n${currentPrinter.name}`; return true; }
+  }catch(e){ res.innerHTML+=`❌ ${e.message}`; } return false;
 }
-function scanBluetoothSDK(){ initInnerPrinter(); }
-
-async function printInner(t){
-  let txt=(t||LAST_TXT||'').toString().replace(/<[^>]*>/g,'').trim();
-  if(!txt) return false;
-
-  // A- SDK DIRÈK
-  if(sunmiInner){
-    try{
-      if(sunmiInner.setAlignment) sunmiInner.setAlignment(1);
-      let logo=getLogoUrl();
-      if(logo && logo.length>100 && sunmiInner.printBitmap){
-        try{
-          let img=new Image(); img.src=logo; await new Promise(r=>{ img.onload=r; setTimeout(r,500); });
-          let cv=document.createElement('canvas'); cv.width=200; cv.height=200;
-          let ctx=cv.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,200,200);
-          ctx.beginPath(); ctx.arc(100,100,100,0,Math.PI*2); ctx.clip();
-          ctx.drawImage(img,0,0,200,200);
-          sunmiInner.printBitmap(cv.toDataURL(),1);
-          await new Promise(r=>setTimeout(r,300));
-        }catch(e){}
-      }
-      if(sunmiInner.printOriginalText) sunmiInner.printOriginalText(txt+"\n\n\n\n",null);
-      else if(sunmiInner.printText) sunmiInner.printText(txt+"\n\n\n\n");
-      else if(sunmiInner.printString) sunmiInner.printString(txt+"\n\n\n\n");
-      setTimeout(()=>{ try{ sunmiInner.cutPaper(); }catch(e){} },600);
-      return true;
-    }catch(e){ console.log('Inner print fail',e); }
-  }
-  // B- BLUETOOTH INNER
-  if(btInner.char && btInner.device && btInner.device.gatt.connected){
-    try{
-      let esc='\x1B\x40\x1B\x61\x01\x1B\x45\x01';
-      let data=new TextEncoder().encode(esc+txt+"\n\n\n\n\x1D\x56\x00");
-      for(let i=0;i<data.length;i+=100){ await btInner.char.writeValue(data.slice(i,i+100)); await new Promise(r=>setTimeout(r,35)); }
-      return true;
-    }catch(e){ console.log('BT Inner fail',e); }
-  }
-  alert('⚠️ INNER PRINTER pa konekte\n1- Bluetooth ON (obligatwa tankou lòt sistèm)\n2- SCAN Inner Printer\n3- TÈS');
-  return false;
+async function scanUSB(){
+  let res=document.getElementById('scanResult'); res.innerHTML='🔍 USB...\n';
+  try{
+    if(!navigator.usb){ res.innerHTML+='❌ WebUSB pa sipòte'; return false; }
+    let device=await navigator.usb.requestDevice({filters:[]}); usb.device=device; await device.open(); await device.selectConfiguration(1); let iface=device.configurations[0].interfaces[0]; await device.claimInterface(iface.interfaceNumber); let epOut=iface.alternates[0].endpoints.find(e=>e.direction==='out'); usb.iface=iface.interfaceNumber; usb.ep=epOut.endpointNumber;
+    currentPrinter={name:device.productName||'USB Printer',type:'usb'}; document.getElementById('selectedPrinter').value=currentPrinter.name+' (USB)'; document.getElementById('usbStatus').innerText='USB: ✅ '+currentPrinter.name; res.innerHTML+=`✅ USB KONEKTE ${currentPrinter.name}`; return true;
+  }catch(e){ res.innerHTML+=`❌ ${e.message}`; } return false;
 }
-function printBT(t){ return printInner(t); }
+function saveIP(){ netIP=document.getElementById('netIP').value.trim(); localStorage.setItem('netPrinterIP',netIP); document.getElementById('netStatus').innerText='NET: ✅ '+netIP; document.getElementById('scanResult').innerHTML=`✅ IP ${netIP} Save`; currentPrinter={name:'NET '+netIP,type:'net'}; document.getElementById('selectedPrinter').value='Network '+netIP; }
+function scanNetwork(){ let ip=prompt('IP Printer WiFi',netIP||'192.168.1.100'); if(ip){ document.getElementById('netIP').value=ip; saveIP(); } }
 
-async function testPrint(){ let t=buildTicket()||"TÈS INNER PRINTER\nSUNMI V2 PRO\n58mm\n"+new Date().toLocaleString()+"\n\n\n\n"; await printInner(t); }
-async function vann(){ let t=buildTicket(); if(!t||t.includes('TOTAL: $0')){ alert('Pa gen miz'); return; } let ok=await printInner(t); if(ok){ tickets.push({txt:t,date:new Date()}); document.getElementById('bets').innerHTML=''; addR(); upd(); } }
+async function printUniversal(t){
+  let txt=(t||LAST_TXT||'').toString().replace(/<[^>]*>/g,'').trim(); if(!txt) return false; let logo=getLogoUrl();
+  if(sunmiInner){ try{ if(sunmiInner.setAlignment) sunmiInner.setAlignment(1); if(logo&&sunmiInner.printBitmap){ try{ let img=new Image(); img.src=logo; await new Promise(r=>{ img.onload=r; setTimeout(r,400); }); let cv=document.createElement('canvas'); cv.width=200; cv.height=200; let ctx=cv.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,200,200); ctx.beginPath(); ctx.arc(100,100,100,0,Math.PI*2); ctx.clip(); ctx.drawImage(img,0,0,200,200); sunmiInner.printBitmap(cv.toDataURL(),1); await new Promise(r=>setTimeout(r,250)); }catch(e){} } if(sunmiInner.printOriginalText) sunmiInner.printOriginalText(txt+"\n\n\n\n",null); else if(sunmiInner.printText) sunmiInner.printText(txt+"\n\n\n\n"); setTimeout(()=>{ try{ sunmiInner.cutPaper(); }catch(e){} },500); return true; }catch(e){} }
+  if(bt.char&&bt.device&&bt.device.gatt.connected){ try{ let data=new TextEncoder().encode('\x1B\x40\x1B\x61\x01'+txt+"\n\n\n\n\x1D\x56\x00"); for(let i=0;i<data.length;i+=100){ await bt.char.writeValue(data.slice(i,i+100)); await new Promise(r=>setTimeout(r,30)); } return true; }catch(e){} }
+  if(usb.device&&usb.ep){ try{ let data=new TextEncoder().encode('\x1B\x40'+txt+"\n\n\n\n\x1D\x56\x00"); await usb.device.transferOut(usb.ep,data); return true; }catch(e){} }
+  if(netIP){ try{ await fetch(`http://${netIP}:9100`,{method:'POST',body:txt,mode:'no-cors'}); return true; }catch(e){} }
+  let w=window.open('','_blank','width=300,height=600'); w.document.write(`<html><head><style>@page{size:auto;margin:0}body{width:58mm;font-family:monospace;font-size:12px;text-align:center}</style></head><body><img src="${logo}" style="width:20mm;height:20mm;border-radius:50%" onerror="this.style.display='none'"><pre style="text-align:left;white-space:pre-wrap">${txt}</pre><script>window.print();setTimeout(()=>window.close(),500)<\/script></body></html>`); return true;
+}
+function printBT(t){ return printUniversal(t); } function scanBluetoothSDK(){ scanBluetooth(); }
+async function testPrint(){ let t=buildTicket()||`TÈS UNIVERSAL\nTout Printer\n${new Date().toLocaleString()}\n\n\n\n`; await printUniversal(t); }
+async function vann(){
+  let t=buildTicket(); if(!t||t.includes('TOTAL: $0')){ alert('Pa gen miz'); return; }
+  let ok=await printUniversal(t);
+  if(ok){ tickets.push({txt:t,total:parseFloat(document.getElementById('total').innerText.replace(/[^0-9.]/g,''))||0,date:new Date().toISOString()}); localStorage.setItem('tickets',JSON.stringify(tickets)); refreshLast(); document.getElementById('bets').innerHTML=''; addR(); upd(); }
+}
 
-// Init
-addR();
-initInnerPrinter();
-setTimeout(initInnerPrinter,1200);
-setTimeout(initInnerPrinter,3000);
+// === ONGLE 2 - TIRAJ ===
+function saveTiraj(){
+  let tr={boul:document.getElementById('tBoul').value, l3:document.getElementById('tL3').value, l4:document.getElementById('tL4').value, l5:document.getElementById('tL5').value, mar1:document.getElementById('tMar1').value, mar2:document.getElementById('tMar2').value, date:new Date().toISOString()};
+  localStorage.setItem('tiraj',JSON.stringify(tr)); tiraj=tr; document.getElementById('tirageInfo').innerText=`Tiraj: ${tr.boul||'--'}`; calcGayan();
+}
+function calcGayan(){
+  if(!tiraj){ document.getElementById('gayanList').innerText='Pa gen tiraj'; return; }
+  let html=`BOUL: ${tiraj.boul} | L3: ${tiraj.l3} | L4: ${tiraj.l4}<br><br>`; let totG=0;
+  tickets.forEach((tk,i)=>{
+    let g=0; if(tk.txt.includes(tiraj.boul)) g+=50; if(tk.txt.includes(tiraj.l3)) g+=500; if(tiraj.mar1&&tiraj.mar2&&tk.txt.includes(tiraj.mar1)&&tk.txt.includes(tiraj.mar2)) g+=1000;
+    if(g>0){ html+=`Tikè ${i+1}: $${g}<br>`; totG+=g; }
+  });
+  document.getElementById('gayanList').innerHTML=html+`<br><b>Total Gayan: $${totG}</b>`; document.getElementById('tirageResult').innerHTML=`✅ Tiraj save - Gayan: $${totG}`; document.getElementById('rGay').innerText='$'+totG;
+}
+
+// === ONGLE 3 - RAPO ===
+function refreshRap(){
+  let totV=0; tickets.forEach(t=>{ totV+=t.total||0; });
+  document.getElementById('rVant').innerText='$'+totV; document.getElementById('rTik').innerText=tickets.length; document.getElementById('rKom').innerText='$'+(totV*0.1).toFixed(0);
+  let html='<table><tr><th>#</th><th>Lè</th><th>Total</th></tr>'; tickets.slice(-20).reverse().forEach((t,i)=>{ html+=`<tr><td>${tickets.length-i}</td><td>${new Date(t.date).toLocaleTimeString()}</td><td>$${t.total}</td></tr>`; }); html+='</table>'; document.getElementById('rapTable').innerHTML=html;
+}
+function refreshLast(){ let div=document.getElementById('lastTickets'); if(tickets.length==0){ div.innerText='Pa gen tikè'; return; } let html=''; tickets.slice(-5).reverse().forEach(t=>{ html+=`<div style="border-bottom:1px solid #eee;padding:4px 0">${new Date(t.date).toLocaleTimeString()} - $${t.total}</div>`; }); div.innerHTML=html; }
+
+// === ONGLE 4 - KES ===
+function refreshKes(){ let dep=0, av=0; kes.forEach(k=>{ if(k.type=='dep') dep+=k.m; if(k.type=='av') av+=k.m; }); let vant=tickets.reduce((s,t)=>s+(t.total||0),0); let bal=vant - dep - av; document.getElementById('kesBal').innerText='$'+bal; let html='<table><tr><th>Tip</th><th>Montan</th><th>Lè</th></tr>'; kes.slice(-20).reverse().forEach(k=>{ html+=`<tr><td>${k.type}</td><td>$${k.m}</td><td>${new Date(k.date).toLocaleTimeString()}</td></tr>`; }); html+='</table>'; document.getElementById('kesList').innerHTML=html; }
+function addDep(){ let m=parseFloat(document.getElementById('kDep').value)||0; if(m>0){ kes.push({type:'dep',m,date:new Date().toISOString()}); localStorage.setItem('kes',JSON.stringify(kes)); refreshKes(); document.getElementById('kDep').value=''; } }
+function addAv(){ let m=parseFloat(document.getElementById('kAv').value)||0; if(m>0){ kes.push({type:'av',m,date:new Date().toISOString()}); localStorage.setItem('kes',JSON.stringify(kes)); refreshKes(); document.getElementById('kAv').value=''; } }
+
+// === ONGLE 5 - PARAM ===
+function uploadLogo(inp){
+  let f=inp.files[0]; if(!f) return; let r=new FileReader(); r.onload=function(e){ localStorage.setItem('propLogo',e.target.result); document.getElementById('logoPrev').src=e.target.result; document.getElementById('logoPrev').style.display='block'; }; r.readAsDataURL(f);
+}
+function saveProp(){ localStorage.setItem('pName',document.getElementById('pName').value); localStorage.setItem('pAddr',document.getElementById('pAddr').value); localStorage.setItem('pTel',document.getElementById('pTel').value); }
+function savePay(){ localStorage.setItem('payBoul',document.getElementById('payBoul').value); localStorage.setItem('payL3',document.getElementById('payL3').value); localStorage.setItem('payL4',document.getElementById('payL4').value); localStorage.setItem('payMar',document.getElementById('payMar').value); alert('Peye save'); }
+
+// INIT
+(function(){
+  document.getElementById('netIP').value=netIP; document.getElementById('pName').value=localStorage.getItem('pName')||''; document.getElementById('pAddr').value=localStorage.getItem('pAddr')||''; document.getElementById('pTel').value=localStorage.getItem('pTel')||''; let lg=getLogoUrl(); if(lg){ document.getElementById('logoPrev').src=lg; document.getElementById('logoPrev').style.display='block'; }
+  addR(); refreshLast(); if(tiraj){ document.getElementById('tBoul').value=tiraj.boul||''; document.getElementById('tL3').value=tiraj.l3||''; document.getElementById('tL4').value=tiraj.l4||''; document.getElementById('tMar1').value=tiraj.mar1||''; document.getElementById('tMar2').value=tiraj.mar2||''; document.getElementById('tirageInfo').innerText=`Tiraj: ${tiraj.boul||'--'}`; calcGayan(); }
+  scanInner(); setTimeout(scanInner,1500);
+})();
 </script>
 </body>
 </html>
