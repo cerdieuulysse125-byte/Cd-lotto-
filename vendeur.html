@@ -1,261 +1,329 @@
-<!DOCTYPE html>
-<html lang="ht">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Vendeur V26.1 - UNIVERSAL Tout Onglè</title>
+<!DOCTYPE html><html lang='ht'><head><link rel="manifest" href="manifest-vendeur.json"><meta name="theme-color" content="#4a148c"><link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>C&D VÉRITÉ LOTTO V26.2 UNIVERSAL</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
-:root{--p:#6366f1;--s:#22c55e;--d:#ef4444;--b:#0ea5e9;--bg:#f3f4f6}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:var(--bg);padding:0 0 80px}
-.top{position:sticky;top:0;z-index:99;background:#111827;color:#fff;padding:10px;display:flex;justify-content:space-between;align-items:center}
-.top b{font-size:18px}.badge{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:800}
-.tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #ddd;display:flex;z-index:99}
-.tab{flex:1;padding:10px 2px;text-align:center;font-size:11px;font-weight:800;border:0;background:transparent}
-.tab.active{background:#111827;color:#fff}
-.card{background:#fff;border-radius:16px;padding:12px;margin:10px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
-.row{display:flex;gap:6px;align-items:center;margin-bottom:8px}
-.inp{padding:11px;border-radius:12px;border:2px solid #e5e7eb;font-size:16px;width:100%}
-.inpN{flex:1;text-align:center;font-weight:800}
-.jeu{flex:1.2}.boul{flex:1}.mise{flex:1;background:#e8f5e9!important;border-color:#22c55e!important}
-.btnR{background:var(--d);color:#fff;border:0;border-radius:10px;padding:10px 12px;font-weight:900}
-.btnF{background:var(--s);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:900}
-.btn{padding:13px;border:0;border-radius:12px;font-weight:800;color:#fff;width:100%;margin-top:6px}
-.btnP{background:var(--p)}.btnB{background:var(--b)}.btnS{background:var(--s)}.btnD{background:var(--d)}.btnDark{background:#111827}
-.btnBT{background:#8b5cf6}.btnUSB{background:#f59e0b;color:#000}.btnNET{background:#10b981}
-#scanResult{font-size:12px;background:#f8fafc;padding:10px;border-radius:10px;margin-top:8px;white-space:pre-wrap;max-height:220px;overflow:auto;border:2px dashed #ddd}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.kbd{font-size:10px;color:#666}
-.hidden{display:none}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-.logoPrev{width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid #ddd}
-</style>
-</head>
-<body>
-
-<div class="top"><b>🎰 V26.1 UNIVERSAL</b><div><span id="sdkStatus" class="badge" style="background:#f59e0b">INIT</span> <span id="btStatus" class="badge" style="background:#666">BT --</span></div></div>
-
-<!-- ONGLE 1 - VENTE -->
-<div id="ong1" class="ong">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;font-weight:800"><span id="printer-status">UNIVERSAL - Tout Printer</span><span id="tirageInfo">Tiraj: --</span></div>
-    <div id="bets"></div>
-    <div class="grid2">
-      <button class="btn btnP" onclick="addR()">+ Liy <span class="kbd">(ENTER ⏎)</span></button>
-      <button class="btn btnB" onclick="clearBets()">🗑️ Efase</button>
-    </div>
-    <div id="total" style="text-align:center;font-weight:900;font-size:22px;margin:10px 0">Total: $0</div>
-    <button class="btn btnDark" onclick="vann()">💰 VANN & ENPRIME - TOUT PRINTER</button>
-    <button class="btn btnS" onclick="testPrint()">🧪 TÈS ENPRIMANT</button>
-  </div>
-
-  <div class="card">
-    <b>📜 Dènye Tikè (5)</b>
-    <div id="lastTickets" style="font-size:12px;margin-top:6px">Pa gen tikè</div>
-  </div>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef2f7}
+.h{background:#0a4a2e;color:#d4af37;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid #d4af37}
+.card{background:#fff;border-radius:12px;padding:10px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.08);border-left:4px solid #0a4a2e}
+.row{display:flex;gap:12px;align-items:center;margin-bottom:12px;justify-content:space-between;padding:0 6px}
+.inp{width:88px;min-width:88px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;font-size:14px;text-align:center;background:#fff;margin-right:8px}
+.inpN{width:82px;min-width:82px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;font-size:20px;text-align:center;background:#fff;margin-right:8px}
+.inpL{width:100%;height:48px;border:2.5px solid #0a4a2e;border-radius:10px;padding:0 10px;font-size:16px}
+.btn{padding:14px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%}.btnG{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37}.btnB{background:#0a4a2e;color:#d4af37;border:1px solid #d4af37}.btnR{background:#e11d48;width:42px;height:52px;border-radius:10px;border:0;color:#fff;font-weight:800;margin-left:8px}
+.btnF{width:36px;height:52px;border:2px solid #0a4a2e;border-radius:10px;background:#fff;font-size:18px;font-weight:900;margin-left:8px}
+.betRow{background:#f9fdf9;border:1.5px solid #d4af37;border-radius:10px;padding:8px;margin-bottom:12px}
+.total{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37;border-radius:12px;padding:12px;display:flex;justify-content:space-between;font-weight:800;margin:8px}
+.tlist{display:none;position:fixed;left:8px;right:8px;top:90px;background:#fff;border:3px solid #0a4a2e;border-radius:12px;z-index:9999;padding:8px;grid-template-columns:78px 78px 78px;gap:8px;max-height:70vh;overflow:auto;justify-content:center}.tlist.open{display:grid}
+.topt{width:78px;min-height:68px;border:2px solid #ccc;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;text-align:center}
+#loginPage{display:block}#mainPage{display:none;min-height:100vh;padding-bottom:80px}#mainPage.show{display:block}
+.tabPage{display:none!important}.tabPage.active{display:block!important}
+.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:3px solid #0a4a2e;z-index:5000;height:60px}.tab{flex:1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:0;background:#eee;border-right:1px solid #ccc}.tab.active{background:#0a4a2e;color:#d4af37}
+#splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a4a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.5s}
+#prev{background:#fff;margin:8px;padding:6px;font-family:'Courier New',monospace;font-size:12px;line-height:1.25;color:#000;white-space:pre;border:1px dashed #000;width:100%;max-width:56mm;text-align:center}
+.printer-bar{background:#00c853;border:2px solid #0a4a2e;border-radius:8px;padding:6px 8px;margin:8px;display:flex;align-items:center;justify-content:space-between;gap:6px;color:#fff}
+.blocked-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:#c62828;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:20px}
+</style></head><body>
+<div id='splash'><div id='splashCircle' style='width:110px;height:110px;border:3px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;font-size:36px;color:#0a4a2e;font-weight:900'>C&D</div><img src='' id='splashLogo' style='display:none;width:110px;height:110px;border-radius:50%;border:3px solid #d4af37'><div style='color:#d4af37;font-weight:800;margin-top:15px;font-size:22px'>C&D VERITE LOTTO</div><div style='color:#fff;margin-top:8px'>V26.2 UNIVERSAL</div></div>
+<div class='h'><div style='display:flex;align-items:center;gap:8px'><img id='headerLogo' src='' style='width:32px;height:32px;border-radius:50%;border:2px solid #d4af37;display:none'><div><b id='vName'>Vendeur</b><br><small id='heureHaiti' style='background:#d4af37;color:#0a4a2e;padding:2px 8px;border-radius:6px;font-weight:800'>SYNC...</small></div></div><div><button onclick='localStorage.clear();location.reload()' style='background:#d4af37;color:#0a4a2e;border:0;padding:6px 10px;border-radius:6px;margin-right:4px;font-weight:800'>Cache</button><button onclick='logout()' style='background:#e11d48;color:#fff;border:0;padding:6px 10px;border-radius:6px'>Soti</button></div></div>
+<div id='loginPage'><div class='card' style='max-width:400px;margin:20px auto;text-align:center'><div style='width:80px;height:80px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;margin:0 auto 10px;border:3px solid #d4af37'>C&D</div><h3 style='color:#0a4a2e'>C&D VERITE LOTTO<br><small style='color:#d4af37;background:#0a4a2e;padding:2px 10px;border-radius:6px'>V26.2 UNIVERSAL</small></h3><input id='inputSerial' class='inpL' placeholder='Serial' style='margin-top:12px'><input id='inputPass' type='password' class='inpL' placeholder='Modpas' style='margin-top:8px'><button class='btn btnG' style='margin-top:10px' onclick='doLogin()'>Konekte</button><div id='loginMsg' style='color:red;font-weight:700;margin-top:8px'></div></div></div>
+<div id='mainPage'>
+<div id='pV' class='tabPage active'>
+<div class='printer-bar'><div><div style='font-size:12px;font-weight:900'>✅ V26.2 - UNIVERSAL Tout Printer</div><small id='printer-status'>INNER + BT + USB + WiFi - Auto</small></div><button onclick='forceInnerSync()' style='background:#fff;color:#0a4a2e;border:2px solid #0a4a2e;padding:8px 12px;border-radius:8px;font-weight:900;font-size:11px'>SYNC</button></div>
+<div id='priceInfo' style='background:#0a4a2e;color:#d4af37;padding:6px 8px;border-radius:8px;font-size:10px;margin:8px;text-align:center;border:1px solid #d4af37'>SYNC Prix...</div>
+<div class='card'><div style='display:flex;justify-content:space-between'><b>1- Tiraj EST</b><button onclick='selAll()' style='padding:6px 12px;border-radius:8px;border:1px solid #0a4a2e'>Tout ouve EST</button></div><div class='row' style='margin-top:10px'><div style='width:88px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800'>Tiraj</div><div id='kazT' style='width:240px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-weight:800;background:#fff' onclick='document.getElementById("tlist").classList.toggle("open")'><span id='txtT' style='color:#999'>Chwazi tiraj EST</span><span>V</span></div></div><div id='tlist' class='tlist'></div></div>
+<div class='card'><div class='row' style='font-size:12px;font-weight:900;background:#0a4a2e;color:#d4af37;padding:12px 8px;border-radius:10px;gap:12px'><div style='width:88px;text-align:center'>JEUX</div><div style='width:82px;text-align:center'>BOUL→</div><div style='width:82px;text-align:center'>MIZ→LIY</div><div style='width:42px'></div><div style='width:36px;text-align:center'>></div></div><div id='bets'></div><button class='btn btnB' style='margin-top:10px' onclick='addR()'>+ Liy (ENTER ⏎)</button></div>
+<div class='total'><span id='dt'>Total $0 x 0 = $0</span><span id='gt'>$0</span></div><div style='display:flex;gap:8px;margin:8px'><button class='btn btnG' style='flex:1;height:58px;font-size:22px' onclick='vann()'>VANN UNIVERSAL</button><button class='btn btnB' style='flex:1;height:58px' onclick='printLast()'>RE-PRINT</button></div><div id='prev' style='display:none'></div></div>
+<div id='pC' class='tabPage'><div class='card'><h3>2- Kopye Fich</h3><input id='cid' class='inpL' placeholder='ID Ticket' style='margin-top:8px'><button class='btn btnB' style='margin-top:8px' onclick='doCopy()'>Kopye Fich</button><div id='copyRes' style='margin-top:8px'></div></div></div>
+<div id='pF' class='tabPage'><div class='card'><h3>3- Mes Fiches</h3><div class='row'><input id='fd' type='date' style='width:150px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px'><button class='btn btnB' style='width:72px;height:52px' onclick='loadF()'>Wè Fich</button></div><div id='ftot' style='background:#0a4a2e;color:#d4af37;padding:10px;border-radius:10px;display:none;margin-top:8px'></div><div id='flist' style='margin-top:8px'></div></div></div>
+<div id='pR' class='tabPage'><div class='card'><h3>4- Rapò</h3><div class='row'><input id='rdu' type='date' style='width:48%;height:52px;border:2.5px solid #0a4a2e;border-radius:10px'><input id='rau' type='date' style='width:48%;height:52px;border:2.5px solid #0a4a2e;border-radius:10px'></div><select id='rt' class='inpL' style='margin-top:8px'><option value='tous'>Tous Tiraj</option></select><button class='btn btnB' style='margin-top:8px' onclick='calcR()'>Kalkile</button><div id='rres' style='display:none;margin-top:8px;background:#fff;padding:8px;border-radius:8px'></div><div id='rprint' style='background:#fff;padding:8px;font-family:monospace;font-size:11px;border:1px dashed #0a4a2e;display:none;white-space:pre-line;text-align:center;margin-top:8px'></div><button class='btn btnB' style='margin-top:8px' onclick='printRapport()'>Print Rapò</button></div></div>
+<div id='pP' class='tabPage'><div class='card'><h3>5- Paramèt V26.2 UNIVERSAL</h3>
+<div style='text-align:center;margin:10px'><img id='paramLogo' src='' style='width:90px;height:90px;border-radius:50%;border:3px solid #d4af37;display:none'><div id='paramCircle' style='width:90px;height:90px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto;font-weight:900;border:3px solid #d4af37'>C&D</div><br><small>Logo 20mm santre - Tout Printer</small></div>
+<div style='background:#e8f5e9;padding:14px;border-radius:12px;border:3px solid #00c853;margin-top:12px'>
+<h4>🖨️ UNIVERSAL - TOUT MAK PRINTER</h4>
+<div style='background:#fff;padding:10px;border-radius:8px;margin-top:8px;border:2px solid #0a4a2e'>
+<b>Printer Aktif:</b> <span id='activePrinter' style='color:#00c853;font-weight:900'>Auto deteksyon</span><br>
+<small>INNER: <span id='sdkStatus'>Binding...</span></small><br>
+<small>BT: <span id='btStatus'>--</span> | USB: <span id='usbStatus'>--</span> | NET: <span id='netStatus'>--</span></small><br>
+<small id='printer-status-detail'>Mòd: UNIVERSAL</small>
 </div>
-
-<!-- ONGLE 2 - TIRAJ -->
-<div id="ong2" class="ong hidden">
-  <div class="card">
-    <b>🎯 Antre Rezilta Tiraj</b>
-    <div class="row"><input id="tBoul" class="inp inpN" placeholder="BOUL 2 chif" inputmode="numeric" maxlength="2"><input id="tL3" class="inp inpN" placeholder="L3 3 chif" inputmode="numeric" maxlength="3"></div>
-    <div class="row"><input id="tL4" class="inp inpN" placeholder="L4 4 chif" inputmode="numeric" maxlength="4"><input id="tL5" class="inp inpN" placeholder="L5 5 chif" inputmode="numeric" maxlength="5"></div>
-    <div class="row"><input id="tMar1" class="inp inpN" placeholder="MAR 1" inputmode="numeric" maxlength="2"><span style="font-weight:900">x</span><input id="tMar2" class="inp inpN" placeholder="MAR 2" inputmode="numeric" maxlength="2"></div>
-    <button class="btn btnS" onclick="saveTiraj()">💾 Anrejistre Tiraj & Kalkile Gayan</button>
-    <div id="tirageResult" style="margin-top:8px;font-size:13px"></div>
-  </div>
-  <div class="card"><b>🏆 Gayan Jodia</b><div id="gayanList" style="font-size:13px;margin-top:6px">Pa gen tiraj</div></div>
+<div style='display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px'>
+<button class='btn btnG' style='height:55px;background:#00c853' onclick='scanInnerUniversal()'>📟 INNER Sunmi</button>
+<button class='btn btnB' style='height:55px;background:#8b5cf6' onclick='scanBluetoothUniversal()'>📱 BT Tout Mak</button>
+<button class='btn btnB' style='height:55px;background:#f59e0b;color:#000' onclick='scanUSBUniversal()'>🔌 USB Printer</button>
+<button class='btn btnB' style='height:55px;background:#10b981' onclick='scanNetworkUniversal()'>🌐 WiFi/IP</button>
 </div>
-
-<!-- ONGLE 3 - RAPO -->
-<div id="ong3" class="ong hidden">
-  <div class="card">
-    <b>📊 Rapò Vant</b>
-    <div class="grid2" style="margin-top:8px">
-      <div style="background:#e0f2fe;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Vant Jodia</div><div id="rVant" style="font-weight:900;font-size:18px">$0</div></div>
-      <div style="background:#dcfce7;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Tikè</div><div id="rTik" style="font-weight:900;font-size:18px">0</div></div>
-      <div style="background:#fef9c3;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Komisyon 10%</div><div id="rKom" style="font-weight:900;font-size:18px">$0</div></div>
-      <div style="background:#fee2e2;padding:10px;border-radius:12px;text-align:center"><div style="font-size:12px">Gayan</div><div id="rGay" style="font-weight:900;font-size:18px">$0</div></div>
-    </div>
-    <button class="btn btnB" onclick="refreshRap()">🔄 Rafrechi Rapò</button>
-    <div id="rapTable" style="margin-top:8px"></div>
-  </div>
+<input id='selectedPrinter' class='inpL' placeholder='Printer chwazi ap parèt la' style='margin-top:8px'>
+<div style='display:flex;gap:6px;margin-top:6px'><input id='netIP' class='inpL' placeholder='IP ex: 192.168.1.100' style='flex:1'><button class='btn btnB' style='width:90px' onclick='saveIPUniversal()'>Save IP</button></div>
+<div id='scanResult' style='background:#f8fafc;padding:8px;border-radius:8px;margin-top:8px;font-size:11px;white-space:pre-wrap;border:2px dashed #0a4a2e'>Chwazi kalite printer ou genyen an. Pou SUNMI V2 PRO fòk Bluetooth ON tankou lòt sistèm nan.</div>
 </div>
-
-<!-- ONGLE 4 - KES -->
-<div id="ong4" class="ong hidden">
-  <div class="card">
-    <b>💵 Kes / Lajan</b>
-    <div class="row"><input id="kDep" class="inp" type="number" placeholder="Depans"><button class="btn btnD" onclick="addDep()" style="width:auto">- Depans</button></div>
-    <div class="row"><input id="kAv" class="inp" type="number" placeholder="Avans Gayan"><button class="btn btnB" onclick="addAv()" style="width:auto">- Avans</button></div>
-    <div id="kesList" style="font-size:13px;margin-top:8px"></div>
-    <div style="background:#111827;color:#fff;padding:12px;border-radius:12px;margin-top:8px;text-align:center"><div>Balans Kes</div><div id="kesBal" style="font-size:22px;font-weight:900">$0</div></div>
-  </div>
+<div style='background:#eef6ee;padding:10px;border-radius:10px;border:2px dashed #0a4a2e;margin-top:12px'>
+<b>Upload Logo 20mm:</b><br>
+<input type='file' id='logoFile' accept='image/*' style='width:100%;margin-top:8px;padding:10px;background:#fff;border:2px solid #0a4a2e;border-radius:8px'>
+<button class='btn btnG' style='margin-top:8px' onclick='uploadLogoPhone()'>SOVE LOGO</button>
 </div>
+<div style='margin-top:10px'><b>Tel:</b><br><input id='logoUrl' class='inpL' placeholder='Tel' style='margin-top:4px'><button class='btn btnB' style='margin-top:8px' onclick='saveTel()'>Sove Tel</button></div>
+<button class='btn btnB' style='margin-top:12px' onclick='testPrintLogo()'>TEST UNIVERSAL - Tout Printer</button>
+</div></div>
+<div class='tabs'><button class='tab active' onclick="goTab('pV',this)">1-Vendre</button><button class='tab' onclick="goTab('pC',this)">2-Kopye</button><button class='tab' onclick="goTab('pF',this)">3-Fiches</button><button class='tab' onclick="goTab('pR',this)">4-Rapport</button><button class='tab' onclick="goTab('pP',this)">5-Paramèt</button></div>
+</div><script>
+const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
+try{firebase.initializeApp(firebaseConfig);}catch(e){}
+const db=firebase.database?firebase.database():null;
+const TIRAJ_DEFAULT=[["GA midi","12:00"],["FL midi","13:00"],["NY midi","14:00"],["Real","12:30"],["GA soir","18:00"],["FL soir","21:00"],["NY soir","22:00"],["Primera dia","11:30"],["Suerte dia","12:00"],["Lote Dom","13:30"],["Ganamas","14:15"],["Suerte noche","17:50"],["Primera noche","19:50"],["Loteka","19:45"],["Nacional noche","20:50"],["Leidsa","20:45"],["Anguila 10h","09:40"],["Anguila 18h","17:40"]];
+let DB={vendeurs:{},tickets:{},heures:{},results:{},config:{limitMode:'global',prixMode:'global',logoUrl:'',tel:'+52 7298079596'},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true}},limites:{global:{bor:1500,mar:100,l3:100,l4:20,l5:5}},blokeVendeur:{},blokeVendeurReasons:{}},CUR=null,selT=[],LAST_TXT='',serverOffset=0;
+// UNIVERSAL PRINTER VARS
+let sunmiPrinterService=null, sunmiBound=false, isPrinting=false;
+let btUniversal={device:null,char:null,server:null}, usbUniversal={device:null,iface:null,ep:null}, netIPUniversal=localStorage.getItem('netPrinterIP')||'', currentPrinterUniversal=null;
 
-<!-- ONGLE 5 - PARAMET -->
-<div id="ong5" class="ong hidden">
-  <div class="card">
-    <b>🖨️ PARAMÈT ENPRIMANT - UNIVERSAL - TOUT MAK</b>
-    <div style="font-size:11px;color:#666;margin:6px 0">Mache sou: Sunmi V2 Pro Inner, Epson, Xprinter, Zjiang, Goojprt, 58mm/80mm, Bluetooth/USB/WiFi</div>
-    <div class="grid2">
-      <button class="btn btnB" onclick="scanInner()">📟 INNER Sunmi</button>
-      <button class="btn btnBT" onclick="scanBluetooth()">📱 BLUETOOTH Tout Mak</button>
-      <button class="btn btnUSB" onclick="scanUSB()">🔌 USB Printer</button>
-      <button class="btn btnNET" onclick="scanNetwork()">🌐 WiFi / IP</button>
-    </div>
-    <input id="selectedPrinter" class="inp" placeholder="Printer chwazi ap parèt la" style="margin-top:8px">
-    <div class="row" style="margin-top:6px"><input id="netIP" class="inp" placeholder="IP ex: 192.168.1.100" style="flex:1"><button class="btn btnNET" onclick="saveIP()" style="width:auto">Save IP</button></div>
-    <div id="scanResult">💡 Chwazi kalite printer ou genyen an:\n- SUNMI V2 PRO: Klike INNER + Bluetooth ON (POS Steward bezwen li)\n- PRINTER BLUETOOTH: Klike BLUETOOTH Tout Mak\n- PRINTER USB: Klike USB\n- PRINTER WIFI: Antre IP\n\nTès toujou mache.</div>
-    <div style="display:flex;gap:6px;margin-top:6px"><span id="usbStatus" class="badge" style="background:#666">USB --</span><span id="netStatus" class="badge" style="background:#666">NET --</span></div>
-  </div>
+function hideSplash(){let sp=document.getElementById('splash');if(sp){sp.style.opacity='0';setTimeout(()=>sp.style.display='none',400);}}
+setTimeout(hideSplash,2000);window.addEventListener('load',()=>setTimeout(hideSplash,1000));
+if(db){try{db.ref('.info/serverTimeOffset').on('value',snap=>{serverOffset=snap.val()||0;});}catch(e){}}
+function getTrueNow(){return new Date(Date.now()+serverOffset);}function getHaitiTime(){try{let u=getTrueNow();return new Date(u.toLocaleString('en-US',{timeZone:'America/Port-au-Prince'}));}catch(e){return new Date();}}
+function getHaitiDateStr(){let d=getHaitiTime();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function formatHaiti(d){let h=d.getHours(),m=d.getMinutes().toString().padStart(2,'0'),ap=h>=12?'PM':'AM',h12=h%12||12;return h12+':'+m+' '+ap+' EST';}
+function getHeureProprio(n){return DB.heures&&DB.heures[n]?DB.heures[n]:(TIRAJ_DEFAULT.find(x=>x[0]==n)?.[1]||'');}
+function isOpen(n){let s=getHeureProprio(n);if(!s)return true;let p=s.split(':'),fh=parseInt(p[0]),fm=parseInt(p[1]||0),h=getHaitiTime();return h.getHours()*60+h.getMinutes()<fh*60+fm;}
+function isVendeurBlocked(vObj, keyId){if(!vObj) return false;if(vObj.actif===false) return true;if(vObj.bloke===true) return true;if(DB.blokeVendeur){if(DB.blokeVendeur[keyId]===true) return true;if(DB.blokeVendeur[vObj.serial]===true) return true;if(DB.blokeVendeur['v_'+vObj.serial]===true) return true;if(keyId && DB.blokeVendeur[keyId.replace('v_','')]===true) return true;}return false;}
+function showBlockedScreen(){if(document.getElementById('blockedScreen')) return;let div=document.createElement('div');div.id='blockedScreen';div.className='blocked-screen';div.innerHTML='<div style="font-size:80px">🔴</div><h1 style="font-size:28px;margin-top:10px">KONT BLOKE</h1><button onclick="localStorage.clear();location.reload()" style="margin-top:20px;background:#fff;color:#c62828;border:0;padding:12px 24px;border-radius:10px;font-weight:800">Soti</button>';document.body.appendChild(div);}
+function getMyPrix(){let mode=DB.config?.prixMode||'global';let prixGlobal=DB.prix?.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true};if(mode==='global') return prixGlobal;let keys=[CUR?.id, CUR?._key, 'v_'+CUR?.serial, CUR?.serial, 'v_'+CUR?._key];for(let k of keys){ if(k && DB.prix && DB.prix[k]) return DB.prix[k]; }return prixGlobal;}
+function getMyLimite(){let mode=DB.config?.limitMode||'global';let limGlobal=DB.limites?.global||{bor:1500,mar:100,l3:100,l4:20,l5:5};if(mode==='global') return limGlobal;let keys=[CUR?.id, CUR?._key, 'v_'+CUR?.serial, CUR?.serial];for(let k of keys){ if(k && DB.limites && DB.limites[k]) return DB.limites[k]; }return limGlobal;}
+function getChifRequis(j){if(j==='boul')return 2;if(j==='loto3')return 3;if(j==='loto4')return 4;if(j==='loto5')return 5;if(j==='maryaj')return 4;return 2;}
+function getLimiteForJeu(j){let l=getMyLimite();if(j==='boul')return l.bor;if(j==='maryaj')return l.mar;if(j==='loto3')return l.l3;if(j==='loto4')return l.l4;if(j==='loto5')return l.l5;return 99999;}
+function updatePriceBar(){let p=getMyPrix(); let l=getMyLimite(); let mode=DB.config?.prixMode||'global';let type=(mode==='global')? '🌍 GLOBAL' : '👤 PA VANDE - '+ (CUR?.nom||'');let el=document.getElementById('priceInfo');if(el) el.innerHTML=type+' | M1='+p.m1+' M2='+p.m2+' M3='+p.m3+' | 1er '+p.p1+' 2e '+p.p2+' 3e '+p.p3;let hh=document.getElementById('heureHaiti');if(hh) hh.innerText='EST:'+formatHaiti(getHaitiTime())+' | M1 M2 M3='+p.m1;}
+function getLogoUrl(){return DB.config?.logoUrl||localStorage.getItem('verite_logo')||'';}function getTel(){return DB.config?.tel||'+52 7298079596';}
+function applyLogo(){try{let u=getLogoUrl();if(!u||u.length<100){document.getElementById('splashCircle').style.display='flex';return;}['headerLogo','paramLogo','splashLogo'].forEach(id=>{let el=document.getElementById(id);if(el){el.src=u;el.style.display='block';if(id==='splashLogo')document.getElementById('splashCircle').style.display='none';}});let pc=document.getElementById('paramCircle');if(pc)pc.style.display='none';}catch(e){}}
+function uploadLogoPhone(){let f=document.getElementById('logoFile').files[0];if(!f){alert('Chwazi logo');return}let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{let c=document.createElement('canvas');c.width=300;c.height=300;let ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,300,300);let s=Math.min(img.width,img.height);let x=(img.width-s)/2,y=(img.height-s)/2;ctx.drawImage(img,x,y,s,s,0,0,300,300);let comp=c.toDataURL('image/jpeg',0.60);if(comp.length>180000){alert('Foto twò gwo');return}if(db)db.ref('config/logoUrl').set(comp).then(()=>{localStorage.setItem('verite_logo',comp);applyLogo();alert('Logo sove!');}).catch(()=>{localStorage.setItem('verite_logo',comp);applyLogo();});else{localStorage.setItem('verite_logo',comp);applyLogo();}};img.src=e.target.result;};r.readAsDataURL(f);}
+function saveTel(){let tel=document.getElementById('logoUrl').value.trim();if(!tel){alert('Mete Tel');return}if(db)db.ref('config/tel').set(tel).then(()=>alert('Tel sove'));localStorage.setItem('verite_tel',tel);}
 
-  <div class="card">
-    <b>🏪 Enfò Proprio & Logo 20mm</b>
-    <div class="row"><img id="logoPrev" class="logoPrev" src="" style="display:none"><input id="logoInput" type="file" accept="image/*" class="inp" style="flex:1" onchange="uploadLogo(this)"></div>
-    <input id="pName" class="inp" placeholder="Non Biznis" style="margin-top:6px" onchange="saveProp()">
-    <input id="pAddr" class="inp" placeholder="Adrès" style="margin-top:6px" onchange="saveProp()">
-    <input id="pTel" class="inp" placeholder="Telefòn" style="margin-top:6px" onchange="saveProp()">
-    <div style="font-size:11px;color:#666;margin-top:6px">Logo ap soti 20mm won santre sou tout printer (Inner/Bluetooth/USB/WiFi)</div>
-  </div>
+// === UNIVERSAL PRINTER - TOUT MAK - INNER + BT + USB + WIFI ===
+function forceInnerSync(){ bindSunmiService(); let ps=document.getElementById('printer-status'); let sdk=document.getElementById('sdkStatus'); if(sunmiBound){ if(ps) ps.innerText='✅ INNER Bound - Universal Prè'; if(sdk) sdk.innerText='✅ Bound'; document.getElementById('activePrinter').innerText='INNER Sunmi 58mm'; } else { if(ps) ps.innerText='⏳ Init Universal...'; if(sdk) sdk.innerText='Binding...'; } }
+function bindSunmiService(){
+  try{
+    if(window.InnerPrinterManager){
+      try{window.InnerPrinterManager.getInstance().bindService(this, {onServiceConnected: function(s){sunmiPrinterService=s;sunmiBound=true; document.getElementById('sdkStatus').innerText='✅ Bound - INNER'; document.getElementById('activePrinter').innerText='Sunmi Inner 58mm (SDK)'; document.getElementById('printer-status').innerText='✅ INNER 58mm - Universal Prè';},onServiceDisconnected: function(){sunmiBound=false;}});}catch(e){}
+    }
+    if(window.woyou && window.woyou.printService){sunmiPrinterService=window.woyou.printService;sunmiBound=true; document.getElementById('sdkStatus').innerText='✅ Woyou Bound';}
+    if(window.sunmiPrinter){sunmiPrinterService=window.sunmiPrinter;sunmiBound=true;}
+    if(window.SunmiPrinter){sunmiPrinterService=window.SunmiPrinter;sunmiBound=true;}
+  }catch(e){}
+}
+function scanInnerUniversal(){
+  let res=document.getElementById('scanResult'); res.innerText='🔍 INNER Sunmi V2 Pro - POS Steward 8Ko...\nFòk Bluetooth ON (menm jan ak lòt sistèm)\n';
+  bindSunmiService(); setTimeout(()=>{ if(sunmiBound){ res.innerText+='✅ INNER Bound - Prè pou enprime\nKlike TEST UNIVERSAL'; document.getElementById('selectedPrinter').value='Sunmi Inner 58mm'; currentPrinterUniversal={name:'Sunmi Inner',type:'inner'}; } else { res.innerText+='❌ Inner pa bound - Eseye:\n1- Bluetooth ON\n2- POS Steward > Enable\n3- Reklike INNER'; } },1200);
+}
+async function scanBluetoothUniversal(){
+  let res=document.getElementById('scanResult'); res.innerText='🔍 BLUETOOTH - Tout Mak Epson/Xprinter/Zjiang/Goojprt/Sunmi...\n📱 Aktive Bluetooth\n';
+  try{
+    if(!navigator.bluetooth){ res.innerText+='❌ Navigatè pa sipòte BT - Louvri nan Chrome'; return; }
+    let device=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['0000ff00-0000-1000-8000-00805f9b34fb','000018f0-0000-1000-8000-00805f9b34fb','00001101-0000-1000-8000-00805f9b34fb','00001800-0000-1000-8000-00805f9b34fb']});
+    btUniversal.device=device; res.innerText+=`✅ Chwazi: ${device.name||'BT Printer'}\n⏳ GATT...\n`;
+    btUniversal.server=await device.gatt.connect(); let services=await btUniversal.server.getPrimaryServices();
+    for(let svc of services){ let chars=await svc.getCharacteristics(); for(let ch of chars){ if(ch.properties.write||ch.properties.writeWithoutResponse){ btUniversal.char=ch; break; } } if(btUniversal.char) break; }
+    if(!btUniversal.char){ for(let svc of services){ try{ let chars=await svc.getCharacteristics(); if(chars[0]){ btUniversal.char=chars[0]; break; } }catch(e){} } }
+    if(btUniversal.char){ currentPrinterUniversal={name:device.name||'BT Printer',type:'bt'}; document.getElementById('selectedPrinter').value=currentPrinterUniversal.name+' (BT)'; document.getElementById('btStatus').innerText='BT: ✅ '+currentPrinterUniversal.name; document.getElementById('activePrinter').innerText=currentPrinterUniversal.name+' - BT'; res.innerText+=`✅ BT KONEKTE - TOUT MAK OK\n${currentPrinterUniversal.name}\n58/80mm ESC/POS\nKlike TEST UNIVERSAL`; }
+  }catch(e){ res.innerText+=`❌ ${e.message}\n1- Bluetooth ON 2- Reklike BT`; }
+}
+async function scanUSBUniversal(){
+  let res=document.getElementById('scanResult'); res.innerText='🔌 USB Printer - Tout Mak...\n';
+  try{
+    if(!navigator.usb){ res.innerText+='❌ WebUSB pa sipòte - Chrome PC/Android'; return; }
+    let device=await navigator.usb.requestDevice({filters:[]}); usbUniversal.device=device; await device.open(); await device.selectConfiguration(1); let iface=device.configurations[0].interfaces[0]; await device.claimInterface(iface.interfaceNumber); let epOut=iface.alternates[0].endpoints.find(e=>e.direction==='out'); usbUniversal.iface=iface.interfaceNumber; usbUniversal.ep=epOut.endpointNumber;
+    currentPrinterUniversal={name:device.productName||'USB Printer',type:'usb'}; document.getElementById('selectedPrinter').value=currentPrinterUniversal.name+' (USB)'; document.getElementById('usbStatus').innerText='USB: ✅ '+currentPrinterUniversal.name; document.getElementById('activePrinter').innerText=currentPrinterUniversal.name+' - USB'; res.innerText+=`✅ USB KONEKTE\n${currentPrinterUniversal.name}\nKlike TEST UNIVERSAL`;
+  }catch(e){ res.innerText+=`❌ ${e.message}`; }
+}
+function saveIPUniversal(){ netIPUniversal=document.getElementById('netIP').value.trim(); localStorage.setItem('netPrinterIP',netIPUniversal); document.getElementById('netStatus').innerText='NET: ✅ '+netIPUniversal; document.getElementById('activePrinter').innerText='Network '+netIPUniversal; document.getElementById('scanResult').innerText=`✅ IP ${netIPUniversal} Save\nKlike TEST UNIVERSAL`; currentPrinterUniversal={name:'NET '+netIPUniversal,type:'net'}; document.getElementById('selectedPrinter').value='Network '+netIPUniversal; }
+function scanNetworkUniversal(){ let ip=prompt('IP Printer WiFi/Network ex: 192.168.1.100', netIPUniversal||'192.168.1.100'); if(ip){ document.getElementById('netIP').value=ip; saveIPUniversal(); } }
+// Compat ansyen non
+function scanPrintersBluetooth(){ return scanBluetoothUniversal(); } function searchAllPrinters(){ return scanInnerUniversal(); } function scanPrinterAuto(){ return scanInnerUniversal(); } function setActivePrinter(){ return forceInnerSync(); } function updatePrinterUI(){ return forceInnerSync(); }
+setInterval(()=>{bindSunmiService();},5000);
+window.addEventListener('load',()=>{setTimeout(bindSunmiService,600);setTimeout(forceInnerSync,1200); if(localStorage.getItem('netPrinterIP')) document.getElementById('netIP').value=localStorage.getItem('netPrinterIP');});
 
-  <div class="card">
-    <b>⚙️ Konfigirasyon Jwèt</b>
-    <table><tr><th>Jwèt</th><th>Peye</th><th>Kom%</th></tr>
-    <tr><td>BOUL 2</td><td><input id="payBoul" class="inp" type="number" value="50"></td><td>10%</td></tr>
-    <tr><td>LOTO 3</td><td><input id="payL3" class="inp" type="number" value="500"></td><td>10%</td></tr>
-    <tr><td>LOTO 4</td><td><input id="payL4" class="inp" type="number" value="5000"></td><td>10%</td></tr>
-    <tr><td>MARYAJ</td><td><input id="payMar" class="inp" type="number" value="1000"></td><td>10%</td></tr>
-    </table>
-    <button class="btn btnP" onclick="savePay()">💾 Save Peye</button>
-  </div>
-</div>
+function listenDB(){if(!db){hideSplash();renderT();return}db.ref().on('value',snap=>{let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.tickets=v.tickets||{};DB.heures=v.heures||{};DB.results=v.results||{};DB.prix=v.prix||{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true}};DB.limites=v.limites||{global:{bor:1500,mar:100,l3:100,l4:20,l5:5}};DB.config=v.config||{limitMode:'global',prixMode:'global',logoUrl:'',tel:'+52 7298079596'};DB.blokeVendeur=v.blokeVendeur||{};if(!DB.prix.global) DB.prix.global={p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true};
+ if(CUR && isVendeurBlocked(DB.vendeurs[CUR._key]||DB.vendeurs[CUR.id]||CUR, CUR._key||CUR.id)){showBlockedScreen();}
+ renderT();applyLogo();updatePriceBar();hideSplash();forceInnerSync();},()=>{hideSplash();renderT();});}
+async function doLogin(){try{let s=document.getElementById('inputSerial').value.trim(),p=document.getElementById('inputPass').value.trim(),m=document.getElementById('loginMsg');if(!s||!p){m.innerText='Mete Serial';return}if(!db){CUR={_key:'15',serial:s,nom:'Tamouche'};localStorage.setItem('curV',JSON.stringify(CUR));openMain();return}let snap=await db.ref('vendeurs').once('value');let vs=snap.val()||{};let blokeSnap=await db.ref('blokeVendeur').once('value');DB.blokeVendeur=blokeSnap.val()||{};let k=Object.keys(vs).find(k=>String(vs[k].serial)===String(s));let f=k?vs[k]:null;if(!f||String(f.pass)!==String(p)){m.innerText='Modpas pa bon';return}
+ if(isVendeurBlocked(f,k)){m.innerHTML='🔴 KONT BLOKE!';showBlockedScreen();return;}
+ CUR=f;CUR._key=k;CUR.id=k;localStorage.setItem('curV',JSON.stringify(CUR));openMain();}catch(e){document.getElementById('loginMsg').innerText=e.message;}}
+function openMain(){document.getElementById('loginPage').style.display='none';document.getElementById('mainPage').style.display='block';document.getElementById('mainPage').classList.add('show');document.getElementById('vName').innerText=CUR.nom||'Vendeur';let today=getHaitiDateStr();let fd=document.getElementById('fd');let rdu=document.getElementById('rdu');let rau=document.getElementById('rau');if(fd)fd.value=today;if(rdu)rdu.value=today;if(rau)rau.value=today;listenDB();document.getElementById('bets').innerHTML='';addR();upd();hideSplash();setTimeout(bindSunmiService,500);setTimeout(forceInnerSync,1000);}
+function logout(){localStorage.clear();location.reload();}
+function getDejaVannPaTiraj(j,n,tN){let today=getHaitiDateStr(),tot=0;Object.values(DB.tickets||{}).forEach(t=>{let td=t.dateHaiti||t.date;if(td!==today)return;if(!t.tirages.includes(tN))return;t.bets.forEach(b=>{if(b.type===j&&b.numero===n)tot+=b.mise;});});return tot;}
+function getDejaVannParVendeurPaTiraj(j,n,tN){let today=getHaitiDateStr(),tot=0;Object.values(DB.tickets||{}).forEach(t=>{let td=t.dateHaiti||t.date;if(td!==today)return;if(String(t.serial)!=String(CUR.serial)&&String(t.vendeurId)!=String(CUR._key)&&String(t.vendeurId)!=String(CUR.id))return;if(!t.tirages.includes(tN))return;t.bets.forEach(b=>{if(b.type===j&&b.numero===n)tot+=b.mise;});});return tot;}
+function renderT(){let tlist=document.getElementById('tlist');if(!tlist)return;let html='<div style="grid-column:1/-1;display:flex;justify-content:space-between;background:#0a4a2e;color:#d4af37;padding:8px;border-radius:8px"><div><b>Tiraj EST</b><br><small>'+formatHaiti(getHaitiTime())+'</small></div><span onclick="document.getElementById(\'tlist\').classList.remove(\'open\')" style="background:#e11d48;color:#fff;padding:6px 12px;border-radius:6px">X</span></div>';TIRAJ_DEFAULT.forEach(t=>{let name=t[0],hp=getHeureProprio(name),open=isOpen(name),chk=selT.includes(name)?'checked':'',bg=open?'background:#dcfce7;border-color:#16a34a':'background:#fee2e2;border-color:#e11d48';html+='<label class="topt" style="'+bg+'"><input type="checkbox" value="'+name+'" '+chk+' '+(open?'':'disabled')+' onchange="chg(this)"><span>'+name+'</span><small>'+hp+' '+(open?'OK':'X')+'</small></label>';});tlist.innerHTML=html;let rt=document.getElementById('rt');if(rt)rt.innerHTML='<option value="tous">Tous Tiraj</option>'+TIRAJ_DEFAULT.map(t=>'<option>'+t[0]+'</option>').join('');}
+function chg(el){if(!isOpen(el.value)&&el.checked){alert('Femen EST');el.checked=false;return}if(el.checked)selT.push(el.value);else selT=selT.filter(x=>x!=el.value);document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj EST':'Chwazi tiraj EST';upd();if(selT.length)document.getElementById('tlist').classList.remove('open')}
+function selAll(){selT=[];TIRAJ_DEFAULT.forEach(t=>{if(isOpen(t[0]))selT.push(t[0])});renderT();document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj EST':'Chwazi tiraj EST';upd()}
 
-<div class="tabs">
-  <button class="tab active" onclick="showOng(1)">1-Vant</button>
-  <button class="tab" onclick="showOng(2)">2-Tiraj</button>
-  <button class="tab" onclick="showOng(3)">3-Rapò</button>
-  <button class="tab" onclick="showOng(4)">4-Kes</button>
-  <button class="tab" onclick="showOng(5)">5-Param</button>
-</div>
-
-<script>
-// === GLOBAL ===
-let LAST_TXT='', currentPrinter=null, sunmiInner=null, bt={device:null,char:null,server:null}, usb={device:null,iface:null,ep:null}, netIP=localStorage.getItem('netPrinterIP')||'', tickets=JSON.parse(localStorage.getItem('tickets')||'[]'), kes=JSON.parse(localStorage.getItem('kes')||'[]'), tiraj=JSON.parse(localStorage.getItem('tiraj')||'null');
-function getLogoUrl(){ try{ return localStorage.getItem('propLogo')||''; }catch(e){ return ''; } }
-function showOng(n){ document.querySelectorAll('.ong').forEach(o=>o.classList.add('hidden')); document.getElementById('ong'+n).classList.remove('hidden'); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab')[n-1].classList.add('active'); if(n==3) refreshRap(); if(n==4) refreshKes(); }
-
-// === ONGLE 1 - VENTE - ENTER RANPLASE. ===
+// === ENTER RANPLASE. - KLAVYE TEL SUNMI ===
 function addR(keep='boul'){
-  let c=document.getElementById('bets'), d=document.createElement('div'); d.className='row betRow';
-  d.innerHTML=`<select class="jeu inp" onchange="onJeuChange(this)"><option value="boul">BOUL 2</option><option value="loto3">L3 3</option><option value="loto4">L4 4</option><option value="loto5">L5 5</option><option value="maryaj">MAR 4</option></select>
-  <input class="boul inpN inp" type="text" inputmode="numeric" enterkeyhint="next" placeholder="--" oninput="validateBoul(this)" onkeydown="handleBoulKey(event,this)">
-  <input class="mise inpN inp" type="text" inputmode="numeric" enterkeyhint="next" placeholder="$" oninput="upd()" onkeydown="handleMizKey(event,this)">
-  <button class="btnR" onclick="this.parentElement.remove();upd()">X</button><button class="btnF" onclick="nextLine(this)">↵</button>`;
-  c.appendChild(d); d.querySelector('.jeu').value=keep; onJeuChange(d.querySelector('.jeu')); upd();
-  setTimeout(()=>{ let b=d.querySelector('.boul'); b.focus(); b.select(); },60); return d;
+  let c=document.getElementById('bets');let d=document.createElement('div');d.className='row betRow';
+  d.innerHTML='<select class="jeu inp" onchange="onJeuChange(this)"><option value="boul">BOUL 2</option><option value="loto3">L3 3</option><option value="loto4">L4 4</option><option value="loto5">L5 5</option><option value="maryaj">MAR 4</option></select><input class="boul inpN" type="text" inputmode="numeric" enterkeyhint="next" placeholder="--" oninput="validateBoul(this)" onkeydown="handleBoulKey(event,this)"><input class="mise inpN" type="text" inputmode="numeric" enterkeyhint="next" placeholder="$" oninput="upd()" onkeydown="handleMizKey(event,this)" onblur="handleMizBlur(this)" style="background:#e8f5e9"><button class="btnR" onclick="this.parentElement.remove();upd()">X</button><button class="btnF" onclick="nextLine(this)">></button>';
+  c.appendChild(d);d.querySelector('.jeu').value=keep;onJeuChange(d.querySelector('.jeu'));upd();return d;
 }
-function onJeuChange(s){ let r=s.parentElement,b=r.querySelector('.boul'),t=s.value; b.placeholder=t==='boul'?'--':t==='loto3'?'---':t==='loto4'?'----':t==='loto5'?'-----':'-- --'; validateBoul(b); }
-function validateBoul(inp){ let v=inp.value.replace(/[^0-9 ]/g,''),jeu=inp.parentElement.querySelector('.jeu').value; if(jeu==='maryaj'){ let p=v.replace(/ /g,'').substring(0,4); v=p.length>2?p.substring(0,2)+' '+p.substring(2):p; }else{ let len=jeu==='boul'?2:jeu==='loto3'?3:jeu==='loto4'?4:5; v=v.replace(/ /g,'').substring(0,len); } inp.value=v; upd(); }
-function handleBoulKey(e,inp){ if(e.key==='Enter'||e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); let m=inp.parentElement.querySelector('.mise'); m.focus(); m.select(); } }
-function handleMizKey(e,inp){ if(e.key==='Enter'){ e.preventDefault(); nextLine(inp); return; } if(e.key==='ArrowDown'||e.key==='ArrowRight'){ e.preventDefault(); nextLine(inp); } if(e.key==='ArrowUp'||e.key==='ArrowLeft'){ e.preventDefault(); let b=inp.parentElement.querySelector('.boul'); b.focus(); b.select(); } }
-function nextLine(el){ let rows=[...document.querySelectorAll('.betRow')],idx=rows.indexOf(el.closest('.betRow')),keep=rows[idx]?.querySelector('.jeu').value||'boul'; addR(keep); }
-function clearBets(){ document.getElementById('bets').innerHTML=''; addR(); upd(); }
-function upd(){ let tot=0; document.querySelectorAll('.betRow').forEach(r=>{ tot+=parseFloat(r.querySelector('.mise').value)||0; }); document.getElementById('total').innerText='Total: $'+tot; }
-function buildTicket(){
-  let pName=localStorage.getItem('pName')||'BÒLÈT', pTel=localStorage.getItem('pTel')||'', lines=[pName, pTel, '----------------', ''], tot=0;
-  document.querySelectorAll('.betRow').forEach(r=>{ let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value,m=r.querySelector('.mise').value; if(b&&m){ lines.push(`${j.toUpperCase()} ${b} $${m}`); tot+=parseFloat(m)||0; } });
-  lines.push('----------------'); lines.push(`TOTAL: $${tot}`); lines.push(new Date().toLocaleString()); lines.push('Bòn chans!'); LAST_TXT=lines.join('\n'); return LAST_TXT;
+function onJeuChange(sel){let row=sel.parentElement;let jeu=sel.value;let req=getChifRequis(jeu);let boul=row.querySelector('.boul');boul.maxLength=req;if(boul.value.length!==0&&boul.value.length!==req)boul.value='';boul.placeholder='-'.repeat(req);}
+function validateBoul(inp){let jeu=inp.parentElement.querySelector('.jeu').value;let req=getChifRequis(jeu);inp.value=inp.value.replace(/\D/g,'').slice(0,req);upd();if(inp.value.length===req){setTimeout(()=>{let m=inp.parentElement.querySelector('.mise');m.focus();m.select();},60);}}
+function handleBoulKey(e,inp){
+  if(e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();let miz=inp.parentElement.querySelector('.mise');miz.focus();miz.select();}
+  if(e.key==='ArrowDown'){e.preventDefault();let next=inp.parentElement.nextElementSibling;if(next){next.querySelector('.boul').focus();}else{nextLine(inp);}}
+  if(e.key==='ArrowUp'){e.preventDefault();let prev=inp.parentElement.previousElementSibling;if(prev)prev.querySelector('.boul').focus();}
 }
+function handleMizKey(e,inp){
+  if(e.key==='Enter'){e.preventDefault();nextLine(inp);return;} // ENTER = LIY SUIVANT - ranplase.
+  if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();nextLine(inp);}
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();let boul=inp.parentElement.querySelector('.boul');boul.focus();boul.select();}
+}
+function handleMizBlur(inp){let row=inp.closest('.betRow');let all=document.querySelectorAll('.betRow');let isLast=row===all[all.length-1];if(!isLast)return;let boul=row.querySelector('.boul').value.trim();let mise=inp.value.trim();if(boul&&mise){setTimeout(()=>{nextLine(inp);},100);}}
+function nextLine(fromEl){let row=fromEl.closest('.betRow');let jeu=row.querySelector('.jeu').value;let boul=row.querySelector('.boul').value.trim();let mise=row.querySelector('.mise').value.trim();if(!boul&&!mise)return;if(boul&&!mise){row.querySelector('.mise').focus();return;}let req=getChifRequis(jeu);if(boul&&boul.length!==req)return;let all=document.querySelectorAll('.betRow');let isLast=row===all[all.length-1];if(!isLast){let next=row.nextElementSibling;if(next){next.querySelector('.boul').focus();next.querySelector('.boul').select();}return;}let newRow=addR(jeu);setTimeout(()=>{let b=newRow.querySelector('.boul');b.focus();b.select();newRow.scrollIntoView({behavior:'smooth',block:'center'});},80);}
+function upd(){let sum=0;document.querySelectorAll('.betRow').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length);document.getElementById('gt').innerText='$'+(sum*selT.length);}
 
-// === PRINTER UNIVERSAL - TOUT MAK ===
-async function scanInner(){
-  let res=document.getElementById('scanResult'); res.innerHTML='🔍 INNER - Sunmi V2 Pro...<br>';
-  try{
-    if(window.InnerPrinterManager){ window.InnerPrinterManager.getInstance().bindService(this,{onServiceConnected:function(s){ sunmiInner=s; document.getElementById('sdkStatus').innerText='✅ INNER Bound'; document.getElementById('printer-status').innerText='INNER 58mm - Prè'; res.innerHTML+='✅ INNER Bound - Prè<br>'; currentPrinter={name:'Sunmi Inner 58mm',type:'inner'}; document.getElementById('selectedPrinter').value='Sunmi Inner 58mm'; },onServiceDisconnected:function(){ sunmiInner=null; }}); await new Promise(r=>setTimeout(r,1200)); if(sunmiInner) return true; }
-    if(window.woyou&&window.woyou.printService){ sunmiInner=window.woyou.printService; document.getElementById('sdkStatus').innerText='✅ INNER Woyou'; res.innerHTML+='✅ Woyou Inner Prè<br>'; currentPrinter={name:'Inner Woyou',type:'inner'}; return true; }
-  }catch(e){ res.innerHTML+=e.message+'<br>'; } res.innerHTML+='❌ Inner pa jwenn - Bluetooth ON + POS Steward Enable'; return false;
+function build(tk){
+let hd=getHaitiTime();let W=32;function center(t){ t=String(t).trim(); if(t.length>=W) return t.substring(0,W); let left=Math.floor((W-t.length)/2); return ' '.repeat(left)+t+' '.repeat(W-t.length-left); }
+function betLine(j,n,m){ let l=j.padEnd(9,' '); let r=('$'+m).padStart(7,' '); let midW=12; let sp=Math.floor((midW-n.length)/2); let mid=' '.repeat(sp)+n+' '.repeat(midW-n.length-sp); return l+mid+r; }
+let tel=getTel(),prix=getMyPrix(),txt='';txt+=center('')+'\n';txt+=center('C&D VERITE LOTTO')+'\n';txt+=center('Fiche Original')+'\n';txt+=center('----------------------------')+'\n';txt+=center('POS: '+(CUR?._key||''))+'\n';txt+=center('Vendeur: '+(CUR?.serial||'')+' '+(CUR?.nom||''))+'\n';txt+=center('Tel: '+tel)+'\n';txt+=center('Date: '+getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' EST')+'\n';txt+=center('----------------------------')+'\n';selT.forEach(t=>{txt+=center(t+' - '+getHeureProprio(t))+'\n';});txt+=center('----------------------------')+'\n';tk.bets.forEach(b=>{let label=b.type==='boul'?'Borlette':b.type==='maryaj'?'Maryaj':b.type.toUpperCase();txt+=betLine(label,b.numero,b.mise)+'\n';});txt+=center('----------------------------')+'\n';txt+=center('Total => '+tk.total+' HTG')+'\n';txt+=center('Prix: 1er '+prix.p1+' 2e '+prix.p2+' 3e '+prix.p3);txt+=center('----------------------------')+'\n';txt+=center('Mèsi pou konfyans ou!')+'\n';txt+=center('')+'\n';txt+=center(getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' PM')+'\n';txt+=center('----------------------------')+'\n';txt+='\n\n\n\n';return txt;
 }
-async function scanBluetooth(){
-  let res=document.getElementById('scanResult'); res.innerHTML='🔍 BLUETOOTH - Tout Mak Epson/Xprinter/Zjiang/Sunmi...\n';
-  try{
-    if(!navigator.bluetooth){ res.innerHTML+='❌ Chrome sèlman'; return false; }
-    let device=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['0000ff00-0000-1000-8000-00805f9b34fb','000018f0-0000-1000-8000-00805f9b34fb','00001101-0000-1000-8000-00805f9b34fb']});
-    bt.device=device; res.innerHTML+=`✅ ${device.name||'BT Printer'}\nGATT...\n`;
-    bt.server=await device.gatt.connect(); let services=await bt.server.getPrimaryServices();
-    for(let svc of services){ let chars=await svc.getCharacteristics(); for(let ch of chars){ if(ch.properties.write||ch.properties.writeWithoutResponse){ bt.char=ch; break; } } if(bt.char) break; }
-    if(!bt.char){ for(let svc of services){ try{ let chars=await svc.getCharacteristics(); if(chars[0]){ bt.char=chars[0]; break; } }catch(e){} } }
-    if(bt.char){ currentPrinter={name:device.name||'BT Printer',type:'bt'}; document.getElementById('selectedPrinter').value=currentPrinter.name+' (BT)'; document.getElementById('btStatus').innerText='BT: ✅ '+currentPrinter.name; document.getElementById('printer-status').innerText='BT - '+currentPrinter.name+' - Prè'; res.innerHTML+=`✅ BT KONEKTE - TOUT MAK OK\n${currentPrinter.name}`; return true; }
-  }catch(e){ res.innerHTML+=`❌ ${e.message}`; } return false;
-}
-async function scanUSB(){
-  let res=document.getElementById('scanResult'); res.innerHTML='🔍 USB...\n';
-  try{
-    if(!navigator.usb){ res.innerHTML+='❌ WebUSB pa sipòte'; return false; }
-    let device=await navigator.usb.requestDevice({filters:[]}); usb.device=device; await device.open(); await device.selectConfiguration(1); let iface=device.configurations[0].interfaces[0]; await device.claimInterface(iface.interfaceNumber); let epOut=iface.alternates[0].endpoints.find(e=>e.direction==='out'); usb.iface=iface.interfaceNumber; usb.ep=epOut.endpointNumber;
-    currentPrinter={name:device.productName||'USB Printer',type:'usb'}; document.getElementById('selectedPrinter').value=currentPrinter.name+' (USB)'; document.getElementById('usbStatus').innerText='USB: ✅ '+currentPrinter.name; res.innerHTML+=`✅ USB KONEKTE ${currentPrinter.name}`; return true;
-  }catch(e){ res.innerHTML+=`❌ ${e.message}`; } return false;
-}
-function saveIP(){ netIP=document.getElementById('netIP').value.trim(); localStorage.setItem('netPrinterIP',netIP); document.getElementById('netStatus').innerText='NET: ✅ '+netIP; document.getElementById('scanResult').innerHTML=`✅ IP ${netIP} Save`; currentPrinter={name:'NET '+netIP,type:'net'}; document.getElementById('selectedPrinter').value='Network '+netIP; }
-function scanNetwork(){ let ip=prompt('IP Printer WiFi',netIP||'192.168.1.100'); if(ip){ document.getElementById('netIP').value=ip; saveIP(); } }
+function showPreview(txt){const p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let h=u?'<img src="'+u+'" style="width:20mm;height:20mm;border-radius:50%;display:block;margin:0 auto 3mm auto;border:1px solid #000;object-fit:cover">':'';p.innerHTML=h+'<div style="white-space:pre;font-family:monospace;font-size:12px;text-align:center">'+txt.replace(/\n/g,'<br>')+'</div>';}
 
-async function printUniversal(t){
-  let txt=(t||LAST_TXT||'').toString().replace(/<[^>]*>/g,'').trim(); if(!txt) return false; let logo=getLogoUrl();
-  if(sunmiInner){ try{ if(sunmiInner.setAlignment) sunmiInner.setAlignment(1); if(logo&&sunmiInner.printBitmap){ try{ let img=new Image(); img.src=logo; await new Promise(r=>{ img.onload=r; setTimeout(r,400); }); let cv=document.createElement('canvas'); cv.width=200; cv.height=200; let ctx=cv.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,200,200); ctx.beginPath(); ctx.arc(100,100,100,0,Math.PI*2); ctx.clip(); ctx.drawImage(img,0,0,200,200); sunmiInner.printBitmap(cv.toDataURL(),1); await new Promise(r=>setTimeout(r,250)); }catch(e){} } if(sunmiInner.printOriginalText) sunmiInner.printOriginalText(txt+"\n\n\n\n",null); else if(sunmiInner.printText) sunmiInner.printText(txt+"\n\n\n\n"); setTimeout(()=>{ try{ sunmiInner.cutPaper(); }catch(e){} },500); return true; }catch(e){} }
-  if(bt.char&&bt.device&&bt.device.gatt.connected){ try{ let data=new TextEncoder().encode('\x1B\x40\x1B\x61\x01'+txt+"\n\n\n\n\x1D\x56\x00"); for(let i=0;i<data.length;i+=100){ await bt.char.writeValue(data.slice(i,i+100)); await new Promise(r=>setTimeout(r,30)); } return true; }catch(e){} }
-  if(usb.device&&usb.ep){ try{ let data=new TextEncoder().encode('\x1B\x40'+txt+"\n\n\n\n\x1D\x56\x00"); await usb.device.transferOut(usb.ep,data); return true; }catch(e){} }
-  if(netIP){ try{ await fetch(`http://${netIP}:9100`,{method:'POST',body:txt,mode:'no-cors'}); return true; }catch(e){} }
-  let w=window.open('','_blank','width=300,height=600'); w.document.write(`<html><head><style>@page{size:auto;margin:0}body{width:58mm;font-family:monospace;font-size:12px;text-align:center}</style></head><body><img src="${logo}" style="width:20mm;height:20mm;border-radius:50%" onerror="this.style.display='none'"><pre style="text-align:left;white-space:pre-wrap">${txt}</pre><script>window.print();setTimeout(()=>window.close(),500)<\/script></body></html>`); return true;
+// === PRINT UNIVERSAL - TOUT PRINTER - INNER + BT + USB + WIFI + FALLBACK ===
+async function printBT(t){
+  if(isPrinting) return;
+  isPrinting=true;
+  let plain = (t||LAST_TXT||'').toString().replace(/<[^>]+>/g,'').trim();
+  if(!plain){isPrinting=false;return;}
+  let logoUrl = getLogoUrl();
+  forceInnerSync();
+
+  // A- INNER SDK - Sunmi V2 Pro
+  try{
+    if(sunmiPrinterService && sunmiBound){
+      try{ if(sunmiPrinterService.setAlignment) sunmiPrinterService.setAlignment(1); if(sunmiPrinterService.setAlignMode) sunmiPrinterService.setAlignMode(1); }catch(e){}
+      if(logoUrl && logoUrl.length>100 && sunmiPrinterService.printBitmap){
+        try{
+          let img=new Image();img.src=logoUrl;
+          await new Promise(r=>{img.onload=r;setTimeout(r,600);});
+          let c=document.createElement('canvas');c.width=200;c.height=200;
+          let ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,200,200);ctx.drawImage(img,0,0,200,200);
+          try{sunmiPrinterService.setAlignment(1);}catch(e){}
+          try{sunmiPrinterService.printBitmap(c.toDataURL(),1);}catch(e){}
+          try{sunmiPrinterService.setAlignment(1);}catch(e){}
+        }catch(e){}
+      }
+      if(sunmiPrinterService.printOriginalText){
+        try{sunmiPrinterService.setAlignment(1);}catch(e){}
+        sunmiPrinterService.printOriginalText(plain+"\n\n\n\n", null);
+        if(sunmiPrinterService.cutPaper){setTimeout(()=>{try{sunmiPrinterService.cutPaper(null);}catch(e){}},500);}
+        setTimeout(()=>{isPrinting=false;},2000);
+        return;
+      }
+      if(sunmiPrinterService.printText){
+        try{sunmiPrinterService.setAlignment(1);}catch(e){}
+        sunmiPrinterService.printText(plain+"\n\n\n\n");
+        setTimeout(()=>{isPrinting=false;},2000);
+        return;
+      }
+    }
+  }catch(e){console.log('Inner SDK fail',e);}
+
+  // B- BLUETOOTH - TOUT MAK
+  if(btUniversal.char && btUniversal.device && btUniversal.device.gatt.connected){
+    try{
+      let data=new TextEncoder().encode('\x1B\x40\x1B\x61\x01\x1B\x45\x01'+plain+"\n\n\n\n\x1D\x56\x00");
+      for(let i=0;i<data.length;i+=100){ await btUniversal.char.writeValue(data.slice(i,i+100)); await new Promise(r=>setTimeout(r,35)); }
+      isPrinting=false; return;
+    }catch(e){console.log('BT fail',e);}
+  }
+
+  // C- USB - TOUT MAK
+  if(usbUniversal.device && usbUniversal.ep){
+    try{
+      let data=new TextEncoder().encode('\x1B\x40\x1B\x61\x01'+plain+"\n\n\n\n\x1D\x56\x00");
+      await usbUniversal.device.transferOut(usbUniversal.ep, data);
+      isPrinting=false; return;
+    }catch(e){console.log('USB fail',e);}
+  }
+
+  // D- WIFI/IP
+  if(netIPUniversal){
+    try{
+      await fetch(`http://${netIPUniversal}:9100`,{method:'POST',body:plain,mode:'no-cors'}).catch(()=>{});
+      // Kontinye pou Chrome fallback tou
+    }catch(e){}
+  }
+
+  // E- FALLBACK - Chrome print - mache pou tout printer sistèm
+  try{
+    let logoHtml = logoUrl && logoUrl.length>100? `<div style="text-align:center"><img src="${logoUrl}" style="width:20mm;height:20mm;border-radius:50%;border:1px solid #000;object-fit:cover;display:block;margin:0 auto 2mm auto"></div>` : '';
+    let html = `<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;width:56mm;font-family:'Courier New',monospace;font-size:11px;text-align:center}pre{text-align:center}</style></head><body>${logoHtml}<pre style="white-space:pre-wrap;text-align:center;font-size:11px">${plain.replace(/</g,'&lt;')}</pre><script>setTimeout(()=>{window.print();},500);<\/script></body></html>`;
+    let iframe=document.createElement('iframe');
+    iframe.style.width='0';iframe.style.height='0';iframe.style.border='0';iframe.style.position='fixed';iframe.style.bottom='0';
+    document.body.appendChild(iframe);
+    iframe.contentDocument.open();iframe.contentDocument.write(html);iframe.contentDocument.close();
+    setTimeout(()=>{try{iframe.contentWindow.print();}catch(e){window.print();} setTimeout(()=>{try{document.body.removeChild(iframe);}catch(e){} isPrinting=false;},2500);},800);
+    return;
+  }catch(e){isPrinting=false;}
 }
-function printBT(t){ return printUniversal(t); } function scanBluetoothSDK(){ scanBluetooth(); }
-async function testPrint(){ let t=buildTicket()||`TÈS UNIVERSAL\nTout Printer\n${new Date().toLocaleString()}\n\n\n\n`; await printUniversal(t); }
+function printLast(){if(isPrinting){alert('Ap enprime deja...');return;}if(!LAST_TXT){alert('Pa gen fich');return}printBT(LAST_TXT);}
+function testPrintLogo(){if(isPrinting){alert('Ap enprime...');return;}forceInnerSync();bindSunmiService();let tk={id:'TEST V26.2',bets:[{type:'boul',numero:'55',mise:5},{type:'boul',numero:'22',mise:5}],tirages:selT.length?selT:['GA soir'],baseTotal:10,total:10};if(!selT.length)selT=tk.tirages;let txt=build(tk);showPreview(txt);LAST_TXT=txt;setTimeout(()=>printBT(txt),800);}
 async function vann(){
-  let t=buildTicket(); if(!t||t.includes('TOTAL: $0')){ alert('Pa gen miz'); return; }
-  let ok=await printUniversal(t);
-  if(ok){ tickets.push({txt:t,total:parseFloat(document.getElementById('total').innerText.replace(/[^0-9.]/g,''))||0,date:new Date().toISOString()}); localStorage.setItem('tickets',JSON.stringify(tickets)); refreshLast(); document.getElementById('bets').innerHTML=''; addR(); upd(); }
+ if(isPrinting){alert('Ap enprime deja - tann');return;}
+ if(CUR && isVendeurBlocked(DB.vendeurs[CUR._key]||DB.vendeurs[CUR.id]||CUR, CUR._key||CUR.id)){alert("🔴 KONT BLOKE!");showBlockedScreen();return;}
+ if(!selT.length){alert('Chwazi Tiraj');return}
+ let bets=[];document.querySelectorAll('.betRow').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm)bets.push({type:j,numero:b,mise:mm});});
+ if(!bets.length){alert('VID');return}
+ let err='',mode=DB.config?.limitMode||'global';
+ for(let bet of bets){
+   let max=getLimiteForJeu(bet.type);let req=getChifRequis(bet.type);
+   if(bet.numero.length!==req){err+=bet.type+' '+bet.numero+' dwe '+req+'\n';continue;}
+   for(let tiraj of selT){let deja=mode==='global'?getDejaVannPaTiraj(bet.type,bet.numero,tiraj):getDejaVannParVendeurPaTiraj(bet.type,bet.numero,tiraj);if((deja+bet.mise)>max)err+='LIMIT '+tiraj+' '+bet.type+' '+bet.numero+' $'+deja+' > $'+max+'\n';}
+ }
+ if(err){alert(err);return}
+ let base=bets.reduce((a,b)=>a+b.mise,0);
+ let tk={id:'T'+Date.now().toString().slice(-7),bets,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),vendeurId:CUR?._key,serial:CUR?.serial, prix:getMyPrix()};
+ if(db){db.ref('tickets/'+tk.id).set(tk).catch(e=>console.log('offline',e));}
+ let txt=build(tk);
+ LAST_TXT=txt;
+ showPreview(txt);
+ forceInnerSync();bindSunmiService();
+ setTimeout(()=>{printBT(txt);},800);
+ setTimeout(()=>{
+   document.getElementById('bets').innerHTML='';
+   addR(bets[bets.length-1]?.type||'boul');
+   upd();
+ },1500);
 }
-
-// === ONGLE 2 - TIRAJ ===
-function saveTiraj(){
-  let tr={boul:document.getElementById('tBoul').value, l3:document.getElementById('tL3').value, l4:document.getElementById('tL4').value, l5:document.getElementById('tL5').value, mar1:document.getElementById('tMar1').value, mar2:document.getElementById('tMar2').value, date:new Date().toISOString()};
-  localStorage.setItem('tiraj',JSON.stringify(tr)); tiraj=tr; document.getElementById('tirageInfo').innerText=`Tiraj: ${tr.boul||'--'}`; calcGayan();
-}
-function calcGayan(){
-  if(!tiraj){ document.getElementById('gayanList').innerText='Pa gen tiraj'; return; }
-  let html=`BOUL: ${tiraj.boul} | L3: ${tiraj.l3} | L4: ${tiraj.l4}<br><br>`; let totG=0;
-  tickets.forEach((tk,i)=>{
-    let g=0; if(tk.txt.includes(tiraj.boul)) g+=50; if(tk.txt.includes(tiraj.l3)) g+=500; if(tiraj.mar1&&tiraj.mar2&&tk.txt.includes(tiraj.mar1)&&tk.txt.includes(tiraj.mar2)) g+=1000;
-    if(g>0){ html+=`Tikè ${i+1}: $${g}<br>`; totG+=g; }
-  });
-  document.getElementById('gayanList').innerHTML=html+`<br><b>Total Gayan: $${totG}</b>`; document.getElementById('tirageResult').innerHTML=`✅ Tiraj save - Gayan: $${totG}`; document.getElementById('rGay').innerText='$'+totG;
-}
-
-// === ONGLE 3 - RAPO ===
-function refreshRap(){
-  let totV=0; tickets.forEach(t=>{ totV+=t.total||0; });
-  document.getElementById('rVant').innerText='$'+totV; document.getElementById('rTik').innerText=tickets.length; document.getElementById('rKom').innerText='$'+(totV*0.1).toFixed(0);
-  let html='<table><tr><th>#</th><th>Lè</th><th>Total</th></tr>'; tickets.slice(-20).reverse().forEach((t,i)=>{ html+=`<tr><td>${tickets.length-i}</td><td>${new Date(t.date).toLocaleTimeString()}</td><td>$${t.total}</td></tr>`; }); html+='</table>'; document.getElementById('rapTable').innerHTML=html;
-}
-function refreshLast(){ let div=document.getElementById('lastTickets'); if(tickets.length==0){ div.innerText='Pa gen tikè'; return; } let html=''; tickets.slice(-5).reverse().forEach(t=>{ html+=`<div style="border-bottom:1px solid #eee;padding:4px 0">${new Date(t.date).toLocaleTimeString()} - $${t.total}</div>`; }); div.innerHTML=html; }
-
-// === ONGLE 4 - KES ===
-function refreshKes(){ let dep=0, av=0; kes.forEach(k=>{ if(k.type=='dep') dep+=k.m; if(k.type=='av') av+=k.m; }); let vant=tickets.reduce((s,t)=>s+(t.total||0),0); let bal=vant - dep - av; document.getElementById('kesBal').innerText='$'+bal; let html='<table><tr><th>Tip</th><th>Montan</th><th>Lè</th></tr>'; kes.slice(-20).reverse().forEach(k=>{ html+=`<tr><td>${k.type}</td><td>$${k.m}</td><td>${new Date(k.date).toLocaleTimeString()}</td></tr>`; }); html+='</table>'; document.getElementById('kesList').innerHTML=html; }
-function addDep(){ let m=parseFloat(document.getElementById('kDep').value)||0; if(m>0){ kes.push({type:'dep',m,date:new Date().toISOString()}); localStorage.setItem('kes',JSON.stringify(kes)); refreshKes(); document.getElementById('kDep').value=''; } }
-function addAv(){ let m=parseFloat(document.getElementById('kAv').value)||0; if(m>0){ kes.push({type:'av',m,date:new Date().toISOString()}); localStorage.setItem('kes',JSON.stringify(kes)); refreshKes(); document.getElementById('kAv').value=''; } }
-
-// === ONGLE 5 - PARAM ===
-function uploadLogo(inp){
-  let f=inp.files[0]; if(!f) return; let r=new FileReader(); r.onload=function(e){ localStorage.setItem('propLogo',e.target.result); document.getElementById('logoPrev').src=e.target.result; document.getElementById('logoPrev').style.display='block'; }; r.readAsDataURL(f);
-}
-function saveProp(){ localStorage.setItem('pName',document.getElementById('pName').value); localStorage.setItem('pAddr',document.getElementById('pAddr').value); localStorage.setItem('pTel',document.getElementById('pTel').value); }
-function savePay(){ localStorage.setItem('payBoul',document.getElementById('payBoul').value); localStorage.setItem('payL3',document.getElementById('payL3').value); localStorage.setItem('payL4',document.getElementById('payL4').value); localStorage.setItem('payMar',document.getElementById('payMar').value); alert('Peye save'); }
-
-// INIT
-(function(){
-  document.getElementById('netIP').value=netIP; document.getElementById('pName').value=localStorage.getItem('pName')||''; document.getElementById('pAddr').value=localStorage.getItem('pAddr')||''; document.getElementById('pTel').value=localStorage.getItem('pTel')||''; let lg=getLogoUrl(); if(lg){ document.getElementById('logoPrev').src=lg; document.getElementById('logoPrev').style.display='block'; }
-  addR(); refreshLast(); if(tiraj){ document.getElementById('tBoul').value=tiraj.boul||''; document.getElementById('tL3').value=tiraj.l3||''; document.getElementById('tL4').value=tiraj.l4||''; document.getElementById('tMar1').value=tiraj.mar1||''; document.getElementById('tMar2').value=tiraj.mar2||''; document.getElementById('tirageInfo').innerText=`Tiraj: ${tiraj.boul||'--'}`; calcGayan(); }
-  scanInner(); setTimeout(scanInner,1500);
-})();
-</script>
-</body>
-</html>
+function doCopy(){let id=document.getElementById('cid').value.trim();if(!id){alert('Mete ID Ticket');return}if(!db){alert('Pa gen DB');return}db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t){alert('Ticket pa jwenn: '+id);return}selT=t.tirages||[];document.getElementById('bets').innerHTML='';t.bets.forEach(b=>{let r=addR(b.type);r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;});renderT();document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';goTab('pV',document.querySelectorAll('.tab')[0]);upd();document.getElementById('copyRes').innerHTML='<div style="background:#dcfce7;padding:8px;border-radius:8px">Kopye ok</div>';});}
+async function loadF(){let d=document.getElementById('fd').value;if(!d){alert('Chwazi dat');return}if(!db){alert('Pa gen DB');return}let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let list=Object.values(all).filter(t=>(t.dateHaiti||t.date)==d&&(String(t.serial)==String(CUR.serial)||String(t.vendeurId)==String(CUR._key)||String(t.vendeurId)==String(CUR.id)));let tot=list.reduce((a,b)=>a+(b.total||0),0);let ftot=document.getElementById('ftot');ftot.style.display='block';ftot.innerHTML='<b>Fich: '+list.length+'</b> - Total: <b>$'+tot.toFixed(2)+'</b>';let html='';list.reverse().forEach(t=>{html+='<div class="card"><b>'+t.id+'</b> - '+t.tirages.join(', ')+' - <b>$'+t.total+'</b><br><small>'+(t.bets||[]).map(b=>b.type+':'+b.numero+' $'+b.mise).join(' | ')+'</small></div>';});document.getElementById('flist').innerHTML=html||'Pa gen fich';}
+async function calcR(){try{let du=document.getElementById('rdu').value,au=document.getElementById('rau').value,ti=document.getElementById('rt').value;if(!du)du=getHaitiDateStr();if(!au)au=getHaitiDateStr();document.getElementById('rdu').value=du;document.getElementById('rau').value=au;let rres=document.getElementById('rres');rres.style.display='block';rres.innerHTML='Kalkil...';if(!db){rres.innerHTML='Pa gen DB';return}let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let resSnap=await db.ref('results').once('value');let results=resSnap.val()||{};let vente=0,gain=0,count=0,detail='';Object.values(all).forEach(t=>{
+ let td=t.dateHaiti||t.date;if(!td)return;if(td<du||td>au)return;
+ if(String(t.serial)!=String(CUR.serial)&&String(t.vendeurId)!=String(CUR._key)&&String(t.vendeurId)!=String(CUR.id))return;
+ if(ti!='tous'&&(t.tirages||[]).indexOf(ti)==-1)return;
+ count++;vente+=ti=='tous'?(t.total||0):(t.baseTotal||0);
+ let prix=getMyPrix();
+ for(let tirage of (t.tirages||[])){
+  if(ti!='tous'&&tirage!=ti)continue;
+  let resList=Object.values(results);
+  let res=resList.find(r=>r&&r.tirage==tirage&&(r.dat==td||r.date==td||(r.dat||'').substring(0,10)==td));
+  if(!res)continue;
+  let r1=(res.r1||'').padStart(2,'0'), r2=(res.r2||'').padStart(2,'0'), r3=(res.r3||'').padStart(2,'0');
+  let l3=(res.l3||'').padStart(3,'0');
+  let loto4Korek = r2 + r3; let loto5Korek = l3 + r2;
+  for(let bet of (t.bets||[])){
+   let raw=(bet.numero||'').toString().trim();if(!raw) continue;
+   let mise=parseFloat(bet.mise||0);let g=0;
+   if(bet.type==='boul'){let num=raw.padStart(2,'0');if(num==r1) g=mise*prix.p1;else if(num==r2) g=mise*prix.p2;else if(num==r3) g=mise*prix.p3;}
+   else if(bet.type==='maryaj'){let a=raw.substring(0,2).padStart(2,'0'), b=raw.substring(2,4).padStart(2,'0');if((a==r1&&b==r2)||(a==r2&&b==r1)) g=mise*(prix.m1||1000);else if((a==r1&&b==r3)||(a==r3&&b==r1)) g=mise*(prix.m2||1000);else if((a==r2&&b==r3)||(a==r3&&b==r2)) g=mise*(prix.m3||1000);}
+   else if(bet.type==='loto3'){if(raw==l3) g=mise*(prix.l3||500);}
+   else if(bet.type==='loto4'){if(raw==loto4Korek) g=mise*(prix.l4||5000);}
+   else if(bet.type==='loto5'){if(raw==loto5Korek) g=mise*(prix.l5||25000);}
+   if(g>0){gain+=g; detail+=`${tirage} ${bet.type} ${raw} x${mise}=$${g}<br>`;}
+  }
+ }
+});
+ let prixCur=getMyPrix();let komPerc=prixCur.kom||10;let kom=prixCur.komActive?vente*komPerc/100:0;let balansNet=vente-kom-gain;
+ rres.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center"><div style="background:#e3f2fd;padding:10px;border-radius:8px"><small>Vant ('+count+')</small><div><b>$'+vente.toFixed(2)+'</b></div></div><div style="background:#fff3e0;padding:10px;border-radius:8px"><small>Komisyon '+komPerc+'%</small><div><b>$'+kom.toFixed(2)+'</b></div></div><div style="background:#fce4ec;padding:10px;border-radius:8px"><small>A Peye</small><div><b>$'+gain.toFixed(2)+'</b></div></div><div style="background:#e8f5e9;padding:10px;border-radius:8px"><small>Balans Net</small><div style="color:#0a4a2e"><b>$'+balansNet.toFixed(2)+'</b></div></div></div>'+(detail?'<div style="margin-top:10px;background:#e8f5e9;padding:8px;border-radius:8px;font-size:10px"><b>Detay:</b><br>'+detail+'</div>':'');
+ let hd=getHaitiTime();let dd=String(hd.getDate()).padStart(2,'0')+'/'+String(hd.getMonth()+1).padStart(2,'0')+'/'+hd.getFullYear();
+ let txt='C&D VERITE LOTTO\nRAPPORT V26.2 UNIVERSAL\n----------------------------\nDu: '+du+' Au: '+au+'\nTiraj: '+ti+'\nVendeur: '+(CUR?.serial||'')+' '+(CUR?.nom||'')+'\n----------------------------\nFiches: '+count+'\nVant: $'+vente.toFixed(2)+'\nKomisyon: $'+kom.toFixed(2)+'\nA Peye: $'+gain.toFixed(2)+'\nBalans Net: $'+balansNet.toFixed(2)+'\nDate: '+dd+'\n';document.getElementById('rprint').style.display='block';document.getElementById('rprint').innerText=txt;
+}catch(e){let rres=document.getElementById('rres');rres.style.display='block';rres.innerHTML='<div style="color:red">Erè: '+e.message+'</div>';}}
+function printRapport(){if(isPrinting){alert('Ap enprime...');return;}let t=document.getElementById('rprint').innerText;if(!t){alert('Kalkile avan');return}printBT(t);}
+function goTab(id,el){document.querySelectorAll('.tabPage').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');forceInnerSync();bindSunmiService();}
+let curV=localStorage.getItem('curV');if(curV){try{CUR=JSON.parse(curV);openMain();}catch(e){}}
+setTimeout(()=>{if(document.getElementById('splash').style.display!=='none'){hideSplash();}},2500);
+forceInnerSync();bindSunmiService();
+</script></body></html>
