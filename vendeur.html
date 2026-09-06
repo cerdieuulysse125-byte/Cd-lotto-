@@ -76,7 +76,7 @@ let sunmiPrinterService=null, sunmiBound=false, isPrinting=false;
 let btUniversal={device:null,char:null,server:null}, usbUniversal={device:null,iface:null,ep:null}, netIPUniversal=localStorage.getItem('netPrinterIP')||'', currentPrinterUniversal=null;
 
 function hideSplash(){let sp=document.getElementById('splash');if(sp){sp.style.opacity='0';setTimeout(()=>sp.style.display='none',400);}}
-setTimeout(hideSplash,2000);window.addEventListener('load',()=>setTimeout(hideSplash,1000));
+setTimeout(hideSplash,400);window.addEventListener('load',()=>setTimeout(hideSplash,200));
 if(db){try{db.ref('.info/serverTimeOffset').on('value',snap=>{serverOffset=snap.val()||0;});}catch(e){}}
 function getTrueNow(){return new Date(Date.now()+serverOffset);}function getHaitiTime(){try{let u=getTrueNow();return new Date(u.toLocaleString('en-US',{timeZone:'America/Port-au-Prince'}));}catch(e){return new Date();}}
 function getHaitiDateStr(){let d=getHaitiTime();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
