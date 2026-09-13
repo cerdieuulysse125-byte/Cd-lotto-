@@ -1,28 +1,274 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>C&D V25.6 - cd-lotto - Imprimante Avansé</title>
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>SUPER-ADMIN V28.1 FIX SYNC - SOURCE DE VERITE - SERI+MODPAS</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<script>const isSunmiDevice=/Sunmi|SUNMI|V2 Pro/i.test(navigator.userAgent)||!!window.sunmiInnerPrinter||!!window.SunmiPrinter||!!window.woyou;</script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef2f7}
-.h{background:#0a4a2e;color:#d4af37;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid #d4af37}
-.card{background:#fff;border-radius:12px;padding:10px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.08);border-left:4px solid #0a4a2e}
-.row{display:flex;gap:12px;align-items:center;margin-bottom:12px;justify-content:space-between;padding:0 6px}
-.inp{width:88px;min-width:88px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;font-size:14px;text-align:center;background:#fff;margin-right:8px}
-.inpN{width:82px;min-width:82px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;font-size:20px;text-align:center;background:#fff;margin-right:8px}
-.inpL{width:100%;height:48px;border:2.5px solid #0a4a2e;border-radius:10px;padding:0 10px;font-size:16px}
-.btn{padding:14px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%}.btnG{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37}.btnB{background:#0a4a2e;color:#d4af37;border:1px solid #d4af37}.btnR{background:#e11d48;width:42px;height:52px;border-radius:10px;border:0;color:#fff;font-weight:800;margin-left:8px}
-.btnF{width:36px;height:52px;border:2px solid #0a4a2e;border-radius:10px;background:#fff;font-size:18px;font-weight:900;margin-left:8px}
-.betRow{background:#f9fdf9;border:1.5px solid #d4af37;border-radius:10px;padding:8px;margin-bottom:12px}
-.total{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37;border-radius:12px;padding:12px;display:flex;justify-content:space-between;font-weight:800;margin:8px}
-.tlist{display:none;position:fixed;left:8px;right:8px;top:90px;background:#fff;border:3px solid #0a4a2e;border-radius:12px;z-index:9999;padding:8px;grid-template-columns:78px 78px 78px;gap:8px;max-height:70vh;overflow:auto;justify-content:center}.tlist.open{display:grid}
-.topt{width:78px;min-height:68px;border:2px solid #ccc;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;text-align:center}
-#loginPage{display:block}#mainPage{display:none;min-height:100vh;padding-bottom:80px}#mainPage.show{display:block}
-.tabPage{display:none!important}.tabPage.active{display:block!important}
-.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:3px solid #0a4a2e;z-index:5000;height:60px}.tab{flex:1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:0;background:#eee;border-right:1px solid #ccc}.tab.active{background:#0a4a2e;color:#d4af37}
-#splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a4a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.5s}
-#prev{background:#fff;margin:8px;padding:6px;font-family:'Courier New',monospace;font-size:12px;line-height:1.25;color:#000;white-space:pre;border:1px dashed #000;width:100%;max-width:56mm;text-align:center}
-.printer-bar{background:#fff;border:3px solid #00c853;border-radius:12px;padding:10px;margin:8px}
-.rapo-line{display:flex;justify-content:space-between;padding:10px;border-bottom:1px dashed #ccc;font-weight:800}
-.blocked-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:#c62828;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:20px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#0f172a;color:#fff}
+.h{background:#0a4a2e;color:#d4af37;padding:12px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #d4af37;position:sticky;top:0;z-index:100}
+.card{background:#1e293b;border-radius:12px;padding:14px;margin:10px;border-left:4px solid #d4af37}
+.inpL{width:100%;height:44px;border:2px solid #334155;border-radius:8px;padding:0 10px;background:#0f172a;color:#fff}
+.btn{padding:12px;border:0;border-radius:8px;font-weight:800;width:100%;cursor:pointer}.btnG{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37}.btnB{background:#1565c0;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vendeurItem{background:#0f172a;border:2px solid #334155;border-radius:10px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.vendeurItem.active{border-color:#00c853;background:#0a2a1a}
 </style></head><body>
+<div class='h'><b>👑 SUPER-ADMIN V28.1 FIX SYNC - SOURCE DE VÉRITÉ - SERI+MODPAS</b><small id='clock' style='background:#d4af37;color:#0a4a2e;padding:4px 8px;border-radius:6px'>SYNC...</small></div>
+
+<div class='card' style='border:3px solid #00c853'>
+<h3>🔄 KÒD VANDÈ A SENKRONIZE D'APRÈS SA KI NAN SUPER-ADMIN LAN - V28.1 FIX SYNC</h3>
+<small style='background:#00c853;color:#fff;padding:4px 8px;border-radius:6px'>Vandè V28.1 ap li sa Super-Admin regle isit la - Seri+Modpas - Limit - Fèmti - Pri</small>
+<div style='margin-top:10px;display:flex;gap:8px'><button class='btn btnG' style='flex:1' onclick='loadAll()'>🔄 RECHAJE TOUT SYNC</button><button class='btn btnB' style='flex:1' onclick='createDemo()'>⚡ KREYE DEMO SUNMI-V2-001 / 1234 - FIX "Li pa antre..."</button></div>
+<div id='syncStatus' style='margin-top:8px;background:#0f172a;padding:8px;border-radius:8px;font-size:11px'></div>
+</div>
+
+<div class='card' style='border:3px solid #1565c0'>
+<h3>🔢🔐 KREYE VANDÈ AK SERI + MODPAS - VANDÈ DWE ANTRE AK NIMEWO SERI LI EPI MODPAS</h3>
+<div class='grid' style='margin-top:10px'>
+<div><label>Proprio ID</label><input id='propId' class='inpL' value='PROP001'></div>
+<div><label>Non Vandè</label><input id='vName' class='inpL' placeholder='TEST-01' value='TEST-01'></div>
+</div>
+<div class='grid' style='margin-top:8px'>
+<div><label>🔢 Nimewo Seri - SUNMI V2 PRO - Vandè dwe antre ak nimewo seri li</label><input id='vSerial' class='inpL' placeholder='SUNMI-V2-001' value='SUNMI-V2-001' style='border:2px solid #00c853'></div>
+<div><label>🔐 Modpas - epi modpas</label><input id='vPass' class='inpL' placeholder='1234' value='1234'></div>
+</div>
+<div class='grid' style='margin-top:8px'>
+<div><label>Limit Global $ / Jou - Limit global (vandè) dwe respekte</label><input id='vLimG' type='number' class='inpL' value='50000'></div>
+<div><label>Limit Boul $ Max</label><input id='vLimB' type='number' class='inpL' value='500'></div>
+</div>
+<div class='grid' style='margin-top:8px'>
+<div><label>Komisyon %</label><input id='vKom' type='number' class='inpL' value='10'></div>
+<div><label>Status</label><select id='vStatus' class='inpL'><option value='active'>✅ Active - Ka antre</option><option value='bloqué'>⛔ Bloqué - Pa ka antre</option></select></div>
+</div>
+<button class='btn btnG' style='margin-top:10px;height:54px;font-size:16px' onclick='createVendeur()'>💾 KREYE VANDÈ AK SERI+MODPAS - SYNC AK VANDÈ V28.1 - FORSE SYNC - REPARE "Li pa antre..."</button>
+<div id='createStatus' style='margin-top:8px;display:none;padding:8px;border-radius:8px;background:#0a2a1a'></div>
+</div>
+
+<div class='card' style='border:3px solid #ff8c00'>
+<h3>💰 PRI PÈYMAN - GLOBAL OUBYEN PA VANDÈ SELON JAN LI REGLE NAN PROPRIO A DWE RESPEKTE - D'APRÈS SUPER-ADMIN</h3>
+<div class='grid' style='margin-top:10px'>
+<div><label>Prix Mode - Jan li regle nan Proprio a - Super-Admin regle</label><select id='prixMode' class='inpL'><option value='global'>🌍 Global - tout vandè menm pri</option><option value='par_vendeur'>👤 Pa Vandè - chak vandè gen pri pa l - selon Jan li regle nan Proprio a</option></select></div>
+<div><label>Proprio pou regle pri a</label><input id='prixPropId' class='inpL' value='PROP001'></div>
+</div>
+<div style='background:#0f172a;padding:10px;border-radius:8px;margin-top:10px'>
+<b>Prix Global - D'après Super-Admin - Tout vandè resevwa</b>
+<div class='grid' style='margin-top:8px'>
+<div><label>P1 - 1er Lò</label><input id='p1' type='number' class='inpL' value='50'></div>
+<div><label>P2 - 2e Lò</label><input id='p2' type='number' class='inpL' value='20'></div>
+<div><label>P3 - 3e Lò</label><input id='p3' type='number' class='inpL' value='10'></div>
+</div>
+<div class='grid' style='margin-top:8px'>
+<div><label>M1 - Maryaj 1-2</label><input id='m1' type='number' class='inpL' value='1000'></div>
+<div><label>M2 - Maryaj 1-3</label><input id='m2' type='number' class='inpL' value='1000'></div>
+<div><label>M3 - Maryaj 2-3</label><input id='m3' type='number' class='inpL' value='1000'></div>
+</div>
+<div class='grid' style='margin-top:8px'>
+<div><label>L3 - Loto3</label><input id='l3' type='number' class='inpL' value='500'></div>
+<div><label>L4 - Loto4</label><input id='l4' type='number' class='inpL' value='5000'></div>
+<div><label>L5 - Loto5</label><input id='l5' type='number' class='inpL' value='25000'></div>
+</div>
+</div>
+<div id='prixParVendeur' style='background:#1a0a2a;padding:10px;border-radius:8px;margin-top:10px;border:2px dashed #d4af37;display:none'>
+<b>Prix Pa Vandè - Si Mode = Pa Vandè - Jan li regle nan Proprio a - D'après Super-Admin</b>
+<div class='grid' style='margin-top:8px'>
+<div><label>Vandè - Pa Vandè - Non</label><input id='pvName' class='inpL' placeholder='TEST-01' value='TEST-01'></div>
+<div><label>Seri - Pa Vandè - Seri</label><input id='pvSerial' class='inpL' placeholder='SUNMI-V2-001' value='SUNMI-V2-001'></div>
+</div>
+<div class='grid' style='margin-top:8px'>
+<div><label>P1 Pa Vandè Sa a</label><input id='pvP1' type='number' class='inpL' value='60'></div>
+<div><label>P2 Pa Vandè Sa a</label><input id='pvP2' type='number' class='inpL' value='25'></div>
+</div>
+<button class='btn btnB' style='margin-top:8px' onclick='savePrixParVendeur()'>💾 Sove Prix Pa Vandè Sa a - D'après Super-Admin</button>
+</div>
+<button class='btn btnG' style='margin-top:10px;height:54px' onclick='savePrix()'>💾 SOVE PRIX - GLOBAL OUBYEN PA VANDÈ - JAN LI REGLE NAN PROPRIO A - SYNC AK VANDÈ V28.1 - D'APRÈS SUPER-ADMIN</button>
+<div id='prixStatus' style='margin-top:8px;display:none;padding:8px;border-radius:8px;background:#0a2a1a'></div>
+</div>
+
+<div class='card' style='border:3px solid #e11d48'>
+<h3>⏰ LÈ FÈMTI DWE RESPEKTE - SUPER-ADMIN REGLE LÈ FÈMTI - VANDÈ SENKRONIZE D'APRÈS SUPER-ADMIN</h3>
+<div id='tirajHours' style='margin-top:10px;background:#0f172a;padding:10px;border-radius:8px'></div>
+<button class='btn btnG' style='margin-top:10px' onclick='saveFermeture()'>💾 SOVE LÈ FÈMTI - SYNC AK VANDÈ V28.1 - D'APRÈS SUPER-ADMIN</button>
+<div id='fermStatus' style='margin-top:8px;display:none;padding:8px;border-radius:8px;background:#0a2a1a'></div>
+</div>
+
+<div class='card'>
+<h3>📋 LIS VANDÈ YO - AK SERI+MODPAS - SYNC D'APRÈS SUPER-ADMIN - V28.1 FIX SYNC - LI PA ANTRE REPARE</h3>
+<div style='display:flex;gap:8px;margin-top:8px'><input id='searchProp' class='inpL' placeholder='Filtre Proprio ID - PROP001' value='PROP001' style='flex:1'><button class='btn btnB' style='width:100px' onclick='loadVendeurs()'>Wè</button></div>
+<div id='vendeurList' style='margin-top:10px;max-height:400px;overflow:auto'></div>
+<div id='vendeurStats' style='margin-top:10px;background:#0f172a;padding:10px;border-radius:8px;font-size:11px'></div>
+</div>
+
+<div class='card'>
+<h3>📊 TOUT TIKÈ YO - SUPER-ADMIN WÈ TOUT - SYNC VANDEUR ↔ PROPRIO ↔ SUPER-ADMIN</h3>
+<div style='display:flex;gap:8px'><input id='filterDate' type='date' class='inpL' style='flex:1'><button class='btn btnB' style='width:100px' onclick='loadTickets()'>Wè Tikè</button></div>
+<div id='ticketList' style='margin-top:10px;max-height:400px;overflow:auto;background:#0f172a;padding:8px;border-radius:8px;font-size:11px'></div>
+</div>
+
+<script>
+const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6",measurementId:"G-TWK9N38BS0"};
+try{firebase.initializeApp(firebaseConfig);}catch(e){}
+const db=firebase.database();
+const TIRAJ_DEFAULT=[["GA midi","12:00"],["FL midi","13:00"],["NY midi","14:00"],["Real","12:30"],["GA soir","18:00"],["FL soir","21:00"],["NY soir","22:00"],["Primera dia","11:30"],["Loteka","19:45"],["Nacional noche","20:50"],["Leidsa","20:45"],["Anguila 10h","09:40"],["Anguila 18h","17:40"]];
+
+function loadAll(){loadVendeurs();loadConfig();loadTickets();document.getElementById('syncStatus').innerHTML='✅ SYNC RECHAJE - Super-Admin V28.1 FIX SYNC - Kòd vandè a senkronize d\'après sa ki nan Super-Admin lan - '+new Date().toLocaleString();}
+async function createDemo(){
+ let serial='SUNMI-V2-001';
+ let vendData={nom:'TEST-01',serial:serial,pass:'1234',propId:'PROP001',superId:'SUPER001',status:'active',limitGlobal:50000,limitBoul:500,kom:10,prixMode:'global',createdBy:'SUPER-ADMIN DEMO FIX SYNC',createdAt:new Date().toISOString()};
+ let paths=['superadmin/SUPER001/vendeurs_by_serial/'+serial,'superadmin/SUPER001/all_vendeurs_serial/'+serial,'superadmin/vendeurs_by_serial/'+serial,'superadmin/SUPER001/proprio/PROP001/vendeurs_by_serial/'+serial,'superadmin/SUPER001/proprio/PROP001/vendeurs/TEST-01','proprio/PROP001/vendeurs_by_serial/'+serial,'proprio/PROP001/vendeurs/TEST-01'];
+ for(let p of paths){await db.ref(p).set(vendData);}
+ await db.ref('superadmin/SUPER001/proprio/PROP001/config').set({prixMode:'global',limitGlobal:50000,limitBoul:500,kom:10});
+ await db.ref('superadmin/SUPER001/proprio/PROP001/prix/global').set({p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10});
+ document.getElementById('syncStatus').innerHTML='✅ DEMO KREYE - Seri:'+serial+' / 1234 - 7 chemen - Kounya vandè V28.1 ka antre - FIX "Li pa antre paske sa ki nan super-admin kòd vandè a pa senkronize avèl" - REPARE - V28.1 FIX SYNC';
+ loadVendeurs();
+ alert('✅ DEMO KREYE - Seri SUNMI-V2-001 / 1234 - Kounya ale sou vendeur.html - antre ak SUNMI-V2-001 / 1234 - LI AP ANTRE - FIX SYNC REYISI');
+}
+
+async function createVendeur(){
+ let propId=document.getElementById('propId').value||'PROP001';
+ let vName=document.getElementById('vName').value||'TEST-01';
+ let serial=document.getElementById('vSerial').value.trim().toUpperCase()||'SUNMI-V2-001';
+ let pass=document.getElementById('vPass').value||'1234';
+ let limG=parseInt(document.getElementById('vLimG').value)||50000;
+ let limB=parseInt(document.getElementById('vLimB').value)||500;
+ let kom=parseInt(document.getElementById('vKom').value)||10;
+ let status=document.getElementById('vStatus').value||'active';
+ let vendData={nom:vName,serial:serial,pass:pass,propId:propId,superId:'SUPER001',status:status,limitGlobal:limG,limitBoul:limB,kom:kom,createdBy:'SUPER-ADMIN V28.1',createdAt:new Date().toISOString()};
+ // KREYE NAN TOUT CHEMEN - POU VANDÈ V28.1 KA JWENN LI - FORSE SYNC - REPARE PA SENKRONIZE A
+ let paths=[
+  'superadmin/SUPER001/vendeurs_by_serial/'+serial,
+  'superadmin/SUPER001/all_vendeurs_serial/'+serial,
+  'superadmin/vendeurs_by_serial/'+serial,
+  'superadmin/SUPER001/proprio/'+propId+'/vendeurs_by_serial/'+serial,
+  'superadmin/SUPER001/proprio/'+propId+'/vendeurs/'+vName,
+  'proprio/'+propId+'/vendeurs_by_serial/'+serial,
+  'proprio/'+propId+'/vendeurs/'+vName,
+  'superadmin/SUPER001/all_vendeurs/'+vName
+ ];
+ for(let p of paths){await db.ref(p).set(vendData);}
+ document.getElementById('createStatus').style.display='block';
+ document.getElementById('createStatus').innerHTML='✅ VANDÈ KREYE AK SERI+MODPAS - FORSE SYNC - 8 chemen<br>Seri: <b>'+serial+'</b><br>Vandè: '+vName+'<br>Proprio: '+propId+'<br>Modpas: '+pass+'<br>Limit Global: $'+limG+' - Limit global (vandè) dwe respekte - D\'après Super-Admin<br>Status: '+status+'<br><br>Kounya vandè V28.1 ka antre ak Seri:'+serial+' + Modpas:'+pass+' - FIX "Li pa antre..." REPARE - Kòd vandè a senkronize d\'après sa ki nan Super-Admin lan - V28.1 FIX SYNC REYISI';
+ loadVendeurs();
+}
+
+async function loadVendeurs(){
+ let propId=document.getElementById('searchProp').value||'PROP001';
+ let snap=await db.ref('superadmin/SUPER001/proprio/'+propId+'/vendeurs_by_serial').once('value');
+ let bySerial=snap.val()||{};
+ let snap2=await db.ref('superadmin/SUPER001/vendeurs_by_serial').once('value');
+ let allBySerial=snap2.val()||{};
+ let combined={...allBySerial,...bySerial};
+ let html='';let count=0;
+ for(let serial in combined){
+  let v=combined[serial];
+  if((v.propId||'')!==propId && propId!=='TOUS') continue;
+  count++;
+  html+=`<div class='vendeurItem ${v.status==='active'?'active':''}'><div><b>🔢 ${v.serial||serial}</b> - ${v.nom}<br><small>Proprio:${v.propId} | Pass:${v.pass} | Limit:$${v.limitGlobal||50000} | Boul:$${v.limitBoul||500} | ${v.status}</small><br><small style='background:#334155;padding:2px 6px;border-radius:4px'>Vandè dwe antre ak nimewo seri li epi modpas - Seri:${v.serial} + Modpas:${v.pass}</small></div><div style='display:flex;gap:4px'><button onclick="editVendeur('${v.serial||serial}')" style='padding:6px 10px;border-radius:6px;background:#1565c0;color:#fff;border:0'>Edit</button><button onclick="deleteVendeur('${v.serial||serial}')" style='padding:6px 10px;border-radius:6px;background:#e11d48;color:#fff;border:0'>X</button></div></div>`;
+ }
+ if(!html) html='<div style="padding:10px;background:#0f172a;border-radius:8px">Pa gen vandè - Kreye youn ak Seri+Modpas - Klike "KREYE DEMO" pou repare "Li pa antre..."</div>';
+ document.getElementById('vendeurList').innerHTML=html;
+ document.getElementById('vendeurStats').innerHTML='Total Vandè ak Seri+Modpas: '+count+' - Proprio:'+propId+' - V28.1 FIX SYNC - Kòd vandè a senkronize d\'après Super-Admin - Vandè dwe antre ak nimewo seri li epi modpas - '+new Date().toLocaleString();
+}
+
+async function loadConfig(){
+ let propId=document.getElementById('prixPropId').value||'PROP001';
+ let snapC=await db.ref('superadmin/SUPER001/proprio/'+propId+'/config').once('value');
+ let cfg=snapC.val()||{prixMode:'global',limitGlobal:50000,limitBoul:500};
+ document.getElementById('prixMode').value=cfg.prixMode||'global';
+ document.getElementById('prixMode').onchange=function(){document.getElementById('prixParVendeur').style.display=this.value==='par_vendeur'?'block':'none';};
+ document.getElementById('prixParVendeur').style.display=cfg.prixMode==='par_vendeur'?'block':'none';
+ let snapP=await db.ref('superadmin/SUPER001/proprio/'+propId+'/prix/global').once('value');
+ let prix=snapP.val()||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10};
+ document.getElementById('p1').value=prix.p1;document.getElementById('p2').value=prix.p2;document.getElementById('p3').value=prix.p3;
+ document.getElementById('m1').value=prix.m1;document.getElementById('m2').value=prix.m2;document.getElementById('m3').value=prix.m3;
+ document.getElementById('l3').value=prix.l3;document.getElementById('l4').value=prix.l4;document.getElementById('l5').value=prix.l5;
+ // Lè fèmti
+ let tirajDiv=document.getElementById('tirajHours');let html='';
+ TIRAJ_DEFAULT.forEach(t=>{
+  let cur=cfg.tirajHours?.[t[0]]||t[1];
+  html+=`<div style='display:flex;gap:8px;margin-bottom:6px'><div style='flex:1'>${t[0]}</div><input id='fh_${t[0]}' type='time' value='${cur}' style='width:120px;background:#0f172a;color:#fff;border:1px solid #334155;border-radius:6px;padding:4px'></div>`;
+ });
+ tirajDiv.innerHTML=html;
+}
+
+async function savePrix(){
+ let propId=document.getElementById('prixPropId').value||'PROP001';
+ let mode=document.getElementById('prixMode').value||'global';
+ let prix={p1:parseInt(document.getElementById('p1').value)||50,p2:parseInt(document.getElementById('p2').value)||20,p3:parseInt(document.getElementById('p3').value)||10,m1:parseInt(document.getElementById('m1').value)||1000,m2:parseInt(document.getElementById('m2').value)||1000,m3:parseInt(document.getElementById('m3').value)||1000,l3:parseInt(document.getElementById('l3').value)||500,l4:parseInt(document.getElementById('l4').value)||5000,l5:parseInt(document.getElementById('l5').value)||25000,kom:10};
+ await db.ref('superadmin/SUPER001/proprio/'+propId+'/prix/global').set(prix);
+ await db.ref('superadmin/SUPER001/prix/global').set(prix);
+ await db.ref('superadmin/SUPER001/proprio/'+propId+'/config').update({prixMode:mode});
+ await db.ref('proprio/'+propId+'/prix/global').set(prix);
+ await db.ref('proprio/'+propId+'/config').update({prixMode:mode});
+ document.getElementById('prixStatus').style.display='block';
+ document.getElementById('prixStatus').innerHTML='✅ PRIX SOVE - Mode:'+mode+' - P1:'+prix.p1+' - Pri pèyman global oubyen pa vandè selon jan li regle nan proprio a dwe respekte - D\'après Super-Admin - Proprio:'+propId+' - Kounya vandè V28.1 ap resevwa prix sa a IMEDYA - SYNC - V28.1 FIX SYNC REYISI - Vandè dwe antre ak nimewo seri li epi modpas';
+}
+
+async function savePrixParVendeur(){
+ let propId=document.getElementById('prixPropId').value||'PROP001';
+ let vName=document.getElementById('pvName').value||'TEST-01';
+ let vSerial=document.getElementById('pvSerial').value||'SUNMI-V2-001';
+ let p1=parseInt(document.getElementById('pvP1').value)||60;
+ let p2=parseInt(document.getElementById('pvP2').value)||25;
+ let prixParV={p1:p1,p2:p2,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,serial:vSerial,nom:vName};
+ await db.ref('superadmin/SUPER001/proprio/'+propId+'/prix/parVendeur/'+vName).set(prixParV);
+ await db.ref('superadmin/SUPER001/proprio/'+propId+'/prix/parSerial/'+vSerial).set(prixParV);
+ await db.ref('superadmin/SUPER001/proprio/'+propId+'/prix/vendeurs/'+vName).set(prixParV);
+ document.getElementById('prixStatus').style.display='block';
+ document.getElementById('prixStatus').innerHTML='✅ PRIX PA VANDÈ SOVE - Vandè:'+vName+' Seri:'+vSerial+' P1:'+p1+' - Pri pèyman pa vandè - Jan li regle nan Proprio a - D\'après Super-Admin - Proprio:'+propId+' - Kounya vandè ak Seri:'+vSerial+' ap resevwa P1:'+p1+' IMEDYA si mode=par_vendeur - SYNC V28.1 FIX SYNC REYISI';
+}
+
+async function saveFermeture(){
+ let propId=document.getElementById('prixPropId').value||'PROP001';
+ let tirajHours={};
+ TIRAJ_DEFAULT.forEach(t=>{let el=document.getElementById('fh_'+t[0]);if(el) tirajHours[t[0]]=el.value||t[1];});
+ await db.ref('superadmin/SUPER001/proprio/'+propId+'/config/tirajHours').set(tirajHours);
+ await db.ref('superadmin/SUPER001/config/tirajHours').set(tirajHours);
+ await db.ref('proprio/'+propId+'/config/tirajHours').set(tirajHours);
+ document.getElementById('fermStatus').style.display='block';
+ document.getElementById('fermStatus').innerHTML='✅ LÈ FÈMTI SOVE - D\'après Super-Admin - Proprio:'+propId+' - '+JSON.stringify(tirajHours).substring(0,150)+' - Lè fèmti dwe respekte - D\'après Super-Admin - Kounya vandè V28.1 ap resevwa lè fèmti sa yo IMEDYA - SYNC - V28.1 FIX SYNC REYISI - Vandè dwe antre ak nimewo seri li epi modpas';
+}
+
+async function loadTickets(){
+ let d=document.getElementById('filterDate').value||new Date().toISOString().slice(0,10);
+ let snap=await db.ref('superadmin/SUPER001/all_tickets').once('value');
+ let all=snap.val()||{};
+ let list=Object.values(all).filter(t=>(t.dateHaiti||t.date)===d);
+ let html=list.slice(-50).reverse().map(t=>`<div style='padding:6px;border-bottom:1px solid #334155'><b>${t.id}</b> - $${t.total} - ${t.vendeur} - Seri:${t.serial||'-'} - ${t.tirages?.join(',')} - Prop:${t.propId} - ${t.paye?'✅ PAYE $'+t.payeMontan:'⏳'}</div>`).join('');
+ if(!html) html='Pa gen tikè pou dat sa - '+d+' - V28.1 FIX SYNC - Kòd vandè a senkronize d\'après Super-Admin';
+ document.getElementById('ticketList').innerHTML=html;
+}
+
+async function editVendeur(serial){
+ let propId=document.getElementById('searchProp').value||'PROP001';
+ let snap=await db.ref('superadmin/SUPER001/vendeurs_by_serial/'+serial).once('value');
+ let v=snap.val()||{};
+ document.getElementById('propId').value=v.propId||propId;
+ document.getElementById('vName').value=v.nom||'';
+ document.getElementById('vSerial').value=v.serial||serial;
+ document.getElementById('vPass').value=v.pass||'';
+ document.getElementById('vLimG').value=v.limitGlobal||50000;
+ document.getElementById('vLimB').value=v.limitBoul||500;
+ document.getElementById('vKom').value=v.kom||10;
+ document.getElementById('vStatus').value=v.status||'active';
+ alert('Vandè ak Seri '+serial+' chaje - Modifye epi klike KREYE pou mete ajou - FORSE SYNC - V28.1 FIX SYNC');
+}
+async function deleteVendeur(serial){
+ if(!confirm('Efase Vandè ak Seri '+serial+'? - Super-Admin ap efase nan tout chemen - Vandè a pap ka antre ankò - Vandè dwe antre ak nimewo seri li epi modpas')) return;
+ let paths=['superadmin/SUPER001/vendeurs_by_serial/'+serial,'superadmin/SUPER001/all_vendeurs_serial/'+serial,'superadmin/vendeurs_by_serial/'+serial];
+ for(let p of paths){await db.ref(p).remove();}
+ let snap=await db.ref('superadmin/SUPER001/proprio').once('value');
+ let allProp=snap.val()||{};
+ for(let propId in allProp){
+  await db.ref('superadmin/SUPER001/proprio/'+propId+'/vendeurs_by_serial/'+serial).remove();
+  if(allProp[propId].vendeurs){
+   for(let vName in allProp[propId].vendeurs){
+    if(allProp[propId].vendeurs[vName].serial===serial){await db.ref('superadmin/SUPER001/proprio/'+propId+'/vendeurs/'+vName).remove();}
+   }
+  }
+ }
+ alert('✅ Vandè ak Seri '+serial+' efase nan tout chemen Super-Admin - V28.1 FIX SYNC - Li pap ka antre kounya');
+ loadVendeurs();
+}
+
+setInterval(()=>{document.getElementById('clock').innerText=new Date().toLocaleString('en-US',{timeZone:'America/Port-au-Prince'})+' | SUPER-ADMIN V28.1 FIX SYNC - SOURCE DE VERITE - SERI+MODPAS';},1000);
+document.getElementById('filterDate').value=new Date().toISOString().slice(0,10);
+loadAll();
+</script></body></html>
