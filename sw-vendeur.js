@@ -1,2 +1,5 @@
-self.addEventListener('install', e=>self.skipWaiting());
-self.addEventListener('fetch', e=>e.respondWith(fetch(e.request).catch(()=>{})));
+const LOGOS={
+ nyFoto: "/new_york_lottery_badge.webp",
+ flFoto: "/florida_lottery_logo.webp",
+ gaFoto: "/georgia_lottery_emblem.webp",
+}
