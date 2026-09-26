@@ -38,6 +38,7 @@
 <button onclick='setMode("bt")' id='btnBT' style='flex:1;background:#fff;color:#0a4a2e;border:2px solid #0a4a2e;padding:12px;border-radius:8px;font-weight:900'>📱 BT 58mm</button>
 <button onclick='setMode("web")' id='btnWeb' style='flex:1;background:#fff;color:#0a4a2e;border:2px solid #0a4a2e;padding:12px;border-radius:8px;font-weight:900'>🌐 CHROME</button>
 </div>
+<button onclick="enprimeSunmiNatif()" style="background:#00c853;color:#fff;padding:18px;width:100%;font-weight:900;border:0;border-radius:12px;margin-top:10px">✅ ENPRIME SUNMI NATIF - V2 PRO</button>
 <div style='font-size:11px;margin-top:6px'><span id='printer-status'>Mòd: SUNMI SDK</span> | <span id='sdkStatus'>Binding...</span> | <span id='btStatus'>BT: Pa konekte</span> | <span id='logoStatus'>Logo: ...</span></div>
 </div>
 <div id='priceInfo' style='background:#0a4a2e;color:#d4af37;padding:6px 8px;border-radius:8px;font-size:10px;margin:8px;text-align:center;border:1px solid #d4af37'>SYNC Prix...</div>
@@ -175,4 +176,25 @@ function goTab(id,el){document.querySelectorAll('.tabPage').forEach(p=>p.classLi
 let curV=localStorage.getItem('curV');if(curV){try{CUR=JSON.parse(curV);openMain();}catch(e){}}
 setTimeout(()=>{if(document.getElementById('splash').style.display!=='none'){hideSplash();}},2500);
 forceInnerSync();bindSunmiService();
+function enprimeSunmiNatif(){
+  if(typeof updatePreview==='function' && window.bets && bets.length>0){ updatePreview(); }
+  const prev = document.getElementById('prev');
+  const txt = (window.lastTicketText || (prev?prev.innerText:'')) + "\n\n\n";
+  if(!txt || txt.length<15){ alert("Mete boul anvan!"); return; }
+  try{
+    if(window.woyou && window.woyou.printerService){
+      window.woyou.printerService.printText(txt, null);
+      window.woyou.printerService.lineWrap(4, null);
+      window.woyou.printerService.cutPaper(null);
+      return;
+    }
+    if(window.sunmiInnerPrinter){
+      window.sunmiInnerPrinter.printText(txt);
+      if(window.sunmiInnerPrinter.cutPaper) window.sunmiInnerPrinter.cutPaper();
+      return;
+    }
+  }catch(e){}
+  window.location.href = "intent://print?text="+encodeURIComponent(txt)+"#Intent;scheme=sunmi;package=woyou.aidlservice.jiuiv5;end;";
+}
+
 </script></body></html>
