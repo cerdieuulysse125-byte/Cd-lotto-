@@ -173,7 +173,33 @@ function handleMizKey(e,inp){if(e.key==='Enter'||e.key==='ArrowDown'||e.key==='A
 function handleMizBlur(inp){let row=inp.closest('.betRow');let all=document.querySelectorAll('.betRow');let isLast=row===all[all.length-1];if(!isLast)return;let boul=row.querySelector('.boul').value.trim();let mise=inp.value.trim();if(boul&&mise){setTimeout(()=>{nextLine(inp);},100);}}
 function nextLine(fromEl){let row=fromEl.closest('.betRow');let jeu=row.querySelector('.jeu').value;let boul=row.querySelector('.boul').value.trim();let mise=row.querySelector('.mise').value.trim();if(!boul&&!mise)return;if(boul&&!mise){row.querySelector('.mise').focus();return;}let req=getChifRequis(jeu);if(boul&&boul.length!==req)return;let max=getLimiteForJeu(jeu);if(parseInt(mise)>max){alert('⛔ LIMIT DEPASE! max $'+max);row.querySelector('.mise').focus();return;}let all=document.querySelectorAll('.betRow');let isLast=row===all[all.length-1];if(!isLast){let next=row.nextElementSibling;if(next){next.querySelector('.boul').focus();next.querySelector('.boul').select();}return;}let newRow=addR(jeu);setTimeout(()=>{let b=newRow.querySelector('.boul');b.focus();b.select();newRow.scrollIntoView({behavior:'smooth',block:'center'});},80);}
 function upd(){let sum=0;document.querySelectorAll('.betRow').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length);document.getElementById('gt').innerText='$'+(sum*selT.length);}
-function build(tk){let hd=getHaitiTime();let W=32;function center(t){t=String(t).trim();if(t.length>=W) return t.substring(0,W);let left=Math.floor((W-t.length)/2);return ' '.repeat(left)+t;}function betLine(j,n,m){let left=j.padEnd(8,' ').slice(0,8);let gap1='    ';let mid=n.padStart(2,' ').padEnd(4,' ').slice(0,4);let gap2='    ';let right=('$'+m).padStart(6,' ').slice(0,6);return (left+gap1+mid+gap2+right).slice(0,W);}let tel=getTel(),prix=getMyPrix(),txt='';txt+=center('C&D VERITE LOTTO')+'\n';txt+=center('Fiche Original')+'\n';txt+=center('----------------------------')+'\n';txt+=center('POS: '+(CUR?._key||''))+'\n';txt+=center('Vendeur: '+(CUR?.serial||'')+' '+(CUR?.nom||''))+'\n';txt+=center('Tel: '+tel)+'\n';txt+=center('Date: '+getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' EST')+'\n';txt+=center('----------------------------')+'\n';selT.forEach(t=>{txt+=center(t+' - '+getHeureProprio(t))+'\n';});tk.bets.forEach(b=>{let label=b.type==='boul'?'Borlette':b.type==='maryaj'?'Maryaj':b.type.toUpperCase();txt+=betLine(label,b.numero,b.mise)+'\n';});txt+=center('----------------------------')+'\n';txt+=center('Total => '+tk.total+' HTG')+'\n';txt+=center('Prix: 1er '+prix.p1+' 2e '+prix.p2+' 3e '+prix.p3)+'\n';txt+=center('----------------------------')+'\n';txt+=center('Mesi pou konfyans ou!');return txt;}
+function build(tk){
+  let hd=getHaitiTime();
+  let W=32;
+  function center(t){t=String(t).trim();if(t.length>=W) return t.substring(0,W);let left=Math.floor((W-t.length)/2);return ' '.repeat(left)+t;}
+  function leftRight(l,r){l=String(l);r=String(r);let space=W-l.length-r.length;return l+' '.repeat(space>0?space:1)+r;}
+  function betLine(j,n,m){let left=j.padEnd(8,' ').slice(0,8);let gap1='    ';let mid=n.padStart(2,' ').padEnd(4,' ').slice(0,4);let gap2='    ';let right=('$'+m).padStart(6,' ').slice(0,6);return (left+gap1+mid+gap2+right).slice(0,W);}
+  let tel=getTel(),prix=getMyPrix(),txt='';
+  txt+=center('C&D VERITE LOTTO')+'\n';
+  txt+=center('Fiche Original')+'\n';
+  txt+=center('****************************')+'\n';
+  txt+=center('ID TICKET: '+tk.id)+'\n';
+  txt+=leftRight('POS: '+(CUR?._key||''),'ID:'+tk.id.slice(-4))+'\n';
+  txt+=center('Vendeur: '+(CUR?.serial||'')+' '+(CUR?.nom||''))+'\n';
+  txt+=center('Tel: '+tel)+'\n';
+  txt+=center('Date: '+getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' EST')+'\n';
+  selT.forEach(t=>{txt+=center(t+' - '+getHeureProprio(t))+'\n';});
+  txt+=center('----------------------------')+'\n';
+  txt+='JEUX    BOUL    MIZ\n';
+  txt+='----------------------------\n';
+  tk.bets.forEach(b=>{let label=b.type==='boul'?'Borlette':b.type==='maryaj'?'Maryaj':b.type.toUpperCase();txt+=betLine(label,b.numero,b.mise)+'\n';});
+  txt+=center('----------------------------')+'\n';
+  txt+=center('Total => '+tk.total+' HTG')+'\n';
+  txt+=center('Prix: 1er '+prix.p1+' 2e '+prix.p2+' 3e '+prix.p3)+'\n';
+  txt+=center('----------------------------')+'\n';
+  txt+=center('Mesi pou konfyans ou!')+'\n';
+  return txt;
+}
 function showPreview(txt){const p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let h=u?'<img src="'+u+'" style="width:20mm;height:20mm;border-radius:50%;display:block;margin:0 auto 3mm auto;border:1px solid #000;object-fit:cover">':'';p.innerHTML=h+'<div style="white-space:pre;font-family:monospace;font-size:12px;text-align:center">'+txt.replace(/\n/g,'<br>')+'</div>'; window.lastTicketText=txt; LAST_TXT=txt;}
 async function printBT(t){
   if(isPrinting) return;isPrinting=true;
