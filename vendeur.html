@@ -181,7 +181,6 @@ function build(tk){
   function betLine(j,n,m){let left=j.padEnd(8,' ').slice(0,8);let gap1='    ';let mid=n.padStart(2,' ').padEnd(4,' ').slice(0,4);let gap2='    ';let right=('$'+m).padStart(6,' ').slice(0,6);return (left+gap1+mid+gap2+right).slice(0,W);}
   let tel=getTel(),prix=getMyPrix(),txt='';
   txt+=center('C&D VERITE LOTTO')+'\n';
-  txt+=center('Fiche Original')+'\n';
   txt+=center('****************************')+'\n';
   txt+=center('ID TICKET: '+tk.id)+'\n';
   txt+=leftRight('POS: '+(CUR?._key||''),'ID:'+tk.id.slice(-4))+'\n';
@@ -189,14 +188,13 @@ function build(tk){
   txt+=center('Tel: '+tel)+'\n';
   txt+=center('Date: '+getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' EST')+'\n';
   selT.forEach(t=>{txt+=center(t+' - '+getHeureProprio(t))+'\n';});
-  txt+=center('----------------------------')+'\n';
+  txt+=center('****************************')+'\n';
   txt+='JEUX    BOUL    MIZ\n';
-  txt+='----------------------------\n';
   tk.bets.forEach(b=>{let label=b.type==='boul'?'Borlette':b.type==='maryaj'?'Maryaj':b.type.toUpperCase();txt+=betLine(label,b.numero,b.mise)+'\n';});
-  txt+=center('----------------------------')+'\n';
+  txt+=center('****************************')+'\n';
   txt+=center('Total => '+tk.total+' HTG')+'\n';
   txt+=center('Prix: 1er '+prix.p1+' 2e '+prix.p2+' 3e '+prix.p3)+'\n';
-  txt+=center('----------------------------')+'\n';
+  txt+=center('****************************')+'\n';
   txt+=center('Mesi pou konfyans ou!')+'\n';
   return txt;
 }
