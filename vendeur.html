@@ -126,17 +126,7 @@ function nextLine(fromEl){let row=fromEl.closest('.betRow');let jeu=row.querySel
 function upd(){let sum=0;document.querySelectorAll('.betRow').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length);document.getElementById('gt').innerText='$'+(sum*selT.length);}
 function build(tk){let hd=getHaitiTime();let W=32;function center(t){t=String(t).trim();if(t.length>=W) return t.substring(0,W);let left=Math.floor((W-t.length)/2);return ' '.repeat(left)+t;}function betLine(j,n,m){let left=j.padEnd(8,' ').slice(0,8);let gap1='    ';let mid=n.padStart(2,' ').padEnd(4,' ').slice(0,4);let gap2='    ';let right=('$'+m).padStart(6,' ').slice(0,6);return (left+gap1+mid+gap2+right).slice(0,W);}let tel=getTel(),prix=getMyPrix(),txt='';txt+=center('C&D VERITE LOTTO')+'\n';txt+=center('Fiche Original')+'\n';txt+=center('----------------------------')+'\n';txt+=center('POS: '+(CUR?._key||''))+'\n';txt+=center('Vendeur: '+(CUR?.serial||'')+' '+(CUR?.nom||''))+'\n';txt+=center('Tel: '+tel)+'\n';txt+=center('Date: '+getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' EST')+'\n';txt+=center('----------------------------')+'\n';selT.forEach(t=>{txt+=center(t+' - '+getHeureProprio(t))+'\n';});tk.bets.forEach(b=>{let label=b.type==='boul'?'Borlette':b.type==='maryaj'?'Maryaj':b.type.toUpperCase();txt+=betLine(label,b.numero,b.mise)+'\n';});txt+=center('----------------------------')+'\n';txt+=center('Total => '+tk.total+' HTG')+'\n';txt+=center('Prix: 1er '+prix.p1+' 2e '+prix.p2+' 3e '+prix.p3)+'\n';txt+=center('----------------------------')+'\n';txt+=center('Mesi pou konfyans ou!');return txt;}
 function showPreview(txt){const p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let h=u?'<img src="'+u+'" style="width:20mm;height:20mm;border-radius:50%;display:block;margin:0 auto 3mm auto;border:1px solid #000;object-fit:cover">':'';p.innerHTML=h+'<div style="white-space:pre;font-family:monospace;font-size:12px;text-align:center">'+txt.replace(/\n/g,'<br>')+'</div>';}
-async function printBT(t){
-  if(isPrinting) return;isPrinting=true;
-  let plain = (t||LAST_TXT||'').toString().replace(/<[^>]+>/g,'').trim();
-  if(!plain){isPrinting=false;return;}
-  let logoUrl = getLogoUrl();
-  let cfg=JSON.parse(localStorage.getItem('printerConfig')||'{}');
-  let logoSize=parseInt(cfg.logoSize||'20');
-  try{
-    if((printerMode==='sunmi'||isSunmiDevice)&&(sunmiPrinterService||window.sunmiInnerPrinter||window.SunmiPrinter)){
-      try{
-        let printer=sunmiPrinterService||window.sunmiInnerPrinter||window.SunmiPrinter;
+inter;
         if(printer){
           try{if(printer.setAlignment) printer.setAlignment(1);}catch(e){}
           if(logoUrl&&logoUrl.length>100&&logoSize>0){
@@ -170,9 +160,128 @@ function doCopy(){let id=document.getElementById('cid').value.trim();if(!id){ale
 function calcGainForTicket(t,prix,resultsForDate){let gain=0;for(let tirage of (t.tirages||[])){let res=Object.values(resultsForDate||{}).find(r=>r&&r.tirage==tirage);if(!res)continue;let r1=(res.r1||'').toString().padStart(2,'0'),r2=(res.r2||'').toString().padStart(2,'0'),r3=(res.r3||'').toString().padStart(2,'0');let l3=(res.l3||'').toString().padStart(3,'0'),l4=(res.l4||'').toString().padStart(4,'0'),l5=(res.l5||'').toString().padStart(5,'0');for(let bet of (t.bets||[])){let raw=(bet.numero||'').trim();let mise=parseFloat(bet.mise||0);let g=0;if(bet.type==='boul'){let num=raw.padStart(2,'0');if(num==r1) g=mise*(prix.p1||50);else if(num==r2) g=mise*(prix.p2||20);else if(num==r3) g=mise*(prix.p3||10);}else if(bet.type==='maryaj'){let a=raw.substring(0,2).padStart(2,'0'),b=raw.substring(2,4).padStart(2,'0');if((a==r1&&b==r2)||(a==r2&&b==r1)) g=mise*(prix.m1||1000);else if((a==r1&&b==r3)||(a==r3&&b==r1)) g=mise*(prix.m2||1000);else if((a==r2&&b==r3)||(a==r3&&b==r2)) g=mise*(prix.m3||1000);}else if(bet.type==='loto3'){if(raw.padStart(3,'0')==l3) g=mise*(prix.l3||500);}else if(bet.type==='loto4'){if(raw.padStart(4,'0')==l4) g=mise*(prix.l4||5000);}else if(bet.type==='loto5'){if(raw.padStart(5,'0')==l5) g=mise*(prix.l5||25000);}if(g>0)gain+=g;}}return {gain};}
 async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let resSnap=await db.ref('results').once('value');let allRes=resSnap.val()||{};let resForDate={};Object.values(allRes).forEach(r=>{if(r&&(r.dat==d)) resForDate[r.tirage]=r;});let list=Object.values(all).filter(t=>(t.dateHaiti||t.date)==d&&(String(t.serial)==String(CUR.serial)||String(t.vendeurId)==String(CUR._key)));let tot=list.reduce((a,b)=>a+(b.total||0),0);let prix=getMyPrix();let totalAPaye=0;let html='';list.reverse().forEach(t=>{let corr=calcGainForTicket(t,t.prix||prix,resForDate);totalAPaye+=corr.gain;let status=corr.gain>0?'GAGNANT $'+corr.gain:'';html+='<div class="card"><b>'+t.id+'</b> - '+t.tirages.join(', ')+' - <b>$'+t.total+'</b> '+status+'</div>';});let ftot=document.getElementById('ftot');ftot.style.display='block';ftot.innerHTML='<b>Fich: '+list.length+'</b> - Vant: $'+tot.toFixed(2)+' - A Peye: $'+totalAPaye.toFixed(2);document.getElementById('flist').innerHTML=html||'Pa gen fich';}
 async function calcR(){try{let du=document.getElementById('rdu').value,au=document.getElementById('rau').value,ti=document.getElementById('rt').value;if(!du)du=getHaitiDateStr();if(!au)au=getHaitiDateStr();let rres=document.getElementById('rres');rres.style.display='block';rres.innerHTML='Kalkil...';let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let resSnap=await db.ref('results').once('value');let results=resSnap.val()||{};let vente=0,gain=0,count=0;Object.values(all).forEach(t=>{let td=t.dateHaiti||t.date;if(!td)return;if(td<du||td>au)return;if(String(t.serial)!=String(CUR.serial)&&String(t.vendeurId)!=String(CUR._key))return;if(ti!='tous'&&(t.tirages||[]).indexOf(ti)==-1)return;count++;vente+=ti=='tous'?(t.total||0):(t.baseTotal||0);let prix=t.prix||getMyPrix();for(let tirage of (t.tirages||[])){if(ti!='tous'&&tirage!=ti)continue;let res=Object.values(results).find(r=>r&&r.tirage==tirage&&(r.dat==td));if(!res)continue;let c=calcGainForTicket({bets:t.bets,tirages:[tirage]},prix,{[tirage]:res});gain+=c.gain;}});let prixCur=getMyPrix();let komPerc=prixCur.kom||10;let kom=prixCur.komActive?vente*komPerc/100:0;let balansNet=vente-kom-gain;rres.innerHTML='<div style="text-align:center;background:#0a4a2e;color:#d4af37;padding:8px;border-radius:8px">RAPÒ V25.6 - '+du+' -> '+au+'</div>'+'<div class="rapo-line"><span>Vant</span><b>$'+vente.toFixed(2)+'</b></div>'+'<div class="rapo-line"><span>Komisyon '+komPerc+'%</span><b>$'+kom.toFixed(2)+'</b></div>'+'<div class="rapo-line"><span>A Peye</span><b>$'+gain.toFixed(2)+'</b></div>'+'<div class="rapo-line" style="background:#0a4a2e;color:#d4af37;border-radius:8px"><span>Balans net</span><b>$'+balansNet.toFixed(2)+'</b></div>';let txt='RAPPORT V25.6\nDu: '+du+' Au: '+au+'\nFiches: '+count+'\nVant: $'+vente.toFixed(2)+'\nKomisyon: $'+kom.toFixed(2)+'\nA Peye: $'+gain.toFixed(2)+'\nBalans: $'+balansNet.toFixed(2);document.getElementById('rprint').style.display='block';document.getElementById('rprint').innerText=txt;}catch(e){document.getElementById('rres').innerHTML='Erè: '+e.message;}}
-function printRapport(){if(isPrinting)return;let t=document.getElementById('rprint').innerText;if(!t){alert('Kalkile avan');return}printBT(t);}
-function goTab(id,el){document.querySelectorAll('.tabPage').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');forceInnerSync();bindSunmiService();}
-let curV=localStorage.getItem('curV');if(curV){try{CUR=JSON.parse(curV);openMain();}catch(e){}}
-setTimeout(()=>{if(document.getElementById('splash').style.display!=='none'){hideSplash();}},2500);
-forceInnerSync();bindSunmiService();
+function printRapport(){if(isPrinting)return;let t=document.getElementById('rprint').innerText;if(!t){alert('Kalkile avan');return}prin
+function getPrintText(){return (window.lastTicketText||LAST_TXT||'').toString().trim();}
+
+async function printUniversel(t){
+  if(isPrinting && Date.now()-window._lastPrintTime<2500){ console.log('Ap enprime deja...'); return; }
+  isPrinting=true; window._lastPrintTime=Date.now();
+  setTimeout(()=>{isPrinting=false;},5000);
+  
+  let txt=(t||getPrintText()||'').toString().trim(); 
+  if(!txt){isPrinting=false; alert('Pa gen tèks pou enprime'); return;}
+  
+  let res=document.getElementById('scanResult'); 
+  if(res) res.innerText='🖨️ Sunmi Native ap enprime...\n'+txt.substring(0,80);
+  
+  // DETEKTE SI SE SUNMI V2 PRO - PA JANM ITILIZE window.print() SOU SUNMI
+  let isSunmi = /sunmi/i.test(navigator.userAgent) || !!window.woyou || !!window.sunmiInnerPrinter || !!window.InnerPrinterManager;
+  console.log('Is Sunmi?', isSunmi, 'woyou:', !!window.woyou);
+
+  // 1 - SUNMI V2 PRO NATIF - woyou.printerService (PI BON POU V2 PRO)
+  try{ 
+    if(window.woyou && window.woyou.printerService){
+      console.log('Essai woyou.printerService');
+      window.woyou.printerService.printText(txt+"\n\n\n\n", {
+        onPrintSuccess: function(){ 
+          console.log('PRINT SUCCESS'); 
+          try{window.woyou.printerService.cutPaper(null);}catch(e){}
+          if(res) res.innerText='✅ SUNMI V2 PRO ENPRIME DIRÈK!';
+          isPrinting=false;
+        },
+        onPrintFail: function(err){ 
+          console.log('PRINT FAIL', err);
+          if(res) res.innerText='❌ Echec woyou: '+err;
+          isPrinting=false;
+        }
+      });
+      // Si pa gen callback, kontinye apre 2 sec
+      setTimeout(()=>{ try{window.woyou.printerService.cutPaper(null);}catch(e){} isPrinting=false; },2000);
+      return;
+    }
+  }catch(e){ console.log('woyou error', e); }
+
+  // 2 - SUNMI INNER PRINTER OLD API
+  try{
+    if(window.sunmiInnerPrinter){
+      console.log('Essai sunmiInnerPrinter');
+      window.sunmiInnerPrinter.printText(txt+"\n\n\n\n");
+      if(res) res.innerText='✅ SUNMI INNER ENPRIME!';
+      setTimeout(()=>{isPrinting=false;},1500);
+      return;
+    }
+  }catch(e){}
+
+  // 3 - INNER PRINTER MANAGER (V2 Pro nouvo)
+  try{
+    if(window.InnerPrinterManager){
+      console.log('Essai InnerPrinterManager');
+      window.InnerPrinterManager.getInstance().bindService(this,{
+        onServiceConnected: function(service){
+          console.log('Service connected');
+          service.printText(txt+"\n\n\n\n", null);
+          setTimeout(()=>{ try{service.cutPaper(null);}catch(e){} },500);
+          if(res) res.innerText='✅ INNER MANAGER ENPRIME!';
+          isPrinting=false;
+        },
+        onServiceDisconnected: function(){ console.log('Service disconnected'); isPrinting=false; }
+      });
+      await new Promise(r=>setTimeout(r,2000));
+      return;
+    }
+  }catch(e){}
+
+  // 4 - BLUETOOTH (si se pa Sunmi oswa si Sunmi echwe)
+  try{
+    if(window._btChar && window._btChar.writeValue){
+      let data=new TextEncoder().encode('\x1B\x40\x1B\x61\x01'+txt+'\n\n\n\n\x1D\x56\x00');
+      for(let i=0;i<data.length;i+=80) await window._btChar.writeValue(data.slice(i,i+80));
+      if(res) res.innerText='✅ BT ENPRIME!';
+      isPrinting=false; return;
+    }
+  }catch(e){}
+
+  try{
+    if(navigator.bluetooth && !isSunmi){
+      let dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['0000ff00-0000-1000-8000-00805f9b34fb']});
+      let srv=await dev.gatt.connect();
+      let ch=null;
+      for(let svc of await srv.getPrimaryServices()){
+        for(let c of await svc.getCharacteristics()){ if(c.properties.write){ch=c;break;}} if(ch) break;
+      }
+      window._btChar=ch;
+      let data=new TextEncoder().encode('\x1B\x40'+txt+'\n\n\n\x1D\x56\x00');
+      for(let i=0;i<data.length;i+=80) await ch.writeValue(data.slice(i,i+80));
+      if(res) res.innerText='✅ BT ENPRIME!'; isPrinting=false; return;
+    }
+  }catch(e){}
+
+  // 5 - SI SE SUNMI MEN ANYEN PA MACHE, PA ITILIZE SYSTEM PRINT DIALOG
+  if(isSunmi){
+    isPrinting=false;
+    if(res) res.innerText='❌ Sunmi detekte men service pa jwenn.\nAktive: Settings > Printer > Enable JavaScript API';
+    alert('SUNMI pa monte enprimant lan otomatik.\n\nFè sa:\n1. Ale nan Settings > Printer\n2. Aktive "InnerPrinter Service"\n3. Nan Chrome, ale chrome://flags > Enable Sunmi Printer\n4. Oswa itilize APP Sunmi Cloud Printer\n\nOswa rele: window.woyou.printerService pa disponib');
+    return;
+  }
+
+  // 6 - SÈLMAN SOU TELEFÒN ÒDINÈ (PA SUNMI) NOU ITILIZE SYSTEM PRINT
+  let iframe=document.createElement('iframe'); iframe.style.display='none'; document.body.appendChild(iframe); 
+  iframe.contentDocument.write('<pre style="font-family:monospace;font-size:12px;text-align:center">'+txt+'</pre>'); 
+  iframe.contentDocument.close(); 
+  iframe.contentWindow.print(); 
+  isPrinting=false;
+}
+
+// BLÒKE TOUT ANSYEN FONKSYON KI RELE window.print()
+function printBT(t){return printUniversel(t);}
+function enprimeSunmiNatif(){return printUniversel();}
+function scanBT(){return printUniversel();}
+function scanSunmi(){return printUniversel();}
+function printLast(){return printUniversel(LAST_TXT);}
+function testPrintAdvanced(){
+  let tk={id:'TEST-'+Date.now().toString().slice(-4),bets:[{numero:'22',mise:25},{numero:'58',mise:25}],total:50};
+  let txt=' C&D VERITE LOTTO\n****************************\nID TICKET: '+tk.id+'\n****************************\nDate: '+new Date().toLocaleString()+'\nReal - 12:45\n22 $25\n58 $25\n----------------------------\nTotal => 50 HTG\nID: '+tk.id+'\n\n\n\n';
+  LAST_TXT=txt; window.lastTicketText=txt;
+  printUniversel(txt);
+}
 </script></body></html>
