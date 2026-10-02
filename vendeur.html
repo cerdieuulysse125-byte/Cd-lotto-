@@ -149,21 +149,7 @@ function enprimeSunmiNatif(){
   }
   printBT(txt+"\n\n\n");
 }
-async function printBT(t){
-  // Anti-blokaj: si li bloke depi plis pase 3 segonn, debloke li
-  if(isPrinting){
-    if(window._lastPrintTime && (Date.now()-window._lastPrintTime)>3000){
-      isPrinting=false;
-    }else{
-      // bay 1.5s epi debloke
-      setTimeout(()=>{isPrinting=false; window._lastPrintTime=0;},1500);
-      return;
-    }
-  }
-  isPrinting=true; window._lastPrintTime=Date.now();
-  // Sekirite: debloke apre 5s kanmenm si yon bagay bloke
-  
-  setTimeout(()=>{isPrinting=false;},5000);
+
 function scanSunmi(){let res=document.getElementById('scanResult');res.innerHTML='🔍 Ap chèche Sunmi...<br>';bindSunmiService();setTimeout(()=>{if(sunmiBound&&sunmiPrinterService){let p={id:'sunmi_inner',name:'Sunmi V2 Pro Inner Printer',type:'sunmi',status:'✅ Disponible'};discoveredPrinters=[p];currentPrinter=p;document.getElementById('selectedPrinter').value=p.name;res.innerHTML='<div style="background:#dcfce7;padding:8px;border-radius:8px;border:2px solid #00c853"><b>📟 '+p.name+'</b><br>✅ SDK: Bound<br>✅ Prè pou enprime dirèk san dialog</div>';setPrinterChoice('sunmi');}else{res.innerHTML='<div style="background:#fff3e0;padding:8px;border-radius:8px">⚠️ Sunmi SDK pa bound - sou telefòn nòmal chwazi Bluetooth. Deteksyon: '+(isSunmiDevice?'Sunmi':'Pa Sunmi')+'</div>';}},1200);}
 async function scanBT(){let res=document.getElementById('scanResult');res.innerHTML='🔍 Bluetooth picker...';if(!navigator.bluetooth){res.innerHTML='❌ Bluetooth pa sipòte - Chrome Android sèlman';return;}try{let device=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['0000ff00-0000-1000-8000-00805f9b34fb','000018f0-0000-1000-8000-00805f9b34fb']});let p={id:device.id,name:device.name||'Bluetooth Printer',type:'bt',device:device};discoveredPrinters.push(p);currentPrinter=p;document.getElementById('selectedPrinter').value=p.name+' (BT)';res.innerHTML='<div style="background:#e3f2fd;padding:8px;border-radius:8px"><b>📱 '+p.name+'</b><br>✅ BT Konekte<br>✅ Anrejistre - Klike ANREJISTRE</div>';btDevice=device;setPrinterChoice('bt');try{let server=await device.gatt.connect();let services=await server.getPrimaryServices();for(let svc of services){let chars=await svc.getCharacteristics();for(let ch of chars){if(ch.properties.write||ch.properties.writeWithoutResponse){btChar=ch;break;}}if(btChar)break;}document.getElementById('btStatus').innerText='BT: ✅ '+(device.name||'Konekte');}catch(e){}}catch(e){res.innerHTML='❌ '+e.message;}}
 async function scanUSB(){let res=document.getElementById('scanResult');res.innerHTML='🔍 USB...';if(!navigator.usb){res.innerHTML='❌ WebUSB pa sipòte - Chrome';return;}try{let device=await navigator.usb.requestDevice({filters:[]});let p={id:'usb_'+device.productId,name:device.productName||'USB Printer',type:'usb',device:device};discoveredPrinters.push(p);currentPrinter=p;document.getElementById('selectedPrinter').value=p.name+' (USB)';res.innerHTML='<div style="background:#fff3e0;padding:8px;border-radius:8px"><b>🔌 '+p.name+'</b><br>✅ USB Detekte</div>';}catch(e){res.innerHTML='❌ USB: '+e.message;}}
@@ -213,56 +199,19 @@ function build(tk){
 }
 function showPreview(txt){const p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let h=u?'<img src="'+u+'" style="width:20mm;height:20mm;border-radius:50%;display:block;margin:0 auto 3mm auto;border:1px solid #000;object-fit:cover">':'';p.innerHTML=h+'<div style="white-space:pre;font-family:monospace;font-size:12px;text-align:center">'+txt.replace(/\n/g,'<br>')+'</div>'; window.lastTicketText=txt; LAST_TXT=txt;}
 async function printBT(t){
-  if(isPrinting) return;isPrinting=true;
-  let plain = (t||LAST_TXT||window.lastTicketText||'').toString().replace(/<[^>]+>/g,'').trim();
-  if(!plain){isPrinting=false;return;}
-  let logoUrl = getLogoUrl();
-  let cfg=JSON.parse(localStorage.getItem('printerConfig')||'{}');
-  let logoSize=parseInt(cfg.logoSize||'20');
-  let choice=localStorage.getItem('printerChoice')||'auto';
-  try{
-    // 1- SUNMI si chwazi oswa auto + Sunmi detekte
-    if((choice==='auto'&& (sunmiPrinterService||isSunmiDevice)) || choice==='sunmi'){
-      try{
-        let printer=sunmiPrinterService||window.sunmiInnerPrinter||window.SunmiPrinter|| (window.woyou&&window.woyou.printerService);
-        if(printer){
-          try{if(printer.setAlignment) printer.setAlignment(1);}catch(e){}
-          if(logoUrl&&logoUrl.length>100&&logoSize>0){
-            try{
-              let img=new Image();img.src=logoUrl;await new Promise(r=>{img.onload=r;setTimeout(r,700);});
-              let size=logoSize===20?200:logoSize===25?250:300;
-              let c=document.createElement('canvas');c.width=size;c.height=size;let ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,size,size);ctx.drawImage(img,0,0,size,size);
-              if(printer.printBitmap){try{printer.printBitmap(c.toDataURL(),1);}catch(e2){try{printer.printBitmap(c.toDataURL(),size,size);}catch(e3){}}}
-            }catch(e){}
-          }
-          if(printer.printOriginalText){printer.printOriginalText(plain+"\n\n\n\n",null);if(printer.cutPaper){setTimeout(()=>{try{printer.cutPaper(null);}catch(e){}},600);} setTimeout(()=>{isPrinting=false;},2000);return;}
-          if(printer.printText){printer.printText(plain+"\n\n\n\n");if(printer.cutPaper) printer.cutPaper(); if(printer.lineWrap) printer.lineWrap(4,null); setTimeout(()=>{isPrinting=false;},2000);return;}
-          if(window.woyou&&window.woyou.printerService){
-            window.woyou.printerService.printText(plain+"\n\n\n\n",null);window.woyou.printerService.lineWrap(4,null);window.woyou.printerService.cutPaper(null);
-            setTimeout(()=>{isPrinting=false;},2000);return;
-          }
-        }
-      }catch(e){}
+  // Anti-blokaj: si li bloke depi plis pase 3 segonn, debloke li
+  if(isPrinting){
+    if(window._lastPrintTime && (Date.now()-window._lastPrintTime)>3000){
+      isPrinting=false;
+    }else{
+      // bay 1.5s epi debloke
+      setTimeout(()=>{isPrinting=false; window._lastPrintTime=0;},1500);
+      return;
     }
-    // 2- BT si chwazi oswa auto + BT konekte
-    if((choice==='auto'&&btChar)||choice==='bt'){
-      if(btChar){
-        let esc='\x1B\x40\x1B\x61\x01';let data=new TextEncoder().encode(esc+plain+'\n\n\n\n\x1D\x56\x00');
-        for(let i=0;i<data.length;i+=100){await btChar.writeValue(data.slice(i,i+100));await new Promise(r=>setTimeout(r,60));}
-        isPrinting=false;return;
-      }else if(choice==='bt'){
-        // mande koneksyon BT si pa gen
-        await connectBT();
-        if(btChar){let esc='\x1B\x40\x1B\x61\x01';let data=new TextEncoder().encode(esc+plain+'\n\n\n\n\x1D\x56\x00');for(let i=0;i<data.length;i+=100){await btChar.writeValue(data.slice(i,i+100));await new Promise(r=>setTimeout(r,60));} isPrinting=false;return;}
-      }
-    }
-    // 3- WEB / CHROME fallback - mache sou TOUT teminal
-    let logoHtml=logoUrl&&logoUrl.length>100&&logoSize>0? `<div style="text-align:center"><img src="${logoUrl}" style="width:${logoSize}mm;height:${logoSize}mm;border-radius:50%;border:1px solid #000;object-fit:cover;display:block;margin:0 auto 2mm auto"></div>` : '';
-    let html=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;width:56mm;font-family:'Courier New',monospace;font-size:11px;text-align:center}pre{text-align:center}</style></head><body>${logoHtml}<pre style="white-space:pre-wrap;text-align:center;font-size:11px">${plain.replace(/</g,'&lt;')}</pre><script>setTimeout(()=>{window.print();},500);<\/script></body></html>`;
-    let iframe=document.createElement('iframe');iframe.style.width='0';iframe.style.height='0';iframe.style.border='0';iframe.style.position='fixed';iframe.style.bottom='0';document.body.appendChild(iframe);iframe.contentDocument.open();iframe.contentDocument.write(html);iframe.contentDocument.close();
-    setTimeout(()=>{try{iframe.contentWindow.print();}catch(e){window.print();} setTimeout(()=>{try{document.body.removeChild(iframe);}catch(e){} isPrinting=false;},2500);},800);return;
-  }catch(e){isPrinting=false; setTimeout(()=>{isPrinting=false;},2000);}
-}
+  }
+  isPrinting=true; window._lastPrintTime=Date.now();
+  // Sekirite: debloke apre 5s kanmenm si yon bagay bloke
+  setTimeout(()=>{isPrinting=false;},5000);
 function printLast(){if(isPrinting){alert('Ap enprime deja...');return;}if(!LAST_TXT && !window.lastTicketText){alert('Pa gen fich');return}printBT(LAST_TXT||window.lastTicketText);}
 function testPrintLogo(){if(isPrinting){alert('Ap enprime...');return;}forceInnerSync();bindSunmiService();let tk={id:'TEST V25.7',bets:[{type:'boul',numero:'44',mise:10}],tirages:selT.length?selT:['FL soir'],baseTotal:15,total:15};if(!selT.length)selT=tk.tirages;let txt=build(tk);showPreview(txt);LAST_TXT=txt;window.lastTicketText=txt;setTimeout(()=>printBT(txt),800);}
 async function vann(){if(isPrinting){alert('Ap enprime deja - tann');return;}if(CUR&&isVendeurBlocked(DB.vendeurs[CUR._key]||DB.vendeurs[CUR.id]||CUR,CUR._key||CUR.id)){alert("🔴 KONT BLOKE!");showBlockedScreen();return;}for(let tn of selT){if(!isOpen(tn)){alert('⛔ FEMEN a '+getHeureProprio(tn)+' EST');return;}}if(!selT.length){alert('Chwazi Tiraj - '+Object.keys(getTirajForVendeur()).length+' disponib');return}let bets=[];document.querySelectorAll('.betRow').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm)bets.push({type:j,numero:b,mise:mm});});if(!bets.length){alert('VID');return}let err='',mode=DB.config?.limitMode||'global';for(let bet of bets){let max=getLimiteForJeu(bet.type);let req=getChifRequis(bet.type);if(bet.numero.length!==req){err+=bet.type+' '+bet.numero+' dwe '+req+'\n';continue;}if(bet.mise>max){err+='LIMIT '+bet.type.toUpperCase()+' max $'+max+'\n';continue;}for(let tiraj of selT){let deja=mode==='global'?getDejaVannPaTiraj(bet.type,bet.numero,tiraj):getDejaVannParVendeurPaTiraj(bet.type,bet.numero,tiraj);if((deja+bet.mise)>max)err+='LIMIT '+tiraj+' '+bet.type+' '+bet.numero+' $'+deja+' > $'+max+'\n';}}if(err){alert(err);return}let base=bets.reduce((a,b)=>a+b.mise,0);let tk={id:'T'+Date.now().toString().slice(-7),bets,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),vendeurId:CUR?._key,serial:CUR?.serial, prix:getMyPrix(), limites:getMyLimite()};if(db){db.ref('tickets/'+tk.id).set(tk).catch(e=>console.log('offline',e));}let txt=build(tk);LAST_TXT=txt;window.lastTicketText=txt;showPreview(txt);forceInnerSync();bindSunmiService();setTimeout(()=>{printBT(txt);},800);setTimeout(()=>{document.getElementById('bets').innerHTML='';addR(bets[bets.length-1]?.type||'boul');upd();},1500);}
