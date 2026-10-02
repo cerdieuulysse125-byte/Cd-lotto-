@@ -149,7 +149,21 @@ function enprimeSunmiNatif(){
   }
   printBT(txt+"\n\n\n");
 }
-
+async function printBT(t){
+  // Anti-blokaj: si li bloke depi plis pase 3 segonn, debloke li
+  if(isPrinting){
+    if(window._lastPrintTime && (Date.now()-window._lastPrintTime)>3000){
+      isPrinting=false;
+    }else{
+      // bay 1.5s epi debloke
+      setTimeout(()=>{isPrinting=false; window._lastPrintTime=0;},1500);
+      return;
+    }
+  }
+  isPrinting=true; window._lastPrintTime=Date.now();
+  // Sekirite: debloke apre 5s kanmenm si yon bagay bloke
+  
+  setTimeout(()=>{isPrinting=false;},5000);
 function scanSunmi(){let res=document.getElementById('scanResult');res.innerHTML='🔍 Ap chèche Sunmi...<br>';bindSunmiService();setTimeout(()=>{if(sunmiBound&&sunmiPrinterService){let p={id:'sunmi_inner',name:'Sunmi V2 Pro Inner Printer',type:'sunmi',status:'✅ Disponible'};discoveredPrinters=[p];currentPrinter=p;document.getElementById('selectedPrinter').value=p.name;res.innerHTML='<div style="background:#dcfce7;padding:8px;border-radius:8px;border:2px solid #00c853"><b>📟 '+p.name+'</b><br>✅ SDK: Bound<br>✅ Prè pou enprime dirèk san dialog</div>';setPrinterChoice('sunmi');}else{res.innerHTML='<div style="background:#fff3e0;padding:8px;border-radius:8px">⚠️ Sunmi SDK pa bound - sou telefòn nòmal chwazi Bluetooth. Deteksyon: '+(isSunmiDevice?'Sunmi':'Pa Sunmi')+'</div>';}},1200);}
 async function scanBT(){let res=document.getElementById('scanResult');res.innerHTML='🔍 Bluetooth picker...';if(!navigator.bluetooth){res.innerHTML='❌ Bluetooth pa sipòte - Chrome Android sèlman';return;}try{let device=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['0000ff00-0000-1000-8000-00805f9b34fb','000018f0-0000-1000-8000-00805f9b34fb']});let p={id:device.id,name:device.name||'Bluetooth Printer',type:'bt',device:device};discoveredPrinters.push(p);currentPrinter=p;document.getElementById('selectedPrinter').value=p.name+' (BT)';res.innerHTML='<div style="background:#e3f2fd;padding:8px;border-radius:8px"><b>📱 '+p.name+'</b><br>✅ BT Konekte<br>✅ Anrejistre - Klike ANREJISTRE</div>';btDevice=device;setPrinterChoice('bt');try{let server=await device.gatt.connect();let services=await server.getPrimaryServices();for(let svc of services){let chars=await svc.getCharacteristics();for(let ch of chars){if(ch.properties.write||ch.properties.writeWithoutResponse){btChar=ch;break;}}if(btChar)break;}document.getElementById('btStatus').innerText='BT: ✅ '+(device.name||'Konekte');}catch(e){}}catch(e){res.innerHTML='❌ '+e.message;}}
 async function scanUSB(){let res=document.getElementById('scanResult');res.innerHTML='🔍 USB...';if(!navigator.usb){res.innerHTML='❌ WebUSB pa sipòte - Chrome';return;}try{let device=await navigator.usb.requestDevice({filters:[]});let p={id:'usb_'+device.productId,name:device.productName||'USB Printer',type:'usb',device:device};discoveredPrinters.push(p);currentPrinter=p;document.getElementById('selectedPrinter').value=p.name+' (USB)';res.innerHTML='<div style="background:#fff3e0;padding:8px;border-radius:8px"><b>🔌 '+p.name+'</b><br>✅ USB Detekte</div>';}catch(e){res.innerHTML='❌ USB: '+e.message;}}
