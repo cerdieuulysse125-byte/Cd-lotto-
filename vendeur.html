@@ -127,33 +127,6 @@ function upd(){let sum=0;document.querySelectorAll('.betRow').forEach(r=>{let mm
 function build(tk){let hd=getHaitiTime();let W=32;function center(t){t=String(t).trim();if(t.length>=W) return t.substring(0,W);let left=Math.floor((W-t.length)/2);return ' '.repeat(left)+t;}function betLine(j,n,m){let left=j.padEnd(8,' ').slice(0,8);let gap1='    ';let mid=n.padStart(2,' ').padEnd(4,' ').slice(0,4);let gap2='    ';let right=('$'+m).padStart(6,' ').slice(0,6);return (left+gap1+mid+gap2+right).slice(0,W);}let tel=getTel(),prix=getMyPrix(),txt='';txt+=center('C&D VERITE LOTTO')+'\n';txt+=center('Fiche Original')+'\n';txt+=center('----------------------------')+'\n';txt+=center('POS: '+(CUR?._key||''))+'\n';txt+=center('Vendeur: '+(CUR?.serial||'')+' '+(CUR?.nom||''))+'\n';txt+=center('Tel: '+tel)+'\n';txt+=center('Date: '+getHaitiDateStr()+' '+hd.getHours().toString().padStart(2,'0')+':'+hd.getMinutes().toString().padStart(2,'0')+' EST')+'\n';txt+=center('----------------------------')+'\n';selT.forEach(t=>{txt+=center(t+' - '+getHeureProprio(t))+'\n';});tk.bets.forEach(b=>{let label=b.type==='boul'?'Borlette':b.type==='maryaj'?'Maryaj':b.type.toUpperCase();txt+=betLine(label,b.numero,b.mise)+'\n';});txt+=center('----------------------------')+'\n';txt+=center('Total => '+tk.total+' HTG')+'\n';txt+=center('Prix: 1er '+prix.p1+' 2e '+prix.p2+' 3e '+prix.p3)+'\n';txt+=center('----------------------------')+'\n';txt+=center('Mesi pou konfyans ou!');return txt;}
 function showPreview(txt){const p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let h=u?'<img src="'+u+'" style="width:20mm;height:20mm;border-radius:50%;display:block;margin:0 auto 3mm auto;border:1px solid #000;object-fit:cover">':'';p.innerHTML=h+'<div style="white-space:pre;font-family:monospace;font-size:12px;text-align:center">'+txt.replace(/\n/g,'<br>')+'</div>';}
 async function printBT(t){
-  if(isPrinting) return;isPrinting=true;
-  let plain = (t||LAST_TXT||'').toString().replace(/<[^>]+>/g,'').trim();
-  if(!plain){isPrinting=false;return;}
-  let logoUrl = getLogoUrl();
-  let cfg=JSON.parse(localStorage.getItem('printerConfig')||'{}');
-  let logoSize=parseInt(cfg.logoSize||'20');
-  try{
-    if((printerMode==='sunmi'||isSunmiDevice)&&(sunmiPrinterService||window.sunmiInnerPrinter||window.SunmiPrinter)){
-      try{
-        let printer=sunmiPrinterService||window.sunmiInnerPrinter||window.SunmiPrinter;
-        if(printer){
-          try{if(printer.setAlignment) printer.setAlignment(1);}catch(e){}
-          if(logoUrl&&logoUrl.length>100&&logoSize>0){
-            try{
-              let img=new Image();img.src=logoUrl;await new Promise(r=>{img.onload=r;setTimeout(r,700);});
-              let size=logoSize===20?200:logoSize===25?250:300;
-              let c=document.createElement('canvas');c.width=size;c.height=size;let ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,size,size);ctx.drawImage(img,0,0,size,size);
-              if(printer.printBitmap){try{printer.printBitmap(c.toDataURL(),1);}catch(e2){try{printer.printBitmap(c.toDataURL(),size,size);}catch(e3){}}}
-            }catch(e){}
-          }
-          if(printer.printOriginalText){printer.printOriginalText(plain+"\n\n\n\n",null);if(printer.cutPaper){setTimeout(()=>{try{printer.cutPaper(null);}catch(e){}},600);} setTimeout(()=>{isPrinting=false;},2000);return;}
-          if(printer.printText){printer.printText(plain+"\n\n\n\n");if(printer.cutPaper) printer.cutPaper(); setTimeout(()=>{isPrinting=false;},2000);return;}
-        }
-      }catch(e){}
-    }
-    if(printerMode==='bt'&&btChar){
-      let esc='\x1B\x40\x1B\x61\x01';let data=new TextEncoder().encode(esc+plain+'\n\n\n\n\x1D\x56\x00');
 // ENPRIMANT SAN DYALÒG - C&Du - Sunmi V2 Pro + Chrome
 function getTicketText() {
   const area = document.getElementById('print-area');
