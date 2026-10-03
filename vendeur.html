@@ -154,17 +154,67 @@ async function printBT(t){
     }
     if(printerMode==='bt'&&btChar){
       let esc='\x1B\x40\x1B\x61\x01';let data=new TextEncoder().encode(esc+plain+'\n\n\n\n\x1D\x56\x00');
-      for(let i=0;i<data.length;i+=100){await btChar.writeValue(data.slice(i,i+100));await new Promise(r=>setTimeout(r,60));}
-      isPrinting=false;return;
-    }
-    let logoHtml=logoUrl&&logoUrl.length>100&&logoSize>0? `<div style="text-align:center"><img src="${logoUrl}" style="width:${logoSize}mm;height:${logoSize}mm;border-radius:50%;border:1px solid #000;object-fit:cover;display:block;margin:0 auto 2mm auto"></div>` : '';
-    let html=`<html><head><meta charset="UTF-8"><style>@page{size:58mm auto;margin:0}body{margin:0;padding:2mm;width:56mm;font-family:'Courier New',monospace;font-size:11px;text-align:center}pre{text-align:center}</style></head><body>${logoHtml}<pre style="white-space:pre-wrap;text-align:center;font-size:11px">${plain.replace(/</g,'&lt;')}</pre><script>setTimeout(()=>{window.print();},500);<\/script></body></html>`;
-    let iframe=document.createElement('iframe');iframe.style.width='0';iframe.style.height='0';iframe.style.border='0';iframe.style.position='fixed';iframe.style.bottom='0';document.body.appendChild(iframe);iframe.contentDocument.open();iframe.contentDocument.write(html);iframe.contentDocument.close();
-    setTimeout(()=>{try{iframe.contentWindow.print();}catch(e){window.print();} setTimeout(()=>{try{document.body.removeChild(iframe);}catch(e){} isPrinting=false;},2500);},800);return;
-  }catch(e){isPrinting=false; setTimeout(()=>{isPrinting=false;},2000);}
+// ENPRIMANT SAN DYALÒG - C&Du - Sunmi V2 Pro + Chrome
+function getTicketText() {
+  const area = document.getElementById('print-area');
+  return area ? area.innerText : document.body.innerText;
 }
-function printLast(){if(isPrinting){alert('Ap enprime deja...');return;}if(!LAST_TXT){alert('Pa gen fich');return}printBT(LAST_TXT);}
-function testPrintLogo(){if(isPrinting){alert('Ap enprime...');return;}forceInnerSync();bindSunmiService();let tk={id:'TEST V25.6',bets:[{type:'boul',numero:'44',mise:10}],tirages:selT.length?selT:['FL soir'],baseTotal:15,total:15};if(!selT.length)selT=tk.tirages;let txt=build(tk);showPreview(txt);LAST_TXT=txt;setTimeout(()=>printBT(txt),800);}
+
+function printSunmiDirect(text) {
+  try {
+    // Fason 1: Sunmi OS 3.x
+    if (window.woyou && woyou.printerService) {
+      try { woyou.printerService.enterPrinterBuffer(true); } catch(e){}
+      woyou.printerService.printText(text + "\n\n\n\n", null);
+      try { woyou.printerService.lineWrap(4, null); } catch(e){}
+      try { woyou.printerService.exitPrinterBuffer(true); } catch(e){}
+      return true;
+    }
+    // Fason 2: Sunmi OS 2.x
+    if (window.printerService) {
+      printerService.printText(text + "\n\n\n\n", null);
+      return true;
+    }
+    // Fason 3: Sunmi InnerPrinter AIDL (nouvo Sunmi)
+    if (window.SunmiInnerPrinter) {
+      SunmiInnerPrinter.printString(text);
+      SunmiInnerPrinter.autoOutPaper();
+      return true;
+    }
+  } catch(e) { console.log("Sunmi fail:", e); }
+  return false;
+}
+
+function printSansDialog() {
+  const text = getTicketText();
+  
+  // 1. Eseye enprime DIRÈK sou Sunmi (pa gen dyalòg ditou)
+  if (printSunmiDirect(text)) {
+    console.log("✅ Enprime dirèk Sunmi OK");
+    return;
+  }
+
+  // 2. Si se Chrome sou Sunmi - itilize iframe san aperçu
+  // Pou sa mache 100% san dyalòg, fòk ou lanse Chrome ak: --kiosk-printing
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  iframe.contentDocument.write(`
+    <html><head><style>
+      body{font-family:monospace; font-size:12px; width:58mm;}
+      pre{white-space:pre-wrap;}
+      @media print { @page { margin:0; } }
+    </style></head>
+    <body><pre>${text}</pre></body></html>
+  `);
+  iframe.contentDocument.close();
+  iframe.contentWindow.focus();
+  iframe.contentWindow.print();
+  setTimeout(()=> iframe.remove(), 1000);
+}
+
+// Ranplase ansyen window.print la
+window.print = printSansDialog;
 async function vann(){if(isPrinting){alert('Ap enprime deja - tann');return;}if(CUR&&isVendeurBlocked(DB.vendeurs[CUR._key]||DB.vendeurs[CUR.id]||CUR,CUR._key||CUR.id)){alert("🔴 KONT BLOKE!");showBlockedScreen();return;}for(let tn of selT){if(!isOpen(tn)){alert('⛔ FEMEN a '+getHeureProprio(tn)+' EST');return;}}if(!selT.length){alert('Chwazi Tiraj - '+Object.keys(getTirajForVendeur()).length+' disponib');return}let bets=[];document.querySelectorAll('.betRow').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm)bets.push({type:j,numero:b,mise:mm});});if(!bets.length){alert('VID');return}let err='',mode=DB.config?.limitMode||'global';for(let bet of bets){let max=getLimiteForJeu(bet.type);let req=getChifRequis(bet.type);if(bet.numero.length!==req){err+=bet.type+' '+bet.numero+' dwe '+req+'\n';continue;}if(bet.mise>max){err+='LIMIT '+bet.type.toUpperCase()+' max $'+max+'\n';continue;}for(let tiraj of selT){let deja=mode==='global'?getDejaVannPaTiraj(bet.type,bet.numero,tiraj):getDejaVannParVendeurPaTiraj(bet.type,bet.numero,tiraj);if((deja+bet.mise)>max)err+='LIMIT '+tiraj+' '+bet.type+' '+bet.numero+' $'+deja+' > $'+max+'\n';}}if(err){alert(err);return}let base=bets.reduce((a,b)=>a+b.mise,0);let tk={id:'T'+Date.now().toString().slice(-7),bets,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),vendeurId:CUR?._key,serial:CUR?.serial, prix:getMyPrix(), limites:getMyLimite()};if(db){db.ref('tickets/'+tk.id).set(tk).catch(e=>console.log('offline',e));}let txt=build(tk);LAST_TXT=txt;showPreview(txt);forceInnerSync();bindSunmiService();setTimeout(()=>{printBT(txt);},800);setTimeout(()=>{document.getElementById('bets').innerHTML='';addR(bets[bets.length-1]?.type||'boul');upd();},1500);}
 function doCopy(){let id=document.getElementById('cid').value.trim();if(!id){alert('Mete ID');return}db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t){alert('Pa jwenn');return}selT=t.tirages||[];document.getElementById('bets').innerHTML='';t.bets.forEach(b=>{let r=addR(b.type);r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;});renderT();document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';goTab('pV',document.querySelectorAll('.tab')[0]);upd();});}
 function calcGainForTicket(t,prix,resultsForDate){let gain=0;for(let tirage of (t.tirages||[])){let res=Object.values(resultsForDate||{}).find(r=>r&&r.tirage==tirage);if(!res)continue;let r1=(res.r1||'').toString().padStart(2,'0'),r2=(res.r2||'').toString().padStart(2,'0'),r3=(res.r3||'').toString().padStart(2,'0');let l3=(res.l3||'').toString().padStart(3,'0'),l4=(res.l4||'').toString().padStart(4,'0'),l5=(res.l5||'').toString().padStart(5,'0');for(let bet of (t.bets||[])){let raw=(bet.numero||'').trim();let mise=parseFloat(bet.mise||0);let g=0;if(bet.type==='boul'){let num=raw.padStart(2,'0');if(num==r1) g=mise*(prix.p1||50);else if(num==r2) g=mise*(prix.p2||20);else if(num==r3) g=mise*(prix.p3||10);}else if(bet.type==='maryaj'){let a=raw.substring(0,2).padStart(2,'0'),b=raw.substring(2,4).padStart(2,'0');if((a==r1&&b==r2)||(a==r2&&b==r1)) g=mise*(prix.m1||1000);else if((a==r1&&b==r3)||(a==r3&&b==r1)) g=mise*(prix.m2||1000);else if((a==r2&&b==r3)||(a==r3&&b==r2)) g=mise*(prix.m3||1000);}else if(bet.type==='loto3'){if(raw.padStart(3,'0')==l3) g=mise*(prix.l3||500);}else if(bet.type==='loto4'){if(raw.padStart(4,'0')==l4) g=mise*(prix.l4||5000);}else if(bet.type==='loto5'){if(raw.padStart(5,'0')==l5) g=mise*(prix.l5||25000);}if(g>0)gain+=g;}}return {gain};}
