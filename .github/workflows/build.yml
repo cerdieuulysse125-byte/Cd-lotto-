@@ -6,26 +6,74 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
+        with: { distribution: temurin, java-version: 17 }
       - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.2.1
-      - name: Setup NEW PACKAGE - PRINT
+        with: { gradle-version: 8.2.1 }
+      - name: Setup TOUCH FIX V2 PRO
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
           printf "pluginManagement{ repositories{ google(); mavenCentral(); gradlePluginPortal() } }\ndependencyResolutionManagement{ repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{ google(); mavenCentral() } }\ninclude ':app'\n" > settings.gradle
           echo "" > build.gradle
-          mkdir -p app/src/main/java/com/cdlotto/app
-          mkdir -p app/src/main/res/values
-          printf "plugins{ id 'com.android.application' version '8.1.0' }\nandroid{ namespace 'com.cdlotto.printfix'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.printfix'; minSdk 21; targetSdk 33; versionCode 1; versionName '1.0-PRINT' } }\n" > app/build.gradle
-          echo '<resources><string name="app_name">C&amp;D Print Fix</string></resources>' > app/src/main/res/values/strings.xml
-          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="C&amp;D Print Fix"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
-          printf "package com.cdlotto.app;\nimport android.app.Activity;import android.os.Bundle;import android.webkit.WebView;import android.webkit.WebViewClient;import android.webkit.WebChromeClient;import android.print.PrintManager;import android.print.PrintDocumentAdapter;import android.print.PrintAttributes;import android.content.Context;import android.webkit.JavascriptInterface;\npublic class MainActivity extends Activity{ WebView w; protected void onCreate(Bundle b){ super.onCreate(b); w=new WebView(this); setContentView(w); w.getSettings().setJavaScriptEnabled(true); w.getSettings().setDomStorageEnabled(true); w.getSettings().setAllowFileAccess(true); w.getSettings().setSupportMultipleWindows(true); w.getSettings().setJavaScriptCanOpenWindowsAutomatically(true); w.addJavascriptInterface(new Object(){ @JavascriptInterface public void printPage(){ runOnUiThread(new Runnable(){ public void run(){ PrintManager pm=(PrintManager)getSystemService(Context.PRINT_SERVICE); PrintDocumentAdapter ad=w.createPrintDocumentAdapter(\"CD\"); pm.print(\"CD Lotto\", ad, new PrintAttributes.Builder().build()); } }); } }, \"AndroidPrint\"); w.setWebViewClient(new WebViewClient()); w.setWebChromeClient(new WebChromeClient(){ public boolean onCreateWindow(WebView view, boolean d, boolean g, android.os.Message m){ WebView nv=new WebView(MainActivity.this); nv.getSettings().setJavaScriptEnabled(true); nv.setWebViewClient(new WebViewClient(){ public void onPageFinished(WebView v, String u){ PrintManager pm=(PrintManager)getSystemService(Context.PRINT_SERVICE); pm.print(\"Rapport\", v.createPrintDocumentAdapter(\"Rapport\"), new PrintAttributes.Builder().build()); } }); WebView.WebViewTransport t=(WebView.WebViewTransport)m.obj; t.setWebView(nv); m.sendToTarget(); return true; } }); w.loadUrl(\"https://cd-lotto.vercel.app/vendeur.html\"); } public void onBackPressed(){ if(w.canGoBack()) w.goBack(); else super.onBackPressed(); } }\n" > app/src/main/java/com/cdlotto/app/MainActivity.java
+          mkdir -p app/src/main/java/com/cdlotto/app app/src/main/res/values
+          printf "plugins{ id 'com.android.application' version '8.1.0' }\nandroid{ namespace 'com.cdlotto.touchfix'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.touchfix'; minSdk 21; targetSdk 33; versionCode 3; versionName '3.0-TOUCH-FIX' } }\n" > app/build.gradle
+          echo '<resources><string name="app_name">C&amp;D Touch Fix</string></resources>' > app/src/main/res/values/strings.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="C&amp;D Touch Fix" android:hardwareAccelerated="true"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar" android:hardwareAccelerated="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          cat > app/src/main/java/com/cdlotto/app/MainActivity.java << 'JAVA'
+          package com.cdlotto.app;
+          import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; import android.webkit.WebChromeClient; import android.print.PrintManager; import android.print.PrintAttributes; import android.content.Context; import android.webkit.JavascriptInterface; import android.text.TextUtils; import android.view.View; import android.view.MotionEvent;
+          public class MainActivity extends Activity{
+              WebView mainView;
+              protected void onCreate(Bundle b){
+                  super.onCreate(b);
+                  mainView=new WebView(this);
+                  setContentView(mainView);
+                  mainView.setFocusable(true);
+                  mainView.setFocusableInTouchMode(true);
+                  mainView.setClickable(true);
+                  mainView.setLongClickable(false);
+                  mainView.requestFocus(View.FOCUS_DOWN);
+                  mainView.getSettings().setJavaScriptEnabled(true);
+                  mainView.getSettings().setDomStorageEnabled(true);
+                  mainView.getSettings().setAllowFileAccess(true);
+                  mainView.getSettings().setSupportMultipleWindows(true);
+                  mainView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+                  mainView.getSettings().setUseWideViewPort(true);
+                  mainView.getSettings().setLoadWithOverviewMode(true);
+                  mainView.getSettings().setBuiltInZoomControls(false);
+                  mainView.addJavascriptInterface(new PrintBridge(), "AndroidPrint");
+                  mainView.setWebViewClient(new WebViewClient());
+                  mainView.setOnTouchListener(new View.OnTouchListener(){
+                      public boolean onTouch(View v, MotionEvent event){
+                          if(event.getAction()==MotionEvent.ACTION_DOWN){
+                              v.requestFocus();
+                          }
+                          return false;
+                      }
+                  });
+                  mainView.setWebChromeClient(new WebChromeClient(){
+                      public boolean onCreateWindow(WebView view, boolean d, boolean g, android.os.Message msg){
+                          WebView nv=new WebView(MainActivity.this);
+                          nv.getSettings().setJavaScriptEnabled(true);
+                          nv.setWebViewClient(new WebViewClient(){
+                              public void onPageFinished(WebView v, String u){
+                                  PrintManager pm=(PrintManager)getSystemService(Context.PRINT_SERVICE);
+                                  pm.print("C&D", v.createPrintDocumentAdapter("C&D"), new PrintAttributes.Builder().build());
+                              }
+                          });
+                          WebView.WebViewTransport t=(WebView.WebViewTransport)msg.obj; t.setWebView(nv); msg.sendToTarget(); return true;
+                      }
+                  });
+                  mainView.loadUrl("https://cd-lotto.vercel.app/vendeur.html");
+              }
+              public class PrintBridge{
+                  @JavascriptInterface public void printPage(){ runOnUiThread(()->{ PrintManager pm=(PrintManager)getSystemService(Context.PRINT_SERVICE); pm.print("C&D Lotto", mainView.createPrintDocumentAdapter("C&D Lotto"), new PrintAttributes.Builder().build()); }); }
+                  @JavascriptInterface public void printText(String txt){ runOnUiThread(()->{ String safe=TextUtils.htmlEncode(txt); String html="<html><head><meta charset='UTF-8'><style>@page{size:58mm auto;margin:0}body{margin:0;padding:4mm;width:54mm;font-family:monospace;font-size:11px;text-align:center;white-space:pre-wrap}pre{white-space:pre-wrap;text-align:center}</style></head><body><pre>"+safe+"</pre></body></html>"; WebView pv=new WebView(MainActivity.this); pv.getSettings().setJavaScriptEnabled(true); pv.setWebViewClient(new WebViewClient(){ public void onPageFinished(WebView v, String u){ PrintManager pm=(PrintManager)getSystemService(Context.PRINT_SERVICE); pm.print("C&D Ticket", v.createPrintDocumentAdapter("C&D Ticket"), new PrintAttributes.Builder().build()); } }); pv.loadDataWithBaseURL(null, html, "text/HTML", "UTF-8", null); }); }
+                  @JavascriptInterface public void enableTouch(){ runOnUiThread(()->{ mainView.requestFocus(); }); }
+              }
+              public void onBackPressed(){ if(mainView.canGoBack()) mainView.goBack(); else super.onBackPressed(); }
+          }
+          JAVA
       - name: Build
         run: gradle :app:assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
-        with:
-          name: APK-CD-PRINT-NEW-PACKAGE
-          path: app/build/outputs/apk/debug/*.apk
+        with: { name: APK-CD-TOUCH-FIX-V2PRO, path: app/build/outputs/apk/debug/*.apk }
