@@ -12,31 +12,101 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.2.1
-      - name: Setup base
+      - name: Setup with PRINT support
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
           printf "pluginManagement{\n repositories{ google(); mavenCentral(); gradlePluginPortal() }\n}\ndependencyResolutionManagement{\n repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{ google(); mavenCentral() }\n}\ninclude ':app'\n" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
           mkdir -p app/src/main/res/values
-          printf "plugins{ id 'com.android.application' version '8.1.0' }\nandroid{ namespace 'com.cdlotto.app'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.app'; minSdk 21; targetSdk 33; versionCode 303; versionName '30.3' } }\n" > app/build.gradle
-          echo '<resources><string name="app_name">C&D Verite Lotto</string></resources>' > app/src/main/res/values/strings.xml
-          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="@string/app_name"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
-          echo 'package com.cdlotto.app;import android.app.Activity;import android.os.Bundle;import android.webkit.WebView;import android.webkit.WebViewClient;public class MainActivity extends Activity{protected void onCreate(Bundle b){super.onCreate(b);WebView w=new WebView(this);setContentView(w);w.getSettings().setJavaScriptEnabled(true);w.getSettings().setDomStorageEnabled(true);w.setWebViewClient(new WebViewClient());w.loadUrl("https://cd-lotto.vercel.app/vendeur.html");}}' > app/src/main/java/com/cdlotto/app/MainActivity.java
-      - name: Add C&D Logo
-        run: |
-          mkdir -p app/src/main/res/mipmap-hdpi app/src/main/res/mipmap-mdpi app/src/main/res/mipmap-xhdpi app/src/main/res/mipmap-xxhdpi app/src/main/res/mipmap-xxxhdpi
-          python3 -c "from PIL import Image, ImageDraw, ImageFont; s=256; img=Image.new('RGB',(s,s),(15,80,40)); d=ImageDraw.Draw(img); d.ellipse([2,2,s-2,s-2], outline=(212,175,55), width=8); d.ellipse([20,20,s-20,s-20], outline=(212,175,55), width=3); f=ImageFont.load_default(); d.text((s//2-30, s//4), 'C&D', fill=(255,215,0), font=f); d.text((s//2-45, s//2), 'VERITE', fill=(255,215,0), font=f); d.text((s//2-35, s//2+30), 'LOTTO', fill=(255,215,0), font=f); img.save('app/src/main/res/mipmap-hdpi/ic_launcher.png'); img.resize((48,48)).save('app/src/main/res/mipmap-mdpi/ic_launcher.png'); img.resize((96,96)).save('app/src/main/res/mipmap-xhdpi/ic_launcher.png'); img.resize((144,144)).save('app/src/main/res/mipmap-xxhdpi/ic_launcher.png'); img.resize((192,192)).save('app/src/main/res/mipmap-xxxhdpi/ic_launcher.png'); print('logos ok')"
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-xhdpi/ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-xxhdpi/ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-xxxhdpi/ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
-          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="C&amp;D Verite Lotto" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
-          ls -lh app/src/main/res/mipmap-hdpi/
-      - name: Build APK
+          printf "plugins{ id 'com.android.application' version '8.1.0' }\nandroid{ namespace 'com.cdlotto.app'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.app'; minSdk 21; targetSdk 33; versionCode 304; versionName '30.4-PRINT' } }\n" > app/build.gradle
+          echo '<resources><string name="app_name">C&amp;D Verite Lotto</string></resources>' > app/src/main/res/values/strings.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.BLUETOOTH"/><uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/><application android:label="C&amp;D Verite Lotto"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          cat > app/src/main/java/com/cdlotto/app/MainActivity.java << 'JAVA'
+          package com.cdlotto.app;
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+          import android.webkit.WebChromeClient;
+          import android.print.PrintAttributes;
+          import android.print.PrintDocumentAdapter;
+          import android.print.PrintManager;
+          import android.content.Context;
+          import android.webkit.JavascriptInterface;
+          import android.widget.Toast;
+
+          public class MainActivity extends Activity {
+              WebView w;
+              protected void onCreate(Bundle b){
+                  super.onCreate(b);
+                  w=new WebView(this);
+                  setContentView(w);
+                  w.getSettings().setJavaScriptEnabled(true);
+                  w.getSettings().setDomStorageEnabled(true);
+                  w.getSettings().setAllowFileAccess(true);
+                  w.getSettings().setAllowContentAccess(true);
+                  w.getSettings().setSupportMultipleWindows(true);
+                  w.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+                  w.addJavascriptInterface(new PrintInterface(this), "AndroidPrint");
+
+                  w.setWebViewClient(new WebViewClient(){
+                      public boolean shouldOverrideUrlLoading(WebView view, String url){
+                          return false;
+                      }
+                  });
+
+                  w.setWebChromeClient(new WebChromeClient(){
+                      public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, android.os.Message resultMsg){
+                          WebView newView = new WebView(MainActivity.this);
+                          newView.getSettings().setJavaScriptEnabled(true);
+                          newView.setWebChromeClient(this);
+                          newView.setWebViewClient(new WebViewClient(){
+                              public void onPageFinished(WebView view, String url){
+                                  // Auto print when new window loads (for rapports)
+                                  PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                                  PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter("Rapport");
+                                  printManager.print("C&D Lotto Rapport", printAdapter, new PrintAttributes.Builder().build());
+                              }
+                          });
+                          WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                          transport.setWebView(newView);
+                          resultMsg.sendToTarget();
+                          return true;
+                      }
+                  });
+
+                  w.loadUrl("https://cd-lotto.vercel.app/vendeur.html");
+              }
+
+              public class PrintInterface {
+                  Context ctx;
+                  PrintInterface(Context c){ctx=c;}
+                  @JavascriptInterface
+                  public void printPage(){
+                      runOnUiThread(new Runnable(){
+                          public void run(){
+                              PrintManager pm = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                              PrintDocumentAdapter adapter = w.createPrintDocumentAdapter("CD Lotto");
+                              pm.print("CD Lotto Ticket", adapter, new PrintAttributes.Builder().build());
+                          }
+                      });
+                  }
+                  @JavascriptInterface
+                  public void showToast(String msg){
+                      Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
+                  }
+              }
+
+              public void onBackPressed(){
+                  if(w.canGoBack()) w.goBack();
+                  else super.onBackPressed();
+              }
+          }
+          JAVA
+      - name: Build APK with Print
         run: gradle :app:assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
-          name: APK-C-D-VERITE-LOGO-OK
+          name: APK-CD-PRINT-FIX
           path: app/build/outputs/apk/debug/*.apk
