@@ -18,7 +18,7 @@ jobs:
           cat > app/build.gradle <<'EOF'
           buildscript {
             repositories { google(); mavenCentral() }
-            dependencies { classpath 'com.android.tools.build:gradle:7.4.2' }
+            dependencies { classpath 'com.android.tools.build:gradle:8.1.0' }
           }
           apply plugin: 'com.android.application'
           android {
@@ -29,7 +29,8 @@ jobs:
           EOF
           echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="CD Lotto"><activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
           echo 'package com.cdlotto.app; import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; public class MainActivity extends Activity { protected void onCreate(Bundle b){ super.onCreate(b); WebView w=new WebView(this); setContentView(w); w.getSettings().setJavaScriptEnabled(true); w.setWebViewClient(new WebViewClient()); w.loadUrl("https://cd-lotto.vercel.app/vendeur.html"); } }' > app/src/main/java/com/cdlotto/app/MainActivity.java
-          gradle :app:assembleDebug --no-daemon
+          gradle wrapper --gradle-version 8.0
+         ./gradlew :app:assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: APK-FINAL
