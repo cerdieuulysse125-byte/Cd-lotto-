@@ -1,5 +1,5 @@
-name: Build APK V25.7 SANS DIALOG
-on: [push, workflow_dispatch]
+name: Build
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,42 +9,18 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Create Project
+      - name: Build
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
-          cat > settings.gradle <<'SET'
-          pluginManagement {
-              repositories { google(); mavenCentral(); gradlePluginPortal() }
-          }
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories { google(); mavenCentral() }
-          }
-          include ':app'
-          SET
+          echo "include ':app'" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
-          cat > app/build.gradle <<'GRADLE'
-          plugins { id 'com.android.application' version '7.4.2' }
-          android {
-              namespace 'com.cdlotto.app'
-              compileSdk 33
-              defaultConfig {
-                  applicationId "com.cdlotto.app"
-                  minSdk 21
-                  targetSdk 33
-                  versionCode 257
-                  versionName "25.7"
-              }
-              buildTypes { debug { minifyEnabled false } }
-          }
-          dependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }
-          GRADLE
-          printf '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:allowBackup="true" android:label="CD Lotto" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
-          printf 'package com.cdlotto.app; import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; import android.view.View; import android.view.WindowManager; public class MainActivity extends Activity { private WebView webView; @Override protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); webView=new WebView(this); setContentView(webView); webView.getSettings().setJavaScriptEnabled(true); webView.getSettings().setDomStorageEnabled(true); webView.setWebViewClient(new WebViewClient()); webView.loadUrl("https://cd-lotto.vercel.app/vendeur.html"); } @Override public void onBackPressed(){ if(webView.canGoBack()) webView.goBack(); else super.onBackPressed(); } }' > app/src/main/java/com/cdlotto/app/MainActivity.java
-      - name: Build APK
-        run: gradle :app:assembleDebug --no-daemon
+          echo "plugins { id 'com.android.application' version '7.4.2' }" > app/build.gradle
+          echo "android { namespace 'com.cdlotto.app'; compileSdk 33; defaultConfig { applicationId 'com.cdlotto.app'; minSdk 21; targetSdk 33; versionCode 257; versionName '25.7' }; buildTypes { debug { minifyEnabled false } } }" >> app/build.gradle
+          echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="CD Lotto" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          echo 'package com.cdlotto.app; import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; import android.view.View; import android.view.WindowManager; public class MainActivity extends Activity { protected void onCreate(Bundle b){ super.onCreate(b); getWindow().setFlags(1024,1024); getWindow().getDecorView().setSystemUiVisibility(5894); WebView w=new WebView(this); setContentView(w); w.getSettings().setJavaScriptEnabled(true); w.setWebViewClient(new WebViewClient()); w.loadUrl("https://cd-lotto.vercel.app/vendeur.html"); } }' > app/src/main/java/com/cdlotto/app/MainActivity.java
+          gradle :app:assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: CD-LOTTO-V25.7-FINAL-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: APK-FINAL
+          path: app/build/outputs/apk/debug/*.apk
