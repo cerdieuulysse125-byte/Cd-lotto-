@@ -1,82 +1,21 @@
-name: Build APK V25.7 SANS DIALOG
-on: [push, workflow_dispatch]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - uses: android-actions/setup-android@v3
-      
-      - name: Create ALL missing files automatically
-        run: |
-          echo "include ':app'" > settings.gradle
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-          echo "" > build.gradle
-          
-          mkdir -p app/src/main/java/com/cdlotto/app
-          
-          cat > app/build.gradle <<'EOF'
-          plugins { id 'com.android.application' }
-          android {
-              namespace 'com.cdlotto.app'
-              compileSdk 33
-              defaultConfig {
-                  applicationId "com.cdlotto.app"
-                  minSdk 21
-                  targetSdk 33
-                  versionCode 257
-                  versionName "25.7"
-              }
-              buildTypes {
-                  debug { minifyEnabled false }
-                  release { minifyEnabled false }
-              }
-          }
-          dependencies {
-              implementation 'androidx.appcompat:appcompat:1.6.1'
-          }
-          EOF
-
-          cat > app/src/main/AndroidManifest.xml <<'EOF'
-          <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <uses-permission android:name="android.permission.INTERNET"/>
-              <application android:allowBackup="true" android:label="CD Lotto V25.7" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-                  <activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-                      <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-
-          cat > app/src/main/java/com/cdlotto/app/MainActivity.java <<'EOF'
-          package com.cdlotto.app;
-          import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; import android.view.View; import android.view.WindowManager;
-          public class MainActivity extends Activity {
-              private WebView webView;
-              @Override protected void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-                  getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                  getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-                  webView = new WebView(this); setContentView(webView);
-                  webView.getSettings().setJavaScriptEnabled(true);
-                  webView.getSettings().setDomStorageEnabled(true);
-                  webView.setWebViewClient(new WebViewClient());
-                  webView.loadUrl("https://cd-lotto.vercel.app/vendeur.html");
-              }
-              @Override public void onBackPressed() { if(webView.canGoBack()) webView.goBack(); else super.onBackPressed(); }
-          }
-          EOF
-
-      - name: Build APK
-        run: gradle :app:assembleDebug --no-daemon --stacktrace
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: CD-LOTTO-V25.7-SANS-DIALOG-FINAL
-          path: app/build/outputs/apk/debug/*.apk
+plugins {
+    id 'com.android.application'
+}
+android {
+    namespace 'com.cdlotto.app'
+    compileSdk 33
+    defaultConfig {
+        applicationId "com.cdlotto.app"
+        minSdk 21
+        targetSdk 33
+        versionCode 257
+        versionName "25.7-SANS-DIALOG"
+    }
+    buildTypes {
+        debug { minifyEnabled false }
+        release { minifyEnabled false }
+    }
+}
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+}
