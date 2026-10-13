@@ -174,4 +174,31 @@ function printRapport(){
 function goTab(id,el){document.querySelectorAll('.tabPage').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');}
 let curV=localStorage.getItem('curV');if(curV){try{CUR=JSON.parse(curV);openMain();}catch(e){}}
 setTimeout(()=>{if(document.getElementById('splash').style.display!=='none'){hideSplash();}},2500);
-</script></body></html>
+</script><script>
+// FIX TOUCH SUNMI V2 PRO - FÒSE TOUCH AKTIF
+setTimeout(()=>{
+  let sp=document.getElementById('splash');
+  if(sp){ sp.style.display='none'; sp.remove(); }
+  document.body.style.touchAction='manipulation';
+  isPrinting=false;
+}, 1500);
+
+document.addEventListener('touchstart', function(e){
+  // Force enable touch
+  isPrinting=false;
+}, {passive:true});
+
+document.addEventListener('click', function(e){
+  let t=e.target;
+  if(t.tagName==='BUTTON' || t.closest('button')){
+    isPrinting=false;
+    console.log('Button touched:', t.innerText);
+  }
+}, true);
+
+// FIX POU TABS YO PA BLOKE
+let style=document.createElement('style');
+style.innerHTML='*{-webkit-tap-highlight-color:transparent; touch-action:manipulation} button{pointer-events:auto!important; cursor:pointer; user-select:none}.tabPage{pointer-events:auto}.tlist{pointer-events:auto}';
+document.head.appendChild(style);
+</script>
+</body></html>
