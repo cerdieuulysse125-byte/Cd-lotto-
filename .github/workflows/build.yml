@@ -1,7 +1,5 @@
 name: Build APK V25.7 SANS DIALOG
-on:
-  push:
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,13 +11,15 @@ jobs:
           distribution: 'temurin'
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      - name: Build APK Debug
+      - name: Fix missing files
         run: |
+          echo "include ':app'" > settings.gradle
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-          chmod +x gradlew 2>/dev/null || echo "no gradlew"
-          gradle wrapper --gradle-version 8.0 || true
-          chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace || gradle assembleDebug
+          cat app/build.gradle
+      - name: Build APK
+        run: |
+          cd app
+          gradle assembleDebug --no-daemon
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
