@@ -15,7 +15,7 @@ jobs:
       - name: Setup
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
-          printf "pluginManagement{\n repositories{\n google()\n mavenCentral()\n gradlePluginPortal()\n }\n}\ninclude ':app'\n" > settings.gradle
+          printf "pluginManagement{\n repositories{\n google()\n mavenCentral()\n gradlePluginPortal()\n }\n}\ndependencyResolutionManagement{\n repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{\n google()\n mavenCentral()\n }\n}\ninclude ':app'\n" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
           printf "plugins{\n id 'com.android.application' version '8.1.0'\n}\nandroid{\n namespace 'com.cdlotto.app'\n compileSdk 33\n defaultConfig{\n applicationId 'com.cdlotto.app'\n minSdk 21\n targetSdk 33\n versionCode 257\n versionName '25.7'\n }\n buildTypes{\n debug{\n minifyEnabled false\n }\n }\n}\n" > app/build.gradle
