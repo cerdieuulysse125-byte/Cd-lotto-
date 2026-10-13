@@ -9,23 +9,37 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      
       - name: Create Project
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
+          echo "include ':app'" > settings.gradle
           rm -f build.gradle
-          echo 'pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }' > settings.gradle
-          echo 'dependencyResolutionManagement { repositories { google(); mavenCentral() } }' >> settings.gradle
-          echo "include ':app'" >> settings.gradle
-          echo "" > build.gradle
+          touch build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
-          printf "plugins { id 'com.android.application' }\nandroid { namespace 'com.cdlotto.app'; compileSdk 33; defaultConfig { applicationId 'com.cdlotto.app'; minSdk 21; targetSdk 33; versionCode 257; versionName '25.7' }; buildTypes { debug { minifyEnabled false } } }\ndependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }\n" > app/build.gradle
+          cat > app/build.gradle <<'GRADLE'
+          buildscript {
+              repositories { google(); mavenCentral() }
+              dependencies { classpath 'com.android.tools.build:gradle:8.1.0' }
+          }
+          apply plugin: 'com.android.application'
+          android {
+              namespace 'com.cdlotto.app'
+              compileSdk 33
+              defaultConfig {
+                  applicationId "com.cdlotto.app"
+                  minSdk 21
+                  targetSdk 33
+                  versionCode 257
+                  versionName "25.7"
+              }
+              buildTypes { debug { minifyEnabled false } }
+          }
+          dependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }
+          GRADLE
           printf '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:allowBackup="true" android:label="CD Lotto" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
           printf 'package com.cdlotto.app; import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; import android.view.View; import android.view.WindowManager; public class MainActivity extends Activity { private WebView webView; @Override protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); webView=new WebView(this); setContentView(webView); webView.getSettings().setJavaScriptEnabled(true); webView.getSettings().setDomStorageEnabled(true); webView.setWebViewClient(new WebViewClient()); webView.loadUrl("https://cd-lotto.vercel.app/vendeur.html"); } @Override public void onBackPressed(){ if(webView.canGoBack()) webView.goBack(); else super.onBackPressed(); } }' > app/src/main/java/com/cdlotto/app/MainActivity.java
-      
       - name: Build APK
-        run: gradle :app:assembleDebug --no-daemon
-      
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
