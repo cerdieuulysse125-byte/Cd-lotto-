@@ -12,75 +12,31 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.2.1
-      - name: Setup with C&D Logo
+      - name: Setup base
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
-          printf "pluginManagement{\n repositories{\n google()\n mavenCentral()\n gradlePluginPortal()\n }\n}\ndependencyResolutionManagement{\n repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{\n google()\n mavenCentral()\n }\n}\ninclude ':app'\n" > settings.gradle
+          printf "pluginManagement{\n repositories{ google(); mavenCentral(); gradlePluginPortal() }\n}\ndependencyResolutionManagement{\n repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{ google(); mavenCentral() }\n}\ninclude ':app'\n" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
-          mkdir -p app/src/main/res/mipmap-hdpi
-          mkdir -p app/src/main/res/mipmap-mdpi
-          mkdir -p app/src/main/res/mipmap-xhdpi
-          mkdir -p app/src/main/res/mipmap-xxhdpi
-          mkdir -p app/src/main/res/mipmap-xxxhdpi
           mkdir -p app/src/main/res/values
-          python3 << 'PY'
-          from PIL import Image, ImageDraw, ImageFont
-          def make_logo(size, path):
-              # Green and gold C&D Verite Lotto style
-              img = Image.new('RGB', (size, size), (15, 80, 40))
-              draw = ImageDraw.Draw(img)
-              # Gold circle border
-              draw.ellipse([size*0.02, size*0.02, size*0.98, size*0.98], outline=(212,175,55), width=max(2,size//20))
-              draw.ellipse([size*0.08, size*0.08, size*0.92, size*0.92], outline=(212,175,55), width=max(1,size//40))
-              try:
-                  font_big = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size//4)
-                  font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size//9)
-              except:
-                  font_big = ImageFont.load_default()
-                  font_small = ImageFont.load_default()
-              # C&D
-              txt1 = "C&D"
-              bbox = draw.textbbox((0,0), txt1, font=font_big)
-              w = bbox[2]-bbox[0]
-              draw.text(((size-w)/2, size*0.18), txt1, font=font_big, fill=(255,215,0))
-              # VERITE
-              txt2 = "VERITE"
-              bbox2 = draw.textbbox((0,0), txt2, font=font_small)
-              w2 = bbox2[2]-bbox2[0]
-              draw.text(((size-w2)/2, size*0.52), txt2, font=font_small, fill=(255,215,0))
-              # LOTTO
-              txt3 = "LOTTO"
-              bbox3 = draw.textbbox((0,0), txt3, font=font_small)
-              w3 = bbox3[2]-bbox3[0]
-              draw.text(((size-w3)/2, size*0.68), txt3, font=font_small, fill=(255,215,0))
-              # Stars
-              draw.text((size*0.15, size*0.10), "*", fill=(255,215,0))
-              draw.text((size*0.75, size*0.10), "*", fill=(255,215,0))
-              img.save(path)
-              print(f"Logo {size} saved to {path}")
-
-          make_logo(48, 'app/src/main/res/mipmap-mdpi/ic_launcher.png')
-          make_logo(72, 'app/src/main/res/mipmap-hdpi/ic_launcher.png')
-          make_logo(96, 'app/src/main/res/mipmap-xhdpi/ic_launcher.png')
-          make_logo(144, 'app/src/main/res/mipmap-xxhdpi/ic_launcher.png')
-          make_logo(192, 'app/src/main/res/mipmap-xxxhdpi/ic_launcher.png')
-          # copy round
-          import shutil, os
-          for d in ["mdpi","hdpi","xhdpi","xxhdpi","xxxhdpi"]:
-              src = f'app/src/main/res/mipmap-{d}/ic_launcher.png'
-              dst = f'app/src/main/res/mipmap-{d}/ic_launcher_round.png'
-              shutil.copy(src, dst)
-          PY
+          printf "plugins{ id 'com.android.application' version '8.1.0' }\nandroid{ namespace 'com.cdlotto.app'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.app'; minSdk 21; targetSdk 33; versionCode 303; versionName '30.3' } }\n" > app/build.gradle
           echo '<resources><string name="app_name">C&D Verite Lotto</string></resources>' > app/src/main/res/values/strings.xml
-          printf "plugins{\n id 'com.android.application' version '8.1.0'\n}\nandroid{\n namespace 'com.cdlotto.app'\n compileSdk 33\n defaultConfig{\n applicationId 'com.cdlotto.app'\n minSdk 21\n targetSdk 33\n versionCode 302\n versionName '30.2'\n }\n}\n" > app/build.gradle
-          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="@string/app_name"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
           echo 'package com.cdlotto.app;import android.app.Activity;import android.os.Bundle;import android.webkit.WebView;import android.webkit.WebViewClient;public class MainActivity extends Activity{protected void onCreate(Bundle b){super.onCreate(b);WebView w=new WebView(this);setContentView(w);w.getSettings().setJavaScriptEnabled(true);w.getSettings().setDomStorageEnabled(true);w.setWebViewClient(new WebViewClient());w.loadUrl("https://cd-lotto.vercel.app/vendeur.html");}}' > app/src/main/java/com/cdlotto/app/MainActivity.java
-      - name: Build
+      - name: Add C&D Logo
+        run: |
+          mkdir -p app/src/main/res/mipmap-hdpi app/src/main/res/mipmap-mdpi app/src/main/res/mipmap-xhdpi app/src/main/res/mipmap-xxhdpi app/src/main/res/mipmap-xxxhdpi
+          python3 -c "from PIL import Image, ImageDraw, ImageFont; s=256; img=Image.new('RGB',(s,s),(15,80,40)); d=ImageDraw.Draw(img); d.ellipse([2,2,s-2,s-2], outline=(212,175,55), width=8); d.ellipse([20,20,s-20,s-20], outline=(212,175,55), width=3); f=ImageFont.load_default(); d.text((s//2-30, s//4), 'C&D', fill=(255,215,0), font=f); d.text((s//2-45, s//2), 'VERITE', fill=(255,215,0), font=f); d.text((s//2-35, s//2+30), 'LOTTO', fill=(255,215,0), font=f); img.save('app/src/main/res/mipmap-hdpi/ic_launcher.png'); img.resize((48,48)).save('app/src/main/res/mipmap-mdpi/ic_launcher.png'); img.resize((96,96)).save('app/src/main/res/mipmap-xhdpi/ic_launcher.png'); img.resize((144,144)).save('app/src/main/res/mipmap-xxhdpi/ic_launcher.png'); img.resize((192,192)).save('app/src/main/res/mipmap-xxxhdpi/ic_launcher.png'); print('logos ok')"
+          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+          cp app/src/main/res/mipmap-mdpi/ic_launcher.png app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+          cp app/src/main/res/mipmap-xhdpi/ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+          cp app/src/main/res/mipmap-xxhdpi/ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+          cp app/src/main/res/mipmap-xxxhdpi/ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="C&amp;D Verite Lotto" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          ls -lh app/src/main/res/mipmap-hdpi/
+      - name: Build APK
         run: gradle :app:assembleDebug --no-daemon
-      - name: Check
-        run: ls -lh app/build/outputs/apk/debug/
       - uses: actions/upload-artifact@v4
         with:
-          name: APK-C-D-VERITE-LOTTO-LOGO
+          name: APK-C-D-VERITE-LOGO-OK
           path: app/build/outputs/apk/debug/*.apk
