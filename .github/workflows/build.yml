@@ -15,11 +15,21 @@ jobs:
           echo "include ':app'" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
-          echo "plugins { id 'com.android.application' version '7.4.2' }" > app/build.gradle
-          echo "android { namespace 'com.cdlotto.app'; compileSdk 33; defaultConfig { applicationId 'com.cdlotto.app'; minSdk 21; targetSdk 33; versionCode 257; versionName '25.7' }; buildTypes { debug { minifyEnabled false } } }" >> app/build.gradle
-          echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="CD Lotto" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
-          echo 'package com.cdlotto.app; import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; import android.view.View; import android.view.WindowManager; public class MainActivity extends Activity { protected void onCreate(Bundle b){ super.onCreate(b); getWindow().setFlags(1024,1024); getWindow().getDecorView().setSystemUiVisibility(5894); WebView w=new WebView(this); setContentView(w); w.getSettings().setJavaScriptEnabled(true); w.setWebViewClient(new WebViewClient()); w.loadUrl("https://cd-lotto.vercel.app/vendeur.html"); } }' > app/src/main/java/com/cdlotto/app/MainActivity.java
-          gradle :app:assembleDebug
+          cat > app/build.gradle <<'EOF'
+          buildscript {
+            repositories { google(); mavenCentral() }
+            dependencies { classpath 'com.android.tools.build:gradle:7.4.2' }
+          }
+          apply plugin: 'com.android.application'
+          android {
+            compileSdk 33
+            defaultConfig { applicationId "com.cdlotto.app"; minSdk 21; targetSdk 33; versionCode 257; versionName "25.7" }
+            buildTypes { debug { minifyEnabled false } }
+          }
+          EOF
+          echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="CD Lotto"><activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          echo 'package com.cdlotto.app; import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; public class MainActivity extends Activity { protected void onCreate(Bundle b){ super.onCreate(b); WebView w=new WebView(this); setContentView(w); w.getSettings().setJavaScriptEnabled(true); w.setWebViewClient(new WebViewClient()); w.loadUrl("https://cd-lotto.vercel.app/vendeur.html"); } }' > app/src/main/java/com/cdlotto/app/MainActivity.java
+          gradle :app:assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: APK-FINAL
