@@ -12,63 +12,60 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.2.1
-      - name: Setup Full App with Logo
+      - name: Setup App with Logo CD
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
-          printf "pluginManagement{\n repositories{ google(); mavenCentral(); gradlePluginPortal() }\n}\ndependencyResolutionManagement{\n repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{ google(); mavenCentral() }\n}\ninclude ':app'\n" > settings.gradle
+          printf "pluginManagement{\n repositories{\n google()\n mavenCentral()\n gradlePluginPortal()\n }\n}\ndependencyResolutionManagement{\n repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{\n google()\n mavenCentral()\n }\n}\ninclude ':app'\n" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
           mkdir -p app/src/main/res/mipmap-hdpi
           mkdir -p app/src/main/res/mipmap-mdpi
           mkdir -p app/src/main/res/mipmap-xhdpi
           mkdir -p app/src/main/res/mipmap-xxhdpi
+          mkdir -p app/src/main/res/mipmap-xxxhdpi
           mkdir -p app/src/main/res/values
-          # Generate LOGO with Python
-          python3 << 'PY'
+          # Create logo with Python - simple and works
+          python3 -c "
           from PIL import Image, ImageDraw, ImageFont
-          import os
-          def make_icon(size, path):
-              img = Image.new('RGBA', (size, size), (13, 27, 100, 255))
-              draw = ImageDraw.Draw(img)
-              # Draw golden CD
+          def make(size, out):
+              img = Image.new('RGB', (size, size), (13, 27, 100))
+              d = ImageDraw.Draw(img)
+              # Gold CD text
               try:
-                  # Try bold font
-                  f_big = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size//3)
-                  f_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size//8)
+                  f = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', size//2)
               except:
-                  f_big = ImageFont.load_default()
-                  f_small = ImageFont.load_default()
-              # Draw lotto balls simplified
-              colors = [(255,80,80), (80,150,255), (255,220,50), (80,200), (100,200,80)]
-              # Background glow
-              draw.ellipse([size*0.1, size*0.1, size*0.9, size*0.9], fill=(25,40,130,255))
-              # CD Text golden
-              text = "CD"
-              bbox = draw.textbbox((0,0), text, font=f_big)
-              w = bbox[2]-bbox[0]; h = bbox[3]-bbox[1]
-              draw.text(((size-w)/2, (size-h)/2 - size*0.05), text, font=f_big, fill=(255,215,0,255), stroke_width=2, stroke_fill=(200,160,0,255))
-              # Small balls around
-              draw.ellipse([size*0.15, size*0.15, size*0.35, size*0.35], fill=colors[1])
-              draw.ellipse([size*0.65, size*0.15, size*0.85, size*0.35], fill=colors[2])
-              draw.ellipse([size*0.1, size*0.65, size*0.3, size*0.85], fill=colors[0])
-              draw.ellipse([size*0.7, size*0.65, size*0.9, size*0.85], fill=colors[3])
-              img.save(path)
-              print(f"Created {path} {size}")
-          for d in ["hdpi","mdpi","xhdpi","xxhdpi"]:
-              sz = {"mdpi":48,"hdpi":72,"xhdpi":96,"xxhdpi":144}[d]
-              make_icon(sz, f"app/src/main/res/mipmap-{d}/ic_launcher.png")
-              make_icon(sz, f"app/src/main/res/mipmap-{d}/ic_launcher_round.png")
-          # Also 512 for play store
-          make_icon(512, "app/src/main/res/mipmap-xxhdpi/ic_launcher.png")
-          PY
-          printf "plugins{\n id 'com.android.application' version '8.1.0'\n}\nandroid{\n namespace 'com.cdlotto.app'\n compileSdk 33\n defaultConfig{\n applicationId 'com.cdlotto.app'\n minSdk 21\n targetSdk 33\n versionCode 258\n versionName '25.8'\n }\n buildTypes{\n debug{ minifyEnabled false }\n release{ minifyEnabled false }\n }\n}\n" > app/build.gradle
+                  f = ImageFont.load_default()
+              txt='CD'
+              bbox=d.textbbox((0,0), txt, font=f)
+              w=bbox[2]-bbox[0]
+              h=bbox[3]-bbox[1]
+              d.text(((size-w)/2, (size-h)/2), txt, font=f, fill=(255,215,0))
+              # small lotto dots
+              d.ellipse([size*0.1, size*0.1, size*0.25, size*0.25], fill=(255,80,80))
+              d.ellipse([size*0.75, size*0.1, size*0.9, size*0.25], fill=(255,220,50))
+              d.ellipse([size*0.1, size*0.75, size*0.25, size*0.9], fill=(80,200,255))
+              d.ellipse([size*0.75, size*0.75, size*0.9, size*0.9], fill=(100,255,100))
+              img.save(out)
+              print(f'icon {size} -> {out}')
+          make(48, 'app/src/main/res/mipmap-mdpi/ic_launcher.png')
+          make(72, 'app/src/main/res/mipmap-hdpi/ic_launcher.png')
+          make(96, 'app/src/main/res/mipmap-xhdpi/ic_launcher.png')
+          make(144, 'app/src/main/res/mipmap-xxhdpi/ic_launcher.png')
+          make(192, 'app/src/main/res/mipmap-xxxhdpi/ic_launcher.png')
+          make(48, 'app/src/main/res/mipmap-mdpi/ic_launcher_round.png')
+          make(72, 'app/src/main/res/mipmap-hdpi/ic_launcher_round.png')
+          make(96, 'app/src/main/res/mipmap-xhdpi/ic_launcher_round.png')
+          make(144, 'app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png')
+          make(192, 'app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png')
+          "
           echo '<resources><string name="app_name">CD Lotto</string></resources>' > app/src/main/res/values/strings.xml
+          printf "plugins{\n id 'com.android.application' version '8.1.0'\n}\nandroid{\n namespace 'com.cdlotto.app'\n compileSdk 33\n defaultConfig{\n applicationId 'com.cdlotto.app'\n minSdk 21\n targetSdk 33\n versionCode 259\n versionName '25.9'\n }\n buildTypes{\n debug{ minifyEnabled false }\n }\n}\n" > app/build.gradle
           echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
           echo 'package com.cdlotto.app;import android.app.Activity;import android.os.Bundle;import android.webkit.WebView;import android.webkit.WebViewClient;public class MainActivity extends Activity{protected void onCreate(Bundle b){super.onCreate(b);WebView w=new WebView(this);setContentView(w);w.getSettings().setJavaScriptEnabled(true);w.getSettings().setDomStorageEnabled(true);w.setWebViewClient(new WebViewClient());w.loadUrl("https://cd-lotto.vercel.app/vendeur.html");}}' > app/src/main/java/com/cdlotto/app/MainActivity.java
       - name: Build APK
         run: gradle :app:assembleDebug --no-daemon
-      - name: Check APK size
-        run: ls -lh app/build/outputs/apk/debug/*.apk && du -h app/build/outputs/apk/debug/*.apk
+      - name: Check size
+        run: ls -lh app/build/outputs/apk/debug/
       - uses: actions/upload-artifact@v4
         with:
           name: APK-CD-LOTTO-LOGO
