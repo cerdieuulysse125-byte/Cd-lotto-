@@ -12,39 +12,20 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.2.1
-      - name: Setup with CD Logo
+      - name: Setup
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
           printf "pluginManagement{\n repositories{\n google()\n mavenCentral()\n gradlePluginPortal()\n }\n}\ndependencyResolutionManagement{\n repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{\n google()\n mavenCentral()\n }\n}\ninclude ':app'\n" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app
-          mkdir -p app/src/main/res/mipmap-hdpi
-          mkdir -p app/src/main/res/mipmap-mdpi
-          mkdir -p app/src/main/res/mipmap-xhdpi
-          mkdir -p app/src/main/res/mipmap-xxhdpi
-          mkdir -p app/src/main/res/mipmap-xxxhdpi
           mkdir -p app/src/main/res/values
-          # CD Logo - base64 PNG (72x72 golden CD on blue)
-          LOGO="iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAIAAADajyQQAAAFnUlEQVR4nO2abUxbVRiAz71ASxktbYEClo+BYykgH8rHBhlsMnUwl7E4HHHBLEucicP4Y84lGKfZ/CBm0R/DGY0yZ+LiNlhGFOcAgQ2ZboM5ZI45lI+1QKEt9LYFW6Dt9QeG1XvuPfcW1pKWPr/gvefcvk/PPee896SYUP4S8Ebw5U7AVfjEPA2fmKfhtWL+rC2M2bqFv0WdYa5Mhi2TK785/iva+ASiMYbYxxyV/nfH5dCjWP2XCbMb46PIZIW+5CJorRBx4MVzjF6MdUzcOWiIYUFcXWEj5gWsMDHWBd2dKz56v2K6usJGDCDHxP0bNNOwIAYTVXnM44UllUez8uaYp+MT8zR8Yp6GT8zT8zIl5Gl4rxn6uCINhICNRl5c6lpc6liA3SoQzEuEMjpPGad7YhOCPgdDOXtnFX2NHdavgvt8ebX427z4cn7PiVhtumfUjTHxiiqfSBA+NCm/1hV/tiRybDFpMkk4VwfwA267N/a+W3k5arUe3JEnQ0RNVXZvaeD2WJB/EmcSYsJNYx++Rx2vTmq7HcO8FnBqx5NX6U4dbFHEEl8YYBvLT1fnp6sfKy5RjQqdycgTHyIIMdUGGurVLXvFRwYiW5img78ixXWlh/+VP6zlauYLCrJHLJ+rTE7ke+3ESezJz5PNDVwJ5tiUk9hCIkJrPf9AYEzHFpTH7oxgbafrmnZ8C/O3wJZ0h8Mvvklq7ovtHRHoTPyjQKhXNpMRPZiVpSvKH1kQbOGYcv7N8whCIY6QoeDZcbMlUaLesU5bkD/n7UT9UJjGfe69p0/6SmTm/pYq9vfemMGgOjp9uXPt6dd4/lgd3ME7zjNO8IbXwh1/ijtRk5yRrDu7uJkmMgxoAANhJjDDxCRP/L1XImeY1cZGmmjfbcpI1lGYp8ZN7t/352YUU9N1YHkVFHFFa2A/HTzYoXjlW4GgFc6NXtuutZ1TjweiPYOL+mHDrgW0dPVHwpYO7uwV8K7o7i9iOgkEcIynBgRHRoU/ynMpyccxa8T1HC+GvTyYxF2So0X1ZxJ7OUcHB6rrUWaubShYtIfj6ogKOP5U9jO6Iyg/DwONraZbXS9dinUpuiVyi25qzk6hzjwJKTCqywOuSlhBw3yUfCj1/h8LBcLEZ3QslFhZigYMTBr5TaS0dwsQnqdMchIlpcnPE6anCffl2KbAqBZSYzhAIB0PphtGlSIQzGPRl6ggBuhdKTG/k2+zUW8ok5kfCpp1Pb/Fk0C1gWoLmS3cEJWYnsVv3wuF40XqaPcB1FK1TwsHOuzJ0L5Y51twZDQdfe76HR1c6ugKZxPxicR8cb+miScwRFrH69nh4mibIjVX7rzmT3iIJ8LefOtwKV09aQtDeTVNqOcIidndIUtf2KBzft723+sDP6IItJ1lz9t0mjm8ZMHGRph8/btiQRlM6HTudYZ5hKd/Zq/sjJ7OK1yuDoQJ/z9Z7xbnKmu+TWm/K+4dDiCmegG+TiiwpCZNZCm1J/mBijAEA8MaJXI4mOEYKV82Fi82ZCm1xrnL7BprXFgDAnUHpVw00RRYFTmcehVkjde830n4MK5SjAWfPPChoCcGmihIubwycNujWLvnLH260zLK827ma8UnBc5VbOL4HsT+Km89/AQDQA/CCGVSpJct17NHSFX2mvEjRBhaewrPIdRElNq/kSKVYDwygimDXI0lw9XZUdW2qanzxR1QAADuJtXdHHT+XFnqB6lE2jHJjFIOtFqgU6/UVO2gPTNW6oDsD0hu9EUwHpkxYbficFbfM+hmmeJPGQJUmeHBU2N0X1tETpdELyhhevhBu9IsHwmqBlp37uOe9FJisFqB189qze5+Yp7HCxFgXBretHIBtv2K6yjhiiNTdaTUPU/YIZ/Za0XHpd7+SI5R1Hz2Svl+/eRo+MU/DJ+ZpeK3Yv3xgAELUdQCvAAAAAElFTkSuQmCC"
-          echo "$LOGO" | base64 -d > app/src/main/res/mipmap-hdpi/ic_launcher.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-mdpi/ic_launcher.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-          cp app/src/main/res/mipmap-hdpi/ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+          printf "plugins{\n id 'com.android.application' version '8.1.0'\n}\nandroid{\n namespace 'com.cdlotto.app'\n compileSdk 33\n defaultConfig{\n applicationId 'com.cdlotto.app'\n minSdk 21\n targetSdk 33\n versionCode 300\n versionName '30.0'\n }\n}\n" > app/build.gradle
           echo '<resources><string name="app_name">CD Lotto</string></resources>' > app/src/main/res/values/strings.xml
-          printf "plugins{\n id 'com.android.application' version '8.1.0'\n}\nandroid{\n namespace 'com.cdlotto.app'\n compileSdk 33\n defaultConfig{\n applicationId 'com.cdlotto.app'\n minSdk 21\n targetSdk 33\n versionCode 260\n versionName '26.0'\n }\n buildTypes{\n debug{ minifyEnabled false }\n }\n}\n" > app/build.gradle
-          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="@string/app_name"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
           echo 'package com.cdlotto.app;import android.app.Activity;import android.os.Bundle;import android.webkit.WebView;import android.webkit.WebViewClient;public class MainActivity extends Activity{protected void onCreate(Bundle b){super.onCreate(b);WebView w=new WebView(this);setContentView(w);w.getSettings().setJavaScriptEnabled(true);w.getSettings().setDomStorageEnabled(true);w.setWebViewClient(new WebViewClient());w.loadUrl("https://cd-lotto.vercel.app/vendeur.html");}}' > app/src/main/java/com/cdlotto/app/MainActivity.java
-      - name: Build APK
+      - name: Build
         run: gradle :app:assembleDebug --no-daemon
-      - name: Check
-        run: ls -lh app/build/outputs/apk/debug/
       - uses: actions/upload-artifact@v4
         with:
-          name: APK-CD-LOTTO-LOGO-FINAL
+          name: APK-CD-LOTTO-SAN-LOGO
           path: app/build/outputs/apk/debug/*.apk
