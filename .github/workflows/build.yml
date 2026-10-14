@@ -1,4 +1,4 @@
-name: Build V26 CORRIGE SILENT FINAL
+name: Build V27 AUTO-AJOU SILENT
 on: [push]
 jobs:
   build:
@@ -9,17 +9,17 @@ jobs:
         with: { distribution: temurin, java-version: 17 }
       - uses: gradle/actions/setup-gradle@v3
         with: { gradle-version: 8.2.1 }
-      - name: Build V26 SILENT
+      - name: Build AUTO SILENT
         run: |
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
           printf "pluginManagement{ repositories{ google(); mavenCentral(); gradlePluginPortal() } }\ndependencyResolutionManagement{ repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n repositories{ google(); mavenCentral() } }\ninclude ':app'\n" > settings.gradle
           echo "" > build.gradle
           mkdir -p app/src/main/java/com/cdlotto/app app/src/main/res/values
-          printf "plugins{ id 'com.android.application' version '8.1.0' }\nandroid{ namespace 'com.cdlotto.v26fixed'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.v26fixed'; minSdk 21; targetSdk 33; versionCode 26; versionName '26-CORRIGE-SILENT' } }\n" > app/build.gradle
-          echo '<resources><string name="app_name">C&D V26 SILENT</string></resources>' > app/src/main/res/values/strings.xml
-          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="C&D V26 SILENT"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          printf "plugins{ id 'com.android.application' version '8.1.0' }\nandroid{ namespace 'com.cdlotto.v27'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.v27auto'; minSdk 21; targetSdk 33; versionCode 27; versionName '27-AUTO-SILENT' } }\n" > app/build.gradle
+          echo '<resources><string name="app_name">C&D V27 AUTO</string></resources>' > app/src/main/res/values/strings.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/><application android:label="C&D V27 AUTO"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
           python3 << 'PY'
-          code = '''
+          java_code = """
           package com.cdlotto.app;
           import android.app.Activity; import android.os.Bundle; import android.webkit.WebView; import android.webkit.WebViewClient; import android.webkit.JavascriptInterface; import java.lang.reflect.Method;
           public class MainActivity extends Activity{
@@ -30,9 +30,11 @@ jobs:
                   setContentView(mainView);
                   mainView.getSettings().setJavaScriptEnabled(true);
                   mainView.getSettings().setDomStorageEnabled(true);
+                  mainView.getSettings().setCacheMode(android.webkit.WebSettings.LOAD_NO_CACHE);
+                  mainView.clearCache(true);
                   mainView.addJavascriptInterface(new PrintBridge(), "AndroidPrint");
                   mainView.setWebViewClient(new WebViewClient());
-                  mainView.loadUrl("https://cd-lotto.vercel.app/vendeur.html");
+                  mainView.loadUrl("https://cd-lotto.vercel.app/vendeur.html?v=" + System.currentTimeMillis());
                   initSunmi();
               }
               void initSunmi(){
@@ -70,10 +72,10 @@ jobs:
                   }
               }
           }
-          '''
-          open('app/src/main/java/com/cdlotto/app/MainActivity.java','w').write(code)
+          """
+          open('app/src/main/java/com/cdlotto/app/MainActivity.java','w').write(java_code)
           PY
       - name: Build
         run: gradle :app:assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
-        with: { name: APK-V26-CORRIGE-SILENT-FINAL, path: app/build/outputs/apk/debug/*.apk }
+        with: { name: APK-V27-AUTO-AJOU-SILENT, path: app/build/outputs/apk/debug/*.apk }
