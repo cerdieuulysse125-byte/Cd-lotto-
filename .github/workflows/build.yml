@@ -1,4 +1,4 @@
-name: Build V30 NATIVE FINAL
+name: Build V31 FIX CRASH
 on: [push]
 jobs:
   build:
@@ -14,54 +14,42 @@ jobs:
           echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
           cat > settings.gradle << 'SET'
           pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
+              repositories { google(); mavenCentral(); gradlePluginPortal() }
           }
           dependencyResolutionManagement {
               repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
+              repositories { google(); mavenCentral() }
           }
           rootProject.name = "Cd-lotto"
           include ':app'
           SET
           cat > build.gradle << 'ROOT'
           buildscript {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.1.0'
-              }
+              repositories { google(); mavenCentral() }
+              dependencies { classpath 'com.android.tools.build:gradle:8.1.0' }
           }
           ROOT
           mkdir -p app/src/main/java/com/cdlotto/app app/src/main/res/values
           cat > app/build.gradle << 'APP'
           apply plugin: 'com.android.application'
           android {
-              namespace 'com.cdlotto.v28native'
+              namespace 'com.cdlotto.app'
               compileSdkVersion 33
               defaultConfig {
-                  applicationId "com.cdlotto.v28native"
+                  applicationId "com.cdlotto.app"
                   minSdkVersion 21
                   targetSdkVersion 33
-                  versionCode 30
-                  versionName "30-NATIVE-SILENT"
+                  versionCode 31
+                  versionName "31-FIX-CRASH"
               }
           }
           APP
-          echo '<resources><string name="app_name">CD V28 NATIVE</string></resources>' > app/src/main/res/values/strings.xml
-          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="CD V28 NATIVE"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          echo '<resources><string name="app_name">CD V31 FIX</string></resources>' > app/src/main/res/values/strings.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="CD V31 FIX"><activity android:name="com.cdlotto.app.MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
           cp MainActivity.java app/src/main/java/com/cdlotto/app/MainActivity.java
       - name: Build APK
         run: gradle :app:assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
-          name: APK-V30-NATIVE-SILENT-FINAL
+          name: APK-V31-FIX-CRASH
           path: app/build/outputs/apk/debug/*.apk
