@@ -2,127 +2,148 @@
 <html lang="ht">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistèm Bòlèt - Enpresyon Otomatik</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vandè - CD Lotto</title>
     <style>
-        /* Estil pou ekran an */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            display: inline-block;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        button:hover { background-color: #218838; }
-
-        /* --- JESTYON ENPRIMANT TÈMIK (58mm) --- */
-        #bolet-ticket {
-            width: 58mm;
-            padding: 5mm;
-            margin: 0 auto;
-            background: #fff;
-            border: 1px dashed #000;
-            text-align: left;
-            font-size: 12px;
-            font-family: 'Courier New', Courier, monospace; /* Tipografik klasik bòlèt */
-            line-height: 1.2;
-        }
-        .text-center { text-align: center; }
-        .line { border-top: 1px dashed #000; margin: 5px 0; }
-        .flex { display: flex; justify-content: space-between; }
-
-        /* --- STYLES POU ENPRESYON SÈLMAN --- */
-        @media print {
-            body * {
-                visibility: hidden; /* Kache tout rès paj la */
-            }
-            #bolet-ticket, #bolet-ticket * {
-                visibility: visible; /* Montre sèlman tikè a */
-            }
-            #bolet-ticket {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 58mm; /* Fòse gwosè enprimant tèmik la */
-                border: none;
-            }
-            @page {
-                size: 58mm auto; /* Fòse navigatè a konprann se yon woulo papye */
-                margin: 0;       /* Retire tèt ak pye paj navigatè a (headers/footers) */
-            }
-        }
+        body { font-family: Arial, sans-serif; margin: 10px; background-color: #f4f4f4; }
+        h3 { text-align: center; margin-bottom: 10px; }
+        .kaz-Saisie { display: flex; gap: 5px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        select, input { padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
+        #jeu { width: 30%; }
+        #boul { width: 35%; }
+        #mise { width: 35%; }
+        /* Bouton Valider ki pran tout lajè ekran POS la */
+        .btn-valider { width: 100%; background: #27ae60; color: white; padding: 15px; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; margin-top: 15px; cursor: pointer; }
+        .lis-boul { margin-top: 15px; background: white; padding: 10px; border-radius: 8px; min-height: 150px; }
+        .boul-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Sistèm Tikè Bòlèt</h2>
-        <p>Klike sou bouton an pou vann epi enprime dirèkteman.</p>
-        <button onclick="fèVantEpiEnprime()">Vann & Enprime Tikè</button>
-       
-        <br><br><br>
+    <h3>CD-LOTTO (Vandè)</h3>
 
-        <!-- Zòn Tikè a -->
-        <div id="bolet-ticket">
-            <div class="text-center">
-                <strong>** LORENDA CHANS **</strong><br>
-                Pòtoprens, Ayiti<br>
-                Tel: +509 3333-2222<br>
-                ---------------------------
-            </div>
-            <div>
-                <strong>Tikè:</strong> #982374<br>
-                <strong>Dat:</strong> <span id="ticket-date"></span><br>
-                <strong>Machann:</strong> Agant 04<br>
-            </div>
-            <div class="line"></div>
-            <div>
-                <strong>LÒT RI / TIRAJ</strong>
-                <div class="flex"><span>NY - 12 x 34 x 45</span> <span>$50.00</span></div>
-                <div class="flex"><span>FL - 05 x 11</span> <span>$25.00</span></div>
-                <div class="flex"><span>Borlette - 88</span> <span>$100.00</span></div>
-            </div>
-            <div class="line"></div>
-            <div class="flex" style="font-size: 14px; font-weight: bold;">
-                <span>TOTAL:</span>
-                <span>$175.00 Gdes</span>
-            </div>
-            <div class="line"></div>
-            <div class="text-center" style="font-size: 10px;">
-                Bòn Chans! Pa gen ranbousman aprè tiraj.<br>
-                Mèsi pou fidelite w!
-            </div>
-        </div>
+    <!-- 1. ZÒN SAISIE RAPID (KLAVYE CHIF SÈLMAN) -->
+    <div class="kaz-Saisie">
+        <select id="jeu">
+            <option value="Borlette">Bor</option>
+            <option value="Mariage">Mar</option>
+            <option value="Loto">Loto</option>
+        </select>
+        <!-- inputmode="numeric" fòse Chrome Android louvri klavye chif sèlman -->
+        <input type="text" inputmode="numeric" pattern="[0-9]*" id="boul" placeholder="Boul" onkeydown="navige(event, 'mise')">
+        <input type="text" inputmode="numeric" pattern="[0-9]*" id="mise" placeholder="Mise" onkeydown="valideLiy(event)">
     </div>
 
+    <!-- 2. LIS BOUL KI ANTRE POU FICh LA -->
+    <div class="lis-boul" id="lis-boul-yo">
+        <!-- Boul yo ap afiche isit la an tan reyèl -->
+    </div>
+
+    <button class="btn-valider" onclick="voyeFirebaseEpiEnprime()">VALIDER & IMPRIMER</button>
+
+    <!-- SDK Firebase (Vèsyon Web) -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+
     <script>
-        // Mete dat jounen an otomatikman sou tikè a
-        document.getElementById('ticket-date').innerText = new Date().toLocaleString();
+        // Konfigirasyon Firebase cd-lotto ou a
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",
+            authDomain: "://firebaseapp.com",
+            databaseURL: "https://firebaseio.com",
+            projectId: "cd-lotto",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-        function fèVantEpiEnprime() {
-            // 1. Mete lojik pou sove vant lan nan baz de done w la isit la (AJAX / Fetch)
-            console.log("Vant lan anrejistre nan sistèm lan...");
+        let fichesEnCours = [];
+        let totalMiseTicket = 0;
 
-            // 2. Deklanche enpresyon an
-            // Si Chrome configured nan mòd Kiosk, l ap enprime san l pa louvri bwat dyalòg la!
-            window.print();
+        // Navigasyon rapid ak flèch/Enter
+        function navige(e, pwochenKazId) {
+            if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowRight") {
+                e.preventDefault();
+                document.getElementById(pwochenKazId).focus();
+            }
+        }
+
+        // Lè w peze Enter sou mise, li ajoute liy lan epi li rale menm jwèt la
+        function valideLiy(e) {
+            if (e.key === "Enter" || e.key === "ArrowDown") {
+                e.preventDefault();
+                
+                const jeu = document.getElementById('jeu').value;
+                const boul = document.getElementById('boul').value;
+                const mise = parseFloat(document.getElementById('mise').value);
+
+                if (!boul || isNaN(mise)) return;
+
+                // Ajoute nan memwa
+                fichesEnCours.push({ jeu, boul, mise });
+                totalMiseTicket += mise;
+
+                // Afiche liy lan sou ekran an
+                const lisDiv = document.getElementById('lis-boul-yo');
+                lisDiv.innerHTML += `<div class="boul-item"><span>${jeu.substring(0,3).toUpperCase()} - ${boul}</span> <span>${mise} HTG</span></div>`;
+
+                // Netwaye kaz yo, men KONSÈVE menm jwèt la, epi tounen sou kaz Boul
+                document.getElementById('boul').value = "";
+                document.getElementById('mise').value = "";
+                document.getElementById('boul').focus();
+            }
+        }
+
+        // FONKSYON POU ENPRIME SAN DYALÒG SOU ANDROID POS
+        function enprimeOtomatikRawBT(ticketId, doneTicket) {
+            // Prepare tèks la ak kòd fòma ESC/POS pou ti woulo a (Santre, gwo lèt)
+            let tèksTikè = "";
+            tèksTikè += "--------------------------------\n";
+            tèksTikè += "[C]<b>CD LOTTO</b>\n"; // [C] vle di Santre, <b> gwo lèt
+            tèksTikè += `[C]Tikè: ${ticketId}\n`;
+            tèksTikè += `[C]Dat: ${new Date().toLocaleString()}\n`;
+            tèksTikè += "--------------------------------\n";
+            
+            fichesEnCours.forEach(item => {
+                let jwetKout = item.jeu.substring(0,3).toUpperCase();
+                tèksTikè += `[L]${jwetKout} - ${item.boul} : [R]${item.mise} HTG\n`; // [L] agoch, [R] adwat
+            });
+            
+            tèksTikè += "--------------------------------\n";
+            tèksTikè += `[C]<b>TOTAL: ${totalMiseTicket} HTG</b>\n`;
+            tèksTikè += "\n\n\n"; // Lage espas pou koupe papye a
+
+            // Nou voye tèks sa a bay aplikasyon enpresyon an pa yon Deep Link (Intent)
+            // Sa ap fize enpresyon an dirèkteman san li pa louvri okenn bwat dyalòg nan Chrome
+            const urlRawBT = "intent:#Intent;component=ru.a402d.rawbtprinter/.ActivityPrint;S.text=" + encodeURIComponent(tèksTikè) + ";end;";
+            window.location.href = urlRawBT;
+
+            // Reyinisyalize fich la apre enpresyon
+            fichesEnCours = [];
+            totalMiseTicket = 0;
+            document.getElementById('lis-boul-yo').innerHTML = "";
+        }
+
+        function voyeFirebaseEpiEnprime() {
+            if (fichesEnCours.length === 0) return;
+
+            const ticketId = "TXT" + Date.now();
+            const doneTicket = {
+                id_vendeur: "vendeur_pos_chrome",
+                date_vente: new Date().toISOString(),
+                total_mise: totalMiseTicket,
+                lignes_jouees: fichesEnCours
+            };
+
+            // 1. Voye bay Super Admin / Pwopriyetè sou Firebase nan pwojè cd-lotto a
+            database.ref('tickets/' + ticketId).set(doneTicket, function(error) {
+                if (!error) {
+                    // 2. Deklanche enpresyon dirèk la depi li fin sove
+                    enprimeOtomatikRawBT(ticketId, doneTicket);
+                } else {
+                    alert("Erè koneksyon Firebase: " + error);
+                }
+            });
         }
     </script>
-
 </body>
 </html>
