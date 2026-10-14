@@ -1,8 +1,6 @@
 package com.cdlotto.app;
 import android.app.Activity; import android.os.Bundle; import android.widget.*;
 import android.view.*; import android.graphics.Color; import android.util.Log;
-import java.util.*; import java.text.SimpleDateFormat;
-
 public class MainActivity extends Activity {
     String CUR_SERIAL="2222"; String CUR_NOM="Vendeur"; String CUR_KEY="15";
     List<String> selT=new ArrayList<>(); String LAST_TXT="";
