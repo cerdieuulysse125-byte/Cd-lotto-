@@ -2,166 +2,285 @@
 <html lang="ht">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vandè tèminal - CD Lotto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistèm Jesyon - 5 Onglè</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { background-color: #f4f7f6; color: #333; padding-bottom: 60px; }
-        
-        /* Navigasyon Onglet nan pye paj la */
-        .bar-onglets { position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; display: flex; justify-content: space-around; border-top: 2px solid #ddd; z-index: 100; }
-        .onglet-btn { background: none; border: none; padding: 12px 5px; font-size: 13px; font-weight: bold; color: #777; flex: 1; text-align: center; cursor: pointer; }
-        .onglet-btn.active { color: #2980b9; border-top: 3px solid #2980b9; background: #f9f9f9; }
-        
-        /* Kontni Onglet yo */
-        .kontni-onglet { display: none; padding: 15px; }
-        .kontni-onglet.active { display: block; }
-        
-        /* Estil Fòm ak Saisie */
-        h2 { font-size: 18px; margin-bottom: 12px; text-align: center; color: #2c3e50; border-bottom: 2px solid #2980b9; padding-bottom: 5px;}
-        .goup-saisie { display: flex; gap: 5px; margin-bottom: 10px; }
-        select, input { padding: 12px 8px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white; }
-        
-        /* Espesifik pou Vendre */
-        #tiraj-select { width: 100%; margin-bottom: 10px; font-weight: bold; border: 2px solid #2980b9; }
-        #jeu { width: 30%; }
-        #boul { width: 35%; }
-        #mise { width: 35%; }
-        
-        .lis-boul-itilize { background: white; border: 1px solid #ddd; border-radius: 6px; min-height: 180px; max-height: 250px; overflow-y: auto; padding: 10px; margin-bottom: 10px; }
-        .boul-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 15px; font-family: monospace; }
-        .total-fich { font-size: 18px; font-weight: bold; text-align: right; margin: 10px 0; color: #27ae60; }
-        
-        /* Bouton aksyon */
-        .btn-aksyon { width: 100%; background: #27ae60; color: white; padding: 14px; font-size: 16px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; margin-top: 5px; }
-        .btn-aksyon:active { background: #219150; }
-        .btn-ble { background: #2980b9; }
-        .btn-ble:active { background: #1f6391; }
-        
-        /* Kat yo pou lis ak rapò */
-        .kat-fich { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px; margin-bottom: 10px; font-size: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .kat-fich p { margin-bottom: 4px; }
-        .lin-rapò { display: flex; justify-content: space-between; padding: 10px 5px; border-bottom: 1px solid #eee; font-size: 15px; }
-        .lin-rapò.net { font-weight: bold; font-size: 17px; color: #2980b9; border-top: 2px double #ddd; }
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --light: #ecf0f1;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        select, input, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        /* Style pou Onglè yo */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: var(--light);
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .tab-btn {
+            flex: 1;
+            background: none;
+            color: var(--primary);
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+        .tab-btn.active {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: var(--accent);
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid var(--light);
+            border-radius: 5px;
+            background: #fff;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Alèt ak Panèl */
+        .status-panel {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent);
+        }
+        .error-msg {
+            color: var(--danger);
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .success-msg {
+            color: var(--success);
+            font-weight: bold;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ================== ONGLET 1: VENDRE ================== -->
-    <div id="onglet-vendre" class="kontni-onglet active">
-        <h2>1 - Vendre</h2>
-        
-        <!-- Chwa Tiraj nan yon sèl kaz (Miltip anba) -->
-        <select id="tiraj-select" onchange="chanjeTirajMode()">
-            <option value="single">-- Chwazi Yon Sèl Tiraj --</option>
-            <option value="GA_midi">GA midi</option>
-            <option value="FL_midi">FL midi</option>
-            <option value="NY_midi">NY midi</option>
-            <option value="Real_midi">Réal midi</option>
-            <option value="GA_soir">GA soir</option>
-            <option value="FL_soir">FL soir</option>
-            <option value="NY_soir">NY soir</option>
-            <option value="Real_12h45">Real 12h45</option>
-            <option value="Primera_dia">Primera día 11h50</option>
-            <option value="Suerte_dia">Suerte día 12h20</option>
-            <option value="Lote_Dom">Lote Dom 1h45</option>
-            <option value="Ganamas">Ganamas 14h15</option>
-            <option value="Suerte_noche">Suerte noche 17h50</option>
-            <option value="Primera_noche">Primera noche 19h50</option>
-            <option value="Loteka">Loteka 19h45</option>
-            <option value="QNacional_noche">QNacional noche 20h50</option>
-            <option value="Leidsa">Leidsa 20h45</option>
-            <option value="Anguila_10h">Anguila 10h / 9h55</option>
-            <option value="Anguilla_18h">Anguilla 18h / 17h55</option>
-            <option value="miltip">● TIRAJ MILTIP (Chwazi plizyè)</option>
-        </select>
-
-        <!-- Kaz pou chwa miltip (ap parèt si yo chwazi tiraj miltip) -->
-        <div id="zòn-miltip" style="display: none; background: white; padding: 10px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #ddd; max-height: 120px; overflow-y: auto;">
-            <label><input type="checkbox" class="tiraj-chk" value="GA midi"> GA midi</label><br>
-            <label><input type="checkbox" class="tiraj-chk" value="FL midi"> FL midi</label><br>
-            <label><input type="checkbox" class="tiraj-chk" value="NY midi"> NY midi</label><br>
-            <label><input type="checkbox" class="tiraj-chk" value="Real 12h45"> Real 12h45</label><br>
-            <label><input type="checkbox" class="tiraj-chk" value="Anguila 10h"> Anguila 10h</label>
-        </div>
-
-        <!-- Liy Saisie Jwèt - Boul - Mise (Kaz yo kout) -->
-        <div class="goup-saisie">
-            <select id="jeu">
-                <option value="Borlette">Bor</option>
-                <option value="Mariage">Mar</option>
-                <option value="Loto3">L3</option>
-                <option value="Loto4">L4</option>
+<div class="container">
+    <!-- Header: Seleksyon Ròl ak Koneksyon -->
+    <div class="header">
+        <h2>Sistèm Tranzaksyon</h2>
+        <div>
+            <label><strong>Konekte kòm:</strong> </label>
+            <select id="userRole" onchange="chanjeRol()">
+                <option value="owner">Pwopriyetè (Owner)</option>
+                <option value="super_admin">Sipè Administratè (Super Admin)</option>
             </select>
-            <input type="text" inputmode="numeric" pattern="[0-9]*" id="boul" placeholder="Boul" onkeydown="navigeKaz(event, 'mise', 'dwat')">
-            <input type="text" inputmode="numeric" pattern="[0-9]*" id="mise" placeholder="Mise" onkeydown="valideEpiDesann(event)">
-        </div>
-
-        <div class="lis-boul-itilize" id="fich-kouran-boul">
-            <!-- Boul yo ap parèt la an tan reyèl -->
-        </div>
-
-        <div class="total-fich">Total: <span id="fich-total-afiche">0</span> HTG</div>
-        <button class="btn-aksyon" onclick="voyeFirebaseEpiEnprime()">IMPRIMER</button>
-    </div>
-
-    <!-- ================== ONGLET 2: COPIER ================== -->
-    <div id="onglet-copier" class="kontni-onglet">
-        <h2>2 - Copier Ticket</h2>
-        <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #ddd;">
-            <p style="margin-bottom: 8px; font-size: 14px;">Antre ID fich ou vle kopye a:</p>
-            <input type="text" id="id-ticket-copier" placeholder="Egzanp: TXT171829..." style="width: 100%; margin-bottom: 15px;">
-            <button class="btn-aksyon btn-ble" onclick="kopyeAswen() ">KOPYE LABOUL YO</button>
         </div>
     </div>
 
-    <!-- ================== ONGLET 3: MES FICHES ================== -->
-    <div id="onglet-fiches" class="kontni-onglet">
-        <h2>3 - Mes Fiches</h2>
-        <div class="goup-saisie">
-            <input type="date" id="filtre-dat-fich" style="width: 50%;">
-            <input type="text" id="chache-fich-input" placeholder="Recherche fiches..." style="width: 50%;" oninput="filtreFichMwenYo()">
-        </div>
-        <div id="lis-tout-fich-yo" style="max-height: 400px; overflow-y: auto;">
-            <!-- Fich yo ap chaje soti nan Firebase la -->
-        </div>
+    <!-- Panèl Enfòmasyon sou Limit Pwopriyetè a -->
+    <div class="status-panel">
+        <strong>Paramèt Pwopriyetè Aktif:</strong> 
+        <span id="infoLimit">Lè Fèmti: 18:00 | Limit Miz: 5,000 Goud</span>
     </div>
 
-    <!-- ================== ONGLET 4: RAPPORT ================== -->
-    <div id="onglet-rapport" class="kontni-onglet">
-        <h2>4 - Rapport</h2>
-        <div class="goup-saisie">
-            <input type="date" id="rap-dat-du" style="width: 50%;">
-            <input type="date" id="rap-dat-au" style="width: 50%;">
-        </div>
-        <select id="rap-tiraj" style="width: 100%; margin-bottom: 15px;" onchange="kalkileRapò()">
-            <option value="tous">Tous les tirages</option>
-            <option value="GA_midi">GA midi</option>
-            <option value="FL_midi">FL midi</option>
-        </select>
-
-        <div style="background: white; border-radius: 6px; padding: 10px; border: 1px solid #ddd;">
-            <div class="lin-rapò"><span>Vente:</span><span id="rap-vente" style="font-weight:bold;">0.00 HTG</span></div>
-            <div class="lin-rapò"><span>Commission:</span><span id="rap-comm" style="color:red;">0.00 HTG</span></div>
-            <div class="lin-rapò"><span>Gain (Kliyan):</span><span id="rap-gain" style="color:orange;">0.00 HTG</span></div>
-            <div class="lin-rapò class lin-rapò net"><span>Balance Net:</span><span id="rap-net">0.00 HTG</span></div>
-        </div>
-        <button class="btn-aksyon btn-ble" onclick="enprimeRapòRawBT()">IMPRIMER RAPPORT</button>
+    <!-- Bar Onglè yo (5 Onglè) -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="louvriOnglet('vann', this)">🛒 Vann</button>
+        <button class="tab-btn" onclick="louvriOnglet('kopye', this)">📋 Kopye</button>
+        <button class="tab-btn" onclick="louvriOnglet('fich', this)">📄 Fich Mwen</button>
+        <button class="tab-btn" onclick="louvriOnglet('rapo', this)">📊 Rapò</button>
+        <button class="tab-btn" onclick="louvriOnglet('parametre', this)">⚙️ Paramèt</button>
     </div>
 
-    <!-- ================== ONGLET 5: PARAMÈTRES ================== -->
-    <div id="onglet-parametres" class="kontni-onglet">
-        <h2>5 - Paramètres</h2>
-        <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #ddd;">
-            <h4 style="margin-bottom: 8px;">Enprimant avanse</h4>
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Sistèm sa a konfigire pou enprime otomatikman pa **RawBT App** san li pa afiche dyalòg Chrome.</p>
-            <button class="btn-aksyon btn-ble" onclick="window.location.href='intent:#Intent;component=ru.a402d.rawbtprinter/.ActivityMain;end;'">ESKANE / KONFIGIRE APARÈY YO</button>
-        </div>
+    <!-- KONTENI CHAK ONGLÈ -->
+
+    <!-- 1. Onglè Vann -->
+    <div id="vann" class="tab-content active">
+        <h3>Onglè Vann Fich</h3>
+        <p>Mete montan miz la pou simulation:</p>
+        <input type="number" id="montanVann" placeholder="Montan an Goud" value="1000">
+        <button onclick="fèTranzaksyon('Vann')">Plase Miz</button>
+        <div id="reponsVann"></div>
     </div>
 
-    <!-- BAR NAVIGASYON ANBA A -->
-    <div class="bar-onglets">
-        <button class="onglet-btn active" onclick="chanjeOnglet(event, 'onglet-vendre')">Vendre</button>
-        <button class="onglet-btn" onclick="chanjeOnglet(event, 'onglet-copier')">Copier</button>
-        <button class="onglet-btn" onclick="chanjeOnglet(event, 'onglet-fiches')">Fiches</button>
-Utilisez le code avec précaution.
+    <!-- 2. Onglè Kopye -->
+    <div id="kopye" class="tab-content">
+        <h3>Onglè Kopye Fich</h3>
+        <p>Kopye yon fich ki te fèt deja:</p>
+        <input type="number" id="montanKopye" placeholder="Montan fich la" value="2000">
+        <button onclick="fèTranzaksyon('Kopye')">Kopye Fich Sa a</button>
+        <div id="reponsKopye"></div>
+    </div>
+
+    <!-- 3. Onglè Fich Mwen -->
+    <div id="fich" class="tab-content">
+        <h3>Onglè Fich Mwen</h3>
+        <p>Istorik fich ou yo toujou disponib pou konsiltasyon, menm si sistèm nan fèmen.</p>
+        <ul>
+            <li>Fich #1024 - 1,500 Goud (Apwouve)</li>
+            <li>Fich #1025 - 3,000 Goud (Apwouve)</li>
+        </ul>
+    </div>
+
+    <!-- 4. Onglè Rapò -->
+    <div id="rapo" class="tab-content">
+        <h3>Onglè Rapò ak Chif</h3>
+        <p>Gade rezime lavant ak estatistik jeneral yo.</p>
+        <table border="1" cellpadding="10" style="width:100%; border-collapse:collapse; border-color:#ecf0f1;">
+            <tr style="background:#2c3e50; color:white;">
+                <th>Dat</th>
+                <th>Total Lavant</th>
+                <th>Miz Bloke</th>
+            </tr>
+            <tr>
+                <td>Jodi a</td>
+                <td>45,000 Goud</td>
+                <td>0 Goud</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 5. Onglè Paramèt -->
+    <div id="parametre" class="tab-content">
+        <h3>Onglè Paramèt (Konfigirasyon Pwopriyetè)</h3>
+        <p id="notifikasyonParamet" style="color:var(--accent); font-weight:bold;"></p>
+        
+        <div style="margin-bottom: 15px;">
+            <label style="display:block; margin-bottom:5px;"><strong>Lè Fèmti (Fòma 24h):</strong></label>
+            <input type="time" id="inputLèFemti" value="18:00">
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label style="display:block; margin-bottom:5px;"><strong>Limit Miz Maksimòm (Goud):</strong></label>
+            <input type="number" id="inputLimitMiz" value="5000">
+        </div>
+        
+        <button onclick="soveParamet()">Sove Paramèt Pwopriyetè a</button>
+    </div>
+</div>
+
+<script>
+    // Konfigirasyon default Pwopriyetè a (Soke nan memwa pou simulation)
+    let param_Pwopriyetere = {
+        le_femti: "18:00",
+        limit_miz_maksimom: 5000
+    };
+
+    // Chanje kontni selon Onglè ki klike a
+    function louvriOnglet(idOnglet, bouton) {
+        // Kache tout kontni yo
+        let kontniYo = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < kontniYo.length; i++) {
+            kontniYo[i].classList.remove("active");
+        }
+        
+        // Retire klas 'active' nan tout bouton yo
+        let boutonYo = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < boutonYo.length; i++) {
+            boutonYo[i].classList.remove("active");
+        }
+
+        // Afiche onglè aktif la
+        document.getElementById(idOnglet).classList.add("active");
+        bouton.classList.add("active");
+    }
+
+    // Mizajou tèks limit yo sou ekran an
+    function meteAjouEnfoLimit() {
+        document.getElementById("infoLimit").innerText = `Lè Fèmti: ${param_Pwopriyetere.le_femti} | Limit Miz: ${param_Pwopriyetere.limit_miz_maksimom.toLocaleString()} Goud`;
+    }
+
+    // Lojik lè ròl la chanje (Sipè Adm vs Pwopriyetè)
+    function chanjeRol() {
+        let rol = document.getElementById("userRole").value;
+        let notif = document.getElementById("notifikasyonParamet");
+        
+        if (rol === "super_admin") {
+            notif.innerText = "⚡ Ou konekte kòm Sipè Adm. Ou ka modifye oswa override paramèt yo.";
+        } else {
+            notif.innerText = "👤 Ou konekte kòm Pwopriyetè. W ap modifye limit pwòp sistèm pa w.";
+        }
+    }
+
+    // Sove nouvo paramèt fèmti ak limit miz yo
+    function soveParamet() {
+        param_Pwopriyetere.le_femti = document.getElementById("inputLèFemti").value;
+        param_Pwopriyetere.limit_miz_maksimom = parseFloat(document.getElementById("inputLimitMiz").value);
+        
+        meteAjouEnfoLimit();
+        alert("Paramèt Pwopriyetè a sove ak siksè nan sistèm nan!");
+    }
+
+    // Lojik Validasyon tranzaksyon pou "Vann" ak "Kopye"
+    function fèTranzaksyon(tipOnglet) {
+        let rol = document.getElementById("userRole").value;
+        let montan = 0;
+        let divRepons = "";
+
+        if (tipOnglet === "Vann") {
+            montan = parseFloat(document.getElementById("montanVann").value);
+            divRepons = document.getElementById("reponsVann");
+        } else {
+            montan = parseFloat(document.getElementById("montanKopye").value);
+            divRepons = document.getElementById("reponsKopye");
+        }
+
+        // 1. SI SE SUPER ADMIN, LI PASE SAN BLOKAJ
+        if (rol === "super_admin") {
+            divRepons.innerHTML = `<p class="success-msg">✅ Aksyon Otorize pa Sipè Adm! Tranzaksyon ${tipOnglet} lan fèt san restriksyon.</p>`;
+            return;
+        }
+
+        // 2. TCHEKE LÈ FÈMTI (Pou Pwopriyetè / Machann)
+        let kounyeA = new Date();
+        let [h_femti, m_femti] = param_Pwopriyetere.le_femti.split(":").map(Number);
+        
+        let lèFèmtiDat = new Date();
+        lèFèmtiDat.setHours(h_femti, m_femti, 0, 0);
+
+        if (kounyeA >= lèFèmtiDat) {
+            divRepons.innerHTML = `<p class="error-msg">❌ Aksyon Refize: Sistèm nan fèmen depi ${param_Pwopriyetere.le_femti} pou Pwopriyetè sa a.</p>`;
+            return;
