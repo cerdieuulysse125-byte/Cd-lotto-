@@ -1,0 +1,28 @@
+name: Build V28 NATIVE NO DELIMITER
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v3
+        with: { gradle-version: 8.2.1 }
+      - name: Create project
+        run: |
+          echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
+          echo "pluginManagement{ repositories{ google(); mavenCentral(); gradlePluginPortal() } }" > settings.gradle
+          echo "dependencyResolutionManagement{ repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS) repositories{ google(); mavenCentral() } } include ':app'" >> settings.gradle
+          echo "" > build.gradle
+          mkdir -p app/src/main/java/com/cdlotto/app app/src/main/res/values
+          echo "plugins{ id 'com.android.application' version '8.1.0' } android{ namespace 'com.cdlotto.v28native'; compileSdk 33; defaultConfig{ applicationId 'com.cdlotto.v28native'; minSdk 21; targetSdk 33; versionCode 28; versionName '28-NATIVE-SILENT' } }" > app/build.gradle
+          echo '<resources><string name="app_name">C&D V28 NATIVE</string></resources>' > app/src/main/res/values/strings.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:label="C&D V28 NATIVE"><activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
+          cp MainActivity.java app/src/main/java/com/cdlotto/app/MainActivity.java
+      - name: Build APK
+        run: gradle :app:assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: APK-V28-NATIVE-SILENT-NO-HTML
+          path: app/build/outputs/apk/debug/*.apk
