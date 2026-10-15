@@ -1,0 +1,9 @@
+async function printBT(t){
+  if(isPrinting) return;isPrinting=true;
+  let plain = (t||LAST_TXT||'').toString().replace(/<[^>]+>/g,'').trim();
+  if(!plain){isPrinting=false;return;}
+  // NOUVO: Si se APK inivesèl, itilize Java Bluetooth dirèk
+  if(window.AndroidPrinter && window.AndroidPrinter.printText){
+      try{ window.AndroidPrinter.printText(plain); isPrinting=false; return; }catch(e){}
+  }
+  // ... rès kòd ou a kontinye
