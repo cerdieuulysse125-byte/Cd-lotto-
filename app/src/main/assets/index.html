@@ -51,27 +51,125 @@
 <div style='text-align:center;margin:10px'><img id='paramLogo' src='' style='width:90px;height:90px;border-radius:50%;border:3px solid #d4af37;display:none'><div id='paramCircle' style='width:90px;height:90px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto;font-weight:900;border:3px solid #d4af37'>C&D</div><br><small id='logoSyncInfo'>Logo 20mm santre - Sync otomatikman depi SUPER</small></div>
 <div style='background:#e3f2fd;border:3px solid #0a4a2e;border-radius:12px;padding:12px;margin-top:12px'>
 <h3 style='color:#0a4a2e'>🖨️ Imprimante Avansé - Scanner + Konfigure + Anrejistre</h3>
-<b>1- Scanner Imprimante Yo:</b><br>
-<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px'>
-<button class='btn' style='background:#0a4a2e;color:#d4af37;padding:12px' onclick='scanSunmi()'>📟 SCAN Sunmi Inner</button>
-<button class='btn' style='background:#2196f3;color:#fff;padding:12px' onclick='scanBT()'>📱 SCAN Bluetooth</button>
-<button class='btn' style='background:#ff9800;color:#fff;padding:12px' onclick='scanUSB()'>🔌 SCAN USB</button>
-<button class='btn' style='background:#9c27b0;color:#fff;padding:12px' onclick='scanNetwork()'>🌐 SCAN Network IP</button>
+<!-- CD LOTTO V38 - SCAN JENERAL INIVÈSÈL -->
+<div style="background:#E8F5E9; border:2px solid #4CAF50; border-radius:12px; padding:12px; margin:10px 0;">
+  <div style="font-weight:bold; text-align:center; margin-bottom:8px;">🖨️ ENPRIMANT INIVÈSÈL - SCAN APARÈY YO</div>
+  
+  <select id="btDeviceList" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:8px;">
+    <option>Peze SCAN pou chèche aparèy yo...</option>
+  </select>
+  
+  <div style="display:flex; gap:8px;">
+    <button onclick="scanAparèyYo()" style="flex:1; background:#4CAF50; color:white; padding:12px; border:none; border-radius:8px; font-weight:bold;">🔍 SCAN APARÈY YO</button>
+    <button onclick="konekteAparèy()" style="flex:1; background:#2196F3; color:white; padding:12px; border:none; border-radius:8px; font-weight:bold;">🔌 KONEKTE</button>
+    <button onclick="testeEnprime()" style="flex:1; background:#FF9800; color:white; padding:12px; border:none; border-radius:8px; font-weight:bold;">🧾 TEST</button>
+  </div>
+  
+  <div id="btStatus" style="text-align:center; margin-top:8px; font-size:12px; font-weight:bold;">Status: Pa konekte</div>
 </div>
-<div id='scanResult' style='background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:8px;margin-top:10px;max-height:200px;overflow:auto;font-size:11px'>Pa gen scan ankò - Klike SCAN</div>
-<b style='margin-top:14px;display:block'>2- Konfigirasyon Imprimante:</b>
-<div class='grid2' style='margin-top:8px'><div><label>Lajè Papye</label><select id='paperWidth'><option value='58'>58mm (Sunmi V2 Pro)</option><option value='80'>80mm</option></select></div><div><label>Dansite</label><select id='printDensity'><option value='high'>High - Nwa fò</option><option value='medium'>Medium</option><option value='low'>Low</option></select></div></div>
-<div class='grid2'><div><label>Vitès</label><select id='printSpeed'><option value='fast'>Rapide</option><option value='medium'>Mwayen</option><option value='slow'>Dousman - Kalite</option></select></div><div><label>Logo Size</label><select id='logoSize'><option value='20'>20mm Centre (default)</option><option value='25'>25mm</option><option value='30'>30mm</option><option value='0'>Pa enprime logo</option></select></div></div>
-<div class='grid2'><div><label>Mode Koupe</label><select id='cutMode'><option value='full'>Koupe konplè</option><option value='partial'>Koupe pasyèl</option><option value='no'>Pa koupe</option></select></div><div><label>Imprimante Chwazi</label><input id='selectedPrinter' placeholder='Pa chwazi' readonly style='background:#e8f5e9;font-weight:800'></div></div>
-<div style='display:flex;gap:8px;margin-top:12px'><button class='btn' style='background:#00c853;color:#fff;flex:2' onclick='savePrinterConfig()'>💾 ANREJISTRE Konfig - SYNC FIREBASE</button><button class='btn' style='background:#0a4a2e;color:#d4af37;flex:1' onclick='testPrintAdvanced()'>🧪 TÈS</button></div>
-<div id='printerSaved' style='background:#e8f5e9;border:2px solid #2e7d32;border-radius:8px;padding:8px;margin-top:10px;display:none;font-size:11px'></div>
-</div>
-<div id='regProprio' style='background:#fff3e0;border:2px solid #ff9800;border-radius:8px;padding:8px;margin-top:10px;font-size:12px;font-weight:700'></div>
-<button class='btn btnB' style='margin-top:12px' onclick='testPrintLogo()'>TEST FICH - LOGO + SUNMI SDK</button>
-</div></div>
-<div class='tabs'><button class='tab active' onclick="goTab('pV',this)">1-Vendre</button><button class='tab' onclick="goTab('pC',this)">2-Kopye</button><button class='tab' onclick="goTab('pF',this)">3-Fiches</button><button class='tab' onclick="goTab('pR',this)">4-Rapport</button><button class='tab' onclick="goTab('pP',this)">5-Paramèt</button></div>
-</div>
+
 <script>
+// ==== SCAN JENERAL - MACHE SOU TOUT MACHIN ====
+let selectedDeviceAddress = null;
+let deviceMap = {};
+
+function scanAparèyYo(){
+  const sel = document.getElementById('btDeviceList');
+  const st = document.getElementById('btStatus');
+  st.innerText = '🔍 Ap chèche...';
+  
+  // 1) Si nou nan APK nou an (AndroidPrinter)
+  if(window.AndroidPrinter && window.AndroidPrinter.scanBluetooth){
+    try{
+      let json = window.AndroidPrinter.scanBluetooth();
+      let list = JSON.parse(json);
+      sel.innerHTML = '';
+      deviceMap = {};
+      if(list.length==0){
+        sel.innerHTML = '<option>Pa gen aparèy pè - Pè nan Settings Bluetooth</option>';
+        st.innerText = '❌ Pa gen aparèy - Ale nan Settings > Bluetooth';
+        return;
+      }
+      list.forEach(d=>{
+        let opt = document.createElement('option');
+        opt.value = d.address;
+        opt.text = d.name + ' (' + d.address + ')';
+        deviceMap[d.address]=d;
+        sel.appendChild(opt);
+      });
+      st.innerText = '✅ '+list.length+' aparèy jwenn - Chwazi epi KONEKTE';
+      return;
+    }catch(e){ console.log(e); }
+  }
+  
+  // 2) Fallback Web Bluetooth (Chrome)
+  if(navigator.bluetooth){
+    navigator.bluetooth.requestDevice({acceptAllDevices:true, optionalServices:['00001101-0000-1000-8000-00805F9B34FB']})
+    .then(device=>{
+      sel.innerHTML = '<option value="'+device.id+'">'+device.name+'</option>';
+      selectedDeviceAddress = device.id;
+      window._btDevice = device;
+      st.innerText = '✅ Jwenn: '+device.name;
+    }).catch(err=>{ st.innerText = '❌ '+err; });
+  } else {
+    st.innerText = '❌ Pa gen AndroidPrinter - Enstale APK V37+';
+  }
+}
+
+function konekteAparèy(){
+  const sel = document.getElementById('btDeviceList');
+  const st = document.getElementById('btStatus');
+  let addr = sel.value;
+  if(!addr){ st.innerText='❌ Chwazi yon aparèy'; return; }
+  
+  if(window.AndroidPrinter && window.AndroidPrinter.connectTo){
+    st.innerText = '🔌 Ap konekte...';
+    let ok = window.AndroidPrinter.connectTo(addr);
+    // connectTo nan V37 pa egziste, nou itilize metòd native la via KONEKTE anwo a
+    // Se pou sa nou rele tou window.AndroidPrinter.printText pou teste
+    setTimeout(()=>{
+      if(window.AndroidPrinter.isConnected()){
+        st.innerText = '✅ KONEKTE: '+window.AndroidPrinter.getStatus();
+        st.style.color='green';
+      } else {
+        st.innerText = '❌ Echec - Klike KONEKTE ble anwo a (bar vèt la)';
+      }
+    }, 1500);
+  } else {
+    st.innerText = '⚠️ Itilize bouton KONEKTE ble anwo a (V37+)';
+  }
+}
+
+function testeEnprime(){
+  let txt = "=== CD LOTTO TEST ===\n"+new Date().toLocaleString()+"\nAparèy: "+(window.AndroidPrinter?window.AndroidPrinter.getStatus():"")+"\nTest OK!\n\n\n";
+  if(window.AndroidPrinter && window.AndroidPrinter.printText){
+    window.AndroidPrinter.printText(txt);
+  } else {
+    alert('AndroidPrinter pa disponib - Enstale V37+');
+  }
+}
+
+// Override tout ansyen fonksyon enprime yo pou yo itilize Bluetooth jeneral la
+(function(){
+  const originalPrint = window.printText || window.printFich || null;
+  window.printViaGeneral = function(t){
+    if(window.AndroidPrinter && window.AndroidPrinter.printText){
+      window.AndroidPrinter.printText(t);
+      return true;
+    }
+    if(window.AndroidPrinter && window.AndroidPrinter.printFich){
+      window.AndroidPrinter.printFich(t);
+      return true;
+    }
+    return false;
+  };
+  // Fòse Sunmi ak BT yo itilize menm bagay la
+  window.SunmiPrint = window.printViaGeneral;
+  window.BTPrint = window.printViaGeneral;
+  window.ChromePrint = window.printViaGeneral;
+})();
+</script>
+<!-- FIN PATCH V38 -->
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
 try{firebase.initializeApp(firebaseConfig);}catch(e){}
 const db=firebase.database?firebase.database():null;
