@@ -8,10 +8,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.webkit.JavascriptInterface;
@@ -24,47 +22,32 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-
     private WebView webView;
     private BluetoothAdapter bluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Layout prensipal
-        LinearLayout mainLayout = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-        mainLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        // WebView pran 90% ekran
+        LinearLayout main = new LinearLayout(this);
+        main.setOrientation(LinearLayout.VERTICAL);
         webView = new WebView(this);
-        LinearLayout.LayoutParams webParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-        mainLayout.addView(webView, webParams);
+        LinearLayout.LayoutParams wp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
+        main.addView(webView, wp);
 
-        // ===== BOUTON SÒTI - 100% NAN JAVA =====
         Button btnExit = new Button(this);
         btnExit.setText("⬛ SÒTI NÈT - FÈMEN APP LA");
-        btnExit.setBackgroundColor(Color.parseColor("#D32F2F")); // Wouj fonse
+        btnExit.setBackgroundColor(Color.parseColor("#D32F2F"));
         btnExit.setTextColor(Color.WHITE);
         btnExit.setTextSize(18);
         btnExit.setAllCaps(false);
-        btnExit.setPadding(20, 30, 20, 30);
-        LinearLayout.LayoutParams exitParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        exitParams.setMargins(10, 10, 10, 10);
-        mainLayout.addView(btnExit, exitParams);
-
-        // Klike pou sòti nèt
+        LinearLayout.LayoutParams ep = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ep.setMargins(10,10,10,10);
+        main.addView(btnExit, ep);
         btnExit.setOnClickListener(v -> {
-            Toast.makeText(this, "Ap fèmen...", Toast.LENGTH_SHORT).show();
-            finishAndRemoveTask();
-            finishAffinity();
-            System.exit(0);
+            finishAndRemoveTask(); finishAffinity(); System.exit(0);
         });
+        setContentView(main);
 
-        setContentView(mainLayout);
-
-        // Permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.BLUETOOTH_CONNECT,
@@ -73,69 +56,56 @@ public class MainActivity extends AppCompatActivity {
             }, 1);
         }
 
-        // WebView config - REGLE "Chwazi Tiraj"
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
-        ws.setDomStorageEnabled(true); // <--- SA KI SOVE TIRAJ YO
+        ws.setDomStorageEnabled(true); // REGLE "Chwazi Tiraj"
         ws.setDatabaseEnabled(true);
+        ws.setDomStorageEnabled(true);
         ws.setAllowFileAccess(true);
         ws.setAllowContentAccess(true);
         ws.setAllowFileAccessFromFileURLs(true);
         ws.setAllowUniversalAccessFromFileURLs(true);
         ws.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        ws.setJavaScriptCanOpenWindowsAutomatically(true);
 
         webView.setWebViewClient(new WebViewClient());
-        webView.addJavascriptInterface(new AppInterface(), "AndroidPrinter");
-
+        webView.addJavascriptInterface(new Bridge(), "AndroidPrinter");
+        webView.addJavascriptInterface(new Bridge(), "CDLotto");
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         webView.loadUrl("file:///android_asset/index.html");
     }
 
-    public class AppInterface {
-        @JavascriptInterface
-        public void printText(String data) { runOnUiThread(() -> universalPrint(data)); }
-        @JavascriptInterface
-        public void print(String data) { printText(data); }
-        @JavascriptInterface
-        public void exitApp() { runOnUiThread(() -> { finishAndRemoveTask(); finishAffinity(); System.exit(0); }); }
-        @JavascriptInterface
-        public void sorti() { exitApp(); }
+    public class Bridge {
+        @JavascriptInterface public void printText(String d){ runOnUiThread(()-> doPrint(d)); }
+        @JavascriptInterface public void print(String d){ printText(d); }
+        @JavascriptInterface public void exitApp(){ runOnUiThread(()->{ finishAndRemoveTask(); finishAffinity(); System.exit(0); }); }
+        @JavascriptInterface public void sorti(){ exitApp(); }
     }
 
-    private void universalPrint(String data) {
-        try {
-            if (bluetoothAdapter == null) return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) return;
-
-            boolean printed = false;
-            for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
-                String name = device.getName() != null ? device.getName().toLowerCase() : "";
-                if (name.contains("58") || name.contains("print") || name.contains("pos") || name.contains("mtp")) {
-                    if (printViaBluetooth(device, data)) { printed = true; break; }
+    private void doPrint(String data){
+        try{
+            if(bluetoothAdapter==null) return;
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)!=PackageManager.PERMISSION_GRANTED) return;
+            for(BluetoothDevice dev: bluetoothAdapter.getBondedDevices()){
+                String n = dev.getName()!=null?dev.getName().toLowerCase():"";
+                if(n.contains("58")||n.contains("print")||n.contains("pos")||n.contains("mtp")){
+                    if(btPrint(dev,data)) return;
                 }
             }
-            if (!printed && !bluetoothAdapter.getBondedDevices().isEmpty()) {
-                BluetoothDevice first = bluetoothAdapter.getBondedDevices().iterator().next();
-                printViaBluetooth(first, data);
+            if(!bluetoothAdapter.getBondedDevices().isEmpty()){
+                btPrint(bluetoothAdapter.getBondedDevices().iterator().next(), data);
+            } else {
+                Toast.makeText(this,"Pair printer 58mm nan Bluetooth Settings",Toast.LENGTH_LONG).show();
             }
-        } catch (Exception e) {
-            Toast.makeText(this, "Erè: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        }catch(Exception e){ Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show(); }
     }
-
-    private boolean printViaBluetooth(BluetoothDevice device, String data) {
-        try {
+    private boolean btPrint(BluetoothDevice dev, String data){
+        try{
             UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-            BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuid);
-            socket.connect();
-            OutputStream os = socket.getOutputStream();
-            os.write(data.getBytes("UTF-8"));
-            os.write("\n\n\n".getBytes());
-            os.write(new byte[]{0x1D, 0x56, 0x00});
-            os.flush(); os.close(); socket.close();
-            Toast.makeText(this, "Enprime: " + device.getName(), Toast.LENGTH_SHORT).show();
-            return true;
-        } catch (Exception e) { return false; }
+            BluetoothSocket s = dev.createRfcommSocketToServiceRecord(uuid);
+            s.connect(); OutputStream os=s.getOutputStream();
+            os.write(data.getBytes("UTF-8")); os.write("\n\n\n".getBytes()); os.write(new byte[]{0x1D,0x56,0x00});
+            os.flush(); os.close(); s.close();
+            Toast.makeText(this,"Enprime: "+dev.getName(),Toast.LENGTH_SHORT).show(); return true;
+        }catch(Exception e){ return false; }
     }
 }
