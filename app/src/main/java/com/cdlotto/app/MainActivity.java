@@ -3,7 +3,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -17,12 +16,15 @@ import android.widget.Toast;
 import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends Activity {
     private WebView webView;
     private TextView status;
     private BluetoothSocket btSocket;
     private OutputStream btOutput;
+    private BluetoothDevice lastDevice;
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     public class AndroidPrinter {
@@ -30,108 +32,96 @@ public class MainActivity extends Activity {
         public void printText(String text) {
             runOnUiThread(() -> {
                 try {
-                    status.setText("AP ENPRIME... " + text.length() + " karaktè");
                     if (btSocket == null || !btSocket.isConnected()) {
-                        connectToPrinter();
+                        status.setText("🔌 Ap konekte...");
+                        autoConnect();
                     }
                     if (btOutput != null) {
-                        // ESC/POS - init + text + cut
-                        btOutput.write(new byte[]{0x1B, 0x40}); // init
+                        btOutput.write(new byte[]{0x1B, 0x40});
                         btOutput.write(text.getBytes("UTF-8"));
-                        btOutput.write(new byte[]{0x0A, 0x0A, 0x0A, 0x1D, 0x56, 0x01}); // feed + cut
+                        btOutput.write(new byte[]{0x0A, 0x0A, 0x0A, 0x1D, 0x56, 0x01});
                         btOutput.flush();
-                        status.setText("✅ ENPRIME FÈT!");
-                        Toast.makeText(MainActivity.this, "Enprime!", Toast.LENGTH_SHORT).show();
+                        status.setText("✅ ENPRIME OK - " + (lastDevice!=null?lastDevice.getName():""));
+                        Toast.makeText(MainActivity.this, "✅ Enprime!", Toast.LENGTH_SHORT).show();
                     } else {
-                        status.setText("❌ Pa konekte - Chèche enprimant...");
-                        connectToPrinter();
+                        status.setText("❌ Pa gen enprimant - Pè youn nan Bluetooth");
+                        Toast.makeText(MainActivity.this, "Pè enprimant Bluetooth nan Settings", Toast.LENGTH_LONG).show();
                     }
-                } catch (Exception e) {
-                    status.setText("❌ ERÈ ENPRIM: " + e.getMessage());
-                }
+                } catch (Exception e) { status.setText("❌ ERÈ: " + e.getMessage()); }
             });
         }
 
         @JavascriptInterface
-        public boolean isConnected() {
-            return btSocket != null && btSocket.isConnected();
+        public String scanBluetooth() {
+            try {
+                BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                if (adapter == null) return "[]";
+                Set<BluetoothDevice> devices = adapter.getBondedDevices();
+                JSONArray arr = new JSONArray();
+                for (BluetoothDevice d : devices) {
+                    JSONObject o = new JSONObject();
+                    o.put("name", d.getName());
+                    o.put("address", d.getAddress());
+                    arr.put(o);
+                }
+                return arr.toString();
+            } catch (Exception e) { return "[]"; }
         }
 
         @JavascriptInterface
-        public String getStatus() {
-            if (btSocket != null && btSocket.isConnected()) return "Konekte";
-            return "Pa konekte";
+        public boolean connectTo(String address) {
+            try {
+                BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                BluetoothDevice dev = adapter.getRemoteDevice(address);
+                btSocket = dev.createRfcommSocketToServiceRecord(MY_UUID);
+                btSocket.connect();
+                btOutput = btSocket.getOutputStream();
+                lastDevice = dev;
+                runOnUiThread(() -> status.setText("✅ Konekte: " + dev.getName()));
+                return true;
+            } catch (Exception e) {
+                runOnUiThread(() -> status.setText("❌ Koneksyon echwe: " + e.getMessage()));
+                return false;
+            }
         }
+
+        @JavascriptInterface public boolean isConnected() { return btSocket!=null && btSocket.isConnected(); }
+        @JavascriptInterface public String getStatus() { return btSocket!=null && btSocket.isConnected() ? "Konekte: "+lastDevice.getName() : "Pa konekte"; }
     }
 
-    private void connectToPrinter() {
+    private void autoConnect() {
         try {
             BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-            if (adapter == null) { status.setText("❌ Pa gen Bluetooth"); return; }
+            if (adapter==null) return;
             if (!adapter.isEnabled()) adapter.enable();
             Set<BluetoothDevice> devices = adapter.getBondedDevices();
             for (BluetoothDevice d : devices) {
-                String name = d.getName();
-                if (name != null && (name.toLowerCase().contains("print") || name.toLowerCase().contains("58") || name.toLowerCase().contains("80") || name.toLowerCase().contains("mpos") || name.toLowerCase().contains("bluetooth"))) {
-                    status.setText("🔍 Konekte ak: " + name);
+                String n = d.getName()!=null?d.getName().toLowerCase():"";
+                if (n.contains("print")||n.contains("58")||n.contains("80")||n.contains("mpos")||n.contains("pos")||n.contains("blue")) {
                     btSocket = d.createRfcommSocketToServiceRecord(MY_UUID);
-                    btSocket.connect();
-                    btOutput = btSocket.getOutputStream();
-                    status.setText("✅ Konekte ak: " + name);
-                    return;
+                    btSocket.connect(); btOutput = btSocket.getOutputStream(); lastDevice=d;
+                    status.setText("✅ Auto-konekte: "+d.getName()); return;
                 }
             }
-            // si pa jwenn non, pran premye aparèy la
-            if (!devices.isEmpty()) {
-                BluetoothDevice d = devices.iterator().next();
-                btSocket = d.createRfcommSocketToServiceRecord(MY_UUID);
-                btSocket.connect();
-                btOutput = btSocket.getOutputStream();
-                status.setText("✅ Konekte ak: " + d.getName());
-            }
-        } catch (Exception e) {
-            status.setText("❌ Koneksyon echwe: " + e.getMessage());
-        }
+        } catch (Exception e) {}
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LinearLayout main = new LinearLayout(this);
-        main.setOrientation(LinearLayout.VERTICAL);
-        
+        LinearLayout main = new LinearLayout(this); main.setOrientation(LinearLayout.VERTICAL);
         status = new TextView(this);
-        status.setText("CD LOTTO V34 INIVESEL - Pare");
-        status.setBackgroundColor(Color.BLACK);
-        status.setTextColor(Color.YELLOW);
-        status.setPadding(15,15,15,15);
-        status.setTextSize(12);
+        status.setText("CD LOTTO V35 INIVÈSÈL - Bluetooth Pare");
+        status.setBackgroundColor(Color.BLACK); status.setTextColor(Color.YELLOW); status.setPadding(15,15,15,15); status.setTextSize(11);
         main.addView(status, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        
         webView = new WebView(this);
         main.addView(webView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
-        
-        Button btn = new Button(this);
-        btn.setText("SOTI NET - FEMEN");
-        btn.setBackgroundColor(Color.RED);
-        btn.setTextColor(Color.WHITE);
-        btn.setTextSize(18);
-        main.addView(btn, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150));
+        Button btn = new Button(this); btn.setText("SOTI NET - FEMEN"); btn.setBackgroundColor(Color.RED); btn.setTextColor(Color.WHITE); btn.setTextSize(18);
+        main.addView(btn, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 130));
         btn.setOnClickListener(v -> { try { if(btSocket!=null) btSocket.close(); } catch(Exception e){} finishAffinity(); System.exit(0); });
-        
         setContentView(main);
-        
-        WebSettings s = webView.getSettings();
-        s.setJavaScriptEnabled(true);
-        s.setDomStorageEnabled(true);
-        s.setAllowFileAccess(true);
-        s.setAllowUniversalAccessFromFileURLs(true);
-        s.setAllowFileAccessFromFileURLs(true);
-        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        
-        // SA KI FÈ L INIVESEL LA
+        WebSettings s = webView.getSettings(); s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setAllowFileAccess(true); s.setAllowUniversalAccessFromFileURLs(true); s.setAllowFileAccessFromFileURLs(true); s.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.addJavascriptInterface(new AndroidPrinter(), "AndroidPrinter");
-        
         webView.loadUrl("file:///android_asset/index.html");
     }
 }
