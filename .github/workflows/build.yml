@@ -1,4 +1,4 @@
-name: Build APK FINAL
+name: Build APK FINAL V150
 on:
   push:
     branches: [ main ]
@@ -6,20 +6,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Java
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Setup Android
+
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      - name: Build Debug APK
+
+      - name: Setup Gradle 7.5
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 7.5
+
+      - name: Build APK - Generate Wrapper + Build
         run: |
-          cd app
-          gradle assembleDebug --stacktrace
+          gradle wrapper --gradle-version 7.5
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: CD-Lotto-APK-FINAL
+          name: CD-Lotto-V150-SCAN-SAN-DYALOG
           path: app/build/outputs/apk/debug/*.apk
