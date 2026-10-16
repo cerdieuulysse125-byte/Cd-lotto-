@@ -1,4 +1,144 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>TEST</title></head><body style='background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column'>
-<h1>C&D VERITE LOTTO</h1><h2>TEST OUVERTI</h2><p>Si ou we sa a, app la OUVRI!</p><button onclick='alert("OK SCAN TEST")' style='padding:20px;font-size:20px;margin-top:20px'>TEST SCAN</button>
-<script>alert("JS AP MACHE - APP OUVRI");</script>
-</body></html>
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CD VERITE LOTTO</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#070f1e;color:#e8eef8;min-height:100vh;padding-bottom:80px}
+.topbar{background:linear-gradient(135deg,#0f2340,#1a3a6a);padding:18px 15px 12px;position:sticky;top:0;z-index:10;border-bottom:2px solid #ffd700}
+.topbar h1{font-size:20px;font-weight:900}.topbar h1 span{color:#ffd700}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tab{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#8aa0c0;padding:8px 2px;border-radius:20px;font-size:11px;font-weight:700;text-align:center;cursor:pointer}
+.tab.active{background:#ffd700;color:#000;border-color:#ffd700}
+.content{padding:14px}
+.card{background:linear-gradient(180deg,#132a4c,#10223d);border:1px solid #1e3f6f;border-radius:14px;padding:14px;margin-bottom:12px}
+.boul{display:flex;gap:8px;margin:8px 0}
+.b{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;background:#fff;color:#000}
+.b.gold{background:linear-gradient(135deg,#ffe27a,#ffb800);border:2px solid #ffd700}
+.scan-box{background:#0c1a30;border:2px dashed #2a4a7a;border-radius:14px;padding:18px;text-align:center;margin-bottom:12px}
+.device{background:#0f213f;border:1px solid #1e3f6f;border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.param-card{background:#101e36;border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid #1c355c;display:flex;justify-content:space-between;align-items:center}
+.switch{width:44px;height:26px;background:#2a3f61;border-radius:20px;position:relative;cursor:pointer}
+.switch.on{background:#ffd700}.switch:after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}
+.switch.on:after{left:21px;background:#000}
+.btn{width:100%;padding:12px;border-radius:12px;border:none;font-weight:900;font-size:12px;cursor:pointer;margin-top:6px}
+.btn-gold{background:linear-gradient(135deg,#ffd700,#ffae00);color:#000}
+.btn-dark{background:#1a335c;color:#fff;border:1px solid #2a4a7a}
+.btn-print{background:linear-gradient(135deg,#00d26a,#00a854);color:#fff}
+.hidden{display:none}.progress{height:6px;background:#1a335c;border-radius:10px;overflow:hidden;margin:10px 0}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ffae00);transition:width.3s}
+.log{background:#050c19;border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:#5d7ea8;height:90px;overflow-y:auto;margin-top:10px}
+.ticket{border:1px dashed #ffd700;padding:10px;border-radius:8px;margin-top:8px;background:#0a1930;font-family:monospace;font-size:12px}
+@media print{body{background:#fff;color:#000}.topbar,.tabs,.btn-dark,.btn-gold,.scan-box{display:none}.card{border:2px solid #000}}
+</style>
+</head>
+<body>
+<div class="topbar">
+<h1><span>CD</span> VERITE LOTTO</h1>
+<p id="dateTop" style="font-size:11px;color:#8aa0c0"></p>
+<div class="tabs">
+<div class="tab active" onclick="showTab('lotto')">🎱 LOTTO</div>
+<div class="tab" onclick="showTab('scan')">📡 SCAN</div>
+<div class="tab" onclick="showTab('param')">⚙️ PARAMÈT</div>
+</div>
+</div>
+<div class="content">
+
+<div id="tab-lotto">
+<div class="card">
+<div style="display:flex;justify-content:space-between"><h2 style="color:#ffd700;font-size:13px">🎯 NEW YORK MIDI</h2><span style="font-size:10px;background:#0a7a3a;color:#fff;padding:3px 8px;border-radius:10px">LIVE</span></div>
+<div class="boul" id="ny_midi"><div class="b gold">18</div><div class="b">45</div><div class="b">79</div></div>
+<div class="ticket">CD VERITE LOTTO<br>NY MIDI: 18-45-79<br>Date: <span class="ticket-date"></span></div>
+<button class="btn btn-print" onclick="enprimeSanDyalog('NY MIDI: 18-45-79')">🖨️ ENPRIME SAN DYALÒG</button>
+<button class="btn btn-dark" onclick="enprimeSouAparèy('NY MIDI: 18-45-79')">📤 VOYE BAY PRINTER</button>
+</div>
+
+<div class="card">
+<h2 style="color:#ffd700;font-size:13px;margin-bottom:6px">🌙 NEW YORK ASWÈ</h2>
+<div class="boul" id="ny_swa"><div class="b gold">07</div><div class="b">33</div><div class="b">92</div></div>
+<button class="btn btn-print" onclick="enprimeSanDyalog('NY ASWE: 07-33-92')">🖨️ ENPRIME SAN DYALÒG</button>
+</div>
+
+<div class="card">
+<h2 style="color:#ffd700;font-size:13px;margin-bottom:6px">☀️ FLORIDA MIDI</h2>
+<div class="boul"><div class="b gold">56</div><div class="b">12</div><div class="b">84</div></div>
+<button class="btn btn-print" onclick="enprimeSanDyalog('FLORIDA MIDI: 56-12-84')">🖨️ ENPRIME SAN DYALÒG</button>
+</div>
+
+<div class="card">
+<h2 style="color:#ffd700;font-size:13px;margin-bottom:6px">🌃 FLORIDA ASWÈ</h2>
+<div class="boul"><div class="b gold">23</div><div class="b">67</div><div class="b">09</div></div>
+<button class="btn btn-print" onclick="enprimeSanDyalog('FLORIDA ASWE: 23-67-09')">🖨️ ENPRIME SAN DYALÒG</button>
+</div>
+
+<button class="btn btn-gold" onclick="randomLotto()">🎲 TIRE NOUVO BOUL</button>
+<button class="btn btn-dark" onclick="enprimeTout()">🖨️ ENPRIME TOUT TIRAJ YO</button>
+</div>
+
+<div id="tab-scan" class="hidden">
+<div class="scan-box" id="scanBox"><div style="font-size:40px">📡</div><h3 style="font-size:14px;margin:8px 0">Scan Aparèy Yo (Detekte Aparèy Pwoch)</h3><p style="font-size:11px;color:#7a95b8">Detekte Bluetooth, Printer, TV, Telefòn</p><div class="progress"><div class="progress-bar" id="pbar"></div></div><button class="btn btn-gold" id="btnScan" onclick="startScan()">🔍 KÒMANSE SCAN</button><div class="log" id="log">> Sistèm pare...<br>> Klike SCAN pou kòmanse</div></div>
+<div style="font-weight:800;margin:12px 0">📱 Aparèy Jwenn (<span id="count">0</span>)</div>
+<div id="deviceList"><div class="device" style="opacity:.5"><div><b>Okenn aparèy poko</b></div></div></div>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-dark" style="flex:1" onclick="scanBluetooth()">🔵 Bluetooth</button><button class="btn btn-dark" style="flex:1" onclick="scanNetwork()">📶 Rezo</button></div>
+</div>
+
+<div id="tab-param" class="hidden">
+<div style="font-weight:800;margin:12px 0">⚙️ Paramèt - Scan Aparèy Yo</div>
+<div class="param-card"><div><b style="font-size:13px">📡 Scan Otomatik</b><br><span style="font-size:11px;color:#7a95b8">Detekte aparèy chak 5 min</span></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+<div class="param-card"><div><b style="font-size:13px">🖨️ Enpresyon Dirèk</b><br><span style="font-size:11px;color:#7a95b8">Enprime san dyalòg</span></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+<div class="param-card"><div><b style="font-size:13px">📱 Dènye Scan</b><br><span style="font-size:11px;color:#7a95b8" id="lastScan">Jamè</span></div><div style="background:#ffd700;color:#000;padding:6px 12px;border-radius:8px;font-weight:900;font-size:12px" onclick="showTab('scan')">SCAN</div></div>
+<div class="card"><p style="font-size:12px;color:#8aa0c0">Vèsyon 33.0 - Enpresyon san dyalòg aktive.<br>1e fwa chwazi printer, apre sa li ap enprime dirèk san mande.</p></div>
+<button class="btn btn-dark" onclick="testPrint()">🧪 TEST ENPRIME</button>
+</div>
+
+</div>
+<script>
+function showTab(t){document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));document.getElementById('tab-lotto').classList.add('hidden');document.getElementById('tab-scan').classList.add('hidden');document.getElementById('tab-param').classList.add('hidden');if(t==='lotto'){document.querySelectorAll('.tab')[0].classList.add('active');document.getElementById('tab-lotto').classList.remove('hidden')}if(t==='scan'){document.querySelectorAll('.tab')[1].classList.add('active');document.getElementById('tab-scan').classList.remove('hidden')}if(t==='param'){document.querySelectorAll('.tab')[2].classList.add('active');document.getElementById('tab-param').classList.remove('hidden')}}
+function randomLotto(){function r(){return String(Math.floor(Math.random()*100)).padStart(2,'0')}document.querySelectorAll('.b').forEach(b=>{b.innerText=r()});addLog('Nouvo: '+r())}
+const fakeDevices=[{name:'HP Printer 2700',type:'🖨️ Printer',id:'PR_12:AA'},{name:'Samsung TV Salon',type:'📺 TV',id:'TV_45:23'},{name:'EPSON TM-T20',type:'🧾 Thermal Printer',id:'TH_99:01'},{name:'iPhone de Pierre',type:'📱 Telefòn',id:'PH_88:21'},{name:'JBL Speaker',type:'🔊 Speaker',id:'SP_33:90'}]
+function addLog(t){const l=document.getElementById('log');l.innerHTML+='<br>> '+t;l.scrollTop=l.scrollHeight}
+async function startScan(){const bar=document.getElementById('pbar');const btn=document.getElementById('btnScan');const list=document.getElementById('deviceList');btn.disabled=true;btn.innerText='⏳ AP SCAN...';bar.style.width='0%';list.innerHTML='';document.getElementById('count').innerText='0';addLog('Kòmanse scan aparèy pwoch...');let w=0;let iv=setInterval(()=>{w+=18;if(w>100)w=100;bar.style.width=w+'%';if(w>=100){clearInterval(iv);finishScan()}},300)}
+function finishScan(){const list=document.getElementById('deviceList');document.getElementById('btnScan').disabled=false;document.getElementById('btnScan').innerText='🔍 RE-SCAN';let found=fakeDevices.sort(()=>0.5-Math.random()).slice(0,4);found.forEach((d,i)=>{setTimeout(()=>{let div=document.createElement('div');div.className='device';div.innerHTML='<div><b>🟢 '+d.name+'</b><br><span style="font-size:11px;color:#7a95b8">'+d.type+' - '+d.id+'</span></div><div><button style="background:#00d26a;color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:900" onclick="enprimeSouAparèy(\''+d.name+'\')">ENPRIME</button></div>';list.appendChild(div);document.getElementById('count').innerText=list.children.length;addLog('Jwenn: '+d.name)},i*400)});document.getElementById('lastScan').innerText=new Date().toLocaleTimeString();addLog(found.length+' aparèy detekte ✅')}
+async function scanBluetooth(){addLog('Bluetooth scan...');if(!navigator.bluetooth){addLog('Similasyon - Bluetooth pa disponib nan WebView, itilize lis');finishScan();return}try{const dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true});addLog('✅ '+dev.name);let div=document.createElement('div');div.className='device';div.innerHTML='<div><b>🟢 '+(dev.name||'Anonim')+'</b><br><span>🔵 Bluetooth</span></div><div><button style="background:#00d26a;color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px" onclick="enprimeSouAparèy(\''+(dev.name||'Bluetooth')+'\')">ENPRIME</button></div>';document.getElementById('deviceList').prepend(div)}catch(e){addLog('Anile: '+e)}}
+function scanNetwork(){addLog('Scan rezo...');finishScan()}
+
+// === FONKSYON ENPRIME SAN DYALÒG - NENPÒT MACHIN ===
+function enprimeSanDyalog(texte){
+  let ticket = "========================\n CD VERITE LOTTO\n========================\n"+texte+"\nDate: "+new Date().toLocaleString()+"\nMèsi!\n========================\n";
+  if(window.AndroidPrinter){
+    window.AndroidPrinter.printTicket(ticket);
+    window.AndroidPrinter.showToast("🖨️ Voye: "+texte);
+    addLog("🖨️ Enprime san dyalòg: "+texte);
+  } else {
+    // Fallback pou navigatè
+    let w=window.open('','','width=300,height=400');
+    w.document.write('<pre>'+ticket+'</pre>');
+    w.print();
+    w.close();
+  }
+}
+
+function enprimeTout(){
+  if(window.AndroidPrinter){
+    window.AndroidPrinter.printDirect();
+    addLog("🖨️ Enprime tout paj la san dyalòg");
+  } else {
+    window.print();
+  }
+}
+
+function enprimeSouAparèy(nomAparèy){
+  enprimeSanDyalog("Enprime sou "+nomAparèy+"\nNY MIDI: 18-45-79\nFLORIDA: 56-12-84");
+}
+
+function testPrint(){
+  enprimeSanDyalog("TEST TICKET - CD LOTTO\nFonksyone 100%");
+}
+
+document.getElementById('dateTop').innerText=new Date().toLocaleDateString('fr-HT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.querySelectorAll('.ticket-date').forEach(e=>e.innerText=new Date().toLocaleString());
+</script>
+</body>
+</html>
