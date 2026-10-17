@@ -9,11 +9,18 @@ import android.util.Log;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.os.Build;
+import java.util.Set;
 
 public class MainActivity extends Activity {
     private WebView webView;
     private Object sunmiService = null;
     private boolean isConnected = false;
+    private static final int REQ_PERM = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +34,50 @@ public class MainActivity extends Activity {
         s.setAllowUniversalAccessFromFileURLs(true);
         s.setAllowFileAccessFromFileURLs(true);
 
+        // Mande otorizasyon otomatik
+        demandePermissions();
+
         initPrinter();
 
         webView.addJavascriptInterface(new PrinterBridge(), "AndroidPrinter");
         webView.addJavascriptInterface(new PrinterBridge(), "Android");
 
         webView.loadUrl("file:///android_asset/index.html");
+    }
+
+    private void demandePermissions(){
+        try{
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                String[] perms;
+                if(Build.VERSION.SDK_INT >= 31){
+                    perms = new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.BLUETOOTH_SCAN,
+                        Manifest.permission.BLUETOOTH_CONNECT,
+                        Manifest.permission.BLUETOOTH
+                    };
+                } else {
+                    perms = new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN
+                    };
+                }
+                boolean need=false;
+                for(String p: perms){
+                    if(checkSelfPermission(p)!=PackageManager.PERMISSION_GRANTED){ need=true; break; }
+                }
+                if(need) requestPermissions(perms, REQ_PERM);
+            }
+        }catch(Exception e){ Log.e("PERM", e.toString()); }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int code, String[] perms, int[] results){
+        super.onRequestPermissionsResult(code, perms, results);
+        Log.d("PERM","otorizasyon reponn");
     }
 
     private void initPrinter(){
@@ -49,12 +94,10 @@ public class MainActivity extends Activity {
                         if("onConnected".equals(name)){
                             sunmiService = args[0];
                             isConnected = true;
-                            Log.d("SUNMI","CONNECTED");
                         }
                         if("onDisconnected".equals(name)){
                             sunmiService = null;
                             isConnected = false;
-                            Log.d("SUNMI","DISCONNECTED");
                         }
                         return null;
                     }
@@ -62,19 +105,66 @@ public class MainActivity extends Activity {
             );
             Object mgr = managerClass.getMethod("getInstance").invoke(null);
             managerClass.getMethod("bindService", android.content.Context.class, callbackClass).invoke(mgr, this, callback);
-        }catch(Exception e){
-            Log.e("SUNMI","init err "+e.getMessage());
-            isConnected = false;
-        }
+        }catch(Exception e){ Log.e("SUNMI","init err "+e.getMessage()); }
     }
 
     public class PrinterBridge {
         @JavascriptInterface public String getPrinterStatus(){ return isConnected ? "CONNECTED" : "DISCONNECTED"; }
 
-        @JavascriptInterface public String scanDevices(){
-            return "[{\"name\":\"Sunmi Interne\",\"mac\":\"SUNMI_INNER\",\"type\":\"sunmi\"}]";
+        @JavascriptInterface
+        public String scanDevices(){
+            StringBuilder json = new StringBuilder("[");
+            // 1 - Sunmi Interne toujou la
+            json.append("{\"name\":\"Sunmi Interne\",\"mac\":\"SUNMI_INNER\",\"type\":\"sunmi\"}");
+
+            // 2 - Detekte tout aparèy Bluetooth apwoksimite ki deja pè
+            try{
+                BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                if(adapter!=null){
+                    if(Build.VERSION.SDK_INT >= 31){
+                        if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT)!=PackageManager.PERMISSION_GRANTED){
+                            // si pa gen pèmisyon, retounen sèlman Sunmi
+                            json.append("]");
+                            return json.toString();
+                        }
+                    }
+                    // Aparèy ki deja konekte
+                    Set<BluetoothDevice> bonded = adapter.getBondedDevices();
+                    if(bonded!=null){
+                        for(BluetoothDevice d : bonded){
+                            String name = d.getName();
+                            String mac = d.getAddress();
+                            if(name==null) name="Printer";
+                            // Filtre sèlman printer
+                            json.append(",{\"name\":\"").append(name.replace("\"","")).append("\",\"mac\":\"").append(mac).append("\",\"type\":\"bluetooth\"}");
+                        }
+                    }
+                    // Lanse rechèch pou nouvo aparèy apwoksimite
+                    try{
+                        if(Build.VERSION.SDK_INT >= 31){
+                            if(checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN)==PackageManager.PERMISSION_GRANTED){
+                                if(!adapter.isDiscovering()) adapter.startDiscovery();
+                            }
+                        }else{
+                            if(!adapter.isDiscovering()) adapter.startDiscovery();
+                        }
+                    }catch(Exception ex){}
+                }
+            }catch(Exception e){ Log.e("SCAN", e.toString()); }
+
+            json.append("]");
+            Log.d("SCAN", json.toString());
+            return json.toString();
         }
-        @JavascriptInterface public void selectPrinter(String mac){}
+
+        @JavascriptInterface public void selectPrinter(String mac){
+            Log.d("SELECT", mac);
+            try{
+                if(mac!=null && !mac.equals("SUNMI_INNER") && sunmiService==null){
+                    // Eseye konekte Bluetooth si se pa Sunmi - kite WebView jere
+                }
+            }catch(Exception e){}
+        }
         @JavascriptInterface public void savePrinter(String mac,String name,String cfg){}
 
         @JavascriptInterface
@@ -88,8 +178,8 @@ public class MainActivity extends Activity {
             }catch(Exception e){ Log.e("PRINT", e.toString()); }
         }
 
-        @JavascriptInterface
-        public void printLogo(String dataUrl){ printBitmap(dataUrl); }
+        @JavascriptInterface public void printLogo(String u){ printBitmap(u); }
+        @JavascriptInterface public void printImage(String u){ printBitmap(u); }
 
         @JavascriptInterface
         public void printBitmap(String dataUrl){
@@ -107,10 +197,8 @@ public class MainActivity extends Activity {
                 c.getMethod("setAlignment", int.class, Object.class).invoke(sunmiService, 1, null);
                 c.getMethod("printBitmap", Bitmap.class, Object.class).invoke(sunmiService, small, null);
                 c.getMethod("lineWrap", int.class, Object.class).invoke(sunmiService, 2, null);
-            }catch(Exception e){ Log.e("PRINT_LOGO", e.toString()); }
+            }catch(Exception e){ Log.e("LOGO", e.toString()); }
         }
-
-        @JavascriptInterface public void printImage(String u){ printBitmap(u); }
 
         @JavascriptInterface
         public void printWithLogo(String logo, String text){
@@ -129,11 +217,10 @@ public class MainActivity extends Activity {
         super.onDestroy();
         try{
             Class<?> managerClass = Class.forName("com.sunmi.peripheral.printer.InnerPrinterManager");
-            Class<?> callbackClass = Class.forName("com.sunmi.peripheral.printer.InnerPrinterCallback");
             Object mgr = managerClass.getMethod("getInstance").invoke(null);
-            // unbind to avoid leak
             try{
-                managerClass.getMethod("unBindService", android.content.Context.class, callbackClass).invoke(mgr, this, null);
+                BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                if(adapter!=null) adapter.cancelDiscovery();
             }catch(Exception ex){}
         }catch(Exception e){}
     }
