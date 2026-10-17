@@ -13,8 +13,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        webView = findViewById(R.id.webview);
+        // Kreye WebView san R.layout
+        webView = new WebView(this);
+        setContentView(webView);
+        
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
@@ -23,36 +25,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class PrinterBridge {
-
         @JavascriptInterface
         public void printWithoutDialog(String text) {
             android.util.Log.d("PRINTER", text);
         }
-
         @JavascriptInterface
         public String getPrinterStatus() {
             return "CONNECTED";
         }
-
         @JavascriptInterface
         public void printLogo(String dataUrl) {
             try {
                 String b64 = dataUrl;
                 if (b64.contains(",")) b64 = b64.substring(b64.indexOf(",") + 1);
-                byte[] d = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);
-                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeByteArray(d, 0, d.length);
-                android.util.Log.d("LOGO", "Logo decoded: " + (bmp != null ? bmp.getWidth() : "null"));
+                android.util.Base64.decode(b64, android.util.Base64.DEFAULT);
             } catch (Exception e) {}
         }
-
         @JavascriptInterface
-        public void printBitmap(String dataUrl) {
-            printLogo(dataUrl);
-        }
-
+        public void printBitmap(String dataUrl) { printLogo(dataUrl); }
         @JavascriptInterface
         public void printWithLogo(String logoDataUrl, String text) {
-            printLogo(logoDataUrl);
             printWithoutDialog(text);
         }
     }
