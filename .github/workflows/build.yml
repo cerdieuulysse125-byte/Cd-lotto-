@@ -16,14 +16,17 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Grant execute permission
-        run: chmod +x ./gradlew
-
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+      - name: Find and Build APK
+        run: |
+          GRADLEW=$(find . -name "gradlew" -type f | head -n 1)
+          echo "Found gradlew at: $GRADLEW"
+          chmod +x "$GRADLEW"
+          DIR=$(dirname "$GRADLEW")
+          cd "$DIR"
+          ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: APK-V26.6-LOGO-FIX
-          path: app/build/outputs/apk/debug/*.apk
+          path: "**/app/build/outputs/apk/debug/*.apk"
