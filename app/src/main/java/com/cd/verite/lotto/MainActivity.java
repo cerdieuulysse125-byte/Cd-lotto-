@@ -10,14 +10,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.sunmi.peripheral.printer.InnerPrinterCallback;
-import com.sunmi.peripheral.printer.InnerPrinterException;
-import com.sunmi.peripheral.printer.InnerPrinterManager;
-import com.sunmi.peripheral.printer.SunmiPrinterService;
-
 public class MainActivity extends Activity {
     private WebView webView;
-    private SunmiPrinterService sunmiPrinterService = null;
+    private Object sunmiService = null;
     private boolean isConnected = false;
 
     @Override
@@ -32,7 +27,7 @@ public class MainActivity extends Activity {
         s.setAllowUniversalAccessFromFileURLs(true);
         s.setAllowFileAccessFromFileURLs(true);
 
-        initSunmiPrinter();
+        initPrinter();
 
         webView.addJavascriptInterface(new PrinterBridge(), "AndroidPrinter");
         webView.addJavascriptInterface(new PrinterBridge(), "Android");
@@ -40,31 +35,38 @@ public class MainActivity extends Activity {
         webView.loadUrl("file:///android_asset/index.html");
     }
 
-    private void initSunmiPrinter(){
+    private void initPrinter(){
         try{
-            InnerPrinterManager.getInstance().bindService(this, innerPrinterCallback);
-        }catch(Exception e){ Log.e("SUNMI","bind err "+e.getMessage()); }
-    }
-
-    private InnerPrinterCallback innerPrinterCallback = new InnerPrinterCallback(){
-        @Override
-        protected void onConnected(SunmiPrinterService service){
-            sunmiPrinterService = service;
-            isConnected = true;
-            Log.d("SUNMI","CONNECTED");
-            try{
-                if(sunmiPrinterService!=null){
-                    sunmiPrinterService.updatePrinterState();
+            Class<?> managerClass = Class.forName("com.sunmi.peripheral.printer.InnerPrinterManager");
+            Class<?> callbackClass = Class.forName("com.sunmi.peripheral.printer.InnerPrinterCallback");
+            Object callback = java.lang.reflect.Proxy.newProxyInstance(
+                callbackClass.getClassLoader(),
+                new Class[]{callbackClass},
+                new java.lang.reflect.InvocationHandler(){
+                    @Override
+                    public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
+                        String name = method.getName();
+                        if("onConnected".equals(name)){
+                            sunmiService = args[0];
+                            isConnected = true;
+                            Log.d("SUNMI","CONNECTED");
+                        }
+                        if("onDisconnected".equals(name)){
+                            sunmiService = null;
+                            isConnected = false;
+                            Log.d("SUNMI","DISCONNECTED");
+                        }
+                        return null;
+                    }
                 }
-            }catch(Exception e){}
-        }
-        @Override
-        protected void onDisconnected(){
-            sunmiPrinterService = null;
+            );
+            Object mgr = managerClass.getMethod("getInstance").invoke(null);
+            managerClass.getMethod("bindService", android.content.Context.class, callbackClass).invoke(mgr, this, callback);
+        }catch(Exception e){
+            Log.e("SUNMI","init err "+e.getMessage());
             isConnected = false;
-            Log.d("SUNMI","DISCONNECTED");
         }
-    };
+    }
 
     public class PrinterBridge {
         @JavascriptInterface public String getPrinterStatus(){ return isConnected ? "CONNECTED" : "DISCONNECTED"; }
@@ -78,11 +80,12 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void printWithoutDialog(String text){
             try{
-                if(sunmiPrinterService==null){ Log.e("PRINT","service null"); return; }
-                sunmiPrinterService.setAlignment(1, null);
-                sunmiPrinterService.printText(text, null);
-                sunmiPrinterService.lineWrap(4, null);
-            }catch(Exception e){ Log.e("PRINT","err "+e.getMessage()); }
+                if(sunmiService==null){ Log.e("PRINT","service null"); return; }
+                Class<?> c = sunmiService.getClass();
+                c.getMethod("setAlignment", int.class, Object.class).invoke(sunmiService, 1, null);
+                c.getMethod("printText", String.class, Object.class).invoke(sunmiService, text, null);
+                c.getMethod("lineWrap", int.class, Object.class).invoke(sunmiService, 4, null);
+            }catch(Exception e){ Log.e("PRINT", e.toString()); }
         }
 
         @JavascriptInterface
@@ -91,20 +94,20 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void printBitmap(String dataUrl){
             try{
-                if(sunmiPrinterService==null) return;
-                if(dataUrl==null||dataUrl.length()<100) return;
+                if(sunmiService==null) return;
+                if(dataUrl==null || dataUrl.length()<100) return;
                 String b64 = dataUrl.contains(",") ? dataUrl.substring(dataUrl.indexOf(",")+1) : dataUrl;
                 byte[] decoded = Base64.decode(b64, Base64.DEFAULT);
                 Bitmap bmp = BitmapFactory.decodeByteArray(decoded,0,decoded.length);
                 if(bmp==null) return;
-                // Redimansyone 200px pou 58mm SANTRE
                 int w = 200;
                 int h = (int)(bmp.getHeight() * (w / (float)bmp.getWidth()));
                 Bitmap small = Bitmap.createScaledBitmap(bmp, w, h, false);
-                sunmiPrinterService.setAlignment(1, null);
-                sunmiPrinterService.printBitmap(small, null);
-                sunmiPrinterService.lineWrap(1, null);
-            }catch(Exception e){ Log.e("PRINT_LOGO",e.getMessage()); }
+                Class<?> c = sunmiService.getClass();
+                c.getMethod("setAlignment", int.class, Object.class).invoke(sunmiService, 1, null);
+                c.getMethod("printBitmap", Bitmap.class, Object.class).invoke(sunmiService, small, null);
+                c.getMethod("lineWrap", int.class, Object.class).invoke(sunmiService, 2, null);
+            }catch(Exception e){ Log.e("PRINT_LOGO", e.toString()); }
         }
 
         @JavascriptInterface public void printImage(String u){ printBitmap(u); }
@@ -124,6 +127,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        try{ InnerPrinterManager.getInstance().unBindService(this, innerPrinterCallback); }catch(Exception e){}
+        try{
+            Class<?> managerClass = Class.forName("com.sunmi.peripheral.printer.InnerPrinterManager");
+            Class<?> callbackClass = Class.forName("com.sunmi.peripheral.printer.InnerPrinterCallback");
+            Object mgr = managerClass.getMethod("getInstance").invoke(null);
+            // unbind to avoid leak
+            try{
+                managerClass.getMethod("unBindService", android.content.Context.class, callbackClass).invoke(mgr, this, null);
+            }catch(Exception ex){}
+        }catch(Exception e){}
     }
 }
