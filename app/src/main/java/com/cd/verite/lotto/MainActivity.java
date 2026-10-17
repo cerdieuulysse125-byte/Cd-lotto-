@@ -202,6 +202,40 @@ public class MainActivity extends AppCompatActivity {
         @JavascriptInterface
         public String getPrinterStatus(){
             return sunmiConnected ? "CONNECTED" : "DISCONNECTED";
+    @JavascriptInterface
+    public void printLogo(String dataUrl){
+        try{
+            if(sunmiPrinterService == null) return;
+            String b64 = dataUrl;
+            if(b64.contains(",")){
+                b64 = b64.substring(b64.indexOf(",")+1);
+            }
+            byte[] d = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);
+            android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeByteArray(d,0,d.length);
+            if(bmp != null){
+                sunmiPrinterService.setAlignment(1, null);
+                sunmiPrinterService.printBitmap(bmp, null);
+                sunmiPrinterService.lineWrap(2, null);
+            }
+        }catch(Exception e){}
+    }
+
+    @JavascriptInterface
+    public void printBitmap(String dataUrl){
+        printLogo(dataUrl);
+    }
+
+    @JavascriptInterface
+    public void printWithLogo(String logoDataUrl, String text){
+        try{
+            if(logoDataUrl != null && logoDataUrl.length() > 100){
+                printLogo(logoDataUrl);
+                try{ Thread.sleep(600); }catch(Exception ex){}
+            }
+            printWithoutDialog(text);
+        }catch(Exception e){
+            printWithoutDialog(text);
         }
+    }
     }
 }
