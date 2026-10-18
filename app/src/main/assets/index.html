@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>C&D V29.1 - SERI + ANILE + PEYE 1X</title>
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>C&D V29.2 FIX</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
@@ -16,7 +16,7 @@
 .tlist{display:none;position:fixed;left:8px;right:8px;top:90px;background:#fff;border:3px solid #0a4a2e;border-radius:12px;z-index:9999;padding:8px;grid-template-columns:78px 78px 78px;gap:8px;max-height:70vh;overflow:auto;justify-content:center}.tlist.open{display:grid}
 .topt{width:78px;min-height:68px;border:2px solid #ccc;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;text-align:center}
 #loginPage{display:block}#mainPage{display:none;min-height:100vh;padding-bottom:90px}#mainPage.show{display:block}
-.tabPage{display:none!important}.tabPage.active{display:block!important}
+.tabPage{display:none}.tabPage.active{display:block !important;}
 .tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:3px solid #0a4a2e;z-index:5000;height:66px;overflow-x:auto}.tab{flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:0;background:#eee;border-right:1px solid #ccc;min-width:60px}.tab.active{background:#0a4a2e;color:#d4af37}
 #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a4a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.5s}
 #prev{background:#fff;margin:8px;padding:10px;font-family:'Courier New',monospace;font-size:12px;line-height:1.5;color:#000;white-space:pre-wrap;word-break:break-word;border:1px dashed #000;width:100%;max-width:58mm;text-align:center;margin:0 auto}
@@ -24,9 +24,9 @@
 .rapo-line{display:flex;justify-content:space-between;padding:12px;border-bottom:1px dashed #ccc;font-weight:800;font-size:14px}
 .rapo-title{background:#0a4a2e;color:#d4af37;padding:12px;text-align:center;font-weight:900}
 </style></head><body>
-<div id='splash'><div style='width:110px;height:110px;border:3px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;font-size:36px;color:#0a4a2e;font-weight:900'>C&D</div><div id='splashBiz' style='color:#d4af37;font-weight:800;margin-top:15px;font-size:22px;text-align:center'>C&D VERITE LOTTO</div><div style='color:#fff;margin-top:8px'>V29.1 SERI+ANILE+PEYE</div></div>
+<div id='splash'><div style='width:110px;height:110px;border:3px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;font-size:36px;color:#0a4a2e;font-weight:900'>C&D</div><div id='splashBiz' style='color:#d4af37;font-weight:800;margin-top:15px;font-size:22px;text-align:center'>C&D VERITE LOTTO</div><div style='color:#fff;margin-top:8px'>V29.2 FIX BLANCH+LOGO</div></div>
 <div class='h'><div style='display:flex;align-items:center;gap:8px'><img id='headerLogo' src='' style='width:32px;height:32px;border-radius:50%;border:2px solid #d4af37;display:none;object-fit:cover;background:#fff'><div><b id='vName'>Vendeur</b><br><small id='heureHaiti' style='background:#d4af37;color:#0a4a2e;padding:2px 8px;border-radius:6px;font-weight:800'>SYNC...</small></div></div><div><button onclick='localStorage.clear();location.reload()' style='background:#d4af37;color:#0a4a2e;border:0;padding:6px 10px;border-radius:6px;margin-right:4px;font-weight:800'>Cache</button><button onclick='logout()' style='background:#e11d48;color:#fff;border:0;padding:6px 10px;border-radius:6px'>Soti</button></div></div>
-<div id='loginPage'><div class='card' style='max-width:400px;margin:20px auto;text-align:center'><h3 id='loginBiz'>C&D VERITE LOTTO<br><small style='background:#0a4a2e;color:#d4af37;padding:2px 10px;border-radius:6px'>V29.1</small></h3><input id='inputSerial' class='inpL' placeholder='Serial' style='margin-top:12px'><input id='inputPass' type='password' class='inpL' placeholder='Modpas' style='margin-top:8px'><button class='btn btnG' style='margin-top:10px' onclick='doLogin()'>Konekte</button><div id='loginMsg' style='color:red;font-weight:700;margin-top:8px'></div>
+<div id='loginPage'><div class='card' style='max-width:400px;margin:20px auto;text-align:center'><h3 id='loginBiz'>C&D VERITE LOTTO<br><small style='background:#0a4a2e;color:#d4af37;padding:2px 10px;border-radius:6px'>V29.2</small></h3><input id='inputSerial' class='inpL' placeholder='Serial' style='margin-top:12px'><input id='inputPass' type='password' class='inpL' placeholder='Modpas' style='margin-top:8px'><button class='btn btnG' style='margin-top:10px' onclick='doLogin()'>Konekte</button><div id='loginMsg' style='color:red;font-weight:700;margin-top:8px'></div>
 <div style='margin-top:14px;border-top:2px dashed #0a4a2e;padding-top:10px;background:#eef2f7;border-radius:10px;padding:10px'>
 <b style='font-size:12px'>📱 SERI APARÈY SA A:</b><br>
 <div id='deviceSerialInfo' style='font-weight:900;color:#0a4a2e;background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:10px;margin-top:6px;font-size:13px;word-break:break-all;min-height:44px'>Ap detekte seri...</div>
@@ -35,18 +35,18 @@
 </div></div>
 <div id='mainPage'>
 <div id='pV' class='tabPage active'>
-<div class='printer-bar'><b>🖨️ V29.1 - SERI APARÈY + ANILE 5MIN + PEYE 1X</b><br><small id='printer-status'>SAN DYALOG</small> | <small id='logoStatus'>Logo: ...</small> | <small id='limitStatus'>Limit</small> | <small id='bizStatus' style='background:#d4af37;color:#0a4a2e;padding:2px 6px;border-radius:4px'>Biznis: SYNC...</small></div>
+<div class='printer-bar'><b>🖨️ V29.2 FIX - ANILE+PEYE PARE</b><br><small id='printer-status'>SAN DYALOG</small> | <small id='logoStatus'>Logo: ...</small> | <small id='limitStatus'>Limit</small> | <small id='bizStatus' style='background:#d4af37;color:#0a4a2e;padding:2px 6px;border-radius:4px'>Biznis: SYNC...</small></div>
 <div id='priceInfo' style='background:#0a4a2e;color:#d4af37;padding:6px 8px;border-radius:8px;font-size:10px;margin:8px;text-align:center'>SYNC...</div>
 <div class='card'><div style='display:flex;justify-content:space-between'><b>1- Tiraj</b><button onclick='selAll()' style='padding:6px 12px;border-radius:8px;border:1px solid #0a4a2e'>Tout ouve</button></div><div class='row' style='margin-top:10px'><div style='width:88px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800'>Tiraj</div><div id='kazT' style='width:240px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-weight:800;background:#fff' onclick='document.getElementById("tlist").classList.toggle("open")'><span id='txtT' style='color:#999'>Chwazi</span><span>V</span></div></div><div id='tlist' class='tlist'></div><div id='fermetiInfo' style='font-size:11px;color:#e11d48;margin-top:6px;font-weight:700'></div></div>
 <div class='card'><div class='row' style='font-size:11px;font-weight:900;background:#0a4a2e;color:#d4af37;padding:10px 8px;border-radius:10px'><div style='width:88px;text-align:center'>JEUX</div><div style='width:82px;text-align:center'>BOUL →</div><div style='width:82px;text-align:center'>MIZ →</div><div style='width:42px'></div><div style='width:36px;text-align:center'>></div></div><div id='bets'></div><button class='btn btnB' style='margin-top:10px' onclick='addR()'>+ Liy</button></div>
 <div class='total'><span id='dt'>Total $0 x 0 = $0</span><span id='gt'>$0</span></div><div style='display:flex;gap:8px;margin:8px'><button class='btn btnG' style='flex:1;height:58px;font-size:18px' onclick='vann()'>VANN + LOGO</button><button class='btn btnB' style='flex:1;height:58px' onclick='printLast()'>RE-PRINT</button></div><div id='prev' style='display:none'></div></div>
 <div id='pC' class='tabPage'><div class='card'><h3>2- Kopye</h3><input id='cid' class='inpL' placeholder='ID Ticket'><button class='btn btnB' style='margin-top:8px' onclick='doCopy()'>Kopye</button></div></div>
 <div id='pF' class='tabPage'><div class='card'><h3>3- Mes Fiches</h3><div class='row'><input id='fd' type='date' style='width:150px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px'><button class='btn btnB' style='width:72px;height:52px' onclick='loadF()'>Wè</button></div><div id='flist'></div></div></div>
-<div id='pR' class='tabPage'><div class='card'><h3>4- Rapò (san anile)</h3>
+<div id='pR' class='tabPage'><div class='card'><h3>4- Rapò (san anile) - LOGO FIX</h3>
 <div style='background:#fff;border:2px solid #0a4a2e;border-radius:10px;padding:10px;margin-top:8px'>
 <div style='display:flex;gap:8px'><div style='flex:1'><b>Du</b><input id='rdu' type='date' style='width:100%;height:48px;border:2px solid #0a4a2e;border-radius:8px;margin-top:4px'></div><div style='flex:1'><b>Au</b><input id='rau' type='date' style='width:100%;height:48px;border:2px solid #0a4a2e;border-radius:8px;margin-top:4px'></div></div>
 <div style='margin-top:10px'><b>Tiraj</b><select id='rt' class='inpL' style='margin-top:4px'><option value='tous'>Tous</option></select></div>
-<button class='btn btnG' style='margin-top:12px;padding:14px;font-size:16px' onclick='calcR()'>📊 Kalkile Rapò</button>
+<button class='btn btnG' style='margin-top:12px;padding:14px;font-size:16px' onclick='calcR()'>📊 Kalkile Rapò + Logo</button>
 </div>
 <div id='rres' style='display:none;margin-top:12px;background:#fff;border:3px solid #0a4a2e;border-radius:12px;overflow:hidden'></div>
 <div id='rprint' style='background:#fff;padding:12px;font-family:Courier New,monospace;font-size:12px;border:1px dashed #000;display:none;white-space:pre-wrap;text-align:center;margin:10px auto;max-width:58mm;line-height:1.4'></div>
@@ -76,7 +76,7 @@
 </div>
 </div>
 <div id='pAn' class='tabPage'>
-<div class='card' style='border:3px solid #e11d48'><h3>6- Anile Tikè</h3><div style='background:#fff3e0;padding:8px;border-radius:8px;margin:8px 0;font-size:12px'>⏰ <b>5 minit sèlman</b> apre enpresyon. Flow: ID => Anile => Konfime</div>
+<div class='card' style='border:3px solid #e11d48'><h3>6- Anile Tikè (FIX BLANCH)</h3><div style='background:#fff3e0;padding:8px;border-radius:8px;margin:8px 0;font-size:12px'>⏰ <b>5 minit sèlman</b> - Flow: ID => Anile => Konfime</div>
 <input id='anId' class='inpL' placeholder='ID Tikè - T1234567' style='margin-top:10px'>
 <button class='btn' style='background:#e11d48;color:#fff;margin-top:8px;padding:16px;font-size:16px;font-weight:900' onclick='checkAnile()'>🔍 ID TIKÈ => ANILE TIKÈ</button>
 <div id='anRes' style='margin-top:12px;background:#fff;border:2px solid #e11d48;border-radius:10px;padding:10px;display:none'></div>
@@ -84,7 +84,7 @@
 </div>
 </div>
 <div id='pPay' class='tabPage'>
-<div class='card' style='border:3px solid #2e7d32'><h3>7- Peye Tikè</h3><div style='background:#e8f5e9;padding:8px;border-radius:8px;margin:8px 0;font-size:12px'>Flow: Kalkile => Peye (1 fwa) => Enprime</div>
+<div class='card' style='border:3px solid #2e7d32'><h3>7- Peye Tikè (FIX BLANCH)</h3><div style='background:#e8f5e9;padding:8px;border-radius:8px;margin:8px 0;font-size:12px'>Flow: Kalkile => Peye 1x => Enprime</div>
 <input id='payId' class='inpL' placeholder='ID Tikè Ganyan' style='margin-top:10px'>
 <button class='btn btnG' style='margin-top:8px;padding:16px;font-size:16px' onclick='checkPeye()'>🧮 KALKILE MONTAN GANYE</button>
 <div id='payRes' style='margin-top:12px;background:#fff;border:2px solid #2e7d32;border-radius:10px;padding:10px;display:none'></div>
@@ -118,7 +118,7 @@ function getMyLimite(){return DB.limites?.global||{bor:1500,mar:100,l3:100,l4:20
 function getChifRequis(j){if(j==='boul')return 2;if(j==='loto3')return 3;if(j==='loto4')return 4;if(j==='loto5')return 5;if(j==='maryaj')return 4;return 2;}
 function getLimiteForJeu(j){let l=getMyLimite();if(j==='boul')return l.bor;if(j==='maryaj')return l.mar;if(j==='loto3')return l.l3;if(j==='loto4')return l.l4;if(j==='loto5')return l.l5;return 99999;}
 function updatePriceBar(){let p=getMyPrix(),l=getMyLimite();let el=document.getElementById('priceInfo');if(el) el.innerHTML='M1='+p.m1+' | 1er '+p.p1+' | $'+l.bor;let hh=document.getElementById('heureHaiti');if(hh) hh.innerText='EST:'+formatHaiti(getHaitiTime());let ls=document.getElementById('limitStatus');if(ls) ls.innerText='GLOBAL $'+l.bor;}
-function getLogoUrl(){if(MY_LOGO&&MY_LOGO.length>100) return MY_LOGO;if(CUR&&CUR.proprioId&&DB.logosProprio[CUR.proprioId]) return DB.logosProprio[CUR.proprioId];return localStorage.getItem('verite_logo')||'';}
+function getLogoUrl(){if(MY_LOGO&&MY_LOGO.length>100) return MY_LOGO;if(CUR&&CUR.proprioId&&DB.logosProprio[CUR.proprioId]) return DB.logosProprio[CUR.proprioId];if(DB.config?.logoUrl&&DB.config.logoUrl.length>100) return DB.config.logoUrl;return localStorage.getItem('verite_logo')||'';}
 function getTel(){return DB.config?.tel||'+52 7298079596';}
 function getBusinessName(){
   let pid = CUR ? CUR.proprioId : null;
@@ -142,7 +142,7 @@ function applyBusinessName(){
     let bn = getBusinessName();
     let el = document.getElementById('vName');if(el && CUR) el.innerText = CUR.nom + ' - ' + bn;
     let splashTitle = document.getElementById('splashBiz');if(splashTitle) splashTitle.innerText = bn;
-    let loginBiz = document.getElementById('loginBiz');if(loginBiz) loginBiz.innerHTML = bn + '<br><small style="background:#0a4a2e;color:#d4af37;padding:2px 10px;border-radius:6px">V29.1</small>';
+    let loginBiz = document.getElementById('loginBiz');if(loginBiz) loginBiz.innerHTML = bn + '<br><small style="background:#0a4a2e;color:#d4af37;padding:2px 10px;border-radius:6px">V29.2</small>';
     let bizStatus = document.getElementById('bizStatus');if(bizStatus) bizStatus.innerText = 'Biznis: ' + bn;
   }catch(e){}
 }
@@ -152,7 +152,6 @@ function getDeviceSerial(){
     if(window.AndroidPrinter && typeof AndroidPrinter.getDeviceSerial==='function'){serial=AndroidPrinter.getDeviceSerial();}
     else if(window.AndroidPrinter && typeof AndroidPrinter.getSerial==='function'){serial=AndroidPrinter.getSerial();}
     else if(window.Android && typeof Android.getDeviceSerial==='function'){serial=Android.getDeviceSerial();}
-    else if(window.Android && typeof Android.getSerial==='function'){serial=Android.getSerial();}
   }catch(e){}
   if(!serial || serial.length<4){
     let stored=localStorage.getItem('device_uuid');
@@ -160,8 +159,7 @@ function getDeviceSerial(){
     serial=stored;
   }
   try{
-    let model='';
-    if(window.AndroidPrinter && typeof AndroidPrinter.getDeviceModel==='function'){model=AndroidPrinter.getDeviceModel();}
+    let model='';if(window.AndroidPrinter && typeof AndroidPrinter.getDeviceModel==='function'){model=AndroidPrinter.getDeviceModel();}
     if(model) serial+=' ('+model+')';
   }catch(e){}
   return serial;
@@ -173,9 +171,9 @@ function showDeviceSerial(){
   try{if(CUR && db){db.ref('vendeurs/'+CUR._key+'/lastDeviceSerial').set(s);db.ref('vendeurs/'+CUR._key+'/lastSeenAt').set(Date.now());}}catch(e){}
 }
 function applyLogo(){try{let u=getLogoUrl();let has=u&&u.length>100;let ls=document.getElementById('logoStatus');if(ls) ls.innerText='Logo: '+(has?'OK':'❌');let inf=document.getElementById('logoInfo');if(inf) inf.innerText=has?'Logo pare '+Math.round(u.length/1024)+'KB':'Pa gen logo';let big=document.getElementById('logoBigPreview');if(has&&big){big.src=u;big.style.display='block';MY_LOGO=u;}let el=document.getElementById('headerLogo');if(el&&has){el.src=u;el.style.display='block';}}catch(e){}}
-function uploadLogoFirebase(b64){try{if(!db||!CUR) return;let pid=CUR.proprioId||'global';db.ref('logosProprio/'+pid).set(b64);}catch(e){}}
-function saveLogo(){if(!MY_LOGO){alert('Chwazi logo');return;}localStorage.setItem('verite_logo',MY_LOGO);uploadLogoFirebase(MY_LOGO);applyLogo();alert('Logo sove');}
-function clearLogo(){MY_LOGO='';localStorage.removeItem('verite_logo');let big=document.getElementById('logoBigPreview');if(big) big.style.display='none';let head=document.getElementById('headerLogo');if(head) head.style.display='none';applyLogo();}
+function uploadLogoFirebase(b64){try{if(!db||!CUR) return;let pid=CUR.proprioId||'global';db.ref('logosProprio/'+pid).set(b64);db.ref('config/logos/v_'+CUR.serial).set(b64);}catch(e){}}
+function saveLogo(){if(!MY_LOGO){alert('Chwazi logo');return;}localStorage.setItem('verite_logo',MY_LOGO);uploadLogoFirebase(MY_LOGO);applyLogo();alert('Logo sove LOCAL+FIREBASE');}
+function clearLogo(){MY_LOGO='';localStorage.removeItem('verite_logo');if(db&&CUR){try{db.ref('logosProprio/'+(CUR.proprioId||'global')).remove();}catch(e){}}let big=document.getElementById('logoBigPreview');if(big) big.style.display='none';let head=document.getElementById('headerLogo');if(head) head.style.display='none';applyLogo();}
 function listenDB(){if(!db){hideSplash();renderT();return}db.ref().on('value',function(snap){let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.tickets=v.tickets||{};DB.heures=v.heures||{};DB.results=v.results||{};DB.prix=v.prix||DB.prix;DB.limites=v.limites||DB.limites;DB.config=v.config||DB.config;DB.proprios=v.proprios||{};DB.tiragesByProprio=v.tiragesByProprio||{};DB.heuresByProprio=v.heuresByProprio||{};DB.logosProprio=v.logosProprio||{};DB.blokeVendeur=v.blokeVendeur||{};DB.headers=v.headers||{};DB.businesses=v.businesses||{};renderT();applyLogo();applyBusinessName();updatePriceBar();hideSplash();});}
 async function doLogin(){try{let s=document.getElementById('inputSerial').value.trim(),p=document.getElementById('inputPass').value.trim(),m=document.getElementById('loginMsg');if(!s||!p){m.innerText='Mete Serial';return}let snap=await db.ref('vendeurs').once('value');let vs=snap.val()||{};let k=Object.keys(vs).find(function(k){return String(vs[k].serial)===String(s);});let f=k?vs[k]:null;if(!f||String(f.pass)!==String(p)){m.innerText='Modpas pa bon';return}if(isVendeurBlocked(f,k)){m.innerHTML='KONT BLOKE!';return;}CUR=f;CUR._key=k;CUR.id=k;localStorage.setItem('curV',JSON.stringify(CUR));openMain();}catch(e){document.getElementById('loginMsg').innerText=e.message;}}
 function openMain(){document.getElementById('loginPage').style.display='none';document.getElementById('mainPage').style.display='block';document.getElementById('mainPage').classList.add('show');document.getElementById('vName').innerText=CUR.nom||'Vendeur';let today=getHaitiDateStr();document.getElementById('fd').value=today;document.getElementById('rdu').value=today;document.getElementById('rau').value=today;listenDB();document.getElementById('bets').innerHTML='';addR();upd();hideSplash();setTimeout(showDeviceSerial,600);}
@@ -223,9 +221,11 @@ async function calcR(){
     let tikèVann=0,tikèGanyan=0,vente=0,aPeye=0,annuleCount=0; let prixGlobal=getMyPrix();
     Object.values(all).forEach(function(t){let td=t.dateHaiti||t.date; if(!td) return; if(td<du||td>au) return; if(String(t.serial)!=String(CUR.serial)&&String(t.vendeurId)!=String(CUR._key)) return; if(ti!='tous'&&(t.tirages||[]).indexOf(ti)==-1) return; if(t.annule){annuleCount++; return;} tikèVann++; let venteTicket=ti=='tous'?(t.total||0):(t.baseTotal||0); vente+=venteTicket; let prixTicket=t.prix||prixGlobal; let resForTicket=resultsByDate[td]||{}; let calc=calcGainForTicket({bets:t.bets,tirages:ti=='tous'?t.tirages:[ti]},prixTicket,resForTicket); if(calc.gain>0){tikèGanyan++; aPeye+=calc.gain;}});
     let komPerc=prixGlobal.kom||10; let komisyon=prixGlobal.komActive?vente*komPerc/100:0; let balansNet=vente-komisyon-aPeye;
-    rres.innerHTML='<div class="rapo-title">RAPÒ - '+du+' -> '+au+'</div><div class="rapo-line"><span>Vann</span><b>'+tikèVann+'</b></div><div class="rapo-line"><span>Anile</span><b>'+annuleCount+'</b></div><div class="rapo-line"><span>Ganyan</span><b>'+tikèGanyan+'</b></div><div class="rapo-line"><span>Vant</span><b>$'+vente.toFixed(2)+'</b></div><div class="rapo-line"><span>Komisyon</span><b>$'+komisyon.toFixed(2)+'</b></div><div class="rapo-line"><span>A peye</span><b>$'+aPeye.toFixed(2)+'</b></div><div class="rapo-line" style="background:#0a4a2e;color:#d4af37"><span>Balans</span><b>$'+balansNet.toFixed(2)+'</b></div>';
+    let logoU=getLogoUrl();
+    let logoH=logoU&&logoU.length>100?'<img src="'+logoU+'" style="width:60px;height:60px;border-radius:50%;display:block;margin:6px auto;border:2px solid #0a4a2e;object-fit:cover">':'<div style="width:60px;height:60px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:6px auto;font-weight:900">C&D</div>';
+    rres.innerHTML=logoH+'<div class="rapo-title">RAPÒ - '+du+' -> '+au+'</div><div class="rapo-line"><span>Vann</span><b>'+tikèVann+'</b></div><div class="rapo-line"><span>Anile</span><b>'+annuleCount+'</b></div><div class="rapo-line"><span>Ganyan</span><b>'+tikèGanyan+'</b></div><div class="rapo-line"><span>Vant</span><b>$'+vente.toFixed(2)+'</b></div><div class="rapo-line"><span>Komisyon</span><b>$'+komisyon.toFixed(2)+'</b></div><div class="rapo-line"><span>A peye</span><b>$'+aPeye.toFixed(2)+'</b></div><div class="rapo-line" style="background:#0a4a2e;color:#d4af37"><span>Balans</span><b>$'+balansNet.toFixed(2)+'</b></div>';
     let txtR=getBusinessName()+'\n\nDu: '+du+'\nAu: '+au+'\nVann: '+tikèVann+'\nAnile: '+annuleCount+'\nGanyan: '+tikèGanyan+'\nVant: $'+vente.toFixed(2)+'\nKom: $'+komisyon.toFixed(2)+'\nA peye: $'+aPeye.toFixed(2)+'\nBalans: $'+balansNet.toFixed(2)+'\n\n'+getFooterMessage()+'\n';
-    let rp=document.getElementById('rprint'); rp.style.display='block'; rp.innerHTML=txtR.replace(/\n/g,'<br>'); rp.dataset.plain=txtR;
+    let rp=document.getElementById('rprint'); rp.style.display='block'; rp.innerHTML=logoH+'<div style="white-space:pre-wrap;text-align:center">'+txtR.replace(/\n/g,'<br>')+'</div>'; rp.dataset.plain=txtR;
   }catch(e){document.getElementById('rres').innerHTML='Erè: '+e.message;}
 }
 async function vann(){
@@ -242,8 +242,6 @@ async function vann(){
 function doCopy(){let id=document.getElementById('cid').value.trim().toUpperCase();if(!id){alert('Mete ID');return}db.ref('tickets/'+id).once('value').then(function(s){let t=s.val();if(!t){alert('Pa jwenn');return}if(t.annule){alert('ANILE');return}selT=t.tirages||[];document.getElementById('bets').innerHTML='';t.bets.forEach(function(b){let r=addR(b.type);r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;});renderT();document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';goTab('pV',document.querySelectorAll('.tab')[0]);upd();});}
 async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let list=Object.values(all).filter(function(t){return (t.dateHaiti||t.date)==d&&(String(t.serial)==String(CUR.serial)||String(t.vendeurId)==String(CUR._key));});list.sort((a,b)=>(b.ts||0)-(a.ts||0));document.getElementById('flist').innerHTML=list.map(function(t){let st=t.annule?' <span style="background:red;color:#fff;padding:2px 6px;border-radius:4px">ANILE</span>':t.paye?' <span style="background:green;color:#fff;padding:2px 6px;border-radius:4px">PEYE $'+(t.payeGain||0)+'</span>':'';return '<div class="card" style="'+(t.annule?'border-color:red':t.paye?'border-color:green':'')+'"><b>'+t.id+'</b>'+st+' - $'+t.total+'<br><small>'+(t.tirages||[]).join(',')+'</small></div>';}).join('')||'Pa gen fich';}
 function printRapport(){let rp=document.getElementById('rprint');let t=rp.dataset.plain||rp.innerText;if(!t){alert('Kalkile avan');return}printBT(t);}
-
-// === 6- ANILE: ID => ANILE => KONFIME ===
 let CUR_AN_TICKET=null;
 async function checkAnile(){
   let id=document.getElementById('anId').value.trim().toUpperCase();if(!id){alert('Mete ID tikè');return;}
@@ -272,8 +270,6 @@ async function doAnileConf(){
     document.getElementById('btnAnileConf').style.display='none';CUR_AN_TICKET=null;document.getElementById('anId').value='';
   }catch(e){alert('Erè: '+e.message);}
 }
-
-// === 7- PEYE: KALKILE => PEYE 1X => ENPRIME ===
 let CUR_PAY_TICKET=null;let CUR_PAY_GAIN=0;
 async function checkPeye(){
   let id=document.getElementById('payId').value.trim().toUpperCase();if(!id){alert('Mete ID');return;}
@@ -309,7 +305,16 @@ async function doPeyeConf(){
   }catch(e){alert('Erè: '+e.message);}
 }
 function printPeye(){let rp=document.getElementById('payPrint');let t=rp.dataset.plain||rp.innerText;if(!t){alert('Kalkile avan');return}printBT(t);}
-function goTab(id,el){document.querySelectorAll('.tabPage').forEach(function(p){p.classList.remove('active');});document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});if(el)el.classList.add('active');if(id==='pP')applyLogo();showDeviceSerial();}
+function goTab(id,el){
+  document.querySelectorAll('.tabPage').forEach(function(p){p.classList.remove('active');p.style.display='none';});
+  let target=document.getElementById(id);
+  if(target){target.classList.add('active');target.style.display='block';}
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+  if(id==='pP'){applyLogo();}
+  showDeviceSerial();
+  window.scrollTo(0,0);
+}
 let curV=localStorage.getItem('curV');if(curV){try{CUR=JSON.parse(curV);openMain();}catch(e){hideSplash();}}
 setTimeout(function(){hideSplash();showDeviceSerial();},1500);
 document.getElementById('logoFile').addEventListener('change',function(){let f=this.files[0];if(!f)return;if(f.size>350*1024){alert('Logo twò gwo');return;}let r=new FileReader();r.onload=function(e){MY_LOGO=e.target.result;localStorage.setItem('verite_logo',MY_LOGO);uploadLogoFirebase(MY_LOGO);applyLogo();};r.readAsDataURL(f);});
