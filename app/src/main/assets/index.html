@@ -1,47 +1,54 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>C&D V31.8.31 - ONGLÈ PI PITI</title>
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>C&D V31.8.33 - SYNC PROPRIO BIZNIS NON AUTO</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef2f7}
 .h{background:#0a4a2e;color:#d4af37;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:100}
 .card{background:#fff;border-radius:12px;padding:10px;margin:8px;box-shadow:0 2px 6px rgba(0,0,0,.08);border-left:4px solid #0a4a2e}
-.row{display:flex;gap:6px;align-items:center;margin-bottom:12px;justify-content:space-between}
-.inp{width:88px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;text-align:center}
-.inpN{width:82px;height:52px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;font-size:20px;text-align:center}
-.inpL{width:100%;height:48px;border:2.5px solid #0a4a2e;border-radius:10px;padding:0 10px}
-.btn{padding:14px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%}.btnG{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37}.btnB{background:#0a4a2e;color:#d4af37;border:1px solid #d4af37}.btnR{background:#e11d48;width:42px;height:52px;border-radius:10px;border:0;color:#fff;font-weight:800}
-.betRow{background:#f9fdf9;border:1.5px solid #d4af37;border-radius:10px;padding:8px;margin-bottom:12px}
+.row{display:flex;gap:16px;align-items:center;margin-bottom:14px;justify-content:space-between}
+.inp{width:92px;height:48px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;text-align:center;margin-right:4px}
+.inpN{width:84px;height:48px;border:2.5px solid #0a4a2e;border-radius:10px;font-weight:800;font-size:18px;text-align:center;margin:0 6px}
+.mise{text-align:right !important;font-family:'Courier New',monospace !important;font-variant-numeric:tabular-nums !important;padding-right:10px !important;letter-spacing:1px;background:#e8f5e9 !important}
+.betRow{background:#f9fdf9;border:1.5px solid #d4af37;border-radius:10px;padding:10px 12px;margin-bottom:14px;display:flex;gap:16px;justify-content:space-between;align-items:center}
 .betRow.gratis{background:#e8f5e9;border:2px dashed #00c853}
-.total{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37;border-radius:12px;padding:12px;display:flex;justify-content:space-between;font-weight:800;margin:8px}
+.betHeader{display:flex;gap:16px;justify-content:space-between;font-size:10px;font-weight:900;background:#0a4a2e;color:#d4af37;padding:10px 12px;border-radius:10px}
+.total{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37;border-radius:12px;padding:12px;display:flex;justify-content:space-between;font-weight:800;margin:8px;font-family:monospace}
 .tlist{display:none;position:fixed;left:8px;right:8px;top:90px;background:#fff;border:3px solid #0a4a2e;border-radius:12px;z-index:9999;padding:8px;grid-template-columns:78px 78px 78px;gap:8px;max-height:70vh;overflow:auto;justify-content:center}.tlist.open{display:grid}
 .topt{width:78px;min-height:68px;border:2px solid #ccc;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;text-align:center}
 #loginPage{display:block}#mainPage{display:none;min-height:100vh;padding-bottom:70px}#mainPage.show{display:block}
 .tabPage{display:none!important}.tabPage.active{display:block!important}
-/* ✅ KAZ ONGLÈ PI PITI - KORIJE */
-.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #0a4a2e;z-index:99999;height:48px;overflow-x:auto;align-items:center;padding:2px}
-.tab{flex:1;min-width:52px;max-width:70px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;border:1.5px solid #0a4a2e;background:#f5f5f5;border-radius:6px;margin:1px;padding:2px;flex-direction:column;color:#0a4a2e;text-align:center;min-height:38px;line-height:1}
-.tab.active{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37;transform:translateY(-2px);min-height:42px;font-size:7.5px}
+.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #0a4a2e;z-index:99999;height:46px;overflow-x:auto;align-items:center;padding:2px}
+.tab{flex:1;min-width:52px;max-width:70px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;border:1.5px solid #0a4a2e;background:#f5f5f5;border-radius:6px;margin:1px;padding:2px;flex-direction:column;color:#0a4a2e;text-align:center;min-height:36px;line-height:1}
+.tab.active{background:#0a4a2e;color:#d4af37;border:2px solid #d4af37;transform:translateY(-2px);min-height:40px}
 #splash{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a4a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.5s}
 #prev{background:#fff;margin:8px;padding:10px;font-family:monospace;font-size:12px;border:1px dashed #000;max-width:58mm;text-align:center;margin:0 auto;white-space:pre-wrap}
 .rapo-simple{background:#fff;border:3px solid #0a4a2e;border-radius:12px;overflow:hidden;margin:12px auto;max-width:380px;text-align:center}
 .rapo-header{background:#0a4a2e;color:#d4af37;padding:14px;text-align:center;font-weight:900;font-size:20px}
 .rapo-line{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #eee;font-weight:800;font-size:14px}
 .logo-circle{width:30mm;height:30mm;border-radius:50%;border:3px solid #0a4a2e;object-fit:cover;background:#fff;display:block;margin:0 auto 8px auto}
+.sync-badge{background:#2e7d32;color:#fff;padding:3px 8px;border-radius:12px;font-size:9px;font-weight:900;display:inline-block}
+.sync-badge.no-sync{background:#e11d48}
 </style></head><body>
-<div id='splash'><div style='width:90px;height:90px;border:3px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;font-size:28px;color:#0a4a2e;font-weight:900'>C&D</div><div style='color:#d4af37;font-weight:800;margin-top:12px;font-size:18px'>C&D VERITE LOTTO</div><div style='color:#fff;margin-top:6px;font-size:11px'>V31.8.31 - ONGLÈ PI PITI</div></div>
-<div class='h'><div style='display:flex;align-items:center;gap:8px'><img id='headerLogo' src='' class='logo-circle' style='width:28px;height:28px;display:none'><div><b id='vName' style='font-size:13px'>Vendeur</b><br><small id='vSync' style='background:#2e7d32;color:#fff;padding:2px 6px;border-radius:4px;font-size:9px'>MAX 2 GRATIS</small></div></div><div><button onclick='logout()' style='background:#e11d48;color:#fff;border:0;padding:4px 8px;border-radius:5px;font-size:11px'>Soti</button></div></div>
-<div id='loginPage'><div class='card' style='max-width:400px;margin:20px auto;text-align:center'><h3 style='font-size:16px'>C&D VERITE LOTTO<br><small style='background:#0a4a2e;color:#d4af37;padding:3px 8px;border-radius:6px;font-size:10px'>V31.8.31 ONGLÈ PI PITI</small></h3><input id='inputSerial' class='inpL' placeholder='Kòd Vandè' style='margin-top:12px;height:42px'><input id='inputPass' type='password' class='inpL' placeholder='Modpas' style='margin-top:8px;height:42px'><button class='btn btnG' style='margin-top:12px;padding:12px' onclick='doLogin()'>Konekte</button><div id='loginMsg' style='margin-top:8px;font-weight:700;min-height:18px;font-size:12px'></div></div></div>
+<div id='splash'><div style='width:90px;height:90px;border:3px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;font-size:28px;color:#0a4a2e;font-weight:900'>C&D</div><div id='splashBiz' style='color:#d4af37;font-weight:800;margin-top:12px;font-size:16px;text-align:center'>C&D VERITE LOTTO</div><div style='color:#fff;margin-top:6px;font-size:10px;text-align:center' id='splashSync'>SYNC PROPRIO → VANDÈ AUTO</div></div>
+<div class='h'><div style='display:flex;align-items:center;gap:8px'><img id='headerLogo' src='' class='logo-circle' style='width:28px;height:28px;display:none'><div><b id='vName' style='font-size:12px'>Vendeur</b><br><small id='vSync' class='sync-badge'>SYNC...</small> <small id='bizSync' style='background:#d4af37;color:#0a4a2e;padding:2px 6px;border-radius:4px;font-size:8px'>AUTO SYNC</small></div></div><div><button onclick='logout()' style='background:#e11d48;color:#fff;border:0;padding:4px 8px;border-radius:5px;font-size:11px'>Soti</button></div></div>
+<div id='loginPage'><div class='card' style='max-width:400px;margin:20px auto;text-align:center'><h3 id='loginBiz' style='font-size:15px'>C&D VERITE LOTTO<br><small style='background:#0a4a2e;color:#d4af37;padding:3px 8px;border-radius:6px;font-size:10px'>V31.8.33 SYNC AUTO</small></h3><input id='inputSerial' class='inpL' placeholder='Kòd Vandè' style='margin-top:12px;height:42px'><input id='inputPass' type='password' class='inpL' placeholder='Modpas' style='margin-top:8px;height:42px'><button class='btn btnG' style='margin-top:12px;padding:12px' onclick='doLogin()'>Konekte - Sync Auto</button><div id='loginMsg' style='margin-top:8px;font-weight:700;min-height:18px;font-size:11px;white-space:pre-wrap'></div></div></div>
 <div id='mainPage'>
 <div id='pV' class='tabPage active'>
-<div style='background:#e8f5e9;border:2px solid #00c853;border-radius:8px;padding:6px;margin:6px;text-align:center;font-size:10px'><b>🎁 MAX 2 GRATIS SAN PRI - PEYMAN 500 SI SÒTI - FLÈCHE →</b></div>
-<div class='card' style='padding:8px'><div style='display:flex;justify-content:space-between'><b style='font-size:12px'>Tiraj</b><button onclick='selAll()' style='padding:4px 8px;border-radius:6px;border:1px solid #0a4a2e;font-size:10px'>Tout ouve</button></div><div class='row' style='margin-top:8px'><div style='width:70px;height:42px;border:2px solid #0a4a2e;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px'>Tiraj</div><div id='kazT' style='width:200px;height:42px;border:2px solid #0a4a2e;border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-weight:800;background:#fff;font-size:12px' onclick='document.getElementById("tlist").classList.toggle("open")'><span id='txtT' style='color:#999'>Chwazi</span><span>V</span></div></div><div id='tlist' class='tlist'></div></div>
-<div class='card' style='padding:8px'><div class='row' style='font-size:9px;font-weight:900;background:#0a4a2e;color:#d4af37;padding:8px 6px;border-radius:8px'><div style='width:70px;text-align:center'>JEUX →</div><div style='width:70px;text-align:center'>BOUL →</div><div style='width:70px;text-align:center'>MIZ →</div><div style='width:30px'></div></div><div id='bets'></div><button class='btn btnB' style='margin-top:8px;padding:10px;font-size:12px' onclick='addR()'>+ Liy</button><div id='gratisPreview' style='margin-top:10px'></div></div>
+<div id='syncInfoBar' class='card' style='background:#e8f5e9;border:2px solid #2e7d32;padding:8px;text-align:center'><b style='font-size:11px'>🔄 SYNC PROPRIO → VANDÈ AUTO</b><br><small id='syncDetails' style='font-size:10px'>Non biznis, adrese, tel, logo, footer ap sync otomatikman si proprio chanje yo</small></div>
+<div class='card' style='padding:8px'><div style='display:flex;justify-content:space-between'><b style='font-size:12px'>Tiraj - Sync Proprio</b><button onclick='selAll()' style='padding:4px 8px;border-radius:6px;border:1px solid #0a4a2e;font-size:10px'>Tout ouve</button></div><div class='row' style='margin-top:8px'><div style='width:70px;height:42px;border:2px solid #0a4a2e;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px'>Tiraj</div><div id='kazT' style='width:200px;height:42px;border:2px solid #0a4a2e;border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-weight:800;background:#fff;font-size:12px' onclick='document.getElementById("tlist").classList.toggle("open")'><span id='txtT' style='color:#999'>Chwazi</span><span>V</span></div></div><div id='tlist' class='tlist'></div></div>
+<div class='card' style='padding:8px'><div class='betHeader'><div style='width:92px'>JEUX</div><div style='width:84px'>BOUL</div><div style='width:84px;text-align:right;padding-right:12px'>MIZ →</div><div style='width:32px'></div></div><div id='bets'></div><button class='btn btnB' style='margin-top:8px;padding:10px;font-size:12px' onclick='addR()'>+ Liy (Flèche →)</button><div id='gratisPreview' style='margin-top:10px'></div></div>
 <div class='total' style='padding:10px;font-size:13px'><span id='dt'>Total $0 x 0 = $0</span><span id='gt'>$0</span></div><div style='display:flex;gap:6px;margin:6px'><button class='btn btnG' style='flex:1;height:48px;font-size:15px' onclick='vann()'>VANN + GRATIS</button><button class='btn btnB' style='flex:1;height:48px;font-size:13px' onclick='printLast()'>RE-PRINT</button></div><div id='prev' style='display:none'></div>
 </div>
 <div id='pC' class='tabPage'><div class='card'><h3 style='font-size:14px'>Kopye</h3><input id='cid' class='inpL' placeholder='ID Ticket' style='height:42px'><button class='btn btnB' style='margin-top:8px;padding:10px' onclick='doCopy()'>Kopye</button></div></div>
-<div id='pF' class='tabPage'><div class='card'><h3 style='font-size:14px'>Mes Fiches</h3><div class='row'><input id='fd' type='date' style='width:130px;height:42px;border:2px solid #0a4a2e;border-radius:8px;font-size:12px'><button class='btn btnB' style='width:60px;height:42px;font-size:12px' onclick='loadF()'>Wè</button></div><div id='flist'></div></div></div>
-<div id='pR' class='tabPage'><div class='card'><h3 style='text-align:center;background:#0a4a2e;color:#d4af37;padding:10px;border-radius:8px;font-size:14px'>RAPÒ - SAN GRATIS</h3><div style='background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:10px;margin-top:10px'><div style='display:flex;gap:6px'><div style='flex:1'><b style='font-size:12px'>Du</b><input id='rdu' type='date' style='width:100%;height:40px;border:2px solid #0a4a2e;border-radius:6px;margin-top:3px;font-size:12px'></div><div style='flex:1'><b style='font-size:12px'>Au</b><input id='rau' type='date' style='width:100%;height:40px;border:2px solid #0a4a2e;border-radius:6px;margin-top:3px;font-size:12px'></div></div><div style='margin-top:8px'><b style='font-size:12px'>Tiraj</b><select id='rt' class='inpL' style='margin-top:3px;height:40px;font-size:12px'><option value='tous'>Tous</option></select></div><button class='btn btnG' style='margin-top:10px;padding:12px;font-size:14px' onclick='calcR()'>Kalkile Rapò</button></div><div id='rres' style='display:none;margin-top:12px'></div><div id='rprint' style='display:none'><div id='rprintLogoArea'></div><div id='rprintText' style='text-align:center;font-family:monospace;font-size:13px;line-height:1.6;white-space:pre-wrap'></div></div><div id='rapportPrintButtons' style='display:none;margin:10px 0'><button class='btn btnG' style='padding:14px;font-size:15px' onclick='printRapport()'>🖨️ Enprime</button></div></div></div>
-<div id='pP' class='tabPage'><div class='card'><h3 style='font-size:14px'>Paramèt</h3><div style='border:2px dashed #0a4a2e;border-radius:8px;padding:8px;background:#fff;text-align:center;margin-top:8px'><b style='font-size:12px'>🖼️ Logo</b><br><input type="file" id="logoFile" accept="image/*" style='margin-top:6px;width:100%;font-size:11px'><img id="logoBigPreview" class='logo-circle' style='width:70px;height:70px;margin:6px auto;display:none'><div id="logoInfo" style='font-size:10px;background:#e8f5e9;padding:4px;border-radius:4px;margin-top:4px'>Logo</div><div style='display:flex;gap:6px;margin-top:6px'><button class='btn btnG' style='flex:1;padding:8px;font-size:11px' onclick='saveLogo()'>💾 Sove Logo</button><button class='btn btnB' style='flex:1;padding:8px;font-size:11px' onclick='clearLogo()'>Efase</button></div></div><button class='btn' style='background:#0a4a2e;color:#d4af37;padding:12px;margin-top:10px;font-size:12px' onclick='scanAparèy()'>🔍 RECHERCHE APARÈY YO</button><div id='scanResult' style='background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:8px;margin-top:8px;max-height:180px;overflow:auto;font-size:11px'>Pa gen recherche</div><div id='configSection' style='background:#fff;border:2px solid #00c853;border-radius:8px;padding:10px;margin-top:10px;display:none'><div style='text-align:center'><b id='chosenName' style='font-size:12px'>Pa chwazi</b><br><small id='chosenMac' style='font-size:10px'></small></div><div style='display:flex;gap:6px;margin-top:8px'><button class='btn' style='background:#00c853;color:#fff;flex:2;padding:10px;font-size:12px' onclick='anrejistreAparèy()'>💾 ANREJISTRE</button><button class='btn' style='background:#0a4a2e;color:#d4af37;flex:1;padding:10px;font-size:11px' onclick='testeAparèyChwazi()'>🧪 TEST</button></div><div id='savedStatus' style='background:#dcfce7;border:2px solid #00c853;border-radius:6px;padding:6px;margin-top:6px;display:none;text-align:center;font-size:11px'></div></div></div></div>
+<div id='pF' class='tabPage'><div class='card'><h3 style='font-size:14px'>Mes Fiches - Sync Proprio</h3><div class='row'><input id='fd' type='date' style='width:130px;height:42px;border:2px solid #0a4a2e;border-radius:8px;font-size:12px'><button class='btn btnB' style='width:60px;height:42px;font-size:12px' onclick='loadF()'>Wè</button></div><div id='flist'></div></div></div>
+<div id='pR' class='tabPage'><div class='card'><h3 style='text-align:center;background:#0a4a2e;color:#d4af37;padding:10px;border-radius:8px;font-size:14px'>RAPÒ - Sync Auto</h3><div style='background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:10px;margin-top:10px'><div style='display:flex;gap:6px'><div style='flex:1'><b style='font-size:12px'>Du</b><input id='rdu' type='date' style='width:100%;height:40px;border:2px solid #0a4a2e;border-radius:6px;margin-top:3px;font-size:12px'></div><div style='flex:1'><b style='font-size:12px'>Au</b><input id='rau' type='date' style='width:100%;height:40px;border:2px solid #0a4a2e;border-radius:6px;margin-top:3px;font-size:12px'></div></div><div style='margin-top:8px'><b style='font-size:12px'>Tiraj</b><select id='rt' class='inpL' style='margin-top:3px;height:40px;font-size:12px'><option value='tous'>Tous</option></select></div><button class='btn btnG' style='margin-top:10px;padding:12px;font-size:14px' onclick='calcR()'>Kalkile Rapò</button></div><div id='rres' style='display:none;margin-top:12px'></div><div id='rprint' style='display:none'><div id='rprintLogoArea'></div><div id='rprintText' style='text-align:center;font-family:monospace;font-size:13px;line-height:1.6;white-space:pre-wrap'></div></div><div id='rapportPrintButtons' style='display:none;margin:10px 0'><button class='btn btnG' style='padding:14px;font-size:15px' onclick='printRapport()'>🖨️ Enprime</button></div></div></div>
+<div id='pP' class='tabPage'><div class='card'><h3 style='font-size:14px'>Paramèt - Sync Proprio Auto</h3>
+<div style='background:#fff3cd;border:2px solid #ff9800;border-radius:8px;padding:8px;margin-top:8px'>
+<b style='font-size:11px'>⚙️ Sa Proprio Mande yo Dwe Fèt nan Vandè yo:</b>
+<div id='proprioSyncLive' style='background:#fff;border:2px solid #2e7d32;border-radius:6px;padding:8px;margin-top:6px;font-size:10px;text-align:left;white-space:pre-wrap'>Ap chèche config proprio...</div>
+</div>
+<div style='border:2px dashed #0a4a2e;border-radius:8px;padding:8px;background:#fff;text-align:center;margin-top:8px'><b style='font-size:12px'>🖼️ Logo - Sync Auto ak Proprio</b><br><input type="file" id="logoFile" accept="image/*" style='margin-top:6px;width:100%;font-size:11px'><img id="logoBigPreview" class='logo-circle' style='width:70px;height:70px;margin:6px auto;display:none'><div id="logoInfo" style='font-size:10px;background:#e8f5e9;padding:4px;border-radius:4px;margin-top:4px'>Logo Sync Auto</div><div style='display:flex;gap:6px;margin-top:6px'><button class='btn btnG' style='flex:1;padding:8px;font-size:11px' onclick='saveLogo()'>💾 Sove Logo</button><button class='btn btnB' style='flex:1;padding:8px;font-size:11px' onclick='clearLogo()'>Efase</button></div></div>
+<button class='btn' style='background:#0a4a2e;color:#d4af37;padding:12px;margin-top:10px;font-size:12px' onclick='scanAparèy()'>🔍 RECHERCHE APARÈY YO</button><div id='scanResult' style='background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:8px;margin-top:8px;max-height:180px;overflow:auto;font-size:11px'>Pa gen recherche</div><div id='configSection' style='background:#fff;border:2px solid #00c853;border-radius:8px;padding:10px;margin-top:10px;display:none'><div style='text-align:center'><b id='chosenName' style='font-size:12px'>Pa chwazi</b><br><small id='chosenMac' style='font-size:10px'></small></div><div style='display:flex;gap:6px;margin-top:8px'><button class='btn' style='background:#00c853;color:#fff;flex:2;padding:10px;font-size:12px' onclick='anrejistreAparèy()'>💾 ANREJISTRE</button><button class='btn' style='background:#0a4a2e;color:#d4af37;flex:1;padding:10px;font-size:11px' onclick='testeAparèyChwazi()'>🧪 TEST</button></div><div id='savedStatus' style='background:#dcfce7;border:2px solid #00c853;border-radius:6px;padding:6px;margin-top:6px;display:none;text-align:center;font-size:11px'></div></div></div></div>
 <div id='pAn' class='tabPage'><div class='card' style='border:2px solid #e11d48;padding:8px'><h3 style='color:#e11d48;text-align:center;font-size:14px'>Anile</h3><div id='stepAn1'><input id='anId' class='inpL' placeholder='ID Tikè' style='height:48px;text-align:center;border:2px solid #e11d48'><button class='btn' style='background:#0a4a2e;color:#d4af37;margin-top:10px;padding:14px;font-size:13px' onclick='stepAnile1()'>CHÈCHE</button></div><div id='stepAn2' style='display:none'><div id='anRes'></div><button class='btn' style='background:#e11d48;color:#fff;margin-top:12px;padding:14px;font-size:13px' onclick='stepAnile2()'>ANILE</button></div><div id='stepAn3' style='display:none'><div id='anFinalInfo'></div><button class='btn' style='background:#e11d48;color:#fff;margin-top:12px;padding:16px;font-size:13px' onclick='doAnileConf()'>KONFIME ANILE</button><div id='anPrint' style='background:#fff;padding:10px;font-family:monospace;font-size:11px;border:1px dashed #000;display:none;white-space:pre-wrap;text-align:center;margin:8px auto;max-width:58mm'></div><button class='btn btnB' id='btnAnPrint' style='display:none;margin-top:8px;padding:10px;font-size:12px' onclick='printAnile()'>PRINT ANILE</button></div></div></div>
 <div id='pPay' class='tabPage'><div class='card' style='border:2px solid #2e7d32;padding:8px'><h3 style='color:#2e7d32;text-align:center;font-size:14px'>Peye - Gratis 500 si sòti</h3><div id='stepPay1'><input id='payId' class='inpL' placeholder='ID Tikè Ganyan' style='height:48px;text-align:center;border:2px solid #2e7d32'><button class='btn btnG' style='margin-top:10px;padding:14px;font-size:13px' onclick='stepPaye1()'>KALKILE + GRATIS 500</button></div><div id='stepPay2' style='display:none'><div id='payRes'></div><button class='btn' style='background:#ff9800;color:#000;margin-top:12px;padding:14px;font-size:13px' onclick='stepPaye2()'>PEYE</button></div><div id='stepPay3' style='display:none'><div id='payFinalInfo'></div><button class='btn' style='background:#2e7d32;color:#fff;margin-top:12px;padding:16px;font-size:13px' onclick='doPeyeConf()'>KONFIME PEYE</button><div id='payPrint' style='background:#fff;padding:10px;font-family:monospace;font-size:11px;border:1px dashed #000;display:none;white-space:pre-wrap;text-align:center;margin:8px auto;max-width:58mm'></div><button class='btn' id='btnPayPrint' style='display:none;margin-top:8px;background:#0a4a2e;color:#d4af37;padding:10px;font-size:12px' onclick='printPeye()'>PRINT PEYMAN</button></div></div></div>
 <div class='tabs'>
@@ -59,7 +66,7 @@ const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomai
 try{if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}}catch(e){}
 const db=firebase.database?firebase.database():null;
 const TIRAJ_DEFAULT=[["Borlette Matin","10:00"],["La Suerte 12:30","12:30"],["Haiti 14h","14:00"],["Borlette Soir 18h","18:00"],["Real","12:30"],["Primera dia","11:30"],["Suerte dia","12:00"],["Lote Dom 13:30","13:30"],["Ganamas","14:15"],["Suerte noche","17:50"],["Primera noche","19:50"],["Loteka","19:45"],["Nacional noche","20:50"],["Leidsa","20:45"]];
-let DB={vendeurs:{},tickets:{},heures:{},results:{},proprios:{},tirages:{},tiragesByProprio:{},heuresByProprio:{},logosProprio:{},businesses:{},config:{logoUrl:'',tel:'+52 7298079596',footer:'Mesi pou konfyans ou'},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,maryajGratis:500}},limites:{global:{bor:1500,mar:100,l3:100,l4:20,l5:5}}};
+let DB={vendeurs:{},tickets:{},heures:{},results:{},proprios:{},tirages:{},tiragesByProprio:{},heuresByProprio:{},logosProprio:{},headers:{},businesses:{},config:{logoUrl:'',tel:'+52 7298079596',footer:'Mesi pou konfyans ou'},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,maryajGratis:500}},limites:{global:{bor:1500,mar:100,l3:100,l4:20,l5:5}}};
 let CUR=null,selT=[],LAST_TXT='',serverOffset=0,MY_LOGO=localStorage.getItem('verite_logo')||'',tempMac='',tempName='';
 function hideSplash(){let sp=document.getElementById('splash');if(sp){sp.style.opacity='0';setTimeout(()=>{sp.style.display='none';},400);}}setTimeout(hideSplash,1000);
 if(db){try{db.ref('.info/serverTimeOffset').on('value',s=>{serverOffset=s.val()||0;});}catch(e){}}
@@ -72,16 +79,230 @@ function getMyPrix(){if(CUR&&CUR.proprioId&&DB.prix[CUR.proprioId]) return DB.pr
 function getMyLimite(){return DB.limites?.global||{bor:1500,mar:100,l3:100,l4:20,l5:5};}
 function getChifRequis(j){if(j==='boul')return 2;if(j==='loto3')return 3;if(j==='loto4')return 4;if(j==='loto5')return 5;return 4;}
 function getLimiteForJeu(j){let l=getMyLimite();if(j==='boul')return l.bor;if(j==='maryaj')return l.mar;if(j==='loto3')return l.l3;if(j==='loto4')return l.l4;return l.l5;}
-function getLogoUrl(){try{if(MY_LOGO&&MY_LOGO.length>100) return MY_LOGO;let pid=CUR?CUR.proprioId:null;if(pid){if(DB.logosProprio[pid]&&DB.logosProprio[pid].length>100) return DB.logosProprio[pid];if(DB.businesses[pid]&&DB.businesses[pid].logoUrl&&DB.businesses[pid].logoUrl.length>100) return DB.businesses[pid].logoUrl;}if(DB.config&&DB.config.logoUrl&&DB.config.logoUrl.length>100) return DB.config.logoUrl;let ls=localStorage.getItem('verite_logo');if(ls&&ls.length>100) return ls;return '';}catch(e){return MY_LOGO||'';}}
-function getBusinessName(){try{let pid=CUR?CUR.proprioId:null;if(pid&&DB.businesses[pid]&&DB.businesses[pid].businessName) return DB.businesses[pid].businessName;return "C&D VERITE LOTTO";}catch(e){return "C&D VERITE LOTTO";}}
-function getFooterMessage(){return "Mesi pou konfyans ou";}
-function getTel(){try{let pid=CUR?CUR.proprioId:null;if(pid&&DB.businesses[pid]&&DB.businesses[pid].tel) return DB.businesses[pid].tel;return DB.config.tel||'+52 7298079596';}catch(e){return '+52 7298079596';}}
-function applyBusinessName(){try{let bn=getBusinessName();let el=document.getElementById('vName');if(el&&CUR) el.innerText=CUR.nom+' ('+CUR.serial+') - '+bn;}catch(e){}}
-function applyLogo(){try{let u=getLogoUrl();let has=u&&u.length>100;let info=document.getElementById('logoInfo');if(info){info.innerText=has?'✅ Logo':'Pa gen logo';}let big=document.getElementById('logoBigPreview');if(big&&has){big.src=u;big.style.display='block';MY_LOGO=u;}let hdr=document.getElementById('headerLogo');if(hdr&&has){hdr.src=u;hdr.style.display='block';}}catch(e){}}
+function getLogoUrl(){try{if(MY_LOGO&&MY_LOGO.length>100) return MY_LOGO;let pid=CUR?CUR.proprioId:null;if(pid){if(DB.logosProprio[pid]&&DB.logosProprio[pid].length>100) return DB.logosProprio[pid];if(DB.businesses[pid]&&DB.businesses[pid].logoUrl&&DB.businesses[pid].logoUrl.length>100) return DB.businesses[pid].logoUrl;if(DB.businesses[pid]&&DB.businesses[pid].logo&&DB.businesses[pid].logo.length>100) return DB.businesses[pid].logo;if(DB.headers[pid]&&DB.headers[pid].logoUrl&&DB.headers[pid].logoUrl.length>100) return DB.headers[pid].logoUrl;}if(DB.config&&DB.config.logoUrl&&DB.config.logoUrl.length>100) return DB.config.logoUrl;let ls=localStorage.getItem('verite_logo');if(ls&&ls.length>100) return ls;return '';}catch(e){return MY_LOGO||'';}}
+// ✅ SA PROPRIO MANDE YO DWE FÈT NAN VANDÈ YO - SYNC NON BIZNIS AUTO - SOUS VERITE businesses[pid].businessName
+function getBusinessName(){
+  try{
+    let pid=CUR?CUR.proprioId:null;
+    if(!pid) return "C&D VERITE LOTTO";
+    // PRIORITE 1 - businesses[pid].businessName - Sa proprio mete nan 7-Entète
+    if(DB.businesses[pid]){
+      let b=DB.businesses[pid];
+      if(b.businessName&&String(b.businessName).trim().length>2) return String(b.businessName).trim();
+      if(b.nom&&String(b.nom).trim().length>2) return String(b.nom).trim();
+      if(b.name&&String(b.name).trim().length>2) return String(b.name).trim();
+      if(b.entete&&b.entete.nomBiznis&&String(b.entete.nomBiznis).trim().length>2) return String(b.entete.nomBiznis).trim();
+    }
+    // PRIORITE 2 - headers[pid]
+    if(DB.headers[pid]){
+      let h=DB.headers[pid];
+      if(h.businessName&&String(h.businessName).trim().length>2) return String(h.businessName).trim();
+      if(h.nomBiznis&&String(h.nomBiznis).trim().length>2) return String(h.nomBiznis).trim();
+      if(h.nom&&String(h.nom).trim().length>2) return String(h.nom).trim();
+    }
+    // PRIORITE 3 - proprios[pid]
+    if(DB.proprios[pid]){
+      let p=DB.proprios[pid];
+      if(typeof p==='string'&&p.length>2) return p;
+      if(p.businessName&&String(p.businessName).trim().length>2) return String(p.businessName).trim();
+      if(p.nom&&String(p.nom).trim().length>2) return String(p.nom).trim();
+    }
+    return "C&D VERITE LOTTO";
+  }catch(e){return "C&D VERITE LOTTO";}
+}
+function getFooterMessage(){
+  try{
+    let pid=CUR?CUR.proprioId:null;
+    if(!pid) return "Mesi pou konfyans ou.";
+    if(DB.businesses[pid]){
+      let b=DB.businesses[pid];
+      if(b.footer&&String(b.footer).trim().length>3) return String(b.footer).trim();
+      if(b.footerMessage&&String(b.footerMessage).trim().length>3) return String(b.footerMessage).trim();
+      if(b.mesi&&String(b.mesi).trim().length>3) return String(b.mesi).trim();
+      if(b.entete&&b.entete.footer&&String(b.entete.footer).trim().length>3) return String(b.entete.footer).trim();
+      if(b.entete&&b.entete.mesi&&String(b.entete.mesi).trim().length>3) return String(b.entete.mesi).trim();
+    }
+    if(DB.headers[pid]){
+      let h=DB.headers[pid];
+      if(h.footer&&String(h.footer).trim().length>3) return String(h.footer).trim();
+      if(h.mesi&&String(h.mesi).trim().length>3) return String(h.mesi).trim();
+    }
+    return "Mesi pou konfyans ou.\nToujou sonje verifye fich ou avan ou deplase !";
+  }catch(e){return "Mesi pou konfyans ou.";}
+}
+function getAdresse(){try{let pid=CUR?CUR.proprioId:null;if(pid&&DB.businesses[pid]){let b=DB.businesses[pid];if(b.adresse) return b.adresse;if(b.adress) return b.adress;if(b.entete&&b.entete.adresse) return b.entete.adresse;}return "";}catch(e){return "";}}
+function getTel(){try{let pid=CUR?CUR.proprioId:null;if(pid&&DB.businesses[pid]){let b=DB.businesses[pid];if(b.tel) return b.tel;if(b.telProprio) return b.telProprio;if(b.telephone) return b.telephone;if(b.entete&&b.entete.tel) return b.entete.tel;}return DB.config.tel||'';}catch(e){return '';}}
+// ✅ APPLY BUSINESS NAME - SYNC AUTO SI NON BIZNIS CHANJE NAN PROPRIO
+function applyBusinessName(){
+  try{
+    let bn=getBusinessName();
+    let footer=getFooterMessage();
+    let adresse=getAdresse();
+    let tel=getTel();
+    let pid=CUR?CUR.proprioId:'';
+    let vCode=CUR?CUR.serial:'';
+    let vNom=CUR?CUR.nom:'';
+    let businessData=pid&&DB.businesses[pid]?DB.businesses[pid]:null;
+    let headerData=pid&&DB.headers[pid]?DB.headers[pid]:null;
+    let hasProprio=pid&&pid.length>3&&(businessData||headerData||DB.proprios[pid]);
+    
+    // Update tout kote non biznis parèt
+    let el=document.getElementById('vName');
+    if(el&&CUR) el.innerText=vNom+' ('+vCode+') - '+bn;
+    
+    let vs=document.getElementById('vSync');
+    if(vs){
+      vs.innerText=hasProprio?'✅ SYNC: '+pid:'❌ PA SYNC';
+      vs.className='sync-badge'+(hasProprio?'':' no-sync');
+    }
+    
+    let bizSync=document.getElementById('bizSync');
+    if(bizSync){
+      bizSync.innerText='🔄 AUTO: '+bn.substring(0,20);
+      bizSync.title='Si proprio chanje non biznis lan nan 7-Entète, li sync otomatikman - businesses/'+pid+'/businessName';
+    }
+    
+    let splashBiz=document.getElementById('splashBiz');
+    if(splashBiz) splashBiz.innerText=bn;
+    
+    let splashSync=document.getElementById('splashSync');
+    if(splashSync) splashSync.innerText='SYNC PROPRIO → VANDÈ - '+bn.substring(0,25);
+    
+    let loginBiz=document.getElementById('loginBiz');
+    if(loginBiz&&document.getElementById('loginPage').style.display!=='none'){
+      loginBiz.innerHTML=bn+'<br><small style="background:#0a4a2e;color:#d4af37;padding:2px 8px;border-radius:6px;font-size:9px">SYNC AUTO: '+pid+'</small>';
+    }
+    
+    let syncDetails=document.getElementById('syncDetails');
+    if(syncDetails){
+      syncDetails.innerHTML='✅ Non Biznis: <b>'+bn+'</b> - Proprio: '+pid+'<br>✅ Footer: '+footer.substring(0,60)+'...<br>🔄 Si proprio chanje nan 7-Entète → businesses/'+pid+'/businessName, vandè wè nouvo non an otomatikman san re-login';
+    }
+    
+    let proprioSyncLive=document.getElementById('proprioSyncLive');
+    if(proprioSyncLive){
+      proprioSyncLive.innerHTML=
+        '✅ <b>PROPRIO → VANDÈ SYNC AUTO AKTIF</b>\n\n'+
+        '📍 Proprio ID: '+pid+'\n'+
+        '🏢 Non Biznis (anlè tikè a): '+bn+'\n'+
+        '📍 Adresse: '+(adresse||'Pa defini')+'\n'+
+        '📞 Tel Proprio: '+(tel||'Pa defini')+'\n'+
+        '💬 Footer: '+footer+'\n\n'+
+        '🔄 <b>KIJAN SA MARCHE:</b>\n'+
+        '1. Proprio ale nan PROPRIO V21.0 → 7-Entète - Non Biznis Sync ak tout vandè\n'+
+        '2. Li chanje: "'+bn+'" → "NOUVO NON"\n'+
+        '3. Li sove - Sa ap sove nan: businesses/'+pid+'/businessName = "NOUVO NON"\n'+
+        '4. Vandè '+vCode+' ap wè "NOUVO NON" otomatikman san re-login (listener aktif)\n\n'+
+        '📦 Sous verite: businesses['+pid+'].businessName\n'+
+        '📦 Header Data: '+(businessData?JSON.stringify(businessData).substring(0,200):'PA GEN - Kreye businesses/'+pid)\n\n'+
+        '✅ Header/Footer/Logo tout ap sync menm jan an';
+      proprioSyncLive.style.background=hasProprio?'#e8f5e9':'#fee2e2';
+    }
+    
+    // Mete ajou localStorage pou offline tou
+    try{localStorage.setItem('lastBusinessName_'+pid, bn);}catch(e){}
+    try{localStorage.setItem('lastFooter_'+pid, footer);}catch(e){}
+    
+  }catch(e){console.log("applyBusinessName sync error",e.message);}
+}
+function applyLogo(){
+  try{
+    let u=getLogoUrl();
+    let has=u&&u.length>100;
+    let info=document.getElementById('logoInfo');
+    if(info){
+      let pid=CUR?CUR.proprioId:'';
+      info.innerText=has?'✅ Logo Sync Auto: '+pid+' - '+(Math.round(u.length/1024))+'KB':'Pa gen logo - Sync ak proprio: '+pid;
+    }
+    let big=document.getElementById('logoBigPreview');
+    if(big&&has){big.src=u;big.style.display='block';MY_LOGO=u;}
+    let hdr=document.getElementById('headerLogo');
+    if(hdr&&has){hdr.src=u;hdr.style.display='block';}
+  }catch(e){}
+}
 function uploadLogoFirebase(b64){try{if(!db||!CUR||!CUR.proprioId) return;let pid=CUR.proprioId;db.ref('logosProprio/'+pid).set(b64);db.ref('businesses/'+pid+'/logoUrl').set(b64);localStorage.setItem('verite_logo',b64);MY_LOGO=b64;}catch(e){}}
-function saveLogo(){if(!MY_LOGO){alert('Chwazi logo');return;}localStorage.setItem('verite_logo',MY_LOGO);if(db&&CUR&&CUR.proprioId) uploadLogoFirebase(MY_LOGO);applyLogo();}
+function saveLogo(){if(!MY_LOGO){alert('Chwazi logo');return;}localStorage.setItem('verite_logo',MY_LOGO);if(db&&CUR&&CUR.proprioId) uploadLogoFirebase(MY_LOGO);applyLogo();alert('Logo sove - Sync auto ak proprio: '+(CUR?CUR.proprioId:''));}
 function clearLogo(){MY_LOGO='';localStorage.removeItem('verite_logo');let big=document.getElementById('logoBigPreview');if(big) big.style.display='none';applyLogo();}
-function listenDB(){if(!db){hideSplash();renderT();return}db.ref().on('value',snap=>{let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.tickets=v.tickets||{};DB.heures=v.heures||{};DB.results=v.results||{};DB.proprios=v.proprios||{};DB.tirages=v.tirages||{};DB.tiragesByProprio=v.tiragesByProprio||{};DB.heuresByProprio=v.heuresByProprio||{};DB.logosProprio=v.logosProprio||{};DB.businesses=v.businesses||{};DB.prix=v.prix||DB.prix;DB.limites=v.limites||DB.limites;DB.config=v.config||DB.config;renderT();applyLogo();applyBusinessName();hideSplash();});}
+function listenDB(){
+  if(!db){hideSplash();renderT();return}
+  db.ref().on('value',snap=>{
+    let v=snap.val()||{};
+    DB.vendeurs=v.vendeurs||{};
+    DB.tickets=v.tickets||{};
+    DB.heures=v.heures||{};
+    DB.results=v.results||{};
+    DB.proprios=v.proprios||{};
+    DB.tirages=v.tirages||{};
+    DB.tiragesByProprio=v.tiragesByProprio||{};
+    DB.heuresByProprio=v.heuresByProprio||{};
+    DB.logosProprio=v.logosProprio||{};
+    DB.headers=v.headers||{};
+    DB.businesses=v.businesses||{};
+    DB.prix=v.prix||DB.prix;
+    DB.limites=v.limites||DB.limites;
+    DB.config=v.config||DB.config;
+    renderT();
+    applyLogo();
+    applyBusinessName(); // ✅ SYNC AUTO SI NON BIZNIS CHANJE
+    hideSplash();
+  });
+  // ✅ LISTENER ESPESYAL - SI NON BIZNIS CHANJE NAN PROPRIO, SYNC OTOMATIKMAN AK VANDÈ YO - SAN RE-LOGIN
+  if(CUR&&CUR.proprioId){
+    let pid=CUR.proprioId;
+    try{
+      // Listener sou businesses[pid].businessName - Sa proprio mete nan 7-Entète
+      db.ref('businesses/'+pid+'/businessName').on('value',snap=>{
+        let newName=snap.val();
+        if(newName&&newName.length>2){
+          if(!DB.businesses[pid]) DB.businesses[pid]={};
+          DB.businesses[pid].businessName=newName;
+          console.log("🔄 SYNC AUTO: Proprio "+pid+" chanje non biznis → "+newName+" - Sync ak vandè "+(CUR?CUR.serial:''));
+          applyBusinessName();
+        }
+      });
+      db.ref('businesses/'+pid+'/nom').on('value',snap=>{
+        let newName=snap.val();
+        if(newName&&newName.length>2){
+          if(!DB.businesses[pid]) DB.businesses[pid]={};
+          if(!DB.businesses[pid].businessName) DB.businesses[pid].businessName=newName;
+          applyBusinessName();
+        }
+      });
+      db.ref('businesses/'+pid+'/footer').on('value',snap=>{
+        let newFooter=snap.val();
+        if(newFooter&&newFooter.length>3){
+          if(!DB.businesses[pid]) DB.businesses[pid]={};
+          DB.businesses[pid].footer=newFooter;
+          applyBusinessName();
+        }
+      });
+      db.ref('businesses/'+pid+'/logoUrl').on('value',snap=>{
+        let newLogo=snap.val();
+        if(newLogo&&newLogo.length>100){
+          if(!DB.businesses[pid]) DB.businesses[pid]={};
+          DB.businesses[pid].logoUrl=newLogo;
+          applyLogo();
+        }
+      });
+      // Listener sou headers[pid] tou
+      db.ref('headers/'+pid+'/businessName').on('value',snap=>{
+        let newName=snap.val();
+        if(newName&&newName.length>2){
+          if(!DB.headers[pid]) DB.headers[pid]={};
+          DB.headers[pid].businessName=newName;
+          applyBusinessName();
+        }
+      });
+      db.ref('headers/'+pid+'/nomBiznis').on('value',snap=>{
+        let newName=snap.val();
+        if(newName&&newName.length>2){
+          if(!DB.headers[pid]) DB.headers[pid]={};
+          DB.headers[pid].nomBiznis=newName;
+          applyBusinessName();
+        }
+      });
+    }catch(e){console.log("Listener setup error",e.message);}
+  }
+}
 function calcMaryajGratis(bets){
   const MAX_GRATIS=2;
   let seuil=50, prixGratis=500;
@@ -139,6 +360,7 @@ function handleJeuKey(e,sel){let row=sel.closest('.betRow');if(e.key==='ArrowRig
 function handleBoulInput(inp){
   let req=getChifRequis(inp.closest('.betRow').querySelector('.jeu').value);
   inp.value=inp.value.replace(/\D/g,'').slice(0,req);
+  inp.style.textAlign='center';
   upd();renderGratisPreview();
   if(inp.value.length===req){setTimeout(()=>{let mise=inp.closest('.betRow').querySelector('.mise');if(mise){mise.focus();mise.select();}},80);}
 }
@@ -148,7 +370,9 @@ function handleMizInput(inp){
   let max=getLimiteForJeu(row.querySelector('.jeu').value);
   let mise=parseInt(raw)||0;
   if(mise>max){raw=String(max);}
-  inp.value=raw;upd();renderGratisPreview();
+  inp.value=raw;
+  inp.style.textAlign='right';
+  upd();renderGratisPreview();
 }
 function handleMizBlur(inp){
   let row=inp.closest('.betRow');
@@ -168,7 +392,8 @@ function handleMizBlur(inp){
 async function doLogin(){
   let s=document.getElementById('inputSerial').value.trim(),p=document.getElementById('inputPass').value.trim(),m=document.getElementById('loginMsg');
   if(!s||!p){m.innerText='Mete Kòd Vandè ak Modpas';return}
-  m.innerText='Konekte...';
+  m.innerText='🔄 Sync Proprio → Vandè - Chèche Kòd '+s+' - Non Biznis Auto Sync...';
+  m.style.color='#0a4a2e';
   try{
     let snap=await db.ref('vendeurs').once('value');let vs=snap.val()||{};
     let k=Object.keys(vs).find(k=>String(vs[k].serial)===String(s)||String(vs[k].code)===String(s));
@@ -176,22 +401,57 @@ async function doLogin(){
     if(!f&&s==='2222'){for(let key in vs){let v=vs[key];if(JSON.stringify(v).includes('2222')){k=key;f=v;break;}}}
     if(!f){
       if(s==='2222'){
-        CUR={nom:'Tamouche (2222)',serial:'2222',_key:'vendeur_2222',proprioId:'1704012200033',businessName:'C&D VERITE LOTTO'};
+        let possibleProprioId='1704012200033';
+        let businessesSnap=await db.ref('businesses').once('value');let businesses=businessesSnap.val()||{};
+        let headersSnap=await db.ref('headers').once('value');let headers=headersSnap.val()||{};
+        let businessData=businesses[possibleProprioId];
+        let headerData=headers[possibleProprioId];
+        let realBusinessName=businessData?.businessName||headerData?.businessName||headerData?.nomBiznis||'C&D VERITE LOTTO';
+        let realFooter=businessData?.footer||headerData?.footer||'Mesi pou konfyans ou.';
+        CUR={nom:'Tamouche (2222)',serial:'2222',_key:'vendeur_2222',proprioId:possibleProprioId,businessName:realBusinessName,footer:realFooter};
         localStorage.setItem('curV',JSON.stringify(CUR));
-        m.innerText='✅ KONEKTE';setTimeout(()=>{openMain();},500);return;
+        m.innerText='✅ KONEKTE AK PROPRIO: '+possibleProprioId+'\n✅ NON BIZNIS SYNC AUTO: '+realBusinessName+'\n🔄 Si proprio chanje non nan 7-Entète → businesses/'+possibleProprioId+'/businessName, vandè ap wè nouvo non an otomatikman';
+        m.style.color='green';
+        setTimeout(()=>{openMain();},800);return;
       }
-      m.innerText='❌ Kòd Vandè pa jwenn';return;
+      m.innerText='❌ Kòd Vandè '+s+' pa jwenn - Verifie vendeurs/'+s;return;
     }
     if(String(f.pass)!==String(p)&&String(f.password)!==String(p)&&p!=='2222'){m.innerText='❌ Modpas pa bon';return;}
-    CUR=f;CUR._key=k;CUR.id=k;CUR.proprioId=f.proprioId||f.proprio||'1704012200033';CUR.serial=f.serial||f.code||s;CUR.nom=f.nom||f.name||'Vendeur '+s;
+    CUR=f;CUR._key=k;CUR.id=k;
+    let proprioIdFromVendeur=f.proprioId||f.proprio||f.proprio_id||f.idProprio||'1704012200033';
+    if(!proprioIdFromVendeur){
+      let businessesSnap=await db.ref('businesses').once('value');let businesses=businessesSnap.val()||{};
+      for(let bid in businesses){let b=businesses[bid];if(b&&b.vendeurs&&b.vendeurs[k]){proprioIdFromVendeur=bid;break;}}
+    }
+    if(!proprioIdFromVendeur) proprioIdFromVendeur='1704012200033';
+    CUR.proprioId=proprioIdFromVendeur;
+    CUR.serial=f.serial||f.code||s;
+    CUR.nom=f.nom||f.name||'Vendeur '+s;
+    // SYNC VANDÈ AK PROPRIO NAN FIREBASE SI LI TE MANKE
+    if(!f.proprioId||f.proprioId!==proprioIdFromVendeur){
+      try{await db.ref('vendeurs/'+k+'/proprioId').set(proprioIdFromVendeur);}catch(e){}
+    }
+    // Chèche non biznis aktyèl pou login msg
+    let businessesSnap=await db.ref('businesses').once('value');let businesses=businessesSnap.val()||{};
+    let headersSnap=await db.ref('headers').once('value');let headers=headersSnap.val()||{};
+    let currentBizName=businesses[CUR.proprioId]?.businessName||headers[CUR.proprioId]?.businessName||headers[CUR.proprioId]?.nomBiznis||f.businessName||'C&D VERITE LOTTO';
+    let currentFooter=businesses[CUR.proprioId]?.footer||headers[CUR.proprioId]?.footer||'Mesi pou konfyans ou.';
     localStorage.setItem('curV',JSON.stringify(CUR));
-    m.innerText='✅ KONEKTE';
-    setTimeout(()=>{openMain();},500);
-  }catch(e){m.innerText='Erè: '+e.message;}
+    m.innerText='✅ VANDÈ SYNC AK PROPRIO: '+CUR.proprioId+'\n✅ NON BIZNIS SYNC AUTO: '+currentBizName+'\n🔄 Si proprio chanje non nan 7-Entète, vandè ap wè nouvo non an otomatikman';
+    m.style.color='green';
+    // LISTENER POU SYNC AUTO LÈ PROPRIO CHANJE NON
+    try{
+      db.ref('businesses/'+CUR.proprioId+'/businessName').on('value',snap=>{
+        let newName=snap.val();
+        if(newName&&newName.length>2){console.log("🔄 SYNC AUTO: Proprio "+CUR.proprioId+" chanje non → "+newName);}
+      });
+    }catch(e){}
+    setTimeout(()=>{openMain();},800);
+  }catch(e){m.innerText='Erè Sync: '+e.message;m.style.color='red';}
 }
 function openMain(){document.getElementById('loginPage').style.display='none';document.getElementById('mainPage').style.display='block';document.getElementById('mainPage').classList.add('show');let today=getHaitiDateStr();document.getElementById('fd').value=today;document.getElementById('rdu').value=today;document.getElementById('rau').value=today;listenDB();document.getElementById('bets').innerHTML='';addR();upd();hideSplash();applyLogo();applyBusinessName();}
 function logout(){localStorage.clear();location.reload();}
-function renderT(){let tlist=document.getElementById('tlist');let allHeures=getTirajForVendeur();let html='<div style="grid-column:1/-1;display:flex;justify-content:space-between;background:#0a4a2e;color:#d4af37;padding:8px;border-radius:6px"><div><b style="font-size:11px">Tiraj ('+Object.keys(allHeures).length+')</b></div><span onclick="document.getElementById(\'tlist\').classList.remove(\'open\')" style="background:#e11d48;color:#fff;padding:4px 8px;border-radius:4px;font-size:10px">X</span></div>';Object.entries(allHeures).forEach(e=>{let name=e[0],hp=e[1],open=isOpen(name),chk=selT.includes(name)?'checked':'',bg=open?'background:#dcfce7':'background:#fee2e2;opacity:0.6';html+='<label class="topt" style="'+bg+'"><input type="checkbox" value="'+name+'" '+chk+' '+(open?'':'disabled')+' onchange="chg(this)"><span>'+name+'</span><small>'+hp+'</small></label>';});tlist.innerHTML=html;let rt=document.getElementById('rt');if(rt)rt.innerHTML='<option value="tous">Tous</option>'+Object.keys(allHeures).map(t=>'<option value="'+t+'">'+t+'</option>').join('');}
+function renderT(){let tlist=document.getElementById('tlist');let allHeures=getTirajForVendeur();let html='<div style="grid-column:1/-1;display:flex;justify-content:space-between;background:#0a4a2e;color:#d4af37;padding:8px;border-radius:6px"><div><b style="font-size:11px">Tiraj ('+Object.keys(allHeures).length+') - Proprio: '+(CUR?CUR.proprioId:'')+'</b></div><span onclick="document.getElementById(\'tlist\').classList.remove(\'open\')" style="background:#e11d48;color:#fff;padding:4px 8px;border-radius:4px;font-size:10px">X</span></div>';Object.entries(allHeures).forEach(e=>{let name=e[0],hp=e[1],open=isOpen(name),chk=selT.includes(name)?'checked':'',bg=open?'background:#dcfce7':'background:#fee2e2;opacity:0.6';html+='<label class="topt" style="'+bg+'"><input type="checkbox" value="'+name+'" '+chk+' '+(open?'':'disabled')+' onchange="chg(this)"><span>'+name+'</span><small>'+hp+'</small></label>';});tlist.innerHTML=html;let rt=document.getElementById('rt');if(rt)rt.innerHTML='<option value="tous">Tous</option>'+Object.keys(allHeures).map(t=>'<option value="'+t+'">'+t+'</option>').join('');}
 function chg(el){if(!isOpen(el.value)&&el.checked){alert('FEMEN '+el.value);el.checked=false;return}if(el.checked)selT.push(el.value);else selT=selT.filter(x=>x!=el.value);document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';upd();if(selT.length)document.getElementById('tlist').classList.remove('open')}
 function selAll(){selT=[];let all=getTirajForVendeur();Object.keys(all).forEach(n=>{if(isOpen(n))selT.push(n);});renderT();document.getElementById('txtT').innerText=selT.length?selT.length+' tiraj':'Chwazi';upd()}
 function addR(){
@@ -208,15 +468,21 @@ function onJeuChange(sel){let req=getChifRequis(sel.value);let boul=sel.parentEl
 function upd(){let sum=0;document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});let bets=[];document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm)bets.push({type:j,numero:b,mise:mm});});let gratisRes=calcMaryajGratis(bets);document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length)+(gratisRes.count>0?' + '+gratisRes.count+'G MAX2':'');document.getElementById('gt').innerText='$'+(sum*selT.length)+(gratisRes.count>0?' + '+gratisRes.count+'G':'');}
 function build(tk){
   let bn=getBusinessName();
+  let footer=getFooterMessage();
   let txt=bn+'\nKòd Vandè: '+(CUR?CUR.serial:'')+'\n----------------\nDate: '+getHaitiDateStr()+'\nVendeur: '+(CUR?.nom||'')+'\nId: '+tk.id+'\n\n';
   (tk.tirages||selT).forEach(tn=>{txt+='Tiraj: '+tn+'\n';});
-  txt+='\nJeux Boul Miz\n';
-  tk.bets.forEach(b=>{txt+=(b.type==='boul'?'BOUL':b.type.toUpperCase()).padEnd(6)+' '+b.numero.toString().padStart(4)+' $'+b.mise+'\n';});
+  txt+='\n  Jeux  Boul    Miz\n----------------\n';
+  tk.bets.forEach(b=>{
+    let jeu=(b.type==='boul'?'BOUL':b.type.toUpperCase()).padEnd(6);
+    let boul=b.numero.toString().padStart(4);
+    let miz=('$'+b.mise).padStart(6);
+    txt+=jeu+' '+boul+' '+miz+'\n';
+  });
   if(tk.gratisBets&&tk.gratisBets.length>0){
     txt+='\n--- MARYAJ GRATIS ---\n';
-    tk.gratisBets.forEach(g=>{txt+='GRATIS '+g.base+'\n';});
+    tk.gratisBets.forEach(g=>{txt+='GRATIS  '+g.base.padEnd(6)+'\n';});
   }
-  txt+='\nTotal: $'+tk.total+'\n----------------\n'+getFooterMessage()+'\n';
+  txt+='\nTotal: $'+tk.total+'\n----------------\n'+footer+'\n';
   return txt;
 }
 function getR(res,keys){if(!res) return '';for(let k of keys){if(res[k]!==undefined&&res[k]!==null&&String(res[k]).trim()!=='') return String(res[k]).trim();}return '';}
@@ -259,14 +525,14 @@ function calcGainForTicket(t,prix,resultsForDate){
   }}catch(e){}
   return {gain,detay};}
 function showPreview(txt){LAST_TXT=txt;let p=document.getElementById('prev');p.style.display='block';let u=getLogoUrl();let has=u&&u.length>100;let h=has?'<img src="'+u+'" class="logo-circle">':'<div style="width:28mm;height:28mm;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto 3mm auto;font-weight:900">C&D</div>';p.innerHTML=h+'<pre style="white-space:pre-wrap;text-align:center;font-family:monospace;font-size:11px">'+txt+'</pre>';p.scrollIntoView({behavior:'smooth'});}
-async function printBT(t,logoOverride){let plain=(t||LAST_TXT||'').toString();if(!plain||plain.length<10)return;let logoUrl=logoOverride||getLogoUrl();let hasLogo=logoUrl&&logoUrl.length>100;try{if(window.AndroidPrinter){if(hasLogo&&typeof AndroidPrinter.printWithLogo==='function'){AndroidPrinter.printWithLogo(logoUrl,plain);}else if(typeof AndroidPrinter.printWithoutDialog==='function'){AndroidPrinter.printWithoutDialog(plain);}}else if(window.Android&&window.Android.printWithoutDialog){window.Android.printWithoutDialog(plain);}else{alert('PRINT\n\n'+plain.substring(0,500));}}catch(e){alert(e.message);}}
+async function printBT(t,logoOverride){let plain=(t||LAST_TXT||'').toString();if(!plain||plain.length<10)return;let logoUrl=logoOverride||getLogoUrl();let hasLogo=logoUrl&&logoUrl.length>100;try{if(window.AndroidPrinter){if(hasLogo&&typeof AndroidPrinter.printWithLogo==='function'){AndroidPrinter.printWithLogo(logoUrl,plain);}else if(typeof AndroidPrinter.printWithoutDialog==='function'){AndroidPrinter.printWithoutDialog(plain);}}else if(window.Android&&window.Android.printWithoutDialog){window.Android.printWithoutDialog(plain);}else{alert('PRINT - SYNC AUTO - '+getBusinessName()+'\n\n'+plain.substring(0,500));}}catch(e){alert(e.message);}}
 function printLast(){if(!LAST_TXT) return;printBT(LAST_TXT,getLogoUrl());}
 function printRapport(){let rp=document.getElementById('rprint');let t=rp.dataset.plain||'';let logo=rp.dataset.logo||getLogoUrl();if(!t){alert('Kalkile avan');return;}printBT(t,logo);}
 async function calcR(){
   let rres=document.getElementById('rres');
   try{
     let du=document.getElementById('rdu').value||getHaitiDateStr(),au=document.getElementById('rau').value||getHaitiDateStr(),ti=document.getElementById('rt').value||'tous';
-    rres.style.display='block';rres.innerHTML='<div style="text-align:center">Kalkil Rapò...</div>';
+    rres.style.display='block';rres.innerHTML='<div style="text-align:center">Kalkil Rapò - Sync Auto '+getBusinessName()+'...</div>';
     let snap=await db.ref('tickets').once('value');let all=snap.val()||{};
     let resSnap=await db.ref('results').once('value');let allResults=resSnap.val()||{};
     let resultsByDate={};Object.values(allResults).forEach(r=>{if(!r||!r.dat) return;if(r.dat<du||r.dat>au) return;if(!resultsByDate[r.dat]) resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});
@@ -289,25 +555,25 @@ async function calcR(){
     });
     let komisyon=totalVann*komPerc/100,balansNet=totalVann-komisyon-aPeye;
     let bn=getBusinessName(),logoUrl=getLogoUrl(),hasLogo=logoUrl&&logoUrl.length>100;
-    // ✅ RAPÒ SAN GRATIS - Jan ou make wouj nan foto a
     let html='<div class="rapo-simple">';
     if(hasLogo){html+='<img src="'+logoUrl+'" class="logo-circle" style="margin:10px auto">';}
     else{html+='<div style="width:28mm;height:28mm;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:10px auto;font-weight:900">C&D</div>';}
     html+='<div class="rapo-header">'+bn+'</div>';
-    html+='<div style="text-align:center;padding:6px"><small style="background:#0a4a2e;color:#d4af37;padding:3px 8px;border-radius:6px">Du: '+du+' Au: '+au+'</small></div>';
+    html+='<div style="text-align:center;padding:6px"><small style="background:#2e7d32;color:#fff;padding:3px 8px;border-radius:6px">🔄 SYNC AUTO - PROPRIO: '+curProprio+'</small></div>';
+    html+='<div class="rapo-line"><span>Du:</span><b>'+du+'</b></div>';
+    html+='<div class="rapo-line"><span>Au:</span><b>'+au+'</b></div>';
     html+='<div class="rapo-line"><span>Tiraj:</span><b>'+ti+'</b></div>';
     html+='<div style="border-top:2px dashed #0a4a2e;margin:6px 0"></div>';
     html+='<div class="rapo-line"><span>Tikè vann:</span><b>'+tikèVann+'</b></div>';
     html+='<div class="rapo-line"><span>Tikè anile:</span><b>'+tikèAnile+'</b></div>';
     html+='<div class="rapo-line"><span>Tikè ganyan:</span><b>'+tikèGanyan+'</b></div>';
     html+='<div class="rapo-line"><span>Total vann:</span><b>$'+totalVann.toFixed(2)+'</b></div>';
-    // ❌ RETIRE "Gratis ..." - Jan ou make wouj nan foto a
     html+='<div class="rapo-line"><span>Komisyon:</span><b>$'+komisyon.toFixed(2)+'</b></div>';
     html+='<div class="rapo-line"><span>A peye:</span><b>$'+aPeye.toFixed(2)+'</b></div>';
     html+='<div class="rapo-line" style="background:#0a4a2e;color:#d4af37;border-radius:0 0 9px 9px"><span>Balans net:</span><b>$'+balansNet.toFixed(2)+'</b></div>';
     html+='</div>';
     rres.innerHTML=html;
-    let txt=bn+'\nDu: '+du+'\nAu: '+au+'\nTiraj: '+ti+'\n----------------\nTikè vann: '+tikèVann+'\nTikè anile: '+tikèAnile+'\nTikè ganyan: '+tikèGanyan+'\nTotal vann: $'+totalVann.toFixed(2)+'\nKomisyon: $'+komisyon.toFixed(2)+'\nA peye: $'+aPeye.toFixed(2)+'\nBalans net: $'+balansNet.toFixed(2)+'\n';
+    let txt=bn+'\nDu: '+du+'\nAu: '+au+'\nTiraj: '+ti+'\n----------------\nTikè vann: '+tikèVann+'\nTikè anile: '+tikèAnile+'\nTikè ganyan: '+tikèGanyan+'\nTotal vann: $'+totalVann.toFixed(2)+'\nKomisyon: $'+komisyon.toFixed(2)+'\nA peye: $'+aPeye.toFixed(2)+'\nBalans net: $'+balansNet.toFixed(2)+'\n----------------\n'+getFooterMessage()+'\n';
     let rp=document.getElementById('rprint');
     let rpLogo=document.getElementById('rprintLogoArea');
     let rpText=document.getElementById('rprintText');
@@ -341,24 +607,25 @@ async function vann(){
     createdAt:getTrueNow().getTime(),
     createdAtServer:firebase.database.ServerValue.TIMESTAMP,
     businessName:getBusinessName(),
+    footerMessage:getFooterMessage(),
     logoUrl:getLogoUrl()
   };
   if(db){await db.ref('tickets/'+tk.id).set(tk);}
   let txt=build(tk);LAST_TXT=txt;showPreview(txt);setTimeout(()=>{printBT(txt,getLogoUrl());},300);document.getElementById('bets').innerHTML='';document.getElementById('gratisPreview').innerHTML='';addR();upd();
 }
 function doCopy(){let id=document.getElementById('cid').value.trim();if(!id) return;db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t) return;selT=t.tirages||[];document.getElementById('bets').innerHTML='';t.bets.forEach(b=>{let r=addR();r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;r.querySelector('.jeu').value=b.type;onJeuChange(r.querySelector('.jeu'));});renderT();goTab('pV',document.querySelectorAll('.tab')[0]);upd();renderGratisPreview();});}
-async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let curSerial=CUR?String(CUR.serial):'',curKey=CUR?String(CUR._key):'',curProprio=CUR?String(CUR.proprioId):'';let list=Object.values(all).filter(t=>{let td=t.dateHaiti||t.date;if(td!==d) return false;let tSerial=String(t.serial||''),tVendeurId=String(t.vendeurId||''),tProprio=String(t.proprioId||'');return tSerial===curSerial||tVendeurId===curKey||tProprio===curProprio;});let html='';list.reverse().forEach(t=>{let gratisInfo=t.gratisBets?' + '+t.gratisBets.length+'G MAX2':'';html+='<div class="card" style="text-align:center;padding:6px"><b style="font-size:12px">'+t.id+'</b> - $'+t.total+gratisInfo+' - <small>'+(t.tirages||[]).join(',')+'</small></div>';});document.getElementById('flist').innerHTML=html||'Pa gen fich';}
+async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let curSerial=CUR?String(CUR.serial):'',curKey=CUR?String(CUR._key):'',curProprio=CUR?String(CUR.proprioId):'';let list=Object.values(all).filter(t=>{let td=t.dateHaiti||t.date;if(td!==d) return false;let tSerial=String(t.serial||''),tVendeurId=String(t.vendeurId||''),tProprio=String(t.proprioId||'');return tSerial===curSerial||tVendeurId===curKey||tProprio===curProprio;});let html='';list.reverse().forEach(t=>{let gratisInfo=t.gratisBets?' + '+t.gratisBets.length+'G':'';html+='<div class="card" style="text-align:center;padding:6px"><b style="font-size:12px">'+t.id+'</b> - $'+t.total+gratisInfo+' - <small>'+(t.tirages||[]).join(',')+'</small><br><small>'+(t.businessName||'')+'</small></div>';});document.getElementById('flist').innerHTML=html||'Pa gen fich - Sync: '+(CUR?CUR.proprioId:'');}
 function scanAparèy(){let res=document.getElementById('scanResult');res.innerHTML='⏳ Recherche...';try{if(window.AndroidPrinter&&typeof AndroidPrinter.scanDevices==='function'){let json=AndroidPrinter.scanDevices();let devs=JSON.parse(json);let html='<b style="font-size:11px">✅ '+devs.length+' Aparèy:</b><br>';devs.forEach(d=>{html+='<div style="background:#e8f5e9;border:1.5px solid #0a4a2e;padding:8px;margin:4px 0;border-radius:6px;font-size:11px" onclick="choisiAparèy(\''+d.mac+'\',\''+d.name+'\')"><b>📟 '+d.name+'</b><br>Mac: '+d.mac+'</div>';});res.innerHTML=html;return;}}catch(e){}let fakeMac='SUNMI-'+Date.now().toString().slice(-6);res.innerHTML='<div style="background:#e8f5e9;border:1.5px solid #0a4a2e;padding:8px;border-radius:6px;font-size:11px" onclick="choisiAparèy(\''+fakeMac+'\',\'Sunmi Interne\')"><b>📟 Sunmi Interne</b><br>Mac: '+fakeMac+'</div>';}
 function choisiAparèy(mac,name){tempMac=mac;tempName=name;document.getElementById('chosenName').innerText=name;document.getElementById('chosenMac').innerText='Mac: '+mac;document.getElementById('configSection').style.display='block';}
-function anrejistreAparèy(){if(!tempMac){alert('Chwazi yon aparèy');return;}localStorage.setItem('selectedPrinterMac',tempMac);localStorage.setItem('selectedPrinterName',tempName);localStorage.setItem('deviceSeri',tempMac);let ss=document.getElementById('savedStatus');ss.style.display='block';ss.innerHTML='✅ Anrejistre: '+tempName;}
-function testeAparèyChwazi(){let mac=localStorage.getItem('selectedPrinterMac')||tempMac||'TEST';let bn=getBusinessName();let txt=bn+'\nTEST - ONGLÈ PI PITI - MAX2 GRATIS\nMac: '+mac+'\n';printBT(txt,getLogoUrl());}
-let CUR_AN=null;async function stepAnile1(){let id=document.getElementById('anId').value.trim().toUpperCase();if(!id) return;let snap=await db.ref('tickets/'+id).once('value');let t=snap.val();if(!t){alert('Pa jwenn');return;}if(t.annule){alert('Deja anile');return;}CUR_AN=t;document.getElementById('anRes').innerHTML='<div style="text-align:center"><b>'+t.id+'</b> - $'+t.total+(t.gratisBets?' + '+t.gratisBets.length+'G':'')+'</div>';document.getElementById('stepAn1').style.display='none';document.getElementById('stepAn2').style.display='block';}
+function anrejistreAparèy(){if(!tempMac){alert('Chwazi yon aparèy');return;}localStorage.setItem('selectedPrinterMac',tempMac);localStorage.setItem('selectedPrinterName',tempName);localStorage.setItem('deviceSeri',tempMac);let ss=document.getElementById('savedStatus');ss.style.display='block';ss.innerHTML='✅ Anrejistre: '+tempName+' - Sync Biznis: '+getBusinessName();}
+function testeAparèyChwazi(){let mac=localStorage.getItem('selectedPrinterMac')||tempMac||'TEST';let bn=getBusinessName();let footer=getFooterMessage();let txt=bn+'\n'+footer+'\n----------------\nTEST - SYNC AUTO\nMac: '+mac+'\nProprio: '+(CUR?CUR.proprioId:'')+'\n';printBT(txt,getLogoUrl());}
+let CUR_AN=null;async function stepAnile1(){let id=document.getElementById('anId').value.trim().toUpperCase();if(!id) return;let snap=await db.ref('tickets/'+id).once('value');let t=snap.val();if(!t){alert('Pa jwenn');return;}if(t.annule){alert('Deja anile');return;}CUR_AN=t;document.getElementById('anRes').innerHTML='<div style="text-align:center"><b>'+t.id+'</b> - $'+t.total+(t.gratisBets?' + '+t.gratisBets.length+'G':'')+'<br><small>'+(t.businessName||'')+'</small></div>';document.getElementById('stepAn1').style.display='none';document.getElementById('stepAn2').style.display='block';}
 function stepAnile2(){document.getElementById('stepAn2').style.display='none';document.getElementById('stepAn3').style.display='block';}
-async function doAnileConf(){await db.ref('tickets/'+CUR_AN.id).update({annule:true});let bn=getBusinessName(),logoUrl=getLogoUrl();let txt=bn+'\n*** ANILE ***\nId: '+CUR_AN.id+'\nTotal: $'+CUR_AN.total+'\n';let rp=document.getElementById('anPrint');rp.style.display='block';rp.innerHTML=(logoUrl&&logoUrl.length>100?'<img src="'+logoUrl+'" class="logo-circle"><br>':'')+txt.replace(/\n/g,'<br>');rp.dataset.plain=txt;rp.dataset.logo=logoUrl;document.getElementById('btnAnPrint').style.display='block';}
+async function doAnileConf(){await db.ref('tickets/'+CUR_AN.id).update({annule:true});let bn=getBusinessName(),logoUrl=getLogoUrl();let footer=getFooterMessage();let txt=bn+'\n*** ANILE ***\nId: '+CUR_AN.id+'\nTotal: $'+CUR_AN.total+'\n----------------\n'+footer+'\n';let rp=document.getElementById('anPrint');rp.style.display='block';rp.innerHTML=(logoUrl&&logoUrl.length>100?'<img src="'+logoUrl+'" class="logo-circle"><br>':'')+txt.replace(/\n/g,'<br>');rp.dataset.plain=txt;rp.dataset.logo=logoUrl;document.getElementById('btnAnPrint').style.display='block';}
 function printAnile(){let rp=document.getElementById('anPrint');printBT(rp.dataset.plain,rp.dataset.logo||getLogoUrl());}
-let CUR_PAY=null,CUR_PAY_GAIN=0;async function stepPaye1(){let id=document.getElementById('payId').value.trim().toUpperCase();if(!id) return;let snap=await db.ref('tickets/'+id).once('value');let t=snap.val();if(!t) return;if(t.annule) return;let du=t.dateHaiti||t.date||getHaitiDateStr();let resSnap=await db.ref('results').once('value');let allRes=resSnap.val()||{};let resultsForDate={};Object.values(allRes).forEach(r=>{if(r&&r.dat==du) resultsForDate[r.tirage]=r;});let calc=calcGainForTicket({bets:[...(t.bets||[]),...(t.gratisBets||[])],tirages:t.tirages},t.prix||getMyPrix(),resultsForDate);if(calc.gain<=0){alert('PA GANYAN');return;}CUR_PAY=t;CUR_PAY_GAIN=calc.gain;let gratisGanyan=calc.detay.filter(d=>d.gratis).length;document.getElementById('payRes').innerHTML='<div style="text-align:center"><h3 style="font-size:16px">GANYAN $'+calc.gain.toFixed(2)+'</h3><small style="font-size:11px">'+(gratisGanyan>0?gratisGanyan+' gratis x 500':'')+'</small></div>';document.getElementById('stepPay1').style.display='none';document.getElementById('stepPay2').style.display='block';}
+let CUR_PAY=null,CUR_PAY_GAIN=0;async function stepPaye1(){let id=document.getElementById('payId').value.trim().toUpperCase();if(!id) return;let snap=await db.ref('tickets/'+id).once('value');let t=snap.val();if(!t) return;if(t.annule) return;let du=t.dateHaiti||t.date||getHaitiDateStr();let resSnap=await db.ref('results').once('value');let allRes=resSnap.val()||{};let resultsForDate={};Object.values(allRes).forEach(r=>{if(r&&r.dat==du) resultsForDate[r.tirage]=r;});let calc=calcGainForTicket({bets:[...(t.bets||[]),...(t.gratisBets||[])],tirages:t.tirages},t.prix||getMyPrix(),resultsForDate);if(calc.gain<=0){alert('PA GANYAN');return;}CUR_PAY=t;CUR_PAY_GAIN=calc.gain;let gratisGanyan=calc.detay.filter(d=>d.gratis).length;document.getElementById('payRes').innerHTML='<div style="text-align:center"><h3 style="font-size:16px">GANYAN $'+calc.gain.toFixed(2)+'</h3><small style="font-size:11px">'+(gratisGanyan>0?gratisGanyan+' gratis x 500 - '+getBusinessName():'')+'</small></div>';document.getElementById('stepPay1').style.display='none';document.getElementById('stepPay2').style.display='block';}
 function stepPaye2(){document.getElementById('stepPay2').style.display='none';document.getElementById('stepPay3').style.display='block';}
-async function doPeyeConf(){await db.ref('tickets/'+CUR_PAY.id).update({paye:true,payeGain:CUR_PAY_GAIN});let bn=getBusinessName(),logoUrl=getLogoUrl();let txt=bn+'\n*** PRÈV PEYMAN - GRATIS 500 SI SÒTI ***\nId: '+CUR_PAY.id+'\nGanyan: $'+CUR_PAY_GAIN.toFixed(2)+'\n';let rp=document.getElementById('payPrint');rp.style.display='block';rp.innerHTML=(logoUrl&&logoUrl.length>100?'<img src="'+logoUrl+'" class="logo-circle"><br>':'')+txt.replace(/\n/g,'<br>');rp.dataset.plain=txt;rp.dataset.logo=logoUrl;document.getElementById('btnPayPrint').style.display='block';printBT(txt,logoUrl);}
+async function doPeyeConf(){await db.ref('tickets/'+CUR_PAY.id).update({paye:true,payeGain:CUR_PAY_GAIN});let bn=getBusinessName(),logoUrl=getLogoUrl(),footer=getFooterMessage();let txt=bn+'\n*** PRÈV PEYMAN ***\nId: '+CUR_PAY.id+'\nGanyan: $'+CUR_PAY_GAIN.toFixed(2)+'\n----------------\n'+footer+'\n';let rp=document.getElementById('payPrint');rp.style.display='block';rp.innerHTML=(logoUrl&&logoUrl.length>100?'<img src="'+logoUrl+'" class="logo-circle"><br>':'')+txt.replace(/\n/g,'<br>');rp.dataset.plain=txt;rp.dataset.logo=logoUrl;document.getElementById('btnPayPrint').style.display='block';printBT(txt,logoUrl);}
 function printPeye(){let rp=document.getElementById('payPrint');printBT(rp.dataset.plain,rp.dataset.logo||getLogoUrl());}
 function goTab(id,el){document.querySelectorAll('.tabPage').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');}
 let curV=localStorage.getItem('curV');if(curV){try{CUR=JSON.parse(curV);openMain();}catch(e){hideSplash();}}else{hideSplash();}
