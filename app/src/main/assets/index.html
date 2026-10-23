@@ -193,29 +193,73 @@ function printBT(t){
   window.print();
  }
 }
-
 // ✅ FONKSYON printTicket ki rele printBT
-function printTicket(tk){
- // tk = ticket object
- let logo=getLogoUrl();
- let txt=""; let html="";
- let logoHtml=logo&&logo.length>100?'<img src="'+logo+'" style="width:384px; max-width:58mm; display:block; margin:0 auto; padding:0;" />':'';
- txt+=getBusinessName()+"\n"+getFooter()+"\n";
- txt+="--------------------------------\n";
- txt+="ID:"+tk.id+" "+(tk.dateHaiti||'')+"\n";
- txt+="V:"+(CUR?CUR.serial:'')+" T:"+ (tk.tirages||[]).join(' ')+"\n";
- txt+="--------------------------------\n";
- tk.bets.forEach(b=>{txt+= (b.numero+'-'+b.type+' $'+b.mise)+"\n"; html+='<div style="line-height:1 !important; margin:0; padding:0; display:flex; justify-content:space-between;"><span>'+b.numero+'-'+b.type+'</span><span>$'+b.mise+'</span></div>';});
- txt+="--------------------------------\n";
- txt+="Total: $"+tk.total+"\n";
- txt+="Mesi!\n";
- html='<div style="text-align:center; font-weight:900; line-height:1 !important; margin:0; padding:0;">'+getBusinessName()+'</div>';
- html+='<div style="text-align:center; line-height:1 !important; margin:0; padding:0; font-size:10px;">'+getFooter()+'</div>';
- html+='<div style="line-height:1 !important; margin:0; padding:0;">--------------------------------</div>';
- html+='<div style="line-height:1 !important; margin:0; padding:0;">ID:'+tk.id+' '+(tk.tirages||[]).join(' ')+'</div>';
- html+=logoHtml;
- html+=html+'<br>Total: $'+tk.total;
- return {text:txt, html:html, logo:logo};
+✅ SANTRE 58MM - PAPYE = TERMINAL - EKONOMI MAX - LINE-HEIGHT 1
+function centerTxt(s,w){w=w||32;s=s.toString().replace(/[èéêëÈÉ]/g,'e').replace(/[àâÀÂ]/g,'a').replace(/[òôÒÔ]/g,'o').replace(/[ùûÙÛ]/g,'u').replace(/[çÇ]/g,'c').trim();s=s.replace(/[^\x20-\x7E$\n\r]/g,'');if(s.length>=w) return s.substring(0,w);let left=Math.floor((w-s.length)/2);return " ".repeat(left)+s;}
+function formatLine(jeux,boul,miz){let c1=jeux.toUpperCase().substring(0,4).padEnd(4,' ');let c2=boul.toString().padStart(2,' ').padEnd(6,' ').substring(0,6);let c3=('$'+miz).padStart(5,' ').substring(0,5);return c1+" "+c2+" "+c3;}
+function formatHeader(){return "JEUX    BOUL     MIZ";}
+function build(tk){
+  let bn=getBusinessName().replace(/[èé]/gi,'e');
+  let ft=getFooter().replace(/[èé]/gi,'e');
+  let logo=getLogoUrl();
+  let txt="";let html="";
+  txt+=centerTxt(bn)+"\n";
+  txt+=centerTxt("Kod: "+(CUR?CUR.serial:""))+"\n";
+  txt+=centerTxt("Date: "+getHaitiDateStr())+"\n";
+  txt+=centerTxt("Vendeur: "+(CUR?.nom||""))+"\n";
+  txt+=centerTxt("Id: "+tk.id)+"\n";
+  txt+=centerTxt("--------------------------------")+"\n";
+  (tk.tirages||selT).forEach(tn=>{txt+=centerTxt("Tiraj: "+tn)+"\n";});
+  txt+=centerTxt("--------------------------------")+"\n";
+  txt+=centerTxt(formatHeader())+"\n";
+  txt+=centerTxt("-------------------------------")+"\n";
+  tk.bets.forEach(b=>{txt+=centerTxt(formatLine(b.type,b.numero,b.mise))+"\n";});
+  if(isMaryajGratisEnabled() && tk.gratisBets&&tk.gratisBets.length>0){
+    txt+=centerTxt("--- GRATIS ---")+"\n";
+    tk.gratisBets.forEach(g=>{txt+=centerTxt("GRATIS "+g.base)+"\n";});
+  }
+  txt+=centerTxt("-------------------------------")+"\n";
+  txt+=centerTxt("Total: $"+tk.total)+"\n";
+  txt+=centerTxt(ft)+"\n";
+  txt+=centerTxt("Toujou sonje verifye")+"\n";
+  txt+=centerTxt("fich ou avan ou deplase !")+"\n";
+  // ✅ PA GEN \n\n\n - MACHIN ANDAN AN KOUPE POUKONT LI
+  let logoHtml=logo&&logo.length>100?'<img src="'+logo+'" style="width:90px;height:90px;border-radius:50%;border:2px solid #0a4a2e;object-fit:cover;display:block;margin:0 auto 4px auto"><br>':'<div style="width:70px;height:70px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto 4px auto;font-weight:900">C&D</div>';
+  html='<div style="text-align:center;font-family:monospace;font-size:12px;line-height:1 !important;max-width:58mm;margin:0 auto;padding:0;">'+logoHtml+'<div style="line-height:1 !important;margin:0;padding:0;"><b>'+bn+'</b><br>Kod: '+(CUR?CUR.serial:"")+'<br>Date: '+getHaitiDateStr()+'<br>Vendeur: '+(CUR?.nom||"")+'<br>Id: '+tk.id+'</div><div style="line-height:1 !important;margin:2px 0;padding:0;">';(tk.tirages||selT).forEach(tn=>{html+='Tiraj: '+tn+'<br>';});
+  html+='</div><div style="display:flex;justify-content:space-between;font-weight:900;border-bottom:1px dashed #000;max-width:260px;margin:0 auto;line-height:1 !important;"><span>JEUX</span><span>BOUL</span><span>MIZ</span></div>';
+  tk.bets.forEach(b=>{html+='<div style="display:flex;justify-content:space-between;max-width:260px;margin:0 auto;line-height:1 !important;"><span>'+b.type.toUpperCase()+'</span><span>'+b.numero+'</span><span>$'+b.mise+'</span></div>';});
+  html+='<div style="line-height:1 !important;margin:2px 0 0 0;padding:0;">Total: $'+tk.total+'<br>'+ft+'</div></div>';
+  return {text:txt,html:html,logo:logo};
+}
+function showPreview(data){LAST_TXT=data.text;LAST_HTML=data.html;let p=document.getElementById('prev');p.style.display='block';p.innerHTML=data.html;}
+
+// ✅ PRINT - LOGO 384PX SANTRE + TÈKS SANTRE - PAPYE = TERMINAL - LINE HEIGHT 1 - MACHIN KOUPE OTOMATIK
+function printBT(t){
+  let plain="";let logoUrl=getLogoUrl();
+  if(typeof t==="object"&&t.text){plain=t.text;logoUrl=t.logo||logoUrl;}
+  else{plain=t.toString();}
+  if(!plain) return;
+  plain=plain.replace(/[èéêë]/g,'e').replace(/[àâ]/g,'a').replace(/[ç]/g,'c').replace(/[^\x20-\x7E$\n\r]/g,'');
+  let cleanLines=plain.split('\n').map(l=>l.replace(/^\s+/,'').trimEnd()).join('\n');
+  let ESC="\x1B"; let escCenter=ESC+"a1"; let escLeft=ESC+"a0";
+  let lineH=ESC+"3\x00"; // ✅ LINE-HEIGHT 1 nan ESC/POS
+  let centeredPlain=lineH+escCenter+cleanLines+escLeft+"\n"; // ✅ YON SEL \n - PA 3
+  try{
+    if(logoUrl&&logoUrl.length>100&&window.AndroidPrinter){
+      if(typeof AndroidPrinter.printImage==="function" && typeof AndroidPrinter.printText==="function"){
+        try{AndroidPrinter.printText(lineH+escCenter);}catch(e){}
+        AndroidPrinter.printImage(logoUrl);
+        setTimeout(()=>{try{AndroidPrinter.printText(centeredPlain); try{AndroidPrinter.cutPaper();}catch(e2){}}catch(e){AndroidPrinter.printWithoutDialog(centeredPlain);}},600);
+        return;
+      }
+      if(typeof AndroidPrinter.printImageAndText==="function"){try{AndroidPrinter.printImageAndText(logoUrl,centeredPlain);return;}catch(e){try{let b64=logoUrl.split(',')[1];AndroidPrinter.printImageAndText(b64,centeredPlain);return;}catch(e2){}}}
+      if(typeof AndroidPrinter.printWithLogo==="function"){AndroidPrinter.printWithLogo(logoUrl,centeredPlain);return;}
+      if(typeof AndroidPrinter.printLogoAndText==="function"){AndroidPrinter.printLogoAndText(logoUrl,centeredPlain);return;}
+    }
+    if(window.AndroidPrinter&&typeof AndroidPrinter.printWithoutDialog==="function"){AndroidPrinter.printWithoutDialog(centeredPlain);return;}
+    if(window.AndroidPrinter&&typeof AndroidPrinter.printText==="function"){AndroidPrinter.printText(centeredPlain);return;}
+  }catch(e){}
+  showPreview({text:plain,html:LAST_HTML,logo:logoUrl});
 }
 function printLast(){if(!LAST_TXT) return;printBT({text:LAST_TXT,html:LAST_HTML,logo:getLogoUrl()});}
 function buildRapportThermalText(data){let bn=data.bn||getBusinessName();let ft=data.ft||getFooter();let logo=getLogoUrl();let txt=centerTxt(bn)+"\n"+centerTxt("RAPPORT")+"\n"+centerTxt("Du "+data.du+" Au "+data.au)+"\n"+centerTxt("Tiraj: "+(data.ti||"tous"))+"\n"+centerTxt("Vendeur: "+(CUR?CUR.nom+" ("+CUR.serial+")":""))+"\n"+centerTxt("------------------------------")+"\n"+centerTxt("Vann: "+data.totalTikeVann)+"\n"+centerTxt("Vant: $"+data.ventTotal.toFixed(2))+"\n"+centerTxt("Komisyon: $"+data.totalKom.toFixed(2))+"\n"+centerTxt("A peye: $"+data.aPeye.toFixed(2))+"\n"+centerTxt("------------------------------")+"\n"+centerTxt("Balans: $"+data.balansNet.toFixed(2))+"\n\n"+centerTxt(ft)+"\n";return {text:txt,logo:logo};}
