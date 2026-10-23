@@ -141,18 +141,40 @@ function printBT(t){
   else{plain=t.toString();}
   if(!plain) return;
   plain=plain.replace(/[èéêë]/g,'e').replace(/[àâ]/g,'a').replace(/[ç]/g,'c').replace(/[^\x20-\x7E$\n\r]/g,'');
-  let ESC="\x1B"; let escCenter=ESC+"a1"; let escLeft=ESC+"a0";
-  let centeredPlain=escCenter+plain+escLeft+"\n\n\n";
+  
+  // ✅ RETIRE ESPAS AGOCH POU ESC SANTRE PA POUSE L ADWAT
+  let cleanLines=plain.split('\n').map(l=>{
+    // retire selman espas devan, kenbe espas andedan liy lan
+    return l.replace(/^\s+/,'').trimEnd();
+  }).join('\n');
+  
+  let ESC="\x1B";
+  let escCenter=ESC+"a1"; // santre
+  let escLeft=ESC+"a0";
+  let centeredPlain=escCenter+cleanLines+escLeft+"\n\n\n";
+  
   try{
     if(logoUrl&&logoUrl.length>100&&window.AndroidPrinter){
-      if(typeof AndroidPrinter.printImageAndText==="function"){try{AndroidPrinter.printImageAndText(logoUrl,centeredPlain);return;}catch(e){try{let b64=logoUrl.split(',')[1];AndroidPrinter.printImageAndText(b64,centeredPlain);return;}catch(e2){}}}
-      if(typeof AndroidPrinter.printWithLogo==="function"){try{AndroidPrinter.printWithLogo(logoUrl,centeredPlain);return;}catch(e){}}
-      if(typeof AndroidPrinter.printLogoAndText==="function"){try{AndroidPrinter.printLogoAndText(logoUrl,centeredPlain);return;}catch(e){}}
-      if(typeof AndroidPrinter.printImage==="function"){AndroidPrinter.printImage(logoUrl);setTimeout(()=>{try{AndroidPrinter.printWithoutDialog(centeredPlain);}catch(e){}},700);return;}
+      if(typeof AndroidPrinter.printImage==="function" && typeof AndroidPrinter.printText==="function"){
+        try{AndroidPrinter.printText(escCenter);}catch(e){}
+        AndroidPrinter.printImage(logoUrl);
+        setTimeout(()=>{
+          try{AndroidPrinter.printText(centeredPlain);}catch(e){AndroidPrinter.printWithoutDialog(centeredPlain);}
+        },900);
+        return;
+      }
+      if(typeof AndroidPrinter.printImageAndText==="function"){
+        try{AndroidPrinter.printImageAndText(logoUrl,centeredPlain);return;}catch(e){
+          try{let b64=logoUrl.split(',')[1];AndroidPrinter.printImageAndText(b64,centeredPlain);return;}catch(e2){}
+        }
+      }
+      if(typeof AndroidPrinter.printWithLogo==="function"){AndroidPrinter.printWithLogo(logoUrl,centeredPlain);return;}
+      if(typeof AndroidPrinter.printLogoAndText==="function"){AndroidPrinter.printLogoAndText(logoUrl,centeredPlain);return;}
     }
     if(window.AndroidPrinter&&typeof AndroidPrinter.printWithoutDialog==="function"){AndroidPrinter.printWithoutDialog(centeredPlain);return;}
     if(window.AndroidPrinter&&typeof AndroidPrinter.printText==="function"){AndroidPrinter.printText(centeredPlain);return;}
   }catch(e){}
+  // preview la rete ak centerTxt (ak espas) pou l santre sou telefon
   showPreview({text:plain,html:LAST_HTML,logo:logoUrl});
 }
 function printLast(){if(!LAST_TXT) return;printBT({text:LAST_TXT,html:LAST_HTML,logo:getLogoUrl()});}
