@@ -106,7 +106,9 @@ txt+=formatLine("JEUX","BOUL","MIZ")+"\n";
 txt+="------------------------------\n";
 tk.bets.forEach(b=>{txt+=formatLine(b.type,b.numero,b.mise)+"\n";});
 if(isMaryajGratisEnabled() && tk.gratisBets&&tk.gratisBets.length>0){txt+="\n"+centerTxt("--- GRATIS ---")+"\n";tk.gratisBets.forEach(g=>{txt+=centerTxt("GRATIS "+g.base)+"\n";});}
-txt+="\n"+centerTxt("Total: $"+tk.total)+"\n"+centerTxt("Komisyon: "+(getMyPrix().komActive!==false?getMyPrix().kom+"% ON":"0% OFF"))+"\n"+centerTxt(ft)+"\n"+centerTxt("Toujou sonje verifye fich ou")+"\n"+centerTxt("avan ou deplase!")+"\n";
+txt+="\n"+centerTxt("Total: $"+tk.total)+"\n";
+txt+=centerTxt(ft)+"\n";
+
 let logoHtml=logo&&logo.length>100?'<img src="'+logo+'" style="width:90px;height:90px;border-radius:50%;border:3px solid #0a4a2e;object-fit:cover;margin-bottom:8px"><br>':'<div style="width:80px;height:80px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto 8px auto;font-weight:900;font-size:22px">C&D</div>';
 html='<div style="text-align:center;font-family:monospace;font-size:13px;line-height:1.4">'+logoHtml+'<b style="font-size:14px">'+bn+'</b><br>Kod: '+(CUR?CUR.serial:"")+'<br>Date: '+getHaitiDateStr()+'<br>Vendeur: '+(CUR?.nom||"")+'<br>Id: '+tk.id+'<br><br>';(tk.tirages||selT).forEach(tn=>{html+='Tiraj: '+tn+'<br>';});
 html+='<br><div style="display:flex;justify-content:space-between;font-weight:900;border-bottom:2px dashed #000;padding:6px 0;margin:8px 0;font-size:13px"><span style="width:32%;text-align:left">JEUX</span><span style="width:34%;text-align:center">BOUL</span><span style="width:34%;text-align:right">MIZ</span></div>';
@@ -114,7 +116,7 @@ tk.bets.forEach(b=>{
 html+='<div style="display:flex;justify-content:space-between;font-family:Courier New,monospace;font-weight:700;padding:2px 0;font-size:13px"><span style="width:32%;text-align:left">'+b.type.toUpperCase()+'</span><span style="width:34%;text-align:center">'+b.numero+'</span><span style="width:34%;text-align:right">$'+b.mise+'</span></div>';
 });
 if(isMaryajGratisEnabled() && tk.gratisBets&&tk.gratisBets.length>0){html+='<br>--- GRATIS ---<br>';tk.gratisBets.forEach(g=>{html+='GRATIS '+g.base+'<br>';});}
-html+='<br>Total: $'+tk.total+'<br>Komisyon: '+(getMyPrix().komActive!==false?getMyPrix().kom+'% ON':'0% OFF')+'<br>'+ft+'<br>Toujou sonje verifye fich ou avan ou deplase !<br></div>';
+html+='<br>Total: $'+tk.total+'<br>'+ft+'<br></div>';
 return {text:txt,html:html,logo:logo};
 }
 function showPreview(data){if(typeof data==="string"){LAST_TXT=data;LAST_HTML='<pre style="text-align:center">'+data+'</pre>';document.getElementById('prev').style.display='block';document.getElementById('prev').innerHTML=LAST_HTML;return;}LAST_TXT=data.text;LAST_HTML=data.html;let p=document.getElementById('prev');p.style.display='block';p.innerHTML=data.html;}
