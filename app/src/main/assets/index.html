@@ -117,7 +117,6 @@ function build(tk){
   txt+=centerTxt("Date: "+getHaitiDateStr())+"\n";
   txt+=centerTxt("Vendeur: "+(CUR?.nom||""))+"\n";
   txt+=centerTxt("Id: "+tk.id)+"\n";
-  txt+=centerTxt("--------------------------------")+"\n";
   (tk.tirages||selT).forEach(tn=>{txt+=centerTxt("Tiraj: "+tn)+"\n";});
   txt+=centerTxt("--------------------------------")+"\n";
   txt+=centerTxt(formatHeader())+"\n";
@@ -140,34 +139,83 @@ function build(tk){
   html+='<br>Total: $'+tk.total+'<br>'+ft+'<br></div>';
   return {text:txt,html:html,logo:logo};
 }
-function showPreview(data){LAST_TXT=data.text;LAST_HTML=data.html;let p=document.getElementById('prev');p.style.display='block';p.innerHTML=data.html;}
+function showPreview(data){
+ LAST_TXT=data;
+ LAST_HTML=data.html||'';
+ let p=document.getElementById('previewZone');
+ if(!p) return;
+ // ✅ LINE HEIGHT 1 POU PREVIEW TOU
+ p.innerHTML=`<div style="width:58mm; font-family:monospace; font-size:11px; line-height:1 !important; margin:0; padding:2px; background:#fff; color:#000;">${data.html||data.text||''}</div>`;
+ p.style.display='block';
+}
 
-// ✅ PRINT - LOGO 384PX SANTRE + TÈKS SANTRE - PAPYE = TERMINAL
+// ✅ PRINT - LOGO 384PX SANTRE + TÈKS - EKONOMI PAPYE - MACHIN ANDAN KOUPE POUKONT LI
 function printBT(t){
-  let plain="";let logoUrl=getLogoUrl();
-  if(typeof t==="object"&&t.text){plain=t.text;logoUrl=t.logo||logoUrl;}
-  else{plain=t.toString();}
-  if(!plain) return;
-  plain=plain.replace(/[èéêë]/g,'e').replace(/[àâ]/g,'a').replace(/[ç]/g,'c').replace(/[^\x20-\x7E$\n\r]/g,'');
-  let cleanLines=plain.split('\n').map(l=>l.replace(/^\s+/,'').trimEnd()).join('\n');
-  let ESC="\x1B"; let escCenter=ESC+"a1"; let escLeft=ESC+"a0";
-  let centeredPlain=escCenter+cleanLines+escLeft+"\n\n\n";
-  try{
-    if(logoUrl&&logoUrl.length>100&&window.AndroidPrinter){
-      if(typeof AndroidPrinter.printImage==="function" && typeof AndroidPrinter.printText==="function"){
-        try{AndroidPrinter.printText(escCenter);}catch(e){}
+ let plain=""; let logoUrl=getLogoUrl();
+ if(typeof t==="object"&&t.text){plain=t.text; logoUrl=t.logo||logoUrl;}
+ else{plain=t.toString();}
+
+ if(!plain) return;
+ plain=plain.replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[ùûü]/g,'u');
+ let cleanLines=plain.split('\n').map(l=>l.trim()).filter(l=>l!=='');
+ let ESC="\x1B"; let escCenter=ESC+"a1"; let escLeft=ESC+"a0";
+ let centeredPlain=escCenter+cleanLines.join('\n')+escLeft;
+
+ // ✅ LINE HEIGHT 1 - ESC/POS
+ let lineHeight1=ESC+"3\x00"; // set line spacing to 0
+
+ try{
+  if(logoUrl&&logoUrl.length>100&&window.AndroidPrinter){
+    if(typeof AndroidPrinter.printImage==="function"){
+      try{
+        AndroidPrinter.printText(lineHeight1+escCenter); // set line height 1
         AndroidPrinter.printImage(logoUrl);
-        setTimeout(()=>{try{AndroidPrinter.printText(centeredPlain);}catch(e){AndroidPrinter.printWithoutDialog(centeredPlain);}},900);
+        AndroidPrinter.printText(centeredPlain);
+        setTimeout(()=>{try{AndroidPrinter.cutPaper();}catch(e){}},300);
         return;
-      }
-      if(typeof AndroidPrinter.printImageAndText==="function"){try{AndroidPrinter.printImageAndText(logoUrl,centeredPlain);return;}catch(e){try{let b64=logoUrl.split(',')[1];AndroidPrinter.printImageAndText(b64,centeredPlain);return;}catch(e2){}}}
-      if(typeof AndroidPrinter.printWithLogo==="function"){AndroidPrinter.printWithLogo(logoUrl,centeredPlain);return;}
-      if(typeof AndroidPrinter.printLogoAndText==="function"){AndroidPrinter.printLogoAndText(logoUrl,centeredPlain);return;}
+      }catch(e){}
     }
-    if(window.AndroidPrinter&&typeof AndroidPrinter.printWithoutDialog==="function"){AndroidPrinter.printWithoutDialog(centeredPlain);return;}
-    if(window.AndroidPrinter&&typeof AndroidPrinter.printText==="function"){AndroidPrinter.printText(centeredPlain);return;}
-  }catch(e){}
-  showPreview({text:plain,html:LAST_HTML,logo:logoUrl});
+  }
+  // Fallback pou enprimant andedan san logo
+  if(typeof AndroidPrinter!=="undefined" && AndroidPrinter.printText){
+    AndroidPrinter.printText(lineHeight1+centeredPlain+"\n\n\n");
+    setTimeout(()=>{try{AndroidPrinter.cutPaper();}catch(e){}},300);
+    return;
+  }
+  // Fallback browser - menm jan men line-height 1
+  let zone=document.getElementById('rprint');
+  zone.innerHTML=`<div style="width:58mm; font-family:monospace; font-size:11px; line-height:1 !important; margin:0; padding:0;">${(t.html||plain).replace(/\n/g,'<br>')}</div>`;
+  setTimeout(()=>{ window.print(); },150);
+ }catch(e){
+  console.log('Print err',e);
+  let zone=document.getElementById('rprint');
+  zone.innerHTML=t.html||plain;
+  window.print();
+ }
+}
+
+// ✅ FONKSYON printTicket ki rele printBT
+function printTicket(tk){
+ // tk = ticket object
+ let logo=getLogoUrl();
+ let txt=""; let html="";
+ let logoHtml=logo&&logo.length>100?'<img src="'+logo+'" style="width:384px; max-width:58mm; display:block; margin:0 auto; padding:0;" />':'';
+ txt+=getBusinessName()+"\n"+getFooter()+"\n";
+ txt+="--------------------------------\n";
+ txt+="ID:"+tk.id+" "+(tk.dateHaiti||'')+"\n";
+ txt+="V:"+(CUR?CUR.serial:'')+" T:"+ (tk.tirages||[]).join(' ')+"\n";
+ txt+="--------------------------------\n";
+ tk.bets.forEach(b=>{txt+= (b.numero+'-'+b.type+' $'+b.mise)+"\n"; html+='<div style="line-height:1 !important; margin:0; padding:0; display:flex; justify-content:space-between;"><span>'+b.numero+'-'+b.type+'</span><span>$'+b.mise+'</span></div>';});
+ txt+="--------------------------------\n";
+ txt+="Total: $"+tk.total+"\n";
+ txt+="Mesi!\n";
+ html='<div style="text-align:center; font-weight:900; line-height:1 !important; margin:0; padding:0;">'+getBusinessName()+'</div>';
+ html+='<div style="text-align:center; line-height:1 !important; margin:0; padding:0; font-size:10px;">'+getFooter()+'</div>';
+ html+='<div style="line-height:1 !important; margin:0; padding:0;">--------------------------------</div>';
+ html+='<div style="line-height:1 !important; margin:0; padding:0;">ID:'+tk.id+' '+(tk.tirages||[]).join(' ')+'</div>';
+ html+=logoHtml;
+ html+=html+'<br>Total: $'+tk.total;
+ return {text:txt, html:html, logo:logo};
 }
 function printLast(){if(!LAST_TXT) return;printBT({text:LAST_TXT,html:LAST_HTML,logo:getLogoUrl()});}
 function buildRapportThermalText(data){let bn=data.bn||getBusinessName();let ft=data.ft||getFooter();let logo=getLogoUrl();let txt=centerTxt(bn)+"\n"+centerTxt("RAPPORT")+"\n"+centerTxt("Du "+data.du+" Au "+data.au)+"\n"+centerTxt("Tiraj: "+(data.ti||"tous"))+"\n"+centerTxt("Vendeur: "+(CUR?CUR.nom+" ("+CUR.serial+")":""))+"\n"+centerTxt("------------------------------")+"\n"+centerTxt("Vann: "+data.totalTikeVann)+"\n"+centerTxt("Vant: $"+data.ventTotal.toFixed(2))+"\n"+centerTxt("Komisyon: $"+data.totalKom.toFixed(2))+"\n"+centerTxt("A peye: $"+data.aPeye.toFixed(2))+"\n"+centerTxt("------------------------------")+"\n"+centerTxt("Balans: $"+data.balansNet.toFixed(2))+"\n\n"+centerTxt(ft)+"\n";return {text:txt,logo:logo};}
