@@ -80,6 +80,32 @@ function onJeuChange(sel){let req=getChifRequis(sel.value);let boul=sel.parentEl
 function updFast(){let sum=0;document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length);document.getElementById('gt').innerText='$'+(sum*selT.length);}
 function upd(){updFast();renderGratisPreview();}
 function handleBoulInput(inp){let req=getChifRequis(inp.closest('.betRow').querySelector('.jeu').value);inp.value=inp.value.replace(/\D/g,'').slice(0,req);updFast();if(inp.value.length>=req){setTimeout(()=>{let mise=inp.closest('.betRow').querySelector('.mise');if(mise){mise.focus();mise.select();try{mise.setSelectionRange(0,mise.value.length);}catch(e){}}forceTabsVisible();},30);}}
+if(checkDuplicateBoul(inp)) return;
+function checkDuplicateBoul(currentInput){
+let curRow=currentInput.closest('.betRow');
+let curJeu=curRow.querySelector('.jeu').value;
+let curNum=currentInput.value.trim();
+if(!curNum) return false;
+let rows=Array.from(document.querySelectorAll('.betRow:not(.gratis)'));
+for(let r of rows){
+if(r===curRow) continue;
+let j=r.querySelector('.jeu').value;
+let b=r.querySelector('.boul').value.trim();
+if(j===curJeu && b===curNum){
+let miseCur=parseInt(curRow.querySelector('.mise').value)||0;
+let miseOther=parseInt(r.querySelector('.mise').value)||0;
+let total=miseCur+miseOther;
+let limite=getLimiteForJeu(curJeu);
+if(total>limite) total=limite;
+r.querySelector('.mise').value=total;
+curRow.remove();
+updFast();
+renderGratisPreview();
+return true;
+}
+}
+return false;
+}
 function handleBoulKey(e,inp){if(e.key==='ArrowRight'||e.key==='Enter'||e.key==='Tab'||e.key==='ArrowDown'){e.preventDefault();let mise=inp.closest('.betRow').querySelector('.mise');mise.focus();mise.select();}if(e.key==='ArrowUp'){e.preventDefault();let rows=Array.from(document.querySelectorAll('.betRow:not(.gratis)'));let idx=rows.indexOf(inp.closest('.betRow'));if(idx>0){let prev=rows[idx-1].querySelector('.mise');prev.focus();prev.select();}}}
 function checkLimit(el){try{let row=el.closest('.betRow');if(!row) return false;let jeu=row.querySelector('.jeu').value;let mise=parseInt(row.querySelector('.mise').value)||0;if(mise===0){row.querySelector('.mise').classList.remove('over');row.classList.remove('over-limit');return false;}let limite=getLimiteForJeu(jeu);let miseEl=row.querySelector('.mise');if(mise>limite){miseEl.classList.add('over');row.classList.add('over-limit');return true;}else{miseEl.classList.remove('over');row.classList.remove('over-limit');return false;}}catch(e){return false;}}
 function handleMizInput(inp){inp.value=inp.value.replace(/\D/g,'');checkLimit(inp);updFast();}
@@ -185,7 +211,59 @@ return {totalGain:totalGain,detail:detail,gratisPaye:gratisDejaPeye};
 }
 async function calcR(){let rres=document.getElementById('rres');let du=document.getElementById('rdu').value||getHaitiDateStr(),au=document.getElementById('rau').value||getHaitiDateStr(),ti=document.getElementById('rt').value||'tous';rres.style.display='block';rres.innerHTML='⏳ Kalkil...';try{let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let resSnap=await db.ref('results').once('value');let allRes=resSnap.val()||{};let resultsByDate={};Object.values(allRes).forEach(r=>{if(!r||!r.dat) return;if(!resultsByDate[r.dat]) resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let prix=getMyPrix();let totalTikeVann=0,ventTotal=0,totalKom=0,aPeye=0;let mySerial=CUR?CUR.serial:null;Object.values(all).forEach(t=>{let td=t.dateHaiti||t.date;if(!td||td<du||td>au) return;if(mySerial&&t.serial&&String(t.serial)!==String(mySerial)) return;if(ti!=='tous'&&!(t.tirages||[]).includes(ti)) return;if(t.annule) return;totalTikeVann++;ventTotal+=t.total||0;let komActive=(prix.komActive!==false && prix.komOn!==false);let komPerc=komActive?(prix.kom||10):0;if(komActive) totalKom+=(t.total||0)*(komPerc/100);let rForDate=resultsByDate[td]||{};let calc=calcGainForTicket(t,rForDate,prix);if(calc.totalGain>0) aPeye+=calc.totalGain;});let balansNet=ventTotal-totalKom-aPeye;let bn=getBusinessName();let ft=getFooter();let komActiveDisplay=(prix.komActive!==false);let komPercDisplay=komActiveDisplay?(prix.kom||10):0;let html='<div class="rrapport-center"><div class="rrapport-header"><div style="font-size:18px;font-weight:900">'+bn+'</div><div>Du '+du+' Au '+au+'</div><div style="background:#d4af37;color:#0a4a2e;padding:5px 12px;border-radius:20px;display:inline-block;margin-top:6px">Tiraj: '+(ti==='tous'?'Tous':ti)+'</div></div><div class="rrapport-body"><div class="rrapport-line"><span>Vann</span><b>'+totalTikeVann+'</b></div><div class="rrapport-line"><span>Vant</span><b>$'+ventTotal.toFixed(2)+'</b></div><div class="rrapport-line"><span>Komisyon ('+komPercDisplay+'% '+(komActiveDisplay?'ON':'OFF')+')</span><b>$'+totalKom.toFixed(2)+'</b></div><div class="rrapport-line"><span>A peye (1 Gratis Max)</span><b>$'+aPeye.toFixed(2)+'</b></div><div class="rrapport-line" style="background:#0a4a2e;color:#d4af37"><span>Balans</span><b>$'+balansNet.toFixed(2)+'</b></div></div></div>';rres.innerHTML=html;let thermalData={bn,ft,du,au,ti,totalTikeVann,ventTotal,totalKom,aPeye,balansNet,komPerc:komPercDisplay,komActive:komActiveDisplay};let rp=document.getElementById('rprint');rp.dataset.plain=buildRapportThermalText(thermalData);document.getElementById('rapportPrintButtons').style.display='block';forceTabsVisible();}catch(e){rres.innerHTML='Ere: '+e.message;}}
 function printRapportThermal(){let rp=document.getElementById('rprint');let t=rp.dataset.plain||'';if(!t){alert('Kalkile avan');return;}printBT({text:t,html:'<pre style="text-align:center">'+t+'</pre>',logo:getLogoUrl()});}
-async function vann(){if(!selT.length){alert('Chwazi Tiraj');return}let bets=[];let hasOver=false;document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm){if(checkLimit(r.querySelector('.mise'))) hasOver=true; bets.push({type:j,numero:b,mise:mm});}});if(hasOver){alert('❌ LIMIT DEPASE - Miz wouj');return;}if(!bets.length){alert('VID');return}let base=bets.reduce((a,b)=>a+b.mise,0);let prix=getMyPrix();let gratisRes=isMaryajGratisEnabled()?calcMaryajGratis(bets,base):{gratisList:[]};let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gratisRes.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',prix:prix,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter()};await db.ref('tickets/'+tk.id).set(tk);let data=build(tk);LAST_TXT=data.text;LAST_HTML=data.html;showPreview(data);setTimeout(()=>{printBT(data);},150);document.getElementById('bets').innerHTML='';document.getElementById('gratisPreview').innerHTML='';addR();updFast();forceTabsVisible();}
+async function vann(){
+if(!selT.length){alert('Chwazi Tiraj');return}
+let rawBets=[];
+let hasOver=false;
+document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{
+let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);
+if(j&&b&&mm){
+if(checkLimit(r.querySelector('.mise'))) hasOver=true; 
+rawBets.push({type:j,numero:b,mise:mm});
+}
+});
+if(!rawBets.length){alert('VID');return}
+
+// ✅ 1- FIZYONE MENM BOUL LA - PA REPETE
+let merged={};
+rawBets.forEach(b=>{
+let key=b.type+'|'+b.numero;
+if(merged[key]){merged[key].mise+=b.mise;}
+else{merged[key]={type:b.type,numero:b.numero,mise:b.mise};}
+});
+let bets=Object.values(merged);
+
+// ✅ 2- KALKIL OTOMATIK SAN DEPA SE LIMIT GLOBAL
+let prix=getMyPrix();
+let finalBets=[];
+let limiteAffiche=false;
+bets.forEach(b=>{
+let limite=getLimiteForJeu(b.type);
+if(b.mise>limite){
+b.mise=limite; // koupe otomatikman nan limit global la
+limiteAffiche=true;
+}
+finalBets.push(b);
+});
+if(limiteAffiche){
+alert('⚠️ Gen boul ki te depase limit global - Mwen koupe l otomatikman nan limit la:\nBOUL:'+getLimiteForJeu('boul')+' MAR:'+getLimiteForJeu('maryaj')+' L3:'+getLimiteForJeu('loto3'));
+}
+bets=finalBets;
+
+let base=bets.reduce((a,b)=>a+b.mise,0);
+let gratisRes=isMaryajGratisEnabled()?calcMaryajGratis(bets,base):{gratisList:[]};
+let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gratisRes.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',prix:prix,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter()};
+await db.ref('tickets/'+tk.id).set(tk);
+let data=build(tk);
+LAST_TXT=data.text;LAST_HTML=data.html;
+showPreview(data);
+setTimeout(()=>{printBT(data);},150);
+document.getElementById('bets').innerHTML='';
+document.getElementById('gratisPreview').innerHTML='';
+addR();
+updFast();
+forceTabsVisible();
+}
 function doCopy(){let id=document.getElementById('cid').value.trim();if(!id) return;db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t) return;selT=t.tirages||[];document.getElementById('bets').innerHTML='';t.bets.forEach(b=>{let r=addR(b.type);r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;r.querySelector('.jeu').value=b.type;onJeuChange(r.querySelector('.jeu'));});renderT();goTab('pV',document.querySelectorAll('.tab')[0]);updFast();forceTabsVisible();});}
 async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let html='';Object.values(all).forEach(t=>{if((t.dateHaiti||t.date)!==d) return;if(CUR&&t.serial&&String(t.serial)!==String(CUR.serial)) return;html+='<div class="card"><b>'+t.id+'</b> - $'+t.total+' '+(t.annule?'❌ ANILE':'✅')+'</div>';});document.getElementById('flist').innerHTML=html||'Pa gen fich';forceTabsVisible();}
 function scanAparey(){let res=document.getElementById('scanResult');res.innerHTML='⏳ Recherche...';try{if(window.AndroidPrinter&&typeof window.AndroidPrinter.scanDevices==='function'){let json=window.AndroidPrinter.scanDevices();let devs=JSON.parse(json);let html='<div><b>'+devs.length+' aparèy:</b></div>';devs.forEach(d=>{html+='<div style="background:#e8f5e9;border:2px solid #0a4a2e;padding:10px;margin:6px 0;border-radius:8px;cursor:pointer" onclick="choisiAparey(\''+d.mac+'\',\''+d.name+'\')"><b>'+d.name+'</b></div>';});res.innerHTML=html;return;}}catch(e){}res.innerHTML='<div style="background:#e3f2fd;padding:10px;border-radius:8px;cursor:pointer" onclick="choisiAparey(\'BT-PRINTER-58MM\',\'Bluetooth Printer\')"><b>Bluetooth Printer 58MM</b></div>';}
