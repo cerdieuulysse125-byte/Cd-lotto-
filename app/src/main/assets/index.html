@@ -79,13 +79,12 @@ function addR(prevJeu){let c=document.getElementById('bets');let d=document.crea
 function onJeuChange(sel){let req=getChifRequis(sel.value);let boul=sel.parentElement.querySelector('.boul');boul.maxLength=req;checkLimit(sel);}
 function updFast(){let sum=0;document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let mm=parseInt(r.querySelector('.mise').value)||0;if(r.querySelector('.boul').value.trim()&&mm)sum+=mm;});document.getElementById('dt').innerText='Total $'+sum+' x '+selT.length+' = $'+(sum*selT.length);document.getElementById('gt').innerText='$'+(sum*selT.length);}
 function upd(){updFast();renderGratisPreview();}
-function handleBoulInput(inp){let req=getChifRequis(inp.closest('.betRow').querySelector('.jeu').value);inp.value=inp.value.replace(/\D/g,'').slice(0,req);updFast();if(inp.value.length>=req){setTimeout(()=>{let mise=inp.closest('.betRow').querySelector('.mise');if(mise){mise.focus();mise.select();try{mise.setSelectionRange(0,mise.value.length);}catch(e){}}forceTabsVisible();},30);}}
-if(checkDuplicateBoul(inp)) return;
 function checkDuplicateBoul(currentInput){
 let curRow=currentInput.closest('.betRow');
+if(!curRow) return false;
 let curJeu=curRow.querySelector('.jeu').value;
 let curNum=currentInput.value.trim();
-if(!curNum) return false;
+if(curNum.length<2) return false;
 let rows=Array.from(document.querySelectorAll('.betRow:not(.gratis)'));
 for(let r of rows){
 if(r===curRow) continue;
@@ -95,16 +94,28 @@ if(j===curJeu && b===curNum){
 let miseCur=parseInt(curRow.querySelector('.mise').value)||0;
 let miseOther=parseInt(r.querySelector('.mise').value)||0;
 let total=miseCur+miseOther;
+if(miseCur===0) total=miseOther;
 let limite=getLimiteForJeu(curJeu);
 if(total>limite) total=limite;
 r.querySelector('.mise').value=total;
+if(miseCur>0 || curRow.querySelector('.boul').value.trim().length>=getChifRequis(curJeu)){
 curRow.remove();
+}
 updFast();
 renderGratisPreview();
 return true;
 }
 }
 return false;
+}
+function handleBoulInput(inp){
+let req=getChifRequis(inp.closest('.betRow').querySelector('.jeu').value);
+inp.value=inp.value.replace(/\D/g,'').slice(0,req);
+if(checkDuplicateBoul(inp)) return;
+updFast();
+if(inp.value.length>=req){
+setTimeout(()=>{let mise=inp.closest('.betRow').querySelector('.mise');if(mise){mise.focus();mise.select();try{mise.setSelectionRange(0,mise.value.length);}catch(e){}}forceTabsVisible();},30);
+}
 }
 function handleBoulKey(e,inp){if(e.key==='ArrowRight'||e.key==='Enter'||e.key==='Tab'||e.key==='ArrowDown'){e.preventDefault();let mise=inp.closest('.betRow').querySelector('.mise');mise.focus();mise.select();}if(e.key==='ArrowUp'){e.preventDefault();let rows=Array.from(document.querySelectorAll('.betRow:not(.gratis)'));let idx=rows.indexOf(inp.closest('.betRow'));if(idx>0){let prev=rows[idx-1].querySelector('.mise');prev.focus();prev.select();}}}
 function checkLimit(el){try{let row=el.closest('.betRow');if(!row) return false;let jeu=row.querySelector('.jeu').value;let mise=parseInt(row.querySelector('.mise').value)||0;if(mise===0){row.querySelector('.mise').classList.remove('over');row.classList.remove('over-limit');return false;}let limite=getLimiteForJeu(jeu);let miseEl=row.querySelector('.mise');if(mise>limite){miseEl.classList.add('over');row.classList.add('over-limit');return true;}else{miseEl.classList.remove('over');row.classList.remove('over-limit');return false;}}catch(e){return false;}}
@@ -134,7 +145,6 @@ tk.bets.forEach(b=>{txt+=formatLine(b.type,b.numero,b.mise)+"\n";});
 if(isMaryajGratisEnabled() && tk.gratisBets&&tk.gratisBets.length>0){txt+="\n"+centerTxt("--- GRATIS ---")+"\n";tk.gratisBets.forEach(g=>{txt+=centerTxt("GRATIS "+g.base)+"\n";});}
 txt+="\n"+centerTxt("Total: $"+tk.total)+"\n";
 txt+=centerTxt(ft)+"\n";
-
 let logoHtml=logo&&logo.length>100?'<img src="'+logo+'" style="width:90px;height:90px;border-radius:50%;border:3px solid #0a4a2e;object-fit:cover;margin-bottom:8px"><br>':'<div style="width:80px;height:80px;border-radius:50%;background:#0a4a2e;color:#d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto 8px auto;font-weight:900;font-size:22px">C&D</div>';
 html='<div style="text-align:center;font-family:monospace;font-size:13px;line-height:1.4">'+logoHtml+'<b style="font-size:14px">'+bn+'</b><br>Kod: '+(CUR?CUR.serial:"")+'<br>Date: '+getHaitiDateStr()+'<br>Vendeur: '+(CUR?.nom||"")+'<br>Id: '+tk.id+'<br><br>';(tk.tirages||selT).forEach(tn=>{html+='Tiraj: '+tn+'<br>';});
 html+='<br><div style="display:flex;justify-content:space-between;font-weight:900;border-bottom:2px dashed #000;padding:6px 0;margin:8px 0;font-size:13px"><span style="width:32%;text-align:left">JEUX</span><span style="width:34%;text-align:center">BOUL</span><span style="width:34%;text-align:right">MIZ</span></div>';
@@ -150,13 +160,10 @@ function printBT(t){let plain="";let hasLogo=false;let logoUrl="";if(typeof t===
 function printLast(){if(!LAST_TXT) return;printBT({text:LAST_TXT,html:LAST_HTML,logo:getLogoUrl()});}
 function buildRapportThermalText(data){let bn=data.bn||getBusinessName();let txt=centerTxt(bn)+"\n"+centerTxt("Du "+data.du+" Au "+data.au)+"\n"+centerTxt("Tiraj: "+(data.ti||"tous"))+"\n"+centerTxt("Vann:"+data.totalTikeVann)+"\n"+centerTxt("Vant:$"+data.ventTotal.toFixed(2))+"\n"+centerTxt("Komisyon:$"+data.totalKom.toFixed(2)+" ("+data.komPerc+"% "+(data.komActive?"ON":"OFF")+")")+"\n"+centerTxt("A peye:$"+data.aPeye.toFixed(2))+"\n"+centerTxt("Balans:$"+data.balansNet.toFixed(2))+"\n"+centerTxt(data.ft)+"\n";return txt;}
 function calcGainForTicket(ticket,resultsForDate,prix){
-let totalGain=0;
-let gratisDejaPeye=false;
-let detail=[];
+let totalGain=0;let gratisDejaPeye=false;let detail=[];
 try{
 for(let tirage of ticket.tirages||[]){
-let res=resultsForDate[tirage];
-if(!res) continue;
+let res=resultsForDate[tirage];if(!res) continue;
 let r1=(res.r1||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
 let r2=(res.r2||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
 let r3=(res.r3||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
@@ -164,9 +171,7 @@ let l3=(res.l3||res.trio||"").toString().replace(/\D/g,"").slice(-3);
 let l4=(res.l4||"").toString().replace(/\D/g,"").slice(-4);
 let l5=(res.l5||"").toString().replace(/\D/g,"").slice(-5);
 for(let bet of ticket.bets||[]){
-let num=(bet.numero||"").replace(/\D/g,"");
-let mise=parseFloat(bet.mise||0);
-if(!num||!mise) continue;
+let num=(bet.numero||"").replace(/\D/g,"");let mise=parseFloat(bet.mise||0);if(!num||!mise) continue;
 if(bet.type==="boul"){
 let raw=num.slice(-2).padStart(2,"0");
 if(raw===r1){totalGain+=mise*(prix.p1||50);detail.push(tirage+": BOUL "+raw+" 1er");}
@@ -181,29 +186,20 @@ if(isM1){totalGain+=mise*(prix.m1||1000);detail.push(tirage+": M1 "+a+b);}
 else if(isM2){totalGain+=mise*(prix.m2||1000);detail.push(tirage+": M2 "+a+b);}
 else if(isM3){totalGain+=mise*(prix.m3||1000);detail.push(tirage+": M3 "+a+b);}
 }else if(bet.type==="loto3"){
-let n3=num.slice(-3).padStart(3,"0");
-if(l3&&n3===l3){totalGain+=mise*(prix.l3||500);detail.push(tirage+": L3 "+n3);}
+let n3=num.slice(-3).padStart(3,"0");if(l3&&n3===l3){totalGain+=mise*(prix.l3||500);detail.push(tirage+": L3 "+n3);}
 }else if(bet.type==="loto4"){
-let n4=num.slice(-4).padStart(4,"0");
-if(l4&&n4===l4){totalGain+=mise*(prix.l4||5000);detail.push(tirage+": L4 "+n4);}
+let n4=num.slice(-4).padStart(4,"0");if(l4&&n4===l4){totalGain+=mise*(prix.l4||5000);detail.push(tirage+": L4 "+n4);}
 }else if(bet.type==="loto5"){
-let n5=num.slice(-5).padStart(5,"0");
-if(l5&&n5===l5){totalGain+=mise*(prix.l5||25000);detail.push(tirage+": L5 "+n5);}
+let n5=num.slice(-5).padStart(5,"0");if(l5&&n5===l5){totalGain+=mise*(prix.l5||25000);detail.push(tirage+": L5 "+n5);}
 }
 }
 if(!isMaryajGratisEnabled()) continue;
 if(gratisDejaPeye) continue;
 for(let gbet of ticket.gratisBets||[]){
-let gnum=(gbet.numero||"").replace(/\D/g,"");
-if(gnum.length<4) continue;
+let gnum=(gbet.numero||"").replace(/\D/g,"");if(gnum.length<4) continue;
 let a=gnum.slice(0,2),b=gnum.slice(-2);
 let win=(a===r1&&b===r2)||(a===r2&&b===r1)||(a===r1&&b===r3)||(a===r3&&b===r1)||(a===r2&&b===r3)||(a===r3&&b===r2);
-if(win){
-totalGain+=parseInt(prix.maryajGratis||500);
-gratisDejaPeye=true;
-detail.push(tirage+": GRATIS "+a+"x"+b+" (1 sel peye)");
-break;
-}
+if(win){totalGain+=parseInt(prix.maryajGratis||500);gratisDejaPeye=true;detail.push(tirage+": GRATIS "+a+"x"+b+" (1 sel peye)");break;}
 }
 }
 }catch(e){console.log(e);}
@@ -214,17 +210,11 @@ function printRapportThermal(){let rp=document.getElementById('rprint');let t=rp
 async function vann(){
 if(!selT.length){alert('Chwazi Tiraj');return}
 let rawBets=[];
-let hasOver=false;
 document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{
 let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);
-if(j&&b&&mm){
-if(checkLimit(r.querySelector('.mise'))) hasOver=true; 
-rawBets.push({type:j,numero:b,mise:mm});
-}
+if(j&&b&&mm){rawBets.push({type:j,numero:b,mise:mm});}
 });
 if(!rawBets.length){alert('VID');return}
-
-// ✅ 1- FIZYONE MENM BOUL LA - PA REPETE
 let merged={};
 rawBets.forEach(b=>{
 let key=b.type+'|'+b.numero;
@@ -232,25 +222,15 @@ if(merged[key]){merged[key].mise+=b.mise;}
 else{merged[key]={type:b.type,numero:b.numero,mise:b.mise};}
 });
 let bets=Object.values(merged);
-
-// ✅ 2- KALKIL OTOMATIK SAN DEPA SE LIMIT GLOBAL
-let prix=getMyPrix();
 let finalBets=[];
-let limiteAffiche=false;
 bets.forEach(b=>{
 let limite=getLimiteForJeu(b.type);
-if(b.mise>limite){
-b.mise=limite; // koupe otomatikman nan limit global la
-limiteAffiche=true;
-}
+if(b.mise>limite){b.mise=limite;}
 finalBets.push(b);
 });
-if(limiteAffiche){
-alert('⚠️ Gen boul ki te depase limit global - Mwen koupe l otomatikman nan limit la:\nBOUL:'+getLimiteForJeu('boul')+' MAR:'+getLimiteForJeu('maryaj')+' L3:'+getLimiteForJeu('loto3'));
-}
 bets=finalBets;
-
 let base=bets.reduce((a,b)=>a+b.mise,0);
+let prix=getMyPrix();
 let gratisRes=isMaryajGratisEnabled()?calcMaryajGratis(bets,base):{gratisList:[]};
 let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gratisRes.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',prix:prix,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter()};
 await db.ref('tickets/'+tk.id).set(tk);
@@ -298,7 +278,7 @@ document.getElementById('stepPay2').style.display='block';
 document.getElementById('payRes').innerHTML='<div style="background:#e8f5e9;border:3px solid #2e7d32;padding:10px;text-align:center"><b>Gayan: $'+calc.totalGain.toFixed(2)+'</b>'+detHtml+'<br><br><b style="color:#c62828">1 Gratis Max respekte</b></div>';
 });
 }
-function stepPaye2(){document.getElementById('stepPay2').style.display='none';document.getElementById('stepPay3').style.display='block';}
+function stepPaye2(){document.getElementById('stepPaye2').style.display='none';document.getElementById('stepPay3').style.display='block';}
 async function doPeyeConf(){if(!CUR_PAY) return;await db.ref('tickets/'+CUR_PAY.id).update({paye:true,payeAt:Date.now()});let txt='*** PEYE ***\nId: '+CUR_PAY.id;document.getElementById('payPrint').dataset.plain=txt;document.getElementById('btnPayPrint').style.display='block';printBT({text:txt,html:'<pre style="text-align:center">'+txt+'</pre>',logo:getLogoUrl()});alert('Peye OK');}
 function printPeye(){printBT({text:document.getElementById('payPrint').dataset.plain,html:'<pre style="text-align:center">'+document.getElementById('payPrint').dataset.plain+'</pre>',logo:getLogoUrl()});}
 </script></body></html>
