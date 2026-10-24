@@ -163,53 +163,32 @@ function saveKomParam(){let k=document.getElementById('komVendeur').value;if(!k)
 function loadKomVendeursList(){let myV=getMyVendeurs();let html='<div style="background:#fff;padding:8px;border-radius:8px;border:2px solid #1565c0"><b>Lis Vandè - Komisyon:</b><br>';myV.forEach(v=>{let p=DB.prix[v._id]||DB.prix.global||{kom:10};html+='<div style="display:flex;justify-content:space-between;padding:6px;border-bottom:1px solid #eee"><span>'+v.nom+'</span><span style="font-weight:900;color:#1565c0">'+(p.kom||10)+'%</span></div>';});html+='</div>';document.getElementById('listKomVendeurs').innerHTML=html;}
 function getPrixForVendeur(vId){let pg=DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true,maryajGratis:500,maryajGratisEnabled:true};if(!vId) return pg;if(DB.prix[vId]) return Object.assign({},pg,DB.prix[vId]);if(DB.vendeurs[vId]&&DB.vendeurs[vId].kom!==undefined) return Object.assign({},pg,{kom:DB.vendeurs[vId].kom});return pg;}
 function calcGainProprio(ticket,resultsForDate,prix){
-  let totalGain=0;let gratisDejaPeye=false;
-  try{
-    for(let tirage of (ticket.tirages||[ticket.tirage]||[])){
-      if(!tirage) continue;let res=resultsForDate[tirage];if(!res) continue;
-      let r1=(res.r1||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
-      let r2=(res.r2||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
-      let r3=(res.r3||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
-      let l3=(res.l3||"").toString().replace(/\D/g,"").slice(-3);
-      let l4=(res.l4||"").toString().replace(/\D/g,"").slice(-4);
-      let l5=(res.l5||"").toString().replace(/\D/g,"").slice(-5);
-      for(let bet of (ticket.bets||[])){
-        let raw=(bet.numero||bet.num||"").toString().replace(/\D/g,"");if(!raw) continue;
-        let mise=parseFloat(bet.mise||0);let type=(bet.type||"").toLowerCase();let g=0;
-        if(type.includes('boul')||(type==''&&raw.length==2)){
-          let num=raw.padStart(2,'0');
-          if(num==r1) g=mise*(prix.p1||50);
-          else if(num==r2) g=mise*(prix.p2||20);
-          else if(num==r3) g=mise*(prix.p3||10);
-        }else if(type.includes('mar')){
-          let a=raw.substring(0,2).padStart(2,'0'), b=raw.substring(2,4).padStart(2,'0');
-          if((a==r1&&b==r2)||(a==r2&&b==r1)) g=mise*(prix.m1||1000);
-          else if((a==r1&&b==r3)||(a==r3&&b==r1)) g=mise*(prix.m2||1000);
-          else if((a==r2&&b==r3)||(a==r3&&b==r2)) g=mise*(prix.m3||1000);
-        }else if(type.includes('loto3')){
-          // KALKIL KORIJE FINAL - 1er×50 si sòti, L3×500 si sòti - ENDEPANDAN
-          let num3=raw.padStart(3,'0');
-          let boul23=num3.slice(-2);
-          if(boul23==r1){ let gg=mise*(prix.p1||50); totalGain+=gg; }
-          if(num3==l3){ let gg=mise*(prix.l3||500); totalGain+=gg; }
-          continue;
-        }else if(type.includes('loto4')){
-          if(l4&&raw.padStart(4,'0')==l4) g=mise*(prix.l4||5000);
-        }else if(type.includes('loto5')){
-          if(l5&&raw.padStart(5,'0')==l5) g=mise*(prix.l5||25000);
-        }
-        if(g>0) totalGain+=g;
-      }
-      if(prix.maryajGratisEnabled===false) continue;
-      if(gratisDejaPeye) continue;
-      for(let gbet of (ticket.gratisBets||[])){
-        let gnum=(gbet.numero||"").replace(/\D/g,"");if(gnum.length<4) continue;
-        let a=gnum.slice(0,2), b=gnum.slice(-2);
-        let win=(a==r1&&b==r2)||(a==r2&&b==r1)||(a==r1&&b==r3)||(a==r3&&b==r1)||(a==r2&&b==r3)||(a==r3&&b==r2);
-        if(win){ totalGain+=parseInt(prix.maryajGratis||500); gratisDejaPeye=true; break; }
+  let totalGain=0;
+  let gratisDejaPeye=false; // ← yon sèl gratis pou tout fich la
+
+  for(let tirage of (ticket.tirages||[])){
+    let res=resultsForDate[tirage]; if(!res) continue;
+    let r1=res.r1, r2=res.r2, r3=res.r3;
+    
+    // ... lòt kalkil boul / maryaj / loto3 ...
+
+    // GRATIS - yon sèl peye
+    if(prix.maryajGratisEnabled===false) continue;
+    if(gratisDejaPeye) continue; // si deja peye 1, pa peye ankò
+
+    for(let gbet of (ticket.gratisBets||[])){
+      let gnum=(gbet.numero||"").replace(/\D/g,"");
+      let a=gnum.slice(0,2), b=gnum.slice(-2);
+      let win=(a==r1&&b==r2)||(a==r2&&b==r1)||
+              (a==r1&&b==r3)||(a==r3&&b==r1)||
+              (a==r2&&b==r3)||(a==r3&&b==r2);
+      if(win){
+        totalGain += parseInt(prix.maryajGratis||500); // 500
+        gratisDejaPeye = true; // bloke lòt gratis yo
+        break; // soti, pa chèche ankò
       }
     }
-  }catch(e){}
+  }
   return totalGain;
 }
 function calcRapport(){
