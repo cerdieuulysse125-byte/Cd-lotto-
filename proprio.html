@@ -1,236 +1,72 @@
 <!DOCTYPE html>
-<html lang="ht">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proprio V22.3 FINAL - BLOKE + KALKIL 1er L3</title>
+<html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proprio V22.3 FINAL</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f5f5f5;padding:10px}
-.card{background:#fff;border-radius:10px;padding:12px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.btn{padding:10px 14px;border:0;border-radius:8px;cursor:pointer;font-weight:700}
-.btn-green{background:#2e7d32;color:#fff}
-.btn-red{background:#c62828;color:#fff}
-.btn-blue{background:#1565c0;color:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-input,select{padding:10px;border:1px solid #ccc;border-radius:8px;width:100%}
-h2{margin:10px 0;color:#222}
-.tab{display:inline-block;padding:10px 14px;background:#ddd;border-radius:8px 8px 0 0;cursor:pointer;margin-right:4px}
-.tab.active{background:#1565c0;color:#fff}
-.section{display:none}.section.active{display:block}
-.badge{padding:4px 10px;border-radius:20px;color:#fff;font-size:10px;font-weight:900}
-small{font-size:11px}
-</style>
-</head>
-<body>
-<h2>PROPRIO V22.3 FINAL - BLOKE ON/OFF + KALKIL 1er/L3 KORIJE</h2>
-<div id="tabs">
- <span class="tab active" onclick="showTab('vendeurs')">1-Vendeurs</span>
- <span class="tab" onclick="showTab('tirages')">2-Tirages</span>
- <span class="tab" onclick="showTab('resultats')">3-Resultats</span>
- <span class="tab" onclick="showTab('prix')">4-Prix</span>
- <span class="tab" onclick="showTab('bloke')">5-Bloke</span>
- <span class="tab" onclick="showTab('rapports')">6-Rapports</span>
-</div>
-<div id="sec-vendeurs" class="section active">
- <div class="card"><b>1-VENDEURS - Bouton Bloke devan chak non</b><div id="listVendeur">Chargement...</div></div>
-</div>
-<div id="sec-tirages" class="section">
- <div class="card">
-  <b>2-TIRAGES - Gwoup kòrèk</b>
-  <div class="grid">
-   <div>NY: 2 (midi, swa)</div><div>GA: 2</div>
-   <div>FL: 2</div><div>ANGUILLA: 4 (10h,13h,18h,21h)</div>
-   <div>TEXAS: 3</div><div>TENNESSEE: 4</div>
-   <div>PRIMERA: 2</div><div>SUERTE: 2</div>
-   <div>LOTEDOM:1</div><div>REAL:1</div>
-   <div>LEIDSA:1</div><div>GANAMAS:1</div><div>NACIONAL:1</div>
-  </div>
-  <div id="tirajChwaziList"></div>
-  <div id="tirajVendeursList"></div>
- </div>
-</div>
-<div id="sec-resultats" class="section">
- <div class="card">
-  <b>3-RESULTATS</b>
-  <div id="resTable"></div>
-  <div class="grid">
-   <select id="resTirage"><option>Chwazi tiraj</option></select>
-   <input id="resR1" placeholder="1er (23)">
-   <input id="resR2" placeholder="2e">
-   <input id="resR3" placeholder="3e">
-   <input id="resL3" placeholder="L3 (123)">
-   <input id="resL4" placeholder="L4">
-   <input id="resL5" placeholder="L5">
-  </div>
-  <button onclick="saveResultat()" class="btn btn-green" style="width:100%;margin-top:8px">Sove Rezilta</button>
-  <div id="heuresList"></div>
- </div>
-</div>
-<div id="sec-prix" class="section">
- <div class="card">
-  <b>4-PRIX - 1er×50 si sòti, L3×500 si sòti</b>
-  <div class="grid">
-   <div><label>1er lot p1</label><input id="p_p1" type="number" value="50"></div>
-   <div><label>2e p2</label><input id="p_p2" type="number" value="20"></div>
-   <div><label>3e p3</label><input id="p_p3" type="number" value="10"></div>
-   <div><label>M1</label><input id="p_m1" type="number" value="1000"></div>
-   <div><label>M2</label><input id="p_m2" type="number" value="1000"></div>
-   <div><label>M3</label><input id="p_m3" type="number" value="1000"></div>
-   <div><label>Loto3 L3 ×500</label><input id="p_l3" type="number" value="500"></div>
-   <div><label>Loto4 L4</label><input id="p_l4" type="number" value="5000"></div>
-   <div><label>Loto5 L5</label><input id="p_l5" type="number" value="25000"></div>
-   <div><label>Gratis yon sèl peye</label><input id="p_gratis" type="number" value="500"></div>
-   <div><label>Kom %</label><input id="p_kom" type="number" value="10"></div>
-  </div>
-  <button onclick="savePrixGlobal()" class="btn btn-blue" style="width:100%;margin-top:8px">Sove Pri</button>
-  <div id="prixList"></div>
- </div>
-</div>
-<div id="sec-bloke" class="section"><div class="card"><b>5-BLOKE</b><div id="blokeBoulList"></div><div id="blokeJeuList"></div></div></div>
-<div id="sec-rapports" class="section"><div class="card"><b>6-RAPPORTS</b><div id="limiteList"></div></div></div>
-<div class="card" style="background:#fff3e0">
-<b>RÈG FINAL:</b><br>1. Maryaj dezòd bon<br>2. Loto3 123 = 23=1er×50 si sòti + 123=L3×500 si sòti<br>3. L4 lòd sèlman<br>4. Gratis 1 sèl peye 500<br>5. Bloke On/Off anrejistre
-</div>
+<style>body{font-family:Arial;padding:10px;background:#f5f5f5}.card{background:#fff;padding:12px;margin:10px 0;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}.btn{padding:10px;border:0;border-radius:8px;font-weight:700;cursor:pointer}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}input{padding:10px;border:1px solid #ccc;border-radius:8px;width:100%}</style>
+</head><body>
+<h3>PROPRIO V22.3 - BLOKE ON/OFF + KALKIL KORIJE</h3>
+<div id="listVendeur">Chargement...</div>
+<div class="card"><b>4-PRIX</b><div class="grid">
+<div>1er p1 <input id="p_p1" value="50"></div><div>L3 p_l3 <input id="p_l3" value="500"></div>
+<div>Gratis <input id="p_gratis" value="500"></div><div>Kom <input id="p_kom" value="10"></div>
+</div><button onclick="savePrixGlobal()" class="btn" style="background:#1565c0;color:#fff;width:100%;margin-top:8px">Sove Pri</button></div>
+
 <script>
-const firebaseConfig = {databaseURL:"https://YOUR_PROJECT.firebaseio.com"};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const MY_PROPRIO_ID = localStorage.getItem('proprioId')||'PROP001';
-let DB={vendeurs:{},prix:{},resultats:{}};
-
-db.ref().on('value',snap=>{DB=snap.val()||{};DB.vendeurs=DB.vendeurs||{};DB.prix=DB.prix||{};DB.resultats=DB.resultats||{};loadAll();});
-
-function showTab(t){
- document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
- document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
- document.querySelector(`#sec-${t}`).classList.add('active');
- event.target.classList.add('active');
-}
-function getMyVendeurs(){
- return Object.entries(DB.vendeurs||{}).filter(([id,v])=> (v.proprioId||v.idProprio)==MY_PROPRIO_ID || !v.proprioId).map(([id,v])=>({...v,_id:id}));
-}
+const firebaseConfig={databaseURL:"https://YOUR_PROJECT.firebaseio.com"};
+firebase.initializeApp(firebaseConfig);const db=firebase.database();
+const MY_PROPRIO_ID=localStorage.getItem('proprioId')||'PROP001';
+let DB={vendeurs:{},prix:{}};
+db.ref().on('value',s=>{DB=s.val()||{};DB.vendeurs=DB.vendeurs||{};DB.prix=DB.prix||{};loadAll();});
+function getMyVendeurs(){return Object.entries(DB.vendeurs||{}).map(([id,v])=>({...v,_id:id}));}
 function loadAll(){
- let myV=getMyVendeurs();
- let html='';
+ let myV=getMyVendeurs();let html='';
  myV.forEach(v=>{
-   let isBloke = v.bloke===true;
-   let komV=DB.prix[v._id]?.kom||DB.prix.global?.kom||10;
-   let prixGratis=DB.prix[v._id]?.gratis||DB.prix.global?.gratis||500;
-   html+=`<div class="card" style="border-left:6px solid ${isBloke?'#c62828':'#2e7d32'};background:${isBloke?'#ffebee':'#fff'}">
-     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-       <div style="display:flex;align-items:center;gap:10px;flex:1">
-         <button onclick="toggleBlokeVendeur('${v._id}')" style="padding:10px 16px;border:0;border-radius:25px;font-weight:900;color:#fff;cursor:pointer;min-width:95px;background:${isBloke?'#c62828':'#2e7d32'}">${isBloke?'🔴 BLOKE':'🟢 ON'}</button>
-         <div><b>${v.nom||v._id}</b><br><small>${v.serial||v._id} | Kom ${komV}% | Gratis ${prixGratis}</small></div>
-       </div>
-       <span class="badge" style="background:${isBloke?'#c62828':'#2e7d32'}">${isBloke?'BLOKE':'AKTIF'}</span>
-     </div>
-     <div class="grid" style="margin-top:10px">
-       <input id="nom_${v._id}" value="${v.nom||''}" placeholder="Non">
-       <input id="kom_${v._id}" type="number" value="${komV}" placeholder="Kom %">
-     </div>
-     <button onclick="saveV('${v._id}')" class="btn btn-green" style="margin-top:6px;width:100%">💾 Sove</button>
-   </div>`;
- });
- document.getElementById('listVendeur').innerHTML=html||'Pa gen vandè';
- loadPrixInputs();loadHeures();loadResTable();
+  let isBloke=v.bloke===true;let komV=DB.prix[v._id]?.kom||DB.prix.global?.kom||10;
+  html+=`<div class="card" style="border-left:6px solid ${isBloke?'#c62828':'#2e7d32'};background:${isBloke?'#ffebee':'#fff'}">
+  <div style="display:flex;align-items:center;gap:10px">
+  <button onclick="toggleBlokeVendeur('${v._id}')" style="padding:10px 16px;border:0;border-radius:25px;font-weight:900;color:#fff;min-width:95px;background:${isBloke?'#c62828':'#2e7d32'}">${isBloke?'🔴 BLOKE':'🟢 ON'}</button>
+  <b>${v.nom||v._id}</b> <small>${v.serial||''} Kom ${komV}%</small></div>
+  <div class="grid" style="margin-top:8px"><input id="nom_${v._id}" value="${v.nom||''}"><input id="kom_${v._id}" value="${komV}"></div>
+  <button onclick="saveV('${v._id}')" class="btn" style="background:#2e7d32;color:#fff;width:100%;margin-top:6px">Sove</button></div>`;
+ });document.getElementById('listVendeur').innerHTML=html;
 }
-function saveV(id){
- let nom=document.getElementById('nom_'+id).value.trim();
- let kom=document.getElementById('kom_'+id).value;
- db.ref().update({['vendeurs/'+id+'/nom']:nom,['vendeurs/'+id+'/kom']:+kom,['prix/'+id+'/kom']:+kom}).then(()=>alert('Sove '+nom));
-}
+function saveV(id){let nom=document.getElementById('nom_'+id).value;let kom=document.getElementById('kom_'+id).value;db.ref().update({['vendeurs/'+id+'/nom']:nom,['vendeurs/'+id+'/kom']:+kom,['prix/'+id+'/kom']:+kom}).then(()=>alert('Sove'));}
 function toggleBlokeVendeur(id){
- let v=DB.vendeurs[id]; if(!v) return;
- let isBlokeNow = v.bloke===true; let nouvoBloke = !isBlokeNow; let nomV=v.nom||id;
- if(nouvoBloke){ if(!confirm('🔴 BLOKE '+nomV+' ?')) return; }
- else { if(!confirm('🟢 DEBLOKE '+nomV+' ?')) return; }
- db.ref('vendeurs/'+id+'/bloke').set(nouvoBloke).then(()=>{
-   if(nouvoBloke){
-     db.ref('vendeurs/'+id+'/blokeAt').set(Date.now());
-     db.ref('blokeVendeurByProprio/'+MY_PROPRIO_ID+'/'+id).set({bloke:true,nom:nomV,at:Date.now()});
-     alert('🔴 '+nomV+' BLOKE');
-   }else{
-     db.ref('vendeurs/'+id+'/blokeAt').remove();
-     db.ref('blokeVendeurByProprio/'+MY_PROPRIO_ID+'/'+id).remove();
-     alert('🟢 '+nomV+' ON');
-   }
+ let v=DB.vendeurs[id];let nouvo=!v.bloke;let nomV=v.nom||id;
+ if(nouvo){if(!confirm('BLOKE '+nomV+'?'))return;}else{if(!confirm('DEBLOKE '+nomV+'?'))return;}
+ db.ref('vendeurs/'+id+'/bloke').set(nouvo).then(()=>{
+  if(nouvo){db.ref('blokeVendeurByProprio/'+MY_PROPRIO_ID+'/'+id).set({bloke:true,nom:nomV,at:Date.now()});alert('🔴 BLOKE');}
+  else{db.ref('blokeVendeurByProprio/'+MY_PROPRIO_ID+'/'+id).remove();alert('🟢 ON');}
  });
 }
-function loadPrixInputs(){
- let g=DB.prix.global||{}; 
- document.getElementById('p_p1').value=g.p1||50;
- document.getElementById('p_p2').value=g.p2||20;
- document.getElementById('p_p3').value=g.p3||10;
- document.getElementById('p_m1').value=g.m1||1000;
- document.getElementById('p_m2').value=g.m2||1000;
- document.getElementById('p_m3').value=g.m3||1000;
- document.getElementById('p_l3').value=g.l3||500;
- document.getElementById('p_l4').value=g.l4||5000;
- document.getElementById('p_l5').value=g.l5||25000;
- document.getElementById('p_gratis').value=g.gratis||500;
- document.getElementById('p_kom').value=g.kom||10;
-}
-function savePrixGlobal(){
- let prix={p1:+p_p1.value,p2:+p_p2.value,p3:+p_p3.value,m1:+p_m1.value,m2:+p_m2.value,m3:+p_m3.value,l3:+p_l3.value,l4:+p_l4.value,l5:+p_l5.value,gratis:+p_gratis.value,kom:+p_kom.value};
- db.ref('prix/global').set(prix).then(()=>alert('Pri sove'));
-}
-function calculGainTicket(ticket, resultsMap, prixMap){
- let totalGain=0; let detail=[];
- let bets = ticket.bets||ticket.numeros||[]; if(!Array.isArray(bets)) bets=[bets];
- let vid = ticket.vendeurId||ticket.idVendeur||ticket.vendeur;
- let p = prixMap[vid]||prixMap.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,gratis:500,kom:10};
- let gratisDejaPeye=false;
- bets.forEach(bet=>{
-  let type=(bet.type||bet.jeu||'boul').toLowerCase();
-  let tirage=bet.tirage||ticket.tirage||(ticket.tirages||[])[0];
-  let mise=parseFloat(bet.mise||bet.montant||1); if(mise<=0) mise=1;
-  let res=resultsMap[tirage]; if(!res) return;
-  let num=(bet.numero||bet.boul||bet.maryaj||'').toString().replace(/\D/g,'');
-  if(type.includes('boul')||type=='boul'||num.length==2){
-    let boul=num.padStart(2,'0');
-    if(boul==res.r1){let g=mise*p.p1; totalGain+=g; detail.push(`1er ${boul} mise ${mise} x${p.p1}=${g}`);}
-    if(boul==res.r2){let g=mise*p.p2; totalGain+=g; detail.push(`2e ${boul} x${p.p2}=${g}`);}
-    if(boul==res.r3){let g=mise*p.p3; totalGain+=g; detail.push(`3e ${boul} x${p.p3}=${g}`);}
+function savePrixGlobal(){let prix={p1:+p_p1.value,l3:+p_l3.value,gratis:+p_gratis.value,kom:+p_kom.value,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l4:5000,l5:25000};db.ref('prix/global').set(prix).then(()=>alert('Pri sove'));}
+
+function calculGainTicket(ticket,resultsMap,prixMap){
+ let total=0,detail=[];let bets=ticket.bets||[];if(!Array.isArray(bets))bets=[bets];
+ let vid=ticket.vendeurId;let p=prixMap[vid]||prixMap.global||{p1:50,l3:500,gratis:500,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l4:5000,l5:25000};
+ let gratisPeye=false;
+ bets.forEach(b=>{
+  let type=(b.type||'boul').toLowerCase();let tirage=b.tirage||ticket.tirage;let mise=+(b.mise||1);
+  let res=resultsMap[tirage];if(!res)return;let num=(b.numero||'').toString().replace(/\D/g,'');
+  if(num.length==2){
+   if(num==res.r1){let g=mise*p.p1;total+=g;detail.push(`1er ${num} x${p.p1}=${g}`);}
+   if(num==res.r2){let g=mise*p.p2;total+=g;}
+   if(num==res.r3){let g=mise*p.p3;total+=g;}
   }
-  if(type.includes('maryaj')&&!type.includes('gratis')){
-    let m=num.padStart(4,'0'); let m1=res.m1||'',m2=res.m2||'',m3=res.m3||'';
-    let m1Rev=m1.length==4?m1.substring(2,4)+m1.substring(0,2):'',m2Rev=m2.length==4?m2.substring(2,4)+m2.substring(0,2):'',m3Rev=m3.length==4?m3.substring(2,4)+m3.substring(0,2):'';
-    if(m==m1||m==m1Rev){let g=mise*p.m1; totalGain+=g; detail.push(`M1 ${m} dezod bon x${p.m1}=${g}`);}
-    if(m==m2||m==m2Rev){let g=mise*p.m2; totalGain+=g; detail.push(`M2 ${m} dezod bon x${p.m2}=${g}`);}
-    if(m==m3||m==m3Rev){let g=mise*p.m3; totalGain+=g; detail.push(`M3 ${m} dezod bon x${p.m3}=${g}`);}
+  if(num.length==3){
+   let b23=num.slice(-2);
+   if(b23==res.r1){let g=mise*p.p1;total+=g;detail.push(`Loto3 ${num} -> ${b23}=1er x${p.p1}=${g} SI SOTI`);}
+   if(num==res.l3){let g=mise*p.l3;total+=g;detail.push(`Loto3 ${num}=L3 x${p.l3}=${g} SI SOTI`);}
   }
-// LOTO3 - 1er×50 si sòti, L3×500 si sòti - ENDEPANDAN
-  if((type.includes('loto3')||num.length==3)&&num.length==3){
-    let boul23=num.slice(-2);
-    if(boul23==res.r1){let g=mise*p.p1; totalGain+=g; detail.push(`Loto3 ${num} -> ${boul23}=1er x${p.p1}=${g}`);}
-    if(num==res.l3){let g=mise*p.l3; totalGain+=g; detail.push(`Loto3 ${num}=L3 x${p.l3}=${g}`);}
+  if(type.includes('maryaj')){
+   let m=num.padStart(4,'0');let m1=res.m1||'';let m1R=m1.slice(2)+m1.slice(0,2);
+   if(m==m1||m==m1R){let g=mise*p.m1;total+=g;}
   }
-  if(type.includes('loto4')&&num==res.l4&&res.l4==res.r2+res.r3){let g=mise*p.l4; totalGain+=g; detail.push(`L4 ${num} lod selman x${p.l4}=${g}`);}
-  if(type.includes('loto5')&&num==res.l5){let g=mise*p.l5; totalGain+=g; detail.push(`L5 ${num} x${p.l5}=${g}`);}
   if(type.includes('gratis')){
-    let m=num.padStart(4,'0'); let m1=res.m1||'',m2=res.m2||'',m3=res.m3||'';
-    let m1Rev=m1.length==4?m1.substring(2,4)+m1.substring(0,2):'',m2Rev=m2.length==4?m2.substring(2,4)+m2.substring(0,2):'',m3Rev=m3.length==4?m3.substring(2,4)+m3.substring(0,2):'';
-    let win=(m==m1||m==m1Rev||m==m2||m==m2Rev||m==m3||m==m3Rev);
-    if(win){
-      if(!gratisDejaPeye){let g=mise*(p.gratis||500); totalGain+=g; detail.push(`GRATIS ${m} x${p.gratis||500}=${g} (yon sel peye)`); gratisDejaPeye=true;}
-      else{detail.push(`GRATIS ${m} soti men PA PEYE`);}
-    }
+   let m=num.padStart(4,'0');let m1=res.m1||'';let m1R=m1.slice(2)+m1.slice(0,2);
+   if((m==m1||m==m1R)&&!gratisPeye){let g=mise*p.gratis;total+=g;gratisPeye=true;detail.push(`Gratis ${m} x${p.gratis}=${g} yon sel peye`);}
   }
- });
- return {totalGain,detail};
+ });return{total,detail};
 }
-function loadHeures(){}
-function loadResTable(){}
-function renderTirajChwaziList(){}
-function loadTirajVendeursList(){}
-function loadBlokeBoulList(){}
-function loadBlokeJeuList(){}
-function loadLimite(){}
-function loadPrix(){}
-function saveResultat(){alert('Sove rezilta');}
-</script>
-</body>
-</html>
+</script></body></html>
