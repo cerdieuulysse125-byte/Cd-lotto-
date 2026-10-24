@@ -109,47 +109,47 @@ function build(tk){
 function showPreview(data){LAST_TXT=data.text;LAST_HTML=data.html;let p=document.getElementById('prev');p.style.display='block';p.innerHTML=data.html;}
 /* === V34 PRINT - KOUPE PAPYE BLANCH - PA GEN FEED ANPLIS === */
 function printBT(t){
- let plain="";let logoUrl=getLogoUrl();
- if(typeof t==="object"&&t.text){plain=t.text;logoUrl=t.logo||logoUrl;}else{plain=t.toString();}
- if(!plain) return;
- plain=plain.replace(/[èéêë]/g,'e').replace(/[àâ]/g,'a').replace(/[ç]/g,'c');
- let lines=plain.split('\n').map(l=>l.trim()).filter(l=>l!=='');
- let cleanLines=lines.join('\n');
- /* Pa ajoute \n\n nan fen - 1 sel \n pou koupe */
- let ESC="\x1B";let escCenter=ESC+"a1";let escLeft=ESC+"a0";let lineNormal=ESC+"2";
- let centeredPlain=lineNormal+escCenter+cleanLines+escLeft;
- try{
-  if(logoUrl&&logoUrl.length>100&&window.AndroidPrinter){
-   if(typeof AndroidPrinter.printImage==="function"&&typeof AndroidPrinter.printText==="function"){
-    try{AndroidPrinter.printText(lineNormal+escCenter);}catch(e){}
-    AndroidPrinter.printImage(logoUrl);
-    setTimeout(()=>{
-     try{
-      AndroidPrinter.printText(centeredPlain);
-      setTimeout(()=>{try{AndroidPrinter.cutPaper();}catch(e){} try{AndroidPrinter.feedPaper(0);}catch(e){}},250);
-     }catch(e){
-      AndroidPrinter.printWithoutDialog(centeredPlain);
-      setTimeout(()=>{try{AndroidPrinter.cutPaper();}catch(e){}},250);
-     }
-    },400);
-    return;
-   }
-   if(typeof AndroidPrinter.printImageAndText==="function"){
-    try{AndroidPrinter.printImageAndText(logoUrl,centeredPlain);setTimeout(()=>{try{AndroidPrinter.cutPaper();}catch(e){} try{AndroidPrinter.feedPaper(0);}catch(e){}},250);return;}catch(e){}
-   }
-  }
-  if(window.AndroidPrinter&&typeof AndroidPrinter.printWithoutDialog==="function"){
-   AndroidPrinter.printWithoutDialog(centeredPlain);
-   setTimeout(()=>{try{AndroidPrinter.cutPaper();}catch(e){} try{AndroidPrinter.feedPaper(0);}catch(e){}},250);
-   return;
-  }
-  if(window.AndroidPrinter&&typeof AndroidPrinter.printText==="function"){
-   AndroidPrinter.printText(centeredPlain);
-   setTimeout(()=>{try{AndroidPrinter.cutPaper();}catch(e){} try{AndroidPrinter.feedPaper(0);}catch(e){}},250);
-   return;
-  }
- }catch(e){}
- showPreview({text:plain,html:LAST_HTML,logo:logoUrl});
+function printBT(t){
+  let plain="";let logoUrl=getLogoUrl();
+  if(typeof t==="object"&&t.text){plain=t.text;logoUrl=t.logo||logoUrl;}
+  else{plain=t.toString();}
+  if(!plain) return;
+  plain=plain.replace(/[èéêë]/g,'e').replace(/[àâ]/g,'a').replace(/[ç]/g,'c').replace(/[^\x20-\x7E$\n\r]/g,'');
+  
+  // ✅ RETIRE ESPAS AGOCH POU ESC SANTRE PA POUSE L ADWAT
+  let cleanLines=plain.split('\n').map(l=>{
+    // retire selman espas devan, kenbe espas andedan liy lan
+    return l.replace(/^\s+/,'').trimEnd();
+  }).join('\n');
+  
+  let ESC="\x1B";
+  let escCenter=ESC+"a1"; // santre
+  let escLeft=ESC+"a0";
+  let centeredPlain=escCenter+cleanLines+escLeft+"\n\n\n";
+  
+  try{
+    if(logoUrl&&logoUrl.length>100&&window.AndroidPrinter){
+      if(typeof AndroidPrinter.printImage==="function" && typeof AndroidPrinter.printText==="function"){
+        try{AndroidPrinter.printText(escCenter);}catch(e){}
+        AndroidPrinter.printImage(logoUrl);
+        setTimeout(()=>{
+          try{AndroidPrinter.printText(centeredPlain);}catch(e){AndroidPrinter.printWithoutDialog(centeredPlain);}
+        },900);
+        return;
+      }
+      if(typeof AndroidPrinter.printImageAndText==="function"){
+        try{AndroidPrinter.printImageAndText(logoUrl,centeredPlain);return;}catch(e){
+          try{let b64=logoUrl.split(',')[1];AndroidPrinter.printImageAndText(b64,centeredPlain);return;}catch(e2){}
+        }
+      }
+      if(typeof AndroidPrinter.printWithLogo==="function"){AndroidPrinter.printWithLogo(logoUrl,centeredPlain);return;}
+      if(typeof AndroidPrinter.printLogoAndText==="function"){AndroidPrinter.printLogoAndText(logoUrl,centeredPlain);return;}
+    }
+    if(window.AndroidPrinter&&typeof AndroidPrinter.printWithoutDialog==="function"){AndroidPrinter.printWithoutDialog(centeredPlain);return;}
+    if(window.AndroidPrinter&&typeof AndroidPrinter.printText==="function"){AndroidPrinter.printText(centeredPlain);return;}
+  }catch(e){}
+  // preview la rete ak centerTxt (ak espas) pou l santre sou telefon
+  showPreview({text:plain,html:LAST_HTML,logo:logoUrl});
 }
 function printLast(){if(!LAST_TXT) return;printBT({text:LAST_TXT,html:LAST_HTML,logo:getLogoUrl()});}
 function buildRapportThermalText(data){let bn=data.bn||getBusinessName();let ft=data.ft||getFooter();let txt=centerTxt(bn)+"\n"+centerTxt("RAPPORT")+"\n"+centerTxt("Du "+data.du+" Au "+data.au)+"\n"+centerTxt("Tiraj: "+(data.ti||"tous"))+"\n"+centerTxt("Vendeur: "+(CUR?CUR.nom+" ("+CUR.serial+")":""))+"\n"+centerTxt("------------------------------")+"\n"+centerTxt("Vann: "+data.totalTikeVann)+"\n"+centerTxt("Vant: $"+data.ventTotal.toFixed(2))+"\n"+centerTxt("Komisyon: $"+data.totalKom.toFixed(2))+"\n"+centerTxt("A peye: $"+data.aPeye.toFixed(2))+"\n"+centerTxt("------------------------------")+"\n"+centerTxt("Balans: $"+data.balansNet.toFixed(2))+"\n"+centerTxt(ft)+"\n";return {text:txt,logo:getLogoUrl()};}
