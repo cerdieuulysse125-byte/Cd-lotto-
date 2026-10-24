@@ -168,68 +168,124 @@ function savePrix(){
 // FONKSYON KALKIL GAIN AK TOUT DONE REPRAN - MARYAJ GRATIS 1 SEL PEYE
 function calculGainTicket(ticket, resultsMap, prixMap){
  let totalGain=0;let detail=[];
- let bets = ticket.bets||ticket.numeros||ticket.jeux||[];
- if(!Array.isArray(bets)) bets=[bets];
- let gratisGagneCount=0;
- let gratisAlreadyPaid=false;
+ let bets = ticket.bets||ticket.numeros||ticket.jeux||ticket.lignes||[];
+ if(!Array.isArray(bets)){
+   // Si ansyen fòma: {bouls:[], maryaj:[], loto3:[]}
+   let tmp=[];
+   (ticket.bouls||[]).forEach(b=>tmp.push({type:'boul', numero:b.numero||b.boul||b, mise:b.mise||b.montant||ticket.mise||1, tirage:b.tirage||ticket.tirage}));
+   (ticket.maryaj||[]).forEach(m=>tmp.push({type:'maryaj', maryaj:m.maryaj||m.numero||m, mise:m.mise||1, tirage:m.tirage||ticket.tirage}));
+   (ticket.loto3||[]).forEach(l=>tmp.push({type:'loto3', numero:l.numero||l, mise:l.mise||1, tirage:l.tirage||ticket.tirage}));
+   (ticket.loto4||[]).forEach(l=>tmp.push({type:'loto4', numero:l.numero||l, mise:l.mise||1, tirage:l.tirage||ticket.tirage}));
+   (ticket.loto5||[]).forEach(l=>tmp.push({type:'loto5', numero:l.numero||l, mise:l.mise||1, tirage:l.tirage||ticket.tirage}));
+   (ticket.maryajGratis||ticket.gratis||[]).forEach(g=>tmp.push({type:'gratis', maryaj:g.maryaj||g.numero||g, mise:g.mise||1, tirage:g.tirage||ticket.tirage}));
+   if(tmp.length>0) bets=tmp; else bets=[{type:'boul', numero:ticket.numero||ticket.boul||'', mise:ticket.mise||ticket.montant||1, tirage:ticket.tirage}];
+ }
+
+ let p = prixMap[ticket.vendeurId||ticket.idVendeur||ticket.vendeur]||prixMap.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,gratis:500,kom:10};
+ let gratisDejaPeye=false;let gratisCount=0;
 
  bets.forEach(bet=>{
   let type=(bet.type||bet.jeu||'boul').toLowerCase();
   let tirage=bet.tirage||ticket.tirage||(ticket.tirages||[])[0];
-  let mise=parseFloat(bet.mise||bet.montant||1);
+  let mise=parseFloat(bet.mise||bet.montant||bet.total||1);
+  if(isNaN(mise)||mise<=0) mise=1;
   let res=resultsMap[tirage];
   if(!res) return;
-  let p=prixMap[ticket.vendeurId||ticket.idVendeur]||prixMap.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,gratis:500};
 
-  if(type.includes('boul')||type=='bolete'){
-   let num=(bet.numero||bet.boul||'').toString().padStart(2,'0');
-   if(num==res.r1) {let g=mise*p.p1; totalGain+=g; detail.push(`Boul ${num} 1er $${g}`);}
-   else if(num==res.r2) {let g=mise*p.p2; totalGain+=g; detail.push(`Boul ${num} 2e $${g}`);}
-   else if(num==res.r3) {let g=mise*p.p3; totalGain+=g; detail.push(`Boul ${num} 3e $${g}`);}
-  }
-  if(type.includes('maryaj')&&!type.includes('gratis')){
-   let m=(bet.maryaj||bet.numero||'').toString();
-   if(m==res.m1||m==res.m1.split('').reverse().join('')||m==res.m2||m==res.m2.split('').reverse().join('')||m==res.m3||m==res.m3.split('').reverse().join('')){
-    // dezòd bon
-    let pm = m==res.m1||m==res.m1.split('').reverse().join('')?p.m1: m==res.m2||m==res.m2.split('').reverse().join('')?p.m2:p.m3;
-    let g=mise*pm; totalGain+=g; detail.push(`Maryaj ${m} dezòd $${g}`);
+  let num=(bet.numero||bet.boul||bet.maryaj||'').toString().replace(/\D/g,'');
+  if(!num) return;
+
+  // 1er LOT
+  if(type.includes('boul')||type=='1er'||type=='bolete'){
+   if(num.padStart(2,'0')==res.r1){
+     let g=mise*p.p1; totalGain+=g; detail.push(`1er ${num} x${p.p1} = $${g}`);
    }
   }
+  // 2e LOT
+  if(type.includes('boul')||type=='2e'){
+   if(num.padStart(2,'0')==res.r2){
+     let g=mise*p.p2; totalGain+=g; detail.push(`2e ${num} x${p.p2} = $${g}`);
+   }
+  }
+  // 3e LOT
+  if(type.includes('boul')||type=='3e'){
+   if(num.padStart(2,'0')==res.r3){
+     let g=mise*p.p3; totalGain+=g; detail.push(`3e ${num} x${p.p3} = $${g}`);
+   }
+  }
+  // LOTO3 ka peye 1er tou (23)
+  if(type.includes('boul')&&num.length==2&&res.l3){
+    if(num==res.l3.slice(-2)){
+      // Si L3=123, boul 23 peye kòm 1er si 1er=23, men si se L3 sèlman vann, li peye deja nan L3 anba a
+    }
+  }
+
+  // M1 = 1er+2e dezòd bon
+  if(type.includes('maryaj')&&!type.includes('gratis')){
+   let m=num.padStart(4,'0').slice(0,4); // maryaj 4 chif
+   if(m.length<4) m=num.padStart(2,'0')+res.r2; // si 2 chif sèlman
+   let m1=res.m1, m1Rev=m1.split('').length==4?m1.substring(2,4)+m1.substring(0,2):m1.split('').reverse().join('');
+   let m2=res.m2, m2Rev=m2.length==4?m2.substring(2,4)+m2.substring(0,2):m2.split('').reverse().join('');
+   let m3=res.m3, m3Rev=m3.length==4?m3.substring(2,4)+m3.substring(0,2):m3.split('').reverse().join('');
+   
+   if(m==m1||m==m1Rev){let g=mise*p.m1; totalGain+=g; detail.push(`M1 ${m} (${res.r1}+${res.r2}) x${p.m1} = $${g} dezòd bon`);}
+   else if(m==m2||m==m2Rev){let g=mise*p.m2; totalGain+=g; detail.push(`M2 ${m} (${res.r1}+${res.r3}) x${p.m2} = $${g} dezòd bon`);}
+   else if(m==m3||m==m3Rev){let g=mise*p.m3; totalGain+=g; detail.push(`M3 ${m} (${res.r2}+${res.r3}) x${p.m3} = $${g} dezòd bon`);}
+  }
+
+  // L3 - Loto3
+  if(type.includes('loto3')||type=='l3'){
+   if(num==res.l3){
+     let g=mise*p.l3; totalGain+=g; detail.push(`L3 ${num} x${p.l3} = $${g} (peye 23+123)`);
+     // L3 peye 23 tou (dènye 2 chif L3 = 1er)
+     let boul23=res.l3.slice(-2);
+     if(boul23==res.r1){let g2=mise*p.p1; totalGain+=g2; detail.push(`L3 ${num} -> 23 = 1er x${p.p1} = $${g2} (2 fwa)`);}
+   }
+  }
+
+  // L4 - Loto4 = 2e+3e LÒD SÈLMAN
+  if(type.includes('loto4')||type=='l4'){
+   if(num==res.l4){
+     // Verifye lòd sèlman: L4 dwe = r2+r3 nan lòd egzak
+     if(res.l4==res.r2+res.r3){
+       let g=mise*p.l4; totalGain+=g; detail.push(`L4 ${num} = 2e+3e ${res.r2}+${res.r3} lòd sèlman x${p.l4} = $${g}`);
+     }
+   }
+  }
+
+  // L5 - Loto5 = L3+2e
+  if(type.includes('loto5')||type=='l5'){
+   if(num==res.l5){
+     let g=mise*p.l5; totalGain+=g; detail.push(`L5 ${num} = L3+2e ${res.l3}+${res.r2} x${p.l5} = $${g}`);
+   }
+  }
+
+  // GRATIS - 500 modifiable - 1 sèl peye menm si 3 sòti
   if(type.includes('gratis')){
-   // MARYAJ GRATIS - 500 modifiable - si 3 sòti se 1 sèl peye
-   let m=(bet.maryaj||bet.numero||'').toString();
+   let m=num;
    let win = (m==res.m1||m==res.m1.split('').reverse().join('')||m==res.m2||m==res.m2.split('').reverse().join('')||m==res.m3||m==res.m3.split('').reverse().join(''));
    if(win){
-    gratisGagneCount++;
-    if(!gratisAlreadyPaid){
-     let g=mise*(p.gratis||500);
-     totalGain+=g; detail.push(`Maryaj Gratis ${m} $${g} (1 sèl peye menm si ${gratisGagneCount} sòti)`);
-     gratisAlreadyPaid=true; // Sèlman 1 fwa peye
-    } else {
-     detail.push(`Maryaj Gratis ${m} sòti men pa peye (deja 1 peye)`);
-    }
+     gratisCount++;
+     if(!gratisDejaPeye){
+       let g=mise*(p.gratis||500);
+       totalGain+=g;
+       detail.push(`GRATIS ${m} x${p.gratis||500} = $${g} (1 sèl peye menm si ${gratisCount} sòti)`);
+       gratisDejaPeye=true;
+     } else {
+       detail.push(`GRATIS ${m} sòti men PA PEYE - deja 1 peye (règ 3=1)`);
+     }
    }
   }
-  if(type.includes('loto3')){
-   let num=(bet.numero||'').toString();
-   if(num==res.l3){let g=mise*p.l3; totalGain+=g; detail.push(`Loto3 ${num} $${g} (23+123)`);}
-   else if(num.slice(-2)==res.r1){let g=mise* (p.p1||50); totalGain+=g; detail.push(`Loto3 ${num} 23 $${g}`);}
-  }
-  if(type.includes('loto4')){
-   if((bet.numero||'')==res.l4){let g=mise*p.l4; totalGain+=g; detail.push(`Loto4 ${bet.numero} lòd $${g}`);}
-  }
-  if(type.includes('loto5')){
-   if((bet.numero||'')==res.l5){let g=mise*p.l5; totalGain+=g; detail.push(`Loto5 ${bet.numero} $${g}`);}
-  }
  });
- return {totalGain, detail, gratisGagneCount};
+
+ return {totalGain, detail, gratisCount, gratisPaye: gratisDejaPeye?1:0};
 }
 
 function calcRapport(){
  let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;
  let allTickets=Object.values(DB.tickets||{});
  let myIds=getMyVendeurs().map(v=>v._id);
- let list=allTickets.filter(t=>myIds.includes(t.vendeurId)||myIds.includes(t.idVendeur)||myIds.includes(t.vendeur));
+ let list=allTickets.filter(t=>myIds.includes(t.vendeurId)||myIds.includes(t.idVendeur));
  if(du)list=list.filter(t=>(t.dateHaiti||t.date||'').substring(0,10)>=du);
  if(au)list=list.filter(t=>(t.dateHaiti||t.date||'').substring(0,10)<=au);
  if(vs!='ALL')list=list.filter(t=>t.vendeurId==vs||t.idVendeur==vs);
@@ -237,36 +293,33 @@ function calcRapport(){
 
  let tikèVann=list.filter(t=>!t.annule);
  let tikèAnile=list.filter(t=>t.annule);
- let totalVann=0;tikèVann.forEach(t=>totalVann+=parseFloat(t.total||t.montant||0));
+ let totalVann=0;tikèVann.forEach(t=>totalVann+=parseFloat(t.total||0));
  let totalKom=0;tikèVann.forEach(t=>{let vid=t.vendeurId||t.idVendeur;let prixV=DB.prix[vid]||DB.prix.global||{kom:10};totalKom+=parseFloat(t.total||0)*parseFloat(prixV.kom||10)/100;});
 
- // Kalkil ganyan ak tout done repran + gratis 1 sèl
- let resultsMap={};Object.values(DB.results||{}).forEach(r=>{resultsMap[r.tirage]=r;});
+ let resultsMap={};Object.values(DB.results||{}).forEach(r=>resultsMap[r.tirage]=r);
  let prixMap=DB.prix||{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,gratis:500,kom:10}};
+
  let tikèGanyan=[];let aPeyeKliyan=0;let detailsGanyan=[];
  tikèVann.forEach(t=>{
   let calc=calculGainTicket(t, resultsMap, prixMap);
-  if(calc.totalGain>0){tikèGanyan.push(t);aPeyeKliyan+=calc.totalGain;detailsGanyan.push({id:t.id||t.numero, gain:calc.totalGain, detail:calc.detail});}
+  if(calc.totalGain>0){tikèGanyan.push(t);aPeyeKliyan+=calc.totalGain;detailsGanyan.push({id:t.id||t.numero, gain:calc.totalGain, detail:calc.detail, gratis:calc.gratisCount});}
   t._calcGain=calc.totalGain; t._calcDetail=calc.detail;
  });
 
  let balansNet=totalVann-totalKom-aPeyeKliyan;
-
+ // ... afiche menm jan ak V22.1 la
  document.getElementById('rapportRes').innerHTML=`
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-  <div style="background:#e8f5e9;padding:12px;border-radius:12px;text-align:center;border:2px solid #2e7d32"><small>Tikè Vann</small><div style="font-size:22px;font-weight:900">${tikèVann.length}</div></div>
-  <div style="background:#ffebee;padding:12px;border-radius:12px;text-align:center;border:2px solid #c62828"><small>Tikè Anile</small><div style="font-size:22px;font-weight:900">${tikèAnile.length}</div></div>
-  <div style="background:#fff3e0;padding:12px;border-radius:12px;text-align:center;border:2px solid #ef6c00"><small>Tikè Ganyan (kalkil repran)</small><div style="font-size:22px;font-weight:900">${tikèGanyan.length}</div><small>Gratis 1 sèl peye</small></div>
-  <div style="background:#e3f2fd;padding:12px;border-radius:12px;text-align:center;border:2px solid #1565c0"><small>Total Vann</small><div style="font-size:18px;font-weight:900">$${totalVann.toFixed(2)}</div></div>
-  <div style="background:#f3e5f5;padding:12px;border-radius:12px;text-align:center;border:2px solid #4a148c"><small>Komisyon</small><div style="font-size:18px;font-weight:900">$${totalKom.toFixed(2)}</div><small>Pri pa vandè/global</small></div>
-  <div style="background:#fff8e1;padding:12px;border-radius:12px;text-align:center;border:2px solid #ff9800"><small>A Peye Kliyan - Gratis 500 modifiable</small><div style="font-size:18px;font-weight:900">$${aPeyeKliyan.toFixed(2)}</div><small>Règ: 3 gratis = 1 sèl peye</small></div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+  <div style="background:#e8f5e9;padding:12px;border-radius:12px;text-align:center"><small>Tikè Vann</small><div style="font-size:22px;font-weight:900">${tikèVann.length}</div></div>
+  <div style="background:#ffebee;padding:12px;border-radius:12px;text-align:center"><small>Tikè Anile</small><div style="font-size:22px;font-weight:900">${tikèAnile.length}</div></div>
+  <div style="background:#fff3e0;padding:12px;border-radius:12px;text-align:center"><small>Tikè Ganyan - Tout kalkil</small><div style="font-size:22px;font-weight:900">${tikèGanyan.length}</div><small>1er 2e 3e M1 M2 M3 L3 L4 L5 Gratis(1)</small></div>
+  <div style="background:#e3f2fd;padding:12px;border-radius:12px;text-align:center"><small>Total Vann</small><div style="font-size:18px;font-weight:900">$${totalVann.toFixed(2)}</div></div>
+  <div style="background:#f3e5f5;padding:12px;border-radius:12px;text-align:center"><small>Komisyon</small><div style="font-size:18px;font-weight:900">$${totalKom.toFixed(2)}</div></div>
+  <div style="background:#fff8e1;padding:12px;border-radius:12px;text-align:center"><small>A Peye Kliyan - Pri kòrèk</small><div style="font-size:18px;font-weight:900">$${aPeyeKliyan.toFixed(2)}</div><small>Gratis ${prixMap.global.gratis} x1 sèlman</small></div>
  </div>
- <div style="background:${balansNet>=0?'#e8f5e9':'#ffebee'};padding:16px;border-radius:14px;text-align:center;border:3px solid ${balansNet>=0?'#2e7d32':'#c62828'}"><b>BALANS NET = Vann - Kom - A Peye</b><div style="font-size:28px;font-weight:900">$${balansNet.toFixed(2)}</div><small>Vann $${totalVann.toFixed(2)} - Kom $${totalKom.toFixed(2)} - Ganyan $${aPeyeKliyan.toFixed(2)} (Gratis 500*1)</small></div>
- <button class="btn btn-black" onclick="window.print()">🖨️ Enprime - Tikè vann, Anile, Ganyan, Total, Kom, A peye, Balans net</button>
- <div style="background:#fff;padding:8px;border-radius:8px;margin-top:8px;font-size:11px"><b>Detay Ganyan ak Gratis:</b><br>${detailsGanyan.slice(0,20).map(d=>`${d.id}: $${d.gain.toFixed(2)} - ${d.detail.join(', ')}`).join('<br>')}</div>
+ <div style="background:${balansNet>=0?'#e8f5e9':'#ffebee'};padding:16px;border-radius:14px;text-align:center;border:3px solid ${balansNet>=0?'#2e7d32':'#c62828'};margin-top:8px"><b>BALANS NET</b><div style="font-size:28px;font-weight:900">$${balansNet.toFixed(2)}</div><small>Vann $${totalVann.toFixed(2)} - Kom $${totalKom.toFixed(2)} - Ganyan $${aPeyeKliyan.toFixed(2)}</small><br><small>1er x${prixMap.global.p1} 2e x${prixMap.global.p2} 3e x${prixMap.global.p3} M1 x${prixMap.global.m1} M2 x${prixMap.global.m2} M3 x${prixMap.global.m3} L3 x${prixMap.global.l3} L4 x${prixMap.global.l4} lòd L5 x${prixMap.global.l5} Gratis x${prixMap.global.gratis} (1 sèl)</small></div>
+ <button class="btn btn-black" onclick="window.print()">🖨️ Enprime - Tout kalkil kòrèk</button>
  `;
- let detailHtml='<div style="max-height:400px;overflow:auto;background:#fff;border-radius:8px;padding:8px;margin-top:10px">'+tikèVann.slice(0,100).map(t=>`<div style="display:flex;justify-content:space-between;padding:4px;border-bottom:1px solid #eee;font-size:11px"><span>${(t.numero||t.id||'').toString().substring(0,12)} - ${t.vendeurId} - $${parseFloat(t.total||0).toFixed(2)}</span><span style="font-weight:800;color:${t._calcGain>0?'green':'#555'}">${t._calcGain>0?`Ganyan $${t._calcGain.toFixed(2)} ${t._calcDetail?.join('; ')}`:''}</span></div>`).join('')+'</div>';
- document.getElementById('rapportDetail').innerHTML=detailHtml;
 }
 
 try{let saved=localStorage.getItem('curP');if(saved){CUR=JSON.parse(saved);MY_PROPRIO_ID=CUR.id;loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=CUR.nom;init();setToday();}else{init();}}catch(e){init();}
