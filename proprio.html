@@ -211,8 +211,75 @@ function loadResTable(){
 }
 function loadEntete(){let h=DB.headers[MY_PROPRIO_ID]||{};let b=DB.businesses?DB.businesses[MY_PROPRIO_ID]:null;let nom=h.businessName||h.nom||(b&&b.businessName)||CUR?.nom||'VERITE LOTTO';entNom.value=nom;entAdresse.value=h.adresse||'';entTel.value=h.tel||'';entFooter.value=h.footer||'';entLogo.value=h.logo||'';}
 function saveEntete(){let nom=entNom.value.trim().toUpperCase();if(!nom){alert('Mete non');return;}let o={businessName:nom,adresse:entAdresse.value.trim(),tel:entTel.value.trim(),footer:entFooter.value.trim(),logo:entLogo.value.trim(),updatedAt:new Date().toISOString()};db.ref('headers/'+MY_PROPRIO_ID).set(o).then(()=>{db.ref('businesses/'+MY_PROPRIO_ID+'/businessName').set(nom);alert('Entête Save - '+nom);});}
-function loadHorairesUI(){let t=horTirage.value,v=horVendeur.value;if(!t){joursList.innerHTML='Chwazi tiraj - Chwazi Tiraj Chwazi Vandè';return;}if(!v)v='ALL';let key=t+'_'+(v=='ALL'?'GLOBAL':v);let saved=DB.horairesTiraj[key]||{};horaireLabel.innerText=t+' + '+(v=='ALL'?'GLOBAL':v);let h='';JOURS.forEach(j=>{let cfg=saved[j]||{active:true,de:'08:00',a:'23:00'};h+=`<div style="display:flex;justify-content:space-between;padding:8px;border:1px solid #ddd;margin-bottom:6px;border-radius:8px"><div><b>${j}</b> ${cfg.active?'✅':'❌'}</div><div style="display:flex;gap:6px"><div class="switch ${cfg.active?'on':''}" id="sw_${j}" onclick="this.classList.toggle('on')"><b></b></div><input type="time" id="de_${j}" value="${cfg.de}" style="width:80px"><input type="time" id="a_${j}" value="${cfg.a}" style="width:80px"></div></div>`;});joursList.innerHTML=h;}
-function saveHoraires(){let t=horTirage.value,v=horVendeur.value;if(!t){alert('Chwazi - Chwazi Tiraj Chwazi Vandè');return;}if(!v)v='ALL';let key=t+'_'+(v=='ALL'?'GLOBAL':v);let obj={};JOURS.forEach(j=>{let de=document.getElementById('de_'+j)?.value||'08:00';let a=document.getElementById('a_'+j)?.value||'23:00';let sw=document.getElementById('sw_'+j);obj[j]={active:sw?sw.classList.contains('on'):true,de,a};});db.ref('horairesTiraj/'+key).set(obj).then(()=>alert('Horaires Save - Lundi au Dimanche - Chwazi Tiraj Chwazi Vandè'));}
+<script>
+// NOUVO FIX - LÈ FÈMTI MODIFYAB
+function loadHorairesUI(){
+  let t=document.getElementById('horTirage').value;
+  let v=document.getElementById('horVendeur').value;
+  let container=document.getElementById('joursList');
+  if(!t || t=="ALL" || t==""){
+    container.innerHTML='<div style="padding:12px;background:#fff3cd;border:2px dashed #ff9800;border-radius:10px;text-align:center"><b>👆 Chwazi Tiraj anvan - Chwazi Tiraj Chwazi Vandè</b><br><small>Chwazi youn tiraj pou wè Lundi-Dimanche</small></div>';
+    return;
+  }
+  if(!v) v='ALL';
+  let key=t+'_'+(v=='ALL'?'GLOBAL':v);
+  let saved=DB.horairesTiraj[key]||{};
+  let h='<div style="background:#e3f2fd;padding:8px;border-radius:8px;margin-bottom:8px;text-align:center"><b>⏰ Orè pou: '+t+' + '+(v=='ALL'?'GLOBAL - Tout Vandè':v)+'</b><br><small>Lè ouvèti ak Lè fèmti modifyab pou chak jou</small></div>';
+  JOURS.forEach(j=>{
+    let cfg=saved[j]||{active:true,de:'08:00',a:'22:00'};
+    let activeClass=cfg.active?'on':'';
+    h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border:2px solid #ddd;margin-bottom:8px;border-radius:10px;background:#fff">
+      <div style="min-width:80px"><b>${j}</b><br><small id="status_${j}" style="color:${cfg.active?'green':'red'}">${cfg.active?'🟢 Ouvè':'🔴 Fèmen'}</small></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="switch ${activeClass}" id="sw_${j}" onclick="toggleJour('${j}')" style="flex-shrink:0"><b></b></div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:9px">OUVÈTI</label>
+          <input type="time" id="de_${j}" value="${cfg.de}" style="width:90px;padding:8px;border:2px solid #2e7d32;border-radius:8px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:9px;font-weight:900;color:#c62828">FÈMTI MODIFYAB</label>
+          <input type="time" id="a_${j}" value="${cfg.a}" style="width:90px;padding:8px;border:2px solid #c62828;border-radius:8px;background:#ffebee;font-weight:800">
+        </div>
+      </div>
+    </div>`;
+  });
+  h+=`<div style="background:#fff3e0;padding:8px;border-radius:8px;margin-top:8px;text-align:center"><small><b>💡 Fèmti modifyab:</b> Ou ka chanje lè fèmti pou chak jou Lundi-Dimanche jan ou vle - Ex: Lundi 08:00 - 18:00, Samedi 08:00 - 23:00</small></div>`;
+  container.innerHTML=h;
+}
+function toggleJour(j){
+  let sw=document.getElementById('sw_'+j);
+  let status=document.getElementById('status_'+j);
+  sw.classList.toggle('on');
+  let isOn=sw.classList.contains('on');
+  if(status){
+    status.innerText=isOn?'🟢 Ouvè':'🔴 Fèmen';
+    status.style.color=isOn?'green':'red';
+  }
+}
+function saveHoraires(){
+  let t=document.getElementById('horTirage').value;
+  let v=document.getElementById('horVendeur').value;
+  if(!t || t=="ALL" || t==""){
+    alert('Chwazi Tiraj - Chwazi Tiraj Chwazi Vandè - Obligatwa');
+    return;
+  }
+  if(!v) v='ALL';
+  let key=t+'_'+(v=='ALL'?'GLOBAL':v);
+  let obj={};
+  JOURS.forEach(j=>{
+    let deEl=document.getElementById('de_'+j);
+    let aEl=document.getElementById('a_'+j);
+    let swEl=document.getElementById('sw_'+j);
+    let de=deEl?deEl.value:'08:00';
+    let a=aEl?aEl.value:'22:00';
+    let active=swEl?swEl.classList.contains('on'):true;
+    obj[j]={active,de,a};
+  });
+  db.ref('horairesTiraj/'+key).set(obj).then(()=>{
+    alert('✅ Orè Save - Lundi-Dimanche - Chwazi Tiraj '+t+' Chwazi Vandè '+(v=='ALL'?'GLOBAL':v)+'\n\nLè fèmti modifyab:\n'+JOURS.map(j=>j+': '+obj[j].de+' - '+obj[j].a+' '+(obj[j].active?'ON':'OFF')).join('\n'));
+  });
+}
+</script>
 function saveBlokeBoul(){let t=blkTirage.value,v=blkVendeur.value,b=blkBoul.value.trim();if(!t||!b){alert('Chwazi Tiraj + Vandè + Boul - Obligatwa - Chwazi Tiraj Chwazi Vandè Chwazi Boul');return;}db.ref('blokeBoul/'+t+'_'+v+'_'+b).set({tirage:t,vendeur:v||'ALL',boul:b,proprioId:MY_PROPRIO_ID}).then(()=>{blkBoul.value='';alert('Bloke Boul - Tiraj '+t+' Chwazi Vandè '+(v||'ALL')+' Chwazi Boul '+b);});}
 function loadBlokeBoulList(){let h='';for(let k in DB.blokeBoul){let b=DB.blokeBoul[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid red;margin-bottom:4px;border-radius:6px"><span>${b.tirage} - ${b.vendeur||'ALL'} - ${b.boul} - Chwazi Tiraj Chwazi Vandè Chwazi Boul</span><button onclick="db.ref('blokeBoul/${k}').remove()" style="background:red;color:#fff;border:0;padding:4px 8px;border-radius:4px">X</button></div>`;}listBlokeBoul.innerHTML=h||'Pa gen - Chwazi Tiraj Chwazi Vandè Chwazi Boul';}
 function saveBlokeJeu(){let t=blkJeuTirage.value,v=blkJeuVendeur.value,j=blkJeuType.value;if(!t||!v||!j){alert('Chwazi Tiraj + Vandè + Jwèt - Obligatwa - Chwazi Tiraj Chwazi Vandè Chwazi Jwèt');return;}db.ref('blokeJeux/'+t+'_'+v+'_'+j).set({tirage:t,vendeur:v,jeu:j,proprioId:MY_PROPRIO_ID}).then(()=>alert('Bloke Jwèt - '+t+' '+v+' '+j+' - Chwazi Tiraj Chwazi Vandè Chwazi Jwèt'));}
