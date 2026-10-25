@@ -1,196 +1,109 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>V26.2 - BON KALKIL + BOUTON BLOKE</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef1f6}.h{background:#4a148c;color:#fff;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:60}.tabs{display:flex;background:#fff;border-bottom:3px solid #4a148c;overflow-x:auto;position:sticky;top:50px;z-index:50}.tab{padding:11px 9px;font-weight:800;color:#555;border-bottom:4px solid transparent;white-space:nowrap;font-size:9px;cursor:pointer;flex-shrink:0}.tab.active{color:#4a148c;border-bottom-color:#4a148c;background:#f3e5f5}.panel{display:none;padding:10px;max-width:1000px;margin:auto}.panel.active{display:block}.card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 3px 10px rgba(0,0,0,.1);margin-bottom:10px;border-left:5px solid #4a148c}.card-green{border-left-color:#2e7d32}.card-red{border-left-color:#c62828}.btn{padding:12px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%;margin-top:8px;cursor:pointer}.btn-purple{background:#4a148c}.btn-red{background:#c62828}.btn-green{background:#2e7d32}input,select,textarea{padding:10px;border:2px solid #ddd;border-radius:10px;width:100%;margin:5px 0;font-weight:600}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.switch{width:56px;height:30px;background:#c62828;border-radius:15px;position:relative;cursor:pointer;display:inline-block}.switch.on{background:#2e7d32}.switch b{position:absolute;top:3px;left:3px;width:24px;height:24px;background:#fff;border-radius:50%;transition:.2s}.switch.on b{left:29px}.result-card{display:flex;align-items:center;background:#fff;border-radius:18px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);margin-bottom:12px;border-left:6px solid #1a237e}.result-logo{width:84px;height:84px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;text-align:center;color:#fff;border:3px solid #fff}.logo-fl{background:#0d47a1}.logo-ny{background:#0d47a1}.logo-ga{background:#2e7d32}.logo-tx{background:#212121}.logo-tn{background:#bf360c}.logo-anguilla{background:#4a148c}.logo-primera{background:#ef6c00}.logo-suerte{background:#ad1457}.logo-loteka{background:#1565c0}.logo-real{background:#ff6f00}.logo-nacional{background:#2e7d32}.logo-leidsa{background:#c62828}.logo-lotedom{background:#4a148c}.result-info{flex:1;margin-left:12px}.result-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;border-bottom:1px dashed #eee;padding-bottom:4px}.result-label{font-weight:800;font-size:11px}.result-balls{display:flex;gap:6px;flex-wrap:wrap}.ball{padding:6px 10px;border-radius:14px;color:#fff;font-weight:900;font-size:13px;min-width:44px;text-align:center}.ball-blue{background:#1e88e5}.ball-orange{background:#ff9800}.auto-box{background:#e8f5e9;border:2px solid #2e7d32;border-radius:10px;padding:8px;margin-top:8px;font-size:11px}</style></head><body><div class='h'><div><b>🏢 PROPRIO V26.2 - BON KALKIL + BOUTON BLOKE</b><br><small id='syncInfo'>SYNC...</small></div><div><span id='pUser'></span> <button onclick='logout()' style='padding:8px 12px;background:#c62828;color:#fff;border:0;border-radius:8px'>SOTI</button></div></div><div id='loginBox' class='card' style='max-width:420px;margin:30px auto'><h3>🔐 Proprio - Modpas Obligatwa</h3><input id='ln' placeholder='Non Proprio'><input id='lp' type='password' placeholder='Modpas'><button class='btn btn-purple' onclick='doLogin()'>Konekte ak Modpas</button><div id='loginMsg' style='color:red;font-weight:800;margin-top:10px'></div></div><div id='mainBox' style='display:none'><div class='tabs'><div class='tab active' onclick="openTab('t1',this)">1-Vendeurs BLOKE ON/OFF+ANREJISTRE+KONFIME</div><div class='tab' onclick="openTab('t4',this)">4-Prix</div><div class='tab' onclick="openTab('t5',this)">5-Rapport BON KALKIL</div><div class='tab' onclick="openTab('t6',this)">6-Résultats GWOUP VRE</div><div class='tab' onclick="openTab('t7',this)">7-Entête</div><div class='tab' onclick="openTab('t8',this)">8-Paramèt Bloke</div></div><div id='t1' class='panel active'><div class='card' style='background:#e8f5e9;border:3px solid #2e7d32'><b>✅ V26.2: Pran 3 kòd yo - Jis modifye kalkil yo ak bon kòd ou voye a + Mete bouton Bloke ON/OFF devan non - Gwoup vre FL 2 NY 2 TX 3 TENN 4 GA 2 Primera 2 Suerte 2 Loteka Real Nacional 2 Leidsa Anguilla 4 Lote Dom - Proprio modpas - Retire soir - Auto Maryaj L4 L5</b></div><div id='listVendeur'></div></div><div id='t4' class='panel'><div class='card'><h3>4- Prix - Global / Pa Vendeur - Tout Modifiab - Bon Kalkil</h3><select id='prixVendeur' onchange='loadPrix()'></select><div class='grid3'><div><label>1er 50 - x50</label><input id='p1' type='number' value='50'></div><div><label>2e 20 - x20</label><input id='p2' type='number' value='20'></div><div><label>3e 10 - x10</label><input id='p3' type='number' value='10'></div></div><div class='grid3'><div><label>M1 1000 - x1000</label><input id='pm1' type='number' value='1000'></div><div><label>M2 1000 - x1000</label><input id='pm2' type='number' value='1000'></div><div><label>M3 1000 - x1000</label><input id='pm3' type='number' value='1000'></div></div><div class='grid3'><div><label>L3 500</label><input id='ppL3' type='number' value='500'></div><div><label>L4 5000 - 2e+3e</label><input id='ppL4' type='number' value='5000'></div><div><label>L5 25000 - L3+2e</label><input id='ppL5' type='number' value='25000'></div></div><div class='grid2'><div><label>Gratis 500 - Maryaj Gratis</label><input id='ppGratis' type='number' value='500'></div><div><label>Kom %</label><input id='pKom' type='number' value='10'></div></div><button class='btn btn-purple' onclick='savePrix()'>Save Prix - Bon Kalkil - Tout Modifiab</button><div id='prixStatus'></div></div></div><div id='t5' class='panel'><div class='card' style='border:3px solid #212121'><h3>5- Rapport - Bon Kalkil ou voye a</h3><div class='grid2'><div><label>Du - Dat kòmansman</label><input type='date' id='rDu'></div><div><label>Au - Dat fen</label><input type='date' id='rAu'></div></div><div class='grid2'><div><label>Vendeur - Chwazi Vandè</label><select id='rVendeur'></select></div><div><label>Tirage - Chwazi Tiraj - Chwazi Gwoup</label><select id='rTirage'></select></div></div><button class='btn btn-purple' onclick='calcRapport()'>Kalkile - Bon Kalkil</button><div id='rapportRes'></div><div id='rapportDetail'></div></div></div>
-<div id='t6' class='panel'><div class='card' style='border:3px solid #2e7d32;background:#e8f5e9'><h3>6- Résultats - Gwoup Vre - Florida 2 - NY 2 - Texas 3 - Tennessee 4 - GA 2 - Primera 2 - Suerte 2 - Loteka - Real - Nacional 2 - Leidsa - Anguilla 4 - Lote Dom - Proprio antre ak modpas - Auto Maryaj L4 L5 selon 1e 2e 3e</h3><label><b>Gwoup Vre + Tiraj</b></label><div class='grid2'><select id='resGroup' onchange='updateTirageByGroup()'></select><select id='resTirage'></select></div><div class='grid2'><div><label>Dat</label><input id='resDate' type='date'></div><div><label>L3 (3 chif - kole ak 1e) - Ex: 905</label><input id='rrL3' placeholder='905 - 3 chif - 2 dènye = 1e' oninput='autoGenerate()'></div></div>
-<div class='grid3'><div><label>1e lot * (2 chif) - x50</label><input id='rr1' placeholder='05 - 1e x50 sèlman' oninput='autoGenerate()'></div><div><label>2e lot * (2 chif) - x20</label><input id='rr2' placeholder='60 - 2e x20' oninput='autoGenerate()'></div><div><label>3e lot * (2 chif) - x10</label><input id='rr3' placeholder='55 - 3e x10' oninput='autoGenerate()'></div></div>
-<div id='autoPreview' class='auto-box'><b>🤖 AUTO - Maryaj L4 L5 selon 1e 2e 3e:</b><div id='autoText'>Antre 1e 2e 3e pou wè auto...</div></div>
-<button class='btn btn-green' onclick='saveRes()' style='font-size:16px'>💾 ANREJISTRE - GWOUP VRE + KALKIL BON + AUTO</button>
-</div>
-<div style='margin-top:12px'><h3 style='text-align:center;padding:10px;background:#1a237e;color:#fff;border-radius:10px'>📋 Afichaj - Gwoup Vre - Kalkil BON - Auto Maryaj L4 L5 - Tankou Foto Korije</h3><div id='groupResView' style='margin-top:10px'></div></div>
-</div>
-<div id='t7' class='panel'><div class='card' style='border:3px solid #4a148c'><h3>7- Entête - Non Biznis + Adresse + Tel + Pye Paj</h3><input id='entNom' value="VERITE LOTTO"><input id='entAdresse' placeholder="Adresse"><input id='entTel' placeholder="Téléphone"><textarea id='entFooter' placeholder="Pye paj - Mèsi"></textarea><input id='entLogo' placeholder="Logo URL"><button class='btn btn-purple' onclick='saveEntete()'>Save Entête</button><div id='syncStatus'></div></div></div>
-<div id='t8' class='panel'><div class='card' style='border:3px solid #00c853'><h3>8- Paramètres - Bloke Boul - Chwazi Tiraj Chwazi Vandè Chwazi Boul + Bloke Jwèt + Orè Lundi-Dimanche</h3>
-<div style='background:#ffebee;padding:12px;border:3px solid #c62828;border-radius:12px;margin-bottom:12px'><h4>🚫 Bloke Boul - Chwazi Tiraj - Chwazi Vandè - Chwazi Boul</h4><div class='grid3'><select id='blkTirage'></select><select id='blkVendeur'></select><input id='blkBoul' type='number' placeholder='Boul - Ex: 55'></div><button class='btn btn-red' onclick='saveBlokeBoul()'>Bloke Boul - Chwazi Tiraj Chwazi Vandè Chwazi Boul</button><div id='listBlokeBoul'></div></div>
-<div style='background:#fff3e0;padding:12px;border:3px solid #ef6c00;border-radius:12px'><h4>🎮 Bloke Jwèt - Chwazi Tiraj - Chwazi Vandè - Chwazi Jwèt</h4><div class='grid3'><select id='blkJeuTirage'></select><select id='blkJeuVendeur'></select><select id='blkJeuType'><option value="">-- Jwèt --</option><option value="bolet">BOLET 1er50 2e20 3e10</option><option value="maryaj">MARYAJ M1M2M3 1000</option><option value="loto3">LOTO3 500</option><option value="loto4">LOTO4 5000</option><option value="loto5">LOTO5 25000</option><option value="all">TOUT</option></select></div><button class='btn' style='background:#ef6c00' onclick='saveBlokeJeu()'>Bloke Jwèt - Chwazi Tiraj Chwazi Vandè Chwazi Jwèt</button><div id='listBlokeJeu'></div></div>
-<div style='background:#e3f2fd;border:3px solid #1565c0;border-radius:12px;padding:12px;margin-top:12px'><h4>⏰ Orè Lundi-Dimanche - Chwazi Tiraj Chwazi Vandè</h4><div class='grid2'><select id='horTirage' onchange='loadHorairesUI()'></select><select id='horVendeur' onchange='loadHorairesUI()'></select></div><div id='joursList'></div><button class='btn btn-purple' onclick='saveHoraires()'>Save Horaires Lundi-Dimanche - Chwazi Tiraj Chwazi Vandè</button></div>
+<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>V26.3 FIX - Ouvri Dirèk - Fèmti Modifyab</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef1f6}.h{background:#4a148c;color:#fff;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:60}.tabs{display:flex;background:#fff;border-bottom:3px solid #4a148c;overflow-x:auto;position:sticky;top:50px;z-index:50}.tab{padding:11px 9px;font-weight:800;color:#555;border-bottom:4px solid transparent;white-space:nowrap;font-size:9px;cursor:pointer;flex-shrink:0}.tab.active{color:#4a148c;border-bottom-color:#4a148c;background:#f3e5f5}.panel{display:none;padding:10px;max-width:1000px;margin:auto}.panel.active{display:block}.card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 3px 10px rgba(0,0,0,.1);margin-bottom:10px;border-left:5px solid #4a148c}.card-green{border-left-color:#2e7d32}.card-red{border-left-color:#c62828}.btn{padding:12px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%;margin-top:8px;cursor:pointer}.btn-purple{background:#4a148c}.btn-red{background:#c62828}.btn-green{background:#2e7d32}input,select,textarea{padding:10px;border:2px solid #ddd;border-radius:10px;width:100%;margin:5px 0;font-weight:600}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.switch{width:56px;height:30px;background:#c62828;border-radius:15px;position:relative;cursor:pointer;display:inline-block}.switch.on{background:#2e7d32}.switch b{position:absolute;top:3px;left:3px;width:24px;height:24px;background:#fff;border-radius:50%;transition:.2s}.switch.on b{left:29px}.result-card{display:flex;align-items:center;background:#fff;border-radius:18px;padding:12px;margin-bottom:12px}.result-logo{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px;color:#fff}.logo-fl{background:#0d47a1}.logo-ny{background:#0d47a1}.logo-ga{background:#2e7d32}.logo-tx{background:#212121}.logo-tn{background:#bf360c}.logo-anguilla{background:#4a148c}.logo-primera{background:#ef6c00}.logo-suerte{background:#ad1457}.logo-loteka{background:#1565c0}.logo-real{background:#ff6f00}.logo-nacional{background:#2e7d32}.logo-leidsa{background:#c62828}.logo-lotedom{background:#4a148c}.ball{padding:6px 10px;border-radius:14px;color:#fff;font-weight:900;font-size:13px;min-width:44px;text-align:center}.ball-blue{background:#1e88e5}.ball-orange{background:#ff9800}</style></head><body>
+<div class='h'><div><b>🏢 V26.3 FIX - OUVRI DIRÈK</b><br><small id='syncInfo'>SYNC...</small></div><div><span id='pUser'></span> <button onclick='logout()' style='padding:8px;background:#c62828;color:#fff;border:0;border-radius:8px'>SOTI</button></div></div>
+<div id='loginBox' class='card' style='max-width:420px;margin:30px auto'><h3>🔐 Proprio</h3><input id='ln' placeholder='Non'><input id='lp' type='password' placeholder='Modpas'><button class='btn btn-purple' onclick='doLogin()'>Konekte</button><div id='loginMsg' style='color:red;font-weight:800;margin-top:10px'></div></div>
+<div id='mainBox' style='display:none'>
+<div class='tabs'><div class='tab active' onclick="openTab('t1',this)">1-Vendeurs BLOKE</div><div class='tab' onclick="openTab('t5',this)">5-Rapport BON</div><div class='tab' onclick="openTab('t6',this)">6-Résultats</div><div class='tab' onclick="openTab('t8',this)">8-Paramèt FÈMTI</div></div>
+<div id='t1' class='panel active'><div class='card' style='background:#e8f5e9;border:3px solid #2e7d32'><b>✅ V26.3 FIX - OUVRI - Lè fèmti modifyab - Bon kalkil resultsByDate[dat][tirage]</b></div><div id='listVendeur'></div></div>
+<div id='t5' class='panel'><div class='card'><h3>5- Rapport BON KALKIL</h3><div class='grid2'><input type='date' id='rDu'><input type='date' id='rAu'></div><div class='grid2'><select id='rVendeur'></select><select id='rTirage'></select></div><button class='btn btn-purple' onclick='calcRapport()'>Kalkile</button><div id='rapportRes'></div></div></div>
+<div id='t6' class='panel'><div class='card'><h3>6- Résultats Gwoup Vre</h3><div class='grid2'><select id='resGroup' onchange='updateTirageByGroup()'></select><select id='resTirage'></select></div><div class='grid2'><input id='resDate' type='date'><input id='rrL3' placeholder='L3 905'></div><div class='grid2'><input id='rr1' placeholder='1e 05'><input id='rr2' placeholder='2e 60'></div><input id='rr3' placeholder='3e 55'><button class='btn btn-green' onclick='saveRes()'>ANREJISTRE</button></div><div id='groupResView'></div></div>
+<div id='t8' class='panel'><div class='card' style='border:3px solid #00c853'><h3>⏰ Orè Lundi-Dimanche - Chwazi Tiraj Chwazi Vandè - Lè Fèmti Modifyab</h3>
+<div class='grid2'><select id='horTirage' onchange='loadHorairesUI()'></select><select id='horVendeur' onchange='loadHorairesUI()'></select></div>
+<div id='joursList' style='margin-top:10px'></div>
+<button class='btn btn-purple' onclick='saveHoraires()' style='background:#311b92'>Save Horaires Lundi-Dimanche - Chwazi Tiraj Chwazi Vandè</button>
+<hr>
+<div class='grid2'><select id='blkTirage'></select><select id='blkVendeur'></select></div><input id='blkBoul' placeholder='Boul'><button class='btn btn-red' onclick='saveBlokeBoul()'>Bloke Boul</button><div id='listBlokeBoul'></div>
 </div></div>
 </div>
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
 firebase.initializeApp(firebaseConfig);const db=firebase.database();
-const GROUPS={
-"FLORIDA":{logo:"logo-fl",text:"FL<br>LOTTERY",tirages:["FL midi","FL swa"]},
-"NEW YORK":{logo:"logo-ny",text:"NY<br>LOTTERY",tirages:["NY midi","NY swa"]},
-"TEXAS":{logo:"logo-tx",text:"TEXAS<br>LOTTERY",tirages:["Texas maten","Texas midi","Texas swa"]},
-"TENNESSEE":{logo:"logo-tn",text:"TENN<br>LOTTERY",tirages:["Ten. maten","Ten. midi","Ten. swa","Ten. nwi"]},
-"GEORGIA":{logo:"logo-ga",text:"GA<br>LOTTERY",tirages:["GA midi","GA swa"]},
-"PRIMERA":{logo:"logo-primera",text:"PRIMERA<br>LOTERÍA",tirages:["Primera midi","Primera swa"]},
-"SUERTE":{logo:"logo-suerte",text:"SUERTE<br>LOTERÍA",tirages:["Suerte midi","Suerte swa"]},
-"LOTEKA":{logo:"logo-loteka",text:"LOTEKA",tirages:["Loteka"]},
-"REAL":{logo:"logo-real",text:"REAL",tirages:["Real"]},
-"NACIONAL":{logo:"logo-nacional",text:"NACIONAL",tirages:["Ganamas","Nacional noche"]},
-"LEIDSA":{logo:"logo-leidsa",text:"LEIDSA",tirages:["Leidsa"]},
-"ANGUILLA":{logo:"logo-anguilla",text:"ANGUILLA",tirages:["Anguilla 10h","Anguilla 13h","Anguilla 18h","Anguilla 21h"]},
-"LOTE DOM":{logo:"logo-lotedom",text:"LOTE DOM",tirages:["Lote Dom"]}
-};
+const GROUPS={"FLORIDA":{logo:"logo-fl",text:"FL",tirages:["FL midi","FL swa"]},"NEW YORK":{logo:"logo-ny",text:"NY",tirages:["NY midi","NY swa"]},"TEXAS":{logo:"logo-tx",text:"TX",tirages:["Texas maten","Texas midi","Texas swa"]},"TENNESSEE":{logo:"logo-tn",text:"TN",tirages:["Ten. maten","Ten. midi","Ten. swa","Ten. nwi"]},"GEORGIA":{logo:"logo-ga",text:"GA",tirages:["GA midi","GA swa"]},"PRIMERA":{logo:"logo-primera",text:"PRIMERA",tirages:["Primera midi","Primera swa"]},"SUERTE":{logo:"logo-suerte",text:"SUERTE",tirages:["Suerte midi","Suerte swa"]},"LOTEKA":{logo:"logo-loteka",text:"LOTEKA",tirages:["Loteka"]},"REAL":{logo:"logo-real",text:"REAL",tirages:["Real"]},"NACIONAL":{logo:"logo-nacional",text:"NACIONAL",tirages:["Ganamas","Nacional noche"]},"LEIDSA":{logo:"logo-leidsa",text:"LEIDSA",tirages:["Leidsa"]},"ANGUILLA":{logo:"logo-anguilla",text:"ANGUILLA",tirages:["Anguilla 10h","Anguilla 13h","Anguilla 18h","Anguilla 21h"]},"LOTE DOM":{logo:"logo-lotedom",text:"LOTE DOM",tirages:["Lote Dom"]}};
 const JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-let DB={vendeurs:{},proprios:{},tickets:{},results:{},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10}},horairesTiraj:{},blokeBoul:{},blokeVendeur:{},blokeJeux:{},headers:{},businesses:{}};
+let DB={vendeurs:{},proprios:{},tickets:{},results:{},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10}},horairesTiraj:{},blokeBoul:{},blokeVendeur:{},headers:{}};
 let CUR=null,MY_PROPRIO_ID=null,tmpBloke={};
 function sanitizeKey(s){return (s||'').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');}
-function init(){db.ref().on('value',snap=>{let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.proprios=v.proprios||{};DB.tickets=v.tickets||{};DB.results=v.results||{};DB.prix=v.prix||{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10}};DB.horairesTiraj=v.horairesTiraj||{};DB.blokeBoul=v.blokeBoul||{};DB.blokeVendeur=v.blokeVendeur||{};DB.blokeJeux=v.blokeJeux||{};DB.headers=v.headers||{};DB.businesses=v.businesses||{};syncInfo.innerText='SYNC V26.2 - BON KALKIL ou voye a + BOUTON BLOKE DEVAN NON + ANREJISTRE + KONFIME - GWOUP VRE';if(mainBox.style.display!='none'){loadAll();}});}
+function init(){db.ref().on('value',snap=>{let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.proprios=v.proprios||{};DB.tickets=v.tickets||{};DB.results=v.results||{};DB.prix=v.prix||{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10}};DB.horairesTiraj=v.horairesTiraj||{};DB.blokeBoul=v.blokeBoul||{};DB.blokeVendeur=v.blokeVendeur||{};DB.headers=v.headers||{};syncInfo.innerText='SYNC V26.3 FIX - OUVRI';if(mainBox.style.display!='none')loadAll();});}
 function setToday(){const t=new Date().toISOString().split('T')[0];if(resDate)resDate.value=t;if(rDu)rDu.value=t;if(rAu)rAu.value=t;}
-function doLogin(){let n=ln.value.trim(),p=lp.value.trim();if(!n||!p){loginMsg.innerText='Mete non ak modpas - Obligatwa - Proprio dwe antre ak modpas';return;}loginMsg.innerText='⏳ Verifye modpas...';db.ref('proprios').once('value').then(snap=>{let all=snap.val()||{};let f=null,fid=null;for(let id in all){if(all[id].nom.toLowerCase()==n.toLowerCase()){f=all[id];fid=id;break;}}if(!f){loginMsg.innerText='❌ Proprio pa jwenn';return;}if(f.pass!=p){loginMsg.innerText='❌ Modpas pa bon';return;}if(f.bloke===true||f.actif===false){loginMsg.innerText='🚫 BLOKE';return;}CUR={nom:f.nom,id:fid};MY_PROPRIO_ID=fid;localStorage.setItem('curP',JSON.stringify(CUR));loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=f.nom;loadAll();setToday();});}
+function doLogin(){let n=ln.value.trim(),p=lp.value.trim();if(!n||!p){loginMsg.innerText='Mete non modpas';return;}db.ref('proprios').once('value').then(snap=>{let all=snap.val()||{};let f=null,fid=null;for(let id in all){if(all[id].nom.toLowerCase()==n.toLowerCase()){f=all[id];fid=id;break;}}if(!f||f.pass!=p){loginMsg.innerText='Pa bon';return;}CUR={nom:f.nom,id:fid};MY_PROPRIO_ID=fid;localStorage.setItem('curP',JSON.stringify(CUR));loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=f.nom;loadAll();setToday();});}
 function logout(){localStorage.removeItem('curP');location.reload();}
 function openTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>{p.classList.remove('active');p.style.display='none';});if(el)el.classList.add('active');document.getElementById(id).classList.add('active');document.getElementById(id).style.display='block';}
 function getMyVendeurs(){let arr=[];for(let id in DB.vendeurs){let v=DB.vendeurs[id];if(v.proprioId==MY_PROPRIO_ID||v.proprioId==CUR.nom)arr.push({...v,_id:id});}return arr;}
 function loadAll(){
  let myV=getMyVendeurs();
- let opts='<option value="global">🌍 GLOBAL ('+myV.length+') - Bon Kalkil 1er50 2e20 3e10 L3 500 L4 5000 M1M2M3 1000 L5 25000</option>';
  let optsA='<option value="ALL">Tous</option>';
- let optsT='<option value="ALL">Tous</option>';
- myV.forEach(v=>{let lab=(v.serial||v._id)+' - '+v.nom;opts+='<option value="'+v._id+'">👤 '+lab+'</option>';optsA+='<option value="'+v._id+'">'+lab+'</option>';});
+ let optsT='<option value="">-- Chwazi Tiraj --</option>';
+ myV.forEach(v=>{optsA+='<option value="'+v._id+'">'+(v.serial||v._id)+' - '+v.nom+'</option>';});
  for(let g in GROUPS){GROUPS[g].tirages.forEach(t=>optsT+='<option value="'+t+'">'+g+' - '+t+'</option>');}
- let groupOpts='<option value="">-- Chwazi Gwoup --</option>';for(let g in GROUPS){groupOpts+=`<option value="${g}">${g} - ${GROUPS[g].tirages.length} tiraj - ${GROUPS[g].tirages.join(', ')}</option>`;}
- let vendOpts='<option value="">-- Vandè --</option><option value="ALL">GLOBAL</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
- let vendSimple='<option value="">-- Chwazi Vandè --</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
- prixVendeur.innerHTML=opts;rVendeur.innerHTML=optsA;rTirage.innerHTML=optsT;resGroup.innerHTML=groupOpts;
- horTirage.innerHTML=optsT;horVendeur.innerHTML=vendOpts;blkTirage.innerHTML=optsT;blkVendeur.innerHTML=vendSimple;blkJeuTirage.innerHTML=optsT;blkJeuVendeur.innerHTML=vendSimple;
+ let groupOpts='<option value="">-- Gwoup --</option>';for(let g in GROUPS){groupOpts+='<option value="'+g+'">'+g+'</option>';}
+ let vendOpts='<option value="ALL">GLOBAL</option>'+myV.map(v=>'<option value="'+v._id+'">'+v.nom+'</option>').join('');
+ rVendeur.innerHTML=optsA;rTirage.innerHTML=optsT;resGroup.innerHTML=groupOpts;
+ horTirage.innerHTML=optsT;horVendeur.innerHTML=vendOpts;blkTirage.innerHTML=optsT;blkVendeur.innerHTML=vendOpts;
  let html='';myV.forEach(v=>{
-   let bloke=DB.blokeVendeur[v._id]===true||v.bloke===true;
-   if(tmpBloke[v._id]!==undefined) bloke=tmpBloke[v._id];
-   let onOffLabel=bloke?'🔴 OFF BLOKE':'🟢 ON AKTIF';
-   let onOffColor=bloke?'#c62828':'#2e7d32';
-   html+=`<div class="card ${bloke?'card-red':'card-green'}" style="border-left-width:8px">
-   <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-     <button onclick="toggleBloke('${v._id}')" style="padding:14px 20px;border:0;border-radius:28px;font-weight:900;color:#fff;background:${onOffColor};min-width:140px;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.3)">BLOKE ${onOffLabel}</button>
-     <div style="flex:1"><b style="font-size:15px">DEVAN NON: ${v.nom}</b> (${v.serial||v._id})<br><small style="font-weight:800">Bouton Bloke devan non - Kom ${DB.prix[v._id]?.kom||v.kom||10}% - 1er50 2e20 3e10 L3 500 L4 5000 M1M2M3 1000 L5 25000</small></div>
-   </div>
-   <div class='grid2'><input id="nom_${v._id}" value="${v.nom}" placeholder="Non"><input id="kom_${v._id}" value="${DB.prix[v._id]?.kom||v.kom||10}" type="number" placeholder="Kom %"></div>
-   <input id="pass_${v._id}" value="${v.pass||''}" placeholder="Pass - Obligatwa">
-   <div class='grid2'><button onclick="saveV('${v._id}')" class="btn btn-green" style="font-size:16px;font-weight:900">💾 ANREJISTRE - ${v.nom}</button><button onclick="confirmVendeur('${v._id}')" class="btn" style="background:#212121;font-size:14px;font-weight:900">✅ KONFIME - ${v.nom}</button></div>
-   <div id="conf_${v._id}" style="margin-top:8px;font-weight:900;min-height:22px;background:#fff;padding:8px;border-radius:10px;border:2px dashed #4a148c;font-size:12px"></div>
-   </div>`;
+   let bloke=DB.blokeVendeur[v._id]===true||v.bloke===true;if(tmpBloke[v._id]!==undefined)bloke=tmpBloke[v._id];
+   html+='<div class="card '+(bloke?'card-red':'card-green')+'"><div style="display:flex;gap:10px;align-items:center"><button onclick="toggleBloke(\''+v._id+'\')" style="padding:12px;border:0;border-radius:20px;color:#fff;background:'+(bloke?'#c62828':'#2e7d32')+';font-weight:900">BLOKE '+(bloke?'🔴 OFF':'🟢 ON')+'</button><b>DEVAN NON: '+v.nom+'</b></div><div class="grid2"><button onclick="saveV(\''+v._id+'\')" class="btn btn-green">💾 ANREJISTRE</button><button onclick="confirmV(\''+v._id+'\')" class="btn" style="background:#212121">✅ KONFIME</button></div><div id="conf_'+v._id+'"></div></div>';
  });
- listVendeur.innerHTML=html||'Pa gen vandè';
- loadPrix();loadResTable();loadEntete();loadBlokeBoulList();loadBlokeJeuList();
+ listVendeur.innerHTML=html||'Pa gen';loadResTable();
 }
-function toggleBloke(id){let bloke=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;if(tmpBloke[id]!==undefined) bloke=tmpBloke[id];tmpBloke[id]=!bloke;loadAll();}
-function confirmVendeur(id){let nom=DB.vendeurs[id]?.nom||id;let bloke=tmpBloke[id]!==undefined?tmpBloke[id]:(DB.blokeVendeur[id]===true);let el=document.getElementById('conf_'+id);if(el) el.innerHTML='✅ KONFIME - '+nom+' - '+(bloke?'🔴 OFF BLOKE':'🟢 ON AKTIF')+' - '+new Date().toLocaleString();alert('✅ KONFIME - Vendeur '+nom+' - '+(bloke?'BLOKE OFF':'AKTIF ON')+' - Anrejistre OK - Konfime');}
-function saveV(id){
-  let nom=document.getElementById('nom_'+id).value.trim();
-  let kom=document.getElementById('kom_'+id).value.trim();
-  let pass=document.getElementById('pass_'+id).value.trim();
-  let bloke=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;
-  if(tmpBloke[id]!==undefined) bloke=tmpBloke[id];
-  let updates={};updates['vendeurs/'+id+'/nom']=nom;updates['vendeurs/'+id+'/kom']=+kom;if(pass)updates['vendeurs/'+id+'/pass']=pass;updates['vendeurs/'+id+'/bloke']=bloke;updates['vendeurs/'+id+'/actif']=!bloke;updates['prix/'+id+'/kom']=+kom;
-  db.ref().update(updates).then(()=>{
-    if(bloke)db.ref('blokeVendeur/'+id).set(true);else db.ref('blokeVendeur/'+id).remove();
-    delete tmpBloke[id];
-    let msg='✅ ANREJISTRE - '+nom+' - '+(bloke?'🔴 OFF BLOKE':'🟢 ON AKTIF')+' - Apre sa KONFIME';
-    let el=document.getElementById('conf_'+id);if(el) el.innerHTML=msg+'<br><small>Klike KONFIME pou konfime</small>';
-    if(confirm(msg+'\n\nKlike OK pou KONFIME - '+nom)){confirmVendeur(id);}
-    loadAll();
-  });
-}
-function loadPrix(){let k=prixVendeur.value;let p=DB.prix[k]||DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10};p1.value=p.p1;p2.value=p.p2;p3.value=p.p3;pm1.value=p.m1;pm2.value=p.m2;pm3.value=p.m3;ppL3.value=p.l3;ppL4.value=p.l4;ppL5.value=p.l5;pKom.value=p.kom;ppGratis.value=p.maryajGratis||500;prixStatus.innerHTML=`<b>${k=='global'?'GLOBAL':'Pa vandè'} - BON KALKIL ou voye a: 1er ${p.p1} 2e ${p.p2} 3e ${p.p3} M1M2M3 ${p.m1} L3 ${p.l3} L4 ${p.l4} L5 ${p.l5} - Tout Modifiab</b>`;}
-function savePrix(){let k=prixVendeur.value;let o={p1:+p1.value,p2:+p2.value,p3:+p3.value,m1:+pm1.value,m2:+pm2.value,m3:+pm3.value,l3:+ppL3.value,l4:+ppL4.value,l5:+ppL5.value,maryajGratis:+ppGratis.value,kom:+pKom.value};db.ref('prix/'+k).set(o).then(()=>alert('✅ Prix Save - '+(k=='global'?'GLOBAL tout vendeur':'Pa vendeur '+k)+': 1er '+o.p1+' 2e '+o.p2+' 3e '+o.p3+' M1M2M3 '+o.m1+' L3 '+o.l3+' L4 '+o.l4+' L5 '+o.l5+' Gratis '+o.maryajGratis+' Kom '+o.kom+'% - Tout Modifiab - Bon Kalkil'));}function getPrixForVendeur(vId){let pg=DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10};if(DB.prix[vId])return Object.assign({},pg,DB.prix[vId]);return pg;}
-function calcGainProprio(ticket,resultsForDate,prix){
+function toggleBloke(id){let b=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;if(tmpBloke[id]!==undefined)b=tmpBloke[id];tmpBloke[id]=!b;loadAll();}
+function confirmV(id){let nom=DB.vendeurs[id]?.nom||id;let b=tmpBloke[id]!==undefined?tmpBloke[id]:DB.blokeVendeur[id]===true;document.getElementById('conf_'+id).innerHTML='✅ KONFIME '+nom+' '+(b?'OFF':'ON')+' '+new Date().toLocaleString();alert('KONFIME '+nom);}
+function saveV(id){let b=DB.blokeVendeur[id]===true;if(tmpBloke[id]!==undefined)b=tmpBloke[id];db.ref('vendeurs/'+id+'/bloke').set(b);db.ref('vendeurs/'+id+'/actif').set(!b);if(b)db.ref('blokeVendeur/'+id).set(true);else db.ref('blokeVendeur/'+id).remove();delete tmpBloke[id];alert('ANREJISTRE');loadAll();}
+function getPrix(vId){let pg=DB.prix.global;if(DB.prix[vId])return Object.assign({},pg,DB.prix[vId]);return pg;}
+function calcGain(ticket,resultsForDate,prix){
   let total=0,gratisDone=false;
   for(let tirage of (ticket.tirages||[ticket.tirage]||[])){
     if(!tirage||tirage.toLowerCase().includes('soir'))continue;let res=resultsForDate[tirage];if(!res)continue;
-    let r1=(res.r1||'').replace(/\D/g,'').slice(-2).padStart(2,'0');
-    let r2=(res.r2||'').replace(/\D/g,'').slice(-2).padStart(2,'0');
-    let r3=(res.r3||'').replace(/\D/g,'').slice(-2).padStart(2,'0');
-    let l3=(res.l3||'').replace(/\D/g,'').slice(-3);
-    let l4=(res.l4||'').replace(/\D/g,'').slice(-4);
-    let l5=(res.l5||'').replace(/\D/g,'').slice(-5);
-    for(let bet of (ticket.bets||[])){
-      let raw=(bet.numero||'').replace(/\D/g,'');if(!raw)continue;let mise=+bet.mise||0;let type=(bet.type||'').toLowerCase();
-      if(type.includes('boul')||raw.length==2){
-        let num=raw.padStart(2,'0');
-        if(num==r1) total+=mise*(prix.p1||50);
-        if(num==r2) total+=mise*(prix.p2||20);
-        if(num==r3) total+=mise*(prix.p3||10);
-      }else if(type.includes('mar')){
-        let a=raw.slice(0,2),b=raw.slice(2,4);
-        if((a==r1&&b==r2)||(a==r2&&b==r1)) total+=mise*(prix.m1||1000);
-        else if((a==r1&&b==r3)||(a==r3&&b==r1)) total+=mise*(prix.m2||1000);
-        else if((a==r2&&b==r3)||(a==r3&&b==r2)) total+=mise*(prix.m3||1000);
-      }else if(type.includes('loto3')||raw.length==3){
-        if(raw.padStart(3,'0')==l3) total+=mise*(prix.l3||500);
-      }else if(type.includes('loto4')||raw.length==4){
-        if(raw.padStart(4,'0')==l4) total+=mise*(prix.l4||5000);
-      }else if(type.includes('loto5')||raw.length==5){
-        if(raw.padStart(5,'0')==l5) total+=mise*(prix.l5||25000);
-      }
+    let r1=(res.r1||'').slice(-2),r2=(res.r2||'').slice(-2),r3=(res.r3||'').slice(-2),l3=(res.l3||'').slice(-3),l4=(res.l4||'').slice(-4),l5=(res.l5||'').slice(-5);
+    for(let bet of (ticket.bets||[])){let raw=(bet.numero||'').replace(/\D/g,'');let mise=+bet.mise||0;let type=(bet.type||'').toLowerCase();
+      if(raw.length==2){if(raw==r1)total+=mise*prix.p1;if(raw==r2)total+=mise*prix.p2;if(raw==r3)total+=mise*prix.p3;}
+      else if(type.includes('mar')){let a=raw.slice(0,2),b=raw.slice(2,4);if((a==r1&&b==r2)||(a==r2&&b==r1))total+=mise*prix.m1;else if((a==r1&&b==r3)||(a==r3&&b==r1))total+=mise*prix.m2;else if((a==r2&&b==r3)||(a==r3&&b==r2))total+=mise*prix.m3;}
+      else if(raw.length==3){if(raw==l3)total+=mise*prix.l3;}
+      else if(raw.length==4){if(raw==l4)total+=mise*prix.l4;}
+      else if(raw.length==5){if(raw==l5)total+=mise*prix.l5;}
     }
-    if(gratisDone)continue;
-    for(let gbet of (ticket.gratisBets||[])){
-      let gnum=(gbet.numero||'').replace(/\D/g,'');if(gnum.length<4)continue;
-      let a=gnum.slice(0,2),b=gnum.slice(-2);
-      let win=(a==r1&&b==r2)||(a==r2&&b==r1)||(a==r1&&b==r3)||(a==r3&&b==r1)||(a==r2&&b==r3)||(a==r3&&b==r2);
-      if(win){total+=prix.maryajGratis||500;gratisDone=true;break;}
-    }
+    if(!gratisDone){for(let g of (ticket.gratisBets||[])){let gn=(g.numero||'').replace(/\D/g,'');if(gn.length>=4){let a=gn.slice(0,2),b=gn.slice(-2);if((a==r1&&b==r2)||(a==r2&&b==r1)||(a==r1&&b==r3)||(a==r3&&b==r1)||(a==r2&&b==r3)||(a==r3&&b==r2)){total+=prix.maryajGratis;gratisDone=true;break;}}}}
   }
   return total;
 }
-function calcRapport(){let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;let list=Object.values(DB.tickets||{}).filter(t=>!t.annule);if(du)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)>=du);if(au)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)<=au);let myIds=getMyVendeurs().map(v=>v._id);list=list.filter(t=>myIds.includes(t.vendeurId));if(vs!='ALL')list=list.filter(t=>t.vendeurId==vs);if(ts!='ALL')list=list.filter(t=>(t.tirages||[]).includes(ts));let resultsByDate={};Object.values(DB.results).forEach(r=>{if(!r.dat)return;if(r.tirage.toLowerCase().includes('soir'))return;if(!resultsByDate[r.dat])resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let vente=0,aPeye=0;list.forEach(t=>{vente+=+t.total||0;let d=(t.dateHaiti||'').slice(0,10);let prix=getPrixForVendeur(t.vendeurId);aPeye+=calcGainProprio(t,resultsByDate[d]||{},prix);});rapportRes.innerHTML=`<div style="background:#fff;border:3px solid #2e7d32;padding:12px;border-radius:12px"><b>VANT $${vente.toFixed(2)}</b><br><b>A PEYE $${aPeye.toFixed(2)}</b><br><b>BALANS $${(vente-aPeye).toFixed(2)}</b><br><small style="font-weight:900">KALKIL BON ou voye a: 1er×50 2e×20 3e×10 M1M2M3×1000 L3×500 L4×5000 L5×25000 Gratis500 - Tout Pri Modifiab - SAN SOIR - resultsByDate[dat][tirage]</small></div>`;}
-function updateTirageByGroup(){let g=resGroup.value;if(!g){resTirage.innerHTML='<option>-- Chwazi Gwoup anvan --</option>';return;}let tirages=GROUPS[g].tirages;let opts='';tirages.forEach(t=>opts+=`<option value="${t}">${t}</option>`);resTirage.innerHTML=opts;autoGenerate();}
-function autoGenerate(){let r1=rr1.value.replace(/\D/g,'').padStart(2,'0').slice(-2);let r2=rr2.value.replace(/\D/g,'').padStart(2,'0').slice(-2);let r3=rr3.value.replace(/\D/g,'').padStart(2,'0').slice(-2);let l3=rrL3.value.replace(/\D/g,'').padStart(3,'0').slice(-3);if(!r1||r1=='00') r1='';if(!r2||r2=='00') r2='';if(!r3||r3=='00') r3='';if(!l3||l3=='000') l3='';let m1=r1&&r2?r1+r2:'----';let m2=r1&&r3?r1+r3:'----';let m3=r2&&r3?r2+r3:'----';let l4=r2&&r3?r2+r3:'----';let l5=l3&&r2?l3+r2:'-----';autoText.innerHTML=`<div>L3 ${l3||'---'} kole 1e ${r1||'--'} x50<br>M1 ${m1} M2 ${m2} M3 ${m3} x1000 L4 ${l4} x5000 L5 ${l5} x25000</div>`;}
-function saveRes(){let tirage=resTirage.value,group=resGroup.value,dat=resDate.value;if(!tirage||!dat){alert('Chwazi Gwoup + Tiraj + Dat');return;}let l3=rrL3.value.replace(/\D/g,'').slice(-3).padStart(3,'0');let r1=rr1.value.replace(/\D/g,'').slice(-2).padStart(2,'0');let r2=rr2.value.replace(/\D/g,'').slice(-2).padStart(2,'0');let r3=rr3.value.replace(/\D/g,'').slice(-2).padStart(2,'0');if(!r1||!r2||!r3){alert('Mete 1e 2e 3e');return;}if(!l3||l3=='000'){l3='9'+r1;}let m1=r1+r2,m2=r1+r3,m3=r2+r3,l4=r2+r3,l5=l3+r2;let key=sanitizeKey(tirage);let o={tirage,group,dat,r1,r2,r3,l3,m1,m2,m3,l4,l5,key,id:key,proprioId:MY_PROPRIO_ID,updatedAt:Date.now()};db.ref('results/'+key).set(o).then(()=>alert('✅ '+group+' - '+tirage+' - BON KALKIL'));}
-function loadResTable(){let arr=Object.values(DB.results||{}).filter(r=>!r.proprioId||r.proprioId==MY_PROPRIO_ID);arr=arr.filter(r=>!r.tirage.toLowerCase().includes('soir'));let html='';for(let gName in GROUPS){let g=GROUPS[gName];let items=[];g.tirages.forEach(tName=>{let found=arr.find(r=>r.tirage===tName);if(found)items.push(found);else items.push({tirage:tName,missing:true});});let balls='';items.forEach(r=>{if(r.missing){balls+=`<div class="result-row"><span class="result-label">${r.tirage} - Pa gen</span><div class="result-balls"><span class="ball" style="background:#999">---</span></div></div>`;}else{balls+=`<div class="result-row"><span class="result-label">${r.tirage} (${r.dat})<br><small>M1 ${r.m1} M2 ${r.m2} M3 ${r.m3} L4 ${r.l4} L5 ${r.l5}</small></span><div class="result-balls"><span class="ball ball-blue">${r.l3}</span><span class="ball ball-orange">${r.r2}</span><span class="ball ball-blue">${r.r3}</span></div></div>`;});let logo=`<div class="result-logo ${g.logo}">${g.text}</div>`;html+=`<div class="result-card">${logo}<div class="result-info"><b>${gName}</b>${balls}</div></div>`;}groupResView.innerHTML=html||'Pa gen';}
-function loadEntete(){let h=DB.headers[MY_PROPRIO_ID]||{};entNom.value=h.businessName||CUR?.nom||'VERITE LOTTO';entAdresse.value=h.adresse||'';entTel.value=h.tel||'';entFooter.value=h.footer||'';entLogo.value=h.logo||'';}
-function saveEntete(){let nom=entNom.value.trim().toUpperCase();let o={businessName:nom,adresse:entAdresse.value.trim(),tel:entTel.value.trim(),footer:entFooter.value.trim(),logo:entLogo.value.trim()};db.ref('headers/'+MY_PROPRIO_ID).set(o).then(()=>{db.ref('businesses/'+MY_PROPRIO_ID+'/businessName').set(nom);alert('Entête Save');});}
-// === FIX V26.3 - LÈ FÈMTI MODIFYAB - CHWAZI TIRAJ CHWAZI VANDÈ ===
+function calcRapport(){let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;let list=Object.values(DB.tickets||{}).filter(t=>!t.annule);if(du)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)>=du);if(au)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)<=au);let myIds=getMyVendeurs().map(v=>v._id);list=list.filter(t=>myIds.includes(t.vendeurId));if(vs!='ALL')list=list.filter(t=>t.vendeurId==vs);if(ts!='ALL')list=list.filter(t=>(t.tirages||[]).includes(ts));let resultsByDate={};Object.values(DB.results).forEach(r=>{if(!r.dat)return;if(r.tirage.toLowerCase().includes('soir'))return;if(!resultsByDate[r.dat])resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let vente=0,aPeye=0;list.forEach(t=>{vente+=+t.total||0;let d=(t.dateHaiti||'').slice(0,10);let prix=getPrix(t.vendeurId);aPeye+=calcGain(t,resultsByDate[d]||{},prix);});rapportRes.innerHTML='<div style="background:#fff;border:3px solid #2e7d32;padding:12px"><b>VANT $'+vente.toFixed(2)+'</b><br><b>A PEYE $'+aPeye.toFixed(2)+'</b><br><b>BALANS $'+(vente-aPeye).toFixed(2)+'</b></div>';}
+function updateTirageByGroup(){let g=resGroup.value;if(!g)return;let opts='';GROUPS[g].tirages.forEach(t=>opts+='<option value="'+t+'">'+t+'</option>');resTirage.innerHTML=opts;}
+function saveRes(){let tirage=resTirage.value,group=resGroup.value,dat=resDate.value;if(!tirage||!dat){alert('Chwazi');return;}let l3=rrL3.value.slice(-3),r1=rr1.value.slice(-2),r2=rr2.value.slice(-2),r3=rr3.value.slice(-2);if(!r1||!r2||!r3){alert('Mete 1e2e3e');return;}if(!l3)l3='9'+r1;let key=sanitizeKey(tirage);let o={tirage,group,dat,r1,r2,r3,l3,m1:r1+r2,m2:r1+r3,m3:r2+r3,l4:r2+r3,l5:l3+r2,key,proprioId:MY_PROPRIO_ID};db.ref('results/'+key).set(o).then(()=>alert('Save'));}
+function loadResTable(){let arr=Object.values(DB.results||{}).filter(r=>!r.proprioId||r.proprioId==MY_PROPRIO_ID);let html='';for(let gName in GROUPS){let g=GROUPS[gName];let items=[];g.tirages.forEach(tName=>{let f=arr.find(r=>r.tirage===tName);if(f)items.push(f);else items.push({tirage:tName,missing:true});});let balls='';items.forEach(r=>{if(r.missing){balls+='<div>'+r.tirage+' - Pa gen</div>';}else{balls+='<div><b>'+r.tirage+' ('+r.dat+')</b> L3 '+r.l3+' 2e '+r.r2+' 3e '+r.r3+'</div>';});html+='<div class="result-card"><div class="result-logo '+g.logo+'">'+g.text+'</div><div><b>'+gName+'</b>'+balls+'</div></div>';}groupResView.innerHTML=html;}
 function loadHorairesUI(){
   let t=document.getElementById('horTirage').value;
   let v=document.getElementById('horVendeur').value;
-  let container=document.getElementById('joursList');
-  if(!t || t=="ALL" || t==""){
-    container.innerHTML='<div style="padding:12px;background:#fff3cd;border:2px dashed #ff9800;border-radius:10px;text-align:center"><b>👆 Chwazi Tiraj anvan</b><br><small>Chwazi youn tiraj pou wè Lundi-Dimanche ak Lè fèmti modifyab</small></div>';
-    return;
-  }
-  if(!v) v='ALL';
+  let c=document.getElementById('joursList');
+  if(!t){c.innerHTML='<div style="padding:12px;background:#fff3cd;text-align:center;border-radius:10px"><b>Chwazi Tiraj anvan pou wè Lundi-Dimanche</b></div>';return;}
+  if(!v)v='ALL';
   let key=t+'_'+(v=='ALL'?'GLOBAL':v);
   let saved=DB.horairesTiraj[key]||{};
-  let h='<div style="background:#e3f2fd;padding:8px;border-radius:8px;margin-bottom:8px;text-align:center"><b>⏰ Orè pou: '+t+' + '+(v=='ALL'?'GLOBAL':v)+'</b><br><small>Lè fèmti modifyab chak jou</small></div>';
+  let h='<div style="background:#e3f2fd;padding:8px;border-radius:8px;text-align:center;margin-bottom:8px"><b>Orè pou: '+t+' + '+v+'</b><br><small>Lè fèmti modifyab</small></div>';
   JOURS.forEach(j=>{
-    let cfg=saved[j]||{active:true,de:'08:00',a:'22:00'};
-    let activeClass=cfg.active?'on':'';
-    h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border:2px solid #ddd;margin-bottom:8px;border-radius:10px;background:#fff">
-      <div style="min-width:75px"><b>${j}</b><br><small id="status_${j}" style="color:${cfg.active?'green':'red'}">${cfg.active?'🟢 Ouvè':'🔴 Fèmen'}</small></div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div class="switch ${activeClass}" id="sw_${j}" onclick="toggleJour('${j}')"><b></b></div>
-        <div style="display:flex;flex-direction:column"><label style="font-size:8px">OUVÈTI</label><input type="time" id="de_${j}" value="${cfg.de}" style="width:85px;padding:7px;border:2px solid #2e7d32;border-radius:6px"></div>
-        <div style="display:flex;flex-direction:column"><label style="font-size:8px;font-weight:900;color:#c62828">FÈMTI MODIFYAB</label><input type="time" id="a_${j}" value="${cfg.a}" style="width:85px;padding:7px;border:2px solid #c62828;border-radius:6px;background:#ffebee;font-weight:800"></div>
-      </div>
-    </div>`;
+    let cfg=saved[j]||{active:true,de:'08:00',a:'21:00'};
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border:2px solid #ddd;margin-bottom:8px;border-radius:10px;background:#fff">'
+      +'<div style="width:70px"><b>'+j+'</b><br><small id="st_'+j+'">'+(cfg.active?'🟢 Ouvè':'🔴 Fèmen')+'</small></div>'
+      +'<div style="display:flex;gap:6px;align-items:center">'
+      +'<div class="switch '+(cfg.active?'on':'')+'" id="sw_'+j+'" onclick="toggleJ(\''+j+'\')"><b></b></div>'
+      +'<div><label style="font-size:8px">OUVÈTI</label><input type="time" id="de_'+j+'" value="'+cfg.de+'" style="width:80px"></div>'
+      +'<div><label style="font-size:8px;color:red;font-weight:900">FÈMTI MODIFYAB</label><input type="time" id="a_'+j+'" value="'+cfg.a+'" style="width:80px;border:2px solid red;background:#ffebee"></div>'
+      +'</div></div>';
   });
-  container.innerHTML=h;
+  c.innerHTML=h;
 }
-function toggleJour(j){
-  let sw=document.getElementById('sw_'+j);
-  let st=document.getElementById('status_'+j);
-  sw.classList.toggle('on');
-  let on=sw.classList.contains('on');
-  if(st){st.innerText=on?'🟢 Ouvè':'🔴 Fèmen'; st.style.color=on?'green':'red';}
-}
+function toggleJ(j){let sw=document.getElementById('sw_'+j);let st=document.getElementById('st_'+j);sw.classList.toggle('on');let on=sw.classList.contains('on');if(st)st.innerText=on?'🟢 Ouvè':'🔴 Fèmen';}
 function saveHoraires(){
   let t=document.getElementById('horTirage').value;
   let v=document.getElementById('horVendeur').value;
-  if(!t || t=="ALL" || t==""){alert('Chwazi Tiraj - Obligatwa');return;}
-  if(!v) v='ALL';
+  if(!t){alert('Chwazi Tiraj');return;}
+  if(!v)v='ALL';
   let key=t+'_'+(v=='ALL'?'GLOBAL':v);
   let obj={};
-  JOURS.forEach(j=>{
-    let de=document.getElementById('de_'+j)?.value||'08:00';
-    let a=document.getElementById('a_'+j)?.value||'22:00';
-    let sw=document.getElementById('sw_'+j);
-    obj[j]={active:sw?sw.classList.contains('on'):true,de,a};
-  });
-  db.ref('horairesTiraj/'+key).set(obj).then(()=>alert('✅ Orè Save - Lè fèmti modifyab OK - '+t+' + '+(v=='ALL'?'GLOBAL':v)+'\n'+JOURS.map(j=>j+': '+obj[j].de+' - '+obj[j].a).join('\n')));
+  JOURS.forEach(j=>{obj[j]={active:document.getElementById('sw_'+j).classList.contains('on'),de:document.getElementById('de_'+j).value,a:document.getElementById('a_'+j).value};});
+  db.ref('horairesTiraj/'+key).set(obj).then(()=>alert('✅ Save Lè fèmti modifyab OK - '+t+' - Lundi-Dimanche\n'+JOURS.map(j=>j+': '+obj[j].de+' - '+obj[j].a).join('\n')));
 }
-function saveBlokeBoul(){let t=blkTirage.value,v=blkVendeur.value,b=blkBoul.value.trim();if(!t||!b){alert('Chwazi Tiraj + Vandè + Boul');return;}db.ref('blokeBoul/'+t+'_'+v+'_'+b).set({tirage:t,vendeur:v||'ALL',boul:b,proprioId:MY_PROPRIO_ID}).then(()=>{blkBoul.value='';alert('Bloke Boul');});}
-function loadBlokeBoulList(){let h='';for(let k in DB.blokeBoul){let b=DB.blokeBoul[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid red;margin-bottom:4px"><span>${b.tirage} - ${b.vendeur} - ${b.boul}</span><button onclick="db.ref('blokeBoul/${k}').remove()">X</button></div>`;}listBlokeBoul.innerHTML=h||'Pa gen';}
-function saveBlokeJeu(){let t=blkJeuTirage.value,v=blkJeuVendeur.value,j=blkJeuType.value;if(!t||!v||!j){alert('Chwazi');return;}db.ref('blokeJeux/'+t+'_'+v+'_'+j).set({tirage:t,vendeur:v,jeu:j,proprioId:MY_PROPRIO_ID}).then(()=>alert('Bloke Jwèt'));}
-function loadBlokeJeuList(){let h='';for(let k in DB.blokeJeux){let b=DB.blokeJeux[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid orange;margin-bottom:4px"><span>${b.tirage} - ${b.vendeur} - ${b.jeu}</span><button onclick="db.ref('blokeJeux/${k}').remove()">X</button></div>`;}listBlokeJeu.innerHTML=h||'Pa gen';}
+function saveBlokeBoul(){let t=blkTirage.value,v=blkVendeur.value,b=blkBoul.value.trim();if(!t||!b){alert('Chwazi');return;}db.ref('blokeBoul/'+t+'_'+v+'_'+b).set({tirage:t,vendeur:v,boul:b,proprioId:MY_PROPRIO_ID}).then(()=>alert('Bloke'));}
+function loadBlokeBoulList(){let h='';for(let k in DB.blokeBoul){let b=DB.blokeBoul[k];if(b.proprioId!=MY_PROPRIO_ID)continue;h+='<div>'+b.tirage+' - '+b.vendeur+' - '+b.boul+' <button onclick="db.ref(\'blokeBoul/'+k+'\').remove()">X</button></div>';}listBlokeBoul.innerHTML=h;}
 try{let s=localStorage.getItem('curP');if(s){CUR=JSON.parse(s);MY_PROPRIO_ID=CUR.id;loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=CUR.nom;init();setToday();}else init();}catch(e){init();}
 </script></body></html>
