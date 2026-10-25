@@ -41,22 +41,42 @@ function setToday(){const t=new Date().toISOString().split('T')[0];if(resDate)re
 function doLogin(){let n=ln.value.trim(),p=lp.value.trim();if(!n||!p){loginMsg.innerText='Mete non ak modpas - Obligatwa - Proprio dwe antre ak modpas';return;}loginMsg.innerText='⏳ Verifye modpas...';db.ref('proprios').once('value').then(snap=>{let all=snap.val()||{};let f=null,fid=null;for(let id in all){if(all[id].nom.toLowerCase()==n.toLowerCase()){f=all[id];fid=id;break;}}if(!f){loginMsg.innerText='❌ Proprio pa jwenn';return;}if(f.pass!=p){loginMsg.innerText='❌ Modpas pa bon';return;}if(f.bloke===true||f.actif===false){loginMsg.innerText='🚫 BLOKE';return;}CUR={nom:f.nom,id:fid};MY_PROPRIO_ID=fid;localStorage.setItem('curP',JSON.stringify(CUR));loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=f.nom;loadAll();setToday();});}
 function logout(){localStorage.removeItem('curP');location.reload();}
 function openTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>{p.classList.remove('active');p.style.display='none';});if(el)el.classList.add('active');document.getElementById(id).classList.add('active');document.getElementById(id).style.display='block';}
-function getMyVendeurs(){let arr=[];for(let id in DB.vendeurs){let v=DB.vendeurs[id];if(v.proprioId==MY_PROPRIO_ID||v.proprioId==CUR.nom||v.proprioId==('p_'+CUR.nom)){arr.push({...v,_id:id});}}return arr;}
+function getMyVendeurs(){let arr=[];for(let id in DB.vendeurs){let v=DB.vendeurs[id];if(v.proprioId==MY_PROPRIO_ID||v.proprioId==CUR.nom)arr.push({...v,_id:id});}return arr;}
 function loadAll(){
  let myV=getMyVendeurs();
- let opts='<option value="global">🌍 PRIX GLOBAL - M1 M2 M3 Detaye ('+myV.length+' vandè)</option>';
+ let opts='<option value="global">🌍 GLOBAL ('+myV.length+') - Bon Kalkil 1er50 2e20 3e10 L3 500 L4 5000 M1M2M3 1000 L5 25000</option>';
  let optsA='<option value="ALL">Tous</option>';
  let optsT='<option value="ALL">Tous</option>';
- myV.forEach(v=>{let lab=(v.serial||v._id)+' - '+v.nom;opts+='<option value="'+v._id+'">👤 '+lab+' (chwazi)</option>';optsA+='<option value="'+v._id+'">'+lab+'</option>';});
- TIRAJ_ALL.forEach(t=>optsT+='<option value="'+t+'">'+t+'</option>');
- let horOpts='<option value="">-- Tiraj --</option>'+TIRAJ_ALL.map(t=>`<option value="${t}">${t}</option>`).join('');
- let vendOptsAll='<option value="">-- Vandè --</option><option value="ALL">🌍 GLOBAL</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
- limVendeur.innerHTML=opts;prixVendeur.innerHTML=opts;rVendeur.innerHTML=optsA;rTirage.innerHTML=optsT;resTirage.innerHTML=horOpts;horTirage.innerHTML=horOpts;horVendeur.innerHTML=vendOptsAll;blkTirage.innerHTML=horOpts;blkJeuTirage.innerHTML=horOpts;blkJeuVendeur.innerHTML=vendOptsAll;
- let html='';myV.forEach((v,i)=>{let bloke=v.bloke===true||DB.blokeVendeur[v._id]===true;let displayBloke=tmpBloke[v._id]!==undefined?tmpBloke[v._id]:bloke;html+=`<div class="card ${displayBloke?'card-red':'card-green'}"><b>${v.nom} (${v.serial||v._id})</b> - ${displayBloke?'🔴 BLOKE':'🟢 DEBLOKE'}<div class="grid2"><input id="nom_${v._id}" value="${v.nom}"><input value="${v.serial||''}" disabled></div><div class="grid2"><input id="pass_${v._id}" type="password" value="${v.pass||''}"><input id="kom_${v._id}" type="number" value="${v.kom||10}"></div><div style="display:flex;gap:8px;margin:8px 0"><div class="switch ${displayBloke?'':'on'}" onclick="toggleBloke('${v._id}')"><b></b></div><b>${displayBloke?'BLOKE':'DEBLOKE'}</b></div><button onclick="saveV('${v._id}')" class="btn btn-green">Sove</button></div>`;});
- listVendeur.innerHTML=html||'<div class="card">Pa gen vandè</div>';loadLimite();loadHeures();loadPrix();loadResTable();loadBlokeBoulList();loadBlokeJeuList();loadEntete();
-}
+ myV.forEach(v=>{let lab=(v.serial||v._id)+' - '+v.nom;opts+='<option value="'+v._id+'">👤 '+lab+'</option>';optsA+='<option value="'+v._id+'">'+lab+'</option>';});
+ for(let g in GROUPS){GROUPS[g].tirages.forEach(t=>optsT+='<option value="'+t+'">'+g+' - '+t+'</option>');}
+ let groupOpts='<option value="">-- Chwazi Gwoup --</option>';for(let g in GROUPS){groupOpts+=`<option value="${g}">${g} - ${GROUPS[g].tirages.length} tiraj - ${GROUPS[g].tirages.join(', ')}</option>`;}
+ let vendOpts='<option value="">-- Vandè --</option><option value="ALL">GLOBAL</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
+ let vendSimple='<option value="">-- Chwazi Vandè --</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
+ prixVendeur.innerHTML=opts;rVendeur.innerHTML=optsA;rTirage.innerHTML=optsT;resGroup.innerHTML=groupOpts;
+ horTirage.innerHTML=optsT;horVendeur.innerHTML=vendOpts;blkTirage.innerHTML=optsT;blkVendeur.innerHTML=vendSimple;blkJeuTirage.innerHTML=optsT;blkJeuVendeur.innerHTML=vendSimple;
+ let html='';myV.forEach(v=>{
+   let bloke=DB.blokeVendeur[v._id]===true||v.bloke===true;
+   if(tmpBloke[v._id]!==undefined) bloke=tmpBloke[v._id];
+   let onOffLabel=bloke?'🔴 OFF BLOKE':'🟢 ON AKTIF';
+   let onOffColor=bloke?'#c62828':'#2e7d32';
+   html+=`<div class="card ${bloke?'card-red':'card-green'}" style="border-left-width:8px">
 function toggleBloke(id){let v=DB.vendeurs[id];let is=v.bloke===true||DB.blokeVendeur[id]===true;if(tmpBloke[id]!==undefined)is=tmpBloke[id];tmpBloke[id]=!is;loadAll();}
 function saveV(id){let nom=document.getElementById('nom_'+id).value.trim();let pass=document.getElementById('pass_'+id).value.trim();let kom=document.getElementById('kom_'+id).value.trim();let newBloke=tmpBloke[id];if(newBloke===undefined){let v=DB.vendeurs[id];newBloke=v.bloke===true;}db.ref('vendeurs/'+id).update({nom,pass,kom:+kom,bloke:newBloke,actif:!newBloke}).then(()=>{if(newBloke){db.ref('blokeVendeur/'+id).set(true);}else{db.ref('blokeVendeur/'+id).remove();}delete tmpBloke[id];alert('Sove');});}
+  let nom=document.getElementById('nom_'+id).value.trim();
+  let kom=document.getElementById('kom_'+id).value.trim();
+  let pass=document.getElementById('pass_'+id).value.trim();
+  let bloke=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;
+  if(tmpBloke[id]!==undefined) bloke=tmpBloke[id];
+  let updates={};updates['vendeurs/'+id+'/nom']=nom;updates['vendeurs/'+id+'/kom']=+kom;if(pass)updates['vendeurs/'+id+'/pass']=pass;updates['vendeurs/'+id+'/bloke']=bloke;updates['vendeurs/'+id+'/actif']=!bloke;updates['prix/'+id+'/kom']=+kom;
+  db.ref().update(updates).then(()=>{
+    if(bloke)db.ref('blokeVendeur/'+id).set(true);else db.ref('blokeVendeur/'+id).remove();
+    delete tmpBloke[id];
+    let msg='✅ ANREJISTRE - '+nom+' - '+(bloke?'🔴 OFF BLOKE':'🟢 ON AKTIF')+' - Apre sa KONFIME';
+    let el=document.getElementById('conf_'+id);if(el) el.innerHTML=msg+'<br><small>Klike KONFIME pou konfime</small>';
+    if(confirm(msg+'\n\nKlike OK pou KONFIME - '+nom)){confirmVendeur(id);}
+    loadAll();
+  });
+}
 function loadPrix(){let k=prixVendeur.value;let p=DB.prix[k]||DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10};p1.value=p.p1;p2.value=p.p2;p3.value=p.p3;pm1.value=p.m1;pm2.value=p.m2;pm3.value=p.m3;ppL3.value=p.l3;ppL4.value=p.l4;ppL5.value=p.l5;pKom.value=p.kom;ppGratis.value=p.maryajGratis||500;prixStatus.innerHTML=`<b>${k=='global'?'GLOBAL':'Pa vandè'} - BON KALKIL ou voye a: 1er ${p.p1} 2e ${p.p2} 3e ${p.p3} M1M2M3 ${p.m1} L3 ${p.l3} L4 ${p.l4} L5 ${p.l5} - Tout Modifiab</b>`;}
 function savePrix(){let k=prixVendeur.value;let o={p1:+p1.value,p2:+p2.value,p3:+p3.value,m1:+pm1.value,m2:+pm2.value,m3:+pm3.value,l3:+ppL3.value,l4:+ppL4.value,l5:+ppL5.value,maryajGratis:+ppGratis.value,kom:+pKom.value};db.ref('prix/'+k).set(o).then(()=>alert('✅ Prix Save - '+(k=='global'?'GLOBAL tout vendeur':'Pa vendeur '+k)+': 1er '+o.p1+' 2e '+o.p2+' 3e '+o.p3+' M1M2M3 '+o.m1+' L3 '+o.l3+' L4 '+o.l4+' L5 '+o.l5+' Gratis '+o.maryajGratis+' Kom '+o.kom+'% - Tout Modifiab - Bon Kalkil'));}
 function getPrixForVendeur(vId){let pg=DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10};if(DB.prix[vId])return Object.assign({},pg,DB.prix[vId]);return pg;}
