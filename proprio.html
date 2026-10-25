@@ -134,155 +134,65 @@ function calcGainProprio(ticket,resultsForDate,prix){
   }
   return total;
 }
-function calcRapport(){let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;let list=Object.values(DB.tickets||{}).filter(t=>!t.annule);if(du)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)>=du);if(au)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)<=au);let myIds=getMyVendeurs().map(v=>v._id);list=list.filter(t=>myIds.includes(t.vendeurId));if(vs!='ALL')list=list.filter(t=>t.vendeurId==vs);if(ts!='ALL')list=list.filter(t=>(t.tirages||[]).includes(ts));let resultsByDate={};Object.values(DB.results).forEach(r=>{if(!r.dat)return;if(r.tirage.toLowerCase().includes('soir'))return;if(!resultsByDate[r.dat])resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let vente=0,aPeye=0;list.forEach(t=>{vente+=+t.total||0;let d=(t.dateHaiti||'').slice(0,10);let prix=getPrixForVendeur(t.vendeurId);aPeye+=calcGainProprio(t,resultsByDate[d]||{},prix);});rapportRes.innerHTML=`<div style="background:#fff;border:3px solid #2e7d32;padding:12px;border-radius:12px"><b>VANT $${vente.toFixed(2)}</b><br><b>A PEYE $${aPeye.toFixed(2)}</b><br><b>BALANS $${(vente-aPeye).toFixed(2)}</b><br><small style="font-weight:900">KALKIL BON ou voye a: 1er×50 2e×20 3e×10 M1M2M3×1000 L3×500 L4×5000 L5×25000 Gratis500 - Tout Pri Modifiab Global/Pa Vendeur - SAN SOIR - GWOUP VRE FL 2 NY 2 TX 3 TENN 4 - resultsByDate[dat][tirage] - BON KALKIL DAT VRE</small></div>`;rapportDetail.innerHTML=`<div class="card"><small>Detail - Bon Kalkil - 1er×50 sèlman kole L3 - 2e×20 - 3e×10 - M1M2M3×1000 lòd/dezòd - L3×500 - L4×5000 nan lòd 2e+3e - L5×25000 L3+2e - resultsByDate - SAN SOIR - NY=2 tiraj sèlman</small></div>`;}
-function updateTirageByGroup(){let g=resGroup.value;if(!g){resTirage.innerHTML='<option value="">-- Chwazi Gwoup anvan --</option>';return;}let tirages=GROUPS[g].tirages;let opts='';tirages.forEach(t=>opts+=`<option value="${t}">${t}</option>`);resTirage.innerHTML=opts;autoGenerate();}
-function autoGenerate(){
- let r1=rr1.value.replace(/\D/g,'').padStart(2,'0').slice(-2);
- let r2=rr2.value.replace(/\D/g,'').padStart(2,'0').slice(-2);
- let r3=rr3.value.replace(/\D/g,'').padStart(2,'0').slice(-2);
- let l3=rrL3.value.replace(/\D/g,'').padStart(3,'0').slice(-3);
- if(!r1||r1=='00') r1='';
- if(!r2||r2=='00') r2='';
- if(!r3||r3=='00') r3='';
- if(!l3||l3=='000') l3='';
- if(l3 && r1 && l3.slice(-2)!=r1){document.getElementById('autoText').innerHTML=`⚠️ L3 ${l3} dènye 2 chif dwe = 1e ${r1} - Ex: L3 905 → 1e 05`;}
- let m1='',m2='',m3='',l4='',l5='';
- if(r1&&r2){m1=r1+r2;}
- if(r1&&r3){m2=r1+r3;}
- if(r2&&r3){m3=r2+r3; l4=r2+r3;}
- if(l3&&r2){l5=l3+r2;}
- let txt=`<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px'>`;
- txt+=`<div>📦 <b>L3:</b> ${l3||'---'} <small>x500 - kole ak 1e ${r1||''}</small></div>`;
- txt+=`<div>🎯 <b>1e:</b> ${r1||'--'} x50</div>`;
- txt+=`<div>🔵 <b>2e:</b> ${r2||'--'} x20</div>`;
- txt+=`<div>🔴 <b>3e:</b> ${r3||'--'} x10</div>`;
- txt+=`<div>💑 <b>M1:</b> ${m1||'----'} = ${r1||'??'}+${r2||'??'} x1000</div>`;
- txt+=`<div>💑 <b>M2:</b> ${m2||'----'} = ${r1||'??'}+${r3||'??'} x1000</div>`;
- txt+=`<div>💑 <b>M3:</b> ${m3||'----'} = ${r2||'??'}+${r3||'??'} x1000</div>`;
- txt+=`<div>🔢 <b>L4:</b> ${l4||'----'} = 2e+3e x5000 nan lòd</div>`;
- txt+=`<div>🔢 <b>L5:</b> ${l5||'-----'} = L3+2e x25000</div>`;
- txt+=`</div>`;
- txt+=`<div style='background:#fff;padding:6px;border-radius:6px;margin-top:8px;border:1px dashed #2e7d32'><b>✅ BON KALKIL ou voye a - resultsByDate[dat][tirage] - SAN SOIR</b></div>`;
- document.getElementById('autoText').innerHTML=txt;
-}
-function saveRes(){
-  let tirage=resTirage.value,group=resGroup.value,dat=resDate.value;
-  if(!tirage||!dat){alert('Chwazi Gwoup + Tiraj + Dat - Obligatwa');return;}
-  let l3=rrL3.value.replace(/\D/g,'').slice(-3).padStart(3,'0');
-  let r1=rr1.value.replace(/\D/g,'').slice(-2).padStart(2,'0');
-  let r2=rr2.value.replace(/\D/g,'').slice(-2).padStart(2,'0');
-  let r3=rr3.value.replace(/\D/g,'').slice(-2).padStart(2,'0');
-  if(!r1||!r2||!r3){alert('Mete 1e lot 2e lot 3e lot - Obligatwa');return;}
-  if(!l3 || l3=='000'){l3='9'+r1;}
-  if(l3.slice(-2)!=r1){alert('⚠️ L3 '+l3+' dènye 2 chif dwe = 1e lot '+r1+' - Menm si kole, kalkil 1e x50 sèlman');}
-  let m1=r1+r2, m2=r1+r3, m3=r2+r3;
-  let l4=r2+r3;
-  let l5=l3+r2;
-  let key=sanitizeKey(tirage);
-  let o={tirage,group,dat,r1,r2,r3,l3,m1,m2,m3,l4,l5,key,id:key,proprioId:MY_PROPRIO_ID,updatedAt:Date.now()};
-  db.ref('results/'+key).set(o).then(()=>{alert('✅ '+group+' - '+tirage+' - '+dat+'\nL3 '+l3+' kole 1e '+r1+' x50 + 2e '+r2+' x20 + 3e '+r3+' x10\nAUTO: M1 '+m1+' M2 '+m2+' M3 '+m3+' x1000\nL4 '+l4+' = 2e+3e x5000 nan lòd sèlman\nL5 '+l5+' = L3+2e x25000\nBON KALKIL ou voye a - resultsByDate[dat][tirage]');});
-}
-function loadResTable(){
-  let arr=Object.values(DB.results||{}).filter(r=>!r.proprioId||r.proprioId==MY_PROPRIO_ID);
-  arr=arr.filter(r=>!r.tirage.toLowerCase().includes('soir'));
-  let html='';
-  for(let gName in GROUPS){
-    let g=GROUPS[gName];
-    let items=[];
-    g.tirages.forEach(tName=>{
-      let found=arr.find(r=>r.tirage===tName);
-      if(found) items.push(found);
-      else items.push({tirage:tName,dat:'---',r1:'--',r2:'--',r3:'--',l3:'---',m1:'----',m2:'----',m3:'----',l4:'----',l5:'-----',missing:true});
-    });
-    let ballsHtml='';
-    items.forEach(r=>{
-      if(r.missing){
-        ballsHtml+=`<div class="result-row"><span class="result-label">${r.tirage} - Pa gen rezilta</span><div class="result-balls"><span class="ball" style="background:#999">---</span><span class="ball" style="background:#999">--</span><span class="ball" style="background:#999">--</span></div></div>`;
-      }else{
-        let b1=r.l3||'---',b2=r.r2||'--',b3=r.r3||'--';
-        let mInfo=`M1 ${r.m1||r.r1+r.r2} M2 ${r.m2||r.r1+r.r3} M3 ${r.m3||r.r2+r.r3} L4 ${r.l4||r.r2+r.r3} L5 ${r.l5||r.l3+r.r2}`;
-        ballsHtml+=`<div class="result-row"><span class="result-label">${r.tirage} (${r.dat})<br><small style="color:#666">${mInfo}</small></span><div class="result-balls"><span class="ball ball-blue" title="L3 ${b1} x500">${b1}</span><span class="ball ball-orange" title="2e ${b2} x20">${b2}</span><span class="ball ball-blue" title="3e ${b3} x10">${b3}</span></div></div>`;
-      }
-    });
-    let logoHtml=`<div class="result-logo ${g.logo}">${g.text}</div>`;
-    html+=`<div class="result-card">${logoHtml}<div class="result-info"><div style="font-weight:900;font-size:12px;margin-bottom:6px">${gName} - ${g.tirages.length} tiraj - ${g.tirages.join(' | ')}</div>${ballsHtml}<div style="font-size:8px;color:#888;margin-top:4px">Bon kalkil ou voye a: resultsByDate[dat][tirage] - 1er x50 sèlman kole L3 - 2e x20 - 3e x10 - M1M2M3 x1000 - L3 x500 - L4 x5000 nan lòd 2e3e - L5 x25000 L3+2e - Auto Maryaj L4 L5 selon 1e2e3e - SAN SOIR</div></div></div>`;
-  }
-  document.getElementById('groupResView').innerHTML=html||'Pa gen rezilta';
-}
-function loadEntete(){let h=DB.headers[MY_PROPRIO_ID]||{};let b=DB.businesses?DB.businesses[MY_PROPRIO_ID]:null;let nom=h.businessName||h.nom||(b&&b.businessName)||CUR?.nom||'VERITE LOTTO';entNom.value=nom;entAdresse.value=h.adresse||'';entTel.value=h.tel||'';entFooter.value=h.footer||'';entLogo.value=h.logo||'';}
-function saveEntete(){let nom=entNom.value.trim().toUpperCase();if(!nom){alert('Mete non');return;}let o={businessName:nom,adresse:entAdresse.value.trim(),tel:entTel.value.trim(),footer:entFooter.value.trim(),logo:entLogo.value.trim(),updatedAt:new Date().toISOString()};db.ref('headers/'+MY_PROPRIO_ID).set(o).then(()=>{db.ref('businesses/'+MY_PROPRIO_ID+'/businessName').set(nom);alert('Entête Save - '+nom);});}
-<script>
-// NOUVO FIX - LÈ FÈMTI MODIFYAB
+function calcRapport(){let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;let list=Object.values(DB.tickets||{}).filter(t=>!t.annule);if(du)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)>=du);if(au)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)<=au);let myIds=getMyVendeurs().map(v=>v._id);list=list.filter(t=>myIds.includes(t.vendeurId));if(vs!='ALL')list=list.filter(t=>t.vendeurId==vs);if(ts!='ALL')list=list.filter(t=>(t.tirages||[]).includes(ts));let resultsByDate={};Object.values(DB.results).forEach(r=>{if(!r.dat)return;if(r.tirage.toLowerCase().includes('soir'))return;if(!resultsByDate[r.dat])resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let vente=0,aPeye=0;list.forEach(t=>{vente+=+t.total||0;let d=(t.dateHaiti||'').slice(0,10);let prix=getPrixForVendeur(t.vendeurId);aPeye+=calcGainProprio(t,resultsByDate[d]||{},prix);});rapportRes.innerHTML=`<div style="background:#fff;border:3px solid #2e7d32;padding:12px;border-radius:12px"><b>VANT $${vente.toFixed(2)}</b><br><b>A PEYE $${aPeye.toFixed(2)}</b><br><b>BALANS $${(vente-aPeye).toFixed(2)}</b><br><small style="font-weight:900">KALKIL BON ou voye a: 1er×50 2e×20 3e×10 M1M2M3×1000 L3×500 L4×5000 L5×25000 Gratis500 - Tout Pri Modifiab - SAN SOIR - resultsByDate[dat][tirage]</small></div>`;}
+function updateTirageByGroup(){let g=resGroup.value;if(!g){resTirage.innerHTML='<option>-- Chwazi Gwoup anvan --</option>';return;}let tirages=GROUPS[g].tirages;let opts='';tirages.forEach(t=>opts+=`<option value="${t}">${t}</option>`);resTirage.innerHTML=opts;autoGenerate();}
+function autoGenerate(){let r1=rr1.value.replace(/\D/g,'').padStart(2,'0').slice(-2);let r2=rr2.value.replace(/\D/g,'').padStart(2,'0').slice(-2);let r3=rr3.value.replace(/\D/g,'').padStart(2,'0').slice(-2);let l3=rrL3.value.replace(/\D/g,'').padStart(3,'0').slice(-3);if(!r1||r1=='00') r1='';if(!r2||r2=='00') r2='';if(!r3||r3=='00') r3='';if(!l3||l3=='000') l3='';let m1=r1&&r2?r1+r2:'----';let m2=r1&&r3?r1+r3:'----';let m3=r2&&r3?r2+r3:'----';let l4=r2&&r3?r2+r3:'----';let l5=l3&&r2?l3+r2:'-----';autoText.innerHTML=`<div>L3 ${l3||'---'} kole 1e ${r1||'--'} x50<br>M1 ${m1} M2 ${m2} M3 ${m3} x1000 L4 ${l4} x5000 L5 ${l5} x25000</div>`;}
+function saveRes(){let tirage=resTirage.value,group=resGroup.value,dat=resDate.value;if(!tirage||!dat){alert('Chwazi Gwoup + Tiraj + Dat');return;}let l3=rrL3.value.replace(/\D/g,'').slice(-3).padStart(3,'0');let r1=rr1.value.replace(/\D/g,'').slice(-2).padStart(2,'0');let r2=rr2.value.replace(/\D/g,'').slice(-2).padStart(2,'0');let r3=rr3.value.replace(/\D/g,'').slice(-2).padStart(2,'0');if(!r1||!r2||!r3){alert('Mete 1e 2e 3e');return;}if(!l3||l3=='000'){l3='9'+r1;}let m1=r1+r2,m2=r1+r3,m3=r2+r3,l4=r2+r3,l5=l3+r2;let key=sanitizeKey(tirage);let o={tirage,group,dat,r1,r2,r3,l3,m1,m2,m3,l4,l5,key,id:key,proprioId:MY_PROPRIO_ID,updatedAt:Date.now()};db.ref('results/'+key).set(o).then(()=>alert('✅ '+group+' - '+tirage+' - BON KALKIL'));}
+function loadResTable(){let arr=Object.values(DB.results||{}).filter(r=>!r.proprioId||r.proprioId==MY_PROPRIO_ID);arr=arr.filter(r=>!r.tirage.toLowerCase().includes('soir'));let html='';for(let gName in GROUPS){let g=GROUPS[gName];let items=[];g.tirages.forEach(tName=>{let found=arr.find(r=>r.tirage===tName);if(found)items.push(found);else items.push({tirage:tName,missing:true});});let balls='';items.forEach(r=>{if(r.missing){balls+=`<div class="result-row"><span class="result-label">${r.tirage} - Pa gen</span><div class="result-balls"><span class="ball" style="background:#999">---</span></div></div>`;}else{balls+=`<div class="result-row"><span class="result-label">${r.tirage} (${r.dat})<br><small>M1 ${r.m1} M2 ${r.m2} M3 ${r.m3} L4 ${r.l4} L5 ${r.l5}</small></span><div class="result-balls"><span class="ball ball-blue">${r.l3}</span><span class="ball ball-orange">${r.r2}</span><span class="ball ball-blue">${r.r3}</span></div></div>`;});let logo=`<div class="result-logo ${g.logo}">${g.text}</div>`;html+=`<div class="result-card">${logo}<div class="result-info"><b>${gName}</b>${balls}</div></div>`;}groupResView.innerHTML=html||'Pa gen';}
+function loadEntete(){let h=DB.headers[MY_PROPRIO_ID]||{};entNom.value=h.businessName||CUR?.nom||'VERITE LOTTO';entAdresse.value=h.adresse||'';entTel.value=h.tel||'';entFooter.value=h.footer||'';entLogo.value=h.logo||'';}
+function saveEntete(){let nom=entNom.value.trim().toUpperCase();let o={businessName:nom,adresse:entAdresse.value.trim(),tel:entTel.value.trim(),footer:entFooter.value.trim(),logo:entLogo.value.trim()};db.ref('headers/'+MY_PROPRIO_ID).set(o).then(()=>{db.ref('businesses/'+MY_PROPRIO_ID+'/businessName').set(nom);alert('Entête Save');});}
+// === FIX V26.3 - LÈ FÈMTI MODIFYAB - CHWAZI TIRAJ CHWAZI VANDÈ ===
 function loadHorairesUI(){
   let t=document.getElementById('horTirage').value;
   let v=document.getElementById('horVendeur').value;
   let container=document.getElementById('joursList');
   if(!t || t=="ALL" || t==""){
-    container.innerHTML='<div style="padding:12px;background:#fff3cd;border:2px dashed #ff9800;border-radius:10px;text-align:center"><b>👆 Chwazi Tiraj anvan - Chwazi Tiraj Chwazi Vandè</b><br><small>Chwazi youn tiraj pou wè Lundi-Dimanche</small></div>';
+    container.innerHTML='<div style="padding:12px;background:#fff3cd;border:2px dashed #ff9800;border-radius:10px;text-align:center"><b>👆 Chwazi Tiraj anvan</b><br><small>Chwazi youn tiraj pou wè Lundi-Dimanche ak Lè fèmti modifyab</small></div>';
     return;
   }
   if(!v) v='ALL';
   let key=t+'_'+(v=='ALL'?'GLOBAL':v);
   let saved=DB.horairesTiraj[key]||{};
-  let h='<div style="background:#e3f2fd;padding:8px;border-radius:8px;margin-bottom:8px;text-align:center"><b>⏰ Orè pou: '+t+' + '+(v=='ALL'?'GLOBAL - Tout Vandè':v)+'</b><br><small>Lè ouvèti ak Lè fèmti modifyab pou chak jou</small></div>';
+  let h='<div style="background:#e3f2fd;padding:8px;border-radius:8px;margin-bottom:8px;text-align:center"><b>⏰ Orè pou: '+t+' + '+(v=='ALL'?'GLOBAL':v)+'</b><br><small>Lè fèmti modifyab chak jou</small></div>';
   JOURS.forEach(j=>{
     let cfg=saved[j]||{active:true,de:'08:00',a:'22:00'};
     let activeClass=cfg.active?'on':'';
     h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border:2px solid #ddd;margin-bottom:8px;border-radius:10px;background:#fff">
-      <div style="min-width:80px"><b>${j}</b><br><small id="status_${j}" style="color:${cfg.active?'green':'red'}">${cfg.active?'🟢 Ouvè':'🔴 Fèmen'}</small></div>
+      <div style="min-width:75px"><b>${j}</b><br><small id="status_${j}" style="color:${cfg.active?'green':'red'}">${cfg.active?'🟢 Ouvè':'🔴 Fèmen'}</small></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <div class="switch ${activeClass}" id="sw_${j}" onclick="toggleJour('${j}')" style="flex-shrink:0"><b></b></div>
-        <div style="display:flex;flex-direction:column;gap:4px">
-          <label style="font-size:9px">OUVÈTI</label>
-          <input type="time" id="de_${j}" value="${cfg.de}" style="width:90px;padding:8px;border:2px solid #2e7d32;border-radius:8px">
-        </div>
-        <div style="display:flex;flex-direction:column;gap:4px">
-          <label style="font-size:9px;font-weight:900;color:#c62828">FÈMTI MODIFYAB</label>
-          <input type="time" id="a_${j}" value="${cfg.a}" style="width:90px;padding:8px;border:2px solid #c62828;border-radius:8px;background:#ffebee;font-weight:800">
-        </div>
+        <div class="switch ${activeClass}" id="sw_${j}" onclick="toggleJour('${j}')"><b></b></div>
+        <div style="display:flex;flex-direction:column"><label style="font-size:8px">OUVÈTI</label><input type="time" id="de_${j}" value="${cfg.de}" style="width:85px;padding:7px;border:2px solid #2e7d32;border-radius:6px"></div>
+        <div style="display:flex;flex-direction:column"><label style="font-size:8px;font-weight:900;color:#c62828">FÈMTI MODIFYAB</label><input type="time" id="a_${j}" value="${cfg.a}" style="width:85px;padding:7px;border:2px solid #c62828;border-radius:6px;background:#ffebee;font-weight:800"></div>
       </div>
     </div>`;
   });
-  h+=`<div style="background:#fff3e0;padding:8px;border-radius:8px;margin-top:8px;text-align:center"><small><b>💡 Fèmti modifyab:</b> Ou ka chanje lè fèmti pou chak jou Lundi-Dimanche jan ou vle - Ex: Lundi 08:00 - 18:00, Samedi 08:00 - 23:00</small></div>`;
   container.innerHTML=h;
 }
 function toggleJour(j){
   let sw=document.getElementById('sw_'+j);
-  let status=document.getElementById('status_'+j);
+  let st=document.getElementById('status_'+j);
   sw.classList.toggle('on');
-  let isOn=sw.classList.contains('on');
-  if(status){
-    status.innerText=isOn?'🟢 Ouvè':'🔴 Fèmen';
-    status.style.color=isOn?'green':'red';
-  }
+  let on=sw.classList.contains('on');
+  if(st){st.innerText=on?'🟢 Ouvè':'🔴 Fèmen'; st.style.color=on?'green':'red';}
 }
 function saveHoraires(){
   let t=document.getElementById('horTirage').value;
   let v=document.getElementById('horVendeur').value;
-  if(!t || t=="ALL" || t==""){
-    alert('Chwazi Tiraj - Chwazi Tiraj Chwazi Vandè - Obligatwa');
-    return;
-  }
+  if(!t || t=="ALL" || t==""){alert('Chwazi Tiraj - Obligatwa');return;}
   if(!v) v='ALL';
   let key=t+'_'+(v=='ALL'?'GLOBAL':v);
   let obj={};
   JOURS.forEach(j=>{
-    let deEl=document.getElementById('de_'+j);
-    let aEl=document.getElementById('a_'+j);
-    let swEl=document.getElementById('sw_'+j);
-    let de=deEl?deEl.value:'08:00';
-    let a=aEl?aEl.value:'22:00';
-    let active=swEl?swEl.classList.contains('on'):true;
-    obj[j]={active,de,a};
+    let de=document.getElementById('de_'+j)?.value||'08:00';
+    let a=document.getElementById('a_'+j)?.value||'22:00';
+    let sw=document.getElementById('sw_'+j);
+    obj[j]={active:sw?sw.classList.contains('on'):true,de,a};
   });
-  db.ref('horairesTiraj/'+key).set(obj).then(()=>{
-    alert('✅ Orè Save - Lundi-Dimanche - Chwazi Tiraj '+t+' Chwazi Vandè '+(v=='ALL'?'GLOBAL':v)+'\n\nLè fèmti modifyab:\n'+JOURS.map(j=>j+': '+obj[j].de+' - '+obj[j].a+' '+(obj[j].active?'ON':'OFF')).join('\n'));
-  });
+  db.ref('horairesTiraj/'+key).set(obj).then(()=>alert('✅ Orè Save - Lè fèmti modifyab OK - '+t+' + '+(v=='ALL'?'GLOBAL':v)+'\n'+JOURS.map(j=>j+': '+obj[j].de+' - '+obj[j].a).join('\n')));
 }
-</script>
-function saveBlokeBoul(){let t=blkTirage.value,v=blkVendeur.value,b=blkBoul.value.trim();if(!t||!b){alert('Chwazi Tiraj + Vandè + Boul - Obligatwa - Chwazi Tiraj Chwazi Vandè Chwazi Boul');return;}db.ref('blokeBoul/'+t+'_'+v+'_'+b).set({tirage:t,vendeur:v||'ALL',boul:b,proprioId:MY_PROPRIO_ID}).then(()=>{blkBoul.value='';alert('Bloke Boul - Tiraj '+t+' Chwazi Vandè '+(v||'ALL')+' Chwazi Boul '+b);});}
-function loadBlokeBoulList(){let h='';for(let k in DB.blokeBoul){let b=DB.blokeBoul[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid red;margin-bottom:4px;border-radius:6px"><span>${b.tirage} - ${b.vendeur||'ALL'} - ${b.boul} - Chwazi Tiraj Chwazi Vandè Chwazi Boul</span><button onclick="db.ref('blokeBoul/${k}').remove()" style="background:red;color:#fff;border:0;padding:4px 8px;border-radius:4px">X</button></div>`;}listBlokeBoul.innerHTML=h||'Pa gen - Chwazi Tiraj Chwazi Vandè Chwazi Boul';}
-function saveBlokeJeu(){let t=blkJeuTirage.value,v=blkJeuVendeur.value,j=blkJeuType.value;if(!t||!v||!j){alert('Chwazi Tiraj + Vandè + Jwèt - Obligatwa - Chwazi Tiraj Chwazi Vandè Chwazi Jwèt');return;}db.ref('blokeJeux/'+t+'_'+v+'_'+j).set({tirage:t,vendeur:v,jeu:j,proprioId:MY_PROPRIO_ID}).then(()=>alert('Bloke Jwèt - '+t+' '+v+' '+j+' - Chwazi Tiraj Chwazi Vandè Chwazi Jwèt'));}
-function loadBlokeJeuList(){let h='';for(let k in DB.blokeJeux){let b=DB.blokeJeux[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid orange;margin-bottom:4px;border-radius:6px"><span>${b.tirage} - ${b.vendeur} - ${b.jeu} - Chwazi Tiraj Chwazi Vandè Chwazi Jwèt</span><button onclick="db.ref('blokeJeux/${k}').remove()" style="background:orange;color:#fff;border:0;padding:4px 8px;border-radius:4px">X</button></div>`;}listBlokeJeu.innerHTML=h||'Pa gen - Chwazi Tiraj Chwazi Vandè Chwazi Jwèt';}
+function saveBlokeBoul(){let t=blkTirage.value,v=blkVendeur.value,b=blkBoul.value.trim();if(!t||!b){alert('Chwazi Tiraj + Vandè + Boul');return;}db.ref('blokeBoul/'+t+'_'+v+'_'+b).set({tirage:t,vendeur:v||'ALL',boul:b,proprioId:MY_PROPRIO_ID}).then(()=>{blkBoul.value='';alert('Bloke Boul');});}
+function loadBlokeBoulList(){let h='';for(let k in DB.blokeBoul){let b=DB.blokeBoul[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid red;margin-bottom:4px"><span>${b.tirage} - ${b.vendeur} - ${b.boul}</span><button onclick="db.ref('blokeBoul/${k}').remove()">X</button></div>`;}listBlokeBoul.innerHTML=h||'Pa gen';}
+function saveBlokeJeu(){let t=blkJeuTirage.value,v=blkJeuVendeur.value,j=blkJeuType.value;if(!t||!v||!j){alert('Chwazi');return;}db.ref('blokeJeux/'+t+'_'+v+'_'+j).set({tirage:t,vendeur:v,jeu:j,proprioId:MY_PROPRIO_ID}).then(()=>alert('Bloke Jwèt'));}
+function loadBlokeJeuList(){let h='';for(let k in DB.blokeJeux){let b=DB.blokeJeux[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid orange;margin-bottom:4px"><span>${b.tirage} - ${b.vendeur} - ${b.jeu}</span><button onclick="db.ref('blokeJeux/${k}').remove()">X</button></div>`;}listBlokeJeu.innerHTML=h||'Pa gen';}
 try{let s=localStorage.getItem('curP');if(s){CUR=JSON.parse(s);MY_PROPRIO_ID=CUR.id;loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=CUR.nom;init();setToday();}else init();}catch(e){init();}
 </script></body></html>
