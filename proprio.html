@@ -198,20 +198,8 @@ function calcGainProprio(ticket,resultsByTirage,prix){
   return total;
 }
 function calcRapport(){
- let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;
- let list=Object.values(DB.tickets||{}).filter(t=>!t.annule);
- if(du) list=list.filter(t=>(t.dateHaiti||'').slice(0,10)>=du);
- if(au) list=list.filter(t=>(t.dateHaiti||'').slice(0,10)<=au);
- let myIds=getMyVendeurs().map(v=>v._id);
- list=list.filter(t=>myIds.includes(t.vendeurId));
- if(vs!='ALL') list=list.filter(t=>t.vendeurId==vs);
- if(ts!='ALL') list=list.filter(t=>(t.tirages||[]).includes(ts));
- let resultsByTirage={};Object.values(DB.results||{}).forEach(r=>{resultsByTirage[r.tirage]=r;});
- let vente=0,aPeye=0,detail='';
- list.forEach(t=>{vente+=+t.total||0;let prix=getPrixForVendeur(t.vendeurId);let gain=calcGainProprio(t,resultsByTirage,prix);if(gain>0){aPeye+=gain;detail+=`✅ ${t.tirage||''} - $${gain.toFixed(2)}<br>`;}});
- rapportRes.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center"><div style="background:#e3f2fd;padding:12px;border-radius:10px"><small>VANT</small><div style="font-size:20px;font-weight:900">$${vente.toFixed(2)}</div></div><div style="background:#fce4ec;padding:12px;border-radius:10px"><small>A PEYE - VRE PRI 1er50 sèlman 2e20 3e10 L3 500 L4 5000 M1M2M3 1000 L5 25000</small><div style="font-size:20px;font-weight:900">$${aPeye.toFixed(2)}</div></div><div style="background:#e8f5e9;padding:12px;border-radius:10px"><small>BALANS</small><div style="font-size:20px;font-weight:900">$${(vente-aPeye).toFixed(2)}</div></div></div>`;
- rapportDetail.innerHTML=detail?`<div class="card"><h4>Detail - Kalkil VRE - 1er x50 sèlman kole L3</h4>${detail}</div>`:'Pa gen gayan';
-}
+function calcRapport(){let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;let list=Object.values(DB.tickets||{}).filter(t=>!t.annule);if(du)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)>=du);if(au)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)<=au);let myIds=getMyVendeurs().map(v=>v._id);list=list.filter(t=>myIds.includes(t.vendeurId));if(vs!='ALL')list=list.filter(t=>t.vendeurId==vs);if(ts!='ALL')list=list.filter(t=>(t.tirages||[]).includes(ts));let resultsByDate={};Object.values(DB.results).forEach(r=>{if(!r.dat)return;if(r.tirage.toLowerCase().includes('soir'))return;if(!resultsByDate[r.dat])resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let vente=0,aPeye=0;list.forEach(t=>{vente+=+t.total||0;let d=(t.dateHaiti||'').slice(0,10);let prix=getPrixForVendeur(t.vendeurId);aPeye+=calcGainProprio(t,resultsByDate[d]||{},prix);});rapportRes.innerHTML=`<div style="background:#fff;border:3px solid #2e7d32;padding:12px;border-radius:12px"><b>VANT $${vente.toFixed(2)}</b><br><b>A PEYE $${aPeye.toFixed(2)}</b><br><b>BALANS $${(vente-aPeye).toFixed(2)}</b><br><small style="font-weight:900">KALKIL: 1er×50 2e×20 3e×10 M1M2M3×1000 L3×500 L4×5000 L5×25000 Gratis500 - Tout Pri Modifiab Global/Pa Vendeur - SAN SOIR - NY=2 - DAT23</small></div>`;}
+function sanitizeId(s){return (s||'').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_');}
 function saveRes(){
   let tirage=resTirage.value,group=resGroup.value,dat=resDate.value;
   if(!tirage||!dat){alert('Chwazi Gwoup + Tiraj + Dat - Obligatwa');return;}
