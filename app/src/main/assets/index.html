@@ -81,7 +81,110 @@ for(let tt of selT){ let c=canSellProprio('',tt,''); if(!c.ok){ alert(c.msg+' - 
 let rawBets=[];document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm){rawBets.push({type:j,numero:b,mise:mm});}});if(!rawBets.length){alert('VID');return}
 for(let b of rawBets){ for(let tt of selT){ let c=canSellProprio(b.numero,tt,b.type); if(!c.ok){ alert(c.msg); return; } } }
 let merged={};rawBets.forEach(b=>{let key=b.type+'|'+b.numero;if(merged[key]){merged[key].mise+=b.mise;}else{merged[key]={type:b.type,numero:b.numero,mise:b.mise};}});let bets=Object.values(merged);for(let b of bets){let lim=getLimiteForJeu(b.type);if(b.mise>lim){alert('Limit depase pou '+b.type.toUpperCase()+' '+b.numero+': $'+b.mise+' > Max $'+lim);return;}}let base=bets.reduce((a,b)=>a+b.mise,0);let prix=getMyPrix();let gratisRes=isMaryajGratisEnabled()?calcMaryajGratis(bets,base):{gratisList:[]};let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gratisRes.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),heure:getHaitiTimeString(),heureEST:getHaitiTimeString()+' EST',dateTimeFull:getHaitiDateTimeFull(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',prix:prix,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter()};await db.ref('tickets/'+tk.id).set(tk);let data=build(tk);LAST_TXT=data.text;LAST_HTML=data.html;showPreview(data);setTimeout(()=>{printBT(data);},150);document.getElementById('bets').innerHTML='';document.getElementById('gratisPreview').innerHTML='';addR();updFast();forceTabsVisible();}
-function doCopy(){let id=document.getElementById('cid').value.trim();if(!id) return;db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t) return;selT=t.tirages||[];document.getElementById('bets').innerHTML='';t.bets.forEach(b=>{let r=addR(b.type);r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;r.querySelector('.jeu').value=b.type;onJeuChange(r.querySelector('.jeu'));checkLimit(r.querySelector('.mise'));});renderT();goTab('pV',document.querySelectorAll('.tab')[0]);updFast();forceTabsVisible();});}
+async function doCopy(){
+  let id=document.getElementById('cid').value.trim().toUpperCase();
+  if(!id){alert('Mete ID Tike');return;}
+  
+  let snap=await db.ref('tickets/'+id).once('value');
+  let t=snap.val();
+  if(!t){alert('Fich pa jwenn: '+id);return;}
+  if(t.annule){alert('Fich sa ANILE - pa ka kopye');return;}
+  
+  // === 1- PA OTORIZE DAT KI DEJA PASE ===
+  let fichDate=t.dateHaiti||t.date||'';
+  let today=getHaitiDateStr();
+  if(fichDate && fichDate < today){
+    alert('⛔ Dat fich la pase ('+fichDate+' < '+today+') - Pa ka kopye fich ki gen dat pase');
+    return;
+  }
+  if(fichDate && fichDate > today){
+    alert('⛔ Dat fich la nan lavni ('+fichDate+') - Pa ka kopye');
+    return;
+  }
+  
+  // === 2- PA OTORIZE TIRAJ KI DEJA FÈMEN ===
+  let oldTirages=t.tirages||[];
+  if(!oldTirages.length){alert('Fich la pa gen tiraj');return;}
+  
+  let tirajOuve=[];
+  let tirajFemen=[];
+  
+  oldTirages.forEach(tn=>{
+    if(isOpen(tn)){
+      tirajOuve.push(tn);
+    }else{
+      tirajFemen.push(tn);
+    }
+  });
+  
+  if(tirajFemen.length>0){
+    console.log('Tiraj fèmen yo pa kopye:', tirajFemen.join(', '));
+  }
+  
+  if(tirajOuve.length===0){
+    alert('⛔ Tout tiraj fich sa a fèmen deja:\n'+tirajFemen.join(', ')+'\n\nPa ka kopye - Chwazi tiraj ankou');
+    return;
+  }
+  
+  // === 3- APRE KOPYE, CHWAZI TIRAJ ANKOU SÈLMAN ===
+  selT=tirajOuve.slice(); // sèlman sa ki ouvè
+  
+  // Kopye bets yo
+  document.getElementById('bets').innerHTML='';
+  let betsOk=0;
+  (t.bets||[]).forEach(b=>{
+    // Tcheke si boul la bloke kounye a
+    if(b.type==='boul'){
+      let bloke=false;
+      for(let tt of selT){
+        if(isBoulBlokeProprio(b.numero,tt)){bloke=true;break;}
+      }
+      if(bloke) return; // pa kopye boul bloke
+    }
+    // Tcheke bloke jwèt
+    for(let tt of selT){
+      let c=canSellProprio(b.numero,tt,b.type);
+      if(!c.ok){return;}
+    }
+    
+    let r=addR(b.type);
+    r.querySelector('.boul').value=b.numero;
+    r.querySelector('.mise').value=b.mise;
+    r.querySelector('.jeu').value=b.type;
+    onJeuChange(r.querySelector('.jeu'));
+    checkLimit(r.querySelector('.mise'));
+    betsOk++;
+  });
+  
+  if(betsOk===0){
+    alert('⛔ Tout boul yo bloke kounye a - Pa ka kopye');
+    selT=[];
+    document.getElementById('bets').innerHTML='';
+    addR();
+    return;
+  }
+  
+  // Update UI
+  renderT();
+  document.getElementById('txtT').innerText=selT.length+' tiraj ankou';
+  goTab('pV',document.querySelectorAll('.tab')[0]);
+  updFast();
+  renderGratisPreview();
+  forceTabsVisible();
+  
+  // Mesaj final
+  let msg='✅ Fich '+t.id+' kopye\n';
+  msg+=selT.length+' tiraj ankou: '+selT.join(', ')+'\n';
+  if(tirajFemen.length>0) msg+='❌ '+tirajFemen.length+' tiraj fèmen pa kopye: '+tirajFemen.join(', ')+'\n';
+  msg+='Pare pou enprime';
+  
+  // Si gen kèk tiraj fèmen, montre yo men pa chwazi yo
+  if(tirajFemen.length>0){
+    setTimeout(()=>{alert(msg);},300);
+  }
+  
+  document.getElementById('cid').value='';
+}
 async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let html='';Object.values(all).forEach(t=>{if((t.dateHaiti||t.date)!==d) return;if(CUR&&t.serial&&String(t.serial)!==String(CUR.serial)) return;html+='<div class="card"><b>'+t.id+'</b> - $'+t.total+' '+(t.annule?' ANILE':'')+'</div>';});document.getElementById('flist').innerHTML=html||'Pa gen fich';forceTabsVisible();}
 function scanAparey(){let res=document.getElementById('scanResult');res.innerHTML='Recherche...';try{if(window.AndroidPrinter&&typeof window.AndroidPrinter.scanDevices==='function'){let json=window.AndroidPrinter.scanDevices();let devs=JSON.parse(json);let html='<div><b>'+devs.length+' aparey:</b></div>';devs.forEach(d=>{html+='<div style="background:#e8f5e9;border:2px solid #0a4a2e;padding:10px;margin:6px 0;border-radius:8px;cursor:pointer" onclick="choisiAparey(\''+d.mac+'\',\''+d.name+'\')"><b>'+d.name+'</b></div>';});res.innerHTML=html;return;}}catch(e){}res.innerHTML='<div style="background:#e3f2fd;padding:10px;border-radius:8px;cursor:pointer" onclick="choisiAparey(\'BT-PRINTER-58MM\',\'Bluetooth Printer\')"><b>Bluetooth Printer 58MM</b></div>';}
 function choisiAparey(mac,name){tempMac=mac;tempName=name;document.getElementById('chosenName').innerText=name;document.getElementById('chosenMac').innerText='Mac: '+mac;document.getElementById('configSection').style.display='block';}
