@@ -75,25 +75,20 @@ async function doCopy(){
   let snap=await db.ref('tickets/'+id).once('value');
   let t=snap.val();
   if(!t){alert('Fich pa jwenn: '+id);return;}
-
-  // ✅ KOREKSYON: ANILE ak dat ki pase KA kopye - jis avèti
-  let msgExtra = "";
-  if(t.annule) msgExtra += "ANILE - ";
-  let fichDate = t.dateHaiti || t.date || "";
-  let today = getHaitiDateStr();
-  if(fichDate && fichDate !== today) msgExtra += "Dat pase ("+fichDate+") - ";
-  if(msgExtra){
-    // pa bloke - jis konfime
-    if(!confirm(msgExtra+" Vle kopye boul yo nan tiraj JODI A ki ouvè?")){
-      return;
-    }
+  // FIX V36.7.1: ANILE + DAT PASE KA KOPYE - men tiraj dat du jour ouvè sèlman
+  let fichDate=t.dateHaiti||t.date||'';
+  let today=getHaitiDateStr();
+  let isOld=fichDate && fichDate!==today;
+  let isAnile=t.annule;
+  let warn="";
+  if(isAnile) warn+="[ANILE] ";
+  if(isOld) warn+="Dat pase "+fichDate+" -> ";
+  warn+="Ap kopye nan tiraj JODI A ki ouvè";
+  if(isAnile || isOld){
+    if(!confirm(warn+" - Kontinye?")) return;
   }
-
-  // ✅ PA kopye tiraj ansyen (GA midi yè, elatriye)
-  selT = [];
-  document.getElementById('txtT').innerText='Chwazi Tiraj';
-
-  // Kopye sèlman boul/miz
+  selT=[];
+  document.getElementById('txtT').innerText='Chwazi Tiraj Jodi a';
   document.getElementById('bets').innerHTML='';
   (t.bets||[]).forEach(b=>{
     let r=addR(b.type);
@@ -103,11 +98,8 @@ async function doCopy(){
     onJeuChange(r.querySelector('.jeu'));
     checkLimit(r.querySelector('.mise'));
   });
-
-  // ✅ Rann tiraj dat du jour ki pa fèmen sèlman
-  renderT(); // renderT deja itilize isOpen() -> sèlman tiraj jodi a ki ouvè
-  document.getElementById('tlist').classList.add('open'); // ouvri pou vandè chwazi
-
+  renderT();
+  document.getElementById('tlist').classList.add('open');
   goTab('pV',document.querySelectorAll('.tab')[0]);
   updFast(); renderGratisPreview(); forceTabsVisible();
   if(idEl) idEl.value='';
