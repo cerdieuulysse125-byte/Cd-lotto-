@@ -98,7 +98,84 @@ function calcGainForTicket(ticket, resultsForDate, fallbackPrix){
   }catch(e){}
   return {totalGain: totalGain};
 }
-(mySerial)) return;if(ti!=='tous'&&!(t.tirages||[]).includes(ti)) return;if(t.annule) return;totalTikeVann++;ventTotal+=t.total||0;let komActive=prix.komActive!==false;let komPerc=parseFloat(prix.kom||10);if(komActive) totalKom+=(t.total||0)*(komPerc/100);let rForDate=resultsByDate[td]||{};let calc=calcGainForTicket(t,rForDate,prix);if(calc.totalGain>0) aPeye+=calc.totalGain;});let balansNet=ventTotal-totalKom-aPeye;let bn=getBusinessName();let ft=getFooter();let komPercDisplay=parseFloat(prix.kom||10);let html='<div style="text-align:center"><div style="background:#0a4a2e;color:#d4af37;padding:10px;border-radius:8px">Du '+du+' Au '+au+' - '+(ti==='tous'?'Tous':ti)+'<br>Kom Sync: '+komPercDisplay+'%</div><div style="background:#fff;border:2px solid #0a4a2e;padding:10px"><div>Vann: '+totalTikeVann+'</div><div>Vant: $'+ventTotal.toFixed(2)+'</div><div>Komisyon ('+komPercDisplay+'%): $'+totalKom.toFixed(2)+'</div><div>A peye: $'+aPeye.toFixed(2)+'</div><div style="background:#0a4a2e;color:#d4af37;padding:8px">Balans: $'+balansNet.toFixed(2)+'</div></div></div>';rres.innerHTML=html;let thermalData={bn,ft,du,au,ti,totalTikeVann,ventTotal,totalKom,aPeye,balansNet,komPerc:komPercDisplay,komActive:true};let rapportTxtData=buildRapportThermalText(thermalData);let rp=document.getElementById('rprint');rp.dataset.plain=rapportTxtData.text;rp.dataset.logo=rapportTxtData.logo;document.getElementById('rapportPrintButtons').style.display='block';forceTabsVisible(e){rres.innerHTML='Ere: '+e.me
+// V36.7.4 - RAPPORT SENKRO VANDE -> PWOPRIYO + RESPÈ PRI PA VANDE / GLOBAL
+async function calcR(){
+  let rres=document.getElementById('rres');
+  let du=document.getElementById('rdu').value||getHaitiDateStr();
+  let au=document.getElementById('rau').value||getHaitiDateStr();
+  let ti=document.getElementById('rt').value||'tous';
+  rres.style.display='block';
+  rres.innerHTML='Ap kalkile...';
+  try{
+    let snap=await db.ref('tickets').once('value');
+    let all=snap.val()||{};
+    let resSnap=await db.ref('results').once('value');
+    let allRes=resSnap.val()||{};
+    let resultsByDate={};
+    Object.values(allRes).forEach(r=>{
+      if(!r||!r.dat) return;
+      if(!resultsByDate[r.dat]) resultsByDate[r.dat]={};
+      resultsByDate[r.dat][r.tirage]=r;
+    });
+
+    let totalTikeVann=0, ventTotal=0, totalKom=0, aPeye=0;
+    let myProprio = CUR ? CUR.proprioId : null;
+    let mySerial = CUR ? CUR.serial : null;
+    let myVendeurKey = CUR ? CUR._key : null;
+
+    // Detèmine si se pwopriyo kap gade (pa gen serial filtre) oswa vandè
+    let isVendeurView = mySerial ? true : false;
+
+    Object.values(all).forEach(t=>{
+      let td = t.dateHaiti || t.date;
+      if(!td || td < du || td > au) return;
+      if(t.annule) return;
+      if(ti!=='tous' && !(t.tirages||[]).includes(ti)) return;
+
+      // FILTRE SENKRO:
+      // Si vandè: wè sèlman pa li
+      // Si pwopriyo: wè tout fich ki gen proprioId = pa li
+      if(isVendeurView){
+        if(mySerial && t.serial && String(t.serial)!==String(mySerial)) return;
+      }else{
+        if(myProprio && t.proprioId && t.proprioId!==myProprio) return;
+      }
+
+      totalTikeVann++;
+      ventTotal += t.total||0;
+
+      // KOMISYON RESPÈKTE PRI NAN FICH LA
+      let prixFich = t.prix || getMyPrix();
+      if(t.vendeurId && DB.vendeurs[t.vendeurId] && !t.prix){
+         let vp = DB.vendeurs[t.vendeurId];
+         if(vp.prix) prixFich = Object.assign({}, prixFich, vp.prix);
+         if(vp.kom!==undefined) prixFich = Object.assign({}, prixFich, {kom: vp.kom, komActive: vp.komActive!==false});
+      }
+      let komActive = prixFich.komActive!==false;
+      let komPerc = parseFloat(prixFich.kom||10);
+      if(komActive) totalKom += (t.total||0)*(komPerc/100);
+
+      // GANYAN RESPÈKTE PRI NAN FICH LA
+      let rForDate = resultsByDate[td]||{};
+      let calc = calcGainForTicket(t, rForDate, prixFich);
+      if(calc.totalGain>0) aPeye += calc.totalGain;
+    });
+
+    let balansNet = ventTotal - totalKom - aPeye;
+    let bn=getBusinessName(), ft=getFooter();
+    let prixGlobal = getMyPrix();
+
+    let html = '<div style="text-align:center"><div style="background:#0a4a2e;color:#d4af37;padding:10px;border-radius:8px">Du '+du+' Au '+au+' - '+(ti==='tous'?'Tous':ti)+'<br>Vandè: '+(isVendeurView?mySerial+' - '+ (CUR.nom||'') : 'TOUT VANDE PWOPRIYO')+'<br>Kom: '+(prixGlobal.kom||10)+'% (respèkte pa fich)</div><div style="background:#fff;border:2px solid #0a4a2e;padding:10px"><div>Vann: '+totalTikeVann+' fich</div><div>Vant: $'+ventTotal.toFixed(2)+'</div><div>Komisyon: $'+totalKom.toFixed(2)+'</div><div>A peye: $'+aPeye.toFixed(2)+'</div><div style="background:#0a4a2e;color:#d4af37;padding:8px;border-radius:6px;margin-top:6px">Balans: $'+balansNet.toFixed(2)+'</div><small style="display:block;margin-top:6px;color:#666">Sa ki nan vandè a = sa ki nan pwopriyo a - Pri pa vandè respekte</small></div></div>';
+    rres.innerHTML=html;
+
+    let thermalData={bn,ft,du,au,ti,totalTikeVann,ventTotal,totalKom,aPeye,balansNet,komPerc: prixGlobal.kom||10};
+    let rapportTxtData=buildRapportThermalText(thermalData);
+    document.getElementById('rprint').dataset.plain=rapportTxtData.text;
+    document.getElementById('rprint').dataset.logo=rapportTxtData.logo;
+    document.getElementById('rapportPrintButtons').style.display='block';
+    forceTabsVisible();
+  }catch(e){ rres.innerHTML='Erè: '+e.message; }
+}
 function printRapportThermal(){let rp=document.getElementById('rprint');let t=rp.dataset.plain||'';let l=rp.dataset.logo||getLogoUrl();if(!t){alert('Kalkile avan');return;}printBT({text:t,html:'<div style="text-align:center"><img src="'+l+'" style="width:90px;height:90px;border-radius:50%;display:block;margin:0 auto 0 auto"><br><b>'+(getBusinessName())+'</b><br><pre style="text-align:center">'+t+'</pre></div>',logo:l});}
 async function vann(){let overRows=document.querySelectorAll('.betRow.over-limit');if(overRows.length>0){alert('Gen '+overRows.length+' liy ki depase Limit!');return;}if(!selT.length){alert('Chwazi Tiraj');return}let rawBets=[];document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm){rawBets.push({type:j,numero:b,mise:mm});}});if(!rawBets.length){alert('VID');return}let merged={};rawBets.forEach(b=>{let key=b.type+'|'+b.numero;if(merged[key]){merged[key].mise+=b.mise;}else{merged[key]={type:b.type,numero:b.numero,mise:b.mise};}});let bets=Object.values(merged);for(let b of bets){let lim=getLimiteForJeu(b.type);if(b.mise>lim){alert('Limit depase pou '+b.type.toUpperCase()+' '+b.numero+': $'+b.mise+' > Max $'+lim);return;}}let base=bets.reduce((a,b)=>a+b.mise,0);let prix=getMyPrix();let gratisRes=isMaryajGratisEnabled()?calcMaryajGratis(bets,base):{gratisList:[]};let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gratisRes.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),heure:getHaitiTimeString(),heureEST:getHaitiTimeString()+' EST',dateTimeFull:getHaitiDateTimeFull(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',prix:prix,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter()};await db.ref('tickets/'+tk.id).set(tk);let data=build(tk);LAST_TXT=data.text;LAST_HTML=data.html;showPreview(data);setTimeout(()=>{printBT(data);},150);document.getElementById('bets').innerHTML='';document.getElementById('gratisPreview').innerHTML='';addR();updFast();forceTabsVisible();}
 // V36.7.3 - KOPYE SAN TIRAJ KOCHE - FICH ANILE + DAT PASE KA KOPYE
