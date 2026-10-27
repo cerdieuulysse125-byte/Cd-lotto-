@@ -23,7 +23,44 @@ function getHaitiTimeString(){let d=getHaitiTime();let h=d.getHours();let m=Stri
 function getHaitiDateTimeFull(){return getHaitiDateStr()+' '+getHaitiTimeString()+' EST';}
 function getTirajForVendeur(){try{let pid=CUR?CUR.proprioId:null;let vkey=CUR?CUR._key:null;let baseMap={};Object.assign(baseMap,Object.fromEntries(TIRAJ_DEFAULT),DB.heures||{});let superT=null;if(pid&&DB.tiragesByProprio[pid]&&Object.keys(DB.tiragesByProprio[pid]).length>0){let m={};Object.entries(DB.tiragesByProprio[pid]).forEach(kv=>{m[kv[0]]=kv[1].heure||kv[1]||baseMap[kv[0]]||'12:00';});superT=m;}if(superT&&Object.keys(superT).length>0) baseMap=superT;let allowed=null;if(vkey&&DB.tiragesByVendeur&&DB.tiragesByVendeur[vkey]) allowed=DB.tiragesByVendeur[vkey];if(allowed&&Array.isArray(allowed)&&allowed.length>0){let f={};allowed.forEach(it=>{let name=typeof it==='string'?it:(it.nom||it.tirage||'');if(name) f[name]=baseMap[name]||'12:00';});if(Object.keys(f).length>0) baseMap=f;}return baseMap;}catch(e){return Object.fromEntries(TIRAJ_DEFAULT);}}
 function getHeureProprio(n){let my=getTirajForVendeur();return my[n]||DB.heures[n]||'';}function isOpen(n){let s=getHeureProprio(n);if(!s)return true;let p=s.split(':'),fh=parseInt(p[0]),fm=parseInt(p[1]||0),h=getHaitiTime();return h.getHours()*60+h.getMinutes()<fh*60+fm;}
-function getMyPrix(){try{let pid=CUR?CUR.proprioId:null;let vid=CUR?CUR._key:null;let global=DB.prix?.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true,maryajGratis:500,maryajGratisEnabled:true};if(pid&&DB.prix&&DB.prix[pid]) return Object.assign({},global,DB.prix[pid]);if(pid&&DB.businesses[pid]&&DB.businesses[pid].prix) return Object.assign({},global,DB.businesses[pid].prix);if(pid&&DB.headers[pid]&&DB.headers[pid].prix) return Object.assign({},global,DB.headers[pid].prix);if(pid&&DB.configProprio[pid]){let cp=DB.configProprio[pid];if(cp.prix) return Object.assign({},global,cp.prix);if(cp.kom!==undefined) return Object.assign({},global,{kom:cp.kom,komActive:cp.komActive!==false});}if(vid&&DB.vendeurs[vid]&&DB.vendeurs[vid].prix) return Object.assign({},global,DB.vendeurs[vid].prix);if(vid&&DB.vendeurs[vid]&&DB.vendeurs[vid].kom!==undefined) return Object.assign({},global,{kom:DB.vendeurs[vid].kom,komActive:DB.vendeurs[vid].komActive!==false});if(DB.config&&DB.config.prix) return Object.assign({},global,DB.config.prix);return global;}catch(e){return {p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true};}}
+// V36.7.5 - PRI GLOBAL + SENKWO PRI PA VANDE
+function getMyPrix(){
+  try{
+    let global = {p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true,maryajGratis:500,maryajGratisEnabled:true,maryajGratisCount:1};
+    let pid = CUR?CUR.proprioId:null;
+    let vid = CUR?CUR._key:null;
+    
+    // 1. Global ki nan Firebase (si gen)
+    if(DB.prix && DB.prix.global) Object.assign(global, DB.prix.global);
+    if(DB.config && DB.config.prix) Object.assign(global, DB.config.prix);
+    
+    // 2. Pri ke proprio mete pou tout proprio a
+    if(pid && DB.prix && DB.prix[pid]) Object.assign(global, DB.prix[pid]);
+    if(pid && DB.businesses[pid] && DB.businesses[pid].prix) Object.assign(global, DB.businesses[pid].prix);
+    
+    // 3. *** PRI PA VANDE - SA KI PI ENPOTAN - LI ECRASE TOUT ***
+    // Lè proprio chwazi vandè 2222 epi mete pri pou li
+    if(vid && DB.vendeurs[vid]){
+      let v = DB.vendeurs[vid];
+      if(v.prix) Object.assign(global, v.prix); // p1, p2, l3, l4, l5, m1...
+      if(v.kom!==undefined) global.kom = v.kom;
+      if(v.komActive!==undefined) global.komActive = v.komActive;
+      // Si proprio mete dirèk: vendeurs/xxx/p1 = 40
+      if(v.p1!==undefined) global.p1 = v.p1;
+      if(v.p2!==undefined) global.p2 = v.p2;
+      if(v.p3!==undefined) global.p3 = v.p3;
+      if(v.l3!==undefined) global.l3 = v.l3;
+      if(v.l4!==undefined) global.l4 = v.l4;
+      if(v.l5!==undefined) global.l5 = v.l5;
+      if(v.m1!==undefined) global.m1 = v.m1;
+      if(v.m2!==undefined) global.m2 = v.m2;
+      if(v.m3!==undefined) global.m3 = v.m3;
+    }
+    return global;
+  }catch(e){
+    return {p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10,komActive:true,maryajGratis:500,maryajGratisEnabled:true,maryajGratisCount:1};
+  }
+}
 function isMaryajGratisEnabled(){try{let p=getMyPrix();if(p.maryajGratisEnabled===false) return false;return true;}catch(e){return true;}}
 function getMyLimites(){try{let pid=CUR?CUR.proprioId:null;let base=DB.limites?.global||{bor:5000,mar:200,l3:500,l4:30,l5:20};if(pid&&DB.limites[pid]) return Object.assign({},base,DB.limites[pid]);if(pid&&DB.businesses[pid]&&DB.businesses[pid].limites) return Object.assign({},base,DB.businesses[pid].limites);return base;}catch(e){return {bor:5000,mar:200,l3:500,l4:30,l5:20};}}
 function getLimiteForJeu(j){let l=getMyLimites();if(j==='boul')return l.bor;if(j==='maryaj')return l.mar;if(j==='loto3')return l.l3;if(j==='loto4')return l.l4;if(j==='loto5')return l.l5;return 5000;}
@@ -131,51 +168,8 @@ async function calcR(){
       if(!td || td < du || td > au) return;
       if(t.annule) return;
       if(ti!=='tous' && !(t.tirages||[]).includes(ti)) return;
-
-      // FILTRE SENKRO:
-      // Si vandè: wè sèlman pa li
-      // Si pwopriyo: wè tout fich ki gen proprioId = pa li
-      if(isVendeurView){
-        if(mySerial && t.serial && String(t.serial)!==String(mySerial)) return;
-      }else{
-        if(myProprio && t.proprioId && t.proprioId!==myProprio) return;
-      }
-
-      totalTikeVann++;
-      ventTotal += t.total||0;
-
-      // KOMISYON RESPÈKTE PRI NAN FICH LA
-      let prixFich = t.prix || getMyPrix();
-      if(t.vendeurId && DB.vendeurs[t.vendeurId] && !t.prix){
-         let vp = DB.vendeurs[t.vendeurId];
-         if(vp.prix) prixFich = Object.assign({}, prixFich, vp.prix);
-         if(vp.kom!==undefined) prixFich = Object.assign({}, prixFich, {kom: vp.kom, komActive: vp.komActive!==false});
-      }
-      let komActive = prixFich.komActive!==false;
-      let komPerc = parseFloat(prixFich.kom||10);
-      if(komActive) totalKom += (t.total||0)*(komPerc/100);
-
-      // GANYAN RESPÈKTE PRI NAN FICH LA
-      let rForDate = resultsByDate[td]||{};
-      let calc = calcGainForTicket(t, rForDate, prixFich);
-      if(calc.totalGain>0) aPeye += calc.totalGain;
-    });
-
-    let balansNet = ventTotal - totalKom - aPeye;
-    let bn=getBusinessName(), ft=getFooter();
-    let prixGlobal = getMyPrix();
-
-    let html = '<div style="text-align:center"><div style="background:#0a4a2e;color:#d4af37;padding:10px;border-radius:8px">Du '+du+' Au '+au+' - '+(ti==='tous'?'Tous':ti)+'<br>Vandè: '+(isVendeurView?mySerial+' - '+ (CUR.nom||'') : 'TOUT VANDE PWOPRIYO')+'<br>Kom: '+(prixGlobal.kom||10)+'% (respèkte pa fich)</div><div style="background:#fff;border:2px solid #0a4a2e;padding:10px"><div>Vann: '+totalTikeVann+' fich</div><div>Vant: $'+ventTotal.toFixed(2)+'</div><div>Komisyon: $'+totalKom.toFixed(2)+'</div><div>A peye: $'+aPeye.toFixed(2)+'</div><div style="background:#0a4a2e;color:#d4af37;padding:8px;border-radius:6px;margin-top:6px">Balans: $'+balansNet.toFixed(2)+'</div><small style="display:block;margin-top:6px;color:#666">Sa ki nan vandè a = sa ki nan pwopriyo a - Pri pa vandè respekte</small></div></div>';
-    rres.innerHTML=html;
-
-    let thermalData={bn,ft,du,au,ti,totalTikeVann,ventTotal,totalKom,aPeye,balansNet,komPerc: prixGlobal.kom||10};
-    let rapportTxtData=buildRapportThermalText(thermalData);
-    document.getElementById('rprint').dataset.plain=rapportTxtData.text;
-    document.getElementById('rprint').dataset.logo=rapportTxtData.logo;
-    document.getElementById('rapportPrintButtons').style.display='block';
-    forceTabsVisible();
-  }catch(e){ rres.innerHTML='Erè: '+e.message; }
-}
+function calcGainForTicket(ticket,resultsForDate,prix){let totalGain=0;try{for(let tirage of ticket.tirages||[]){let res=resultsForDate[tirage];if(!res) continue;let r1=(res.r1||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");let r2=(res.r2||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");let r3=(res.r3||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");for(let bet of ticket.bets||[]){let num=(bet.numero||"").replace(/\D/g,"");let mise=parseFloat(bet.mise||0);if(!num||!mise) continue;if(bet.type==="boul"){let raw=num.slice(-2).padStart(2,"0");if(raw===r1){totalGain+=mise*(prix.p1||50);}else if(raw===r2){totalGain+=mise*(prix.p2||20);}else if(raw===r3){totalGain+=mise*(prix.p3||10);}}}}catch(e){}return {totalGain:totalGain};}
+async function calcR(){let rres=document.getElementById('rres');let du=document.getElementById('rdu').value||getHaitiDateStr(),au=document.getElementById('rau').value||getHaitiDateStr(),ti=document.getElementById('rt').value||'tous';rres.style.display='block';rres.innerHTML='Tcheke...';try{let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let resSnap=await db.ref('results').once('value');let allRes=resSnap.val()||{};let resultsByDate={};Object.values(allRes).forEach(r=>{if(!r||!r.dat) return;if(!resultsByDate[r.dat]) resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let prix=getMyPrix();let totalTikeVann=0,ventTotal=0,totalKom=0,aPeye=0;let mySerial=CUR?CUR.serial:null;Object.values(all).forEach(t=>{let td=t.dateHaiti||t.date;if(!td||td<du||td>au) return;if(mySerial&&t.serial&&String(t.serial)!==String(mySerial)) return;if(ti!=='tous'&&!(t.tirages||[]).includes(ti)) return;if(t.annule) return;totalTikeVann++;ventTotal+=t.total||0;let komActive=prix.komActive!==false;let komPerc=parseFloat(prix.kom||10);if(komActive) totalKom+=(t.total||0)*(komPerc/100);let rForDate=resultsByDate[td]||{};let calc=calcGainForTicket(t,rForDate,prix);if(calc.totalGain>0) aPeye+=calc.totalGain;});let balansNet=ventTotal-totalKom-aPeye;let bn=getBusinessName();let ft=getFooter();let komPercDisplay=parseFloat(prix.kom||10);let html='<div style="text-align:center"><div style="background:#0a4a2e;color:#d4af37;padding:10px;border-radius:8px">Du '+du+' Au '+au+' - '+(ti==='tous'?'Tous':ti)+'<br>Kom Sync: '+komPercDisplay+'%</div><div style="background:#fff;border:2px solid #0a4a2e;padding:10px"><div>Vann: '+totalTikeVann+'</div><div>Vant: $'+ventTotal.toFixed(2)+'</div><div>Komisyon ('+komPercDisplay+'%): $'+totalKom.toFixed(2)+'</div><div>A peye: $'+aPeye.toFixed(2)+'</div><div style="background:#0a4a2e;color:#d4af37;padding:8px">Balans: $'+balansNet.toFixed(2)+'</div></div></div>';rres.innerHTML=html;let thermalData={bn,ft,du,au,ti,totalTikeVann,ventTotal,totalKom,aPeye,balansNet,komPerc:komPercDisplay,komActive:true};let rapportTxtData=buildRapportThermalText(thermalData);let rp=document.getElementById('rprint');rp.dataset.plain=rapportTxtData.text;rp.dataset.logo=rapportTxtData.logo;document.getElementById('rapportPrintButtons').style.display='block';forceTabsVisible();}catch(e){rres.innerHTML='Ere: '+e.message;}}
 function printRapportThermal(){let rp=document.getElementById('rprint');let t=rp.dataset.plain||'';let l=rp.dataset.logo||getLogoUrl();if(!t){alert('Kalkile avan');return;}printBT({text:t,html:'<div style="text-align:center"><img src="'+l+'" style="width:90px;height:90px;border-radius:50%;display:block;margin:0 auto 0 auto"><br><b>'+(getBusinessName())+'</b><br><pre style="text-align:center">'+t+'</pre></div>',logo:l});}
 async function vann(){let overRows=document.querySelectorAll('.betRow.over-limit');if(overRows.length>0){alert('Gen '+overRows.length+' liy ki depase Limit!');return;}if(!selT.length){alert('Chwazi Tiraj');return}let rawBets=[];document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm){rawBets.push({type:j,numero:b,mise:mm});}});if(!rawBets.length){alert('VID');return}let merged={};rawBets.forEach(b=>{let key=b.type+'|'+b.numero;if(merged[key]){merged[key].mise+=b.mise;}else{merged[key]={type:b.type,numero:b.numero,mise:b.mise};}});let bets=Object.values(merged);for(let b of bets){let lim=getLimiteForJeu(b.type);if(b.mise>lim){alert('Limit depase pou '+b.type.toUpperCase()+' '+b.numero+': $'+b.mise+' > Max $'+lim);return;}}let base=bets.reduce((a,b)=>a+b.mise,0);let prix=getMyPrix();let gratisRes=isMaryajGratisEnabled()?calcMaryajGratis(bets,base):{gratisList:[]};let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gratisRes.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),heure:getHaitiTimeString(),heureEST:getHaitiTimeString()+' EST',dateTimeFull:getHaitiDateTimeFull(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',prix:prix,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter()};await db.ref('tickets/'+tk.id).set(tk);let data=build(tk);LAST_TXT=data.text;LAST_HTML=data.html;showPreview(data);setTimeout(()=>{printBT(data);},150);document.getElementById('bets').innerHTML='';document.getElementById('gratisPreview').innerHTML='';addR();updFast();forceTabsVisible();}
 // V36.7.3 - KOPYE SAN TIRAJ KOCHE - FICH ANILE + DAT PASE KA KOPYE
