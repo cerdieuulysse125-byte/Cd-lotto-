@@ -1,80 +1,182 @@
-<!DOCTYPE html><html lang='ht'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>V26.6 - LÈ FÈMTI TIRAJ + LIMIT TIRAJ + PRIX GRATIS 500</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#eef1f6}.h{background:#4a148c;color:#fff;padding:10px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:60}.tabs{display:flex;background:#fff;border-bottom:3px solid #4a148c;overflow-x:auto;position:sticky;top:50px;z-index:50}.tab{padding:11px 9px;font-weight:800;color:#555;border-bottom:4px solid transparent;white-space:nowrap;font-size:9px;cursor:pointer;flex-shrink:0}.tab.active{color:#4a148c;border-bottom-color:#4a148c;background:#f3e5f5}.panel{display:none;padding:10px;max-width:1000px;margin:auto}.panel.active{display:block}.card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 3px 10px rgba(0,0,0,.1);margin-bottom:10px;border-left:5px solid #4a148c}.card-green{border-left-color:#2e7d32}.card-red{border-left-color:#c62828}.btn{padding:12px;border:0;border-radius:10px;color:#fff;font-weight:800;width:100%;margin-top:8px;cursor:pointer}.btn-purple{background:#4a148c}.btn-red{background:#c62828}.btn-green{background:#2e7d32}input,select,textarea{padding:10px;border:2px solid #ddd;border-radius:10px;width:100%;margin:5px 0;font-weight:600}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.switch{width:56px;height:30px;background:#c62828;border-radius:15px;position:relative;cursor:pointer;display:inline-block}.switch.on{background:#2e7d32}.switch b{position:absolute;top:3px;left:3px;width:24px;height:24px;background:#fff;border-radius:50%;transition:.2s}.switch.on b{left:29px}</style></head><body><div class='h'><div><b>🏢 PROPRIO V26.6 - TIRAJ CHWAZI GLOBAL/PA VANDE</b><br><small id='syncInfo'>SYNC...</small></div><div><span id='pUser'></span> <button onclick='logout()' style='padding:8px 12px;background:#c62828;color:#fff;border:0;border-radius:8px'>SOTI</button></div></div><div id='loginBox' class='card' style='max-width:420px;margin:30px auto'><h3>🔐 Proprio</h3><input id='ln' placeholder='Non Proprio'><input id='lp' type='password' placeholder='Modpas'><button class='btn btn-purple' onclick='doLogin()'>Konekte</button><div id='loginMsg' style='color:red;font-weight:800;margin-top:10px'></div></div><div id='mainBox' style='display:none'><div class='tabs'><div class='tab active' onclick="openTab('t1',this)">1-Vendeurs</div><div class='tab' onclick="openTab('t4',this)">4-Prix + Gratis500</div><div class='tab' onclick="openTab('t5',this)">5-Rapport</div><div class='tab' onclick="openTab('t8',this)">8-Lè Fèmti + Limit + Bloke</div></div><div id='t1' class='panel active'><div class='card' style='background:#e8f5e9;border:3px solid #2e7d32'><b>✅ V26.6 - Onglè Lè Fèmti: Tiraj chwazi GLOBAL oubyen pa vandè modifyab - Onglè Limit: Tiraj GLOBAL oubyen pa vandè modifyab - Onglè Prix: Maryaj Gratis 500 modifyab</b></div><div id='listVendeur'></div></div><div id='t4' class='panel'><div class='card'><h3>4- Prix - GLOBAL 50/20/10 + Gratis 500 MODIFYAB</h3><p style="background:#e8f5e9;padding:8px;border-radius:8px;font-size:11px">GLOBAL: 1e 50 / 2e 20 / 3e 10 / L3 500 / Gratis 500 / M1 M2 M3 1000 / L4 5000 / L5 25000 - Tout modifyab - Chwazi vandè pou mete pri pa vandè - Rapò respekte pri pa vandè</p><select id='prixVendeur' onchange='loadPrix()'></select><div class='grid3'><div><label>1er - 50</label><input id='p1' type='number' value='50'></div><div><label>2e - 20</label><input id='p2' type='number' value='20'></div><div><label>3e - 10</label><input id='p3' type='number' value='10'></div></div><div class='grid3'><div><label>M1 1000</label><input id='pm1' type='number' value='1000'></div><div><label>M2 1000</label><input id='pm2' type='number' value='1000'></div><div><label>M3 1000</label><input id='pm3' type='number' value='1000'></div></div><div class='grid3'><div><label>L3 500</label><input id='ppL3' type='number' value='500'></div><div><label>L4 5000</label><input id='ppL4' type='number' value='5000'></div><div><label>L5 25000</label><input id='ppL5' type='number' value='25000'></div></div><div class='grid2'><div><label style="background:#e8f5e9;border:2px solid #00c853;padding:4px;border-radius:6px;font-weight:900">Maryaj Gratis 500 - MODIFYAB</label><input id='ppGratis' type='number' value='500' style="border:3px solid #00c853;background:#e8f5e9"></div><div><label>Kom %</label><input id='pKom' type='number' value='10'></div></div><button class='btn btn-purple' onclick='savePrix()'>Save Prix - RESPÈKTE PA VANDE</button><div id='prixStatus'></div></div></div>
-<div id='t5' class='panel'><div class='card' style='border:3px solid #212121'><h3>5- Rapport - RESPÈKTE PRI PA VANDE</h3><div class='grid2'><div><label>Du</label><input type='date' id='rDu'></div><div><label>Au</label><input type='date' id='rAu'></div></div><div class='grid2'><div><label>Vendeur</label><select id='rVendeur'></select></div><div><label>Tirage</label><select id='rTirage'></select></div></div><button class='btn btn-purple' onclick='calcRapport()'>Kalkile - RESPÈKTE PRI PA VANDE</button><div id='rapportRes'></div></div></div>
-<div id='t8' class='panel'>
-<div class='card' style="border:3px solid #1565c0">
-<h3>8A - LÈ FÈMTI - Tiraj Chwazi GLOBAL oubyen Pa Vandè Modifyab</h3>
-<p style="background:#e3f2fd;padding:8px;border-radius:8px;font-size:11px">Chwazi TIRAJ + chwazi GLOBAL oubyen yon VANDE espesifik - Lundi-Dimanche - Fèmti modifyab - Vandè V36.7.10 ap tande l otomatik</p>
-<div class='grid2'><select id='horTirage' onchange='loadHorairesUI()'></select><select id='horVendeur' onchange='loadHorairesUI()'></select></div>
-<div id='joursList'></div><button class='btn btn-purple' onclick='saveHoraires()'>Save LÈ FÈMTI - TIRAJ CHWAZI GLOBAL/PA VANDE</button>
+<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C&D VERITE PROPRIO V26.7 M1 1200 FIX</title><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}body{background:#e8f5e9;padding:10px}.card{background:#fff;border:2px solid #0a4a2e;border-radius:12px;padding:12px;margin:10px 0}.btn{border:0;border-radius:8px;padding:12px;font-weight:900;cursor:pointer}.btnG{background:#0a4a2e;color:#d4af37}.btnB{background:#1976d2;color:#fff}.inp{width:100%;height:44px;border:2px solid #0a4a2e;border-radius:8px;padding:0 10px;font-weight:800}.row{display:flex;gap:6px;flex-wrap:wrap}.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0}.tab{padding:10px 12px;background:#0a4a2e;color:#d4af37;border:0;border-radius:8px;font-weight:800;font-size:12px}.tab.active{background:#d4af37;color:#0a4a2e}.page{display:none}.page.active{display:block}h2{background:#0a4a2e;color:#d4af37;padding:10px;border-radius:8px;text-align:center;font-size:14px}</style></head><body>
+<h2>C&D VERITE PROPRIO V26.7 - M1 1200 FIX GLOBAL+PA VANDE</h2>
+<div class="tabs"><button class="tab active" onclick="go('prix',this)">Prix GLOBAL/PA VANDE</button><button class="tab" onclick="go('tiraj',this)">Tiraj</button><button class="tab" onclick="go('lim',this)">Limites</button><button class="tab" onclick="go('bloke',this)">Bloke</button><button class="tab" onclick="go('hora',this)">Horaires</button><button class="tab" onclick="go('rap',this)">Rapport</button></div>
+
+<div id="prix" class="page active"><div class="card"><h3>Prix - GLOBAL ak PA VANDE (M1 1200 FIX)</h3><div class="row" style="margin-top:8px"><select id="prixVendeur" class="inp" style="flex:1"><option value="global">GLOBAL</option></select><button class="btn btnB" onclick="loadPrix()">Chaje</button></div><div id="prixStatus" style="margin-top:8px;padding:8px;background:#e8f5e9;border:2px dashed #0a4a2e;border-radius:8px;font-weight:800;font-size:11px">Chwazi GLOBAL oswa yon vandè</div>
+<div class="row" style="margin-top:12px">
+<div style="flex:1;min-width:80px"><label>1e</label><input id="p1" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>2e</label><input id="p2" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>3e</label><input id="p3" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>M1</label><input id="pm1" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>M2</label><input id="pm2" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>M3</label><input id="pm3" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>L3</label><input id="ppL3" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>L4</label><input id="ppL4" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>L5</label><input id="ppL5" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>Gratis</label><input id="ppGratis" type="number" class="inp"></div>
+<div style="flex:1;min-width:80px"><label>Kom %</label><input id="pKom" type="number" class="inp"></div>
 </div>
-<div class='card' style="border:3px solid #ef6c00;margin-top:16px">
-<h3>8B - LIMIT - Tiraj GLOBAL oubyen Pa Vandè Modifyab</h3>
-<p style="background:#fff3e0;padding:8px;border-radius:8px;font-size:11px">Tiraj + GLOBAL oubyen pa vandè - GLOBAL: Boul 5000 / Maryaj 200 / L3 500 / L4 30 / L5 20 - Modifyab - Vandè ap respekte limit sa a</p>
-<div class='grid2'><select id='limTirage'></select><select id='limVendeur' onchange='loadLimites()'></select></div>
-<div class='grid3'><div><label>Boul Max</label><input id='limBor' type='number' value='5000'></div><div><label>Maryaj Max</label><input id='limMar' type='number' value='200'></div><div><label>L3 Max</label><input id='limL3' type='number' value='500'></div></div>
-<div class='grid2'><div><label>L4 Max</label><input id='limL4' type='number' value='30'></div><div><label>L5 Max</label><input id='limL5' type='number' value='20'></div></div>
-<button class='btn' style="background:#ef6c00" onclick='saveLimites()'>Save LIMIT - TIRAJ + GLOBAL/PA VANDE</button><div id='limitStatus'></div><div id='listLimites'></div>
-</div>
-<div class='card' style="border:3px solid #c62828;margin-top:16px">
-<h4>Bloke Boul - Tiraj + Vandè</h4><div class='grid3'><select id='blkTirage'></select><select id='blkVendeur'></select><input id='blkBoul' type='number' placeholder='Boul ex: 12'></div><button class='btn btn-red' onclick='saveBlokeBoul()'>Bloke Boul - Tiraj Chwazi</button><div id='listBlokeBoul'></div>
-</div>
-</div>
-</div>
+<button class="btn btnG" style="width:100%;margin-top:12px;padding:14px" onclick="savePrix()">Save Prix - RESPÈKTE PA VANDE + ID+SERIAL FIX</button>
+<div id="prixList" style="margin-top:10px;font-size:11px"></div>
+</div></div>
+
+<div id="tiraj" class="page"><div class="card"><h3>Tiraj - GLOBAL ak PA VANDE</h3><div id="tirajList"></div></div></div>
+<div id="lim" class="page"><div class="card"><h3>Limites - GLOBAL ak PA VANDE PA TIRAJ</h3><select id="limVendeur" class="inp"><option value="global">GLOBAL</option></select><select id="limTiraj" class="inp" style="margin-top:6px"><option value="ALL">Tous Tiraj</option></select><div class="row" style="margin-top:8px"><div style="flex:1"><label>BORLET</label><input id="lBor" type="number" class="inp"></div><div style="flex:1"><label>MARYAJ</label><input id="lMar" type="number" class="inp"></div><div style="flex:1"><label>L3</label><input id="lL3" type="number" class="inp"></div><div style="flex:1"><label>L4</label><input id="lL4" type="number" class="inp"></div><div style="flex:1"><label>L5</label><input id="lL5" type="number" class="inp"></div></div><button class="btn btnG" style="width:100%;margin-top:10px" onclick="saveLim()">Save Limite PA TIRAJ</button><div id="limList" style="margin-top:8px;font-size:11px"></div></div></div>
+<div id="bloke" class="page"><div class="card"><h3>Bloke Boul - GLOBAL/PA VANDE</h3><input id="bBoul" class="inp" placeholder="Boul ex 22"><select id="bVendeur" class="inp" style="margin-top:6px"><option value="ALL">GLOBAL</option></select><button class="btn btnG" style="width:100%;margin-top:8px" onclick="saveBloke()">Bloke</button><div id="blokeList" style="margin-top:8px"></div></div></div>
+<div id="hora" class="page"><div class="card"><h3>Horaires Tiraj - Lundi-Dimanche</h3><select id="hTiraj" class="inp"></select><select id="hVendeur" class="inp" style="margin-top:6px"><option value="ALL">GLOBAL</option></select><div id="hJours"></div><button class="btn btnG" style="width:100%;margin-top:8px" onclick="saveHora()">Save Horaire</button></div></div>
+<div id="rap" class="page"><div class="card"><h3>Rapport Proprio</h3><div class="row"><input id="rDu" type="date" class="inp" style="flex:1"><input id="rAu" type="date" class="inp" style="flex:1"><button class="btn btnB" onclick="calcRap()">Kalkile</button></div><div id="rapRes" style="margin-top:10px"></div></div></div>
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuuxJB1G1hdJUyMaKucgiNsFO-teYvri4",authDomain:"cd-lotto.firebaseapp.com",databaseURL:"https://cd-lotto-default-rtdb.firebaseio.com",projectId:"cd-lotto",storageBucket:"cd-lotto.firebasestorage.app",messagingSenderId:"671091732195",appId:"1:671091732195:web:51bcfe8df83bc58fc75fd6"};
-firebase.initializeApp(firebaseConfig);const db=firebase.database();
-const JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-let DB={vendeurs:{},proprios:{},tickets:{},results:{},prix:{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10}},limites:{global:{bor:5000,mar:200,l3:500,l4:30,l5:20}},horairesTiraj:{},blokeBoul:{},blokeVendeur:{},blokeJeux:{},headers:{},businesses:{}};
-let CUR=null,MY_PROPRIO_ID=null,tmpBloke={};
-function sanitizeKey(s){return (s||'').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');}
-function init(){db.ref().on('value',snap=>{let v=snap.val()||{};DB.vendeurs=v.vendeurs||{};DB.proprios=v.proprios||{};DB.tickets=v.tickets||{};DB.results=v.results||{};DB.prix=v.prix||{global:{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10}};DB.limites=v.limites||{global:{bor:5000,mar:200,l3:500,l4:30,l5:20}};DB.horairesTiraj=v.horairesTiraj||{};DB.blokeBoul=v.blokeBoul||{};DB.blokeVendeur=v.blokeVendeur||{};DB.blokeJeux=v.blokeJeux||{};DB.headers=v.headers||{};DB.businesses=v.businesses||{};syncInfo.innerText='SYNC V26.6 - TIRAJ CHWAZI GLOBAL/PA VANDE';if(mainBox.style.display!='none'){loadAll();}});}
-function setToday(){const t=new Date().toISOString().split('T')[0];if(rDu)rDu.value=t;if(rAu)rAu.value=t;}
-function doLogin(){let n=ln.value.trim(),p=lp.value.trim();if(!n||!p){loginMsg.innerText='Mete non ak modpas';return;}loginMsg.innerText='⏳...';db.ref('proprios').once('value').then(snap=>{let all=snap.val()||{};let f=null,fid=null;for(let id in all){if(all[id].nom.toLowerCase()==n.toLowerCase()){f=all[id];fid=id;break;}}if(!f){loginMsg.innerText='❌ Pa jwenn';return;}if(f.pass!=p){loginMsg.innerText='❌ Modpas pa bon';return;}CUR={nom:f.nom,id:fid};MY_PROPRIO_ID=fid;localStorage.setItem('curP',JSON.stringify(CUR));loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=f.nom;loadAll();setToday();});}
-function logout(){localStorage.removeItem('curP');location.reload();}
-function openTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>{p.classList.remove('active');p.style.display='none';});if(el)el.classList.add('active');document.getElementById(id).classList.add('active');document.getElementById(id).style.display='block';}
-function getMyVendeurs(){let arr=[];for(let id in DB.vendeurs){let v=DB.vendeurs[id];if(v.proprioId==MY_PROPRIO_ID||v.proprioId==CUR.nom)arr.push({...v,_id:id});}return arr;}
-function loadAll(){let myV=getMyVendeurs();let opts='<option value="global">GLOBAL - 50/20/10 L3 500 M1000 L4 5000 L5 25000 Gratis500</option>';let optsA='<option value="ALL">Tous</option>';let optsT='<option value="ALL">Tous</option>';myV.forEach(v=>{let lab=(v.serial||v._id)+' - '+v.nom;opts+='<option value="'+v._id+'">'+lab+' - PRI PA VANDE</option>';optsA+='<option value="'+v._id+'">'+lab+'</option>';});let tirajList=["Borlette Matin","La Suerte 12:30","Haiti 14h","Borlette Soir 18h","Real","Primera dia","Suerte dia","Lote Dom 13:30","Ganamas","Suerte noche","Primera noche","Loteka","Nacional noche","Leidsa"];tirajList.forEach(t=>optsT+='<option value="'+t+'">'+t+'</option>');let vendOpts='<option value="">-- Vandè --</option><option value="ALL">GLOBAL</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');let vendSimple='<option value="">-- Vandè --</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');prixVendeur.innerHTML=opts;rVendeur.innerHTML=optsA;rTirage.innerHTML=optsT;horTirage.innerHTML=optsT;horVendeur.innerHTML=vendOpts;blkTirage.innerHTML=optsT;blkVendeur.innerHTML=vendSimple;limTirage.innerHTML=optsT;limVendeur.innerHTML=vendOpts;let html='';myV.forEach(v=>{let bloke=DB.blokeVendeur[v._id]===true||v.bloke===true;if(tmpBloke[v._id]!==undefined) bloke=tmpBloke[v._id];let label=bloke?'🔴 OFF BLOKE':'🟢 ON AKTIF';let color=bloke?'#c62828':'#2e7d32';let priInfo=v.prix?`P1 ${v.prix.p1||50} Gratis ${v.prix.maryajGratis||500} - PA VANDE`:'GLOBAL 50/20/10';html+=`<div class="card ${bloke?'card-red':'card-green'}"><div style="display:flex;gap:12px;align-items:center;margin-bottom:12px"><button onclick="toggleBloke('${v._id}')" style="padding:14px 20px;border:0;border-radius:28px;font-weight:900;color:#fff;background:${color};min-width:140px">${label}</button><div><b>${v.nom}</b><br><small>${v.serial||v._id}</small><br><small style="color:#4a148c;font-weight:800">${priInfo}</small></div></div><div class='grid2'><input id="nom_${v._id}" value="${v.nom}"><input id="kom_${v._id}" value="${v.prix?.kom||10}" type="number"></div><div class='grid2'><button onclick="saveV('${v._id}')" class="btn btn-green">💾 ANREJISTRE - KOMINIKE VANDE</button><button onclick="confirmVendeur('${v._id}')" class="btn" style="background:#212121">✅ KONFIME</button></div><div id="conf_${v._id}" style="margin-top:8px;font-weight:900;background:#fff;padding:8px;border-radius:10px;border:2px dashed #4a148c"></div></div>`;});listVendeur.innerHTML=html||'Pa gen';loadPrix();loadLimites();loadBlokeBoulList();}
-function toggleBloke(id){let cur=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;if(tmpBloke[id]!==undefined) cur=tmpBloke[id];tmpBloke[id]=!cur;loadAll();}
-function confirmVendeur(id){let bloke=tmpBloke[id]!==undefined?tmpBloke[id]:(DB.blokeVendeur[id]===true);document.getElementById('conf_'+id).innerHTML='✅ '+(bloke?'BLOKE - VANDE PAP KA VANN':'AKTIF - VANDE KA VANN');}
-function saveV(id){let nom=document.getElementById('nom_'+id).value.trim();let kom=document.getElementById('kom_'+id).value.trim();let bloke=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;if(tmpBloke[id]!==undefined) bloke=tmpBloke[id];let updates={};updates['vendeurs/'+id+'/nom']=nom;updates['vendeurs/'+id+'/kom']=+kom;updates['vendeurs/'+id+'/prix/kom']=+kom;updates['vendeurs/'+id+'/bloke']=bloke;updates['vendeurs/'+id+'/actif']=!bloke;updates['prix/'+id+'/kom']=+kom;if(bloke)updates['blokeVendeur/'+id]=true;else updates['blokeVendeur/'+id]=null;db.ref().update(updates).then(()=>{delete tmpBloke[id];alert('✅ ANREJISTRE - '+(bloke?'BLOKE':'DEBLOKE'));loadAll();});}
-function loadPrix(){let k=prixVendeur.value;let p=null;if(k!=='global' && DB.vendeurs[k] && DB.vendeurs[k].prix){let pg=DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10};p=Object.assign({},pg,DB.prix[k]||{},DB.vendeurs[k].prix);}else{p=DB.prix[k]||DB.prix.global||{p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,kom:10};}p1.value=p.p1; p2.value=p.p2; p3.value=p.p3; pm1.value=p.m1; pm2.value=p.m2; pm3.value=p.m3; ppL3.value=p.l3; ppL4.value=p.l4; ppL5.value=p.l5; pKom.value=p.kom; ppGratis.value=p.maryajGratis||500;let src=k==='global'?'GLOBAL':(DB.vendeurs[k]?.prix?'PRI PA VANDE - RESPÈKTE':'GLOBAL');prixStatus.innerHTML=`<div style="background:#e8f5e9;border:2px solid #2e7d32;padding:8px"><b>${k} (${src})</b><br>1e ${p.p1} 2e ${p.p2} 3e ${p.p3} M1 ${p.m1} L3 ${p.l3} L4 ${p.l4} L5 ${p.l5} Gratis ${p.maryajGratis||500} Kom ${p.kom}%</div>`;}
-function savePrix(){let k=prixVendeur.value;let o={p1:+p1.value,p2:+p2.value,p3:+p3.value,m1:+pm1.value,m2:+pm2.value,m3:+pm3.value,l3:+ppL3.value,l4:+ppL4.value,l5:+ppL5.value,maryajGratis:+ppGratis.value,kom:+pKom.value};let updates={};updates['prix/'+k]=o;if(k!=='global'){updates['vendeurs/'+k+'/prix']=o;updates['vendeurs/'+k+'/kom']=o.kom;updates['vendeurs/'+k+'/p1']=o.p1; updates['vendeurs/'+k+'/p2']=o.p2; updates['vendeurs/'+k+'/p3']=o.p3; updates['vendeurs/'+k+'/l3']=o.l3; updates['vendeurs/'+k+'/l4']=o.l4; updates['vendeurs/'+k+'/l5']=o.l5; updates['vendeurs/'+k+'/m1']=o.m1; updates['vendeurs/'+k+'/m2']=o.m2; updates['vendeurs/'+k+'/m3']=o.m3;}db.ref().update(updates).then(()=>{alert('✅ Prix Save - '+(k==='global'?'GLOBAL':'PA VANDE '+k)+' Gratis '+o.maryajGratis);loadAll();});}
-// V26.6 - LÈ FÈMTI TIRAJ CHWAZI GLOBAL/PA VANDE + LIMIT TIRAJ GLOBAL/PA VANDE + PRIX GRATIS 500
-function loadLimites(){
-  let v=limVendeur.value; if(!v) v='ALL';
-  let t=limTirage.value; if(!t||t==='ALL') t='GLOBAL';
-  let key=t+'_'+v;
-  let saved=null;
-  if(v==='ALL' && t==='GLOBAL'){ saved=DB.limites.global||{bor:5000,mar:200,l3:500,l4:30,l5:20}; }
-  else if(DB.limites[key]){ saved=DB.limites[key]; }
-  else if(v!=='ALL' && DB.vendeurs[v] && DB.vendeurs[v].limites){ saved=DB.vendeurs[v].limites; }
-  else{ saved=DB.limites.global||{bor:5000,mar:200,l3:500,l4:30,l5:20}; }
-  limBor.value=saved.bor||5000; limMar.value=saved.mar||200; limL3.value=saved.l3||500; limL4.value=saved.l4||30; limL5.value=saved.l5||20;
-  limitStatus.innerHTML=`<div style="background:#fff3e0;border:2px solid #ef6c00;padding:8px"><b>${t} + ${v} - LIMIT</b><br>Bor ${saved.bor} Mar ${saved.mar} L3 ${saved.l3} L4 ${saved.l4} L5 ${saved.l5}</div>`;
+try{if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);}catch(e){}
+const db=firebase.database();
+const TIRAJ_DEFAULT=["Borlette Matin","La Suerte 12:30","Haiti 14h","Borlette Soir 18h","Real","Primera dia","Suerte dia","Lote Dom 13:30","Ganamas","Suerte noche","Primera noche","Loteka","Nacional noche","Leidsa"];
+let DB={vendeurs:{},prix:{},limites:{},blokeBoul:{},blokeBoulGlobal:{},blokeBoulVendeur:{},horairesTiraj:{}};
+function go(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');}
+function loadAll(){
+ db.ref().on('value',snap=>{
+  let v=snap.val()||{};
+  DB.vendeurs=v.vendeurs||{};
+  DB.prix=v.prix||{};
+  DB.limites=v.limites||{};
+  DB.blokeBoul=v.blokeBoul||{};
+  DB.blokeBoulGlobal=v.blokeBoulGlobal||{};
+  DB.blokeBoulVendeur=v.blokeBoulVendeur||{};
+  DB.horairesTiraj=v.horairesTiraj||{};
+  renderVendeurs();
+  renderPrixList();
+  renderLimList();
+  renderBlokeList();
+  renderTirajList();
+ });
 }
-function saveLimites(){
-  let t=limTirage.value; if(!t||t==='ALL') t='GLOBAL';
-  let v=limVendeur.value; if(!v) v='ALL';
-  let o={bor:+limBor.value,mar:+limMar.value,l3:+limL3.value,l4:+limL4.value,l5:+limL5.value,tirage:t,vendeur:v,updatedAt:Date.now()};
-  let updates={};
-  let key=t+'_'+v;
-  updates['limites/'+key]=o;
-  if(v==='ALL' && t==='GLOBAL'){ updates['limites/global']=o; }
-  if(v!=='ALL'){
-    updates['vendeurs/'+v+'/limites']=o;
-    updates['vendeurs/'+v+'/bor']=o.bor; updates['vendeurs/'+v+'/mar']=o.mar;
-    updates['limitesByVendeur/'+v]=o;
-  }
-  db.ref().update(updates).then(()=>{alert('✅ LIMIT Save - '+t+' + '+v);loadLimites();});
+function renderVendeurs(){
+ let opts='<option value="global">GLOBAL</option>';
+ Object.entries(DB.vendeurs).forEach(([k,v])=>{
+  opts+='<option value="'+k+'">'+(v.nom||k)+' ('+(v.serial||k)+') - '+(k.startsWith('v_')?'PA VANDE':'')+'</option>';
+ });
+ document.getElementById('prixVendeur').innerHTML=opts;
+ document.getElementById('limVendeur').innerHTML=opts;
+ document.getElementById('bVendeur').innerHTML='<option value="ALL">GLOBAL</option>'+opts;
+ document.getElementById('hVendeur').innerHTML='<option value="ALL">GLOBAL</option>'+opts;
+ let topts='<option value="ALL">Tous Tiraj</option>';
+ TIRAJ_DEFAULT.forEach(t=>{topts+='<option value="'+t+'">'+t+'</option>';});
+ document.getElementById('limTiraj').innerHTML=topts;
+ document.getElementById('hTiraj').innerHTML=TIRAJ_DEFAULT.map(t=>'<option value="'+t+'">'+t+'</option>').join('');
+ let jours=["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+ let htmlJ='';
+ jours.forEach(j=>{
+  htmlJ+='<div class="row" style="margin-top:6px;align-items:center"><div style="width:80px;font-weight:800">'+j+'</div><input id="h_'+j+'_a" type="time" class="inp" style="flex:1"><label style="display:flex;align-items:center;gap:4px"><input id="h_'+j+'_act" type="checkbox" checked> Active</label></div>';
+ });
+ document.getElementById('hJours').innerHTML=htmlJ;
 }
-function loadHorairesUI(){let t=document.getElementById('horTirage').value;let v=document.getElementById('horVendeur').value;let container=document.getElementById('joursList');if(!t || t=="ALL"){container.innerHTML='<div style="padding:12px;background:#fff3cd;border:2px dashed #ff9800;border-radius:10px;text-align:center"><b>Chwazi TIRAJ - Tiraj chwazi GLOBAL oubyen Pa Vandè modifyab</b></div>';return;}if(!v) v='ALL';let key=t+'_'+v;let saved=DB.horairesTiraj[key]||{};let h='<div style="background:#e3f2fd;padding:8px;border-radius:8px;margin-bottom:8px;text-align:center"><b>'+t+' + '+(v=='ALL'?'GLOBAL':'Vandè '+v)+'</b><br><small>Fèmti modifyab - Vandè ap tande l V36.7.10</small></div>';JOURS.forEach(j=>{let cfg=saved[j]||{active:true,de:'08:00',a:'22:00'};h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border:2px solid #ddd;margin-bottom:8px;border-radius:10px;background:#fff"><div style="min-width:75px"><b>${j}</b><br><small id="status_${j}" style="color:${cfg.active?'green':'red'}">${cfg.active?'🟢 Ouvè':'🔴 Fèmen'}</small></div><div style="display:flex;gap:8px;align-items:center"><div class="switch ${cfg.active?'on':''}" id="sw_${j}" onclick="toggleJour('${j}')"><b></b></div><div style="display:flex;flex-direction:column"><label style="font-size:8px">OUVÈTI</label><input type="time" id="de_${j}" value="${cfg.de}" style="width:85px"></div><div style="display:flex;flex-direction:column"><label style="font-size:8px;font-weight:900;color:#c62828">FÈMTI</label><input type="time" id="a_${j}" value="${cfg.a}" style="width:85px;border:2px solid #c62828;background:#ffebee"></div></div></div>`;});container.innerHTML=h;}
-function toggleJour(j){let sw=document.getElementById('sw_'+j);let st=document.getElementById('status_'+j);sw.classList.toggle('on');let on=sw.classList.contains('on');if(st){st.innerText=on?'🟢 Ouvè':'🔴 Fèmen'; st.style.color=on?'green':'red';}}
-function saveHoraires(){let t=document.getElementById('horTirage').value;let v=document.getElementById('horVendeur').value;if(!t || t=="ALL"){alert('Chwazi TIRAJ - Tiraj chwazi');return;}if(!v) v='ALL';let key=t+'_'+v;let obj={};JOURS.forEach(j=>{let de=document.getElementById('de_'+j)?.value||'08:00';let a=document.getElementById('a_'+j)?.value||'22:00';let sw=document.getElementById('sw_'+j);obj[j]={active:sw?sw.classList.contains('on'):true,de,a,updatedAt:Date.now(),proprioId:MY_PROPRIO_ID};});let updates={};updates['horairesTiraj/'+key]=obj;if(v!='ALL'){updates['horairesVendeur/'+v+'/'+sanitizeKey(t)]=obj;updates['vendeurs/'+v+'/horaires/'+sanitizeKey(t)]=obj;}db.ref().update(updates).then(()=>alert('✅ LÈ FÈMTI Save - '+t+' + '+(v=='ALL'?'GLOBAL':'Vandè '+v)));}
-
-function getPrixForVendeur(vId){let pg={p1:50,p2:20,p3:10,m1:1000,m2:1000,m3:1000,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10};if(DB.prix&&DB.prix.global) Object.assign(pg,DB.prix.global);if(DB.vendeurs[vId]&&DB.vendeurs[vId].prix) return Object.assign({},pg,DB.vendeurs[vId].prix);if(DB.prix[vId]) return Object.assign({},pg,DB.prix[vId]);return pg;}
-function calcGainProprio(ticket,resultsForDate,prix){let total=0,gratisDone=false;for(let tirage of (ticket.tirages||[ticket.tirage]||[])){if(!tirage||tirage.toLowerCase().includes('soir'))continue;let res=resultsForDate[tirage];if(!res)continue;let r1=(res.r1||'').replace(/\D/g,'').slice(-2).padStart(2,'0');let r2=(res.r2||'').replace(/\D/g,'').slice(-2).padStart(2,'0');let r3=(res.r3||'').replace(/\D/g,'').slice(-2).padStart(2,'0');let l3=(res.l3||'').replace(/\D/g,'').slice(-3);let l4=(res.l4||'').replace(/\D/g,'').slice(-4);let l5=(res.l5||'').replace(/\D/g,'').slice(-5);for(let bet of (ticket.bets||[])){let raw=(bet.numero||'').replace(/\D/g,'');if(!raw)continue;let mise=+bet.mise||0;let type=(bet.type||'').toLowerCase();if(type.includes('boul')||raw.length==2){let num=raw.padStart(2,'0');if(num==r1) total+=mise*(prix.p1||50);if(num==r2) total+=mise*(prix.p2||20);if(num==r3) total+=mise*(prix.p3||10);}else if(type.includes('mar')){let a=raw.slice(0,2),b=raw.slice(2,4);if((a==r1&&b==r2)||(a==r2&&b==r1)) total+=mise*(prix.m1||1000);else if((a==r1&&b==r3)||(a==r3&&b==r1)) total+=mise*(prix.m2||1000);else if((a==r2&&b==r3)||(a==r3&&b==r2)) total+=mise*(prix.m3||1000);}else if(type.includes('loto3')||raw.length==3){if(raw.padStart(3,'0')==l3) total+=mise*(prix.l3||500);}else if(type.includes('loto4')||raw.length==4){if(raw.padStart(4,'0')==l4) total+=mise*(prix.l4||5000);}else if(type.includes('loto5')||raw.length==5){if(raw.padStart(5,'0')==l5) total+=mise*(prix.l5||25000);}}if(gratisDone)continue;for(let gbet of (ticket.gratisBets||[])){let gnum=(gbet.numero||'').replace(/\D/g,'');if(gnum.length<4)continue;let a=gnum.slice(0,2),b=gnum.slice(-2);let win=(a==r1&&b==r2)||(a==r2&&b==r1)||(a==r1&&b==r3)||(a==r3&&b==r1)||(a==r2&&b==r3)||(a==r3&&b==r2);if(win){total+=prix.maryajGratis||500;gratisDone=true;break;}}}return total;}
-function calcRapport(){let du=rDu.value,au=rAu.value,vs=rVendeur.value,ts=rTirage.value;let list=Object.values(DB.tickets||{}).filter(t=>!t.annule);if(du)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)>=du);if(au)list=list.filter(t=>(t.dateHaiti||'').slice(0,10)<=au);let myIds=getMyVendeurs().map(v=>v._id);list=list.filter(t=>myIds.includes(t.vendeurId));if(vs!='ALL')list=list.filter(t=>t.vendeurId==vs);if(ts!='ALL')list=list.filter(t=>(t.tirages||[]).includes(ts));let resultsByDate={};Object.values(DB.results).forEach(r=>{if(!r.dat)return;if(r.tirage.toLowerCase().includes('soir'))return;if(!resultsByDate[r.dat])resultsByDate[r.dat]={};resultsByDate[r.dat][r.tirage]=r;});let vente=0,aPeye=0;list.forEach(t=>{vente+=+t.total||0;let d=(t.dateHaiti||'').slice(0,10);let prix=t.prix? t.prix : getPrixForVendeur(t.vendeurId);aPeye+=calcGainProprio(t,resultsByDate[d]||{},prix);});rapportRes.innerHTML=`<div style="background:#fff;border:3px solid #2e7d32;padding:12px"><b>VANT $${vente.toFixed(2)}</b><br><b>A PEYE $${aPeye.toFixed(2)}</b><br><b>BALANS $${(vente-aPeye).toFixed(2)}</b><br><small>GLOBAL 50/20/10 L3 500 Gratis500 M1000 L4 5000 L5 25000 - PRI PA VANDE RESPÈKTE</small></div>`;}
-function saveBlokeBoul(){let t=blkTirage.value,v=blkVendeur.value,b=blkBoul.value.trim().replace(/\D/g,'');if(!t||!b){alert('Chwazi Tiraj + Boul');return;}if(!v) v='ALL';let key=t+'_'+v+'_'+b;let o={tirage:t,vendeur:v,boul:b,proprioId:MY_PROPRIO_ID,at:Date.now()};db.ref('blokeBoul/'+key).set(o).then(()=>{blkBoul.value='';alert('✅ Boul '+b+' bloke - '+t+' + '+v);loadBlokeBoulList();});}
-function loadBlokeBoulList(){let h='';for(let k in DB.blokeBoul){let b=DB.blokeBoul[k];if(b.proprioId&&b.proprioId!=MY_PROPRIO_ID)continue;h+=`<div style="display:flex;justify-content:space-between;padding:6px;border:1px solid red;margin-bottom:4px"><span>${b.tirage} - ${b.vendeur} - ${b.boul}</span><button onclick="db.ref('blokeBoul/${k}').remove()" style="background:red;color:#fff">X</button></div>`;}listBlokeBoul.innerHTML=h||'Pa gen';}
-try{let s=localStorage.getItem('curP');if(s){CUR=JSON.parse(s);MY_PROPRIO_ID=CUR.id;loginBox.style.display='none';mainBox.style.display='block';pUser.innerText=CUR.nom;init();setToday();}else init();}catch(e){init();}
+function renderTirajList(){
+ let html='';
+ TIRAJ_DEFAULT.forEach(t=>{
+  html+='<div class="card" style="padding:8px"><b>'+t+'</b> - GLOBAL</div>';
+ });
+ document.getElementById('tirajList').innerHTML=html;
+}
+function loadPrix(){
+ let k=document.getElementById('prixVendeur').value;
+ let p=DB.prix[k] || DB.prix['v_'+k] || {};
+ if(k!=='global'){
+  let vData=DB.vendeurs[k];
+  let serial=vData? vData.serial : k;
+  if(DB.prix['v_'+serial]) p=DB.prix['v_'+serial];
+  if(DB.prix[serial]) p=Object.assign({},p,DB.prix[serial]);
+  if(DB.vendeurs[k] && DB.vendeurs[k].prix) p=Object.assign({},p,DB.vendeurs[k].prix);
+ }
+ if(k==='global' && !p.p1){
+  p=DB.prix.global || {p1:70,p2:8,p3:4,m1:1000,m2:500,m3:100,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10};
+ }
+ document.getElementById('p1').value=p.p1||70;
+ document.getElementById('p2').value=p.p2||8;
+ document.getElementById('p3').value=p.p3||4;
+ document.getElementById('pm1').value=p.m1||1000;
+ document.getElementById('pm2').value=p.m2||500;
+ document.getElementById('pm3').value=p.m3||100;
+ document.getElementById('ppL3').value=p.l3||500;
+ document.getElementById('ppL4').value=p.l4||5000;
+ document.getElementById('ppL5').value=p.l5||25000;
+ document.getElementById('ppGratis').value=p.maryajGratis||500;
+ document.getElementById('pKom').value=p.kom||10;
+ document.getElementById('prixStatus').innerText=(k==='global'?'GLOBAL':'PA VANDE '+k)+' - M1 '+(p.m1||1000)+' - Kounye a modifyab - pou Tamouche mete 1200';
+}
+function savePrix(){
+ let k=document.getElementById('prixVendeur').value;
+ let o={p1:+document.getElementById('p1').value,p2:+document.getElementById('p2').value,p3:+document.getElementById('p3').value,m1:+document.getElementById('pm1').value,m2:+document.getElementById('pm2').value,m3:+document.getElementById('pm3').value,l3:+document.getElementById('ppL3').value,l4:+document.getElementById('ppL4').value,l5:+document.getElementById('ppL5').value,maryajGratis:+document.getElementById('ppGratis').value,kom:+document.getElementById('pKom').value,komActive:true,maryajGratisEnabled:true};
+ let vData=DB.vendeurs[k];
+ let serial=vData? (vData.serial||k) : k;
+ let updates={};
+ updates['prix/'+k]=o;
+ updates['prix/v_'+serial]=o;
+ updates['prix/'+serial]=o;
+ updates['prix/global']=(k==='global'?o:(DB.prix.global||o));
+ if(k!=='global'){
+  updates['vendeurs/'+k+'/prix']=o;
+  updates['vendeurs/'+k+'/m1']=o.m1;
+  updates['vendeurs/'+k+'/kom']=o.kom;
+  updates['vendeurs/'+k+'/p1']=o.p1; updates['vendeurs/'+k+'/p2']=o.p2; updates['vendeurs/'+k+'/p3']=o.p3;
+ }
+ if(k==='global'){
+  updates['prix/global']=o;
+ }
+ db.ref().update(updates).then(()=>{
+  alert('✅ Prix Save OK - '+(k==='global'?'GLOBAL M1 '+o.m1:'PA VANDE '+k+' (serial '+serial+') M1 '+o.m1+' - Tamouche ap jwenn 1200 kounye a'));
+  loadAll();
+ });
+}
+function renderPrixList(){
+ let html='';
+ Object.entries(DB.prix).forEach(([k,v])=>{
+  if(!v||!v.p1) return;
+  let label=k==='global'?'GLOBAL (GLOBAL)':k+' (PA VANDE - RESPÈKTE)';
+  html+='<div style="background:#e8f5e9;border:1px solid #0a4a2e;border-radius:6px;padding:6px;margin-top:4px">📌 '+label+' 1e '+v.p1+' 2e '+v.p2+' 3e '+v.p3+' M1 '+v.m1+' M2 '+v.m2+' M3 '+v.m3+' L3 '+v.l3+' L4 '+v.l4+' L5 '+v.l5+' Gratis '+v.maryajGratis+' Kom '+v.kom+'%</div>';
+ });
+ document.getElementById('prixList').innerHTML=html;
+}
+function saveLim(){
+ let kv=document.getElementById('limVendeur').value;
+ let kt=document.getElementById('limTiraj').value;
+ let o={bor:+document.getElementById('lBor').value,mar:+document.getElementById('lMar').value,l3:+document.getElementById('lL3').value,l4:+document.getElementById('lL4').value,l5:+document.getElementById('lL5').value};
+ let key=kt==='ALL'?(kv==='global'?'global':kv):kt+'_'+kv;
+ db.ref('limites/'+key).set(o).then(()=>{alert('Limite Save '+key);});
+}
+function renderLimList(){
+ let html='';
+ Object.entries(DB.limites).forEach(([k,v])=>{
+  html+='<div>🔒 '+k+' -> BOR '+v.bor+' MAR '+v.mar+'</div>';
+ });
+ document.getElementById('limList').innerHTML=html;
+}
+function saveBloke(){
+ let boul=document.getElementById('bBoul').value.trim();
+ let kv=document.getElementById('bVendeur').value;
+ if(!boul) return alert('Mete boul');
+ if(kv==='ALL'){
+  db.ref('blokeBoulGlobal/'+boul.replace(/\D/g,'')).set(true).then(()=>alert('Bloke GLOBAL '+boul));
+ }else{
+  db.ref('blokeBoulVendeur/'+kv+'/'+boul.replace(/\D/g,'')).set(true).then(()=>alert('Bloke PA VANDE '+kv+' boul '+boul));
+ }
+}
+function renderBlokeList(){
+ let html='GLOBAL: '+Object.keys(DB.blokeBoulGlobal).join(', ')+'<br>';
+ html+='PA VANDE: '+Object.keys(DB.blokeBoulVendeur).length+' vandè gen bloke';
+ document.getElementById('blokeList').innerHTML=html;
+}
+function saveHora(){
+ let t=document.getElementById('hTiraj').value;
+ let v=document.getElementById('hVendeur').value;
+ let jours=["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+ let updates={};
+ jours.forEach(j=>{
+  let a=document.getElementById('h_'+j+'_a').value;
+  let act=document.getElementById('h_'+j+'_act').checked;
+  let key=t+'_'+v;
+  updates['horairesTiraj/'+key+'/'+j]={a:a,active:act};
+ });
+ db.ref().update(updates).then(()=>alert('Horaire Save '+t+' '+v));
+}
+function calcRap(){document.getElementById('rapRes').innerText='Rapò Proprio - menm lojik ak vandè - itilize prix/global ak prix/vendeur';}
+loadAll();
 </script></body></html>
