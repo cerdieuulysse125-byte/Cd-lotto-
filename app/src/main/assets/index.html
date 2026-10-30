@@ -296,95 +296,10 @@ async function vann(){if(!selT.length){alert('CHWAZI TIRAJ DABO - TIRAJ PA MONTE
 function doCopy(){let id=document.getElementById('cid').value.trim().toUpperCase();if(!id) return alert('Mete ID');db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t) return alert('Pa jwenn');doCopyFill(t);});}
 function doCopyFill(t){selT=[];document.getElementById('txtT').innerText='Chwazi Tiraj Jodi a (0)';document.getElementById('bets').innerHTML='';(t.bets||[]).forEach(b=>{let r=addR(b.type);r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;r.querySelector('.jeu').value=b.type;onJeuChange(r.querySelector('.jeu'));});renderT();goTab('pV',document.querySelectorAll('.tab')[0]);setTimeout(()=>{document.getElementById('tlist').classList.add('open');},150);updFast(); renderGratisPreview();document.getElementById('cid').value='';}
 async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let html='';Object.values(all).forEach(t=>{if((t.dateHaiti||t.date)!==d) return;if(CUR&&t.serial&&String(t.serial)!==String(CUR.serial)) return;let payeBadge=t.paye?' <span style="background:#2e7d32;color:#fff;padding:2px 6px;border-radius:4px">PEYE - 1 FICH PA PEYE 2 FWA</span>':'';html+='<div class="card"><b>'+t.id+'</b> - $'+t.total+' '+(t.gratisRule||'')+payeBadge+'<br><small>'+(t.gratisBets||[]).map(g=>g.base+' '+g.numero).join(' | ')+'</small></div>';});document.getElementById('flist').innerHTML=html||'Pa gen fich';forceTabsVisible();}
-
-// === NOUVO: RECHERCHE TOUT APAREY KI PWÒCH - V36.7.17 ===
-function scanAparey(){
-  let res=document.getElementById('scanResult');
-  discoveredDevices=[];
-  res.innerHTML='<div style="padding:10px;text-align:center">🔍 <b>Recherche tout aparèy ki pwòch...</b><br><small>Bluetooth ON? Tcheke...</small><br><div style="margin-top:8px;width:100%;height:6px;background:#eee;border-radius:3px;overflow:hidden"><div style="width:100%;height:100%;background:#0a4a2e;animation:loading 2s infinite"></div></div></div>';
-  try{
-    if(window.AndroidPrinter){
-      try{
-        if(typeof window.AndroidPrinter.getBondedDevices === 'function'){
-          let raw=window.AndroidPrinter.getBondedDevices();
-          try{ let list=JSON.parse(raw); if(Array.isArray(list)) list.forEach(d=>{ discoveredDevices.push({name:d.name||d.deviceName||'Printer', mac:d.address||d.mac||d.id, type:'PAIRED'}); }); }catch(e){ raw.split('\n').forEach(l=>{ if(l.trim()) discoveredDevices.push({name:l.split(',')[0]||l, mac:l.split(',')[1]||l, type:'PAIRED'}); }); }
-        }
-        if(typeof window.AndroidPrinter.getPairedDevices === 'function'){
-          let raw=window.AndroidPrinter.getPairedDevices();
-          try{ let list=JSON.parse(raw); if(Array.isArray(list)) list.forEach(d=>{ discoveredDevices.push({name:d.name||'Printer', mac:d.address||d.id, type:'PAIRED'}); }); }catch(e){}
-        }
-        if(typeof window.AndroidPrinter.startScan === 'function') window.AndroidPrinter.startScan();
-        if(typeof window.AndroidPrinter.scanDevices === 'function') window.AndroidPrinter.scanDevices();
-        if(typeof window.AndroidPrinter.searchDevices === 'function') window.AndroidPrinter.searchDevices();
-      }catch(e){}
-    }
-  }catch(e){}
-  window.onBluetoothDeviceFound=function(name,mac){
-    discoveredDevices.push({name:name||'Unknown', mac:mac||name, type:'FOUND'});
-    let r=document.getElementById('scanResult');
-    if(r){
-      let item=document.createElement('div');
-      item.innerHTML='<div onclick="choisiAparey(\''+mac.replace(/'/g,'')+'\',\''+name.replace(/'/g,'')+'\')" style="background:#e3f2fd;border:2px solid #2196f3;border-radius:8px;padding:10px;margin-top:6px;cursor:pointer"><b>📡 '+(name||'Aparèy')+'</b><br><small style="font-family:monospace">'+mac+'</small><br><small style="background:#bbdefb;padding:2px 6px;border-radius:4px">NOUVO - PWÒCH</small></div>';
-      r.appendChild(item.firstChild);
-    }
-  };
-  setTimeout(()=>{
-    let html='';
-    if(discoveredDevices.length>0){
-      html+='<div style="background:#e8f5e9;padding:8px;border-radius:6px;border:2px solid #00c853"><b>✅ '+discoveredDevices.length+' aparèy PAIRE/Nearby jwenn</b></div>';
-      discoveredDevices.forEach(d=>{
-        html+='<div onclick="choisiAparey(\''+String(d.mac).replace(/'/g,'')+'\',\''+String(d.name).replace(/'/g,'')+'\')" style="background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:10px;margin-top:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center"><div><b>🖨️ '+d.name+'</b><br><small style="font-family:monospace">'+d.mac+'</small><br><small style="background:#dcfce7;padding:2px 6px;border-radius:4px">'+d.type+'</small></div><div style="background:#0a4a2e;color:#d4af37;padding:6px 10px;border-radius:6px;font-size:10px">CHWAZI</div></div>';
-      });
-    }else{
-      html+='<div style="background:#fff3e0;border:2px solid #ef6c00;padding:8px;border-radius:8px;text-align:center">Pa gen aparèy PAIRE jwenn - Eseye WEB BLUETOOTH</div>';
-    }
-    html+='<div style="margin-top:12px;border-top:2px dashed #0a4a2e;padding-top:10px"><b>🔵 Tout aparèy ki pwòch (Bluetooth):</b><br><button class="btn btnG" style="margin-top:8px;padding:12px" onclick="scanWithWebBluetooth()">🔍 RECHERCHE TOUT APAREY PWÒCH - WEB BLUETOOTH</button><br><small>Sa ap ouvri lis Bluetooth telefòn nan pou wè tout imprimante 58mm/80mm ki bò kote w</small></div>';
-    html+='<div style="margin-top:10px"><b>Manyèl:</b><br><div style="display:flex;gap:6px;margin-top:6px"><input id="manualMac" class="inpL" style="height:40px;font-size:11px" placeholder="Mac: 00:11:22..."><input id="manualName" class="inpL" style="height:40px;font-size:11px" placeholder="Non: Printer"></div><button class="btn btnB" style="margin-top:6px;padding:8px" onclick="choisiManu()">AJOUTE MANYÈL</button></div>';
-    res.innerHTML=html;
-  },1500);
-}
-async function scanWithWebBluetooth(){
-  let res=document.getElementById('scanResult');
-  if(!navigator.bluetooth){
-    res.innerHTML+='<div style="background:#ffcdd2;padding:10px;border-radius:8px;margin-top:8px">❌ Navigatè sa a pa sipòte Web Bluetooth<br>Eseye Chrome Android</div>';
-    return;
-  }
-  try{
-    res.innerHTML+='<div style="padding:10px;text-align:center">🔵 Ap ouvri seleksyon Bluetooth...<br><small>Chwazi imprimante w la</small></div>';
-    let device = await navigator.bluetooth.requestDevice({acceptAllDevices:true, optionalServices:['000018f0-0000-1000-8000-00805f9b34fb','battery_service']});
-    if(device){
-      let name=device.name||'Printer';
-      let id=device.id||name;
-      discoveredDevices.push({name:name, mac:id, type:'WEB-BT'});
-      choisiAparey(id, name);
-      res.innerHTML+='<div style="background:#c8e6c9;padding:10px;border-radius:8px;margin-top:6px">✅ Jwenn: <b>'+name+'</b><br>ID: '+id+'</div>';
-    }
-  }catch(e){
-    res.innerHTML+='<div style="background:#fff3e0;padding:8px;border-radius:8px;margin-top:6px">Anile: '+e.message+'</div>';
-  }
-}
-function choisiManu(){
-  let mac=document.getElementById('manualMac').value.trim();
-  let name=document.getElementById('manualName').value.trim()||'Printer';
-  if(!mac){alert('Mete Mac la');return;}
-  choisiAparey(mac, name);
-}
-function choisiAparey(mac,name){
-  tempMac=mac; tempName=name;
-  document.getElementById('chosenName').innerText=name;
-  document.getElementById('chosenMac').innerText='Mac/ID: '+mac;
-  document.getElementById('configSection').style.display='block';
-  document.getElementById('configSection').scrollIntoView({behavior:'smooth'});
-}
-function anrejistreAparey(){
-  if(!tempMac){alert('Chwazi aparèy nan lis la dabò');return;}
-  localStorage.setItem('selectedPrinterMac',tempMac);
-  localStorage.setItem('selectedPrinterName',tempName);
-  localStorage.setItem('selectedPrinterList', JSON.stringify(discoveredDevices));
-  alert('✅ Anrejistre: '+tempName+'\n'+tempMac);
-  document.getElementById('scanResult').innerHTML+='<div style="background:#00c853;color:#fff;padding:10px;border-radius:8px;margin-top:10px;text-align:center;font-weight:900">✅ APAREY ANREJISTRE: '+tempName+'</div>';
-}
-function testeApareyChwazi(){let bn=getBusinessName();let logo=getLogoUrl();let txt=centerTxt(bn)+"\n"+centerTxt("TEST V36.7.17 TOUT APAREY PWÒCH")+"\n"+centerTxt("Seri Aparèy: "+getDeviceSerial())+"\n"+centerTxt("Printer: "+(tempName||'Pa chwazi'))+"\n"+centerTxt(getHaitiDateTimeFull())+"\n";printBT({text:txt,logo:logo});}
+function scanAparey(){let res=document.getElementById('scanResult');res.innerHTML='Recherche...';try{if(window.AndroidPrinter&&typeof window.AndroidPrinter.scanDevices==='function'){let json=window.AndroidPrinter.scanDevices();let devs=JSON.parse(json);let html='<div><b>'+devs.length+' aparey:</b></div>';devs.forEach(d=>{html+='<div style="background:#e8f5e9;border:2px solid #0a4a2e;padding:10px;margin:6px 0;border-radius:8px;cursor:pointer" onclick="choisiAparey(\''+d.mac+'\',\''+d.name+'\')"><b>'+d.name+'</b></div>';});res.innerHTML=html;return;}}catch(e){}res.innerHTML='<div style="background:#e3f2fd;padding:10px;border-radius:8px;cursor:pointer" onclick="choisiAparey(\'BT-PRINTER-58MM\',\'Bluetooth Printer\')"><b>Bluetooth Printer 58MM</b></div>';}
+function choisiAparey(mac,name){tempMac=mac;tempName=name;document.getElementById('chosenName').innerText=name;document.getElementById('chosenMac').innerText='Mac: '+mac;document.getElementById('configSection').style.display='block';}
+function anrejistreAparey(){if(!tempMac){alert('Chwazi aparey');return;}localStorage.setItem('selectedPrinterMac',tempMac);localStorage.setItem('selectedPrinterName',tempName);alert('Anrejistre: '+tempName);}
+function testeApareyChwazi(){let bn=getBusinessName();let logo=getLogoUrl();let txt=centerTxt(bn)+"\n"+centerTxt("TEST V34 LOGO MONTE")+"\n"+centerTxt(getHaitiDateTimeFull())+"\n"+centerTxt("Logo santre anwo - koupe")+"\n";printBT({text:txt,html:'<div style="text-align:center"><div style="width:100%;display:flex;justify-content:center"><img src="'+logo+'" style="width:88px;height:88px;border-radius:50%;border:2px solid #0a4a2e;display:block;margin:0 auto"></div><br><b>'+bn+'</b><br>TEST V34<br>'+getHaitiDateTimeFull()+'</div>',logo:logo});}
 function resetAnile(){CUR_AN=null;document.getElementById('anId').value='';document.getElementById('anCheckLog').innerText='';document.getElementById('anRes').innerHTML='';document.getElementById('anTimeInfo').innerHTML='';document.getElementById('anFinalInfo').innerHTML='';document.getElementById('anPrint').dataset.plain='';document.getElementById('btnAnPrint').style.display='none';document.getElementById('stepAn1').style.display='block';document.getElementById('stepAn2').style.display='none';document.getElementById('stepAn3').style.display='none';}
 function resetPaye(){CUR_PAY=null;document.getElementById('payId').value='';document.getElementById('payRes').innerHTML='';document.getElementById('payPrevPeyman').innerHTML='';document.getElementById('payPrint').dataset.plain='';document.getElementById('btnPayPrint').style.display='none';document.getElementById('stepPay1').style.display='block';document.getElementById('stepPay2').style.display='none';document.getElementById('stepPay3').style.display='none';document.getElementById('payFinalInfo').innerHTML='';let btn=document.getElementById('btnConfPeye');if(btn) btn.style.display='block';}
 function goTab(id,el){document.querySelectorAll('.tabPage').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');forceTabsVisible();}
