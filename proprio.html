@@ -220,20 +220,24 @@ function calcRapport(){
  let resultsByDate={};
  Object.values(DB.results).forEach(r=>{
   if(!r.dat) return;
-  if(!TIRAJ_26.includes(r.tirage)) return;
+  // PA FILTRE SOIR - TOUT 26 EGZAKT
+  let tName = r.tirage||'';
+  let norm = TIRAJ_26.find(x=> x.toLowerCase()===String(tName).toLowerCase())||tName;
+  if(!TIRAJ_26.includes(norm)) return;
   if(!resultsByDate[r.dat]) resultsByDate[r.dat]={};
-  resultsByDate[r.dat][r.tirage]=r;
+  resultsByDate[r.dat][norm]=r;
+  resultsByDate[r.dat][tName]=r;
  });
  let totalVant=0, aPeye=0, komisyonTotal=0, tikèGanyan=0;
  listFiltre.forEach(t=>{
   if(t.annule){tikèAnile++; return;}
   let d=(t.dateHaiti||'').slice(0,10);
   let prix=getPrixForVendeur(t.vendeurId);
-  let nbTiraj=(t.tirages||[t.tirage]||[]).filter(x=>TIRAJ_26.includes(x)).length||1;
+  let nbTiraj=(t.tirages||[t.tirage]||[]).filter(x=> TIRAJ_26.includes(x) || TIRAJ_26.find(y=> y.toLowerCase()===String(x).toLowerCase())).length||1;
   let fichTotal=parseFloat(t.total||0);
-  let fichVentPaTiraj=fichTotal / nbTiraj; // 500 / 5 = 100
+  let fichVentPaTiraj=fichTotal / nbTiraj; // 500 / 5 = 100 - FL soir, NY soir tout kalkile
   if(ts!='ALL'){
-    let has=(t.tirages||[t.tirage]||[]).some(x=>String(x).toLowerCase()===String(ts).toLowerCase());
+    let has=(t.tirages||[t.tirage]||[]).some(x=> String(x).trim().toLowerCase()===String(ts).trim().toLowerCase());
     if(!has) return;
     tikèVann++;
     totalVant+=fichVentPaTiraj;
@@ -249,8 +253,8 @@ function calcRapport(){
   }
  });
  let balansNet=totalVant - komisyonTotal - aPeye;
- rapportRes.innerHTML=`<div style="background:#fff;border:3px solid #212121;border-radius:14px;padding:14px"><div style="background:#4a148c;color:#fff;padding:8px;border-radius:8px;text-align:center"><b>📊 RAPÒ ${du||'---'} → ${au||'---'} - ${ts} - RAPÒ PA TIRAJ 500/5=100 - 26 EGZAKT - PA GATE</b></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><div style="background:#eef1f6;padding:10px;border-radius:8px"><b>Du</b><br>${du||'---'}</div><div style="background:#eef1f6;padding:10px;border-radius:8px"><b>Au</b><br>${au||'---'}</div><div style="background:#e8f5e9;padding:10px;border-radius:8px"><b>Tikè vann (pa tiraj)</b><br><span style="font-size:18px;font-weight:900">${tikèVann}</span><br><small>${ts!=='ALL'?'500/5=100 - divize':''}</small></div><div style="background:#ffebee;padding:10px;border-radius:8px"><b>Tikè anile</b><br><span style="font-size:18px;font-weight:900">${tikèAnile}</span></div><div style="background:#fff3e0;padding:10px;border-radius:8px"><b>Tikè ganyan (sèlman ${ts})</b><br><span style="font-size:18px;font-weight:900">${tikèGanyan}</span></div><div style="background:#e3f2fd;padding:10px;border-radius:8px"><b>Total vant (pa tiraj)</b><br>$${totalVant.toFixed(2)} ${ts!=='ALL'?'(divize 500/5=100)':''}</div><div style="background:#f3e5f5;padding:10px;border-radius:8px"><b>Komisyon (pa tiraj)</b><br>$${komisyonTotal.toFixed(2)}</div><div style="background:#ffebee;padding:10px;border-radius:8px"><b>A peye kliyan (sèlman ${ts})</b><br>$${aPeye.toFixed(2)}<br><small>GANYEN PA TIRAJ SÈLMAN - 26 EGZAKT - PA GATE</small></div></div><div style="background:#212121;color:#fff;padding:12px;border-radius:10px;margin-top:12px;text-align:center"><b>Balans net = Vant - Komisyon - A Peye = $${balansNet.toFixed(2)}</b><br><small>500 goud / 5 tiraj = 100 goud pa tiraj - Ganyen pa tiraj sèlman - 26 EGZAKT - FL midi FL soir - PA GATE</small></div></div>`;
- rapportDetail.innerHTML=`<div class="card" style="font-size:11px"><b>✅ RAPÒ PA TIRAJ 500/5=100 - GANYEN PA TIRAJ SÈLMAN - 26 EGZAKT - PA GATE:</b> 500 goud / 5 tiraj = 100 goud pa tiraj - 10 000 total nan plizyè tiraj → rapò pou 1 tiraj = sèlman sa ki genyen nan tiraj sa a - FL midi FL soir TEN maten Texas swa Real - PA GATE</div>`;
+ rapportRes.innerHTML=`<div style="background:#fff;border:3px solid #212121;border-radius:14px;padding:14px"><div style="background:#4a148c;color:#fff;padding:8px;border-radius:8px;text-align:center"><b>📊 RAPÒ ${du||'---'} → ${au||'---'} - ${ts} - RAPÒ PA TIRAJ 500/5=100 - 26 EGZAKT - FL soir NY soir GA soir TEN swa Texas swa Real TOUT KALKILE</b></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><div style="background:#e8f5e9;padding:10px;border-radius:8px"><b>Tikè vann (pa tiraj)</b><br><span style="font-size:18px;font-weight:900">${tikèVann}</span><br><small>FL soir NY soir tout kalkile - 500/5=100</small></div><div style="background:#ffebee;padding:10px;border-radius:8px"><b>Tikè anile</b><br><span style="font-size:18px;font-weight:900">${tikèAnile}</span></div><div style="background:#fff3e0;padding:10px;border-radius:8px"><b>Tikè ganyan (sèlman ${ts})</b><br><span style="font-size:18px;font-weight:900">${tikèGanyan}</span><br><small>FL soir NY soir GA soir kalkile</small></div><div style="background:#e3f2fd;padding:10px;border-radius:8px"><b>Total vant (pa tiraj)</b><br>$${totalVant.toFixed(2)}</div><div style="background:#f3e5f5;padding:10px;border-radius:8px"><b>Komisyon</b><br>$${komisyonTotal.toFixed(2)}</div><div style="background:#ffebee;padding:10px;border-radius:8px"><b>A peye (sèlman ${ts})</b><br>$${aPeye.toFixed(2)}<br><small>FL soir NY soir GA soir TEN swa Texas swa tout kalkile</small></div></div><div style="background:#212121;color:#fff;padding:12px;border-radius:10px;margin-top:12px;text-align:center"><b>Balans net = $${balansNet.toFixed(2)}</b><br><small>500 / 5 = 100 - TOUT 26 TIRAJ KALKILE - FL soir NY soir GA soir TEN swa Texas swa Real - PA GATE</small></div></div>`;
+ rapportDetail.innerHTML=`<div class="card" style="font-size:11px"><b>✅ TOUT 26 TIRAJ KALKILE EPI KORIJE - FL soir NY soir GA soir TEN swa Texas swa Real - RAPÒ PA TIRAJ 500/5=100:</b> Anvan FL soir pa t kalkile akòz if(soir) continue - Kounye a retire - tout soir/swa kalkile - 500/5=100 - PA GATE</div>`;
 }
 function updateTirageByGroup(){let g=resGroup.value;if(!g){resTirage.innerHTML='<option value="">-- Chwazi Gwoup - 26 EGZAKT --</option>';return;}let tirages=GROUPS[g].tirages.filter(t=>TIRAJ_26.includes(t));let opts='';tirages.forEach(t=>opts+=`<option value="${t}">${t} - 26 EGZAKT</option>`);resTirage.innerHTML=opts;autoGenerate();}
 function autoGenerate(){
