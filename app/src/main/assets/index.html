@@ -172,8 +172,62 @@ async function calcR(){
 }
 function printRapportThermal(){let rp=document.getElementById('rprint');let t=rp.dataset.plain||'';let l=rp.dataset.logo||getLogoUrl();if(!t){alert('Kalkile avan');return;}printBT({text:t,logo:l});}
 async function vann(){if(!selT.length){alert('CHWAZI TIRAJ DABO - 26 EGZAKT');return}for(let tn of selT){if(!TIRAJ_26.includes(tn)){alert('Tiraj pa nan 26 EGZAKT: '+tn);return;}}let rawBets=[];document.querySelectorAll('.betRow').forEach(r=>{if(r.classList.contains('gratis')||r.classList.contains('gratis2')) return;let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm){rawBets.push({type:j,numero:b,mise:mm});}});if(!rawBets.length){alert('VID');return}let merged={};rawBets.forEach(b=>{let key=b.type+'|'+b.numero;if(merged[key]){merged[key].mise+=b.mise;}else{merged[key]={type:b.type,numero:b.numero,mise:b.mise};}});let bets=Object.values(merged);let base=bets.reduce((a,b)=>a+b.mise,0);let prix=getMyPrix();let gratisRes=calcMaryajGratis(bets,base);let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gratisRes.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getHaitiDateStr(),dateHaiti:getHaitiDateStr(),heure:getHaitiTimeString(),heureEST:getHaitiTimeString()+' EST',dateTimeFull:getHaitiDateTimeFull(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',prix:prix,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter(),deviceSerial:CUR?.deviceSerial||getDeviceSerial(),gratisRule:base>=50?'2 GRATIS - 1 PEYE - 1 FICH PA PEYE 2 FWA':'0 GRATIS'};await db.ref('tickets/'+tk.id).set(tk);let data=build(tk);LAST_TXT=data.text;LAST_HTML=data.html;showPreview(data);setTimeout(()=>{printBT(data);},150);document.getElementById('bets').innerHTML='';document.getElementById('gratisPreview').innerHTML='';addR();updFast();forceTabsVisible();}
-function doCopy(){let id=document.getElementById('cid').value.trim().toUpperCase();if(!id) return alert('Mete ID');db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t) return alert('Pa jwenn');doCopyFill(t);});}
-function doCopyFill(t){selT=[];document.getElementById('txtT').innerText='Chwazi Tiraj Jodi a (0) - 26 EGZAKT';document.getElementById('bets').innerHTML='';(t.bets||[]).forEach(b=>{let r=addR(b.type);r.querySelector('.boul').value=b.numero;r.querySelector('.mise').value=b.mise;r.querySelector('.jeu').value=b.type;onJeuChange(r.querySelector('.jeu'));});let validTirages=(t.tirages||[]).filter(n=>TIRAJ_26.includes(n));if(validTirages.length>0) selT=validTirages; else selT=[];renderT();goTab('pV',document.querySelectorAll('.tab')[0]);setTimeout(()=>{document.getElementById('tlist').classList.add('open');},150);updFast(); renderGratisPreview();document.getElementById('cid').value='';}
+function doCopy(){
+  let id=document.getElementById('cid').value.trim().toUpperCase();
+  if(!id) return alert('Mete ID - 26 EGZAKT - RAPÒ PA TIRAJ - PA GATE');
+  db.ref('tickets/'+id).once('value').then(s=>{
+    let t=s.val();
+    if(!t) return alert('Pa jwenn fich '+id+' - 26 EGZAKT');
+    doCopyFill(t);
+  });
+}
+
+function doCopyFill(t){
+  // === KOPYE KORIJE - PA GEN TIRAJ SELEKSYONE - VANDE A CHWAZI - 26 EGZAKT - RAPÒ PA TIRAJ 500/5=100 - PA GATE ===
+  selT=[]; // ← PA GEN TIRAJ SELEKSYONE - VANDE A CHWAZI
+  document.getElementById('txtT').innerText='CHWAZI TIRAJ POU KOPYE A (0) - 26 EGZAKT - RAPÒ PA TIRAJ';
+  document.getElementById('txtT').style.color='#c62828';
+  document.getElementById('txtT').style.fontWeight='900';
+  document.getElementById('bets').innerHTML='';
+  document.getElementById('gratisPreview').innerHTML='';
+  
+  (t.bets||[]).forEach(b=>{
+    let r=addR(b.type);
+    r.querySelector('.boul').value=b.numero;
+    r.querySelector('.mise').value=b.mise;
+    r.querySelector('.jeu').value=b.type;
+    onJeuChange(r.querySelector('.jeu'));
+  });
+  
+  // PA CHWAZI TIRAJ OTOMATIK - VANDE A DWE CHWAZI
+  // let validTirages=(t.tirages||[]).filter(n=>TIRAJ_26.includes(n));
+  // if(validTirages.length>0) selT=validTirages; // ← RETIRE SA
+  
+  renderT(); // re-render san tiraj chwazi
+  
+  // Louvri tab Vendre + louvri lis tiraj pou vandè a chwazi
+  goTab('pV',document.querySelectorAll('.tab')[0]);
+  
+  setTimeout(()=>{
+    document.getElementById('tlist').classList.add('open');
+    // Mete mesaj pou vandè a chwazi tiraj
+    let txt=document.getElementById('txtT');
+    if(txt){
+      txt.innerText='⚠️ CHWAZI TIRAJ KOTE W AP KOPYE FICH SA A - FICH ORIGINAL: '+(t.tirages||[]).filter(x=>TIRAJ_26.includes(x)).join(', ')+' - 26 EGZAKT';
+      txt.style.color='#c62828';
+      txt.style.fontWeight='900';
+      txt.style.background='#ffebee';
+      txt.style.padding='6px';
+      txt.style.borderRadius='6px';
+    }
+  },150);
+  
+  updFast(); 
+  renderGratisPreview();
+  document.getElementById('cid').value='';
+  
+  alert('✅ FICH KOPIYE - '+t.id+' - '+t.bets.length+' jwèt\n\n⚠️ CHWAZI TIRAJ KOTE W AP KOPYE L\n\nFich original te nan: '+(t.tirages||[]).filter(x=>TIRAJ_26.includes(x)).join(', ')+'\n\nKounye a chwazi NOUVO tiraj ou vle kopye l - 26 EGZAKT - 500/5=100 - PA GATE');
+}
 async function loadF(){let d=document.getElementById('fd').value;if(!d)return;let snap=await db.ref('tickets').once('value');let all=snap.val()||{};let html='';Object.values(all).forEach(t=>{if((t.dateHaiti||t.date)!==d) return;if(CUR&&t.serial&&String(t.serial)!==String(CUR.serial)) return;let payeBadge=t.paye?' <span style="background:#2e7d32;color:#fff;padding:2px 6px;border-radius:4px">PEYE</span>':'';html+='<div class="card"><b>'+t.id+'</b> - $'+t.total+' '+(t.gratisRule||'')+payeBadge+' - '+(t.tirages||[]).filter(x=>TIRAJ_26.includes(x)).join(', ')+'</div>';});document.getElementById('flist').innerHTML=html||'Pa gen fich - 26 EGZAKT - RAPÒ PA TIRAJ';forceTabsVisible();}
 function scanAparey(){let res=document.getElementById('scanResult');res.innerHTML='Recherche...';try{if(window.AndroidPrinter&&typeof window.AndroidPrinter.scanDevices==='function'){let json=window.AndroidPrinter.scanDevices();let devs=JSON.parse(json);let html='<div><b>'+devs.length+' aparey:</b></div>';devs.forEach(d=>{html+='<div style="background:#e8f5e9;border:2px solid #0a4a2e;padding:10px;margin:6px 0;border-radius:8px;cursor:pointer" onclick="choisiAparey(\''+d.mac+'\',\''+d.name+'\')"><b>'+d.name+'</b></div>';});res.innerHTML=html;return;}}catch(e){}res.innerHTML='<div style="background:#e3f2fd;padding:10px;border-radius:8px;cursor:pointer" onclick="choisiAparey(\'BT-PRINTER-58MM\',\'Bluetooth Printer\')"><b>Bluetooth Printer 58MM</b></div>';}
 function choisiAparey(mac,name){tempMac=mac;tempName=name;document.getElementById('chosenName').innerText=name;document.getElementById('chosenMac').innerText='Mac: '+mac;document.getElementById('configSection').style.display='block';}
