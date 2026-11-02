@@ -90,8 +90,6 @@ function loadAll(){
    <input id="pass_${v._id}" value="${v.pass||''}" placeholder="Pass">
    <div id="conf_${v._id}" style="margin-top:4px;font-weight:900;min-height:22px;background:#fff;padding:6px;border-radius:10px;border:2px dashed #4a148c;font-size:11px"></div>`;
  });
-listVendeur.innerHTML=html||'Pa gen vandè';
- loadPrix();loadLimites();loadResTable();loadEntete();loadBlokeBoulList();loadBlokeJeuList();loadHeure
 /* === 3 TI PWEN FONKSYON === */
 function toggleVendeurMenu(e,key){
   e.stopPropagation();
@@ -131,34 +129,7 @@ async function efaseVendeur(key){
   await db.ref('vendeurs/'+key).remove(); await db.ref('blokeVendeur/'+key).remove();
 }
 async function toggleGratisVendeur(key){
-  document.querySelectorAll('.dots-menu').forEach(m=>m.classList.remove('open'));
-  let v=DB.vendeurs[key];
-  if(!v) return;
-  
-  // Li eta aktyèl la
-  let enabled=true;
-  if(DB.prix.global && DB.prix.global.maryajGratisEnabled===false) enabled=false;
-  if(DB.prix[key] && DB.prix[key].maryajGratisEnabled===false) enabled=false;
-  if(v.prix && v.prix.maryajGratisEnabled===false) enabled=false;
-  if(v.serial && DB.prix[v.serial] && DB.prix[v.serial].maryajGratisEnabled===false) enabled=false;
-  if(v.serial && DB.prix['v_'+v.serial] && DB.prix['v_'+v.serial].maryajGratisEnabled===false) enabled=false;
-  
-  let newState=!enabled;
-  let serial=v.serial||key;
-  
-  let updates={};
-  updates['prix/'+key+'/maryajGratisEnabled']=newState;
-  updates['prix/v_'+serial+'/maryajGratisEnabled']=newState;
-  updates['prix/'+serial+'/maryajGratisEnabled']=newState;
-  updates['vendeurs/'+key+'/prix/maryajGratisEnabled']=newState;
-  
-  await db.ref().update(updates);
-  
-  // Feedback rapid
-  if(navigator.vibrate) navigator.vibrate(100);
-  // Pa bezwen alert — bouton an ap chanje koulè otomatik
-  loadAll();
-}
+
 function toggleBloke(id){let bloke=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;if(tmpBloke[id]!==undefined) bloke=tmpBloke[id];tmpBloke[id]=!bloke;loadAll();}
 function confirmVendeur(id){let nom=DB.vendeurs[id]?.nom||id;let bloke=tmpBloke[id]!==undefined?tmpBloke[id]:(DB.blokeVendeur[id]===true);let el=document.getElementById('conf_'+id);if(el) el.innerHTML='✅ KONFIME - '+nom+' - '+(bloke?'🔴 OFF':'🟢 ON')+' - '+new Date().toLocaleString();}
 function saveV(id){
