@@ -46,53 +46,50 @@ function doLogin(){let n=ln.value.trim(),p=lp.value.trim();if(!n||!p){loginMsg.i
 function logout(){localStorage.removeItem('curP');location.reload();}
 function openTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>{p.classList.remove('active');p.style.display='none';});if(el)el.classList.add('active');document.getElementById(id).classList.add('active');document.getElementById(id).style.display='block';}
 function getMyVendeurs(){let arr=[];for(let id in DB.vendeurs){let v=DB.vendeurs[id];if(!v) continue; if(v.nom==='undefined'||v.id==='undefined'||v.serial==='undefined'||String(v.id).toLowerCase().includes('undefined')) continue; if(v.proprioId==MY_PROPRIO_ID||v.proprioId==CUR.nom)arr.push({...v,_id:id});}return arr;}
-function loadAll(){
- let myV=getMyVendeurs();
- let opts='<option value="global">🌍 GLOBAL - 70/8/4 M1 1200 ('+myV.length+' vandè - 26 EGZAKT)</option>';
- let optsA='<option value="ALL">Tous - 26 EGZAKT</option>';
- let optsT='<option value="ALL">Tous - 26 EGZAKT - 500/5=100</option>';
- myV.forEach(v=>{let lab=(v.serial||v._id)+' - '+v.nom;opts+='<option value="'+v._id+'">👤 '+lab+'</option>';optsA+='<option value="'+v._id+'">'+lab+'</option>';});
- TIRAJ_26.forEach(t=>{optsT+='<option value="'+t+'">'+t+' - 26 EGZAKT</option>';});
- let groupOpts='<option value="">-- Chwazi Gwoup --</option>';for(let g in GROUPS){groupOpts+=`<option value="${g}">${g} - ${GROUPS[g].tirages.length} tiraj</option>`;}
- let vendOpts='<option value="">-- Vandè --</option><option value="ALL">GLOBAL</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
- let vendSimple='<option value="">-- Chwazi Vandè --</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
- let vendGlobal='<option value="ALL">GLOBAL (tout vandè)</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
- prixVendeur.innerHTML=opts;rVendeur.innerHTML=optsA;rTirage.innerHTML=optsT;resGroup.innerHTML=groupOpts;
- limTirage.innerHTML=optsT;limVendeur.innerHTML=vendGlobal;
- horTirage.innerHTML=optsT;horVendeur.innerHTML=vendOpts;blkTirage.innerHTML=optsT;blkVendeur.innerHTML=vendSimple;blkJeuTirage.innerHTML=optsT;blkJeuVendeur.innerHTML=vendSimple;
- let html='';myV.forEach(v=>{
+let html='';myV.forEach(v=>{
    let bloke=DB.blokeVendeur[v._id]===true||v.bloke===true;
    if(tmpBloke[v._id]!==undefined) bloke=tmpBloke[v._id];
-   let proprioBloke=DB.blokeProprio[MY_PROPRIO_ID]===true||DB.proprios[MY_PROPRIO_ID]?.bloke===true;
-   if(proprioBloke) bloke=true;
-   let onOffLabel=bloke?'🔴 OFF BLOKE':'🟢 ON AKTIF';
-   let onOffColor=bloke?'#c62828':'#2e7d32';
-   let prixV=getPrixForVendeur(v._id);
+   
+   // === GRATIS ON/OFF PA VANDE ===
+   let gratisEnabled=true;
+   if(DB.prix && DB.prix.global && DB.prix.global.maryajGratisEnabled===false) gratisEnabled=false;
+   if(DB.prix[v._id] && DB.prix[v._id].maryajGratisEnabled===false) gratisEnabled=false;
+   if(v.prix && v.prix.maryajGratisEnabled===false) gratisEnabled=false;
+   if(v.serial && DB.prix[v.serial] && DB.prix[v.serial].maryajGratisEnabled===false) gratisEnabled=false;
+   if(v.serial && DB.prix['v_'+v.serial] && DB.prix['v_'+v.serial].maryajGratisEnabled===false) gratisEnabled=false;
+   
+   let gratisLabel=gratisEnabled?'🟢 GRATIS ON':'🔴 GRATIS OFF';
+   let gratisColor=gratisEnabled?'#00c853':'#c62828';
+   
    html+=`<div class="vendeur-card ${bloke?'bloke':''}">
    <div class="vendeur-info">
-     <div style="display:flex;align-items:center;gap:8px">
+     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
        <button class="dots-btn" onclick="toggleVendeurMenu(event,'${v._id}')">⋯</button>
-       <div><b style="font-size:16px">${v.nom}</b><br><span style="font-size:13px">| C&D VÉRITÉ LOTTO</span><br><span class="vendeur-kod">Kòd:${v.serial||v._id}</span><span class="vendeur-seri">Seri:${v.deviceSerial||v.serialAparay||'---'}</span></div>
+       <div>
+         <b style="font-size:16px">Tamouche - ${v.nom}</b> ${bloke?'⛔':''}<br>
+         <span style="font-size:12px">| C&D VÉRITÉ LOTTO</span><br>
+         <span class="vendeur-kod">Kòd:${v.serial||v._id}</span><span class="vendeur-seri">Seri:${v.deviceSerial||v.serialAparay||'---'}</span>
+       </div>
      </div>
    </div>
-   <div style="display:flex;gap:6px;align-items:center;position:relative">
-     <button onclick="toggleBloke('${v._id}')" style="padding:12px 16px;border:0;border-radius:12px;font-weight:900;color:#fff;background:${onOffColor};min-width:90px">${bloke?'BLOKE':'ON'}</button>
-     <button style="background:#0a4a2e;color:#d4af37;border:0;padding:10px 14px;border-radius:10px;font-weight:900;border:2px solid #d4af37" onclick="saveV('${v._id}')">💾 SAVE - PA GATE</button>
-     <button style="background:#c62828;color:#fff;border:0;width:40px;height:40px;border-radius:10px;font-weight:900" onclick="efaseVendeur('${v._id}')">X</button>
+   <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;position:relative">
+     <div style="display:flex;gap:6px">
+       <button onclick="toggleGratisVendeur('${v._id}')" style="padding:8px 12px;border:0;border-radius:10px;font-weight:900;color:#fff;background:${gratisColor};font-size:11px;min-width:110px">${gratisLabel}</button>
+       <button onclick="toggleBloke('${v._id}')" style="padding:8px 12px;border:0;border-radius:10px;font-weight:900;color:#fff;background:${bloke?'#c62828':'#2e7d32'};font-size:11px">${bloke?'BLOKE':'ON'}</button>
+     </div>
+     <div style="display:flex;gap:6px">
+       <button style="background:#0a4a2e;color:#d4af37;border:2px solid #d4af37;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px" onclick="saveV('${v._id}')">💾 SAVE</button>
+       <button style="background:#c62828;color:#fff;border:0;width:36px;height:36px;border-radius:8px;font-weight:900" onclick="efaseVendeur('${v._id}')">X</button>
+     </div>
      <div id="menu-${v._id}" class="dots-menu">
        <button onclick="modifyeVendeur('${v._id}')">✏️ Modifye</button>
+       <button onclick="toggleGratisVendeur('${v._id}')">${gratisEnabled?'🔴 Dezaktive Gratis':'🟢 Aktive Gratis'}</button>
        <button onclick="${bloke?`deblokeVendeur('${v._id}')`:`blokeVendeur('${v._id}')`}">${bloke?'✅ Debloke':'🚫 Bloke'}</button>
        <button onclick="efaseVendeur('${v._id}')" style="color:#c62828">🗑️ Efase</button>
      </div>
    </div>
-   </div>
-   <div class='grid2' style="margin-top:6px"><input id="nom_${v._id}" value="${v.nom}" placeholder="Non"><input id="kom_${v._id}" value="${prixV.kom}" type="number" placeholder="Kom %"></div>
-   <input id="pass_${v._id}" value="${v.pass||''}" placeholder="Pass">
-   <div id="conf_${v._id}" style="margin-top:4px;font-weight:900;min-height:22px;background:#fff;padding:6px;border-radius:10px;border:2px dashed #4a148c;font-size:11px"></div>`;
+   </div>`;
  });
- listVendeur.innerHTML=html||'Pa gen vandè';
- loadPrix();loadLimites();loadResTable();loadEntete();loadBlokeBoulList();loadBlokeJeuList();loadHeureSuperList();
-}
 /* === 3 TI PWEN FONKSYON === */
 function toggleVendeurMenu(e,key){
   e.stopPropagation();
@@ -131,7 +128,35 @@ async function efaseVendeur(key){
   let konf=prompt('Tape EFASER pou konfime:'); if(konf!=='EFASER') return;
   await db.ref('vendeurs/'+key).remove(); await db.ref('blokeVendeur/'+key).remove();
 }
-
+async function toggleGratisVendeur(key){
+  document.querySelectorAll('.dots-menu').forEach(m=>m.classList.remove('open'));
+  let v=DB.vendeurs[key];
+  if(!v) return;
+  
+  // Li eta aktyèl la
+  let enabled=true;
+  if(DB.prix.global && DB.prix.global.maryajGratisEnabled===false) enabled=false;
+  if(DB.prix[key] && DB.prix[key].maryajGratisEnabled===false) enabled=false;
+  if(v.prix && v.prix.maryajGratisEnabled===false) enabled=false;
+  if(v.serial && DB.prix[v.serial] && DB.prix[v.serial].maryajGratisEnabled===false) enabled=false;
+  if(v.serial && DB.prix['v_'+v.serial] && DB.prix['v_'+v.serial].maryajGratisEnabled===false) enabled=false;
+  
+  let newState=!enabled;
+  let serial=v.serial||key;
+  
+  let updates={};
+  updates['prix/'+key+'/maryajGratisEnabled']=newState;
+  updates['prix/v_'+serial+'/maryajGratisEnabled']=newState;
+  updates['prix/'+serial+'/maryajGratisEnabled']=newState;
+  updates['vendeurs/'+key+'/prix/maryajGratisEnabled']=newState;
+  
+  await db.ref().update(updates);
+  
+  // Feedback rapid
+  if(navigator.vibrate) navigator.vibrate(100);
+  // Pa bezwen alert — bouton an ap chanje koulè otomatik
+  loadAll();
+}
 function toggleBloke(id){let bloke=DB.blokeVendeur[id]===true||DB.vendeurs[id]?.bloke===true;if(tmpBloke[id]!==undefined) bloke=tmpBloke[id];tmpBloke[id]=!bloke;loadAll();}
 function confirmVendeur(id){let nom=DB.vendeurs[id]?.nom||id;let bloke=tmpBloke[id]!==undefined?tmpBloke[id]:(DB.blokeVendeur[id]===true);let el=document.getElementById('conf_'+id);if(el) el.innerHTML='✅ KONFIME - '+nom+' - '+(bloke?'🔴 OFF':'🟢 ON')+' - '+new Date().toLocaleString();}
 function saveV(id){
