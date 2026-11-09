@@ -28,9 +28,8 @@ if(db){try{db.ref('.info/serverTimeOffset').on('value',s=>{serverOffset=s.val()|
 function getTrueNow(){return new Date(Date.now()+serverOffset);}function getHaitiTime(){try{return new Date(getTrueNow().toLocaleString('en-US',{timeZone:'America/Port-au-Prince'}));}catch(e){return new Date();}}
 function getHaitiDateStr(){let d=getHaitiTime();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 // === DAT KOLE JISKASKE MINWI AYITI - V36.7.35 - MENM JAN AK PROPRIO V27.9.11 ===
-// Toutotan li pa fè minwi Ayiti (00:00 America/Port-au-Prince), dat la pa dwe chanje.
 function getLockedHaitiDate(){try{let todayHaiti=getHaitiDateStr();let locked=localStorage.getItem('vendeurLockedDate');if(!locked){localStorage.setItem('vendeurLockedDate',todayHaiti);return todayHaiti;}if(locked===todayHaiti){return locked;}localStorage.setItem('vendeurLockedDate',todayHaiti);return todayHaiti;}catch(e){return getHaitiDateStr();}}
-// === 1e SOTI NAN L3 A - V36.7.35 - PA GEN KAZ 1e NAN PROPRIO ANKÒ ===
+// === 1e SOTI NAN L3 A - V36.7.35 ===
 function getR1FromL3(l3){let s=(l3||'').toString().replace(/\D/g,'');if(s.length<3) return '';return s.slice(-2).padStart(2,'0');}
 function getHaitiTimeString(){let d=getHaitiTime();let h=d.getHours();let m=String(d.getMinutes()).padStart(2,'0');let s=String(d.getSeconds()).padStart(2,'0');let ampm=h>=12?'PM':'AM';let h12=h%12||12;return String(h12).padStart(2,'0')+':'+m+':'+s+' '+ampm;}
 function getHaitiDateTimeFull(){return getLockedHaitiDate()+' '+getHaitiTimeString()+' EST';}
@@ -101,14 +100,13 @@ function calcGainForTicket(ticket,resultsForDate,prix){
   let P={p1:(prix&&prix.p1!=null)?prix.p1:70, p2:(prix&&prix.p2!=null)?prix.p2:8, p3:(prix&&prix.p3!=null)?prix.p3:4, m1:(prix&&prix.m1!=null)?prix.m1:1200, m2:(prix&&prix.m2!=null)?prix.m2:500, m3:(prix&&prix.m3!=null)?prix.m3:100, l3:(prix&&prix.l3!=null)?prix.l3:500, l4:(prix&&prix.l4!=null)?prix.l4:5000, l5:(prix&&prix.l5!=null)?prix.l5:25000, maryajGratis:(prix&&prix.maryajGratis!=null)?prix.maryajGratis:500};
   let totalGain=0; let details=[];
   // V36.7.35 - GRATIS PA FICH: DEYÒ bouk tiraj la - 1 fich = max 1 gratis = 500 $
-  // PA METE L ANNDAN bouk tiraj la - sinon fich ak 2 tiraj ap peye 2 x 500
   let gratisDejaPeye=false;
   try{
     for(let tirage of (ticket.tirages||[])){
       let res=findResultForTirage(resultsForDate, tirage);
       if(!res){ details.push('❌ '+tirage+' - PA GEN REZILTA pou dat sa a'); continue; }
       let l3=(res.l3||res.trio||"").toString().replace(/\D/g,"").slice(-3);
-      // V36.7.35 - 1e SOTI NAN L3 A: Proprio pa antre 1e ankò - si res.r1 pa la, derive l nan L3 a
+      // V36.7.35 - 1e SOTI NAN L3 A
       let r1=res.r1?String(res.r1).replace(/\D/g,"").slice(-2).padStart(2,"0"):getR1FromL3(l3);
       let r2=(res.r2||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
       let r3=(res.r3||"").toString().replace(/\D/g,"").slice(-2).padStart(2,"0");
@@ -154,7 +152,7 @@ function calcGainForTicket(ticket,resultsForDate,prix){
         if(gainBet>0){ totalGain+=gainBet; details.push('✅ '+tirage+' - '+label+' - $'+mise+' = $'+gainBet); }
         else { details.push('— '+tirage+' - '+label); }
       }
-      // GRATIS PA FICH - si 1 deja peye sou fich sa a, lòt yo pa peye - menm si se lòt tiraj
+      // GRATIS PA FICH - si 1 deja peye sou fich sa a, lòt yo pa peye
       if(isMaryajGratisEnabled() && !gratisDejaPeye){
         for(let gbet of (ticket.gratisBets||[])){
           let gnum=(gbet.numero||"").replace(/\D/g,"");
