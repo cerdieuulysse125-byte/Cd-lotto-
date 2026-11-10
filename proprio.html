@@ -38,10 +38,10 @@ function openTab(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList
 function getMyVendeurs(){let arr=[];for(let id in DB.vendeurs){let v=DB.vendeurs[id];if(!v) continue; if(v.nom==='undefined'||v.id==='undefined'||v.serial==='undefined'||String(v.id).toLowerCase().includes('undefined')) continue; if(v.proprioId==MY_PROPRIO_ID||v.proprioId==CUR.nom)arr.push({...v,_id:id});}return arr;}
 function loadAll(){
  let myV=getMyVendeurs();
- let opts='<option value="global">🌍 GLOBAL - R1 70 / R2 8 / R3 4 - M1 1200 M2 500 M3 100 - L3 500 L4 5000 L5 25000 ('+myV.length+' vandè)</option>';
+ let opts='<option value="global"></option>';
  let optsA='<option value="ALL">Tous - 26 EGZAKT</option>';
  let optsT='<option value="ALL">Tous - 26 EGZAKT - 500/5=100</option>';
- myV.forEach(v=>{let lab=(v.serial||v._id)+' - '+v.nom;opts+='<option value="'+v._id+'">👤 '+lab+' - Pri pa l</option>';optsA+='<option value="'+v._id+'">'+lab+'</option>';});
+ myV.forEach(v=>{let lab=(v.serial||v._id)+' - '+v.nom;opts+='<option value="'+v._id+'">👤 '+lab+'</option>';optsA+='<option value="'+v._id+'">'+lab+'</option>';});
  TIRAJ_26.forEach(t=>{optsT+='<option value="'+t+'">'+t+' - 26 EGZAKT</option>';});
  let groupOpts='<option value="">-- Chwazi Gwoup --</option>';for(let g in GROUPS){groupOpts+=`<option value="${g}">${g} - ${GROUPS[g].tirages.length} tiraj</option>`;}
  let vendOpts='<option value="">-- Vandè --</option><option value="ALL">GLOBAL</option>'+myV.map(v=>`<option value="${v._id}">${v.serial||v._id} - ${v.nom}</option>`).join('');
