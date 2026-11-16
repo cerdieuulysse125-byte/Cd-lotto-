@@ -272,34 +272,49 @@ function testLogoSelman(){
 }
 function testeApareyChwazi(){if(LAST_TXT)printLast();else printBT({text:"TEST PRINTER\n"+getBusinessName()+"\nLOGO + TEKS\n\n\n",html:"",logo:getLogoUrl()});}
 async function vann(){if(_PRINTING){alert('Ap enprime... tann');return;}autoDeselectClosedTirages();let cf=(selT||[]).filter(t=>!isOpen(t));if(cf.length){selT=selT.filter(t=>isOpen(t));renderT();}if(!selT.length){alert('⛔ Tout tiraj ou te chwazi yo FÈMEN. Chwazi yon tiraj ki OUVÈ.');return;}if(cf.length){if(!confirm('⏰ '+cf.join(', ')+' FÈMEN — retire otomatik.\nFich la ap enprime SÈLMAN pou: '+selT.join(', ')+'\nKontinye?'))return;}for(let t of selT){if(!isOpen(t)){alert('⛔ TIRAJ FÈMEN: '+t);autoDeselectClosedTirages();return;}}let cur=getDeviceSerial();if(!cur||normalizeSeri(cur)!==normalizeSeri(CUR.deviceSerial||'')){alert('⛔ SERI APARÈY CHANJE - Dekonekte. Konekte ankò.');logout();return;}let over=document.querySelectorAll('.betRow.over-limit');if(over.length){alert('Gen '+over.length+' liy ki depase Limit!');return;}let raw=[];document.querySelectorAll('.betRow:not(.gratis)').forEach(r=>{let j=r.querySelector('.jeu').value,b=r.querySelector('.boul').value.trim(),mm=parseInt(r.querySelector('.mise').value);if(j&&b&&mm)raw.push({type:j,numero:b,mise:mm});});if(!raw.length){alert('VID');return;}let dups=findDuplicatesInBets(raw);if(dups.length){alert('❌ REPETISYON NAN FICH LA!\n\n'+dups.map(d=>getBetLabelForKey(d.type,d.numero)).join('\n')+'\n\nPa ka gen menm boul 2 fwa.');return;}try{await db.ref('tickets').once('value').then(s=>{DB.tickets=s.val()||DB.tickets;});}catch(e){}let ge=checkGlobalLimit(raw,selT.slice());if(ge.length){alert('⛔ LIMIT GLOBAL DEPASE!\n\n'+ge.map(e=>'• '+getBetLabelForKey(e.bet.type,e.bet.numero)+' — '+e.tiraj+'\n Deja Global: $'+e.deja+' + Ou: $'+e.bet.mise+' = $'+e.nouvo+' > Limit $'+e.lim+'\n Rete: $'+e.reste).join('\n\n')+'\n\nFich la PA sove.');renderGlobalLimitInfo();return;}let bets=raw;for(let b of bets){let lim=getLimiteForJeu(b.type);if(b.mise>lim){alert('Limit depase pou '+b.type.toUpperCase()+' '+b.numero+': $'+b.mise+' > Max $'+lim);return;}}let base=bets.reduce((a,b)=>a+b.mise,0);let prix=getMyPrix();let gr=isMaryajGratisEnabled()?calcMaryajGratis(bets,base):{gratisList:[]};let tk={id:'T'+Date.now().toString().slice(-7),bets:bets,gratisBets:gr.gratisList,tirages:selT.slice(),baseTotal:base,total:base*selT.length,date:getLockedHaitiDate(),dateHaiti:getLockedHaitiDate(),heure:getHaitiTimeString(),heureEST:getHaitiTimeString()+' EST',dateTimeFull:getHaitiDateTimeFull(),vendeurId:CUR?._key,serial:CUR?.serial,proprioId:CUR?CUR.proprioId:'',deviceSerial:cur,vendeurVersion:VENDEUR_VERSION,createdAt:Date.now(),businessName:getBusinessName(),footer:getFooter()};let ex=await db.ref('tickets/'+tk.id).once('value');if(ex.exists()){alert('Fich sa deja egziste');return;}await db.ref('tickets/'+tk.id).set(tk);let d=build(tk);LAST_TXT=d.text;LAST_HTML=d.html;LAST_TK=d.tk;showPreview(d);try{printBT(d);}catch(e){_PRINTING=false;}}
-function doCopy(){let id=document.getElementById('cid').value.trim().toUpperCase();if(!id) return alert('Mete ID');db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t) return alert('Pa jwenn fich '+id);doCopyFill(t);});}
-function doCopyFill(t){
-  selT=[];
-  document.getElementById('txtT').innerText='CHWAZI TIRAJ POU KOPYE A (0)';
-  document.getElementById('txtT').style.color='#c62828';
-  document.getElementById('txtT').style.fontWeight='900';
+async function doCopy(){
+  let idEl=document.getElementById('cid');
+  let id=(idEl?idEl.value:'').trim().toUpperCase();
+  if(!id){alert('Mete ID Ticket');return;}
+  let snap=await db.ref('tickets/'+id).once('value');
+  let t=snap.val();
+  if(!t){alert('Fich pa jwenn: '+id);return;}
+
+  // ✅ KOREKSYON: ANILE ak dat ki pase KA kopye - jis avèti
+  let msgExtra = "";
+  if(t.annule) msgExtra += "ANILE - ";
+  let fichDate = t.dateHaiti || t.date || "";
+  let today = getHaitiDateStr();
+  if(fichDate && fichDate !== today) msgExtra += "Dat pase ("+fichDate+") - ";
+  if(msgExtra){
+    // pa bloke - jis konfime
+    if(!confirm(msgExtra+" Vle kopye boul yo nan tiraj JODI A ki ouvè?")){
+      return;
+    }
+  }
+
+  // ✅ PA kopye tiraj ansyen (GA midi yè, elatriye)
+  selT = [];
+  document.getElementById('txtT').innerText='Chwazi Tiraj';
+
+  // Kopye sèlman boul/miz
   document.getElementById('bets').innerHTML='';
-  document.getElementById('gratisPreview').innerHTML='';
   (t.bets||[]).forEach(b=>{
     let r=addR(b.type);
     r.querySelector('.boul').value=b.numero;
     r.querySelector('.mise').value=b.mise;
     r.querySelector('.jeu').value=b.type;
     onJeuChange(r.querySelector('.jeu'));
+    checkLimit(r.querySelector('.mise'));
   });
-  renderT();
+
+  // ✅ Rann tiraj dat du jour ki pa fèmen sèlman
+  renderT(); // renderT deja itilize isOpen() -> sèlman tiraj jodi a ki ouvè
+  document.getElementById('tlist').classList.add('open'); // ouvri pou vandè chwazi
+
   goTab('pV',document.querySelectorAll('.tab')[0]);
-  setTimeout(()=>{
-    document.getElementById('tlist').classList.add('open');
-    let txt=document.getElementById('txtT');
-    if(txt){
-      txt.innerText='⚠️ CHWAZI TIRAJ KOTE W AP KOPYE - ORIGINAL: '+(t.tirages||[]).filter(x=>TIRAJ_26.includes(x)).join(', ');
-      txt.style.color='#c62828'; txt.style.fontWeight='900'; txt.style.background='#ffebee'; txt.style.padding='6px'; txt.style.borderRadius='6px';
-    }
-  },150);
-  updFast(); renderGratisPreview();
-  document.getElementById('cid').value='';
-  alert('✅ FICH KOPIYE - '+t.id+'\n\n⚠️ CHWAZI NOUVO TIRAJ KOTE W AP KOPYE L\n\nOriginal: '+(t.tirages||[]).filter(x=>TIRAJ_26.includes(x)).join(', '));
+  updFast(); renderGratisPreview(); forceTabsVisible();
+  if(idEl) idEl.value='';
 }
 async function loadF(){let fd=document.getElementById('fd').value||getLockedHaitiDate();let el=document.getElementById('flist');el.innerHTML='Tcheke...';let s=await db.ref('tickets').once('value');let all=s.val()||{};let list=Object.values(all).filter(t=>(t.dateHaiti||t.date)===fd&&t.serial===CUR.serial&&!isTicketAnile(t)).sort((a,b)=>b.createdAt-a.createdAt);if(!list.length){el.innerHTML='<div style="text-align:center;padding:10px">Pa gen fich pou dat sa a</div>';return;}el.innerHTML=list.map(t=>'<div style="background:#fff;border:2px solid #0a4a2e;border-radius:8px;padding:8px;margin-top:6px"><b>'+t.id+'</b> — $'+t.total+' — '+(t.tirages||[]).join(', ')+'<br>'+(t.bets||[]).map(b=>b.type.toUpperCase()+' '+b.numero+' $'+b.mise).join(' | ')+'</div>').join('');}
 function stepAnile1(){let id=document.getElementById('anId').value.trim();if(!id){alert('Mete ID');return;}db.ref('tickets/'+id).once('value').then(s=>{let t=s.val();if(!t){document.getElementById('anCheckLog').innerHTML='Ticket pa jwenn';return;}if(isTicketAnile(t)){document.getElementById('anCheckLog').innerHTML='Ticket sa deja anile';return;}CUR_AN={id:id,tk:t};document.getElementById('stepAn1').style.display='none';document.getElementById('stepAn2').style.display='block';document.getElementById('anRes').innerHTML='<b>'+t.id+'</b> — $'+t.total+'<br>'+(t.bets||[]).map(b=>b.type+' '+b.numero+' $'+b.mise).join('<br>');let diff=Date.now()-(t.createdAt||0);let mins=Math.floor(diff/60000);document.getElementById('anTimeInfo').innerHTML=mins<=5?'✅ Anko '+mins+' minit — Ou ka anile':'⛔ Depase 5 minit ('+mins+' min) — Pa ka anile';});}
