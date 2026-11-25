@@ -12,7 +12,7 @@ function normalizeSeri(s){return (s||'').toString().toUpperCase().replace(/[^A-Z
 const MIN_VENDEUR_VERSION_PROPRIO="36.7.26";
 function isTicketVersionOK(t){if(!t) return false;if(!t.vendeurVersion) return false;let v=String(t.vendeurVersion).trim();let parts=v.split('.').map(n=>parseInt(n)||0);let minParts=MIN_VENDEUR_VERSION_PROPRIO.split('.').map(n=>parseInt(n)||0);for(let i=0;i<3;i++){if((parts[i]||0)>(minParts[i]||0)) return true;if((parts[i]||0)<(minParts[i]||0)) return false;}return true;}
 function isTicketAncienVersion(t){return !isTicketVersionOK(t);}
-const DEFAULT_PRIX={p1:70,p2:8,p3:4,m1:1200,m2:500,m3:100,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:10,maryajGratisEnabled:true};
+const DEFAULT_PRIX={p1:70,p2:8,p3:4,m1:1200,m2:500,m3:100,l3:500,l4:5000,l5:25000,maryajGratis:500,kom:0,maryajGratisEnabled:true};
 let DB={vendeurs:{},proprios:{},tickets:{},results:{},resultsHistory:{},resultsByDate:{},resultsLatest:{},prix:{global:{...DEFAULT_PRIX}},limites:{global:{bor:5000,mar:200,l3:500,l4:30,l5:20}},horairesTiraj:{},blokeBoul:{},blokeVendeur:{},blokeJeux:{},headers:{},businesses:{},limitesByVendeur:{},blokeProprio:{},heures:{},heuresByProprio:{},tiragesByProprio:{},config:{},blokeBoulByProprio:{},blokeJeuxByProprio:{}};
 let CUR=null,MY_PROPRIO_ID=null,tmpBloke={};
 function sanitizeKey(s){return (s||'').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');}
